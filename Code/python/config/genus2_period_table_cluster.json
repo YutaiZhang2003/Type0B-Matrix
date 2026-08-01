@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "seed": 20260718,
+  "array_task_count": 960,
+  "q_domain": {
+    "q_abs_max": 0.80,
+    "q_abs_tail_min": 1e-14,
+    "finite_q_abs_min": 1e-4,
+    "standard_collocation_min_q": 1e-10,
+    "geometry_margin_min": 1e-8,
+    "geometry_refinement_margin": 0.02
+  },
+  "coverage_basis": {
+    "source": "plumbing/results/genus2_full_moduli_coverage/qstar_depth4_tail_refined/summary.json",
+    "sample_count": 96,
+    "observed_q_star_max": 0.7304334236558763,
+    "table_q_abs_max_with_buffer": 0.80,
+    "warning": "The earlier 0.30 envelope missed new invariant-domain targets. The 0.80 envelope covers all 65536 production selector targets after depth-five rescue; the largest best-chart score observed during rescue is 0.7304334236558763. This remains a finite-sample, finite-depth certificate."
+  },
+  "useful_region": {
+    "mode": "atlas-selected-theta-glasses-union",
+    "status": "selector-implemented-and-certified",
+    "candidate_pool_only": false,
+    "retain_theta_glasses_overlap": true,
+    "source": "plumbing/results/genus2_full_moduli_coverage/qstar_depth4_tail_refined/summary.json",
+    "selection_rule": "Keep only q cells belonging to a selected theta or glasses chart for the hybrid moduli-space cover, including a controlled overlap band.",
+    "warning": "Coverage is certified against a finite randomized-QMC target set and finite symplectic search depth, not as a proof over the continuous compactification."
+  },
+  "atlas_design": {
+    "target_sampler": "randomized-sobol-invariant-siegel",
+    "target_sample_power": 16,
+    "selector_batch_size": 512,
+    "search_depth": 3,
+    "tail_search_depth": 4,
+    "rescue_search_depth": 5,
+    "tail_refine_q_abs_min": 0.25,
+    "markings_per_topology": 4,
+    "tail_markings_per_topology": 32,
+    "rescue_markings_per_topology": 256,
+    "overlap_score_ratio": 1.20,
+    "overlap_q_abs_max": 0.75,
+    "minimum_selector_geometry_margin": 0.01,
+    "required_selected_target_fraction": 1.0,
+    "cusp_augmentation_fraction": 0.03125,
+    "cusp_augmentation_patterns": [
+      [0], [1], [2], [0, 1], [0, 2], [1, 2], [0, 1, 2]
+    ]
+  },
+  "noncompact_tail": {
+    "table_q_abs_floor": 1e-14,
+    "below_floor_extension": "exact leading logarithmic period plus the certified limiting correction on the table floor",
+    "required_boundary_stability": 1e-8,
+    "status": "requires a high-precision pilot certificate before production"
+  },
+  "schottky_all_small_q_max": {
+    "theta": 0.15,
+    "glasses": 0.20
+  },
+  "method_boundary_log_half_width": 0.18,
+  "high_q_abs_min": 0.18,
+  "strata": [
+    {
+      "name": "bulk",
+      "sobol_power": 17,
+      "patterns": [["finite", "finite", "finite"]]
+    },
+    {
+      "name": "one-cusp",
+      "sobol_power": 14,
+      "patterns": [
+        ["cusp", "finite", "finite"],
+        ["finite", "cusp", "finite"],
+        ["finite", "finite", "cusp"]
+      ]
+    },
+    {
+      "name": "two-cusp",
+      "sobol_power": 13,
+      "patterns": [
+        ["cusp", "cusp", "finite"],
+        ["cusp", "finite", "cusp"],
+        ["finite", "cusp", "cusp"]
+      ]
+    },
+    {
+      "name": "all-small",
+      "sobol_power": 14,
+      "patterns": [["small", "small", "small"]]
+    },
+    {
+      "name": "method-boundary",
+      "sobol_power": 13,
+      "patterns": [["method_boundary", "method_boundary", "method_boundary"]]
+    },
+    {
+      "name": "geometry-boundary",
+      "sobol_power": 14,
+      "patterns": [["high", "high", "high"]],
+      "geometry_margin_min": 1e-8,
+      "geometry_margin_max": 0.03
+    }
+  ],
+  "cluster": {
+    "partition": "serial_requeue",
+    "maximum_concurrent_tasks": 200,
+    "cpus_per_task": 1,
+    "memory_gb_per_task": 8,
+    "walltime": "12:00:00",
+    "checkpoint_rows": 1,
+    "output_format": "jsonl-per-array-task",
+    "shared_file_appends_forbidden": true
+  },
+  "numerics": {
+    "period_tolerance": 1e-11,
+    "agreement_tolerance": 5e-10,
+    "maximum_collocation_basis": 160,
+    "minimum_schottky_word": 4,
+    "maximum_schottky_word": 13,
+    "schottky_tail_safety_factor": 4.0,
+    "crosscheck_strata": ["method-boundary"],
+    "crosscheck_bulk_fraction": 0.01,
+    "crosscheck_min_q": 1e-8,
+    "crosscheck_min_geometry_margin": 0.02
+  },
+  "coverage_targets": {
+    "nearest_neighbor_count": 8,
+    "omega_target_sample": "plumbing/results/genus2_full_moduli_coverage/full_moduli_combined.csv",
+    "required_target_coverage_fraction": 0.999,
+    "coverage_spacing_quantile": 0.995,
+    "coverage_distance_multiplier": 2.0,
+    "marking_search_depth": 4,
+    "markings_per_topology": 4,
+    "roundtrip_validation_fraction": 0.01,
+    "refine_largest_omega_holes_fraction": 0.05
+  },
+  "storage": {
+    "working_tier": "shared-scratch",
+    "archive_tier": "lab-storage",
+    "raw_shard_format": "jsonl-per-array-task",
+    "canonical_table_format": "csv-and-deterministic-gzip",
+    "portable_index_format": "compressed-npz",
+    "checksum_algorithm": "sha256",
+    "retain_raw_shards_until_validation": true
+  }
+}

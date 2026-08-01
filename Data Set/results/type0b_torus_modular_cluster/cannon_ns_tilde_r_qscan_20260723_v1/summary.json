@@ -1,0 +1,1659 @@
+{
+  "accuracy_checks": [
+    {
+      "kind": "modular_residual",
+      "maximum": 5e-12,
+      "name": "spin-scan central order-12 residual",
+      "observed": 8.881784197001252e-15,
+      "passed": true
+    },
+    {
+      "kind": "comparison_relative_change",
+      "maximum": 5e-11,
+      "name": "spin-scan spectral quadrature convergence",
+      "observed": 8.92959133099543e-15,
+      "passed": true
+    },
+    {
+      "kind": "finite_part_two_radius",
+      "maximum": 5e-12,
+      "name": "spin-scan finite-part two-radius stability",
+      "observed": 4.892970531256212e-13,
+      "passed": true
+    }
+  ],
+  "accuracy_targets_passed": true,
+  "atomic_job_count": 160,
+  "comparisons": {
+    "scan_quadrature_64_to_96": {
+      "left": "quadrature_64",
+      "maximum_relative_change": 8.92959133099543e-15,
+      "points": {
+        "y045": {
+          "12": {
+            "value_q_relative_change": 1.2855314263210148e-15,
+            "value_q_tilde_relative_change": 8.92959133099543e-15
+          }
+        },
+        "y050": {
+          "12": {
+            "value_q_relative_change": 1.1226725699273062e-15,
+            "value_q_tilde_relative_change": 8.585928469618866e-15
+          }
+        },
+        "y055": {
+          "12": {
+            "value_q_relative_change": 9.356194423241376e-16,
+            "value_q_tilde_relative_change": 8.050081747287419e-15
+          }
+        },
+        "y060": {
+          "12": {
+            "value_q_relative_change": 9.699392563719031e-16,
+            "value_q_tilde_relative_change": 7.657305675368582e-15
+          }
+        },
+        "y065": {
+          "12": {
+            "value_q_relative_change": 1.2518302079375794e-15,
+            "value_q_tilde_relative_change": 7.102740513340983e-15
+          }
+        },
+        "y070": {
+          "12": {
+            "value_q_relative_change": 1.0304733622256043e-15,
+            "value_q_tilde_relative_change": 6.77678567808161e-15
+          }
+        },
+        "y075": {
+          "12": {
+            "value_q_relative_change": 9.25029760152057e-16,
+            "value_q_tilde_relative_change": 6.475334413396866e-15
+          }
+        },
+        "y080": {
+          "12": {
+            "value_q_relative_change": 1.2169482460355354e-15,
+            "value_q_tilde_relative_change": 6.195790965892713e-15
+          }
+        },
+        "y085": {
+          "12": {
+            "value_q_relative_change": 1.2422879792530482e-15,
+            "value_q_tilde_relative_change": 5.9357228370285665e-15
+          }
+        },
+        "y090": {
+          "12": {
+            "value_q_relative_change": 1.1248393851664732e-15,
+            "value_q_tilde_relative_change": 5.692931104747201e-15
+          }
+        },
+        "y095": {
+          "12": {
+            "value_q_relative_change": 1.2864967166354328e-15,
+            "value_q_tilde_relative_change": 5.465471038872013e-15
+          }
+        },
+        "y100": {
+          "12": {
+            "value_q_relative_change": 1.450567260651967e-15,
+            "value_q_tilde_relative_change": 5.25164620028979e-15
+          }
+        },
+        "y105": {
+          "12": {
+            "value_q_relative_change": 1.7633899619837744e-15,
+            "value_q_tilde_relative_change": 4.913503209221584e-15
+          }
+        },
+        "y110": {
+          "12": {
+            "value_q_relative_change": 1.3376445787699134e-15,
+            "value_q_tilde_relative_change": 5.121899759407519e-15
+          }
+        },
+        "y115": {
+          "12": {
+            "value_q_relative_change": 1.500963326967954e-15,
+            "value_q_tilde_relative_change": 4.678309252846458e-15
+          }
+        },
+        "y120": {
+          "12": {
+            "value_q_relative_change": 1.513621957052474e-15,
+            "value_q_tilde_relative_change": 4.506273377364565e-15
+          }
+        },
+        "y125": {
+          "12": {
+            "value_q_relative_change": 1.676734840042775e-15,
+            "value_q_tilde_relative_change": 4.224972940166802e-15
+          }
+        },
+        "y130": {
+          "12": {
+            "value_q_relative_change": 1.9929900421805335e-15,
+            "value_q_tilde_relative_change": 4.07267369327751e-15
+          }
+        },
+        "y135": {
+          "12": {
+            "value_q_relative_change": 2.0019705007937857e-15,
+            "value_q_tilde_relative_change": 3.927009383885639e-15
+          }
+        },
+        "y140": {
+          "12": {
+            "value_q_relative_change": 2.008618922132071e-15,
+            "value_q_tilde_relative_change": 3.997898029969174e-15
+          }
+        }
+      },
+      "right": "production"
+    }
+  },
+  "config_sha256": "379b4ffcd85283598186e8f7af3b7e6402ea9427172a01dcca99a6a9a540ea47",
+  "external_momentum": 0.33,
+  "external_weight": [
+    0.55445,
+    0.0
+  ],
+  "implementation": {
+    "environment": {
+      "mpmath_version": "1.3.0",
+      "numpy_version": "2.0.2",
+      "python_implementation": "CPython",
+      "python_version": "3.12.11"
+    },
+    "sha256": "ded96544c4944a2bd183521659b29d83ce2647bb18610263dd2bb34849c89fe1",
+    "source_files": {
+      "mixed_ramond_sphere_blocks.py": "bfae38919082aa86c540ab7cb1da82de38f89193334c81ca9160ec779fae16cb",
+      "ramond_sphere_blocks.py": "738bd72f5233782288921adf95bfa4adb92cfa1d245675bb428b4fcb67819baa",
+      "self_dual_superconformal_blocks.py": "dafef880658576a8c107dfddd955c2067a84ae44a0e3e0792edb325e576fa40c",
+      "super_liouville_structure_constants.py": "63f425bb0b13ce7078ca84dbaa769c3b261d5e1c3e1e572de60f812705b0a9e8",
+      "super_liouville_torus_modular_cluster.py": "326f7b7bb2d64f147c93c0234891b89f0496ba1b087a79d1c3a70a73c9438de4",
+      "super_liouville_torus_one_point.py": "3023def8e335b9ce777c22d3e0d109ca7391b51fda08864f9dadd468e8abaa0d",
+      "superconformal_blocks.py": "a6db3dc2ff690c81e4d84e4af490b4e7b841a69b1e8290716349dedaffac8f44",
+      "superconformal_torus_blocks.py": "19906a530e95a399a9ec742d0a3f41915eb4626fb4ef7da763a8b556be291c06"
+    },
+    "source_tree_sha256": "14f4135717e8b11b7af70c140f6c38388778d6509559a8d764fc0060e29aa177"
+  },
+  "implementation_sha256": "ded96544c4944a2bd183521659b29d83ce2647bb18610263dd2bb34849c89fe1",
+  "levels": [
+    12
+  ],
+  "modular_orbit": "ns_tilde_to_r",
+  "schema_version": 2,
+  "shard_count": 16,
+  "studies": {
+    "production": {
+      "maximum_two_radius_difference": 4.892970531256212e-13,
+      "node_count": 96,
+      "parameters": {
+        "finite_part_samples": 40,
+        "name": "production",
+        "p_max": 5.5,
+        "quadrature_order": 96,
+        "structure_precision": 50
+      },
+      "taus": {
+        "y045": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.45588302973465467,
+              "numeric_ratio": [
+                0.45588307076863943,
+                -1.6805174308815163e-52
+              ],
+              "relative_error": [
+                9.000989753538136e-08,
+                -3.68629082740732e-52
+              ],
+              "relative_error_abs": 9.000989753538136e-08,
+              "value_q": [
+                0.06477222193251446,
+                -1.3494583046901067e-53
+              ],
+              "value_q_tilde": [
+                0.02952855943510251,
+                -1.7037036757615342e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.8247422680412371,
+            1.8556701030927831
+          ],
+          "tau": [
+            0.2,
+            0.45
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y050": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.5034154846186873,
+              "numeric_ratio": [
+                0.5034154907666034,
+                -2.000661485509926e-52
+              ],
+              "relative_error": [
+                1.2212409528089552e-08,
+                -3.97417550043247e-52
+              ],
+              "relative_error_abs": 1.2212409528089552e-08,
+              "value_q": [
+                0.061806924741703795,
+                -1.0624056654410164e-53
+              ],
+              "value_q_tilde": [
+                0.03111456335161934,
+                -1.7713788081465823e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.689655172413793,
+            1.7241379310344827
+          ],
+          "tau": [
+            0.2,
+            0.5
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y055": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.5520679768505176,
+              "numeric_ratio": [
+                0.5520679777614913,
+                -2.3437462718480406e-52
+              ],
+              "relative_error": [
+                1.6501116029132845e-09,
+                -4.245394353823664e-52
+              ],
+              "relative_error_abs": 1.6501116029132845e-09,
+              "value_q": [
+                0.05933090818780399,
+                -8.081617264948857e-54
+              ],
+              "value_q_tilde": [
+                0.032754694501993656,
+                -1.836726158755507e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.583941605839416,
+            1.605839416058394
+          ],
+          "tau": [
+            0.2,
+            0.55
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y060": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.6016752709198997,
+              "numeric_ratio": [
+                0.6016752710534542,
+                -2.704030738663055e-52
+              ],
+              "relative_error": [
+                2.2197110816080112e-10,
+                -4.4941696449130605e-52
+              ],
+              "relative_error_abs": 2.2197110816080112e-10,
+              "value_q": [
+                0.057231574932743175,
+                -5.838038408354125e-54
+              ],
+              "value_q_tilde": [
+                0.03443482336047433,
+                -1.8988197125790495e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.5000000000000001,
+            1.5
+          ],
+          "tau": [
+            0.2,
+            0.6
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y065": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.6521105143193011,
+              "numeric_ratio": [
+                0.6521105143386914,
+                -3.076105480721599e-52
+              ],
+              "relative_error": [
+                2.973465917932572e-11,
+                -4.7171536314401556e-52
+              ],
+              "relative_error_abs": 2.973465917932572e-11,
+              "value_q": [
+                0.055429992501452856,
+                -3.8663286323638705e-54
+              ],
+              "value_q_tilde": [
+                0.03614648091991223,
+                -1.9572123926060838e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.43243243243243246,
+            1.4054054054054053
+          ],
+          "tau": [
+            0.2,
+            0.65
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y070": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.703274314206089,
+              "numeric_ratio": [
+                0.703274314208883,
+                -3.455071691674579e-52
+              ],
+              "relative_error": [
+                3.97282207131866e-12,
+                -4.912836459234166e-52
+              ],
+              "relative_error_abs": 3.97282207131866e-12,
+              "value_q": [
+                0.053869564479925455,
+                -2.141399990767785e-54
+              ],
+              "value_q_tilde": [
+                0.037885081016350776,
+                -2.0118312337697004e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.3773584905660378,
+            1.3207547169811322
+          ],
+          "tau": [
+            0.2,
+            0.7
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y075": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.7550873369301475,
+              "numeric_ratio": [
+                0.7550873369305512,
+                -3.836655142971086e-52
+              ],
+              "relative_error": [
+                5.346834086594754e-13,
+                -5.081074672195188e-52
+              ],
+              "relative_error_abs": 5.346834086594754e-13,
+              "value_q": [
+                0.05250885908726462,
+                -6.397793861621664e-55
+              ],
+              "value_q_tilde": [
+                0.03964877457346421,
+                -2.0628927739790036e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.33195020746887965,
+            1.2448132780082988
+          ],
+          "tau": [
+            0.2,
+            0.75
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y080": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.8074851917155719,
+              "numeric_ratio": [
+                0.8074851917156346,
+                -4.217258290552259e-52
+              ],
+              "relative_error": [
+                7.771561172376096e-14,
+                -5.2227066623876164e-52
+              ],
+              "relative_error_abs": 7.771561172376096e-14,
+              "value_q": [
+                0.05131692768251166,
+                6.605576120828288e-55
+              ],
+              "value_q_tilde": [
+                0.04143765918797028,
+                -2.1108283381442376e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.2941176470588235,
+            1.176470588235294
+          ],
+          "tau": [
+            0.2,
+            0.8
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y085": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.8604148230855673,
+              "numeric_ratio": [
+                0.8604148230855819,
+                -4.593960167414718e-52
+              ],
+              "relative_error": [
+                1.709743457922741e-14,
+                -5.3392387533958766e-52
+              ],
+              "relative_error_abs": 1.709743457922741e-14,
+              "value_q": [
+                0.05027018386889196,
+                1.7802393437750964e-54
+              ],
+              "value_q_tilde": [
+                0.04325321136003235,
+                -2.1562177910206115e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.26229508196721313,
+            1.1147540983606556
+          ],
+          "tau": [
+            0.2,
+            0.85
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y090": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190367157,
+                -4.964477177474432e-52
+              ],
+              "relative_error": [
+                8.881784197001252e-15,
+                -5.432593318372604e-52
+              ],
+              "relative_error_abs": 8.881784197001252e-15,
+              "value_q": [
+                0.049350291217836635,
+                2.738481772612592e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861643,
+                -2.1997327391753055e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.23529411764705885,
+            1.0588235294117647
+          ],
+          "tau": [
+            0.2,
+            0.9
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y095": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.9676990159771133,
+              "numeric_ratio": [
+                0.9676990159771204,
+                -5.3270983384682275e-52
+              ],
+              "relative_error": [
+                7.327471962526033e-15,
+                -5.504912426814142e-52
+              ],
+              "relative_error_abs": 7.327471962526033e-15,
+              "value_q": [
+                0.048542716298950385,
+                3.5530490023534893e-54
+              ],
+              "value_q_tilde": [
+                0.04697473879535081,
+                -2.2420900310791355e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.21220159151193635,
+            1.0079575596816976
+          ],
+          "tau": [
+            0.2,
+            0.95
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y100": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.02198409026794,
+              "numeric_ratio": [
+                1.0219840902679478,
+                -5.6806069228573936e-52
+              ],
+              "relative_error": [
+                7.549516567451064e-15,
+                -5.558410328450488e-52
+              ],
+              "relative_error_abs": 7.549516567451064e-15,
+              "value_q": [
+                0.04783572669900523,
+                4.240222842158376e-54
+              ],
+              "value_q_tilde": [
+                0.04888735163278904,
+                -2.284015574075174e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.19230769230769232,
+            0.9615384615384615
+          ],
+          "tau": [
+            0.2,
+            1.0
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y105": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.0766594954131274,
+              "numeric_ratio": [
+                1.0766594954131354,
+                -6.0241978921019116e-52
+              ],
+              "relative_error": [
+                7.327471962526033e-15,
+                -5.5952675082202784e-52
+              ],
+              "relative_error_abs": 7.327471962526033e-15,
+              "value_q": [
+                0.04721968971242945,
+                4.8147984008324265e-54
+              ],
+              "value_q_tilde": [
+                0.05083952729934912,
+                -2.326217710637617e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.17505470459518596,
+            0.9190371991247264
+          ],
+          "tau": [
+            0.2,
+            1.05
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y110": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.1317011487172823,
+              "numeric_ratio": [
+                1.1317011487172897,
+                -6.357397802496741e-52
+              ],
+              "relative_error": [
+                6.439293542825908e-15,
+                -5.6175588490852756e-52
+              ],
+              "relative_error_abs": 6.439293542825908e-15,
+              "value_q": [
+                0.04668657588594536,
+                5.290110801447748e-54
+              ],
+              "value_q_tilde": [
+                0.05283525155980128,
+                -2.369368902350048e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.16,
+            0.8799999999999999
+          ],
+          "tau": [
+            0.2,
+            1.1
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y115": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.1870879006988342,
+              "numeric_ratio": [
+                1.187087900698835,
+                -6.679991434076935e-52
+              ],
+              "relative_error": [
+                6.661338147750939e-16,
+                -5.6272087603154315e-52
+              ],
+              "relative_error_abs": 6.661338147750939e-16,
+              "value_q": [
+                0.04622960321038787,
+                5.678090673005416e-54
+              ],
+              "value_q_tilde": [
+                0.054878602625159464,
+                -2.4140942607621017e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.1467889908256881,
+            0.8440366972477065
+          ],
+          "tau": [
+            0.2,
+            1.15
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y120": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.2428010402621408,
+              "numeric_ratio": [
+                1.2428010402621168,
+                -6.99195745061862e-52
+              ],
+              "relative_error": [
+                -1.9317880628477724e-14,
+                -5.6259668475525455e-52
+              ],
+              "relative_error_abs": 1.9317880628477724e-14,
+              "value_q": [
+                0.045842978635296454,
+                5.989342382865302e-54
+              ],
+              "value_q_tilde": [
+                0.056973701536660426,
+                -2.4609654658850143e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.13513513513513514,
+            0.8108108108108107
+          ],
+          "tau": [
+            0.2,
+            1.2
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y125": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.2988239020351535,
+              "numeric_ratio": [
+                1.2988239020350634,
+                -7.293413967710482e-52
+              ],
+              "relative_error": [
+                -6.938893903907228e-14,
+                -5.615398635859937e-52
+              ],
+              "relative_error_abs": 6.938893903907228e-14,
+              "value_q": [
+                0.04552170749969756,
+                6.23323784524128e-54
+              ],
+              "value_q_tilde": [
+                0.05912468176205599,
+                -2.510498743076361e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.12480499219968799,
+            0.7800312012480499
+          ],
+          "tau": [
+            0.2,
+            1.25
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y130": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.3551415515285523,
+              "numeric_ratio": [
+                1.3551415515283731,
+                -7.584573931755427e-52
+              ],
+              "relative_error": [
+                -1.3222756223285614e-13,
+                -5.596886851561959e-52
+              ],
+              "relative_error_abs": 1.3222756223285614e-13,
+              "value_q": [
+                0.045261450805895484,
+                6.418019112354879e-54
+              ],
+              "value_q_tilde": [
+                0.06133567266952634,
+                -2.5631557611927216e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.11560693641618497,
+            0.7514450867052023
+          ],
+          "tau": [
+            0.2,
+            1.3
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y135": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.411740530246712,
+              "numeric_ratio": [
+                1.4117405302467039,
+                -7.865709607130237e-52
+              ],
+              "relative_error": [
+                -5.773159728050814e-15,
+                -5.571639716085537e-52
+              ],
+              "relative_error_abs": 5.773159728050814e-15,
+              "value_q": [
+                0.04505841655260508,
+                6.550904048752877e-54
+              ],
+              "value_q_tilde": [
+                0.06361079287605155,
+                -2.619346524060852e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.10738255033557045,
+            0.7248322147651006
+          ],
+          "tau": [
+            0.2,
+            1.35
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y140": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.4686086474742928,
+              "numeric_ratio": [
+                1.4686086474759796,
+                -8.137125139509745e-52
+              ],
+              "relative_error": [
+                1.148636741277187e-12,
+                -5.540703545157479e-52
+              ],
+              "relative_error_abs": 1.148636741277187e-12,
+              "value_q": [
+                0.044909275600691856,
+                6.638190711306859e-54
+              ],
+              "value_q_tilde": [
+                0.06595415049905808,
+                -2.679433526653615e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.10000000000000003,
+            0.7000000000000001
+          ],
+          "tau": [
+            0.2,
+            1.4
+          ],
+          "transformed_spin_structure": "R"
+        }
+      },
+      "total_node_runtime_seconds": 82.43738809460774
+    },
+    "quadrature_64": {
+      "maximum_two_radius_difference": 5.075937764879384e-13,
+      "node_count": 64,
+      "parameters": {
+        "finite_part_samples": 40,
+        "name": "quadrature_64",
+        "p_max": 5.5,
+        "quadrature_order": 64,
+        "structure_precision": 50
+      },
+      "taus": {
+        "y045": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.45588302973465467,
+              "numeric_ratio": [
+                0.45588307076863477,
+                -2.0251230565639196e-52
+              ],
+              "relative_error": [
+                9.000988732132953e-08,
+                -4.442198819602116e-52
+              ],
+              "relative_error_abs": 9.000988732132953e-08,
+              "value_q": [
+                0.06477222193251454,
+                -3.8346697225407204e-53
+              ],
+              "value_q_tilde": [
+                0.029528559435102245,
+                -3.0598782090994765e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.8247422680412371,
+            1.8556701030927831
+          ],
+          "tau": [
+            0.2,
+            0.45
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y050": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.5034154846186873,
+              "numeric_ratio": [
+                0.5034154907665985,
+                -2.5049886594546993e-52
+              ],
+              "relative_error": [
+                1.2212399758126935e-08,
+                -4.975986508146657e-52
+              ],
+              "relative_error_abs": 1.2212399758126935e-08,
+              "value_q": [
+                0.061806924741703864,
+                -3.3718605353782032e-53
+              ],
+              "value_q_tilde": [
+                0.031114563351619072,
+                -3.2457032817513263e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.689655172413793,
+            1.7241379310344827
+          ],
+          "tau": [
+            0.2,
+            0.5
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y055": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.5520679768505176,
+              "numeric_ratio": [
+                0.5520679777614863,
+                -3.0323316512499813e-52
+              ],
+              "relative_error": [
+                1.6501024990844826e-09,
+                -5.4926780367683605e-52
+              ],
+              "relative_error_abs": 1.6501024990844826e-09,
+              "value_q": [
+                0.059330908187804045,
+                -2.959553534120119e-53
+              ],
+              "value_q_tilde": [
+                0.03275469450199339,
+                -3.432984642611403e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.583941605839416,
+            1.605839416058394
+          ],
+          "tau": [
+            0.2,
+            0.55
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y060": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.6016752709198997,
+              "numeric_ratio": [
+                0.6016752710534491,
+                -3.599718736027151e-52
+              ],
+              "relative_error": [
+                2.2196267046581397e-10,
+                -5.982826468044051e-52
+              ],
+              "relative_error_abs": 2.2196267046581397e-10,
+              "value_q": [
+                0.05723157493274323,
+                -2.593365207961447e-53
+              ],
+              "value_q_tilde": [
+                0.034434823360474064,
+                -3.620539440218164e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.5000000000000001,
+            1.5
+          ],
+          "tau": [
+            0.2,
+            0.6
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y065": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.6521105143193011,
+              "numeric_ratio": [
+                0.6521105143386859,
+                -4.201465905799443e-52
+              ],
+              "relative_error": [
+                2.9726221484338566e-11,
+                -6.44287404288382e-52
+              ],
+              "relative_error_abs": 2.9726221484338566e-11,
+              "value_q": [
+                0.055429992501452925,
+                -2.26836253744225e-53
+              ],
+              "value_q_tilde": [
+                0.036146480919911975,
+                -3.8080952975338053e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.43243243243243246,
+            1.4054054054054053
+          ],
+          "tau": [
+            0.2,
+            0.65
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y070": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.703274314206089,
+              "numeric_ratio": [
+                0.7032743142088774,
+                -4.8332650933883725e-52
+              ],
+              "relative_error": [
+                3.964828465541359e-12,
+                -6.872517587741762e-52
+              ],
+              "relative_error_abs": 3.964828465541359e-12,
+              "value_q": [
+                0.05386956447992551,
+                -1.9797485100445294e-53
+              ],
+              "value_q_tilde": [
+                0.03788508101635052,
+                -3.9959651316761945e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.3773584905660378,
+            1.3207547169811322
+          ],
+          "tau": [
+            0.2,
+            0.7
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y075": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.7550873369301475,
+              "numeric_ratio": [
+                0.7550873369305455,
+                -5.491876610513045e-52
+              ],
+              "relative_error": [
+                5.271338920920243e-13,
+                -7.273167409800033e-52
+              ],
+              "relative_error_abs": 5.271338920920243e-13,
+              "value_q": [
+                0.052508859087264666,
+                -1.7231098531435267e-53
+              ],
+              "value_q_tilde": [
+                0.039648774573463955,
+                -4.184820180909671e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.33195020746887965,
+            1.2448132780082988
+          ],
+          "tau": [
+            0.2,
+            0.75
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y080": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.8074851917155719,
+              "numeric_ratio": [
+                0.8074851917156286,
+                -6.174876289293126e-52
+              ],
+              "relative_error": [
+                7.016609515630989e-14,
+                -7.647045856251642e-52
+              ],
+              "relative_error_abs": 7.016609515630989e-14,
+              "value_q": [
+                0.05131692768251172,
+                -1.4944796548864396e-53
+              ],
+              "value_q_tilde": [
+                0.04143765918797002,
+                -4.3755269905022e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.2941176470588235,
+            1.176470588235294
+          ],
+          "tau": [
+            0.2,
+            0.8
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y085": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.8604148230855673,
+              "numeric_ratio": [
+                0.8604148230855757,
+                -6.880449456610739e-52
+              ],
+              "relative_error": [
+                9.769962616701378e-15,
+                -7.996665413011471e-52
+              ],
+              "relative_error_abs": 9.769962616701378e-15,
+              "value_q": [
+                0.050270183868892024,
+                -1.2903278936179124e-53
+              ],
+              "value_q_tilde": [
+                0.043253211360032094,
+                -4.56903183915404e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.26229508196721313,
+            1.1147540983606556
+          ],
+          "tau": [
+            0.2,
+            0.85
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y090": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190367095,
+                -7.607225515883361e-52
+              ],
+              "relative_error": [
+                1.9984014443252818e-15,
+                -8.324534695507596e-52
+              ],
+              "relative_error_abs": 1.9984014443252818e-15,
+              "value_q": [
+                0.04935029121783669,
+                -1.1075278119861418e-53
+              ],
+              "value_q_tilde": [
+                0.045097871328616174,
+                -4.766282211499842e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.23529411764705885,
+            1.0588235294117647
+          ],
+          "tau": [
+            0.2,
+            0.9
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y095": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 0.9676990159771133,
+              "numeric_ratio": [
+                0.9676990159771138,
+                -8.354147541520782e-52
+              ],
+              "relative_error": [
+                6.661338147750939e-16,
+                -8.63300200123213e-52
+              ],
+              "relative_error_abs": 6.661338147750939e-16,
+              "value_q": [
+                0.04854271629895045,
+                -9.433170006044535e-54
+              ],
+              "value_q_tilde": [
+                0.04697473879535055,
+                -4.968177073515589e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.21220159151193635,
+            1.0079575596816976
+          ],
+          "tau": [
+            0.2,
+            0.95
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y100": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.02198409026794,
+              "numeric_ratio": [
+                1.021984090267941,
+                -9.12037154707752e-52
+              ],
+              "relative_error": [
+                8.881784197001252e-16,
+                -8.924181534652242e-52
+              ],
+              "relative_error_abs": 8.881784197001252e-16,
+              "value_q": [
+                0.0478357266990053,
+                -7.952597641059959e-54
+              ],
+              "value_q_tilde": [
+                0.04888735163278878,
+                -5.175538833740407e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.19230769230769232,
+            0.9615384615384615
+          ],
+          "tau": [
+            0.2,
+            1.0
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y105": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.0766594954131274,
+              "numeric_ratio": [
+                1.0766594954131283,
+                -9.905190347469017e-52
+              ],
+              "relative_error": [
+                8.881784197001252e-16,
+                -9.199928472899664e-52
+              ],
+              "relative_error_abs": 8.881784197001252e-16,
+              "value_q": [
+                0.047219689712429534,
+                -6.612125395928642e-54
+              ],
+              "value_q_tilde": [
+                0.05083952729934887,
+                -5.389100906739277e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.17505470459518596,
+            0.9190371991247264
+          ],
+          "tau": [
+            0.2,
+            1.05
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y110": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.1317011487172823,
+              "numeric_ratio": [
+                1.1317011487172823,
+                -1.070797733403945e-51
+              ],
+              "relative_error": [
+                0.0,
+                -9.461841888361007e-52
+              ],
+              "relative_error_abs": 9.461841888361007e-52,
+              "value_q": [
+                0.04668657588594542,
+                -5.392924927963471e-54
+              ],
+              "value_q_tilde": [
+                0.05283525155980101,
+                -5.609505897498396e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.16,
+            0.8799999999999999
+          ],
+          "tau": [
+            0.2,
+            1.1
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y115": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.1870879006988342,
+              "numeric_ratio": [
+                1.1870879006988277,
+                -1.1528146013680207e-51
+              ],
+              "relative_error": [
+                -5.440092820663267e-15,
+                -9.71128254857423e-52
+              ],
+              "relative_error_abs": 5.440092820663267e-15,
+              "value_q": [
+                0.04622960321038794,
+                -4.278489960004208e-54
+              ],
+              "value_q_tilde": [
+                0.05487860262515921,
+                -5.837310526116755e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.1467889908256881,
+            0.8440366972477065
+          ],
+          "tau": [
+            0.2,
+            1.15
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y120": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.2428010402621408,
+              "numeric_ratio": [
+                1.2428010402621092,
+                -1.236512176985544e-51
+              ],
+              "relative_error": [
+                -2.5424107263916085e-14,
+                -9.949397666457776e-52
+              ],
+              "relative_error_abs": 2.5424107263916085e-14,
+              "value_q": [
+                0.04584297863529652,
+                -3.254376781126485e-54
+              ],
+              "value_q_tilde": [
+                0.05697370153666017,
+                -6.072994416082115e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.13513513513513514,
+            0.8108108108108107
+          ],
+          "tau": [
+            0.2,
+            1.2
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y125": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.2988239020351535,
+              "numeric_ratio": [
+                1.2988239020350556,
+                -1.3218322919327414e-51
+              ],
+              "relative_error": [
+                -7.538414337204813e-14,
+                -1.0177147878642637e-51
+              ],
+              "relative_error_abs": 7.538414337204813e-14,
+              "value_q": [
+                0.04552170749969764,
+                -2.3079681641268463e-54
+              ],
+              "value_q_tilde": [
+                0.05912468176205574,
+                -6.316970717372111e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.12480499219968799,
+            0.7800312012480499
+          ],
+          "tau": [
+            0.2,
+            1.25
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y130": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.3551415515285523,
+              "numeric_ratio": [
+                1.355141551528365,
+                -1.4087148714370993e-51
+              ],
+              "relative_error": [
+                -1.383337888682945e-13,
+                -1.0395333755710746e-51
+              ],
+              "relative_error_abs": 1.383337888682945e-13,
+              "value_q": [
+                0.045261450805895574,
+                -1.428259085590719e-54
+              ],
+              "value_q_tilde": [
+                0.06133567266952609,
+                -6.5695972086315675e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.11560693641618497,
+            0.7514450867052023
+          ],
+          "tau": [
+            0.2,
+            1.3
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y135": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.411740530246712,
+              "numeric_ratio": [
+                1.4117405302466954,
+                -1.497097244730966e-51
+              ],
+              "relative_error": [
+                -1.176836406102666e-14,
+                -1.0604620414697149e-51
+              ],
+              "relative_error_abs": 1.176836406102666e-14,
+              "value_q": [
+                0.04505841655260517,
+                -6.0566301396786906e-55
+              ],
+              "value_q_tilde": [
+                0.0636107928760513,
+                -6.831187029733517e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.10738255033557045,
+            0.7248322147651006
+          ],
+          "tau": [
+            0.2,
+            1.35
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "y140": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "12": {
+              "expected_ratio": 1.4686086474742928,
+              "numeric_ratio": [
+                1.4686086474759708,
+                -1.5869138240502453e-51
+              ],
+              "relative_error": [
+                1.1426415369442111e-12,
+                -1.0805559580351194e-51
+              ],
+              "relative_error_abs": 1.1426415369442111e-12,
+              "value_q": [
+                0.044909275600691946,
+                1.6816234342101747e-55
+              ],
+              "value_q_tilde": [
+                0.06595415049905781,
+                -7.102018560709251e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.10000000000000003,
+            0.7000000000000001
+          ],
+          "tau": [
+            0.2,
+            1.4
+          ],
+          "transformed_spin_structure": "R"
+        }
+      },
+      "total_node_runtime_seconds": 56.89508215524256
+    }
+  }
+}

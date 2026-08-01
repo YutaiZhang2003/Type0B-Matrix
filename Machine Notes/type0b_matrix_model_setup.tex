@@ -1,0 +1,1587 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\setlength{\emergencystretch}{2em}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black,
+  pdftitle={Noncritical Type 0B String Theory and Its Matrix-Model Dual},
+  pdfauthor={StringMC project}
+}
+
+\newcommand{\ap}{\alpha'}
+\newcommand{\NSNS}{\mathrm{NS\!\!-\!\!NS}}
+\newcommand{\RR}{\mathrm{R\!\!-\!\!R}}
+\newcommand{\SL}{\mathrm{SL}}
+\newcommand{\MQM}{\mathrm{MQM}}
+\newcommand{\ellB}{\ell_{\mathrm B}}
+
+\title{Noncritical Type 0B String Theory\\
+and Its Matrix-Model Dual\\[0.4em]
+\large Setup, conventions, and first benchmarks}
+\author{StringMC project}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This note specifies a new target for the StringMC project: the duality between
+two-dimensional noncritical type 0B string theory and double-scaled Hermitian
+matrix quantum mechanics with a symmetrically filled two-sided Fermi sea.  We
+adopt explicitly the conventions of Balthazar--Rodriguez--Yin (BRY),
+including $\ap=2$, their delta-normalized physical states, and their exact
+matrix-model energy and coupling dictionary.  We identify the genus-one
+logarithm as the first vacuum normalization benchmark and separate carefully
+the sphere data supplied by BRY from the additional supermoduli measure
+needed at genus one and genus two.
+\end{abstract}
+
+\tableofcontents
+
+\section{Target and baseline}
+
+The target is the proposed exact duality
+\begin{equation}
+ \boxed{
+ \text{2D noncritical type 0B string theory}
+ \quad\longleftrightarrow\quad
+ \text{two-sided double-scaled MQM}}
+ \label{eq:duality}
+\end{equation}
+developed in Refs.~\cite{DouglasEtAl2003NewHat,TakayanagiToumbas2003Type0B}.
+Our master convention is Ref.~\cite{BalthazarRodriguezYin2023SMatrix}.
+The essential distinction from the bosonic $c=1$ matrix model is the vacuum:
+both sides of an even potential are filled to the same Fermi level.  The
+resulting state has a nonperturbatively stable completion and supports two
+collective modes, which map to the two propagating type 0B fields.
+
+The initial comparison is defined by
+\begin{equation}
+ \begin{aligned}
+ b&=1,
+ &Q&=b+b^{-1}=2,
+ &\ellB&\equiv\sqrt{\ap/2},
+ &[\ellB]_{\rm BRY}&=1,\\
+ q_{\RR}&=\widetilde q_{\RR}=0,
+ &E_F&=-\mu_{\rm F},
+ &\mu_{\rm F}&>0.
+ \end{aligned}
+ \label{eq:baseline}
+\end{equation}
+with equal regulated fillings $N_L=N_R$.  For the finite-radius benchmark,
+Euclidean time is compactified as
+\begin{equation}
+ X\sim X+2\pi R_{\rm phys}.
+ \label{eq:circle}
+\end{equation}
+The BRY notation $\ap=2$ is a choice of units:
+$\ap=2\ellB^2$ followed by $[\ellB]_{\rm BRY}=1$.  It is not an equality
+between a dimensionful quantity and the pure number two.
+Every formula imported from another source is translated to this
+$\ap=2$ convention before use.
+
+\section{Worldsheet description}
+
+\subsection{\texorpdfstring{$\widehat c=1$}{c-hat=1} matter and
+super-Liouville theory}
+
+The matter multiplet is the Lorentzian free field
+$(X^0,\psi^0,\widetilde\psi^0)$.  In the BRY component normalization, the
+$N=1$ super-Liouville action is
+\begin{align}
+ S_{\SL}=\int d^2z\bigg[
+ &\frac{1}{2\pi}\left(
+ \partial\phi\,\bar\partial\phi+
+ \psi\,\bar\partial\psi+
+ \widetilde\psi\,\partial\widetilde\psi\right)\notag\\
+ &+2i\mu_{\rm L} b^2\psi\widetilde\psi e^{b\phi}
+ +2\pi b^2\mu_{\rm L}^2e^{2b\phi}\bigg].
+ \label{eq:sl-action}
+\end{align}
+The linear-dilaton slope and ordinary central charge are
+\begin{equation}
+ Q=b+b^{-1},
+ \qquad
+ c_{\SL}=\frac32(1+2Q^2).
+ \label{eq:sl-central-charge}
+\end{equation}
+At $b=1$, $Q=2$ and $c_{\SL}=27/2$; together with the free timelike
+multiplet this gives an $N=1$, $c=15$ matter SCFT.
+
+We reserve $\phi$ for the Liouville boson and
+$\varphi,\widetilde\varphi$ for the bosonized superghosts.  Throughout,
+$h$ and $\widetilde h$ denote the holomorphic and antiholomorphic conformal
+weights.  In the $\ap=2$ convention the elementary holomorphic weights are
+\begin{equation}
+ h\!\left[e^{\pm i\omega X^0}\right]=-\frac{\omega^2}{2},
+ \qquad
+ h\!\left[e^{q\varphi}\right]=-\frac12q(q+2),
+ \qquad
+ h[c]=-1,
+ \qquad
+ h[\sigma^0]=h[\mu^0]=\frac1{16},
+ \label{eq:elementary-conformal-weights}
+\end{equation}
+with identical formulas in the antiholomorphic sector.  Thus
+$h[e^{-\varphi}]=1/2$ and $h[e^{-\varphi/2}]=3/8$.  Equation
+\eqref{eq:elementary-conformal-weights} fixes in one place the timelike,
+superghost, and spin-field conventions used below.
+
+The super-Liouville wall cuts off the strong-coupling end of the linear-dilaton
+direction.  The weak-coupling asymptotic end supplies the scattering region.
+BRY print the glyph $\mu$ both for the Liouville interaction in
+Eq.~\eqref{eq:sl-action} and for the matrix-model Fermi depth.  We denote
+them by $\mu_{\rm L}$ and $\mu_{\rm F}$ respectively.  They are not
+identified inside the genus-one derivation; the comparison map
+$\mu_{\rm L}=\kappa\mu_{\rm F}^{\,p}$ is introduced only afterward.
+
+\subsection{Type 0B projection and spectrum}
+
+The nonchiral type 0B GSO projection retains
+\begin{equation}
+ (\mathrm{NS}-,\mathrm{NS}-)
+ \oplus(\mathrm{NS}+,\mathrm{NS}+)
+ \oplus(\mathrm{R}+,\mathrm{R}+)
+ \oplus(\mathrm{R}-,\mathrm{R}-).
+ \label{eq:gso}
+\end{equation}
+There are no spacetime fermions.  The propagating fields are an $\NSNS$
+scalar $T$ and an $\RR$ axion $A$.  The field traditionally called the
+``tachyon'' is massless in the two-dimensional linear-dilaton background.
+Discrete states also occur at special momenta, but they are not part of the
+first vacuum-amplitude benchmark.
+
+For $P\ge0$, BRY normalize the NS and R super-Liouville primaries by
+\begin{align}
+ h_{\rm NS}(P)&=\frac12\left(\frac{Q^2}{4}+P^2\right)
+               =\frac{1+P^2}{2},\notag\\
+ h_{\rm R}(P)&=\frac1{16}
+ +\frac12\left(\frac{Q^2}{4}+P^2\right)
+ =\frac1{16}+\frac{1+P^2}{2},
+ \label{eq:liouville-weights}
+\end{align}
+Here $h_{\rm R}$ is the weight of the \emph{Liouville} Ramond operator;
+the timelike spin or disorder field contributes a further $1/16$.  Hence
+the combined matter Ramond operator used in the physical axion vertex has
+\begin{equation}
+ h[\mathcal A_P^\pm]=\widetilde h[\mathcal A_P^\pm]
+ =\frac1{16}+h_{\rm R}(P)
+ =\frac18+\frac12(1+P^2).
+ \label{eq:combined-ramond-weight}
+\end{equation}
+
+The reflection phases are fixed by the weak-coupling, $\phi\to-\infty$,
+asymptotics
+\begin{align}
+ V_P&\sim S_{\rm NS}(P)^{-1/2}e^{(Q/2+iP)\phi}
+       +S_{\rm NS}(P)^{1/2}e^{(Q/2-iP)\phi},
+ \label{eq:ns-reflection-asymptotic}\\
+ V_P^{\mathrm R,+}&\sim\sigma^1\!\left[
+ S_{\rm R}(P)^{-1/2}e^{(Q/2+iP)\phi}
+ +S_{\rm R}(P)^{1/2}e^{(Q/2-iP)\phi}\right],
+ \label{eq:rplus-reflection-asymptotic}\\
+ V_P^{\mathrm R,-}&\sim\mu^1\!\left[
+ S_{\rm R}(P)^{-1/2}e^{(Q/2+iP)\phi}
+ -S_{\rm R}(P)^{1/2}e^{(Q/2-iP)\phi}\right].
+ \label{eq:rminus-reflection-asymptotic}
+\end{align}
+Here $\sigma^1$ and $\mu^1$ are the spin and disorder fields of the
+asymptotic Liouville Majorana fermion.  The relative minus sign in
+Eq.~\eqref{eq:rminus-reflection-asymptotic} is part of the Ramond phase
+convention, not an in/out label.  The explicit functions $S_{\rm NS}$ and
+$S_{\rm R}$ are not needed in the BRY sphere amplitudes.
+
+With those phases, the delta-function normalization is
+\begin{equation}
+ \langle V_{P_1}(z,\bar z)V_{P_2}(0)\rangle
+ =\frac{\pi\delta(P_1-P_2)}
+ {|z|^{2(h_1+h_2)}}.
+ \label{eq:liouville-two-point}
+\end{equation}
+For either Ramond family $\epsilon=\pm$, the corresponding normalization is
+\begin{equation}
+ \left\langle
+ V_{P_1}^{\mathrm R,\epsilon}(z,\bar z)
+ V_{P_2}^{\mathrm R,\epsilon}(0)
+ \right\rangle
+ =\frac{\pi\delta(P_1-P_2)}
+ {|z|^{2(h^{\rm R}_1+h^{\rm R}_2)}}.
+ \label{eq:ramond-liouville-two-point}
+\end{equation}
+In the modular-invariant bosonic-CFT description,
+$V_P^{\mathrm R,+}$ is a local lowest-weight operator, whereas
+$V_P^{\mathrm R,-}$ is a defect operator attached to the $\mathbb Z_2$
+fermion-parity topological line.  Thus the two symbols do not denote two
+ordinary local-primary families.  The equal-family Ramond correlators below
+contain either zero or two defect endpoints; a mixed $+$/$-$ correlator is
+not an ordinary local sphere correlator in the BRY data.
+Equations~\eqref{eq:liouville-two-point} and
+\eqref{eq:ramond-liouville-two-point}, together with the standard free-field,
+spin-field, and ghost inner products, are what is meant below by the
+delta-normalized asymptotic string states.  They should not be confused with
+a two-punctured sphere vacuum diagram, which retains a conformal-Killing
+volume.
+For the timelike zero mode we use the Fourier convention
+\begin{equation}
+ \int\frac{dX_0^0}{2\pi}
+ e^{i(\omega-\omega_1-\omega_2)X_0^0}
+ =\delta(\omega-\omega_1-\omega_2).
+ \label{eq:timelike-zero-mode-normalization}
+\end{equation}
+Accordingly, the energy delta function below carries no additional $2\pi$;
+that factor is absorbed into the zero-mode path-integral measure.
+
+\subsection{Physical vertex operators, pictures, and sphere three-point data}
+
+The incoming and outgoing physical operators are
+\begin{align}
+ T_\omega^\pm
+ &=g_s c\widetilde c\,
+ e^{-\varphi-\widetilde\varphi}
+ e^{\pm i\omega X^0}V_{P=\omega},
+ \label{eq:tachyon-vertex}\\
+ A_\omega^\pm
+ &=g_s\omega c\widetilde c\,
+ e^{-\varphi/2-\widetilde\varphi/2}
+ e^{\pm i\omega X^0}\mathcal A_{P=\omega}^{\pm},
+ \label{eq:axion-vertex}\\
+ \mathcal A_P^\pm
+ &=\frac1{\sqrt2}\left(
+ \sigma^0V_P^{\mathrm R,+}
+ \pm\mu^0V_P^{\mathrm R,-}\right).
+ \label{eq:ramond-combination}
+\end{align}
+Equivalently, their weak-coupling wave functions are
+\begin{align}
+ \mathcal A_P^+
+ &\sim \mathsf S^+\widetilde{\mathsf S}^{+}S_{\rm R}(P)^{-1/2}
+ e^{(Q/2+iP)\phi}
+ +\mathsf S^-\widetilde{\mathsf S}^{-}S_{\rm R}(P)^{1/2}
+ e^{(Q/2-iP)\phi},\notag\\
+ \mathcal A_P^-
+ &\sim \mathsf S^-\widetilde{\mathsf S}^{-}S_{\rm R}(P)^{-1/2}
+ e^{(Q/2+iP)\phi}
+ +\mathsf S^+\widetilde{\mathsf S}^{+}S_{\rm R}(P)^{1/2}
+ e^{(Q/2-iP)\phi},
+ \label{eq:combined-ramond-asymptotic}
+\end{align}
+where $\mathsf S^\pm$ and $\widetilde{\mathsf S}^{\pm}$ are the spin fields
+of the combined timelike--Liouville fermion system, normalized so that
+\begin{equation}
+ \mathsf S^\pm\widetilde{\mathsf S}^{\pm}
+ =\frac1{\sqrt2}\left(\sigma^0\sigma^1\pm\mu^0\mu^1\right).
+ \label{eq:combined-spin-fields}
+\end{equation}
+Here $T_\omega^\pm$ is an $\NSNS$ vertex in picture $(-1,-1)$ and
+$A_\omega^\pm$ is an $\RR$ vertex in picture
+$(-\tfrac12,-\tfrac12)$.  For $\omega>0$, the superscript has the fixed
+scattering interpretation
+\begin{equation}
+ +\;=\;\text{incoming},
+ \qquad
+ -\;=\;\text{outgoing}.
+ \label{eq:in-out-sign}
+\end{equation}
+Thus an incoming state carries $e^{+i\omega X^0}$ and an outgoing state
+carries $e^{-i\omega X^0}$ in these conventions.  The symbols $\pm$ on the
+Liouville operators $V_P^{\mathrm R,\pm}$ instead label the two Ramond
+families in Eq.~\eqref{eq:gso}; they are not in/out labels.  The combination
+in Eq.~\eqref{eq:ramond-combination} correlates these two distinct uses of a
+sign.  BRY choose their phases so that
+Eqs.~\eqref{eq:liouville-two-point} and
+\eqref{eq:ramond-liouville-two-point} hold and all structure constants below
+are real for $P_i\geq0$.  No additional leg-pole factor is included.
+
+The BRST mass-shell condition is $P=\omega$.  Before ghost dressing, the
+left-moving matter weights are
+\begin{align}
+ h_T^{\rm matter}(P,\omega)
+ &=-\frac{\omega^2}{2}+h_{\rm NS}(P)
+ =\frac12+\frac{P^2-\omega^2}{2},\notag\\
+ h_A^{\rm matter}(P,\omega)
+ &=-\frac{\omega^2}{2}+h[\mathcal A_P^\pm]
+ =\frac58+\frac{P^2-\omega^2}{2}.
+ \label{eq:physical-matter-weight-audit}
+\end{align}
+At $P=\omega$, adding $e^{-\varphi}$ to the NS operator or
+$e^{-\varphi/2}$ to the R operator gives weight one; multiplication by
+$c$ then gives weight zero.  The same check holds on the right, so the
+unintegrated physical vertices in Eqs.~\eqref{eq:tachyon-vertex} and
+\eqref{eq:axion-vertex} have total weight $(0,0)$.
+
+To state the three-point data independently of the ghost dressing, define
+the level-$1/2$ descendants and the top NS component by
+\begin{equation}
+ \Lambda_P=G_{-1/2}V_P,
+ \qquad
+ \widetilde\Lambda_P=\widetilde G_{-1/2}V_P,
+ \qquad
+ W_P=G_{-1/2}\widetilde G_{-1/2}V_P.
+ \label{eq:top-ns-component}
+\end{equation}
+BRY normalize the holomorphic supercurrent modes by
+\begin{equation}
+ \{G_r,G_s\}=2L_{r+s}
+ +\frac{c}{12}(4r^2-1)\delta_{r,-s},
+ \label{eq:sca-normalization}
+\end{equation}
+and analogously in the antiholomorphic sector.
+The top component has two-point function
+\begin{equation}
+ \langle W_{P_1}(z,\bar z)W_{P_2}(0)\rangle
+ =\frac{\pi(2h_1)^2\delta(P_1-P_2)}
+ {|z|^{2(h_1+h_2+1)}}.
+ \label{eq:top-ns-two-point}
+\end{equation}
+Writing $z_{ij}=z_i-z_j$, the two independent NS three-point functions are
+\begin{align}
+ \left\langle V_{P_1}(z_1)V_{P_2}(z_2)V_{P_3}(z_3)\right\rangle
+ &=\frac{C(P_1,P_2,P_3)}
+ {|z_{12}|^{2(h_1+h_2-h_3)}
+  |z_{13}|^{2(h_1+h_3-h_2)}
+  |z_{23}|^{2(h_2+h_3-h_1)}},
+ \label{eq:ns-primary-three-point}\\
+ \left\langle W_{P_1}(z_1)V_{P_2}(z_2)V_{P_3}(z_3)\right\rangle
+ &=\frac{\widetilde C(P_1,P_2,P_3)}
+ {|z_{12}|^{2(h_1+h_2-h_3+1/2)}
+  |z_{13}|^{2(h_1+h_3-h_2+1/2)}
+  |z_{23}|^{2(h_2+h_3-h_1-1/2)}}.
+ \label{eq:ns-top-three-point}
+\end{align}
+For two Ramond fields and one NS field, let $h_i^{\rm R}$ denote the
+Ramond weights.  The nonzero equal-family correlators are
+\begin{equation}
+ \left\langle
+ V_{P_3}(z_3)V_{P_2}^{\mathrm R,\epsilon}(z_2)
+ V_{P_1}^{\mathrm R,\epsilon}(z_1)
+ \right\rangle
+ =\frac{C_\epsilon(P_1,P_2;P_3)}
+ {|z_{12}|^{2(h_1^{\rm R}+h_2^{\rm R}-h_3)}
+  |z_{13}|^{2(h_1^{\rm R}+h_3-h_2^{\rm R})}
+  |z_{23}|^{2(h_2^{\rm R}+h_3-h_1^{\rm R})}},
+ \qquad \epsilon=\pm,
+ \label{eq:rrns-three-point}
+\end{equation}
+where
+\begin{equation}
+ C_\pm=\frac12\left(C_{\rm even}\pm C_{\rm odd}\right).
+ \label{eq:cpm-definition-early}
+\end{equation}
+The coefficients are completely explicit at $b=1$.  Define
+\begin{align}
+ \Upsilon_{\rm NS}(x)
+ &=\frac{\Gamma(x/2)}{\Gamma(1-x/2)}
+   \Upsilon_1(x/2)^2,
+ &
+ \Upsilon_{\rm R}(x)
+ &=\Upsilon_1\left(\frac{x+1}{2}\right)^2,\notag\\
+ N_{\rm NS}(P)
+ &=\frac{\Gamma(1+iP)}{\Gamma(1-iP)}
+   \Upsilon_{\rm NS}(2iP),
+ &
+ N_{\rm R}(P)
+ &=\frac{\Gamma(\frac12+iP)}{\Gamma(\frac12-iP)}
+   \Upsilon_{\rm R}(2iP),
+ \label{eq:upsilon-definitions}
+\end{align}
+The $b=1$ Barnes-double-gamma convention is fixed, including its overall
+normalization, by \cite{BalthazarRodriguezYin2019LongString}
+\begin{align}
+ G(1)&=1,
+ &G(x+1)&=\Gamma(x)G(x),\notag\\
+ \Gamma_1(x)&=\frac{(2\pi)^{(x-1)/2}}{G(x)},
+ &\Gamma_1(x+1)&=\frac{\sqrt{2\pi}}{\Gamma(x)}\Gamma_1(x),\notag\\
+ \Upsilon_1(x)&=\frac{1}{\Gamma_1(x)\Gamma_1(2-x)},
+ &\Upsilon_1(1)&=1.
+ \label{eq:upsilon-one-definition}
+\end{align}
+Here $G$ is the Barnes $G$-function on its standard analytic continuation.
+Equivalently, $\Gamma_1$ is meromorphic with poles at the nonpositive
+integers, while $\Upsilon_1$ is entire, has zeros at
+$x\in\mathbb Z\setminus\{1\}$, and obeys
+\begin{equation}
+ \Upsilon_1(2-x)=\Upsilon_1(x),
+ \qquad
+ \Upsilon_1(x+1)=\frac{\Gamma(x)}{\Gamma(1-x)}\Upsilon_1(x).
+ \label{eq:upsilon-one-identities}
+\end{equation}
+The power of $2\pi$ in Eq.~\eqref{eq:upsilon-one-definition} uses the real
+$\log(2\pi)$, so it introduces no additional complex-log branch choice.
+At $P=0$, and whenever individual Gamma factors appear singular, the
+composite expressions in Eqs.~\eqref{eq:upsilon-definitions}--\eqref{eq:c-odd}
+are defined by analytic continuation and their continuous $P\to0^+$ limit,
+not by separately evaluating the singular factors.
+
+With
+\begin{equation}
+ P_\Sigma=P_1+P_2+P_3,
+ \qquad
+ \Delta_i=P_j+P_k-P_i,
+ \qquad \{i,j,k\}=\{1,2,3\},
+ \label{eq:three-point-momentum-combinations}
+\end{equation}
+the two NS coefficients are
+\begin{align}
+ \boxed{
+ C(P_1,P_2,P_3)
+ =\frac{i}{2}
+ \frac{\prod_{j=1}^3N_{\rm NS}(P_j)}
+ {\Upsilon_{\rm NS}(1+iP_\Sigma)
+  \prod_{i=1}^3\Upsilon_{\rm NS}(1+i\Delta_i)}} ,
+ \label{eq:c-ns}\\
+ \boxed{
+ \widetilde C(P_1,P_2,P_3)
+ =i
+ \frac{\prod_{j=1}^3N_{\rm NS}(P_j)}
+ {\Upsilon_{\rm R}(1+iP_\Sigma)
+  \prod_{i=1}^3\Upsilon_{\rm R}(1+i\Delta_i)}} .
+ \label{eq:ctilde-ns}
+\end{align}
+For $P_1,P_2$ Ramond and $P_3$ NS, set
+$\mathcal N=N_{\rm R}(P_1)N_{\rm R}(P_2)N_{\rm NS}(P_3)$.  Then
+\begin{align}
+ \boxed{
+ C_{\rm even}(P_1,P_2;P_3)
+ =-\frac{i}{2}\frac{\mathcal N}{
+ \Upsilon_{\rm R}(1+iP_\Sigma)
+ \Upsilon_{\rm R}(1+i\Delta_3)
+ \Upsilon_{\rm NS}(1+i\Delta_1)
+ \Upsilon_{\rm NS}(1+i\Delta_2)}} ,
+ \label{eq:c-even}\\
+ \boxed{
+ C_{\rm odd}(P_1,P_2;P_3)
+ =-\frac{i}{2}\frac{\mathcal N}{
+ \Upsilon_{\rm NS}(1+iP_\Sigma)
+ \Upsilon_{\rm NS}(1+i\Delta_3)
+ \Upsilon_{\rm R}(1+i\Delta_1)
+ \Upsilon_{\rm R}(1+i\Delta_2)}} .
+ \label{eq:c-odd}
+\end{align}
+These coefficients are real for $P_i\geq0$ in the BRY phase convention.
+Under analytic continuation that reflects one momentum,
+$C$ and $\widetilde C$ change sign; reflecting the NS momentum changes the
+sign of both $C_{\rm even}$ and $C_{\rm odd}$, while reflecting either
+Ramond momentum exchanges their even and odd labels.  All descendant
+correlators are then fixed by superconformal Ward identities.
+
+The holomorphic PCO used in their sphere calculation is
+\begin{equation}
+ \chi=-\frac12e^\varphi
+ \left(-i\psi^0\partial X^0+G^{\rm L}\right)
+ +\text{ghost terms},
+ \label{eq:bry-pco}
+\end{equation}
+and similarly in the antiholomorphic sector.  At higher genus this local
+operator represents odd-modulus integration only after a global
+supermoduli or vertical-integration prescription has been supplied.
+For the tree-level NS amplitudes, BRY place a holomorphic and an
+antiholomorphic PCO on a tachyon insertion.  Suppressing the spectator
+$c\widetilde c$ factor, the resulting picture-raised operator is
+\begin{align}
+ \widetilde\chi\chi\,T_\omega^\pm
+ =\frac{ig_s}{4}\big[&
+ \omega^2\psi^0\widetilde\psi^0e^{\pm i\omega X^0}V_\omega
+ +e^{\pm i\omega X^0}W_\omega\notag\\
+ &\ \pm\omega\widetilde\psi^0e^{\pm i\omega X^0}\Lambda_\omega
+ \mp\omega\psi^0e^{\pm i\omega X^0}\widetilde\Lambda_\omega
+ \big]+\text{ghost terms}.
+ \label{eq:picture-raised-tachyon}
+\end{align}
+The explicit $i$ in Eq.~\eqref{eq:picture-raised-tachyon} is BRY's cocycle
+phase: combining the separately bosonized left- and right-moving factors
+$e^{-\varphi}e^{-\widetilde\varphi}$ into
+$e^{-\varphi-\widetilde\varphi}$ produces this extra factor.  It is already
+included in the amplitude convention below.
+Their ordered integration over a complex-conjugate pair of Grassmann-odd
+moduli inserts $-i\widetilde\chi\chi$.  This sign is included in the
+sphere amplitude below.
+
+For completeness, distinguish the CFT three-point functions above from the
+on-shell three-string amplitude.  The total picture on the sphere is
+$(-2,-2)$.  For one incoming and two outgoing right-side modes
+$\mathcal R=T+A$, place the incoming vertex at infinity and the outgoing
+vertices at $1$ and $0$.  In the BRY cocycle and odd-modulus convention,
+with $C_{S^2}$ denoting the sphere-topology normalization,
+\begin{align}
+ S_{1\mathcal R\to2\mathcal R}(\omega,\omega_1,\omega_2)
+ &=i\,\delta(\omega-\omega_1-\omega_2)g_s^3C_{S^2}
+ \bigg[
+ \frac14\widetilde C(\omega,\omega_1,\omega_2)
+ +\frac12\omega_1\omega_2
+ C_{\rm even}(\omega_1,\omega_2;\omega)\notag\\
+ &\hspace{3.8cm}
+ +\frac12\omega\omega_2
+ C_{\rm odd}(\omega,\omega_2;\omega_1)
+ +\frac12\omega\omega_1
+ C_{\rm odd}(\omega,\omega_1;\omega_2)
+ \bigg].
+ \label{eq:physical-sphere-three-point}
+\end{align}
+On the energy-conserving locus $\omega=\omega_1+\omega_2$, the bracket
+collapses to $\omega\omega_1\omega_2$, so after removing the delta function
+\begin{equation}
+ \boxed{
+ \mathcal A_{1\mathcal R\to2\mathcal R}^{S^2}
+ =i g_s^3C_{S^2}\omega\omega_1\omega_2
+ =\frac{4i}{\mu_{\rm F}}\omega\omega_1\omega_2.}
+ \label{eq:physical-sphere-three-point-onshell}
+\end{equation}
+The same formula holds for three left-side modes $\mathcal L=T-A$.
+Every sphere three-point amplitude containing both an $\mathcal L$ and an
+$\mathcal R$ mode vanishes.  In particular, in the $T,A$ basis the zero-flux
+selection rule eliminates amplitudes with an odd number of axions.
+
+The odd spin structure contributes to the type 0B torus amplitude.  It is
+therefore essential to retain the complete spin-structure sum: using only the
+three even structures gives the wrong coefficient for the two massless
+spacetime fields.
+
+The three-punctured-sphere ledger above and the four-punctured-sphere block
+layer below are intentionally separate.  The former fixes external-state and
+pants normalizations; the latter computes chiral NS superconformal blocks but
+does not yet perform the modulus integral of a four-string amplitude.
+
+\section{Sphere four-point superconformal blocks}
+\label{sec:sphere-superconformal-blocks}
+
+This section fixes the code convention for the $N=1$ super-Virasoro block on
+a four-punctured sphere, following BRY and the $c$-recursion of
+Refs.~\cite{HadaszJaskolskiSuchanek2007NSBlocks,Belavin2007FourPoint,
+Suchanek2011EllipticRecursion,BalthazarRodriguezYin2023SMatrix}.
+Only NS external and exchanged representations are included at this stage.
+The pointwise NS structure-constant contraction and the integral over real
+internal Liouville momentum are included.  Ramond blocks, the integral over
+the sphere modulus and its counterterms, analytic continuation to physical
+scattering kinematics, and every higher-genus sewing problem remain outside
+the scope of the present implementation.
+
+\subsection{Labels, weights, and local series}
+
+Parametrize the super-Liouville central charge and weights by
+\begin{equation}
+ c=\frac32(1+2Q^2),\qquad Q=b+b^{-1},\qquad
+ h_i=\frac12\left(\frac{Q^2}{4}-a_i^2\right),\qquad
+ h=\frac12\left(\frac{Q^2}{4}+P^2\right).
+ \label{eq:ns-block-weights}
+\end{equation}
+For the type 0B theory, $b=1$, $Q=2$, $c=27/2$, and an external
+super-Liouville primary of momentum $P_i$ has $h_i=(1+P_i^2)/2$.
+At punctures 2 and 3 the external state may be either a primary or its
+level-$1/2$ descendant.  Write
+\begin{equation}
+ \star^0h_i\equiv h_i,\qquad \star^1h_i\equiv *h_i,
+ \qquad \underline h_i\equiv h_i+\frac{\delta_i}{2},
+ \qquad \delta_i\in\{0,1\},\quad i=2,3.
+ \label{eq:ns-block-star-notation}
+\end{equation}
+Thus there are eight chiral blocks
+$\mathcal F^{e/o}(h_4,\star^{\delta_3}h_3,
+\star^{\delta_2}h_2,h_1;h|z)$, where $e/o$ selects integer/half-integer
+levels in the internal NS module.  The cross ratio and our local series are
+\begin{align}
+ z&=\frac{z_{12}z_{34}}{z_{13}z_{24}},\notag\\
+ \mathcal F^e(z)
+ &=z^{h-h_1-\underline h_2}
+ \left[1+\sum_{m=1}^{\infty}z^m\mathfrak F_m\right],\notag\\
+ \mathcal F^o(z)
+ &=z^{h-h_1-\underline h_2}
+ \sum_{n=0}^{\infty}z^{n+1/2}\mathfrak F_{n+1/2}.
+ \label{eq:ns-block-local-series}
+\end{align}
+The fraktur coefficients specify the chiral phase used in the code: they are
+the signed coefficients produced by BRY's ancillary notebook, including the
+minus signs in the half-integer seeds below, with no second overall sign
+inserted in the last line of Eq.~\eqref{eq:ns-block-local-series}.  BRY's
+displayed block convention instead places an extra minus sign in front of the
+odd series when $(\delta_3,\delta_2)=(1,1)$.  This is a holomorphic phase
+choice, which the scalar decomposition into $|\mathcal F|^2$ does not fix;
+the code choice is made explicit because it reproduces BRY's executable
+crossing benchmark.
+
+\subsection{The \texorpdfstring{$c$}{c}-recursion}
+
+For $r\geq2$, $s\geq1$, and $r+s$ even, define
+\begin{align}
+ b_{r,s}(h)^2
+ &=-\frac{4h+rs-1+
+ \sqrt{16h^2+8(rs-1)h+(r-s)^2}}{r^2-1},\notag\\
+ c_{r,s}(h)&=\frac{15}{2}+3b_{r,s}(h)^2+3b_{r,s}(h)^{-2},\notag\\
+ A_{r,s}(h)&=\frac12
+ \prod_{\substack{p=1-r,\ldots,r\\q=1-s,\ldots,s\\
+ (p,q)\ne(0,0),(r,s)\\p+q\in2\mathbb Z}}
+ \frac{\sqrt2}{p b_{r,s}(h)+q b_{r,s}(h)^{-1}}.
+ \label{eq:ns-block-pole-data}
+\end{align}
+With the external labels suppressed, the recursion is
+\begin{align}
+ \mathfrak F_0(h;c)&=1,\notag\\
+ \mathfrak F_\ell(h;c)
+ &=f_\ell(h)+
+ \sum_{\substack{r\geq2,\ s\geq1\\r+s\in2\mathbb Z\\rs\leq2\ell}}
+ \frac{R^{\ell}_{r,s}(h)}{c-c_{r,s}(h)}
+ \mathfrak F_{\ell-rs/2}
+ \left(h+\frac{rs}{2};c_{r,s}(h)\right).
+ \label{eq:ns-block-c-recursion}
+\end{align}
+The endpoint $rs=2\ell$ is essential: it supplies the first $(3,1)$ pole
+at $\ell=3/2$ and the first $(2,2)$ pole at $\ell=2$.  BRY's displayed
+equation prints the strict inequality $rs<2\ell$, whereas its ancillary
+notebook sums through $rs=2\ell$.  Equation~\eqref{eq:ns-block-c-recursion}
+and the code follow the notebook.
+
+At a pole set $b=b_{r,s}(h)$, $Q_{r,s}=b+b^{-1}$, and
+\begin{equation}
+ a_i^{(r,s)}=\sqrt{\frac{Q_{r,s}^2}{4}-2h_i}.
+ \label{eq:ns-block-pole-momenta}
+\end{equation}
+For $\delta\in\{0,1\}$, define the fusion polynomial
+\begin{align}
+ P_{r,s}^{(\delta)}(h_a,h_b)
+ ={}&\prod_{\substack{p=1-r,\,1-r+2,\ldots,r-1\\
+ q=1-s,\,1-s+2,\ldots,s-1\\
+ (p+q)-(r+s)\equiv2(1-\delta)\ ({\rm mod}\ 4)}}
+ \frac{2a_a^{(r,s)}-2a_b^{(r,s)}-pb-q/b}{2\sqrt2}\notag\\
+ &\hspace{2.2cm}\times
+ \frac{2a_a^{(r,s)}+2a_b^{(r,s)}+pb+q/b}{2\sqrt2}.
+ \label{eq:ns-block-fusion-polynomial}
+\end{align}
+Let $\delta_i^{(\ell)}=\delta_i$ for integer $\ell$ and
+$\delta_i^{(\ell)}=1-\delta_i$ for half-integer $\ell$.  The residue is
+\begin{equation}
+ R^{\ell}_{r,s}(h)=
+ (-1)^{rs\delta_3}
+ \left(-\frac{\partial c_{r,s}(h)}{\partial h}\right)A_{r,s}(h)
+ P_{r,s}^{(\delta_2^{(\ell)})}(h_1,h_2)
+ P_{r,s}^{(\delta_3^{(\ell)})}(h_4,h_3).
+ \label{eq:ns-block-residue}
+\end{equation}
+The factor $(-1)^{rs\delta_3}$ is required; omitting it is the sign typo in
+the older recursion formula noted and corrected by BRY.
+
+For an implementation-complete seed ledger, set
+$A=h+h_3-h_4$, $B=h+h_2-h_1$.  For $m\in\mathbb Z_{>0}$ and
+$n\in\mathbb Z_{\geq0}$,
+\begin{equation}
+\renewcommand{\arraystretch}{1.55}
+\begin{array}{c|c|c}
+ (\delta_3,\delta_2)&f_m&f_{n+1/2}\\ \hline
+ (0,0)&\displaystyle\frac{(A)_m(B)_m}{m!(2h)_m}
+ &\displaystyle\frac{(A+\frac12)_n(B+\frac12)_n}{n!(2h)_{n+1}}\\
+ (0,1)&\displaystyle\frac{(A)_m(B+\frac12)_m}{m!(2h)_m}
+ &\displaystyle\frac{(A+\frac12)_n(B)_{n+1}}{n!(2h)_{n+1}}\\
+ (1,0)&\displaystyle\frac{(A+\frac12)_m(B)_m}{m!(2h)_m}
+ &\displaystyle-\frac{(A)_{n+1}(B+\frac12)_n}{n!(2h)_{n+1}}\\
+ (1,1)&\displaystyle\frac{(A+\frac12)_m(B+\frac12)_m}{m!(2h)_m}
+ &\displaystyle-\frac{(A)_{n+1}(B)_{n+1}}{n!(2h)_{n+1}}
+\end{array}
+\label{eq:ns-block-seeds}
+\end{equation}
+where $(x)_n$ is the rising Pochhammer symbol.
+
+\subsection{Elliptic representation and code interface}
+
+The local $z$-series is converted to the elliptic nome
+\begin{equation}
+ q(z)=\exp\!\left[-\pi\frac{K(1-z)}{K(z)}\right],
+ \qquad K(z)={}_2F_1\!\left(\frac12,\frac12;1;z\right),
+ \qquad z=\frac{\theta_2(q)^4}{\theta_3(q)^4}.
+ \label{eq:ns-block-nome}
+\end{equation}
+Both parities are written as
+\begin{align}
+ \mathcal F^{e/o}(z)={}&(16q)^{h-Q^2/8}
+ z^{Q^2/8-h_1-\underline h_2}
+ (1-z)^{Q^2/8-\underline h_2-\underline h_3}\notag\\
+ &\times\theta_3(q)^{\frac32Q^2-
+ 4(h_1+\underline h_2+\underline h_3+h_4)}
+ H^{e/o}(q).
+ \label{eq:ns-block-elliptic-factorization}
+\end{align}
+Here $H^e$ has integer powers of $q$, whereas $H^o$ has powers
+$q^{n+1/2}$.  The elliptic series converges rapidly throughout the direct
+channel and is the representation used for numerical four-punctured-sphere
+work.
+
+The root-level Python module
+\texttt{superconformal\_}\allowbreak\texttt{blocks.py} implements
+Eqs.~\eqref{eq:ns-block-weights}--\eqref{eq:ns-block-elliptic-factorization}.
+Its main class stores a level $\ell$ by the integer $2\ell$, exposes
+individual recursion coefficients, and evaluates either the local series or
+the elliptic series:
+\begin{verbatim}
+block = NSSphereFourPointBlock.from_liouville_momenta(
+    p1=P1, p2=P2, p3=P3, p4=P4,
+    internal_momentum=P, b=1, star2=True, star3=True)
+Fe = block.elliptic_block(z, order=8, parity="even")
+Fo = block.elliptic_block(z, order=8, parity="odd")
+\end{verbatim}
+All square roots, fractional powers, and elliptic functions use principal
+branches.  Crucially, the $a_i^{(r,s)}$ are recomputed with $Q_{r,s}$ at
+every recursion pole rather than with the physical background charge.  A
+near-zero $c-c_{r,s}$ raises an explicit pole error instead of silently
+returning an unstable value.  The order parameter counts retained
+coefficients: $q^0$ through $q^{N-1}$ in the even block and $q^{1/2}$
+through $q^{N-1/2}$ in the odd block.
+
+As an external regression anchor, take BRY's ancillary-notebook values
+\begin{equation}
+ c=\frac{27}{2}+10^{-5},\quad
+ (P_4,P_3,P_2,P_1)=\left(\frac35,\frac14,\frac13,\frac12\right),\quad
+ h=\frac{11}{10},\quad (\delta_3,\delta_2)=(1,1).
+ \label{eq:ns-block-bry-benchmark-input}
+\end{equation}
+The implementation reproduces
+\begin{align}
+ H^e(q)&=1+1.0998737373737373q
+ +15.824538587885476q^2+21.09367085588721q^3+\cdots,\notag\\
+ H^o(q)&=-1.7823926767676768q^{1/2}
+ -6.738809221289842q^{3/2}
+ -13.848138977969848q^{5/2}+\cdots.
+ \label{eq:ns-block-bry-benchmark-series}
+\end{align}
+At $z=1/3+3i/5$, truncation through eight coefficients gives
+\begin{align}
+ \mathcal F^e&=1.3109708952736965
+ +0.18058411587390863i,\notag\\
+ \mathcal F^o&=-0.3051714889777302
+ -0.4379494400515853i.
+ \label{eq:ns-block-bry-benchmark-values}
+\end{align}
+The automated tests also compare the $z$- and $q$-representations for all
+eight choices and verify explicitly that both endpoint poles are present.
+No claim about a higher-genus analogue is made here; that literature and
+sewing audit is deferred to a later stage.
+
+\subsection{Nonchiral correlators and the BRY four-tachyon density}
+\label{subsec:bry-sphere-correlators}
+
+We now contract the chiral blocks with the $b=1$ pants coefficients defined
+in Eqs.~\eqref{eq:ns-primary-three-point} and
+\eqref{eq:ns-top-three-point}, using the explicit formulas
+\eqref{eq:c-ns} and \eqref{eq:ctilde-ns}.  Place the operators $4,3,2,1$
+at $\infty,1,z,0$, respectively, and abbreviate
+\begin{equation}
+ C_{12P}=C(P_1,P_2,P),\quad C_{34P}=C(P_3,P_4,P),\quad
+ \widetilde C_{12P}=\widetilde C(P_1,P_2,P),\quad
+ \widetilde C_{34P}=\widetilde C(P_3,P_4,P).
+ \label{eq:sphere-four-point-coefficient-shorthand}
+\end{equation}
+Below, $\mathcal F^{e/o}$ has external labels $(h_4,h_3,h_2,h_1)$, whereas
+$\mathcal F^{e/o}_{**}$ has $(h_4,*h_3,*h_2,h_1)$.  BRY's three
+nonchiral functions are
+\begin{align}
+ G(4321|z)={}&\int_0^\infty\frac{dP}{\pi}\bigl[
+ C_{12P}C_{34P}\mathcal F^e(z)\mathcal F^e(\bar z)
+ +\widetilde C_{12P}\widetilde C_{34P}
+ \mathcal F^o(z)\mathcal F^o(\bar z)\bigr],
+ \label{eq:bry-G-decomposition}\\
+ H(4321|z)={}&-\int_0^\infty\frac{dP}{\pi}\bigl[
+ \widetilde C_{12P}\widetilde C_{34P}
+ \mathcal F^e_{**}(z)\mathcal F^e_{**}(\bar z)
+ +C_{12P}C_{34P}\mathcal F^o_{**}(z)
+ \mathcal F^o_{**}(\bar z)\bigr].
+ \label{eq:bry-H-decomposition}
+\end{align}
+Here
+$G=\langle V_{P_4}(\infty)V_{P_3}(1)V_{P_2}(z,\bar z)V_{P_1}(0)\rangle$
+and
+$H=\langle V_{P_4}(\infty)W_{P_3}(1)W_{P_2}(z,\bar z)V_{P_1}(0)\rangle$.
+The third function includes the two timelike-free-fermion contractions in
+the picture-raised tachyons:
+\begin{align}
+ J(4321|z)=-\int_0^\infty\frac{dP}{\pi}\Bigg\{&
+ C_{12P}C_{34P}\left[
+ \frac{\mathcal F^o_{**}(z)\mathcal F^e(\bar z)}{1-\bar z}
+ +\frac{\mathcal F^e(z)\mathcal F^o_{**}(\bar z)}{1-z}\right]
+ \notag\\[-2pt]
+ &+\widetilde C_{12P}\widetilde C_{34P}\left[
+ \frac{\mathcal F^e_{**}(z)\mathcal F^o(\bar z)}{1-\bar z}
+ +\frac{\mathcal F^o(z)\mathcal F^e_{**}(\bar z)}{1-z}\right]
+ \Bigg\}.
+ \label{eq:bry-J-decomposition}
+\end{align}
+In the scalar convention used in Eqs.~\eqref{eq:bry-H-decomposition} and
+\eqref{eq:bry-J-decomposition}, the doubly-starred odd block is minus the
+signed ancillary-notebook series returned by the low-level block class.
+This phase cancels between the two chiral halves of $H$ but is indispensable
+in the mixed products of $J$.  For nonnegative real momenta, $H$ and $J$ are
+real and negative, as required by the anti-Hermiticity of the descendant
+operators.
+
+For the all-tachyon term in BRY's $1\to3$ setup, assign
+\begin{equation}
+ (P_4,P_3,P_2,P_1)=(\omega,\omega_3,\omega_2,\omega_1).
+ \label{eq:bry-four-tachyon-momentum-assignment}
+\end{equation}
+After the internal-$P$ integral but before the $z$ integral, the reduced
+moduli density is
+\begin{align}
+ \mathcal I_T(z)={}&|z|^{-2\omega_1\omega_2}
+ |1-z|^{-2\omega_2\omega_3}
+ \left[\frac{\omega_2^2\omega_3^2}{|1-z|^2}G(4321|z)
+ -H(4321|z)-\omega_2\omega_3J(4321|z)\right].
+ \label{eq:bry-four-tachyon-density}
+\end{align}
+Thus the corresponding unregularized contribution carries the overall
+factor
+\begin{equation}
+ \frac{i}{2}\,\delta\!\left(\omega-\sum_{i=1}^3\omega_i\right)
+ g_s^4C_{S^2}\int_{\mathbb C}d^2z\,\mathcal I_T(z).
+ \label{eq:bry-four-tachyon-unregularized-prefactor}
+\end{equation}
+This is the BRY expression after multiplying the explicitly calculated
+four-tachyon term by the eight nonzero even-axion contributions.  Equality of
+those eight terms follows from the assumed perturbative decoupling of left-
+and right-side modes; it was not separately derived from eight worldsheet
+correlators.
+
+The code interface is
+\begin{verbatim}
+corr = BRYNSFourPointCorrelator(
+    p1=1/2, p2=1/3, p3=1/4, p4=3/5, block_order=8)
+values = corr.evaluate(z=0.1, p_max=5, quadrature_order=20)
+\end{verbatim}
+The module \texttt{sphere\_four\_point.py} performs the $P$ integral by
+Gauss--Legendre quadrature, while
+\texttt{super\_liouville\_structure\_constants.py} supplies the normalized
+$C$ and $\widetilde C$.  The recursion is evaluated at
+$c=27/2+10^{-5}$, as in BRY's numerical benchmark, and with arbitrary
+precision internally.  The latter is necessary because separately large
+near-threshold recursion terms cancel at higher orders.  The finite
+$P_{\max}$ is only a numerical truncation: convergence must be checked by
+increasing $P_{\max}$, the quadrature order, and the elliptic-block order.
+
+At BRY's crossing-test momenta
+$(P_1,P_2,P_3,P_4)=(1/2,1/3,1/4,3/5)$, using the parameters in the code
+snippet, the regression values are
+\begin{equation}
+ G(0.1)=0.6251752343,\qquad
+ H(0.1)=-0.3082787765,\qquad
+ J(0.1)=-0.4125437927.
+ \label{eq:bry-four-point-regression-values}
+\end{equation}
+With the same numbers interpreted as
+$(\omega_1,\omega_2,\omega_3,\omega)$,
+$\mathcal I_T(0.1)=0.7630630252$.  The automated tests check these anchors,
+the $H$ crossing relation, structure-constant identities, and the
+near-threshold high-precision cancellation.
+
+\subsection{First regulated $1_R\to3_R$ benchmark}
+
+The first end-to-end test follows BRY Eq.~(4.15):
+\begin{equation}
+ \omega=\frac13+ia,\qquad
+ \omega_1=\omega_2=\omega_3=\frac{\omega}{3},\qquad
+ 0.5\leq a\leq0.7.
+ \label{eq:bry-complex-energy-benchmark}
+\end{equation}
+No pole of the super-Liouville structure constants crosses the undeformed
+contour $P\in\mathbb R_{\geq0}$ along this continuation.  The $s$- and
+$u$-channel counterterms vanish, as does the t-channel term proportional to
+$\widetilde C\widetilde C$.  Only the leading $C C$ subtraction at the
+picture-changing collision $z=1$ remains.  At fixed internal momentum its
+three picture-raised coefficients form the OPE square
+\begin{align}
+ B_t(P)
+ &=\omega_2^2\omega_3^2+c_0(P)^2
+   +2\omega_2\omega_3c_0(P)
+ \notag\\
+ &=\frac14\left[1+(\omega_2+\omega_3)^2-P^2\right]^2,
+ &
+ c_0(P)&=h_2+h_3-h_P.
+ \label{eq:bry-leading-t-counterterm-coefficient}
+\end{align}
+Consequently the nonzero fixed-$P$ counterterm density, including $dP/\pi$,
+is
+\begin{equation}
+ r_t(P,z)=\frac{1}{\pi}
+ C(\omega_1,\omega,P)C(\omega_2,\omega_3,P)B_t(P)
+ |1-z|^{-3+P^2-(\omega_2+\omega_3)^2},
+ \quad 0\leq P<P_* ,
+ \label{eq:bry-leading-t-counterterm-density}
+\end{equation}
+where
+\begin{equation}
+ P_*=\sqrt{1+\operatorname{Re}\!\left[(\omega_2+\omega_3)^2\right]}.
+ \label{eq:bry-t-counterterm-threshold}
+\end{equation}
+For $a=0.6$, $P_*=0.9430708966$.  The subtraction is global, as required by
+analytic continuation of the power divergence; it is not a literal removal
+of only the $1/\epsilon$ term in a small disk.
+
+Following BRY, inversion crossing folds the full $z$ plane to
+$D=\{|z|\leq1\}$, which is divided into
+\begin{equation}
+ D_\epsilon^{(0)}=\{|z|<\epsilon\},\qquad
+ D_{\rm int}=\{\epsilon\leq|z|\leq1, |1-z|\geq\epsilon\},\qquad
+ D_\epsilon^{(1)}=\{|z|\leq1, |1-z|<\epsilon\}.
+ \label{eq:bry-three-moduli-regions}
+\end{equation}
+We use $\epsilon=10^{-2}$.  The direct low-$z$ OPE is integrated in
+$D_\epsilon^{(0)}$, the elliptic-recursion blocks are used in $D_{\rm int}$,
+and the crossed low-$(1-z)$ blocks through next-to-leading order are used in
+$D_\epsilon^{(1)}$.  The angular quadrature in $D_{\rm int}$ is explicitly
+split at $\arg z=\pm\epsilon$; a single rule on $[-\pi,\pi]$ misses this
+narrow boundary layer.
+
+Let $\mathcal M$ denote the regularized expression inside braces in
+BRY Eq.~(B.6), after the three $z$ integrals and the final $P$ integral.  The
+worldsheet and matrix-model normalizations imply
+\begin{align}
+ \mathcal A_{1_R\to3_R}^{\rm WS}\big|_{\delta,\mu_{\rm F}^{-2}\ {\rm stripped}}
+ &=\frac{8i}{\pi}\mathcal M,
+ &
+ \mathcal M_{\rm MQM}
+ &=\pi\omega\omega_1\omega_2\omega_3(1+2i\omega),
+ \label{eq:bry-reduced-moduli-target}
+\end{align}
+which is equivalent to
+$\mathcal A_{1_R\to3_R}^{\rm MQM}
+=8i\omega\omega_1\omega_2\omega_3(1+2i\omega)$.
+The executable implementation is \texttt{bry\_one\_to\_three.py}.  It keeps
+the internal-$P$ contour and threshold explicit, evaluates all three moduli
+regions, and reports both sides of Eq.~\eqref{eq:bry-reduced-moduli-target}
+as complex numbers.  Fast regression tests separately check the OPE square,
+$P_*$, the direct low-$z$ expansion, complex external momenta, and the final
+normalization conversion and regularized integration path.  At $a=0.6$, a
+representative $q^8$ run with
+$P_{\max}=4$, 24-point $P$ quadrature on each side of $P_*$, and the moduli
+orders recorded by the command-line output gives
+\begin{align}
+ \mathcal M_{\rm WS}&=0.01750879-0.00320541i,
+ &
+ \mathcal M_{\rm MQM}&=0.01772691-0.00297257i,
+ \notag\\
+ \mathcal A_{\rm WS}&=0.00816252+0.04458577i,
+ &
+ \mathcal A_{\rm MQM}&=0.00756958+0.04514122i.
+ \label{eq:bry-first-regulated-numerical-result}
+\end{align}
+The relative complex-amplitude discrepancy is $1.78\%$.  This recovers the
+BRY curve at the first nontrivial level, but does not yet reproduce their
+quoted sub-$0.3\%$ numerical precision.  At the same production quadrature,
+the cutoff comparison begins with
+\begin{align}
+ \mathcal M_{q^6}&=0.01765123551-0.00248615555i,
+ &
+ \mathcal M_{q^8}&=0.01750879244-0.00320541444i,
+ \notag\\
+ \mathcal M_{q^{10}}&=0.01750781745-0.00322155122i.
+ \label{eq:bry-first-regulated-q-ledger}
+\end{align}
+In units of $|\mathcal M_{\rm MQM}|$, the $q^6\to q^8$ displacement is
+$4.08\%$, while the $q^8\to q^{10}$ displacement is approximately $0.09\%$;
+changing the moduli orders from 12 to 14 at $q^8$ gives $0.074\%$.  Thus
+$q^6$ is not converged and production begins at approximately $q^8$.  The
+remaining limitation is the narrow-$z=1$ and oscillatory-$P$ product
+quadrature rather than the superconformal recursion.
+
+\section{Matrix quantum mechanics}
+
+\subsection{Double-scaled Hamiltonian}
+
+The BRY double-scaled matrix quantum mechanics is
+\begin{equation}
+ H=\frac12\operatorname{Tr}(P^2-X^2),
+ \qquad
+ h=\frac12(p^2-x^2).
+ \label{eq:one-particle-hamiltonian}
+\end{equation}
+Diagonalization and the Vandermonde determinant turn the eigenvalues into
+free fermions.  All one-particle states on both sides with
+\begin{equation}
+ E\le-\mu_{\rm F},\qquad \mu_{\rm F}>0,
+ \label{eq:fermi-level}
+\end{equation}
+are filled.  No extra oscillator curvature, matrix Planck constant, or
+$\ap$ is to be restored in Eq.~\eqref{eq:one-particle-hamiltonian}.
+
+\subsection{Two-sided basis and exact dictionary}
+
+BRY's physical left- and right-side scattering modes are
+\begin{align}
+ \mathcal L_\omega^\pm&=T_\omega^\pm-A_\omega^\pm,
+ &
+ \mathcal R_\omega^\pm&=T_\omega^\pm+A_\omega^\pm.
+ \label{eq:lr-basis}
+\end{align}
+There is no $1/\sqrt2$ in this basis.  Reflection exchanges
+$\mathcal L$ and $\mathcal R$ and realizes $(-1)^{F_L}$; hence $T$ is even
+and $A$ is odd.  At zero flux, correlators with an odd number of axions
+vanish.
+
+The two sides decouple to every order in the perturbative
+$1/\mu_{\rm F}$ expansion.
+Eigenvalue tunnelling across the barrier mixes them through effects
+nonanalytic in $g_s$.  Perturbative and tunnelling contributions must therefore
+be tracked separately.
+
+For one incoming and $k$ outgoing excitations on one side,
+\begin{equation}
+ \mathcal A_{1\to k}
+ =\sum_{g\ge0}\mu_{\rm F}^{-(k-1+2g)}
+ \mathcal A_{\rm pert}^{(g)}
+ +O(e^{-2\pi\mu_{\rm F}}).
+ \label{eq:mm-genus-expansion}
+\end{equation}
+The exact worldsheet/matrix-model dictionary is
+\begin{equation}
+ \boxed{
+ \omega_{\rm MM}=2\omega,\qquad
+ g_s=\frac4{\pi\mu_{\rm F}},\qquad
+ C_{S^2}=\frac{\pi}{g_s^2}.}
+ \label{eq:bry-dictionary}
+\end{equation}
+The energy relation includes the corresponding rescaling of the
+energy-conservation delta function.  In the phases of
+Eqs.~\eqref{eq:tachyon-vertex}--\eqref{eq:ramond-combination}, BRY compare
+directly to the matrix-model S-matrix; an additional leg-pole transform
+must not be inserted.
+
+\section{Duality dictionary}
+
+\begin{table}[ht]
+\centering
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.36\textwidth}X@{}}
+\toprule
+String description & Matrix-model description \\
+\midrule
+Liouville coordinate
+& Eigenvalue time-of-flight coordinate \\
+BRY Fermi parameter $\mu_{\rm F}$
+& Depth of the Fermi level below the quadratic maximum \\
+$g_s=4/(\pi\mu_{\rm F})$
+& Expansion about the filled two-sided Fermi sea \\
+$\NSNS$ scalar $T$
+& Even combination of left/right scattering modes \\
+$\RR$ axion $A$
+& Odd combination of left/right scattering modes \\
+Worldsheet energy $\omega$
+& Matrix energy $\omega_{\rm MM}=2\omega$ \\
+$(-1)^{F_L}$
+& Reflection $M\mapsto-M$ \\
+$\RR$ background data
+& Fermi-level asymmetry and flux data \\
+D0-brane excitation
+& A fermion excited from the sea toward the top \\
+Nonperturbative correction
+& Eigenvalue tunnelling across the barrier \\
+\bottomrule
+\end{tabularx}
+\caption{Baseline 0B/matrix-model dictionary.  Flux normalizations are
+deferred until the flux milestone.}
+\label{tab:dictionary}
+\end{table}
+
+Equation~\eqref{eq:lr-basis}, rather than an independently orthonormalized
+density basis, is used in every amplitude comparison.
+
+\section{Genus-one path integral in BRY variables}
+
+We use the term free energy for the connected string vacuum functional,
+$\mathcal F=\log Z_{\rm string}$; it is not the thermodynamic quantity
+$-\beta^{-1}\log Z$.  This sentence fixes the overall sign convention.
+
+Define the physical radius and its dimensionless BRY numerical value by
+\begin{equation}
+ \rho\equiv\frac{R_{\rm phys}}{\ellB},
+ \qquad
+ x\equiv\frac{R_{\rm phys}}{\sqrt{2\ap}}
+ =\frac{\rho}{2},
+ \qquad
+ y\equiv\frac{R_{\rm phys}}{\sqrt{\ap}}
+ =\frac{\rho}{\sqrt2}=\sqrt2x.
+ \label{eq:dimensionless-radius}
+\end{equation}
+The variable $y$ is the argument used in the finite-radius formulas of
+Ref.~\cite{DouglasEtAl2003NewHat}.  We denote the connected amplitude per
+regulated BRY Liouville-coordinate length by
+$\widehat{\mathcal F}_1=\mathcal F_1/V_\phi^{\rm reg}$.
+
+\subsection{Even spin structures and the modular orbit integral}
+
+We follow the worldsheet derivation of
+Ref.~\cite{DouglasEtAl2003NewHat}, translated to Eq.~\eqref{eq:dimensionless-radius}.
+For an even spin structure $(r,s)=(0,1),(1,0),(1,1)$, let $D_{r,s}$ be the
+fermion determinant divided by the square root of the scalar determinant,
+and define
+\begin{equation}
+ \Theta_\rho(\tau)=\sum_{m,n\in\mathbb Z}e^{-S_{m,n}},
+ \qquad
+ S_{m,n}=\frac{\pi\rho^2}{2\tau_2}|n-m\tau|^2.
+ \label{eq:bry-circle-lattice}
+\end{equation}
+The compact matter multiplet, super-Liouville theory, and combined ghost
+system contribute respectively
+\begin{equation}
+ Z^X_{r,s}=\frac{y}{\sqrt{\tau_2}}|D_{r,s}|^2\Theta_\rho,
+ \quad
+ Z^{\rm SL}_{r,s}=\frac{V_\phi^{\rm reg}}{2\pi\sqrt{2\tau_2}}
+ |D_{r,s}|^2,
+ \quad
+ Z^{\rm gh}_{r,s}=\frac1{2\tau_2}|D_{r,s}|^{-4}.
+ \label{eq:even-spin-factors}
+\end{equation}
+All nonzero-mode determinants cancel.  Including the diagonal GSO factor
+$1/2$ for each of the three even structures gives
+\begin{equation}
+ \widehat{\mathcal F}_{1,\rm even}
+ =\frac{3\rho}{16\pi}
+ \int_{\mathcal F}\frac{d^2\tau}{\tau_2^2}\Theta_\rho(\tau).
+ \label{eq:even-spin-integral}
+\end{equation}
+
+This modular integral can be evaluated without a divergent vacuum-energy
+sum.  Separate the zero orbit and unfold every nonzero orbit to the strip:
+\begin{align}
+ I(\rho)&\equiv
+ \int_{\mathcal F}\frac{d^2\tau}{\tau_2^2}\Theta_\rho(\tau)\notag\\
+ &=\frac\pi3+2\sum_{k=1}^{\infty}
+ \int_{-1/2}^{1/2}d\tau_1\int_0^\infty\frac{d\tau_2}{\tau_2^2}
+ \exp\left[-\frac{\pi\rho^2k^2}{2\tau_2}\right]\notag\\
+ &=\frac\pi3+\frac4{\pi\rho^2}\sum_{k=1}^{\infty}\frac1{k^2}
+ =\frac\pi3\left(1+\frac2{\rho^2}\right).
+ \label{eq:lattice-orbit-integral}
+\end{align}
+The series is absolutely convergent; the last equality uses the ordinary
+Basel sum $\sum_{k\ge1}k^{-2}=\pi^2/6$, not analytic continuation at
+$s=-1$.  Therefore
+\begin{equation}
+ \boxed{
+ \widehat{\mathcal F}_{1,\rm even}
+ =\frac\rho{16}+\frac1{8\rho}.}
+ \label{eq:even-spin-density}
+\end{equation}
+
+\subsection{Odd spin structure and direct odd-supermodulus integration}
+
+The odd structure $(r,s)=(0,0)$ has left- and right-moving $\gamma$ zero
+modes from the conformal Killing spinors, $\beta$ zero modes from the
+gravitino components that cannot be gauged away, and zero modes for both the
+matter fermion $\chi$ and Liouville fermion $\psi$.  The Liouville-fermion
+zeros cancel the $\gamma$-zero-mode divergence.  Integrating the $\beta$
+zeros, equivalently the odd moduli, inserts the supercurrents
+\begin{equation}
+ G(z)\overline G(\bar w)
+ =\big(\chi\partial X+\psi\partial\phi\big)(z)
+  \big(\bar\chi\bar\partial X+\bar\psi\bar\partial\phi\big)(\bar w).
+ \label{eq:odd-supercurrent-insertion}
+\end{equation}
+These insertions absorb the remaining $\chi,\bar\chi$ zero modes.  The
+nontrivial matter factor is then
+\begin{equation}
+ \left\langle\partial X(z)\bar\partial X(\bar w)\right\rangle_X,
+ \label{eq:odd-matter-correlator}
+\end{equation}
+including both its separated-point term $-\pi/\tau_2$ and its contact term.
+Because the compact-boson action is proportional to
+$\int\partial X\bar\partial X$, the integrated insertion is a radius
+derivative of the circle path integral.  It fixes the odd contribution to
+be proportional to $y-y^{-1}$.
+
+Equivalently, one can work globally on the odd supertorus
+\begin{equation}
+ (z,\theta)\sim(z+1,\theta)
+ \sim(z+\tau+\lambda\theta,\theta+\lambda)
+ \label{eq:odd-supertorus}
+\end{equation}
+and integrate $d\lambda\,d\bar\lambda$ directly.  Thus no arbitrary local
+PCO position is introduced.  If a local PCO description is used instead,
+it must reproduce this direct integral and its contact term; there is no
+additional vertical correction to add to a globally defined supermoduli
+integral for this unpunctured genus-one vacuum amplitude.
+
+The path integral fixes the radius dependence.  As in
+Ref.~\cite{DouglasEtAl2003NewHat}, its overall magnitude is normalized by
+the large-radius spectrum.  The result before choosing the 0A/0B sign is
+\begin{equation}
+ \widehat{\mathcal F}_{1,\rm odd}^{(\varepsilon)}
+ =\frac{\varepsilon}{24\sqrt2}\left(y-\frac1y\right)
+ =\varepsilon\left(\frac\rho{48}-\frac1{24\rho}\right).
+ \label{eq:odd-spin-general}
+\end{equation}
+The sign is chosen so that the $1/R$ term counts one massless field in 0A
+and two in 0B.  In this convention $\varepsilon_A=+1$ and
+$\varepsilon_B=-1$, hence
+\begin{equation}
+ \boxed{
+ \widehat{\mathcal F}_{1,\rm odd}^{0B}
+ =-\frac\rho{48}+\frac1{24\rho}.}
+ \label{eq:odd-spin-density}
+\end{equation}
+
+\subsection{The 0B and fluxless 0A spin sums}
+
+The even contribution in Eq.~\eqref{eq:even-spin-density} is common to the
+two theories.  Their relative GSO choice reverses the odd contribution, so
+\begin{equation}
+ \widehat{\mathcal F}_{1,\rm odd}^{0A}(\rho_A)
+ =\frac{\rho_A}{48}-\frac1{24\rho_A}
+ =-\widehat{\mathcal F}_{1,\rm odd}^{0B}(\rho_A).
+ \label{eq:odd-spin-density-0a}
+\end{equation}
+Adding even and odd structures gives directly
+\begin{align}
+ \boxed{
+ \widehat{\mathcal F}^{0B}_1(\rho_B)
+ =\frac{\rho_B}{24}+\frac1{6\rho_B}}
+ \label{eq:bry-spectrum-torus}\\[3pt]
+ \boxed{
+ \widehat{\mathcal F}^{0A}_1(\rho_A)
+ =\frac1{12}\left(\rho_A+\frac1{\rho_A}\right)}.
+ \label{eq:bry-spectrum-torus-0a}
+\end{align}
+The BRST spectrum explains these coefficients: 0B has two momentum towers
+and one winding tower, while 0A has one momentum tower and two winding
+towers.  This is now a check of the modular and supermoduli derivation, not
+a zeta-regularized input.
+
+The physical T-duality map is
+\begin{equation}
+ R_A=\frac{\ap}{R_B},
+ \qquad \rho_A=\frac2{\rho_B},
+ \qquad
+ \widehat{\mathcal F}^{0A}_1(\rho_A)
+ =\widehat{\mathcal F}^{0B}_1\!\left(\frac2{\rho_A}\right).
+ \label{eq:0a-0b-t-duality}
+\end{equation}
+This also maps the 0B stationary point $\rho_B=2$ to the 0A stationary
+point $\rho_A=1$, or $R_A=\sqrt{\ap/2}$.
+
+\subsection{Liouville wall and the regulator ledger}
+
+The interaction in Eq.~\eqref{eq:sl-action} is invariant under
+\begin{equation}
+ \phi\longrightarrow\phi+c,
+ \qquad
+ \mu_{\rm L}\longrightarrow e^{-bc}\mu_{\rm L}.
+ \label{eq:liouville-shift}
+\end{equation}
+Consequently the wall position contains
+$-b^{-1}\log\mu_{\rm L}$.  With a fixed coordinate cutoff in the
+weak-coupling region, define
+\begin{equation}
+ V_\phi^{\rm reg}
+ =-\frac1b\log\frac{\mu_{\rm L}}{\Lambda_{\rm L}}
+ +V_{\rm scheme}.
+ \label{eq:bry-liouville-volume}
+\end{equation}
+The additive term depends on the location and shape of the cutoff.  It is
+not compared.  Combining Eqs.~\eqref{eq:bry-spectrum-torus} and
+\eqref{eq:bry-liouville-volume} at $b=1$ gives
+\begin{equation}
+ \boxed{
+ \mathcal F^{0B}_1(\rho,\mu_{\rm L})\big|_{\rm univ}
+ =-\frac{\log(\mu_{\rm L}/\Lambda_{\rm L})}{24}
+ \left(\rho+\frac4\rho\right)}.
+ \label{eq:torus-anchor}
+\end{equation}
+For fluxless type 0A, the same regulated volume gives
+\begin{equation}
+ \boxed{
+ \mathcal F^{0A}_1(\rho_A,\mu_{\rm L})\big|_{\rm univ}
+ =-\frac1{12}\left(\rho_A+\frac1{\rho_A}\right)
+ \log\frac{\mu_{\rm L}}{\Lambda_{\rm L}}.}
+ \label{eq:torus-anchor-0a}
+\end{equation}
+Restoring dimensions, this is
+\begin{equation}
+ \mathcal F^{0A}_1\big|_{\rm univ}
+ =-\frac{\log(\mu_{\rm L}/\Lambda_{\rm L})}{12\sqrt2}
+ \left(\frac{2R_A}{\sqrt{\ap}}+\frac{\sqrt{\ap}}{R_A}\right).
+ \label{eq:torus-anchor-0a-dimensional}
+\end{equation}
+The regulator-independent datum is the logarithmic derivative
+\begin{equation}
+ \boxed{
+ \frac{\partial\mathcal F^{0B}_1}
+ {\partial\log\mu_{\rm L}}
+ =-\frac1{24}\left(\rho+\frac4\rho\right).}
+ \label{eq:torus-log-derivative}
+\end{equation}
+
+If another source uses $\Phi=a\phi$ and a parameter $\lambda$ defined by
+$\mu_{\rm L}=\kappa\lambda^p$, then
+\begin{equation}
+ V_\Phi^{\rm reg}\big|_{\log\lambda}
+ =-\frac{ap}{b}\log\lambda.
+ \label{eq:volume-translation}
+\end{equation}
+Thus $\kappa$ and additive cutoff changes affect only a constant, whereas a
+field rescaling $a$ or power map $p$ changes the logarithmic coefficient.
+
+\subsection{Douglas convention and the matrix variable}
+
+The calculation above follows Sec.~4.2 and App.~A of
+Ref.~\cite{DouglasEtAl2003NewHat}, with $y=R_{\rm phys}/\sqrt\ap$
+translated to the BRY radius $\rho=\sqrt2y$.  That reference writes the
+Liouville kinetic term as
+$(8\pi)^{-1}(d\phi)^2$, which is the same coordinate normalization as
+Eq.~\eqref{eq:sl-action}, and then sets
+$V_L=-\log|\mu_{\rm D}|$, with an additive cutoff constant suppressed.
+At $b=1$ this is Eq.~\eqref{eq:bry-liouville-volume} after a constant
+rescaling of the interaction parameter.  Their Eqs.~(4.5), (4.7), and
+(4.8) become respectively Eqs.~\eqref{eq:even-spin-density},
+\eqref{eq:odd-spin-general}, and the two totals above.
+
+To compare the logarithm, introduce rather than assume
+\begin{equation}
+ \mu_{\rm L}=\kappa\mu_{\rm F}^{\,p}.
+ \label{eq:liouville-fermi-map}
+\end{equation}
+Equation~\eqref{eq:torus-anchor} then predicts
+\begin{equation}
+ \mathcal F^{0B}_1\big|_{\log\mu_{\rm F}}
+ =-\frac p{24}\left(\rho+\frac4\rho\right)\log\mu_{\rm F}.
+ \label{eq:torus-fermi-comparison}
+\end{equation}
+The conventional string/matrix-model identification corresponds to
+$p=1$ and an unobservable constant $\kappa$.  Agreement therefore tests
+$p=1$; it is not an input to the worldsheet moduli integral.
+
+For the smoke-test choice
+$\mu_{\rm L}/\Lambda_{\rm L}=10$, the stationary numerical radius is
+$\rho=2$, equivalently $R_{\rm phys}=\sqrt{2\ap}$, and
+\begin{equation}
+ \frac{\partial\mathcal F^{0B}_1}
+ {\partial\log\mu_{\rm L}}\bigg|_{\rho=2}
+ =-\frac16,
+ \qquad
+ \mathcal F^{0B}_1(\rho=2)\big|_{\rm univ}
+ =-\frac{\log10}{6}.
+ \label{eq:numerical-anchor}
+\end{equation}
+
+\section{Benchmark ladder}
+
+The calculations should be developed in the following order.
+
+\subsection*{A. Analytic torus check}
+
+First reproduce the determinant cancellation in
+Eq.~\eqref{eq:even-spin-factors}, unfold the convergent modular integral
+Eq.~\eqref{eq:lattice-orbit-integral}, and derive the odd-spin term by
+integrating the odd supermodulus with its contact term.  Then apply the
+0A/0B sign and the Liouville wall displacement.  The spectrum count and
+matrix variable $\mu_{\rm F}$ are subsequent checks.
+
+\subsection*{B. Inverted-oscillator scattering data}
+
+Construct even and odd one-particle scattering states, compute their reflection
+phases and regulated densities of states, and reconstruct the finite-radius
+genus-one term from the two parity sectors.  Cutoff variation and increasing
+numerical precision should leave the logarithmic coefficient stable.
+
+\subsection*{C. Collective fields and sphere amplitudes}
+
+Build the left and right time-of-flight fields, form the BRY combinations
+\(\mathcal L=T-A\) and \(\mathcal R=T+A\), verify the zero-flux parity
+selection rule, and reproduce the BRY-normalized $1\to2$ and $1\to3$
+amplitudes with $\omega_{\rm MM}=2\omega$.  Mixed-side connected amplitudes
+must vanish perturbatively.
+
+\subsection*{D. Flux backgrounds and 0A/0B T-duality}
+
+Introduce asymmetric Fermi data using explicitly named flux variables.  Keep
+Lorentzian continuous-flux conventions distinct from Euclidean quantized
+fluxes, and verify the exact finite-radius 0A/0B map
+\cite{GukovTakayanagiToumbas2004Flux,MaldacenaSeiberg2005FluxVacua}.
+
+\subsection*{E. Higher genus and StringMC}
+
+Only after the lower-genus dictionary is fixed should the project choose a
+super-Riemann-surface measure, specify the treatment of odd moduli, and adapt
+the existing StringMC sampling infrastructure.  The bosonic moduli measure
+must not be imported into this target implicitly.  Degeneration,
+factorization, GSO phases, and superghost normalization must be audited before
+a full higher-genus integral is attempted.
+
+\section{Worldsheet literature for the genus-one and genus-two program}
+
+The higher-genus target requires more than a bosonic moduli integral with a
+spin-structure prefactor.  It needs the BRST-complete state space, the
+$bc$--$\beta\gamma$ measure, the integration over odd moduli, and the
+super-Liouville conformal data in every allowed NS and Ramond sewing channel.
+A detailed source-to-formula map is maintained in
+\texttt{literature\_genus1\_genus2.md}; the main conclusions are summarized
+here.
+
+Ref.~\cite{BalthazarRodriguezYin2023SMatrix} computes tree-level sphere
+$1\to2$ and $1\to3$ amplitudes.  It does not compute the torus vacuum
+amplitude or the genus-two free energy, and explicitly leaves higher-genus
+blocks and loop amplitudes for future work.  We therefore use it as the
+master convention and sphere-data source, not as a substitute for the
+higher-genus measure.
+
+\subsection{Genus-one measure source}
+
+The generic propagating spectrum consists of the NS--NS tachyon and R--R axion,
+supplemented by discrete BRST states at special momenta.  The physical 0B
+spectrum and its circle momentum/winding projection are given in
+Ref.~\cite{DouglasEtAl2003NewHat}; the systematic NS and R BRST cohomology is
+given in Ref.~\cite{ItohOhta1992BRST}.
+
+Section~5 follows the explicit genus-one measure of
+Ref.~\cite{DouglasEtAl2003NewHat}, translated to the BRY ledger.  For the
+three even torus spin structures, the matter, super-Liouville, and combined
+superghost factors are
+\begin{align}
+ Z_X&=\frac{y}{\sqrt{\tau_2}}|D_{r,s}|^2
+       \sum_{m,n}e^{-S_{m,n}},\notag\\
+ Z_{\SL}&=\frac{V_{\rm D}}{2\pi\sqrt{2\tau_2}}|D_{r,s}|^2,
+ &
+ Z_{\rm sgh}&=\frac{1}{2\tau_2}|D_{r,s}|^{-4}.
+ \label{eq:torus-determinants}
+\end{align}
+All nonzero-mode determinants cancel.  An even supertorus has moduli
+dimension $1|0$, so there is no PCO insertion for the unpunctured vacuum
+amplitude.  The quantity $V_{\rm D}$ is their regulated Liouville volume;
+it is translated using Eq.~\eqref{eq:volume-translation}, rather than
+identified by its symbol.
+
+The odd spin structure must not be omitted.  It has one odd supermodulus,
+one $\beta$ and one $\gamma$ zero mode in each chiral sector, and matter and
+Liouville fermion zero modes.  Appendix A of
+Ref.~\cite{DouglasEtAl2003NewHat} integrates the odd modulus directly.  The
+$\beta$ zero modes insert $G\overline G$, the Liouville-fermion zero modes
+cancel the $\gamma$-zero-mode divergence, and the remaining insertion is
+proportional to $\langle\partial X\,\overline\partial X\rangle$, including
+its contact term.  This gives the odd-spin contribution required for
+Eq.~\eqref{eq:torus-anchor}.
+
+For this vacuum calculation, direct integration over the global odd
+supertorus modulus is the primary prescription.  Vertical integration is
+needed only if the same integral is represented by local PCO sections, or if
+punctures or off-shell states destroy the global description.  It must then
+reproduce, rather than be added to, the direct-supermoduli result.
+
+\subsection{Genus two: conformal data and measure}
+
+For an unpunctured surface of genus $g\ge2$,
+\begin{equation}
+ \dim\mathfrak M_g=(3g-3\,|\,2g-2).
+ \label{eq:supermoduli-dimension}
+\end{equation}
+Thus the genus-two chiral measure has dimension $3|2$: a PCO
+representation uses two holomorphic and two antiholomorphic PCOs.  There are
+ten even and six odd genus-two spin structures
+\cite{Witten2012SuperRiemannSurfaces}.  The all-genus type-0 GSO projection
+is a diagonal spin-structure sum.  Type 0B assigns no Arf sign, whereas 0A
+weights a spin structure by $(-1)^{\operatorname{Arf}}$
+\cite{KaidiEtAl2020TopologicalSuperconductors}.
+
+The complete three-point coefficient is a family of coefficients.  The
+NS sector has two independent structures,
+\begin{equation}
+ C(P_1,P_2,P_3),\qquad \widetilde C(P_1,P_2,P_3),
+\end{equation}
+and an R--R--NS pants vertex requires two further structures, which may be
+taken as $C_{\rm even}$ and $C_{\rm odd}$.  They were bootstrapped in
+Refs.~\cite{RashkovStanishkov1996ThreePoint,Poghossian1997StructureConstants}.
+For numerical work at $b=1$, the preferred normalization is the explicit
+$\Upsilon_{\rm NS/R}$ representation of
+Ref.~\cite{BalthazarRodriguezYin2023SMatrix}, whose formulas and reflection
+rules have already been fixed explicitly in
+Eqs.~\eqref{eq:upsilon-definitions}--\eqref{eq:c-odd}.
+They are part of the initial worldsheet convention, not data introduced only
+at genus two.  In particular, PCO supercurrents couple to top components and
+descendants, so the bottom coefficient $C$ alone is insufficient.
+
+The structure constants must be combined with super-Virasoro sewing blocks.
+NS elliptic recursions, including top-component blocks, are developed in
+Refs.~\cite{BelavinEtAl2007Bootstrap,Belavin2007FourPoint,Suchanek2011EllipticRecursion};
+Ramond blocks are treated in Ref.~\cite{HadaszJaskolskiSuchanek2008RamondBlocks}.
+These are benchmarks for a plumbing-fixture sewing engine, not a ready-made
+genus-two vacuum block.
+
+For even spin structures, the natural starting point is the slice-independent
+D'Hoker--Phong measure based on the super period matrix
+\cite{DHokerPhong2002ChiralMeasure,DHokerPhong2002Lectures}.  Their formula
+for a general $N=1$, $c=15$ matter SCFT contains both the matter-supercurrent
+correlator and the finite-dimensional $b$- and $\beta$-ghost determinants.
+The latter are essential: the apparent collision pole of the naive product
+of two PCOs is cancelled by an opposite singularity in those determinants.
+For the present problem, the flat-space matter partition function must be
+replaced by the noncompact time $\times$ super-Liouville theory, with its
+Liouville zero-mode regulator and degeneration boundary terms retained.
+
+The standard explicit D'Hoker--Phong result is an even-spin construction.
+The six odd spin structures are therefore a separate work package.  Their
+fermion and superghost zero modes, contact terms, and separating and
+nonseparating degenerations must be derived directly before translating the
+answer into a PCO gauge.
+
+The BRY coupling relation does fix the conversion of genus powers,
+\begin{equation}
+ \frac1{\mu_{\rm F}^2}=\frac{\pi^2}{16}g_s^2.
+ \label{eq:genus-two-power-map}
+\end{equation}
+Consequently a matrix-model term $A_2/\mu_{\rm F}^2$ maps to
+$(\pi^2A_2/16)g_s^2$.  This power map does not determine the absolute
+unpunctured genus-two path-integral normalization.  That constant must be
+fixed by degeneration and factorization to the BRY-normalized sphere data
+and the torus anchor.
+
+\subsection{Vertical integration at genus two}
+
+If PCOs are used globally, spurious poles obstruct a single smooth PCO
+section.  Sen and Witten prescribe safe local sections and vertical
+interpolations between them
+\cite{Sen2015OffShell,SenWitten2015PCO}.  With two PCOs, the construction
+contains bulk cell integrals, codimension-one vertical segments on shared
+faces, and codimension-two vertical cells at corners; the hierarchy then
+terminates.  The choices must also respect plumbing degenerations.  This is
+an alternative representation of the odd-moduli integral, not an additional
+physical correction to a correct super-period-matrix calculation.
+
+\subsection{Result of the literature audit}
+
+The primary literature supplies the complete sphere super-Liouville
+three-point data and a powerful even-spin genus-two gauge-fixing framework.
+It does not appear to supply the finished diagonal type-0B genus-two vacuum
+integrand for time $\times$ super-Liouville including all odd spin
+structures.  Constructing and factorization-testing that assembly is the
+main worldsheet research problem for the genus-two target.
+
+\section{Deferred choices and safeguards}
+
+The baseline intentionally leaves the following items open:
+\begin{itemize}
+ \item continuation to $\mu_{\rm F}<0$ through the top of the potential;
+ \item unequal filling and the two independent 0B flux variables;
+ \item Lorentzian versus Euclidean flux normalization;
+ \item the complete 0A/0B T-duality dictionary;
+ \item the nonperturbative tunnelling contour prescription;
+ \item the higher-genus supermoduli integration cycle and measure.
+\end{itemize}
+An imbalance between the Fermi seas is not a harmless numerical regulator: it
+changes the $\RR$ background.  Likewise, Eq.~\eqref{eq:bry-dictionary} fixes
+the sphere coupling convention but does not by itself normalize the
+unpunctured genus-two integration cycle.  Both facts should remain explicit
+in code and data products.
+
+\section{Immediate next step}
+
+The next bounded calculation is to complete stage A at the integrand level:
+derive Eq.~\eqref{eq:odd-spin-density} by direct integration of the odd
+supertorus modulus, including its contact term, without importing its value
+from Douglas et al.  The matrix-model phase-shift calculation then tests
+Eq.~\eqref{eq:liouville-fermi-map} and in particular the exponent $p$.
+
+\bibliographystyle{unsrt}
+\bibliography{../References/references}
+
+\end{document}

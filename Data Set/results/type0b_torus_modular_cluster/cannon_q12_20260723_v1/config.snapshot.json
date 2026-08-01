@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "external_momentum": 0.33,
+  "levels": [6, 8, 10, 12],
+  "taus": [
+    {
+      "name": "bry_anchor",
+      "tau": [0.2, 0.9]
+    },
+    {
+      "name": "nonprincipal_spin_lift",
+      "tau": [0.45, 0.65]
+    }
+  ],
+  "studies": [
+    {
+      "name": "quadrature_64",
+      "quadrature_order": 64,
+      "p_max": 4.5,
+      "structure_precision": 50,
+      "finite_part_samples": 32
+    },
+    {
+      "name": "quadrature_96",
+      "quadrature_order": 96,
+      "p_max": 4.5,
+      "structure_precision": 50,
+      "finite_part_samples": 32
+    },
+    {
+      "name": "tail_5p5",
+      "quadrature_order": 96,
+      "p_max": 5.5,
+      "structure_precision": 50,
+      "finite_part_samples": 32
+    },
+    {
+      "name": "production",
+      "quadrature_order": 96,
+      "p_max": 5.5,
+      "structure_precision": 50,
+      "finite_part_samples": 40
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "quadrature_64_to_96",
+      "left": "quadrature_64",
+      "right": "quadrature_96"
+    },
+    {
+      "name": "momentum_tail_4p5_to_5p5",
+      "left": "quadrature_96",
+      "right": "tail_5p5"
+    },
+    {
+      "name": "finite_part_samples_32_to_40",
+      "left": "tail_5p5",
+      "right": "production"
+    }
+  ],
+  "accuracy_targets": [
+    {
+      "name": "principal-frame order-12 modular residual",
+      "kind": "modular_residual",
+      "study": "production",
+      "tau": "bry_anchor",
+      "level": 12,
+      "maximum": 5e-12
+    },
+    {
+      "name": "nonprincipal-lift order-12 modular residual",
+      "kind": "modular_residual",
+      "study": "production",
+      "tau": "nonprincipal_spin_lift",
+      "level": 12,
+      "maximum": 2e-10
+    },
+    {
+      "name": "spectral quadrature convergence",
+      "kind": "comparison_relative_change",
+      "comparison": "quadrature_64_to_96",
+      "maximum": 5e-12
+    },
+    {
+      "name": "momentum-tail convergence",
+      "kind": "comparison_relative_change",
+      "comparison": "momentum_tail_4p5_to_5p5",
+      "maximum": 5e-12
+    },
+    {
+      "name": "finite-part sample convergence",
+      "kind": "comparison_relative_change",
+      "comparison": "finite_part_samples_32_to_40",
+      "maximum": 5e-12
+    },
+    {
+      "name": "finite-part two-radius stability diagnostic",
+      "kind": "finite_part_two_radius",
+      "study": "production",
+      "maximum": 5e-12
+    }
+  ],
+  "default_shard_count": 16
+}

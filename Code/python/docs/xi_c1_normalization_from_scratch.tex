@@ -1,0 +1,1330 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1.0in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,array,booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage{microtype}
+
+\numberwithin{equation}{section}
+
+\newcommand{\A}{\alpha'}
+\newcommand{\dd}{\mathrm d}
+\newcommand{\ee}{\mathrm e}
+\newcommand{\ii}{\mathrm i}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cM}{\mathcal M}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\im}{\operatorname{Im}}
+\newcommand{\vol}{\operatorname{Vol}}
+\newcommand{\wh}{\widehat}
+\newcommand{\wt}{\widetilde}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\vev}[1]{\left\langle #1\right\rangle}
+
+\newtheorem{minimalinput}{Minimal input}
+\newtheorem{warning}{Convention warning}
+
+\title{Absolute Normalization of the Compact $c=1$ String\\
+Ingredient by Ingredient in Xi's Worldsheet Conventions}
+\author{Scratch derivation from the action, CFT data, and sewing unitarity}
+\date{21 July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We derive the genus-one and genus-two vacuum integrands of the compact $c=1$
+bosonic string using the logic of the string notes.  Every ingredient is
+computed separately: the compact zero mode and lattice action, oscillator
+determinants, Liouville spectral measure, ghost determinant, moduli form,
+loop-momentum Gaussian, Mumford-form residue, topology sewing constant, and
+global stack weight.  The matrix model is not used as a normalization input.
+It is introduced only after the worldsheet answer has been fixed, as an
+external comparison.
+
+The main bookkeeping distinction is between the universal BRST normalization
+$K_{S^2}^{\rm crit}=8\pi/\A$ used in the critical-string measure and the
+reduced physical $c=1$ sphere normalization
+$\wh K_{S^2}^{c=1}=2\pi\sqrt{\A}\,\wt K_{S^2}=4\pi$.  Sewing then gives
+\[
+ \frac{C_g^{c=1}}{C_g^{\rm crit}}
+ =\left(\frac{2}{\A}\right)^{g-1}.
+\]
+The torus vacuum is unchanged, while the genus-two local kernel is multiplied
+by $2/\A$.  At $\A=1$ the positive-real, $g_s^2$-stripped coefficient is
+$2/\pi$.
+\end{abstract}
+
+\tableofcontents
+
+\section{Logic contract: what is input and what is derived}
+
+The purpose of this note is to prevent an overall constant from entering
+through an implicit convention.  Every numerical factor must belong to one of
+the following categories.
+
+\begin{minimalinput}[Worldsheet theory]
+The matter theory is a timelike free boson $X^0$ times $b=1$ Liouville theory,
+together with the standard $(b,c)$ ghosts and a constant dilaton $\Phi_0$.
+We set $g_s=\ee^{\Phi_0}$.
+\end{minimalinput}
+
+\begin{minimalinput}[Ghost normalization]
+On the sphere,
+\begin{equation}
+ \vev{\prod_{i=1}^3c(z_i)\widetilde c(\bar z_i)}_{S^2}
+ =\abs{z_{12}z_{13}z_{23}}^2.
+ \label{eq:ghost-sphere}
+\end{equation}
+This is Xi's equation (4.32).
+\end{minimalinput}
+
+\begin{minimalinput}[Liouville states]
+The reflection-symmetric Liouville primary $V_P$, $P\geq0$, is normalized by
+\begin{equation}
+ \vev{V_P(1)V_{P'}(0)}=\pi\delta(P-P'),
+ \qquad
+ \mathbf 1_{\cH_L}=\int_0^\infty\frac{\dd P}{\pi}\,
+ |P\rangle\langle P|,
+ \label{eq:liouville-metric}
+\end{equation}
+and
+\begin{equation}
+ \vev{V_{P_1}V_{P_2}V_{P_3}}=C(P_1,P_2,P_3).
+ \label{eq:liouville-three}
+\end{equation}
+These are Xi's equations (I.39)--(I.42).
+\end{minimalinput}
+
+\begin{minimalinput}[Physical string states]
+The one-string in/out states and their vertices are
+\begin{align}
+ {}_{\rm in/out}\!\langle\omega|\omega'\rangle_{\rm in/out}
+ &=\omega\delta(\omega-\omega'),
+ \label{eq:state-metric}\\
+ \cV_\omega^\pm
+ &=g_s\,c\widetilde c\,
+ \exp\!\left(\pm\frac{\ii\omega X^0}{\sqrt{\A}}\right)
+ V_{P=\omega/2}.
+ \label{eq:physical-vertex}
+\end{align}
+These are Xi's equations (4.111)--(4.112).
+\end{minimalinput}
+
+\begin{minimalinput}[Plumbing coordinate and differential forms]
+Local coordinates are sewn literally by
+\begin{equation}
+ uv=q,\qquad q=\ee^{2\pi\ii\tau}.
+ \label{eq:plumbing}
+\end{equation}
+The cylinder has circumference $2\pi$.  Differential forms are ordered as in
+the string notes; in particular
+\begin{equation}
+ \ii\,\dd z\wedge\dd\bar z=2\,\dd(\Re z)\dd(\Im z).
+ \label{eq:complex-real}
+\end{equation}
+\end{minimalinput}
+
+\begin{minimalinput}[Unitarity]
+With $S=1+\ii T$, impose $SS^\dagger=1$.  A one-particle pole must factorize
+with the inverse of the physical two-point metric.  On the worldsheet this pole
+is produced by the region $q\to0$ of moduli space.
+\end{minimalinput}
+
+No matrix-model free energy, no numerical Monte Carlo result, and no guessed
+integer or power of $2$ will be used below.
+
+\section{Worldsheet conventions}
+
+\subsection{Action and central charge}
+
+In Lorentzian target signature, the matter action is
+\begin{align}
+ S_{X^0}
+ &=-\frac{1}{4\pi\A}\int_\Sigma\dd^2\sigma\sqrt g\,
+ g^{ab}\partial_aX^0\partial_bX^0,
+ \label{eq:timelike-action}\\
+ S_L[X^1]
+ &=\frac{1}{4\pi\A}\int_\Sigma\dd^2\sigma\sqrt g\,
+ \left[
+ g^{ab}\partial_aX^1\partial_bX^1
+ +\sqrt{\A}\,QX^1R(g)
+ +4\pi\mu_L\ee^{2bX^1/\sqrt{\A}}
+ \right].
+ \label{eq:liouville-action}
+\end{align}
+Here $Q=b+b^{-1}$.  At $b=1$, $Q=2$ and
+\begin{equation}
+ c_{X^0}+c_L+c_{bc}=1+25-26=0.
+\end{equation}
+The constant dilaton contributes
+\begin{equation}
+ S_{\Phi_0}=\Phi_0\chi(\Sigma),\qquad
+ \ee^{-S_{\Phi_0}}=g_s^{2g-2}.
+ \label{eq:dilaton-weight}
+\end{equation}
+Since each physical vertex in \eqref{eq:physical-vertex} contains one $g_s$,
+a genus-$g$, $n$-point amplitude is of order $g_s^{2g-2+n}$.
+
+For the thermal vacuum amplitude we Wick rotate $X^0$ to a Euclidean compact
+boson $X$ with
+\begin{equation}
+ X\sim X+2\pi R_{\rm phys},
+ \qquad r:=\frac{R_{\rm phys}}{\sqrt{\A}}.
+ \label{eq:target-circle}
+\end{equation}
+The worldsheet torus coordinate has periods $2\pi$ and $2\pi\tau$.
+
+The action also fixes the conformal weights used in the sewing calculation.
+With the exponential in \eqref{eq:physical-vertex},
+\begin{equation}
+ h_{X^0}=\bar h_{X^0}=-\frac{\omega^2}{4},
+ \qquad
+ h_L=\bar h_L=\frac{Q^2}{4}+P^2=1+P^2
+ \quad (b=1).
+ \label{eq:weights}
+\end{equation}
+Thus the product is a $(1,1)$ primary precisely when $P=\omega/2$.  Off this
+physical locus the quantity that appears in a plumbing propagator is
+\begin{equation}
+ a(P,\omega)=P^2-\frac{\omega^2}{4}.
+ \label{eq:offshell-a}
+\end{equation}
+
+\subsection{The special \texorpdfstring{$b=1$}{b=1} three-point identity}
+
+The DOZZ coefficient in the normalization \eqref{eq:liouville-metric} obeys
+\begin{equation}
+ C(P_1,P_2,P_1+P_2)=8P_1P_2(P_1+P_2).
+ \label{eq:resonance}
+\end{equation}
+On the physical kinematic locus $P_i=\omega_i/2$ and
+$\omega=\omega_1+\omega_2$, this becomes
+\begin{equation}
+ C\!\left(\frac\omega2,\frac{\omega_1}{2},\frac{\omega_2}{2}\right)
+ =\omega\omega_1\omega_2.
+ \label{eq:energy-polynomial}
+\end{equation}
+This identity fixes the local three-string interaction once the sphere zero
+mode and the string coupling are normalized.
+
+\section{Unitarity and the sphere constants}
+
+\subsection{Critical BRST state metric}
+
+Let $N_{g,n}$ multiply Xi's top differential form on $\cM_{g,n}$.  Plumbing
+two surfaces of types $(g_1,n_1)$ and $(g_2,n_2)$ and matching the pole to the
+one-particle unitarity sum gives
+\begin{equation}
+ N_{g_1,n_1}N_{g_2,n_2}
+ =-\ii N_{g,n}\frac{8\pi}{\A K_{S^2}^{\rm crit}},
+ \qquad
+ g=g_1+g_2,\qquad n=n_1+n_2-2.
+ \label{eq:separating-recurrence}
+\end{equation}
+Pinching one handle gives
+\begin{equation}
+ N_{g-1,n+2}
+ =-\ii N_{g,n}\frac{8\pi}{\A K_{S^2}^{\rm crit}}.
+ \label{eq:nonseparating-recurrence}
+\end{equation}
+These are Xi's equations (4.69)--(4.70).  The simultaneous solution adopted in
+the notes is
+\begin{equation}
+ \boxed{
+ N_{g,n}=\ii^{3g-3+n},
+ \qquad
+ K_{S^2}^{\rm crit}=\frac{8\pi}{\A}.}
+ \label{eq:critical-solution}
+\end{equation}
+To see that the numerical value of $K_{S^2}^{\rm crit}$ is fixed rather than
+assumed, substitute the phase ansatz into the separating recurrence.  Since
+$g=g_1+g_2$ and $n=n_1+n_2-2$,
+\begin{equation}
+ \frac{N_{g_1,n_1}N_{g_2,n_2}}{N_{g,n}}
+ =\ii^{-1}=-\ii.
+ \label{eq:N-ratio}
+\end{equation}
+Comparison with \eqref{eq:separating-recurrence} therefore requires
+$8\pi/(\A K_{S^2}^{\rm crit})=1$, which is exactly the second result in
+\eqref{eq:critical-solution}.  The nonseparating recurrence gives the same
+condition.
+In particular,
+\begin{equation}
+ N_{1,0}=1,\qquad N_{2,0}=-\ii.
+ \label{eq:N10N20}
+\end{equation}
+
+\subsection{Physical \texorpdfstring{$c=1$}{c=1} timelike sphere normalization}
+
+In the $c=1$ scattering convention, write the timelike zero-mode correlator as
+\begin{equation}
+ \vev{\ee^{-\ii k^0X^0}}_{S^2,X^0}
+ =2\pi\ii\,\delta(k^0)\,g_s^{-2}\wt K_{S^2}.
+ \label{eq:timelike-sphere}
+\end{equation}
+Here is the pole calculation behind the normalization.  The literal fixture
+$uv=q$ gives, for the radial part of a closed-string propagator,
+\begin{equation}
+ \int_{|q|<1}\frac{\dd^2q}{2\pi|q|^2}|q|^{2a}
+ =\frac{1}{2a},
+ \qquad a=P^2-\frac{\omega^2}{4}.
+ \label{eq:q-radial-pole}
+\end{equation}
+The Liouville completeness measure then has the on-shell discontinuity
+\begin{equation}
+ \operatorname{Im}\int_0^\infty\frac{\dd P}{\pi}
+ \frac{1}{P^2-\omega^2/4-\ii0}
+ =\int_0^\infty\dd P\,
+ \delta\!\left(P^2-\frac{\omega^2}{4}\right)
+ =\frac1\omega.
+ \label{eq:liouville-cut}
+\end{equation}
+This is exactly the inverse metric required by
+$\langle\omega|\omega'\rangle=\omega\delta(\omega-\omega')$.  In Xi's
+closed-string propagator convention the remaining zero-mode residue is
+$\sqrt{\A}\,\wt K_{S^2}/2$; the factor $1/2$ is the radial residue in
+\eqref{eq:q-radial-pole}.  Requiring unit coefficient gives
+\begin{equation}
+ \frac{\sqrt{\A}\,\wt K_{S^2}}{2}=1,
+\end{equation}
+and hence
+\begin{equation}
+ \boxed{\wt K_{S^2}=\frac{2}{\sqrt{\A}}.}
+ \label{eq:Ktilde}
+\end{equation}
+This is Xi's equation (4.114).  The momentum in
+\eqref{eq:timelike-sphere} is physical,
+\begin{equation}
+ k^0=\frac{\omega}{\sqrt{\A}},
+ \qquad
+ \delta(k^0)=\sqrt{\A}\,\delta(\omega).
+ \label{eq:delta-jacobian}
+\end{equation}
+Consequently the coefficient of the dimensionless energy delta function is
+\begin{equation}
+ \boxed{
+ \wh K_{S^2}^{c=1}
+ :=2\pi\sqrt{\A}\,\wt K_{S^2}
+ =4\pi.}
+ \label{eq:Khat}
+\end{equation}
+
+\begin{warning}
+$K_{S^2}^{\rm crit}$ and $\wt K_{S^2}$ are not two names for the same
+quantity.  The first normalizes the universal BRST state metric in the
+critical-string derivation.  The second is the timelike zero-mode constant in
+the physical $c=1$ scattering normalization.  After converting to the
+dimensionless energy delta function, the $c=1$ topology metric is $\wh K$.
+\end{warning}
+
+\subsection{Tree-level \texorpdfstring{$1\to2$}{1 to 2} check}
+
+Three vertices give $g_s^3$ and the sphere dilaton factor gives $g_s^{-2}$.
+Using \eqref{eq:Khat} and \eqref{eq:energy-polynomial}, the coefficient of
+$\delta(\omega-\omega_1-\omega_2)$ is
+\begin{align}
+ \cA_0(\omega_1,\omega_2)
+ &=\ii g_s\,\wh K_{S^2}^{c=1}
+ C\!\left(\frac\omega2,\frac{\omega_1}{2},\frac{\omega_2}{2}\right)
+ \notag\\
+ &=\boxed{4\pi\ii g_s\,\omega\omega_1\omega_2},
+ \qquad \omega=\omega_1+\omega_2.
+ \label{eq:tree-amplitude}
+\end{align}
+This reproduces Xi's equation (4.121) without using the matrix model.
+
+\section{Topology constants from sewing}
+
+First strip the single energy-conservation delta function and the local CFT
+density from every connected amplitude.  Denote the remaining topology
+constant by $C_g$.  With this reduced-amplitude convention, the tree result
+\eqref{eq:tree-amplitude} says directly that
+\begin{equation}
+ C_0^{c=1}=\wh K_{S^2}^{c=1}=4\pi.
+ \label{eq:C0-physical}
+\end{equation}
+Thus the Fourier $2\pi$ and the Jacobian in \eqref{eq:delta-jacobian} are part
+of the reduced sphere coefficient, whereas the polynomial
+$C(\omega/2,\omega_1/2,\omega_2/2)$ remains in the local CFT density.
+
+Sewing a genus-$g_1$ and a genus-$g_2$ surface through one inverse two-point
+metric gives
+\begin{equation}
+ C_{g_1+g_2}\,K_{S^2}=C_{g_1}C_{g_2}.
+ \label{eq:topology-sewing}
+\end{equation}
+The canonical torus trace fixes $C_1=1$.  Taking $g_2=1$ recursively, or
+solving \eqref{eq:topology-sewing} directly, gives
+\begin{equation}
+C_g=(K_{S^2})^{1-g},\qquad C_0=K_{S^2}.
+ \label{eq:Cg}
+\end{equation}
+Therefore replacing the critical sphere metric by the physical $c=1$ metric
+changes a genus-$g$ vacuum density by
+\begin{equation}
+ \boxed{
+ \Lambda_g
+ :=\frac{C_g^{c=1}}{C_g^{\rm crit}}
+ =\left(\frac{K_{S^2}^{\rm crit}}{\wh K_{S^2}^{c=1}}\right)^{g-1}
+ =\left(\frac{2}{\A}\right)^{g-1}.}
+ \label{eq:Lambda-g}
+\end{equation}
+Two immediate consequences are
+\begin{equation}
+ \boxed{\Lambda_1=1,\qquad \Lambda_2=\frac{2}{\A}.}
+ \label{eq:Lambda12}
+\end{equation}
+
+This is the precise sense in which a genus-one vacuum computation cannot see
+the sphere-normalization mismatch: the torus has zero Euler characteristic.
+A constant rescaling in the $g_s$--$\mu$ dictionary may shift a regulated
+$\log\mu$ by an additive constant, but it cannot multiply the universal
+coefficient of $\log\mu$.
+
+\section{Genus one: derivation of every ingredient}
+
+\subsection{Geometry and classical compact-boson sectors}
+
+Let $\sigma^1,\sigma^2\in[0,2\pi)$ and
+$z=\sigma^1+\tau\sigma^2$.  In these coordinates the flat torus metric is
+\begin{equation}
+ g_{ab}=\begin{pmatrix}1&\tau_1\\ \tau_1&|\tau|^2\end{pmatrix},
+ \qquad
+ \sqrt g=\tau_2,
+ \qquad
+ g^{ab}=\frac1{\tau_2^2}
+ \begin{pmatrix}|\tau|^2&-\tau_1\\-\tau_1&1\end{pmatrix}.
+ \label{eq:torus-metric}
+\end{equation}
+A map to the target circle can wind independently around the two cycles:
+\begin{equation}
+ X_{m,n}=x_0+R_{\rm phys}(m\sigma^1+n\sigma^2),
+ \qquad m,n\in\mathbb Z.
+\end{equation}
+Substitution into the Euclidean version of \eqref{eq:timelike-action} gives
+\begin{align}
+ S_{m,n}
+ &=\frac{(2\pi)^2}{4\pi\A}\,
+ \tau_2 R_{\rm phys}^2(m,n)g^{-1}\binom mn \notag\\
+ &=\frac{\pi R_{\rm phys}^2}{\A\tau_2}
+ \left(|\tau|^2m^2-2\tau_1mn+n^2\right)
+ =\frac{\pi R_{\rm phys}^2}{\A\tau_2}|m\tau-n|^2.
+ \label{eq:compact-classical-action}
+\end{align}
+This calculation fixes both the $\pi$ and the placement of $\tau_2$ in the
+lattice exponential.
+
+\subsection{Compact zero mode and oscillator determinant}
+
+The nonzero modes of one real scalar give
+\begin{equation}
+ Z_X^{\rm osc}(\tau)
+ =\tau_2^{-1/2}|q|^{-1/12}
+ \prod_{k=1}^\infty|1-q^k|^{-2}
+ =\frac1{\sqrt{\tau_2}|\eta(\tau)|^2},
+ \qquad q=\ee^{2\pi\ii\tau}.
+ \label{eq:compact-oscillator}
+\end{equation}
+The zero-mode measure compatible with Xi's noncompact momentum measure
+$\dd k/(2\pi)$ is
+\begin{equation}
+ \int_0^{2\pi R_{\rm phys}}\frac{\dd x_0}{2\pi\sqrt{\A}}
+ =\frac{R_{\rm phys}}{\sqrt{\A}}.
+ \label{eq:compact-zero-mode}
+\end{equation}
+This is not an additional convention: it is forced by the canonical trace.
+Indeed, with
+$p_{L,R}=n/R_{\rm phys}\pm wR_{\rm phys}/\A$, Poisson resummation uses
+\begin{equation}
+ \sum_{n\in\mathbb Z}
+ \ee^{-\pi\tau_2\A n^2/R_{\rm phys}^2+2\pi\ii\tau_1nw}
+ =\frac{R_{\rm phys}}{\sqrt{\A\tau_2}}
+ \sum_{\widetilde n\in\mathbb Z}
+ \ee^{-\pi R_{\rm phys}^2(\widetilde n-w\tau_1)^2/(\A\tau_2)},
+ \label{eq:torus-poisson}
+\end{equation}
+which produces exactly the same zero-mode coefficient.  Combining
+\eqref{eq:compact-classical-action}--\eqref{eq:compact-zero-mode},
+\begin{equation}
+ \boxed{
+ Z_X(R_{\rm phys};\tau)
+ =\frac{R_{\rm phys}}
+ {\sqrt{\A\tau_2}|\eta(\tau)|^2}
+ \sum_{m,n\in\mathbb Z}
+ \exp\!\left[-\frac{\pi R_{\rm phys}^2}{\A\tau_2}
+ |m\tau-n|^2\right].}
+ \label{eq:compact-torus}
+\end{equation}
+
+\subsection{Liouville spectral trace}
+
+The normalized Liouville identity resolution \eqref{eq:liouville-metric}
+restricts the reflection-symmetric spectrum to $P\geq0$.  In Xi's dimensionful
+momentum, $P_{\rm note}=2P/\sqrt\A$, the character is
+$\ee^{-\pi\A\tau_2P_{\rm note}^2}/|\eta|^2$.  Therefore
+\begin{align}
+ \frac{Z_L(\tau)}{V_\phi}
+ &=\int_0^\infty\frac{\dd P_{\rm note}}{\pi}
+ \frac{\ee^{-\pi\A\tau_2P_{\rm note}^2}}
+ {|\eta(\tau)|^2} \notag\\
+ &=\frac1{\pi|\eta|^2}
+ \frac{\sqrt\pi}{2\sqrt{\pi\A\tau_2}}
+ =\boxed{\frac1{2\pi\sqrt{\A\tau_2}|\eta(\tau)|^2}}.
+ \label{eq:liouville-torus}
+\end{align}
+The factor $1/2$ is thus the half-line Gaussian, not an automorphism factor.
+
+\subsection{Ghosts, modulus, conformal Killing volume, and stack weight}
+
+The chiral nonzero-mode trace of the weight-$(2,-1)$ ghost system is
+$\eta(\tau)^2$; the left-right product is $|\eta|^4$.  The $b$ zero modes are
+saturated by the Beltrami insertions for $\tau$ and $\bar\tau$.  With the
+sphere ghost normalization \eqref{eq:ghost-sphere}, the resulting unmarked
+torus formula is Xi's equation (4.90),
+\begin{equation}
+ \cA_1
+ =\frac12\int_{\cF_1}
+ \underbrace{\frac{\ii\,\dd\tau\wedge\dd\bar\tau}{2\tau_2}}
+ _{\text{modulus and translation CKV}}
+ \underbrace{|\eta(\tau)|^4}_{bc\ \text{nonzero modes}}
+ Z_m(\tau,\bar\tau).
+ \label{eq:torus-master}
+\end{equation}
+Here $N_{1,0}=1$ and $g_s^{2g-2}=1$.  The prefactor $1/2$ is the generic
+$z\mapsto-z$ stabilizer of an unmarked torus when $\cF_1$ is a coarse
+$PSL(2,\mathbb Z)$ fundamental domain.  It is distinct from the translation
+CKV factor $1/(2\tau_2)$.  Finally,
+\begin{equation}
+ \ii\,\dd\tau\wedge\dd\bar\tau=2\,\dd^2\tau
+ \quad\Longrightarrow\quad
+ \frac{\ii\,\dd\tau\wedge\dd\bar\tau}{2\tau_2}
+ =\frac{\dd^2\tau}{\tau_2}.
+ \label{eq:torus-real-measure}
+\end{equation}
+
+\subsection{Multiplication: the complete genus-one integrand}
+
+Insert $Z_m=Z_XZ_L$ into \eqref{eq:torus-master}.  Every factor can be seen
+before cancellation:
+\begin{align}
+ \frac{\dd\cA_1}{V_\phi}
+ &=\underbrace{\frac12}_{\rm stack}
+ \underbrace{\frac{\dd^2\tau}{\tau_2}}_{\rm modulus/CKV}
+ \underbrace{|\eta|^4}_{bc}
+ \underbrace{\frac{R_{\rm phys}}
+ {\sqrt{\A\tau_2}|\eta|^2}\Theta_1}_{X}
+ \underbrace{\frac1{2\pi\sqrt{\A\tau_2}|\eta|^2}}_{L},
+ \label{eq:genus1-factor-product}\\
+ \Theta_1
+ &:=\sum_{m,n\in\mathbb Z}
+ \exp\!\left[-\frac{\pi R_{\rm phys}^2}{\A\tau_2}
+ |m\tau-n|^2\right].
+\end{align}
+Thus $|\eta|^{4-2-2}=1$, the two factors $\tau_2^{-1/2}$ give
+$\tau_2^{-1}$, and the moduli form supplies the second $\tau_2^{-1}$.  The
+answer is
+\begin{equation}
+ \boxed{
+ \frac1{V_\phi}\frac{\dd\cA_1}{\dd^2\tau}
+ =\frac{R_{\rm phys}}{4\pi\A\tau_2^2}
+ \sum_{m,n\in\mathbb Z}
+ \exp\!\left[-\frac{\pi R_{\rm phys}^2}{\A\tau_2}
+ |m\tau-n|^2\right].}
+ \label{eq:torus-integrand}
+\end{equation}
+This is the genus-one integrand used by the direct $\tau$-plane computation.
+There is no sphere-topology correction because $\Lambda_1=1$.
+
+\subsection{Unfolding check and the universal logarithm}
+
+The zero orbit uses
+$\int_{\cF_1}\dd^2\tau/\tau_2^2=\pi/3$ and contributes
+$R_{\rm phys}/(12\A)$.  Every nonzero pair can be written as a primitive pair
+times $k\geq1$; modular images unfold $\cF_1$ to the strip.  Hence
+\begin{align}
+ \left.\frac{\cA_1}{V_\phi}\right|_{\rm nonzero}
+ &=\frac{R_{\rm phys}}{4\pi\A}\,2
+ \sum_{k=1}^\infty
+ \int_{-1/2}^{1/2}\dd\tau_1
+ \int_0^\infty\frac{\dd\tau_2}{\tau_2^2}
+ \ee^{-\pi R_{\rm phys}^2k^2/(\A\tau_2)} \notag\\
+ &=\frac{R_{\rm phys}}{4\pi\A}\,2
+ \sum_{k=1}^\infty\frac{\A}{\pi R_{\rm phys}^2k^2}
+ =\frac1{12R_{\rm phys}}.
+\end{align}
+Therefore
+\begin{equation}
+ \boxed{
+ \frac{\cA_1}{V_\phi}
+ =\frac1{12}\left(\frac{R_{\rm phys}}{\A}
+ +\frac1{R_{\rm phys}}\right).}
+ \label{eq:torus-result}
+\end{equation}
+The Liouville potential depends on its zero mode through
+$\mu_L\exp(2bX^1/\sqrt\A)$.  Shifting the zero mode to absorb $\mu_L$ gives
+\begin{equation}
+ V_\phi^{\rm ren}
+ =-\frac{\sqrt\A}{2b}\log\mu_L+C_{\rm cutoff}.
+ \label{eq:liouville-volume}
+\end{equation}
+At $b=1$ and $\A=1$, where $r=R_{\rm phys}$,
+\begin{equation}
+ \cA_1\big|_{\log\mu_L}
+ =-\frac1{24}\left(r+\frac1r\right)\log\mu_L.
+ \label{eq:torus-log}
+\end{equation}
+
+\section{Genus two: derivation of every ingredient}
+
+\subsection{Period-matrix coordinates and the ghost top form}
+
+Let
+\begin{equation}
+ \Omega=X+\ii Y=\begin{pmatrix}\Omega_{11}&\Omega_{12}\\
+ \Omega_{12}&\Omega_{22}\end{pmatrix},
+ \qquad Y\succ0,
+\end{equation}
+and order the three holomorphic differentials on moduli space as
+\begin{equation}
+ \dd^3\Omega:=\dd\Omega_{11}\wedge\dd\Omega_{22}
+ \wedge\dd\Omega_{12}.
+ \label{eq:d3omega-order}
+\end{equation}
+There are three $b$-ghost zero modes because
+$\dim_{\mathbb C}\cM_2=3$.  In the basis
+$\omega_1^2,\omega_2^2,\omega_1\omega_2$ of holomorphic quadratic
+differentials, contraction with the three Beltrami differentials converts the
+ghost zero-mode determinant into $\dd^3\Omega$.  This is the content of Xi's
+equations (4.100)--(4.103); it explains why no separate insertion-point
+Jacobian remains in the vacuum measure.
+
+For one complex coordinate $z=x+\ii y$,
+$\dd z\wedge\dd\bar z=-2\ii\dd x\wedge\dd y$.  Reordering the three barred
+forms next to their unbarred partners takes three transpositions.  Therefore
+\begin{equation}
+ \dd^3\Omega\wedge\dd^3\bar\Omega
+ =(-1)^3(-2\ii)^3\,\dd^3X\dd^3Y
+ =-8\ii\,\dd^3X\dd^3Y.
+ \label{eq:six-form-jacobian-full}
+\end{equation}
+The factor $8$ is solely a complex-to-real form Jacobian.
+
+\subsection{Critical seed and the 26 loop-momentum Gaussians}
+
+Before doing the harmonic-momentum integrals, Xi's equation (4.105) is
+\begin{equation}
+ f(\Sigma)Z_X^{26}(\Sigma)
+ =V_X\frac{g_s^2\A}{8\pi}
+ \int\prod_{I=1}^{2}\frac{\dd^{26}k_I}{(2\pi)^{26}}
+ \ee^{-\pi\A k_I\cdot k_JY_{IJ}}
+ |\Phi(\Omega)|^2.
+ \label{eq:xi-4105-full}
+\end{equation}
+For one target component, diagonalizing the positive matrix $Y$ gives
+\begin{equation}
+ \int\frac{\dd^2k}{(2\pi)^2}\ee^{-\pi\A k^TYk}
+ =\frac1{(2\pi)^2}\frac1{\sqrt{\det(\A Y)}}
+ =\frac1{4\pi^2\A\sqrt{\det Y}}.
+ \label{eq:two-loop-gaussian-full}
+\end{equation}
+There are 26 components, hence
+$(4\pi^2\A)^{-26}(\det Y)^{-13}$.  Rotating the two timelike loop momenta
+to Euclidean contours gives $\ii^2=-1$.  The complex six-form is therefore
+\begin{equation}
+ \Omega_6^{\rm crit}
+ =-V_X\frac{g_s^2\A}{8\pi}
+ \frac{|\Phi(\Omega)\dd^3\Omega|^2}
+ {(4\pi^2\A)^{26}(\det Y)^{13}}.
+ \label{eq:critical-six-form-full}
+\end{equation}
+
+\begin{warning}
+The factor $g_s^2\A/(8\pi)$ displayed in Xi's equation (4.105) must remain
+after the Gaussian.  It is absent from the printed equation (4.106), but the
+preceding equation and the gauge-fixing recurrence require it.
+\end{warning}
+
+\subsection{Oscillators, the Igusa form, and the factor
+\texorpdfstring{$2^{24}$}{2 to the 24}}
+
+The combined chiral oscillator function of the ghosts and 26 scalars has
+modular weight $-10$ and unit plumbing residue.  It is uniquely
+\begin{equation}
+ \Phi(\Omega)=\frac{2\pi\ii}{\chi_{10}^{\rm note}(\Omega)}.
+ \label{eq:Phi-note}
+\end{equation}
+To compare this with the implementation, define the genus-two theta constant
+\begin{equation}
+ \theta\!\begin{bmatrix}a\\b\end{bmatrix}(0|\Omega)
+ =\sum_{\ell\in\mathbb Z^2}
+ \exp\!\left[
+ \pi\ii(\ell+a)^T\Omega(\ell+a)+2\pi\ii(\ell+a)^Tb\right]
+\end{equation}
+and the raw product over the ten even characteristics,
+\begin{equation}
+ \Psi_{10}(\Omega)=\prod_{\delta\ {\rm even}}
+ \theta[\delta](0|\Omega)^2,
+ \qquad
+ \chi_{10}^{\rm note}=2^{-12}\Psi_{10}.
+ \label{eq:chi-conventions-full}
+\end{equation}
+Let $\epsilon=\Omega_{12}$.  With the literal plumbing coordinate,
+\begin{equation}
+ q=2\pi\ii\epsilon+O(\epsilon^3),
+ \qquad
+ \Psi_{10}=2^{12}q^2\eta(\Omega_{11})^{24}
+ \eta(\Omega_{22})^{24}+O(q^4).
+ \label{eq:Psi-separating}
+\end{equation}
+Consequently $\chi_{10}^{\rm note}\sim
+q^2\eta_1^{24}\eta_2^{24}$ and
+$\dd\epsilon=\dd q/(2\pi\ii)$.  Substitution into
+\eqref{eq:Phi-note} gives the unit chiral residue
+\begin{equation}
+ \Phi\,\dd\Omega_{11}\dd\Omega_{22}\dd\epsilon
+ \longrightarrow
+ \frac{\dd q}{q^2}
+ \frac{\dd\Omega_{11}}{\eta(\Omega_{11})^{24}}
+ \frac{\dd\Omega_{22}}{\eta(\Omega_{22})^{24}}.
+ \label{eq:unit-mumford-residue}
+\end{equation}
+If one instead evaluates $(2\pi\ii)/\Psi_{10}$, its chiral residue is
+$2^{-12}$.  Its absolute square must therefore be multiplied by
+\begin{equation}
+ \boxed{(2^{12})^2=2^{24}.}
+ \label{eq:raw-product-conversion}
+\end{equation}
+This factor belongs to the local Mumford density; it is unrelated to either
+the sphere constant or the moduli-stack quotient.
+
+\subsection{The compact scalar at genus two}
+
+Normalize the holomorphic one-forms by
+$\oint_{A_I}\omega_J=\delta_{IJ}$ and
+$\oint_{B_I}\omega_J=\Omega_{IJ}$.  A harmonic map to the circle is labelled
+by $m,n\in\mathbb Z^2$.  Using
+$\ii\int_\Sigma\omega_I\wedge\bar\omega_J=2Y_{IJ}$ in the scalar action gives
+\begin{equation}
+ S_{m,n}^{(2)}
+ =\pi r^2(m+\bar\Omega n)^TY^{-1}(m+\Omega n),
+ \qquad r=\frac{R_{\rm phys}}{\sqrt\A}.
+ \label{eq:genus2-classical-action}
+\end{equation}
+Thus the classical lattice sum is
+\begin{equation}
+ \boxed{
+ \Theta_r^{(2)}(\Omega)
+ =\sum_{m,n\in\mathbb Z^2}
+ \exp\!\left[-\pi r^2
+ (m+\bar\Omega n)^TY^{-1}(m+\Omega n)\right].}
+ \label{eq:theta-genus2-full}
+\end{equation}
+The connected compact zero mode is the target length, not merely the radius:
+\begin{equation}
+ \int_0^{2\pi R_{\rm phys}}\dd x_0=2\pi R_{\rm phys}
+ =2\pi\sqrt\A\,r.
+ \label{eq:genus2-compact-zero-mode}
+\end{equation}
+If $Z_X^\Xi$ is one noncompact scalar partition per unit target length in
+Xi's convention, the compact scalar is therefore
+\begin{equation}
+ Z_{X,r}^\Xi=(2\pi\sqrt\A\,r)Z_X^\Xi\Theta_r^{(2)}.
+ \label{eq:compact-from-noncompact}
+\end{equation}
+
+\subsection{Liouville sewing and the Xi-normalized same-frame quotient}
+
+In a three-tube pants decomposition $a$, the normalized Liouville vacuum
+partition is defined entirely by the input two- and three-point data:
+\begin{equation}
+ Z_L^{(a)}
+ =\int_0^\infty\prod_{e=1}^3\frac{\dd P_e}{\pi}
+ C(P_1,P_2,P_3)^2
+ \left|\cF_{25}^{(a)}(\boldsymbol P;\boldsymbol q)\right|^2.
+ \label{eq:liouville-genus2-sewing}
+\end{equation}
+The Virasoro block includes all descendant Gram matrices and the powers of
+$q_e$ dictated by the weights.  Equation \eqref{eq:liouville-genus2-sewing}
+shows explicitly that there is no extra Liouville normalization constant:
+each internal edge carries exactly the completeness measure $\dd P/\pi$ and
+each pair of pants carries one DOZZ coefficient.
+
+\paragraph{Vacuum shifts and the meaning of $A_L$.}
+Let $\cB_X^{(a)}$ and $\cB_L^{(a)}$ denote the unshifted scalar and
+Liouville blocks in the same three-tube plumbing channel, and define
+\begin{equation}
+ \cV_a:=\prod_{e=1}^3|q_e|^{-1/12}.
+\end{equation}
+The Xi-normalized partitions are
+\begin{equation}
+ Z_X^{\Xi,(a)}=A_X\cV_a\cB_X^{(a)},
+ \qquad
+ Z_L^{\Xi,(a)}=A_L^{\rm sewn}\cV_a^{25}\cB_L^{(a)},
+ \qquad
+ A_X=\frac1{4\pi^2\A},
+ \quad A_L^{\rm sewn}=1.
+ \label{eq:AL-sewn-ledger}
+\end{equation}
+Here $A_X$ is Xi's two-handle momentum-measure normalization, whereas
+$A_L^{\rm sewn}=1$ follows from using literally the primary, metric, inverse
+metric, DOZZ coefficient, and intrinsic momentum $P$ of Appendix~I.  Hence
+\begin{equation}
+ \frac{Z_L^{\Xi,(a)}}{(Z_X^{\Xi,(a)})^{25}}
+ =(4\pi^2\A)^{25}
+ \frac{\cB_L^{(a)}}{(\cB_X^{(a)})^{25}}.
+ \label{eq:q-shift-cancellation-quotient}
+\end{equation}
+The factor $\cV_a^{25}$ cancels exactly.  Thus the
+$|q_e|^{-25/12}$ shifts in the Liouville block produce no further constant;
+the surviving $(4\pi^2\A)^{25}$ is the scalar normalization and must be
+combined with the critical $26$-scalar seed and compact zero mode.
+
+\paragraph{What genus one does and does not determine.}
+Xi's equation (4.92) writes the unpunctured torus trace per ordinary
+Liouville length as
+\begin{equation}
+ \frac{Z_L^{\Xi,(1)}}{V_\phi}
+ =\int_0^\infty\frac{\dd P_{\rm phys}}{\pi}
+ \frac{\ee^{-\pi\A\tau_2P_{\rm phys}^2}}{|\eta(\tau)|^2}
+ =\frac1{2\pi\sqrt{\A\tau_2}|\eta(\tau)|^2}.
+ \label{eq:Xi-Liouville-torus-volume-density}
+\end{equation}
+The intrinsic CFT momentum of Appendix~I instead gives
+\begin{equation}
+ \cZ_L^{\rm CFT,(1)}
+ =\int_0^\infty\frac{\dd P_{\rm CFT}}{\pi}
+ \frac{\ee^{-4\pi\tau_2P_{\rm CFT}^2}}{|\eta(\tau)|^2}
+ =\frac1{4\pi\sqrt{\tau_2}|\eta(\tau)|^2}.
+ \label{eq:CFT-Liouville-torus-density}
+\end{equation}
+Matching only the Gaussian characters gives
+\begin{equation}
+ P_{\rm phys}=\frac{2P_{\rm CFT}}{\sqrt\A},
+ \qquad
+ \frac{Z_L^{\Xi,(1)}}{V_\phi}
+ =\underbrace{\frac2{\sqrt\A}}_{J_\phi^{(1)}}
+ \cZ_L^{\rm CFT,(1)}.
+ \label{eq:Jphi-genus-one}
+\end{equation}
+The factor $J_\phi^{(1)}$ converts the dimensionful asymptotic wave number
+and the regulator defining the divergent ordinary length $V_\phi$.  It is
+not $A_L^{\rm sewn}$ and must not be inserted into the genus-two DOZZ
+integral.  The symbol $P$ is overloaded in the note: the DOZZ arguments in
+(4.119), the weight $h=1+P^2$, and every momentum in
+\eqref{eq:liouville-genus2-sewing} remain the dimensionless intrinsic
+$P_{\rm CFT}$.  Replacing them by $2P_{\rm CFT}/\sqrt\A$ would change the
+arguments and weights of the non-homogeneous DOZZ function.  Therefore
+\begin{equation}
+ \boxed{J_\phi^{(1)}=\frac2{\sqrt\A},
+ \qquad A_L^{\rm sewn}=1.}
+ \label{eq:AL-final-verdict}
+\end{equation}
+
+For the analytic derivation, place $Z_L^{(a)}$ together with Xi's noncompact
+scalar $Z_{X,k}^{\Xi,(a)}$ in the same conformal frame.  Their Weyl
+transformations have
+the form
+\begin{equation}
+ Z_{X,k}^{\Xi,(a)}=W_a Z_{X,k}^{\Xi,B},
+ \qquad
+ Z_L^{(a)}=W_a^{25}Z_L^{B},
+\end{equation}
+so the combination
+\begin{equation}
+ \frac{Z_L^{(a)}}{(Z_{X,k}^{\Xi,(a)})^{25}}
+ =\frac{Z_L^{B}}{(Z_{X,k}^{\Xi,B})^{25}}
+ \label{eq:same-frame-quotient}
+\end{equation}
+is frame independent.  This is why a separately guessed Weyl determinant
+must not be inserted into the integrand.  The repository convention will be
+introduced only after the Xi-normalized density has been derived.
+
+\subsection{Xi-normalized momentum measure and matter replacement}
+
+Xi's note writes the physical momentum as $k$ and fixes the free-boson states
+by
+\begin{equation}
+ \boxed{
+ \langle k|k'\rangle=2\pi\delta(k-k'),
+ \qquad
+ \mathbf 1=\int_{\mathbb R}\frac{\dd k}{2\pi}|k\rangle\langle k|.}
+ \label{eq:xi-k-state-normalization}
+\end{equation}
+This is the convention stated explicitly in Appendix P around (P.20).
+Appendix E gives the general form $C_X2\pi\delta(k-k')$; Xi's convention here
+sets $C_X=1$.  All formulas through \eqref{eq:I2Xi-full} use this convention.
+
+The $k_I$ are the two handle momenta, not the connected constant target-space
+mode $x_0$.  The latter is divided out for a noncompact scalar and becomes the
+target length $2\pi R_{\rm phys}=2\pi\sqrt\A\,r$ for a compact scalar.  Write
+\begin{equation}
+ Y=\begin{pmatrix}a&b\\b&c\end{pmatrix},
+ \qquad D:=\det Y=ac-b^2>0.
+\end{equation}
+Xi's handle-momentum integral for one scalar per ordinary target-space volume
+is therefore
+\begin{align}
+ I_{0,k}^{\Xi}(Y)
+ &:=\int_{\mathbb R^2}\frac{\dd k_1}{2\pi}
+ \frac{\dd k_2}{2\pi}
+ \exp\!\left[-\pi\A(ak_1^2+2bk_1k_2+ck_2^2)\right] \notag\\
+ &=\frac1{(2\pi)^2}
+ \int\dd k_1\dd k_2\,
+ \exp\!\left[-\pi\A a\left(k_1+\frac ba k_2\right)^2
+ -\pi\A\frac Da k_2^2\right] \notag\\
+ &=\boxed{\frac1{4\pi^2\A\sqrt{\det Y}}}.
+ \label{eq:k-zero-mode-integral}
+\end{align}
+
+For bookkeeping inside the same Xi normalization, change variables only:
+$p_I=\sqrt\A\,k_I$.  Define
+\begin{equation}
+ I_{0,p}^{(2\pi)}(Y)
+ :=\int_{\mathbb R^2}\frac{\dd p_1}{2\pi}
+ \frac{\dd p_2}{2\pi}\,\ee^{-\pi p^TYp}
+ =\frac1{4\pi^2\sqrt{\det Y}}.
+ \label{eq:xi-p-zero-mode-integral}
+\end{equation}
+The genuine genus-two change of variables is then
+\begin{equation}
+ \prod_{I=1}^2\frac{\dd k_I}{2\pi}
+ =\frac1\A\prod_{I=1}^2\frac{\dd p_I}{2\pi},
+ \qquad
+ \boxed{Z_{X,k}^\Xi=\frac1\A Z_{X,p}^{(2\pi)}}.
+ \label{eq:scalar-conversion-full}
+\end{equation}
+No extra $2\pi$ occurs in this $k\to p$ map: Xi's factor $1/(2\pi)$ is
+present on both sides.  If actual dimensionless-$p$ states are introduced,
+they must be rescaled as
+$|p\rangle=\A^{-1/4}|k=p/\sqrt\A\rangle$ in order to retain
+$\langle p|p'\rangle=2\pi\delta(p-p')$.
+
+Now perform the matter replacement without referring to the repository:
+\begin{equation}
+ Z_X^{26}\longrightarrow Z_{X,r}^\Xi Z_L,
+ \qquad
+ Z_{X,r}^\Xi=(2\pi\sqrt\A\,r)Z_{X,k}^\Xi\Theta_r^{(2)},
+ \label{eq:c1-replacement-full}
+\end{equation}
+and hence
+\begin{equation}
+ \frac{Z_{X,r}^\Xi Z_L}{(Z_{X,k}^\Xi)^{26}}
+ =(2\pi\sqrt\A\,r)\Theta_r^{(2)}
+ \frac{Z_L}{(Z_{X,k}^\Xi)^{25}}.
+ \label{eq:c1-replacement-quotient}
+\end{equation}
+Using the raw theta product and temporarily omitting the external topology
+coefficient, the Xi-normalized local density is
+\begin{align}
+ \cD_{2,\rm raw}^{c=1,\Xi}
+ &=\underbrace{\frac{|2\pi\ii|^2}
+ {(4\pi^2\A)^{26}(\det Y)^{13}|\Psi_{10}|^2}}
+ _{\text{critical density in Xi's }\dd k/(2\pi)\text{ convention}}
+ \underbrace{(2\pi\sqrt\A\,r)\Theta_r^{(2)}}
+ _{\text{compact zero mode and windings}}
+ \underbrace{\frac{Z_L}{(Z_{X,k}^\Xi)^{25}}}
+ _{\text{Xi-normalized same-frame quotient}} \notag\\
+ &=\boxed{
+ \frac{2\pi r}{\sqrt\A}(4\pi^2)^{-25}
+ \frac{\Theta_r^{(2)}}{(\det Y)^{13}|\Psi_{10}|^2}
+ \frac{Z_L}{(Z_{X,p}^{(2\pi)})^{25}}}.
+ \label{eq:raw-local-density}
+\end{align}
+The second line merely uses the Xi-preserving change of variables
+\eqref{eq:scalar-conversion-full}:
+\begin{equation}
+ |2\pi\ii|^2(4\pi^2\A)^{-26}
+ \A^{25}(2\pi\sqrt\A\,r)
+ =\frac{2\pi r}{\sqrt\A}(4\pi^2)^{-25}.
+ \label{eq:correlated-scalar-conversion-full}
+\end{equation}
+Equivalently, the 26 critical scalars and the inverse 25-scalar quotient leave
+one genuine Xi $k\to p$ Jacobian,
+\begin{equation}
+ (\A^{-1})^{26}(\A^{-1})^{-25}=\A^{-1}.
+ \label{eq:26-minus-25}
+\end{equation}
+
+Applying the unit-residue conversion \eqref{eq:raw-product-conversion} now
+defines the integrand before any code convention is mentioned:
+\begin{align}
+ \cI_2^\Xi(\Omega;r,\A)
+ &:=\boxed{2^{24}\frac{|2\pi\ii|^2}{(4\pi^2\A)^{26}}
+ \frac{(2\pi\sqrt\A\,r)\Theta_r^{(2)}(\Omega)}
+ {(\det Y)^{13}|\Psi_{10}(\Omega)|^2}
+ \frac{Z_L(\Omega)}{(Z_{X,k}^\Xi(\Omega))^{25}}} \notag\\
+ &=2^{24}\frac{2\pi r}{\sqrt\A}(4\pi^2)^{-25}
+ \frac{\Theta_r^{(2)}(\Omega)}
+ {(\det Y)^{13}|\Psi_{10}(\Omega)|^2}
+ \frac{Z_L(\Omega)}{(Z_{X,p}^{(2\pi)}(\Omega))^{25}}.
+ \label{eq:I2Xi-full}
+\end{align}
+
+\paragraph{Translation to the repository evaluator.}
+Only now introduce the repository's independent bare-measure object:
+\begin{align}
+ I_{0,p}^{\rm code}(Y)
+ &:=\int_{\mathbb R^2}\dd p_1\dd p_2\,\ee^{-\pi p^TYp}
+ =\frac1{\sqrt{\det Y}}
+ =(2\pi)^2 I_{0,p}^{(2\pi)}(Y),
+ \label{eq:p-zero-mode-integral}\\
+ Z_{X,p}^{\rm code}&=(2\pi)^2Z_{X,p}^{(2\pi)}.
+ \label{eq:code-vs-xip-scalar}
+\end{align}
+The oscillator determinant is common to both objects.  Combining this
+repository-only conversion with the Xi $k\to p$ Jacobian gives
+\begin{equation}
+ \boxed{
+ Z_{X,k}^\Xi
+ =\frac1\A Z_{X,p}^{(2\pi)}
+ =\frac1{4\pi^2\A}Z_{X,p}^{\rm code}.}
+ \label{eq:code-to-xi-scalar}
+\end{equation}
+For clarity, the two factors are
+\begin{equation}
+ C_\A:=\A^{-1},
+ \qquad C_{2\pi}:=(2\pi)^{-2},
+ \qquad C_{\mathrm{code}\to k}:=C_\A C_{2\pi}
+ =\frac1{4\pi^2\A}.
+ \label{eq:two-scalar-conversions}
+\end{equation}
+Here $C_\A$ belongs to the Xi derivation; $C_{2\pi}$ belongs only to the final
+translation of the repository object.  Substitution into
+\eqref{eq:I2Xi-full} gives the numerically convenient but logically secondary
+form
+\begin{equation}
+ \boxed{
+ \cI_2^\Xi
+ =2^{24}\frac{2\pi r}{\sqrt\A}
+ \frac{\Theta_r^{(2)}}{(\det Y)^{13}|\Psi_{10}|^2}
+ \frac{Z_L}{(Z_{X,p}^{\rm code})^{25}}.}
+ \label{eq:I2Xi-xip-form}
+\end{equation}
+
+\subsection{Gauge phase, sphere topology, and the final real coefficient}
+
+The critical six-form contains four independent factors: the phase
+$N_{2,0}=-\ii$, the Wick-rotation sign $-1$, the form Jacobian $-8\ii$, and
+the coefficient $g_s^2\A/(8\pi)$.  Their product is
+\begin{equation}
+ (-\ii)(-1)(-8\ii)\frac{g_s^2\A}{8\pi}
+ =\frac{g_s^2\A}{\pi}.
+ \label{eq:critical-positive-full}
+\end{equation}
+After stripping $g_s^2$, the critical topology coefficient is $\A/\pi$.
+Replacing its sphere metric by the reduced physical $c=1$ metric multiplies
+it by \eqref{eq:Lambda12}, hence
+\begin{equation}
+ \underbrace{\frac{\A}{\pi}}_{\rm critical\ real\ form}
+ \underbrace{\frac2\A}_{\rm sphere\ sewing}
+ =\boxed{\frac2\pi}.
+ \label{eq:final-external-coefficient-full}
+\end{equation}
+For comparison with the historical dimensionless-plumbing implementation,
+let $\cK_2^{\rm old}$ include its original critical coefficient $\A/\pi$,
+its dimensionless compact prefactor $r$, and the raw same-frame quotient
+$\cB_L/(\cB_X)^{25}$.  The correlated Xi scalar conversion and the separate
+topology replacement are
+\begin{equation}
+ \cN_{\rm scalar}=\frac1{2\pi\sqrt\A},
+ \qquad
+ \cN_{\rm top}=\frac2\A,
+ \qquad
+ \boxed{\cN_{\rm final}
+ =\cN_{\rm scalar}\cN_{\rm top}
+ =\frac1{\pi\A^{3/2}}.}
+ \label{eq:final-normalization-relative-old}
+\end{equation}
+Thus $\cK_2^{c=1}=\cN_{\rm final}\cK_2^{\rm old}$ in this explicitly
+defined comparison, and $\cN_{\rm final}=1/\pi$ at $\A=1$.  This relative
+multiplier must not be confused with the local coefficient $2/\pi$ below:
+the latter multiplies the already Xi-normalized object $\cI_2^\Xi$, whereas
+$\cN_{\rm final}$ compares directly to the pre-conversion historical
+dimensionless-plumbing expression.
+The final positive-real local kernel is therefore
+\begin{equation}
+ \boxed{
+ K_2^{c=1}(\Omega;r,\A)
+ =\frac2\pi\cI_2^\Xi(\Omega;r,\A).}
+ \label{eq:final-kernel-full}
+\end{equation}
+Equivalently, after the separate repository translation
+\eqref{eq:code-to-xi-scalar}, the evaluator may display every factor as
+\begin{equation}
+ \boxed{
+ K_2^{c=1}
+ =\underbrace{\frac2\pi}_{\rm topology/form}
+ \underbrace{2^{24}}_{\rm raw\ \Psi_{10}}
+ \underbrace{\frac{2\pi r}{\sqrt\A}}_{\rm scalar\ measures}
+ \underbrace{\Theta_r^{(2)}}_{\rm compact\ lattice}
+ \underbrace{(\det Y)^{-13}}_{26\ \rm Gaussians}
+ \underbrace{|\Psi_{10}|^{-2}}_{\rm oscillators}
+ \underbrace{Z_L (Z_{X,p}^{\rm code})^{-25}}_{\rm CFT\ replacement}.}
+ \label{eq:factorized-final-kernel}
+\end{equation}
+
+When a coarse $PSp(4,\mathbb Z)$ fundamental domain is used, a generic
+genus-two curve has the hyperelliptic involution.  Dividing by this stabilizer
+gives a separate global weight $1/2$:
+\begin{equation}
+ \boxed{
+ \frac{\cA_2(r)}{g_s^2}
+ =\frac12\int_{\cF_2^{\rm coarse}}
+ \dd^3X\dd^3Y\,K_2^{c=1}
+ =\frac1\pi\int_{\cF_2^{\rm coarse}}
+ \dd^3X\dd^3Y\,\cI_2^\Xi.}
+ \label{eq:final-amplitude-full}
+\end{equation}
+The local $2/\pi$ and the global $1/2$ must each be applied exactly once.
+
+\subsection{Numerical reference at the self-dual radius}
+
+For reference, set $\A=1$ and $R_{\rm phys}=r=1$.  The latest completed
+physical-mixture RQMC run used eight independent scrambled-Sobol replicates,
+four proposal components, and $256$ proposals per component; $6846$ in-domain
+nodes required CFT evaluation.  The archived table used the legacy
+dimensionless-scalar density $\cI_2^{\rm old}$ and the label
+\begin{equation}
+ K_{2,\rm legacy}^{\rm note}=\frac1\pi\cI_2^{\rm old},
+ \qquad
+ \cI_2^\Xi=\frac1{2\pi}\cI_2^{\rm old}
+             =\frac12K_{2,\rm legacy}^{\rm note}
+\end{equation}
+and found
+\begin{equation}
+ \int_{\cF_2^{\rm coarse}}\dd^3X\dd^3Y\,
+ K_{2,\rm legacy}^{\rm note}(\Omega;1)
+ =\left(3.4977126795939466
+ \mathbin{\pm}0.08214314738188904\right)\times10^{-4}.
+ \label{eq:R1-saved-Knote-integral}
+\end{equation}
+After the exact scalar-measure conversion, the direct numerical reference for
+the Xi-normalized integrand
+defined in \eqref{eq:I2Xi-full} is
+\begin{equation}
+ \boxed{
+ \int_{\cF_2^{\rm coarse}}\dd^3X\dd^3Y\,
+ \cI_2^\Xi(\Omega;1)
+ =\left(1.7488563397969733
+ \mathbin{\pm}0.04107157369094452\right)\times10^{-4}.}
+ \label{eq:R1-I2Xi-integral}
+\end{equation}
+The uncertainty is the standard error across the eight complete replicates.
+Equation \eqref{eq:R1-I2Xi-integral} is a coarse-domain integral and does not
+include the generic stack weight $1/2$.  Combining it with the final local
+coefficient $2/\pi$ and that stack weight gives
+\begin{equation}
+ \left.\frac{\cA_2}{g_s^2}\right|_{r=1}
+ =\frac1\pi\int_{\cF_2^{\rm coarse}}\dd^3X\dd^3Y\,\cI_2^\Xi
+ =\left(0.5566782624725754
+ \mathbin{\pm}0.013073487946953723\right)\times10^{-4}.
+ \label{eq:R1-final-amplitude-reference}
+\end{equation}
+This is the release field labelled
+\texttt{connected\_logZ\_genus2\_over\_gs\_squared}.  The corresponding
+coarse integral of $K_2^{c=1}$ is twice this value.  No matrix-model
+normalization is used in any of these numbers.  The machine-readable source is
+\path{output/data/genus2_c1_free_energy_direct_39/summary.json}.
+
+\subsection{One-to-one map to the numerical evaluator}
+
+At $\A=1$ the public code radius is $r$.  The returned quantities correspond
+to the analytic factors as follows:
+\begin{center}
+\begin{tabular}{@{}p{0.37\textwidth}p{0.52\textwidth}@{}}
+\toprule
+Implementation quantity & Analytic factor \\
+\midrule
+\texttt{compact\_target\_zero\_mode} & $2\pi r$ \\
+\texttt{compact\_winding\_sum} & $\Theta_r^{(2)}$ \\
+\texttt{det\_im\_omega} & $\det Y$ \\
+\texttt{chi10} with \texttt{product} & $\Psi_{10}$ \\
+\texttt{liouville\_partition} & $Z_L$ from \eqref{eq:liouville-genus2-sewing} \\
+\texttt{noncompact\_scalar\_partition} & $Z_{X,p}^{\rm code}$ with bare $\dd^2p$; converted to Xi's physical-$k$ object by \eqref{eq:code-to-xi-scalar} \\
+\texttt{factorization\_normalization} & $2^{24}$ \\
+historical critical multiplier & $\A/\pi$ before the $c=1$ sphere replacement \\
+\texttt{c1\_genus2\_topology\_correction} & $2/\A$ \\
+\texttt{string\_note\_kernel\_multiplier} & final sphere-normalized product $2/\pi$ \\
+Monte Carlo stack weight & $1/2$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+The v3 production evaluator applies the scalar-measure conversion and the
+sphere-normalized multiplier exactly once.  When archived values are read,
+their convention identifier selects an exact migration before integration;
+the stack weight remains a separate Monte Carlo factor.
+
+
+\section{Factor ledger}
+
+\subsection*{Genus one}
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.29\textwidth}p{0.22\textwidth}p{0.40\textwidth}@{}}
+\toprule
+Factor & Value & Origin \\
+\midrule
+$X$ zero mode & $R_{\rm phys}/\sqrt\A$ & \eqref{eq:compact-zero-mode}; also Poisson resummation \\
+$X$ classical action & $\pi R_{\rm phys}^2|m\tau-n|^2/(\A\tau_2)$ & action and torus metric \\
+$X$ oscillators & $\tau_2^{-1/2}|\eta|^{-2}$ & scalar determinant \\
+Liouville trace per $V_\phi$ & $(2\pi\sqrt{\A\tau_2}|\eta|^2)^{-1}$ & $\dd P/\pi$ half-line Gaussian \\
+ghost oscillators & $|\eta|^4$ & left-right $bc$ determinant \\
+modulus/CKV & $\dd^2\tau/\tau_2$ & \eqref{eq:torus-real-measure} \\
+torus stack weight & $1/2$ & generic $z\mapsto-z$ stabilizer \\
+$N_{1,0}$ and topology & $1$ & plumbing unitarity and $\Lambda_1=1$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Genus two}
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.29\textwidth}p{0.22\textwidth}p{0.40\textwidth}@{}}
+\toprule
+Factor & Value & Origin \\
+\midrule
+$N_{1,0}$ & $1$ & Plumbing unitarity, \eqref{eq:critical-solution} \\
+$N_{2,0}$ & $-\ii$ & Plumbing unitarity, \eqref{eq:critical-solution} \\
+$K_{S^2}^{\rm crit}$ & $8\pi/\A$ & BRST state metric and pole residue \\
+$\wt K_{S^2}$ & $2/\sqrt{\A}$ & Physical $c=1$ state unitarity \\
+$\wh K_{S^2}^{c=1}$ & $4\pi$ & Fourier factor and \eqref{eq:delta-jacobian} \\
+$\Lambda_2$ & $2/\A$ & Sphere topology sewing \\
+one-scalar Gaussian & $(4\pi^2\A\sqrt{\det Y})^{-1}$ & \eqref{eq:two-loop-gaussian-full} \\
+26-scalar Gaussian & $(4\pi^2\A)^{-26}(\det Y)^{-13}$ & product of 26 Gaussians \\
+Mumford numerator & $|2\pi\ii|^2=4\pi^2$ & unit $q$-residue in Xi's convention \\
+raw $\Psi_{10}$ conversion & $2^{24}$ & \eqref{eq:raw-product-conversion} \\
+compact zero mode & $2\pi\sqrt\A\,r$ & target-circle length \\
+compact lattice & $\Theta_r^{(2)}$ & harmonic-map action \\
+Xi state completeness & $\dd k/(2\pi)$ & \eqref{eq:xi-k-state-normalization} \\
+Xi $k\to p$ Jacobian & $\A^{-1}$ & \eqref{eq:scalar-conversion-full} \\
+bare code $p\to(2\pi)$-measure $p$ & $(2\pi)^{-2}$ & \eqref{eq:code-vs-xip-scalar} \\
+combined code $p\to$ Xi $k$ & $(4\pi^2\A)^{-1}$ & \eqref{eq:code-to-xi-scalar} \\
+code-form scalar product & $2\pi r/\sqrt\A$ & \eqref{eq:I2Xi-xip-form} \\
+complex six-form Jacobian & $-8\ii$ & \eqref{eq:six-form-jacobian-full} \\
+final local coefficient & $2/\pi$ & \eqref{eq:final-external-coefficient-full} \\
+genus-two stack weight & $1/2$ & generic hyperelliptic involution \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Matrix model only as an external test}
+
+Nothing above uses the matrix model.  After the worldsheet normalization has
+been fixed, the tree amplitude \eqref{eq:tree-amplitude} may be compared with
+the collective-field result
+\begin{equation}
+ \cA_{1\to2}^{\rm MQM}
+ =\frac{\ii}{\mu}\omega\omega_1\omega_2.
+\end{equation}
+This gives the dictionary
+\begin{equation}
+ \boxed{\mu^{-1}=4\pi g_s^{\Xi}.}
+ \label{eq:mu-gs}
+\end{equation}
+If
+\begin{equation}
+ f_2(r)=\frac{7r^2+10+7r^{-2}}{5760r},
+\end{equation}
+then the matrix-model prediction in the same coupling convention is
+\begin{equation}
+ \frac{\cA_2^{\rm MM}(r)}{(g_s^\Xi)^2}
+ =16\pi^2 f_2(r).
+ \label{eq:mm-target}
+\end{equation}
+Equation \eqref{eq:mm-target} is a test of \eqref{eq:final-amplitude-full}, not an
+input used to alter it.
+
+\section{Items that still require an independent review}
+
+The derivation reduces the absolute normalization question to the following
+sharp checks.
+\begin{enumerate}
+\item Verify directly from Xi's BPZ and physical-state conventions that the
+conversion from \eqref{eq:Ktilde} to \eqref{eq:Khat} contains exactly one
+Fourier $2\pi$ and exactly one Jacobian $\sqrt{\A}$.
+\item Verify that the scalar conversion \eqref{eq:correlated-scalar-conversion-full}
+is included once and is not mistaken for the topology replacement
+\eqref{eq:Lambda12} merely because both contain related zero-mode constants.
+\item Verify each global $1/2$ against the precise moduli stack used in the
+numerical integration.
+\item Test the analytic separating formula \eqref{eq:Psi-separating}
+numerically with the literal coordinate $uv=q$ and
+$q\simeq2\pi\ii\Omega_{12}$.
+\end{enumerate}
+
+If these checks pass, no additional moduli-independent factor is allowed by
+unitarity or by a change of local sewing coordinates.
+
+\section{Implementation manifest for the genus-two integral}
+
+The exhaustive, reviewer-facing source inventory is kept in
+\path{plumbing/genus2_monte_carlo_code_manifest.md}.  The numerical path is
+not a single script.  It has the following auditable stages:
+\begin{equation}
+ \begin{aligned}
+ &\text{physical-measure RQMC nodes}
+ \longrightarrow
+ \text{certified }(\Omega,q,\operatorname{Sp}(4,\mathbb Z))\text{ chart}
+ \\
+ &\hspace{2cm}\longrightarrow (Z_L,Z_X,\Theta_r,\Psi_{10})
+ \longrightarrow K_2^{c=1}
+ \longrightarrow \text{complete-scramble assembly}.
+ \end{aligned}
+\end{equation}
+The source closure of the pointwise evaluator contains 31 local Python
+modules.  The manifest lists every one, together with the period-table
+builders, scheduler wrappers, radius reweighting and release code, and the
+independent convention checks.  It also distinguishes code that changes the
+value from optional plots, recovery jobs, and historical samplers.
+
+For the preferred physical-period-measure design the implemented estimator is
+\begin{equation}
+ \left(\frac{\cA_2}{g_s^2}\right)_s
+ =\frac12\frac1{4M}
+ \sum_{a=1}^{4M}
+ \mathbf 1_{\cF_2}(\Omega_{s,a})
+ \frac{J_Y(t_{1,s,a},t_{3,s,a})}
+      {p_{\rm mix}(t_{1,s,a},t_{3,s,a})}
+ K_2^{c=1}(\Omega_{s,a};r).
+ \label{eq:implemented-physical-mixture-estimator}
+\end{equation}
+Thus no $\det(Y)^3$ multiplies the local kernel in the current production
+design.  Out-of-domain proposals contribute exact zero; every in-domain node
+must have a certified CFT result; and the uncertainty is the standard error
+across independent complete scrambles.  The exact control observable
+$K_{\rm control}=\det(Y)^{-3}$ must reproduce
+\begin{equation}
+ \int_{\cF_2^{\rm coarse}}\frac{\dd^3X\dd^3Y}{\det(Y)^3}
+ =\frac{\pi^3}{270}.
+\end{equation}
+These requirements are enforced by the design generator and strict assembler,
+not added by post-processing.
+
+\begin{thebibliography}{9}
+\bibitem{XiNotes}
+X.~Yin, \emph{String Theory Notes}, especially Sections 3.8, 4.6, 4.8--4.10
+and Appendices E, I.5, and P; equations (4.32), (4.58)--(4.72),
+(4.90)--(4.122), (I.39)--(I.42), and (P.20).
+
+\bibitem{BRY}
+B.~Balthazar, V.~A.~Rodriguez, and X.~Yin,
+\emph{The $c=1$ String Theory S-Matrix Revisited},
+\href{https://arxiv.org/abs/1705.07151}{arXiv:1705.07151}.
+
+\bibitem{DHP}
+E.~D'Hoker and D.~H.~Phong,
+\emph{Two-Loop Superstrings VI: Non-Renormalization Theorems and the 4-Point
+Function}, and related genus-two measure papers.
+\end{thebibliography}
+
+\end{document}

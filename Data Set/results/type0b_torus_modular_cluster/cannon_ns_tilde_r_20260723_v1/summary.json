@@ -1,0 +1,1041 @@
+{
+  "accuracy_checks": [
+    {
+      "kind": "modular_residual",
+      "maximum": 5e-12,
+      "name": "principal order-12 NS-tilde-to-R residual",
+      "observed": 8.881784197001252e-15,
+      "passed": true
+    },
+    {
+      "kind": "modular_residual",
+      "maximum": 2e-10,
+      "name": "nonprincipal order-12 NS-tilde-to-R residual",
+      "observed": 1.0098555325299685e-10,
+      "passed": true
+    },
+    {
+      "kind": "comparison_relative_change",
+      "maximum": 5e-12,
+      "name": "spin-orbit spectral quadrature convergence",
+      "observed": 4.615890084930416e-15,
+      "passed": true
+    },
+    {
+      "kind": "comparison_relative_change",
+      "maximum": 5e-12,
+      "name": "spin-orbit momentum-tail convergence",
+      "observed": 9.842344691638254e-16,
+      "passed": true
+    },
+    {
+      "kind": "comparison_relative_change",
+      "maximum": 5e-12,
+      "name": "spin-orbit finite-part sample convergence",
+      "observed": 4.886355470922636e-68,
+      "passed": true
+    },
+    {
+      "kind": "finite_part_two_radius",
+      "maximum": 5e-12,
+      "name": "spin-orbit finite-part two-radius stability",
+      "observed": 4.892970531256212e-13,
+      "passed": true
+    }
+  ],
+  "accuracy_targets_passed": true,
+  "atomic_job_count": 352,
+  "comparisons": {
+    "finite_part_samples_32_to_40": {
+      "left": "tail_5p5",
+      "maximum_relative_change": 4.886355470922636e-68,
+      "points": {
+        "nonprincipal_spin_lift": {
+          "10": {
+            "value_q_relative_change": 2.9318137693211664e-68,
+            "value_q_tilde_relative_change": 0.0
+          },
+          "12": {
+            "value_q_relative_change": 0.0,
+            "value_q_tilde_relative_change": 0.0
+          },
+          "6": {
+            "value_q_relative_change": 3.90910494364349e-68,
+            "value_q_tilde_relative_change": 0.0
+          },
+          "8": {
+            "value_q_relative_change": 4.886355470922636e-68,
+            "value_q_tilde_relative_change": 0.0
+          }
+        },
+        "principal_anchor": {
+          "10": {
+            "value_q_relative_change": 0.0,
+            "value_q_tilde_relative_change": 0.0
+          },
+          "12": {
+            "value_q_relative_change": 0.0,
+            "value_q_tilde_relative_change": 0.0
+          },
+          "6": {
+            "value_q_relative_change": 0.0,
+            "value_q_tilde_relative_change": 0.0
+          },
+          "8": {
+            "value_q_relative_change": 1.1743871144042992e-68,
+            "value_q_tilde_relative_change": 0.0
+          }
+        }
+      },
+      "right": "production"
+    },
+    "momentum_tail_4p5_to_5p5": {
+      "left": "quadrature_96",
+      "maximum_relative_change": 9.842344691638254e-16,
+      "points": {
+        "nonprincipal_spin_lift": {
+          "10": {
+            "value_q_relative_change": 7.020299262709217e-16,
+            "value_q_tilde_relative_change": 9.110242728922711e-16
+          },
+          "12": {
+            "value_q_relative_change": 8.190349104319023e-16,
+            "value_q_tilde_relative_change": 9.110242728922713e-16
+          },
+          "6": {
+            "value_q_relative_change": 8.190390871947873e-16,
+            "value_q_tilde_relative_change": 9.110242729521084e-16
+          },
+          "8": {
+            "value_q_relative_change": 8.190347779987815e-16,
+            "value_q_tilde_relative_change": 7.591868940767586e-16
+          }
+        },
+        "principal_anchor": {
+          "10": {
+            "value_q_relative_change": 8.436295388743347e-16,
+            "value_q_tilde_relative_change": 9.231780169860326e-16
+          },
+          "12": {
+            "value_q_relative_change": 8.436295388748551e-16,
+            "value_q_tilde_relative_change": 9.231780169860326e-16
+          },
+          "6": {
+            "value_q_relative_change": 9.842344691638254e-16,
+            "value_q_tilde_relative_change": 7.693150141953031e-16
+          },
+          "8": {
+            "value_q_relative_change": 9.842344619159858e-16,
+            "value_q_tilde_relative_change": 6.154520113240551e-16
+          }
+        }
+      },
+      "right": "tail_5p5"
+    },
+    "quadrature_64_to_96": {
+      "left": "quadrature_64",
+      "maximum_relative_change": 4.615890084930416e-15,
+      "points": {
+        "nonprincipal_spin_lift": {
+          "10": {
+            "value_q_relative_change": 7.020299262709212e-16,
+            "value_q_tilde_relative_change": 4.403283985645981e-15
+          },
+          "12": {
+            "value_q_relative_change": 8.190349104319017e-16,
+            "value_q_tilde_relative_change": 4.403283985645982e-15
+          },
+          "6": {
+            "value_q_relative_change": 8.190390871947867e-16,
+            "value_q_tilde_relative_change": 4.403283985935195e-15
+          },
+          "8": {
+            "value_q_relative_change": 7.020298097132408e-16,
+            "value_q_tilde_relative_change": 4.555121364460555e-15
+          }
+        },
+        "principal_anchor": {
+          "10": {
+            "value_q_relative_change": 9.842344620200562e-16,
+            "value_q_tilde_relative_change": 4.4620270820991614e-15
+          },
+          "12": {
+            "value_q_relative_change": 1.1248393851664722e-15,
+            "value_q_tilde_relative_change": 4.615890084930167e-15
+          },
+          "6": {
+            "value_q_relative_change": 1.1248393933300849e-15,
+            "value_q_tilde_relative_change": 4.462027082332761e-15
+          },
+          "8": {
+            "value_q_relative_change": 1.1248393850468395e-15,
+            "value_q_tilde_relative_change": 4.615890084930416e-15
+          }
+        }
+      },
+      "right": "quadrature_96"
+    }
+  },
+  "config_sha256": "b604e5f67d6c465128225f882ba3b609a285334846fef8d112f00f2853005152",
+  "external_momentum": 0.33,
+  "external_weight": [
+    0.55445,
+    0.0
+  ],
+  "implementation": {
+    "environment": {
+      "mpmath_version": "1.3.0",
+      "numpy_version": "2.0.2",
+      "python_implementation": "CPython",
+      "python_version": "3.12.11"
+    },
+    "sha256": "ded96544c4944a2bd183521659b29d83ce2647bb18610263dd2bb34849c89fe1",
+    "source_files": {
+      "mixed_ramond_sphere_blocks.py": "bfae38919082aa86c540ab7cb1da82de38f89193334c81ca9160ec779fae16cb",
+      "ramond_sphere_blocks.py": "738bd72f5233782288921adf95bfa4adb92cfa1d245675bb428b4fcb67819baa",
+      "self_dual_superconformal_blocks.py": "dafef880658576a8c107dfddd955c2067a84ae44a0e3e0792edb325e576fa40c",
+      "super_liouville_structure_constants.py": "63f425bb0b13ce7078ca84dbaa769c3b261d5e1c3e1e572de60f812705b0a9e8",
+      "super_liouville_torus_modular_cluster.py": "326f7b7bb2d64f147c93c0234891b89f0496ba1b087a79d1c3a70a73c9438de4",
+      "super_liouville_torus_one_point.py": "3023def8e335b9ce777c22d3e0d109ca7391b51fda08864f9dadd468e8abaa0d",
+      "superconformal_blocks.py": "a6db3dc2ff690c81e4d84e4af490b4e7b841a69b1e8290716349dedaffac8f44",
+      "superconformal_torus_blocks.py": "19906a530e95a399a9ec742d0a3f41915eb4626fb4ef7da763a8b556be291c06"
+    },
+    "source_tree_sha256": "14f4135717e8b11b7af70c140f6c38388778d6509559a8d764fc0060e29aa177"
+  },
+  "implementation_sha256": "ded96544c4944a2bd183521659b29d83ce2647bb18610263dd2bb34849c89fe1",
+  "levels": [
+    6,
+    8,
+    10,
+    12
+  ],
+  "modular_orbit": "ns_tilde_to_r",
+  "schema_version": 2,
+  "shard_count": 16,
+  "studies": {
+    "production": {
+      "maximum_two_radius_difference": 4.892970531256212e-13,
+      "node_count": 96,
+      "parameters": {
+        "finite_part_samples": 40,
+        "name": "production",
+        "p_max": 5.5,
+        "quadrature_order": 96,
+        "structure_precision": 50
+      },
+      "taus": {
+        "nonprincipal_spin_lift": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "10": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705940962935653,
+                -3.1511883860396146e-52
+              ],
+              "relative_error": [
+                4.234409045622556e-09,
+                -4.0892973545213345e-52
+              ],
+              "relative_error_abs": 4.234409045622556e-09,
+              "value_q": [
+                0.05930425736206655,
+                -4.450419242152679e-54
+              ],
+              "value_q_tilde": [
+                0.045699510608282694,
+                -2.211735549823898e-53
+              ]
+            },
+            "12": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705940929527358,
+                -3.151188371516165e-52
+              ],
+              "relative_error": [
+                -1.0098555325299685e-10,
+                -4.089297335674253e-52
+              ],
+              "relative_error_abs": 1.0098555325299685e-10,
+              "value_q": [
+                0.059304257619173906,
+                -4.4504192680793725e-54
+              ],
+              "value_q_tilde": [
+                0.04569951060828269,
+                -2.2117355498238976e-53
+              ]
+            },
+            "6": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705980226354775,
+                -3.15120528690825e-52
+              ],
+              "relative_error": [
+                5.099448540102358e-06,
+                -4.08931928677956e-52
+              ],
+              "relative_error_abs": 5.099448540102358e-06,
+              "value_q": [
+                0.05930395519182212,
+                -4.450390064018856e-54
+              ],
+              "value_q_tilde": [
+                0.04569951060528109,
+                -2.211735549679349e-53
+              ]
+            },
+            "8": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.770593968352346,
+                -3.1511878301744912e-52
+              ],
+              "relative_error": [
+                -1.6179491890699893e-07,
+                -4.0892966331751315e-52
+              ],
+              "relative_error_abs": 1.6179491890699893e-07,
+              "value_q": [
+                0.0593042672083246,
+                -4.45042023252109e-54
+              ],
+              "value_q_tilde": [
+                0.04569951060829076,
+                -2.211735549824286e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.72,
+            1.04
+          ],
+          "tau": [
+            0.45,
+            0.65
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "principal_anchor": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "10": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190361519,
+                -4.964477177471287e-52
+              ],
+              "relative_error": [
+                -6.080691505871982e-13,
+                -5.4325933183691626e-52
+              ],
+              "relative_error_abs": 6.080691505871982e-13,
+              "value_q": [
+                0.04935029121786708,
+                2.738481772613841e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861643,
+                -2.1997327391753055e-53
+              ]
+            },
+            "12": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190367157,
+                -4.964477177474432e-52
+              ],
+              "relative_error": [
+                8.881784197001252e-15,
+                -5.432593318372604e-52
+              ],
+              "relative_error_abs": 8.881784197001252e-15,
+              "value_q": [
+                0.049350291217836635,
+                2.738481772612592e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861643,
+                -2.1997327391753055e-53
+              ]
+            },
+            "6": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319256210828,
+                -4.9644772140457266e-52
+              ],
+              "relative_error": [
+                7.205236629559408e-09,
+                -5.432593358392321e-52
+              ],
+              "relative_error_abs": 7.205236629559408e-09,
+              "value_q": [
+                0.049350290859672914,
+                2.738481757058073e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132625542,
+                -2.1997327390606943e-53
+              ]
+            },
+            "8": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319189394752,
+                -4.9644771769306064e-52
+              ],
+              "relative_error": [
+                -1.0640066605560605e-10,
+                -5.4325933177775e-52
+              ],
+              "relative_error_abs": 1.0640066605560605e-10,
+              "value_q": [
+                0.0493502912230853,
+                2.7384817728198195e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861398,
+                -2.199732739175187e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.23529411764705885,
+            1.0588235294117647
+          ],
+          "tau": [
+            0.2,
+            0.9
+          ],
+          "transformed_spin_structure": "R"
+        }
+      },
+      "total_node_runtime_seconds": 82.70754270767793
+    },
+    "quadrature_64": {
+      "maximum_two_radius_difference": 1.2161874681762039e-12,
+      "node_count": 64,
+      "parameters": {
+        "finite_part_samples": 32,
+        "name": "quadrature_64",
+        "p_max": 4.5,
+        "quadrature_order": 64,
+        "structure_precision": 50
+      },
+      "taus": {
+        "nonprincipal_spin_lift": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "10": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705940962935602,
+                -7.049864109284646e-53
+              ],
+              "relative_error": [
+                4.234402384284408e-09,
+                -9.148609070644813e-53
+              ],
+              "relative_error_abs": 4.234402384284408e-09,
+              "value_q": [
+                0.05930425736206663,
+                -1.6150522021790412e-53
+              ],
+              "value_q_tilde": [
+                0.04569951060828245,
+                -1.6626366477096958e-53
+              ]
+            },
+            "12": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705940929527304,
+                -7.049864092025519e-53
+              ],
+              "relative_error": [
+                -1.0099254765805199e-10,
+                -9.148609048247642e-53
+              ],
+              "relative_error_abs": 1.0099254765805199e-10,
+              "value_q": [
+                0.059304257619174,
+                -1.6150522081570035e-53
+              ],
+              "value_q_tilde": [
+                0.045699510608282444,
+                -1.662636647709696e-53
+              ]
+            },
+            "6": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705980226354722,
+                -7.049886911708695e-53
+              ],
+              "relative_error": [
+                5.099448533218975e-06,
+                -9.148638661351848e-53
+              ],
+              "relative_error_abs": 5.099448533218975e-06,
+              "value_q": [
+                0.059303955191822216,
+                -1.615044982628379e-53
+              ],
+              "value_q_tilde": [
+                0.045699510605280845,
+                -1.662636647600156e-53
+              ]
+            },
+            "8": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705939683523407,
+                -7.049863445215574e-53
+              ],
+              "relative_error": [
+                -1.6179492567935938e-07,
+                -9.14860820888234e-53
+              ],
+              "relative_error_abs": 1.6179492567935938e-07,
+              "value_q": [
+                0.05930426720832469,
+                -1.6150524313521174e-53
+              ],
+              "value_q_tilde": [
+                0.045699510608290514,
+                -1.6626366477099895e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.72,
+            1.04
+          ],
+          "tau": [
+            0.45,
+            0.65
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "principal_anchor": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "10": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190361454,
+                1.0745667658642013e-52
+              ],
+              "relative_error": [
+                -6.152856002472618e-13,
+                1.1758910402220665e-52
+              ],
+              "relative_error_abs": 6.152856002472618e-13,
+              "value_q": [
+                0.04935029121786717,
+                -2.36952656087976e-53
+              ],
+              "value_q_tilde": [
+                0.04509787132861619,
+                -1.6350471760514681e-53
+              ]
+            },
+            "12": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190367089,
+                1.0745667658650434e-52
+              ],
+              "relative_error": [
+                1.5543122344752192e-15,
+                1.175891040222988e-52
+              ],
+              "relative_error_abs": 1.5543122344752192e-15,
+              "value_q": [
+                0.04935029121783673,
+                -2.369526560878396e-53
+              ],
+              "value_q_tilde": [
+                0.04509787132861618,
+                -1.6350471760514686e-53
+              ]
+            },
+            "6": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319256210762,
+                1.0745667754217257e-52
+              ],
+              "relative_error": [
+                7.205229302087446e-09,
+                1.1758910506807999e-52
+              ],
+              "relative_error_abs": 7.205229302087446e-09,
+              "value_q": [
+                0.04935029085967302,
+                -2.36952654466075e-53
+              ],
+              "value_q_tilde": [
+                0.04509787132625519,
+                -1.6350471759655571e-53
+              ]
+            },
+            "8": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319189394686,
+                1.0745667657157199e-52
+              ],
+              "relative_error": [
+                -1.0640799352756858e-10,
+                1.1758910400595843e-52
+              ],
+              "relative_error_abs": 1.0640799352756858e-10,
+              "value_q": [
+                0.0493502912230854,
+                -2.3695265611115176e-53
+              ],
+              "value_q_tilde": [
+                0.045097871328613745,
+                -1.6350471760513803e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.23529411764705885,
+            1.0588235294117647
+          ],
+          "tau": [
+            0.2,
+            0.9
+          ],
+          "transformed_spin_structure": "R"
+        }
+      },
+      "total_node_runtime_seconds": 48.923952143639326
+    },
+    "quadrature_96": {
+      "maximum_two_radius_difference": 1.2206239912040124e-12,
+      "node_count": 96,
+      "parameters": {
+        "finite_part_samples": 32,
+        "name": "quadrature_96",
+        "p_max": 4.5,
+        "quadrature_order": 96,
+        "structure_precision": 50
+      },
+      "taus": {
+        "nonprincipal_spin_lift": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "10": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705940962935641,
+                3.37345914497963e-53
+              ],
+              "relative_error": [
+                4.234407491310321e-09,
+                4.377738131514421e-53
+              ],
+              "relative_error_abs": 4.234407491310321e-09,
+              "value_q": [
+                0.05930425736206659,
+                -2.2631922503686702e-53
+              ],
+              "value_q_tilde": [
+                0.04569951060828265,
+                -1.543942097577154e-53
+              ]
+            },
+            "12": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705940929527345,
+                3.3734591445199704e-53
+              ],
+              "relative_error": [
+                -1.0098721858753379e-10,
+                4.37773813091792e-53
+              ],
+              "relative_error_abs": 1.0098721858753379e-10,
+              "value_q": [
+                0.059304257619173954,
+                -2.2631922612706758e-53
+              ],
+              "value_q_tilde": [
+                0.045699510608282645,
+                -1.5439420975771538e-53
+              ]
+            },
+            "6": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705980226354762,
+                3.3734624157722123e-53
+              ],
+              "relative_error": [
+                5.099448538548046e-06,
+                4.377742376022148e-53
+              ],
+              "relative_error_abs": 5.099448538548046e-06,
+              "value_q": [
+                0.05930395519182217,
+                -2.263179647745637e-53
+              ],
+              "value_q_tilde": [
+                0.045699510605281046,
+                -1.5439420974753904e-53
+              ]
+            },
+            "8": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705939683523447,
+                3.3734591227155323e-53
+              ],
+              "relative_error": [
+                -1.6179492046131116e-07,
+                4.377738102622299e-53
+              ],
+              "relative_error_abs": 1.6179492046131116e-07,
+              "value_q": [
+                0.05930426720832465,
+                -2.263192667516294e-53
+              ],
+              "value_q_tilde": [
+                0.04569951060829072,
+                -1.5439420975774272e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.72,
+            1.04
+          ],
+          "tau": [
+            0.45,
+            0.65
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "principal_anchor": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "10": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190361502,
+                -1.5536826766590066e-52
+              ],
+              "relative_error": [
+                -6.098455074265985e-13,
+                -1.7001842946094302e-52
+              ],
+              "relative_error_abs": 6.098455074265985e-13,
+              "value_q": [
+                0.049350291217867125,
+                -8.189818222138322e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861639,
+                -1.515158655782162e-53
+              ]
+            },
+            "12": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190367141,
+                -1.5536826766601238e-52
+              ],
+              "relative_error": [
+                7.105427357601002e-15,
+                -1.7001842946106528e-52
+              ],
+              "relative_error_abs": 7.105427357601002e-15,
+              "value_q": [
+                0.04935029121783668,
+                -8.189818222132411e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861639,
+                -1.515158655782162e-53
+              ]
+            },
+            "6": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319256210813,
+                -1.553682689422111e-52
+              ],
+              "relative_error": [
+                7.205235075247174e-09,
+                -1.700184308576008e-52
+              ],
+              "relative_error_abs": 7.205235075247174e-09,
+              "value_q": [
+                0.04935029085967296,
+                -8.18981815422692e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132625539,
+                -1.5151586557025685e-53
+              ]
+            },
+            "8": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319189394738,
+                -1.5536826764644602e-52
+              ],
+              "relative_error": [
+                -1.0640222036784053e-10,
+                -1.7001842943965396e-52
+              ],
+              "relative_error_abs": 1.0640222036784053e-10,
+              "value_q": [
+                0.049350291223085346,
+                -8.189818223167275e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861395,
+                -1.5151586557820802e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.23529411764705885,
+            1.0588235294117647
+          ],
+          "tau": [
+            0.2,
+            0.9
+          ],
+          "transformed_spin_structure": "R"
+        }
+      },
+      "total_node_runtime_seconds": 70.44403344159946
+    },
+    "tail_5p5": {
+      "maximum_two_radius_difference": 1.2257535298653909e-12,
+      "node_count": 96,
+      "parameters": {
+        "finite_part_samples": 32,
+        "name": "tail_5p5",
+        "p_max": 5.5,
+        "quadrature_order": 96,
+        "structure_precision": 50
+      },
+      "taus": {
+        "nonprincipal_spin_lift": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "10": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705940962935653,
+                -3.151188386039614e-52
+              ],
+              "relative_error": [
+                4.234409045622556e-09,
+                -4.089297354521334e-52
+              ],
+              "relative_error_abs": 4.234409045622556e-09,
+              "value_q": [
+                0.05930425736206655,
+                -4.4504192421526805e-54
+              ],
+              "value_q_tilde": [
+                0.045699510608282694,
+                -2.211735549823898e-53
+              ]
+            },
+            "12": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705940929527358,
+                -3.151188371516165e-52
+              ],
+              "relative_error": [
+                -1.0098555325299685e-10,
+                -4.089297335674253e-52
+              ],
+              "relative_error_abs": 1.0098555325299685e-10,
+              "value_q": [
+                0.059304257619173906,
+                -4.4504192680793725e-54
+              ],
+              "value_q_tilde": [
+                0.04569951060828269,
+                -2.2117355498238976e-53
+              ]
+            },
+            "6": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.7705980226354775,
+                -3.1512052869082496e-52
+              ],
+              "relative_error": [
+                5.099448540102358e-06,
+                -4.0893192867795596e-52
+              ],
+              "relative_error_abs": 5.099448540102358e-06,
+              "value_q": [
+                0.05930395519182212,
+                -4.4503900640188585e-54
+              ],
+              "value_q_tilde": [
+                0.04569951060528109,
+                -2.211735549679349e-53
+              ]
+            },
+            "8": {
+              "expected_ratio": 0.7705940930305547,
+              "numeric_ratio": [
+                0.770593968352346,
+                -3.151187830174491e-52
+              ],
+              "relative_error": [
+                -1.6179491890699893e-07,
+                -4.089296633175131e-52
+              ],
+              "relative_error_abs": 1.6179491890699893e-07,
+              "value_q": [
+                0.0593042672083246,
+                -4.450420232521093e-54
+              ],
+              "value_q_tilde": [
+                0.04569951060829076,
+                -2.211735549824286e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.72,
+            1.04
+          ],
+          "tau": [
+            0.45,
+            0.65
+          ],
+          "transformed_spin_structure": "R"
+        },
+        "principal_anchor": {
+          "direct_spin_structure": "NS_tilde",
+          "levels": {
+            "10": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190361519,
+                -4.964477177471287e-52
+              ],
+              "relative_error": [
+                -6.080691505871982e-13,
+                -5.4325933183691626e-52
+              ],
+              "relative_error_abs": 6.080691505871982e-13,
+              "value_q": [
+                0.04935029121786708,
+                2.738481772613841e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861643,
+                -2.1997327391753055e-53
+              ]
+            },
+            "12": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319190367157,
+                -4.964477177474432e-52
+              ],
+              "relative_error": [
+                8.881784197001252e-15,
+                -5.432593318372604e-52
+              ],
+              "relative_error_abs": 8.881784197001252e-15,
+              "value_q": [
+                0.049350291217836635,
+                2.738481772612592e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861643,
+                -2.1997327391753055e-53
+              ]
+            },
+            "6": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319256210828,
+                -4.9644772140457266e-52
+              ],
+              "relative_error": [
+                7.205236629559408e-09,
+                -5.432593358392321e-52
+              ],
+              "relative_error_abs": 7.205236629559408e-09,
+              "value_q": [
+                0.049350290859672914,
+                2.738481757058073e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132625542,
+                -2.1997327390606943e-53
+              ]
+            },
+            "8": {
+              "expected_ratio": 0.9138319190367076,
+              "numeric_ratio": [
+                0.9138319189394752,
+                -4.9644771769306064e-52
+              ],
+              "relative_error": [
+                -1.0640066605560605e-10,
+                -5.4325933177775e-52
+              ],
+              "relative_error_abs": 1.0640066605560605e-10,
+              "value_q": [
+                0.0493502912230853,
+                2.73848177281982e-54
+              ],
+              "value_q_tilde": [
+                0.04509787132861398,
+                -2.199732739175187e-53
+              ]
+            }
+          },
+          "lift_sign": 1,
+          "lift_sign_tilde": -1,
+          "s_tau": [
+            -0.23529411764705885,
+            1.0588235294117647
+          ],
+          "tau": [
+            0.2,
+            0.9
+          ],
+          "transformed_spin_structure": "R"
+        }
+      },
+      "total_node_runtime_seconds": 71.4483686760068
+    }
+  }
+}

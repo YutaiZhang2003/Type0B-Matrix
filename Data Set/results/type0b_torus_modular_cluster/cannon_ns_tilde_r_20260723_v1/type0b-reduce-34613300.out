@@ -1,0 +1,27 @@
+Type-0B torus modular cluster reduction
+  config_sha256=b604e5f67d6c465128225f882ba3b609a285334846fef8d112f00f2853005152
+  implementation_sha256=ded96544c4944a2bd183521659b29d83ce2647bb18610263dd2bb34849c89fe1
+  atomic jobs=352
+  shards=16
+  study=quadrature_64
+    principal_anchor: NS_tilde->R, lifts=(1, -1), level-12 residual=1.554312e-15
+    nonprincipal_spin_lift: NS_tilde->R, lifts=(1, -1), level-12 residual=1.009925e-10
+  study=quadrature_96
+    principal_anchor: NS_tilde->R, lifts=(1, -1), level-12 residual=7.105427e-15
+    nonprincipal_spin_lift: NS_tilde->R, lifts=(1, -1), level-12 residual=1.009872e-10
+  study=tail_5p5
+    principal_anchor: NS_tilde->R, lifts=(1, -1), level-12 residual=8.881784e-15
+    nonprincipal_spin_lift: NS_tilde->R, lifts=(1, -1), level-12 residual=1.009856e-10
+  study=production
+    principal_anchor: NS_tilde->R, lifts=(1, -1), level-12 residual=8.881784e-15
+    nonprincipal_spin_lift: NS_tilde->R, lifts=(1, -1), level-12 residual=1.009856e-10
+  comparison=quadrature_64_to_96: maximum relative change=4.615890e-15
+  comparison=momentum_tail_4p5_to_5p5: maximum relative change=9.842345e-16
+  comparison=finite_part_samples_32_to_40: maximum relative change=4.886355e-68
+  [PASS] principal order-12 NS-tilde-to-R residual: 8.881784e-15 <= 5.000000e-12
+  [PASS] nonprincipal order-12 NS-tilde-to-R residual: 1.009856e-10 <= 2.000000e-10
+  [PASS] spin-orbit spectral quadrature convergence: 4.615890e-15 <= 5.000000e-12
+  [PASS] spin-orbit momentum-tail convergence: 9.842345e-16 <= 5.000000e-12
+  [PASS] spin-orbit finite-part sample convergence: 4.886355e-68 <= 5.000000e-12
+  [PASS] spin-orbit finite-part two-radius stability: 4.892971e-13 <= 5.000000e-12
+  accuracy targets=PASS

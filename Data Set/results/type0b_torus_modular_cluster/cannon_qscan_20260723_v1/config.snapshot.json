@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "external_momentum": 0.33,
+  "levels": [6, 8, 10, 12],
+  "taus": [
+    {"name": "radial_x020_y045", "tau": [0.20, 0.45], "family": "radial_x020", "scan_value": 0.45},
+    {"name": "radial_x020_y055", "tau": [0.20, 0.55], "family": "radial_x020", "scan_value": 0.55},
+    {"name": "radial_x020_y065", "tau": [0.20, 0.65], "family": "radial_x020", "scan_value": 0.65},
+    {"name": "radial_x020_y075", "tau": [0.20, 0.75], "family": "radial_x020", "scan_value": 0.75},
+    {"name": "radial_x020_y085", "tau": [0.20, 0.85], "family": "radial_x020", "scan_value": 0.85},
+    {"name": "radial_x020_y095", "tau": [0.20, 0.95], "family": "radial_x020", "scan_value": 0.95},
+    {"name": "radial_x020_y105", "tau": [0.20, 1.05], "family": "radial_x020", "scan_value": 1.05},
+    {"name": "radial_x020_y120", "tau": [0.20, 1.20], "family": "radial_x020", "scan_value": 1.20},
+    {"name": "radial_x020_y140", "tau": [0.20, 1.40], "family": "radial_x020", "scan_value": 1.40},
+    {"name": "lift_x045_y055", "tau": [0.45, 0.55], "family": "lift_x045", "scan_value": 0.55},
+    {"name": "lift_x045_y065", "tau": [0.45, 0.65], "family": "lift_x045", "scan_value": 0.65},
+    {"name": "lift_x045_y075", "tau": [0.45, 0.75], "family": "lift_x045", "scan_value": 0.75},
+    {"name": "lift_x045_y080", "tau": [0.45, 0.80], "family": "lift_x045", "scan_value": 0.80},
+    {"name": "lift_x045_y082", "tau": [0.45, 0.82], "family": "lift_x045", "scan_value": 0.82},
+    {"name": "lift_x045_y084", "tau": [0.45, 0.84], "family": "lift_x045", "scan_value": 0.84},
+    {"name": "lift_x045_y086", "tau": [0.45, 0.86], "family": "lift_x045", "scan_value": 0.86},
+    {"name": "lift_x045_y090", "tau": [0.45, 0.90], "family": "lift_x045", "scan_value": 0.90},
+    {"name": "lift_x045_y100", "tau": [0.45, 1.00], "family": "lift_x045", "scan_value": 1.00},
+    {"name": "lift_x045_y120", "tau": [0.45, 1.20], "family": "lift_x045", "scan_value": 1.20}
+  ],
+  "studies": [
+    {
+      "name": "scan_quadrature_64",
+      "quadrature_order": 64,
+      "p_max": 5.5,
+      "structure_precision": 50,
+      "finite_part_samples": 40
+    },
+    {
+      "name": "production",
+      "quadrature_order": 96,
+      "p_max": 5.5,
+      "structure_precision": 50,
+      "finite_part_samples": 40
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "scan_quadrature_64_to_96",
+      "left": "scan_quadrature_64",
+      "right": "production"
+    }
+  ],
+  "accuracy_targets": [
+    {
+      "name": "q-scan spectral quadrature convergence",
+      "kind": "comparison_relative_change",
+      "comparison": "scan_quadrature_64_to_96",
+      "maximum": 5e-11
+    },
+    {
+      "name": "q-scan finite-part two-radius stability diagnostic",
+      "kind": "finite_part_two_radius",
+      "study": "production",
+      "maximum": 5e-12
+    }
+  ],
+  "default_shard_count": 16
+}

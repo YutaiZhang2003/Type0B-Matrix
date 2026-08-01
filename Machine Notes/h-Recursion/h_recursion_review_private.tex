@@ -1,0 +1,2187 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,bm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\setlength{\emergencystretch}{2em}
+\allowdisplaybreaks
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  citecolor=blue!55!black,
+  urlcolor=blue!55!black,
+  pdftitle={A Working Review of h-Recursion in Two-Dimensional CFT},
+  pdfauthor={Private working note}
+}
+
+\newcommand{\Vir}{\mathrm{Vir}}
+\newcommand{\sVir}{\mathrm{sVir}}
+\newcommand{\NS}{\mathrm{NS}}
+\newcommand{\R}{\mathrm{R}}
+\newcommand{\F}{\mathcal F}
+\newcommand{\Hh}{\mathcal H}
+\newcommand{\Vv}{\mathcal V}
+\newcommand{\Res}{\operatorname*{Res}}
+\newcommand{\half}{\tfrac12}
+\newcommand{\bvec}{\bm}
+\newcommand{\order}{\mathcal O}
+\newcommand{\id}{\mathbf 1}
+\newcommand{\ketbra}[2]{|#1\rangle\langle #2|}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+\title{A Working Review of \(h\)-Recursion in Two-Dimensional CFT\\[0.4em]
+\large Virasoro, Neveu--Schwarz, and Ramond blocks}
+\author{Private working note---not for circulation}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This note reviews the practical recipe for Zamolodchikov recursion in an
+internal conformal weight.  The emphasis is on the data that a numerical
+implementation actually needs: the Kac pole, inverse null norm, factorized
+three-point matrix element, shifted module, elliptic or plumbing
+normalization, and regular large-weight part.  We begin with Virasoro sphere
+and torus blocks, then summarize the \(\mathcal N=1\) NS and Ramond
+generalizations.  The Ramond discussion makes explicit how the \(G_0\)
+ground-state doublet is hidden in the scalar recursions of the literature.
+The final sections isolate the obstruction to applying the same method
+directly to a genus-two theta graph.
+\end{abstract}
+
+\tableofcontents
+
+\section{\texorpdfstring{The question answered by \(h\)-recursion}
+{The question answered by h-recursion}}
+
+Fix a chiral algebra, a pants decomposition, the central charge \(c\), all
+external weights, and all internal weights except one, denoted \(h\).
+A conformal-block coefficient obtained by descendant sewing is a rational
+function of \(h\).  Its singularities occur when the internal Verma module
+contains a null vector.  The block can therefore be reconstructed from
+\begin{equation}
+ \boxed{
+ \text{regular part at large \(h\)}
+ \quad+\quad
+ \text{sum over Kac poles and their residues}.}
+ \label{eq:one-line-summary}
+\end{equation}
+This is the meaning of \(h\)-recursion.  The residue is local to the two
+vertices adjacent to the singular internal edge.  The regular part is not
+local in this sense: it depends on the topology, channel, and normalization.
+This distinction will be central at genus two.
+
+At fixed order in the plumbing parameters, only finitely many Kac labels
+contribute.  Once the regular part is known, the recursion is triangular and
+efficient; it never requires construction or inversion of a large Gram
+matrix.
+
+\subsection{Three versions that should not be conflated}
+
+The same meromorphic idea appears in three commonly used forms:
+\begin{enumerate}
+ \item A recursion for coefficients of a local coordinate expansion, such
+ as the sphere \(z\)-series.
+ \item An elliptic recursion after extracting a universal prefactor and
+ replacing \(z\) by a nome \(q(z)\).  This is usually the fastest numerical
+ representation of a four-point block.
+ \item A plumbing recursion on a multipoint or higher-genus graph, with one
+ plumbing parameter \(q_e\) for every internal edge.
+\end{enumerate}
+The poles and null-vector residues are the same representation-theory data.
+The prefactor and regular part differ.
+
+\section{Universal residue mechanism}
+\label{sec:universal-residue}
+
+Let \(\mathcal V_{c,h}\) be a Verma module with a basis
+\(\{|h;I\rangle\}\) and Gram matrix
+\begin{equation}
+ B^{(n)}_{IJ}(c,h)=\langle h;I|h;J\rangle ,
+ \qquad |I|=|J|=n .
+\end{equation}
+A sewn block coefficient has the schematic form
+\begin{equation}
+ F_n(c,h)
+ =
+ \sum_{|I|=|J|=n}
+ \rho_L(I)\,
+ \big(B^{(n)}(c,h)^{-1}\big)^{IJ}\,
+ \rho_R(J).
+ \label{eq:gram-definition}
+\end{equation}
+Suppose that at \(h=h_{r,s}(c)\) a normalized singular vector
+\begin{equation}
+ |\chi_{r,s}\rangle
+ =
+ D_{r,s}|h_{r,s}\rangle
+\end{equation}
+appears at level \(\ell_{r,s}\).  Descendants of this vector form a Verma
+submodule with highest weight
+\begin{equation}
+ h'_{r,s}=h_{r,s}+\ell_{r,s}.
+\end{equation}
+Near the zero of the Kac determinant, the inverse Gram matrix has a
+rank-one singular part.  Define the inverse null-norm slope by
+\begin{equation}
+ A_{r,s}(c)
+ =
+ \left[
+ \lim_{h\to h_{r,s}}
+ \frac{\langle\chi_{r,s}(h)|\chi_{r,s}(h)\rangle}
+      {h-h_{r,s}}
+ \right]^{-1}.
+ \label{eq:inverse-null-slope}
+\end{equation}
+The Ward identities factorize the two adjacent three-point tensors:
+\begin{align}
+ \rho_L(D_{r,s}u)
+ &=P^{(L)}_{r,s}\,\rho'_L(u),&
+ \rho_R(D_{r,s}v)
+ &=P^{(R)}_{r,s}\,\rho'_R(v).
+ \label{eq:null-factorization}
+\end{align}
+The \(P_{r,s}\) are fusion polynomials, or finite matrices when the ground
+space is not one-dimensional.  Equations
+\eqref{eq:inverse-null-slope}--\eqref{eq:null-factorization} imply
+\begin{equation}
+ \Res_{h=h_{r,s}}\F
+ =
+ q^{\ell_{r,s}}\,
+ A_{r,s}\,
+ P^{(L)}_{r,s}P^{(R)}_{r,s}\,
+ \F(h_{r,s}+\ell_{r,s}).
+ \label{eq:universal-residue}
+\end{equation}
+This is the reusable kernel of every \(h\)-recursion discussed below.
+
+\subsection{What must be fixed before quoting a residue}
+
+A residue coefficient is meaningless until the following choices are
+locked:
+\begin{enumerate}
+ \item the normalization of the singular operator \(D_{r,s}\);
+ \item whether \(A_{r,s}\) is a slope with respect to \(h\), a momentum, or
+ another parameter;
+ \item the ordering and normalization of the two three-point forms;
+ \item the local coordinate or elliptic prefactor;
+ \item the branch convention for momenta such as \(b\), \(P\), or \(\beta\).
+\end{enumerate}
+A large fraction of apparent sign and factor-of-two disagreements in the
+literature come from changing one item in this list.
+
+\section{What is the regular boundary data?}
+\label{sec:regular-boundary}
+
+\subsection{Coefficient-level definition}
+
+At a fixed plumbing level \(N\), suppose the reduced block coefficient is a
+meromorphic function of one recursion variable \(x\):
+\begin{equation}
+ H_N(x)
+ =
+ U_N(x)
+ +
+ \sum_p\frac{R_{p,N}}{x-x_p}.
+ \label{eq:coefficient-partial-fraction}
+\end{equation}
+The pole sum is fixed by null-vector factorization.  The function \(U_N\) is
+the regular boundary data.  If \(H_N(x)\) is bounded as \(x\to\infty\), then
+Liouville's theorem gives
+\begin{equation}
+ U_N=\lim_{x\to\infty}H_N(x).
+ \label{eq:bounded-regular-part}
+\end{equation}
+If \(H_N\) grows as a polynomial of degree \(k\), then \(U_N(x)\) is a
+polynomial of degree \(k\), and \(k+1\) asymptotic coefficients are needed.
+In practice one chooses a prefactor so that the reduced block is bounded and
+the regular part is as simple as possible.
+
+At the level of the complete plumbing series,
+\begin{equation}
+ \Hh_\infty(\bvec q)
+ =
+ \sum_N \bvec q^{\,N} U_N
+ \label{eq:complete-seed}
+\end{equation}
+is called the large-weight seed.  Thus ``the seed is one'' means
+\begin{equation}
+ U_0=1,\qquad U_{N>0}=0
+\end{equation}
+for the reduced block, not for the original unstripped conformal block.
+
+\subsection{Why a prefactor is part of the boundary condition}
+
+The original block may contain a known exponential or character-like
+large-weight dependence:
+\begin{equation}
+ \F_x(\bvec q)
+ =
+ \mathcal P_x(\bvec q)\,\Hh_x(\bvec q).
+ \label{eq:prefactor-and-reduced-block}
+\end{equation}
+One first derives \(\mathcal P_x\), then applies the partial-fraction
+argument to \(\Hh_x\).  Changing \(\mathcal P_x\) changes the regular part.
+Consequently the statement
+\begin{equation}
+ \lim_{x\to\infty}\Hh_x=1
+ \end{equation}
+is meaningful only together with the chosen elliptic or plumbing
+normalization.
+
+\subsection{How the large-weight limit is derived}
+\label{sec:large-h-gram}
+
+There are two standard derivations.
+
+\paragraph{Semiclassical monodromy and uniformization.}
+For the sphere four-point block, Zamolodchikov studied a classical limit in
+which \(c\), the internal weight, and the external weights are large with
+their ratios controlled.  The monodromy problem determines the leading
+large-internal-weight dependence in terms of the elliptic nome.  The answer
+is precisely the prefactor in
+Eq.~\eqref{eq:vir-elliptic-prefactor}; after it is removed, the reduced
+elliptic block tends to one.  The pillow representation gives a geometric
+interpretation of the same factor.
+
+\paragraph{Large-weight power counting in the descendant basis.}
+At fixed \(c\),
+\begin{equation}
+ [L_n,L_{-n}]
+ =
+ 2nL_0+\frac{c}{12}(n^3-n)
+ \sim 2nh
+ \label{eq:large-h-commutator}
+\end{equation}
+on a state of large weight \(h\).  For a PBW state \(L_{-A}|h\rangle\), let
+\([A]\) be the number of Virasoro generators.  After Gram--Schmidt
+orthogonalization,
+\begin{equation}
+ \|\ell_{-A}|h\rangle\|^2\sim h^{[A]}.
+ \label{eq:large-h-norm}
+\end{equation}
+Off-diagonal inverse-Gram elements are suppressed.  If a three-point tensor
+contains two large-weight legs and one fixed-weight primary, Ward identities
+allow the descendant generators to pass through the fixed primary at
+subleading cost.  Hence
+\begin{equation}
+ \frac{
+ \rho(\ell_{-A}h,d,\ell_{-B}h)}
+ {\|\ell_{-A}|h\rangle\|\,
+  \|\ell_{-B}|h\rangle\|}
+ \longrightarrow \delta_{AB}.
+ \label{eq:large-h-diagonal-vertex}
+\end{equation}
+The boundary seed is then obtained by summing the descendant states that
+survive this diagonal limit.
+
+\subsection{The standard examples}
+
+\paragraph{Sphere four-point block.}
+The original \(z\)-block has a nontrivial large-\(h\) behavior.  After the
+elliptic prefactor is extracted, one has
+\begin{equation}
+ \Hh_h(q)\longrightarrow1.
+ \label{eq:sphere-h-boundary}
+\end{equation}
+The coefficientwise regular data are therefore
+\(U_0=1\), \(U_{N>0}=0\).
+
+\paragraph{Torus one-point block.}
+In the trace, the large-\(h\) normalized matrix element of a fixed primary
+approaches the descendant norm.  Every descendant therefore contributes
+one, and the unstripped boundary is the nondegenerate Verma character:
+\begin{equation}
+ \F_h^d(q)
+ \longrightarrow
+ q^{h-c/24}
+ \prod_{n=1}^{\infty}\frac1{1-q^n}.
+ \label{eq:torus-character-boundary}
+\end{equation}
+After this character is divided out, the reduced seed is again one.
+
+\paragraph{Torus \(N\)-point necklace channel.}
+The regular part in one weight \(h_i\) is complicated.  Rather than compute
+it directly, Cho--Collier--Yin set
+\begin{equation}
+ h_i=H+a_i,\qquad a_1=0,
+ \label{eq:necklace-common-weight}
+\end{equation}
+and take \(H\to\infty\) with every difference \(a_i=h_i-h_1\) fixed.  Each
+vertex then has two large legs and one fixed external primary, so
+Eq.~\eqref{eq:large-h-diagonal-vertex} applies around the entire necklace.
+All descendant partitions must agree around the cycle, giving
+\begin{equation}
+ \F_{\mathrm{necklace}}
+ \longrightarrow
+ \sum_A(q_1q_2\cdots q_N)^{|A|}
+ =
+ \prod_{n=1}^{\infty}
+ \frac1{1-(q_1q_2\cdots q_N)^n}.
+ \label{eq:necklace-boundary}
+\end{equation}
+The block is regarded as a meromorphic function of the single common
+variable \(H\).  A Kac pole on edge \(i\) occurs at
+\begin{equation}
+ H=h_{r,s}-a_i.
+\end{equation}
+Thus all edge poles and one simultaneous boundary value determine a closed
+one-variable recursion.  This avoids the need to know the separate regular
+functions \(U_i(\{h_{j\ne i}\})\).
+
+\paragraph{Sphere \(N\)-point linear channel.}
+A similar one-parameter limit sends all internal weights and the two endpoint
+external weights to infinity with their differences fixed.  Only the
+level-zero term survives, so
+\begin{equation}
+ \F_{\mathrm{linear}}\longrightarrow1.
+ \label{eq:linear-boundary}
+\end{equation}
+The price is that the recursion shifts some external weights as well as the
+internal weights \cite{ChoCollierYin2017Recursive}.
+
+\subsection{Superconformal large-weight boundaries}
+
+For NS and R modules the same Gram--Schmidt argument includes fermionic
+PBW modes.  In a channel where the large-weight vertex becomes diagonal,
+the surviving-state sum is a super-Virasoro character:
+\begin{equation}
+ \sum_{A,K}Q^{|A|+|K|}
+ =
+ \prod_{n\ge1}\frac1{1-Q^n}
+ \prod_{r\in\mathcal I_s}(1+\epsilon Q^r).
+ \label{eq:super-character-boundary}
+\end{equation}
+Here \(\mathcal I_s\) is the appropriate NS or R mode lattice and
+\(\epsilon\) records a possible \((-1)^F\) insertion.
+
+In the Ramond case the power counting is naturally performed at
+\(|\beta|\to\infty\).  The special parity basis makes the leading Gram
+matrix diagonal.  Unstarred components approach a character, while a
+component with an effective \(G_0\) insertion has an additional leading
+factor proportional to \(\beta\).  Removing both the character and this
+\(\beta\) factor produces the seed used in
+Eq.~\eqref{eq:r-h-recursion}
+\cite{HadaszJaskolskiSuchanek2012Toric}.
+
+\subsection{Why the theta graph is different}
+
+The successful limits above arrange that every trivalent tensor contains
+\emph{two} large legs and \emph{one fixed} primary.  This makes the leading
+tensor a two-point norm and leads to
+Eq.~\eqref{eq:large-h-diagonal-vertex}.
+
+On a genus-two theta graph, a simultaneous large-weight limit makes all
+three legs of each trinion large.  The leading three-point tensor is then a
+genuine trivalent oscillator vertex rather than a diagonal two-point norm.
+The Kac residues do not determine this vertex.  To obtain a closed
+\(h\)-recursion one must derive and resum the resulting oscillator network.
+For an \(NRR\) vertex the network also retains the Ramond ground fibre and
+the \(G_0\) sewing matrices.
+
+This gives a concrete criterion for a new \(h\)-recursion:
+\begin{equation}
+ \boxed{
+ \begin{gathered}
+ \text{find a one-parameter correlated large-weight limit,}\\
+ \text{prove that its trivalent large-weight tensor has a closed form,}\\
+ \text{and factor it so that the reduced block has a bounded seed.}
+ \end{gathered}}
+ \label{eq:new-h-recursion-criterion}
+\end{equation}
+If no such closed trivalent seed is available, the local \(h\)-pole formulas
+remain valid but do not form a complete algorithm.
+
+\section{Virasoro four-point blocks on the sphere}
+\label{sec:vir-sphere}
+
+Use
+\begin{equation}
+ c=1+6Q^2,\qquad Q=b+b^{-1},
+\qquad
+ h(\lambda)=\frac{Q^2-\lambda^2}{4}.
+ \label{eq:vir-parameterization}
+\end{equation}
+The degenerate weights are
+\begin{equation}
+ h_{r,s}
+ =
+ \frac{Q^2-(rb+s b^{-1})^2}{4},
+ \qquad r,s\in\mathbb Z_{>0},
+ \label{eq:vir-kac-weight}
+\end{equation}
+and the singular vector is at level
+\(\ell_{r,s}=rs\).
+
+For the channel
+\(\langle\phi_4(\infty)\phi_3(1)\phi_2(z)\phi_1(0)\rangle\),
+normalize
+\begin{equation}
+ \F_h(z)
+ =
+ z^{h-h_1-h_2}
+ \left(1+\sum_{n\ge1}z^nF_n(h)\right).
+ \label{eq:vir-local-block}
+\end{equation}
+The first coefficient,
+\begin{equation}
+ F_1(h)
+ =
+ \frac{(h+h_2-h_1)(h+h_3-h_4)}{2h},
+ \label{eq:vir-level-one}
+\end{equation}
+already displays the mechanism: a pole at the level-one degenerate weight
+\(h=0\), a factor from each adjacent three-point function, and a shifted
+module.
+
+\subsection{Coefficient recursion}
+
+At each level,
+\begin{equation}
+ F_n(h)
+ =
+ U_n
+ \sum_{\substack{r,s\ge1\\rs\le n}}
+ \frac{R_{r,s}}{h-h_{r,s}}\,
+ F_{n-rs}(h_{r,s}+rs),
+ \label{eq:vir-coefficient-recursion}
+\end{equation}
+where
+\begin{equation}
+ R_{r,s}
+ =
+ A_{r,s}\,
+ P_{r,s}(h_4,h_3)\,
+ P_{r,s}(h_2,h_1).
+ \label{eq:vir-residue-coefficient}
+\end{equation}
+The \(h\)-independent term \(U_n\) is fixed by the large-\(h\) asymptotic.
+In a local \(z\)-series it is nontrivial; the elliptic normalization packages
+the complete sequence \(U_n\) into a universal prefactor.
+
+\subsection{Elliptic normalization}
+
+Introduce
+\begin{equation}
+ q(z)=\exp\!\left[-\pi\frac{K(1-z)}{K(z)}\right].
+ \label{eq:elliptic-nome}
+\end{equation}
+Zamolodchikov's normalization writes
+\begin{align}
+ \F_h(z)
+ &=
+ (16q)^{h-(c-1)/24}
+ z^{(c-1)/24-h_1-h_2}
+ (1-z)^{(c-1)/24-h_2-h_3}
+ \notag\\[-0.2em]
+ &\qquad\times
+ \theta_3(q)^{(c-1)/2-4\sum_i h_i}
+ \Hh_h(q).
+ \label{eq:vir-elliptic-prefactor}
+\end{align}
+The reduced block has the recursion
+\begin{equation}
+ \boxed{
+ \Hh_h(q)
+ =
+ 1+
+ \sum_{r,s\ge1}
+ \frac{(16q)^{rs}R_{r,s}}
+      {h-h_{r,s}}\,
+ \Hh_{h_{r,s}+rs}(q).}
+ \label{eq:vir-elliptic-recursion}
+\end{equation}
+The essential achievement of the elliptic prefactor is
+\begin{equation}
+ \lim_{h\to\infty}\Hh_h(q)=1.
+ \label{eq:vir-large-h-seed}
+\end{equation}
+The recursion is efficient because a requested coefficient of \(q^N\)
+receives contributions only from \(rs\le N\).
+
+\subsection{Practical implementation}
+
+To compute through \(q^N\):
+\begin{enumerate}
+ \item enumerate \((r,s)\) with \(rs\le N\);
+ \item evaluate \(h_{r,s}\), \(A_{r,s}\), and the two fusion polynomials;
+ \item recursively evaluate the shifted block only through order \(N-rs\);
+ \item memoize by shifted weight and remaining order;
+ \item multiply by the prefactor \eqref{eq:vir-elliptic-prefactor}.
+\end{enumerate}
+The recursion tree grows much more slowly than the descendant basis.
+
+\section{Virasoro torus one-point and multipoint blocks}
+\label{sec:vir-torus}
+
+For a torus one-point block,
+\begin{equation}
+ \F_h^{d}(q)
+ =
+ q^{h-c/24}
+ \sum_{n\ge0}q^n
+ \sum_{|I|=|J|=n}
+ \rho(h;I,d,h;J)\,
+ (B_h^{(n)})^{IJ}.
+ \label{eq:torus-one-point-definition}
+\end{equation}
+The same Kac pole appears on the traced module.  Both sides of the singular
+state meet the same vertex, so the residue again contains two null-vector
+three-point factors:
+\begin{equation}
+ \Res_{h=h_{r,s}}\F_h^d
+ =
+ q^{rs}A_{r,s}
+ P_{r,s}^{(1)}(d,h'_{r,s})
+ P_{r,s}^{(2)}(d,h_{r,s})
+ \F_{h'_{r,s}}^d.
+ \label{eq:torus-residue}
+\end{equation}
+After extracting the torus large-\(h\) character, the reduced block has seed
+one and satisfies the same triangular pattern as
+\eqref{eq:vir-elliptic-recursion}; see
+Ref.~\cite{HadaszJaskolskiSuchanek2009Torus}.
+
+\subsection{Linear and necklace channels}
+
+For a sphere multipoint block in a linear channel or a torus multipoint
+block in a necklace channel, every internal edge has two well-defined
+adjacent vertices.  Applying \eqref{eq:universal-residue} edge by edge gives
+\begin{equation}
+ \Res_{h_e=h_{r,s}}
+ \F_{\Gamma}
+ =
+ q_e^{rs}A_{r,s}
+ P_{r,s}^{(v_L,e)}P_{r,s}^{(v_R,e)}
+ \F_{\Gamma}(h_e\to h_{r,s}+rs).
+ \label{eq:graph-local-h-residue}
+\end{equation}
+For these channels the simultaneous large-weight limit can be organized
+recursively, and closed \(h\)-recursions are available
+\cite{ChoCollierYin2017Recursive}.
+
+\subsection{Why a local residue does not automatically give a closed recursion}
+
+For several internal weights, meromorphy in one variable gives
+\begin{equation}
+ \F_\Gamma(\bvec h)
+ =
+ U_e(\{h_{e'}:e'\ne e\})
+ +
+ \sum_{r,s}
+ \frac{\mathcal R_{r,s}^{(e)}}
+      {h_e-h_{r,s}}\,
+ \F_\Gamma(h_e\to h_{r,s}+rs).
+ \label{eq:multivariable-partial-fraction}
+\end{equation}
+The residue is known, but the regular function \(U_e\) need not be.
+At a theta vertex all three legs are internal.  Sending one weight to
+infinity changes a three-point tensor whose other two weights remain
+dynamical.  The large-\(h_e\) limit is therefore not the same universal
+external-leg asymptotic that closes the sphere linear and torus necklace
+recursions.  This is the basic higher-genus obstruction.
+
+Cho--Collier--Yin solve the arbitrary Virasoro plumbing problem instead by
+recursing in \(c\).  Its large-\(c\) regular part factorizes into a global
+\(\mathfrak{sl}(2)\) block and a universal vacuum contribution.  This is why
+the existence of graph-local \(h\)-pole residues should not be confused with
+the existence of a complete genus-two \(h\)-recursion.
+
+\section{\texorpdfstring{\(\mathcal N=1\) Neveu--Schwarz recursion}
+{N=1 Neveu--Schwarz recursion}}
+\label{sec:ns-recursion}
+
+Use the ordinary super-Virasoro central charge
+\begin{equation}
+ c=\frac32+3Q^2,\qquad Q=b+b^{-1},
+\qquad h(\lambda)=\frac{Q^2-\lambda^2}{8}.
+ \label{eq:ns-parameterization}
+\end{equation}
+An NS singular vector is labelled by
+\begin{equation}
+ h^{\NS}_{r,s}
+ =
+ \frac{Q^2-(rb+s b^{-1})^2}{8},
+ \qquad r+s\in2\mathbb Z,
+ \qquad
+ \ell_{r,s}=\frac{rs}{2}.
+ \label{eq:ns-kac-weight}
+\end{equation}
+Because levels may be half-integral, an NS block has even and odd
+superconformal components.  A null vector of odd parity maps an even block
+to an odd block and conversely.
+
+\subsection{Component form}
+
+Let \(\pi\in\{\mathrm e,\mathrm o\}\) label the parity of the sewn
+three-point structure.  The elliptic recursion takes the schematic form
+\begin{equation}
+ \Hh_h^\pi(q)
+ =
+ g^\pi(q)
+ +
+ \sum_{\substack{r,s\ge1\\r+s\ {\rm even}}}
+ \frac{q^{rs/2}
+ A^{\NS}_{r,s}
+ P_{r,s}^{(L,\pi)}
+ P_{r,s}^{(R,\pi)}}
+ {h-h^{\NS}_{r,s}}\,
+ \Hh_{h^{\NS}_{r,s}+rs/2}^{\,\pi+\mathrm{parity}(rs/2)}(q).
+ \label{eq:ns-schematic-recursion}
+\end{equation}
+The precise powers of \(16\), signs, and seed functions \(g^\pi\) depend on
+the chosen four-point component and elliptic prefactor
+\cite{HadaszJaskolskiSuchanek2007NSBlocks,Suchanek2011EllipticRecursion}.
+
+The conceptual changes relative to Virasoro recursion are only:
+\begin{enumerate}
+ \item the Kac level is \(rs/2\);
+ \item NS fusion polynomials have even/odd versions;
+ \item the recursion can mix the two component blocks;
+ \item the large-\(h\) prefactor contains bosonic and fermionic oscillator
+ characters.
+\end{enumerate}
+
+\subsection{Toric NS blocks}
+
+The same residue mechanism applies to torus one-point blocks.  The trace can
+include either \(1\) or \((-1)^F\), producing the NS and
+\(\widetilde{\NS}\) spin structures.  The two blocks differ by signs for
+half-integral levels, while the Kac data are unchanged
+\cite{HadaszJaskolskiSuchanek2012Toric}.
+
+\section{Ramond recursion: where the ground-state mixing goes}
+\label{sec:r-recursion}
+
+\subsection{Long Ramond ground space}
+
+Parameterize a generic Ramond weight by
+\begin{equation}
+ h_\R(\beta)=\frac{c}{24}-\beta^2.
+ \label{eq:r-weight}
+\end{equation}
+In a parity basis \((w_\beta^+,w_\beta^-)\),
+\begin{equation}
+ G_0w_\beta^\pm
+ =
+ i e^{\mp i\pi/4}\beta\,w_\beta^\mp,
+ \qquad
+ G_0^2=-\beta^2=h_\R-\frac{c}{24}.
+ \label{eq:r-ground-action}
+\end{equation}
+After rephasing \(w_\beta^-\), this is equivalently
+\begin{equation}
+ G_0
+ =
+ \beta
+ \begin{pmatrix}0&-1\\1&0\end{pmatrix},
+ \qquad
+ (-1)^F=
+ \begin{pmatrix}1&0\\0&-1\end{pmatrix}.
+ \label{eq:r-simple-matrices}
+\end{equation}
+At \(\beta=0\) the long module shortens.  One should perform the recursion at
+generic \(\beta\) and construct the irreducible short quotient separately.
+
+\subsection{Ramond Kac poles}
+
+The positive-parity singular state occurs at
+\begin{equation}
+ \beta_{r,s}
+ =
+ \frac{rb+s b^{-1}}{2\sqrt2},
+ \qquad r+s\in2\mathbb Z+1,
+ \qquad \ell_{r,s}=\frac{rs}{2}.
+ \label{eq:r-kac-momentum}
+\end{equation}
+Its null submodule is another long Ramond module with
+\begin{equation}
+ \beta'_{r,s}
+ =
+ \frac{(-1)^s}{2\sqrt2}
+ \left(rb-sb^{-1}\right),
+ \qquad
+ h_\R(\beta'_{r,s})
+ =
+ h_\R(\beta_{r,s})+\frac{rs}{2}.
+ \label{eq:r-shifted-momentum}
+\end{equation}
+The odd null partner is generated by \(G_0\):
+\begin{equation}
+ \chi^-_{r,s}
+ =
+ \frac{e^{i\pi/4}}{i\beta'_{r,s}}\,
+ G_0\chi^+_{r,s}.
+ \label{eq:r-null-partner}
+\end{equation}
+
+\subsection{\texorpdfstring{Why the published \(h\)-recursion is usually
+scalar}{Why the published h-recursion is usually scalar}}
+
+The toric construction of
+Ref.~\cite{HadaszJaskolskiSuchanek2012Toric} starts with \(w_\beta^+\) but
+allows \(G_0\) in the descendant strings.  It separates descendants into
+even and odd fermion parity and defines
+\begin{equation}
+ F_{\beta,\mathrm e}^{\lambda(\pm)},\qquad
+ F_{\beta,\mathrm o}^{\lambda(\pm)}.
+\end{equation}
+Here \(\mathrm e/\mathrm o\) is descendant parity, while \((\pm)\) labels
+the two independent chiral R--R--NS three-point forms.  Ward identities give
+\begin{equation}
+ F_{\beta,\mathrm e}^{\lambda(\pm)}
+ =
+ \pm F_{\beta,\mathrm o}^{\lambda(\pm)},
+ \label{eq:r-even-odd-relation}
+\end{equation}
+so it is enough to recurse two scalar blocks.  The \(2\times2\) ground
+mixing has not disappeared: it has been diagonalized into these component
+relations.
+
+\subsection{\texorpdfstring{The Ramond \(h\)-recursion}
+{The Ramond h-recursion}}
+
+The natural meromorphic variable is \(\beta\), with poles at
+\(\beta=\pm\beta_{r,s}\).  Combining the two poles gives a denominator
+\begin{equation}
+ h_\R(\beta)-h^\R_{r,s}
+ =
+ -(\beta-\beta_{r,s})(\beta+\beta_{r,s}).
+ \label{eq:r-paired-poles}
+\end{equation}
+After extracting the appropriate large-\(\beta\) prefactor, the toric
+recursion is
+\begin{equation}
+ \boxed{
+ H_{\beta,\mathrm e}^{\lambda(\pm),f}
+ =
+ \delta_{f0}
+ +
+ \sum_{\substack{1<rs\le2f\\r+s\ {\rm odd}}}
+ \frac{
+ A^\R_{r,s}
+ P^{r,s}_{c}\!\left[{}^{\Delta_\lambda}_{\pm\beta'_{r,s}}\right]
+ P^{r,s}_{c}\!\left[{}^{\Delta_\lambda}_{\pm\beta_{r,s}}\right]}
+ {h_\R(\beta)-h^\R_{r,s}}\,
+ H_{\beta'_{r,s},\mathrm e}^{\lambda(\pm),f-rs/2}.}
+ \label{eq:r-h-recursion}
+\end{equation}
+The phases from \(G_0\), the odd null partner, and the two ground states are
+encoded in the two fusion polynomials and the \((\pm)\) label.
+
+\subsection{\texorpdfstring{Blocks with an effective \(G_0\) insertion}
+{Blocks with an effective G0 insertion}}
+
+An odd Ramond plumbing modulus gives
+\begin{equation}
+ e^{\alpha G_0}=\id+\alpha G_0,
+ \qquad
+ \int d\alpha\,e^{\alpha G_0}=G_0.
+ \label{eq:r-odd-sewing}
+\end{equation}
+When the \(G_0\) insertion can be moved to an adjacent vertex by a Ward
+identity, it becomes a starred or odd chiral component.  Its leading
+large-\(\beta\) behavior contains an explicit factor of \(\beta\).  In the
+HJS toric conventions one finds schematically
+\begin{equation}
+ \F_{\beta}^{*\,\lambda(-)}
+ =
+ e^{i\pi/4}\sqrt2\,\beta\,
+ q^{h_\R-c/24}
+ \chi_\R(q)\,
+ \Hh_{\beta}^{\lambda(-)}(q).
+ \label{eq:r-g0-prefactor}
+\end{equation}
+After the \(\beta\) factor is extracted, the same reduced elliptic block
+obeys the scalar recursion \eqref{eq:r-h-recursion}.  This is how known
+low-topology \(h\)-recursions deal with the \(G_0\) matrix element.
+
+\subsection{External Ramond fields versus an internal Ramond edge}
+
+These two situations must be distinguished:
+\begin{enumerate}
+ \item A four-R sphere block in the \(R\times R\) channel propagates an NS
+ module.  Its recursion uses NS Kac poles together with R--R--NS fusion
+ polynomials.
+ \item A block with an internal R module has the paired \(\beta\) poles,
+ shifted momentum \(\beta'_{r,s}\), and ground doublet described above.
+\end{enumerate}
+The first problem tests Ramond external Ward identities but not the
+Ramond propagator.
+
+\section{\texorpdfstring{A practical \(h\)-recursion checklist}
+{A practical h-recursion checklist}}
+\label{sec:checklist}
+
+For any proposed block, proceed in the following order.
+
+\subsection*{Step 1: specify the block}
+\begin{itemize}
+ \item Choose the pants decomposition and local coordinates.
+ \item Label every internal edge by Virasoro, NS, or R.
+ \item Fix the ordered three-point form at every vertex.
+ \item For R edges, fix parity basis, orientation, and spin lift.
+\end{itemize}
+
+\subsection*{Step 2: identify the meromorphic variable}
+\begin{itemize}
+ \item Virasoro or NS: normally the internal weight \(h\).
+ \item Ramond: preferably \(\beta\), pairing the poles
+ \(\pm\beta_{r,s}\).
+\end{itemize}
+
+\subsection*{Step 3: derive the pole kernel}
+\begin{equation}
+ \text{kernel}
+ =
+ \text{inverse null slope}
+ \times
+ \text{left fusion factor}
+ \times
+ \text{right fusion factor}.
+\end{equation}
+For an open R ground fibre, the last two factors are matrices and their
+order matters.
+
+\subsection*{Step 4: determine the shifted block}
+\begin{center}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Sector & Kac level & Shift\\
+\midrule
+Virasoro & \(rs\) & \(h\to h_{r,s}+rs\)\\
+NS & \(rs/2\) & \(h\to h^\NS_{r,s}+rs/2\)\\
+R & \(rs/2\) & \(\beta\to\beta'_{r,s}\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection*{Step 5: derive the regular part}
+
+This is mandatory.  A list of poles is not yet a recursion.  One must
+derive, rather than guess,
+\begin{equation}
+ \F_{\infty}
+ =
+ \lim_{\text{internal weight}\to\infty}
+ \left(\text{properly reduced block}\right).
+ \label{eq:regular-part-requirement}
+\end{equation}
+For standard sphere and torus elliptic blocks this limit is one.  For
+multipoint and higher-genus blocks it may be a nontrivial function or
+finite-dimensional matrix.
+
+\subsection*{Step 6: truncate by plumbing degree}
+
+At total plumbing degree \(N\), retain only poles whose null level does not
+exceed the remaining degree.  Memoization should use the full shifted
+weight data, component label, spin lift, and remaining multidegree.
+
+\subsection*{Step 7: perform collision-safe evaluation}
+
+At rational or self-dual values of \(b\), distinct labels can give the same
+pole.  Terms must first be combined algebraically as Laurent or
+partial-fraction objects.  Evaluating each resonant term separately and
+then adding generally loses the finite part.
+
+\section{Common failure modes}
+\label{sec:failure-modes}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}L{0.27\textwidth}X@{}}
+\toprule
+Failure & Diagnosis\\
+\midrule
+Poles without a seed &
+The result is only a residue identity, not a closed recursion.\\
+
+Using \(z\) where a formula assumes \(q\) &
+Powers of \(16q\), theta functions, and the large-weight seed become
+incorrect.\\
+
+Confusing \(A^{(h)}_{r,s}\) and \(A^{(\beta)}_{r,s}\) &
+The two differ by the Jacobian
+\(-1/(2\beta_{r,s})\).\\
+
+Discarding the NS parity label &
+Odd null vectors map even and odd component blocks into one another.\\
+
+Treating the R ground doublet as two unrelated modules &
+\(G_0\) relates the states and fixes relative phases.\\
+
+Projecting the R ground fibre too early &
+Spin-lift, \(G_0\), and GSO matrices may not commute; orientation signs are
+lost.\\
+
+Substituting \(\beta=0\) into a long-module formula &
+The Ramond module shortens and requires an irreducible quotient.\\
+
+Calling a chiral block a correlator &
+The nonchiral pairing, structure constants, momentum integrals, spin sum,
+and string measure remain to be included.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Genus two: what the review tells us}
+\label{sec:genus-two}
+
+\subsection{The theta graph}
+
+A genus-two vacuum surface can be obtained by gluing two trinions along
+three edges.  In an \(\mathcal N=1\) theory the chiral sector assignments are
+\begin{equation}
+ NNN
+ \qquad\text{or}\qquad
+ NRR
+\end{equation}
+at each vertex.  For an \(NRR\) theta graph, denote the weights by
+\begin{equation}
+ h_N,\qquad \beta_1,\qquad\beta_2
+\end{equation}
+and the plumbing parameters by
+\(q_N,q_{R,1},q_{R,2}\).
+
+The edge-local \(h\)-pole data are known:
+\begin{align}
+ \Res_{h_N=h^\NS_{r,s}}\F_\Theta
+ &=
+ q_N^{rs/2}\,
+ \mathcal R^\NS_{r,s}\,
+ \F_\Theta(h_N\to h^\NS_{r,s}+rs/2),
+ \notag\\
+ \Res_{\beta_a=\pm\beta_{r,s}}\F_\Theta
+ &=
+ q_{R,a}^{rs/2}\,
+ \mathbf P^{(a)}_{L,r,s}\,
+ \F_\Theta(\beta_a\to\beta'_{r,s})\,
+ \mathbf P^{(a)}_{R,r,s}.
+ \label{eq:nrr-local-residues}
+\end{align}
+The Ramond formula is matrix-valued until the two odd sewings are
+contracted with
+\begin{equation}
+ G_0^{(1)}\otimes G_0^{(2)}.
+ \label{eq:two-g0}
+\end{equation}
+
+\subsection{The missing ingredient}
+
+The unknown object is the simultaneous regular part,
+\begin{equation}
+ \mathbf U_\Theta
+ =
+ \text{regular part of }
+ \F_\Theta(h_N,\beta_1,\beta_2)
+ \text{ in the internal weights}.
+ \label{eq:theta-regular-part}
+\end{equation}
+The scalar torus relations
+\(F_{\mathrm e}=\pm F_{\mathrm o}\) cannot simply be applied independently
+to both R edges, because the two R lines meet at the same ordered R--R--NS
+tensor.  One must first derive the joint Ward identities and the resulting
+finite matrix of component blocks.
+
+Consequently,
+\begin{equation}
+ \boxed{
+ \text{known Ramond \(h\)-pole kernel}
+ \;\not\Rightarrow\;
+ \text{known genus-two Ramond \(h\)-recursion}.}
+ \label{eq:not-yet-recursion}
+\end{equation}
+
+\subsection{Two plausible routes}
+
+\paragraph{Route A: derive a genuine multi-weight \(h\)-seed.}
+Choose a basis of R--R--NS component tensors, extract the explicit
+\(\beta_1\beta_2\) from the two \(G_0\) sewings, and derive the joint
+large-\((h_N,\beta_1,\beta_2)\) asymptotic.  If the result resums to a known
+oscillator determinant, the local residues
+\eqref{eq:nrr-local-residues} close a matrix-valued \(h\)-recursion.
+
+\paragraph{Route B: use genus-two \(c\)-recursion.}
+Keep \(h_N,\beta_1,\beta_2\) fixed while varying \(c\), so that
+\(G_0^2=-\beta_a^2\) remains finite.  The Kac residues are again edge-local.
+The remaining problem is a large-\(c\) \(NRR\) seed, which should follow
+from the contracted super-Virasoro oscillator algebra.  This route is the
+closer analogue of the arbitrary-genus Virasoro construction of
+Ref.~\cite{ChoCollierYin2017Recursive}.
+
+\subsection{\texorpdfstring{Fixed-\(\beta\) Ramond \(c\)-poles}{Fixed-beta Ramond c-poles}}
+\label{sec:fixed-beta-c-poles}
+
+The fixed-\(\beta\) formulation deserves to be separated from a
+fixed-\(h_R\) \(c\)-recursion.  Write
+\begin{equation}
+ h_R(c,\beta)=\frac{c}{24}-\beta^2
+ \end{equation}
+and vary \(c\) with \(\beta\) held fixed.  Then
+\begin{equation}
+ G_0^2=-\beta^2,
+ \qquad
+ q^{h_R-c/24}=q^{-\beta^2}
+ \label{eq:fixed-beta-benefits}
+\end{equation}
+are independent of \(c\).  In particular, the level-zero denominator
+\((h_R-c/24)^{-1}\) is simply \(-\beta^{-2}\); it does not produce an
+additional pole at \(c=24h_R\).
+
+A positive-level Ramond pole occurs when
+\begin{equation}
+ \beta=\epsilon\beta_{r,s}(b),
+ \qquad
+ \beta_{r,s}(b)=\frac{rb+s b^{-1}}{2\sqrt2},
+ \qquad
+ \epsilon=\pm1,
+ \qquad
+ r+s\ {\rm odd}.
+ \label{eq:fixed-beta-degeneracy}
+\end{equation}
+Equivalently, the pole value \(b_*\) solves
+\begin{equation}
+ r b_*^2-\epsilon\,2\sqrt2\,\beta b_*+s=0,
+ \qquad
+ c^{R}_{r,s}(\beta)
+ =
+ \frac32+3\left(b_*+b_*^{-1}\right)^2.
+ \label{eq:fixed-beta-c-pole}
+\end{equation}
+The quadratic branches and the labels related by
+\(b\leftrightarrow b^{-1}\), \(r\leftrightarrow s\) must be organized once
+and continued consistently so that the same \(c\)-pole is not counted
+twice.
+
+The denominator in the Ramond \(h\)-recursion becomes, along the
+fixed-\(\beta\) path,
+\begin{equation}
+ h_R(c,\beta)-h^R_{r,s}(c)
+ =
+ \beta_{r,s}(c)^2-\beta^2.
+ \label{eq:fixed-beta-denominator}
+\end{equation}
+
+\subsubsection{\texorpdfstring{Residue recipe: first the null module, then the
+\(c\)-plane}{Residue recipe: first the null module, then the c-plane}}
+
+It is useful to separate two logically distinct operations.  The
+representation-theoretic residue is first determined in a local
+weight--momentum coordinate.  It is then pulled back to the fixed-\(\beta\)
+\(c\)-plane.
+
+At level \(f\), a block coefficient has the schematic Gram-matrix form
+\begin{equation}
+ F_f
+ =
+ \sum_{I,J}
+ \rho_L(\nu_I)\,
+ [B_f(c,\beta)^{-1}]^{IJ}\,
+ \rho_R(\nu_J).
+ \label{eq:fixed-beta-gram-coefficient}
+\end{equation}
+At \(\beta=\epsilon\beta_{r,s}\), the primitive Ramond null multiplet
+\(\chi^\pm_{r,s}\) appears at level
+\(\ell_{r,s}=rs/2\).  Only the inverse Gram matrix restricted to the
+descendant submodule generated by this multiplet is singular.  Thus it is
+more precise to say that the primitive null direction creates the pole,
+while all descendants of the null multiplet resum into a block for the
+shifted Ramond module.
+
+Choose the normalization of the singular-vector operator \(D_{r,s}\) once
+and define its inverse-norm coefficient by
+\begin{equation}
+ A^{(h),R}_{r,s}
+ =
+ \lim_{h\to h^R_{r,s}}
+ (h-h^R_{r,s})\,
+ \langle D_{r,s}w\mid D_{r,s}w\rangle^{-1}.
+ \label{eq:fixed-beta-null-norm}
+\end{equation}
+The three-point matrix elements of \(D_{r,s}w\) factor into left and right
+Ramond fusion matrices,
+\begin{equation}
+ \rho_L(D_{r,s}w)=\mathbf P_{L,r,s}\rho_L(w_{\beta'_{r,s}}),
+ \qquad
+ \rho_R(D_{r,s}w)=\rho_R(w_{\beta'_{r,s}})
+ \mathbf P_{R,r,s}.
+ \label{eq:fixed-beta-fusion-factorization}
+\end{equation}
+Keeping the two Ramond ground indices open automatically includes both
+\(\chi^+_{r,s}\) and its \(G_0\)-related partner \(\chi^-_{r,s}\).
+
+\paragraph{Published Ramond kernel.}
+The data above are not new.  They were worked out for four-point blocks
+with R intermediate states in Ref.~\cite{Suchanek2011EllipticRecursion}
+and for toric one-point blocks in
+Ref.~\cite{HadaszJaskolskiSuchanek2012Toric}.  In the normalization
+\begin{equation}
+ D_{r,s}=L_{-1}^{rs/2}+\cdots ,
+\end{equation}
+the weight-residue normalization is
+\begin{equation}
+ A^{(h),R}_{r,s}
+ =
+ 2^{rs-2}\left(rb+\frac{s}{b}\right)
+ \prod_{\substack{m=1-r,\ldots,r\\ n=1-s,\ldots,s\\
+                   m+n\in2\mathbb Z\\(m,n)\neq(0,0)}}
+ \left(mb+n b^{-1}\right)^{-1}.
+ \label{eq:published-Ah-R}
+\end{equation}
+The coefficient used for a pole in \(\beta\) in
+Ref.~\cite{Suchanek2011EllipticRecursion} already includes the first
+Jacobian:
+\begin{equation}
+ A^{(\beta),R}_{r,s}
+ =
+ -\frac{A^{(h),R}_{r,s}}{2\beta_{r,s}}
+ =
+ -2^{rs-\frac32}
+ \prod_{\substack{m=1-r,\ldots,r\\ n=1-s,\ldots,s\\
+                   m+n\in2\mathbb Z\\(m,n)\neq(0,0)}}
+ \left(mb+n b^{-1}\right)^{-1}.
+ \label{eq:published-Abeta-R}
+\end{equation}
+Because \(r+s\) is odd, the factor \((m,n)=(r,s)\) is absent from the even
+sublattice automatically, and the two expressions obey exactly
+\(A^{(\beta),R}_{r,s}=-A^{(h),R}_{r,s}/(2\beta_{r,s})\).
+The odd-sublattice condition printed below the corresponding product in
+Ref.~\cite{Suchanek2011EllipticRecursion} is a typo: it fails already for
+the exact level-one \(2\times2\) Ramond Gram matrix.  The even sublattice
+reproduces the residues at both \(\beta_{2,1}\) and \(\beta_{1,2}\).
+
+For an adjacent NS weight
+\begin{equation}
+ h_N=\frac{Q^2}{8}-\frac{\lambda^2}{8},
+ \qquad Q=b+b^{-1},
+\end{equation}
+define
+\begin{align}
+ X^{r,s}_{\rm e}(x)
+ &=
+ \prod_{\substack{p=1-r+2k,\ q=1-s+2l\\
+                   0\leq k\leq r-1,\ 0\leq l\leq s-1\\
+                   k+l\ {\rm even}}}
+ \frac{x-pb-qb^{-1}}{2\sqrt2},
+ \notag\\
+ X^{r,s}_{\rm o}(x)
+ &=
+ \prod_{\substack{p=1-r+2k,\ q=1-s+2l\\
+                   0\leq k\leq r-1,\ 0\leq l\leq s-1\\
+                   k+l\ {\rm odd}}}
+ \frac{x-pb-qb^{-1}}{2\sqrt2},
+ \label{eq:published-Xeo-R}\\
+ P^{r,s}_{c,\sigma}(\beta;\lambda)
+ &=
+ X^{r,s}_{\rm e}(2\sqrt2\beta-\sigma\lambda)\,
+ X^{r,s}_{\rm o}(2\sqrt2\beta+\sigma\lambda),
+ \qquad \sigma=\pm1.
+ \label{eq:published-fusion-R}
+\end{align}
+These are the two Ramond fusion-polynomial components denoted
+\(P^{rs}_c[{}^{\Delta_\lambda}_{\pm\beta}]\) in the toric paper.
+
+In the component basis of the four-point paper, the residue at
+\(\beta=\epsilon\beta_{r,s}\) takes the universal form
+\begin{equation}
+ \Res_{\beta=\epsilon\beta_{r,s}}
+ \mathbf F
+ =
+ \epsilon\,A^{(\beta),R}_{r,s}\,
+ \mathbf P^{(\epsilon)}_{L,r,s}\,
+ \mathbf F(\beta'_{r,s})\,
+ \mathbf P^{(\epsilon)}_{R,r,s},
+ \qquad \epsilon=\pm1.
+ \label{eq:published-beta-kernel}
+\end{equation}
+Here each \(\mathbf P^{(\epsilon)}\) is selected from
+\eqref{eq:published-fusion-R} with the component and orientation signs
+specified by the corresponding R--R--NS three-point form.  Equation
+\eqref{eq:published-beta-kernel}, including these sign changes, is the
+local kernel to import for every Ramond plumbing edge.
+
+At fixed \(c\), the same denominator may be resolved into the two momentum
+poles:
+\begin{equation}
+ \frac{1}{h_R(\beta)-h^R_{r,s}}
+ =
+ -\frac{1}{(\beta-\beta_{r,s})(\beta+\beta_{r,s})},
+ \qquad
+ \Res_{\beta=\epsilon\beta_{r,s}}
+ =
+ -\frac{1}{2\epsilon\beta_{r,s}}.
+ \label{eq:fixed-beta-beta-residue}
+\end{equation}
+In the \(c\)-recursion, however, \(\beta\) itself is not varied.  The local
+coordinate at the pole is
+\begin{equation}
+ u_{r,s}(c)=\epsilon\beta_{r,s}(c)-\beta,
+ \qquad
+ u_{r,s}(c_*)=0,
+ \label{eq:fixed-beta-local-coordinate}
+\end{equation}
+and
+\begin{equation}
+ \beta_{r,s}(c)^2-\beta^2
+ =
+ 2\beta\,u_{r,s}(c)+O(u_{r,s}^2).
+ \label{eq:fixed-beta-pullback}
+\end{equation}
+Consequently, the conversion from the momentum residue to the \(c\)-plane
+is entirely the Jacobian of this change of local coordinate.
+
+Therefore the pole-conversion Jacobian is
+\begin{align}
+ J^R_{r,s}(\beta)
+ &=
+ \left[
+ \frac{\partial\,\beta_{r,s}(c)^2}{\partial c}
+ \right]^{-1}_{c=c^R_{r,s}(\beta)}
+ \notag\\
+ &=
+ \left.
+ \frac{dc/db}{d\beta_{r,s}^2/db}
+ \right|_{b=b_*}
+ =
+ \left.
+ \frac{
+ 24(b+b^{-1})(1-b^{-2})}
+ {(rb+s b^{-1})(r-s b^{-2})}
+ \right|_{b=b_*}.
+ \label{eq:fixed-beta-jacobian}
+\end{align}
+Equivalently, if one imports the published \(\beta\)-residue coefficient
+\eqref{eq:published-Abeta-R} directly, then
+\begin{equation}
+ J^R_{r,s}A^{(h),R}_{r,s}
+ =
+ -\left.
+ \frac{A^{(\beta),R}_{r,s}}
+ {\partial_c\beta_{r,s}}
+ \right|_{c=c^R_{r,s}(\beta)}.
+ \label{eq:published-kernel-pullback}
+\end{equation}
+This identity is the complete modification required to turn the known
+Ramond \(h\)-recursion pole kernel into a fixed-\(\beta\) \(c\)-plane
+kernel; it does not require a new singular-vector calculation.
+
+With ground indices kept open, the corresponding edge residue is
+\begin{equation}
+ \begin{aligned}
+ \Res_{c=c^R_{r,s}(\beta_e)}
+ \mathbf F_\Gamma
+ ={}&
+ q_e^{rs/2}\,
+ J^R_{r,s}(\beta_e)\,
+ A^{(h),R}_{r,s}\,
+ \mathbf P^{(e)}_{L,r,s}\,
+ \mathbf F_\Gamma
+ \left(
+ c^R_{r,s}(\beta_e),
+ \beta_e\to\beta'_{r,s}
+ \right)
+ \mathbf P^{(e)}_{R,r,s}.
+ \end{aligned}
+ \label{eq:fixed-beta-c-residue}
+\end{equation}
+The shifted momentum \(\beta'_{r,s}\) is
+Eq.~\eqref{eq:r-shifted-momentum}, evaluated at \(b=b_*\).
+
+For an \(NRR\) theta graph the natural analytic variables are therefore
+\begin{equation}
+ \left(c;h_N,\beta_1,\beta_2\right),
+ \end{equation}
+with \(h_N,\beta_1,\beta_2\) fixed in the \(c\)-recursion.  A pole on one R
+edge shifts only its \(\beta\); the other R momentum remains fixed even
+though its absolute conformal weight changes with the recursively evaluated
+central charge.
+
+The remaining boundary datum is now the single limit
+\begin{equation}
+ \mathbf F_{\Theta,\infty}^{NRR}
+ =
+ \lim_{\substack{c\to\infty\\h_N,\beta_1,\beta_2\ {\rm fixed}}}
+ \mathbf F_\Theta(c;h_N,\beta_1,\beta_2).
+ \label{eq:fixed-beta-large-c-seed}
+\end{equation}
+This is simpler analytically than a multivariate large-\(h\) boundary
+problem, but it is not yet known: the R weights scale as \(c/24\), so the
+seed is a hybrid large-\(c\) limit rather than the ordinary light
+superconformal block.
+
+\subsection{Sphere \(R\)-channel certificate}
+\label{sec:sphere-r-c-certificate}
+
+Before using the local kernel on a higher-genus graph, consider the mixed
+sphere block
+\begin{equation}
+ \left\langle
+ V^{\NS}_4(\infty)\,
+ V^{\R}_3(1)\,
+ V^{\R}_2(z)\,
+ V^{\NS}_1(0)
+ \right\rangle ,
+ \qquad
+ \widehat H_{\beta}^{\eta_3,\eta_2}(c;q),
+ \label{eq:sphere-r-test-block}
+\end{equation}
+with an R intermediate module.  The analytic variables are
+\begin{equation}
+ \left(c;h_1,\beta_2,\beta_3,h_4;\beta,\eta_3,\eta_2\right);
+ \label{eq:sphere-r-fixed-data}
+\end{equation}
+all variables after the semicolon are held fixed while \(c\) moves.
+
+\paragraph{Canonical pole table.}
+It is enough to retain the unordered labels
+\(r>s\geq1\), \(r+s\) odd, and work on the positive sheet
+\(\beta=\beta_{r,s}(b)\).  Its two roots are
+\begin{equation}
+ b_{r,s}^{(\alpha)}
+ =
+ \frac{\sqrt2\,\beta+
+ \alpha\sqrt{2\beta^2-rs}}{r},
+ \qquad
+ c_{r,s}^{(\alpha)}
+ =
+ \frac32+3\left(
+ b_{r,s}^{(\alpha)}+
+ \frac{1}{b_{r,s}^{(\alpha)}}\right)^2,
+ \qquad \alpha=\pm1 .
+ \label{eq:sphere-r-two-c-poles}
+\end{equation}
+The description \(\beta=-\beta_{r,s}(b)\) gives the same two \(c\)-poles
+after \(b\mapsto-b\).  Likewise, \(r\leftrightarrow s\) is accompanied by
+\(b\leftrightarrow b^{-1}\).  Thus summing either of these equivalent
+descriptions would double count the poles.  On the canonical sheet no
+endpoint-sign flip occurs; if the negative sheet is used instead, both
+\(\eta_2\) and \(\eta_3\) flip as in the published \(\beta\)-recursion.
+
+At a stored root \(b_*\),
+\begin{equation}
+ \partial_c\beta_{r,s}
+ =
+ \left.
+ \frac{r-sb^{-2}}
+ {12\sqrt2\,(b+b^{-1})(1-b^{-2})}
+ \right|_{b=b_*}.
+ \label{eq:sphere-r-db-dc}
+\end{equation}
+Consequently the coefficient residue is
+\begin{equation}
+ \begin{split}
+ \mathcal R_{r,s}^{(\alpha;\eta_3,\eta_2)}
+ ={}&
+ -\frac{16^{rs/2}A^{(\beta),R}_{r,s}(b_*)}
+ {\partial_c\beta_{r,s}(b_*)}
+ P_{r,s}^{\eta_3}(\beta_3,h_4;b_*)\,
+ P_{r,s}^{\eta_2}(\beta_2,h_1;b_*).
+ \end{split}
+ \label{eq:sphere-r-c-residue}
+\end{equation}
+The shifted internal parameter is
+\begin{equation}
+ \beta'_{r,s}(b_*)
+ =
+ (-1)^s\frac{rb_*-s/b_*}{2\sqrt2}.
+ \label{eq:sphere-r-beta-prime}
+\end{equation}
+
+\paragraph{The necessary regularization at \(c=\infty\).}
+The raw HJS elliptic series is not bounded coefficient by coefficient at
+fixed \(\beta\).  Already at level one its regular polynomial is
+\begin{equation}
+ [q]H_{\beta}^{\eta_3,\eta_2}\big|_{\rm reg}
+ =
+ \frac c3
+{}+8\beta^2-8\beta_2^2-8\beta_3^2
+-8h_1-8h_4-\frac12 .
+ \label{eq:sphere-r-raw-level-one-seed}
+\end{equation}
+The leading powers through the first computed orders are generated by the
+Ramond oscillator factor
+\begin{equation}
+ \mathcal E_R(c,q)
+ =
+ \left[
+ \prod_{n=1}^{\infty}
+ \frac{1+q^n}{1-q^n}
+ \right]^{c/6}.
+ \label{eq:sphere-r-oscillator-factor}
+\end{equation}
+We therefore define
+\(H=\mathcal E_R\,\widehat H\).  Since \(\mathcal E_R\) is entire in \(c\)
+and independent of the internal momentum and component labels, the pole
+kernel is unchanged.  Its first three regular coefficients are exactly
+\begin{equation}
+ S_0=1,\qquad
+ S_1(\beta)
+ =
+ 8\beta^2-8\beta_2^2-8\beta_3^2
+ -8h_1-8h_4-\frac12 .
+ \label{eq:sphere-r-normalized-seed-one}
+\end{equation}
+If
+\begin{equation}
+ X=\beta^2-\beta_2^2-\beta_3^2-h_1-h_4,
+\end{equation}
+the next coefficient obtained directly from the fixed-\(\beta\)
+large-\(c\) limit is
+\begin{equation}
+ S_2(\beta)
+ =
+ 32X^2-16\beta^2+12\beta_2^2+12\beta_3^2
+ -4h_1-4h_4-\frac38 .
+ \label{eq:sphere-r-normalized-seed-two}
+\end{equation}
+Both \(S_1\) and \(S_2\) are independent of
+\((\eta_3,\eta_2)\).
+At arbitrary order the normalized recursion is
+\begin{equation}
+ \begin{split}
+ [q^n]\widehat H_\beta(c)
+ ={}&S_n(\beta)
+ +\sum_{\substack{r>s\geq1,\ r+s\ {\rm odd}\\rs/2\leq n}}
+ \sum_{\alpha=\pm1}
+ \frac{\mathcal R_{r,s}^{(\alpha)}}
+ {c-c_{r,s}^{(\alpha)}}\,
+ [q^{n-rs/2}]
+ \widehat H_{\beta'_{r,s}}
+ \left(c_{r,s}^{(\alpha)}\right).
+ \end{split}
+ \label{eq:sphere-r-fixed-beta-c-recursion}
+\end{equation}
+The endpoint component labels in
+\eqref{eq:sphere-r-fixed-beta-c-recursion} are unchanged on the canonical
+positive sheet.
+
+\paragraph{Level-one certificate.}
+In the basis
+\((L_{-1}w^+,G_{-1}G_0w^+)\), the exact Gram matrix is
+\begin{equation}
+ B_1=
+ \begin{pmatrix}
+ 2h&-\frac32\beta^2\\
+ -\frac32\beta^2&-\beta^2(2h+c/4)
+ \end{pmatrix},
+ \qquad h=\frac c{24}-\beta^2.
+ \label{eq:sphere-r-level-one-gram}
+\end{equation}
+Its nontrivial Kac polynomial is
+\begin{equation}
+ K_1(c,\beta)
+ =
+ c^2-30\beta^2c+144\beta^4+81\beta^2.
+ \label{eq:sphere-r-level-one-kac}
+\end{equation}
+The two zeros of \(K_1\) are precisely
+\(c_{2,1}^{(+)}\) and \(c_{2,1}^{(-)}\).
+Contracting \(B_1^{-1}\) with the two Ward vectors, or instead using
+\eqref{eq:sphere-r-fixed-beta-c-recursion} with the two residues
+\eqref{eq:sphere-r-c-residue} and the seed
+\eqref{eq:sphere-r-normalized-seed-one}, gives the same answer for all four
+\((\eta_3,\eta_2)\).  The numerical residue test approaches the predicted
+value with relative error below \(2\times10^{-9}\).
+At \(q^2\), the same recursion includes the shifted-\(\beta'\) level-one
+tail and the two \((4,1)\) poles.  Together with
+\eqref{eq:sphere-r-normalized-seed-two}, it reproduces the full HJS
+coefficient for all four component choices.
+
+This completes the pole part of the sphere R-channel \(c\)-recursion.  The
+remaining derivation problem is sharply isolated: determine the closed
+hybrid large-\(c\) seed \(S_n(\beta)\) for \(n\geq3\).  Substituting an
+ordinary scalar \(\mathfrak{osp}(1|2)\) global block here would be
+unjustified because the R weights scale as \(c/24\).
+
+\subsection{\texorpdfstring{The fixed-\(\beta\) contracted Ramond algebra}
+{The fixed-beta contracted Ramond algebra}}
+\label{sec:contracted-r-algebra}
+
+The sphere calculation suggests that the regular block should itself be
+regarded as a conformal block for the algebra which survives at
+\(c=\infty\).  This ``smaller algebra'' is not literally a subalgebra
+obtained by discarding most super-Virasoro generators.  It is an
+In\"on\"u--Wigner contraction of the full Ramond algebra, together with a
+renormalized limit of its three-point intertwiners.
+
+\paragraph{Starting algebra and fixed-\(\beta\) grading.}
+In the ordinary-\(c\) convention,
+\begin{align}
+ [L_m,L_n]
+ &=(m-n)L_{m+n}
+ +\frac{c}{12}(m^3-m)\delta_{m+n,0},
+ \notag\\
+ [L_m,G_n]
+ &=\left(\frac m2-n\right)G_{m+n},
+ \notag\\
+ \{G_m,G_n\}
+ &=2L_{m+n}
+ +\frac c3\left(m^2-\frac14\right)\delta_{m+n,0},
+ \qquad m,n\in\mathbb Z .
+ \label{eq:r-supervir-algebra}
+\end{align}
+The correct finite zero-mode operator in the fixed-\(\beta\) limit is
+\begin{equation}
+ D=L_0-\frac c{24}.
+ \label{eq:contracted-D}
+\end{equation}
+On the Ramond ground fiber
+\(\mathcal R_\beta^{(0)}\),
+\begin{equation}
+ D|\beta,a\rangle=-\beta^2|\beta,a\rangle,
+ \qquad
+ G_0^2=D,
+ \label{eq:contracted-ground}
+\end{equation}
+where \(a\) is the open two-dimensional Ramond ground index.  Thus both
+\(D\) and \(G_0\) remain unscaled and finite as \(c\to\infty\).
+
+\paragraph{Rescaled nonzero modes.}
+For every positive integer \(n\), define
+\begin{equation}
+ \begin{aligned}
+ a_n&=\sqrt{\frac{12}{cn^3}}\,L_n,
+ &\qquad
+ a_n^\dagger&=\sqrt{\frac{12}{cn^3}}\,L_{-n},
+ \\
+ \psi_n&=\sqrt{\frac{3}{cn^2}}\,G_n,
+ &
+ \psi_n^\dagger&=\sqrt{\frac{3}{cn^2}}\,G_{-n}.
+ \end{aligned}
+ \label{eq:contracted-oscillators}
+\end{equation}
+These are normalized versions of the original superconformal modes, not
+new local fields.  Here \(\dagger\) denotes the creation-mode partner in
+the chiral BPZ pairing; no Hilbert-space reality condition is being
+imposed.  The \(c\to\infty\) statements below are understood
+coefficientwise on fixed-level descendants.  On a state at finite level
+\(\ell\), \(D=-\beta^2+\ell\) remains \(O(c^0)\); no claim is made about a
+simultaneous limit in which the descendant level grows with \(c\).
+
+Acting on the ground fiber, the normalized one-oscillator descendants are
+exactly
+\begin{align}
+ a_n^\dagger|\beta,a\rangle
+ &=
+ \frac{L_{-n}}{\sqrt{cn^3/12}}|\beta,a\rangle,
+ \notag\\
+ \psi_n^\dagger|\beta,a\rangle
+ &=
+ \frac{G_{-n}}{\sqrt{cn^2/3}}|\beta,a\rangle .
+ \label{eq:normalized-original-descendants}
+\end{align}
+\begin{samepage}
+Indeed, their unnormalized diagonal norms are
+\begin{align}
+ \langle\beta,a|L_nL_{-n}|\beta,b\rangle
+ &=
+ \left(\frac{cn^3}{12}-2n\beta^2\right)
+ \langle\beta,a|\beta,b\rangle,
+ \notag\\
+ \langle\beta,a|G_nG_{-n}|\beta,b\rangle
+ &=
+ \left(\frac{cn^2}{3}-2\beta^2\right)
+ \langle\beta,a|\beta,b\rangle.
+ \label{eq:original-mode-large-c-norms}
+\end{align}
+\end{samepage}
+The factors in Eq.~\eqref{eq:contracted-oscillators} are therefore the
+unique positive-mode normalizations, up to finite phases, which produce
+unit leading Gram matrix.  At equal mode number the corresponding exact
+diagonal brackets are
+\begin{align}
+ [a_n,a_n^\dagger]
+ &=1+\frac{24D}{cn^2},
+ \notag\\
+ \{\psi_n,\psi_n^\dagger\}
+ &=1+\frac{6D}{cn^2}.
+ \label{eq:contracted-diagonal-finite-c}
+\end{align}
+On any fixed-level family of states, brackets at unequal mode number are
+suppressed by \(c^{-1/2}\).  The \(c\to\infty\) oscillator algebra is
+therefore
+\begin{align}
+ [a_n,a_m^\dagger]&=\delta_{nm},
+ & [a_n,a_m]&=[a_n^\dagger,a_m^\dagger]=0,
+ \notag\\
+ \{\psi_n,\psi_m^\dagger\}&=\delta_{nm},
+ & \{\psi_n,\psi_m\}
+ =\{\psi_n^\dagger,\psi_m^\dagger\}=0,
+ \label{eq:contracted-free-oscillators}
+\end{align}
+with all boson--fermion supercommutators zero.
+
+The grading operator is not central.  Its surviving action is
+\begin{align}
+ [D,a_n]&=-n a_n,
+ & [D,a_n^\dagger]&=n a_n^\dagger,
+ \notag\\
+ [D,\psi_n]&=-n\psi_n,
+ & [D,\psi_n^\dagger]&=n\psi_n^\dagger.
+ \label{eq:contracted-D-action}
+\end{align}
+Most importantly, the Ramond zero mode does not decouple:
+\begin{align}
+ [G_0,a_n]&=-\sqrt n\,\psi_n,
+ &
+ [G_0,a_n^\dagger]&=\sqrt n\,\psi_n^\dagger,
+ \notag\\
+ \{G_0,\psi_n\}&=\sqrt n\,a_n,
+ &
+ \{G_0,\psi_n^\dagger\}&=\sqrt n\,a_n^\dagger,
+ \notag\\
+ G_0^2&=D,
+ & [D,G_0]&=0.
+ \label{eq:contracted-G0-action}
+\end{align}
+Equations
+\eqref{eq:contracted-free-oscillators}--\eqref{eq:contracted-G0-action}
+are the complete contracted Ramond algebra, which we denote by
+\begin{equation}
+ \mathfrak A_{\R,\infty}
+ =
+ \left(
+ \mathfrak h_{\rm bos}\oplus\mathfrak h_{\rm fer}
+ \right)\rtimes\langle D,G_0\rangle .
+ \label{eq:contracted-r-algebra-name}
+\end{equation}
+It is an infinite super-Heisenberg algebra acted on by a common Ramond
+supercharge.  In particular, every nonzero mode survives after the
+appropriate rescaling; the limit is simpler because their nonlinear
+mode-changing interactions vanish, not because only finitely many modes
+remain.
+
+\paragraph{Fock realization of the contracted Ramond module.}
+Let \(\Gamma_\beta\) be the odd operator on
+\(\mathcal R_\beta^{(0)}\) satisfying
+\begin{equation}
+ \Gamma_\beta^2=-\beta^2.
+ \label{eq:contracted-ground-clifford}
+\end{equation}
+The tensor product with the oscillator Fock space is graded, so
+\(\Gamma_\beta\) anticommutes with the \(\psi_n,\psi_n^\dagger\) and
+commutes with the \(a_n,a_n^\dagger\).  A representation of
+\(\mathfrak A_{\R,\infty}\) is
+\begin{align}
+ N&=
+ \sum_{n=1}^{\infty}n
+ \left(a_n^\dagger a_n+\psi_n^\dagger\psi_n\right),
+ \notag\\
+ D&=-\beta^2+N,
+ \notag\\
+ G_0&=
+ \Gamma_\beta+
+ \sum_{n=1}^{\infty}\sqrt n\,
+ \left(a_n^\dagger\psi_n+\psi_n^\dagger a_n\right).
+ \label{eq:contracted-fock-realization}
+\end{align}
+The graded cross terms in \(G_0^2\) vanish, and each oscillator pair
+contributes
+\(n(a_n^\dagger a_n+\psi_n^\dagger\psi_n)\); hence
+\(G_0^2=D\) holds on the entire contracted module.
+
+A diagonal oscillator basis is
+\begin{equation}
+ |\boldsymbol k,\boldsymbol\varepsilon;\beta,a\rangle
+ =
+ \prod_{n\geq1}
+ (a_n^\dagger)^{k_n}
+ (\psi_n^\dagger)^{\varepsilon_n}
+ |\beta,a\rangle,
+ \qquad
+ k_n\in\mathbb Z_{\geq0},\quad
+ \varepsilon_n\in\{0,1\},
+ \label{eq:contracted-fock-basis}
+\end{equation}
+with oscillator level
+\begin{equation}
+ |\boldsymbol k,\boldsymbol\varepsilon|
+ =
+ \sum_{n\geq1}n(k_n+\varepsilon_n).
+ \label{eq:contracted-level}
+\end{equation}
+Apart from the fixed ground-fiber metric, its Gram matrix is diagonal with
+bosonic norm
+\(\prod_n k_n!\).  This is the first reason the contracted block can be
+evaluated without constructing super-Virasoro Gram matrices.
+
+\begin{samepage}
+\paragraph{The conformal block of the contracted algebra.}
+Let
+\(\rho_{L,\infty}\) and \(\rho_{R,\infty}\) denote the two renormalized
+N--R--R three-point intertwiners adjacent to the internal R edge.  Keeping
+the Ramond ground indices open, define
+\begin{align}
+ \mathbf S_\beta(q)
+ ={}&
+ \sum_{\boldsymbol k,\boldsymbol\varepsilon}
+ q^{|\boldsymbol k,\boldsymbol\varepsilon|}
+ \rho_{L,\infty}
+ \left(
+ |\boldsymbol k,\boldsymbol\varepsilon;\beta\rangle
+ \right)
+ \left(B_{\infty}^{-1}\right)_
+ {\boldsymbol k,\boldsymbol\varepsilon}
+ \rho_{R,\infty}
+ \left(
+ |\boldsymbol k,\boldsymbol\varepsilon;\beta\rangle
+ \right)
+ \notag\\
+ ={}&
+ \left\langle\mathcal V_{L,\infty}\right|
+ q^N
+ \left|\mathcal V_{R,\infty}\right\rangle .
+ \label{eq:contracted-r-block}
+\end{align}
+\end{samepage}
+The primary propagation \(q^{-\beta^2}\) has already been extracted.
+Equation \eqref{eq:contracted-r-block} is the precise meaning of the
+``conformal block for the smaller algebra.''  For the sphere channel,
+\begin{equation}
+ \mathbf S_\beta(q)
+ =
+ \lim_{\substack{c\to\infty\\
+ h_1,h_4,\beta,\beta_2,\beta_3\ {\rm fixed}}}
+ \widehat{\mathbf H}_\beta(c;q)
+ =
+ \sum_{n=0}^{\infty}\mathbf S_n(\beta)q^n .
+ \label{eq:contracted-r-block-limit}
+\end{equation}
+The scalar component computed in
+Eqs.~\eqref{eq:sphere-r-normalized-seed-one} and
+\eqref{eq:sphere-r-normalized-seed-two} is independent of the endpoint
+component labels through \(q^2\).
+
+\paragraph{Renormalized intertwiners are additional data.}
+The contracted commutation relations alone do not determine
+\(\rho_{L,\infty}\) and \(\rho_{R,\infty}\).  They must be obtained by
+putting the exact N--R--R Ward identities in the variables
+\eqref{eq:contracted-oscillators}, holding all \(\beta\)'s and the adjacent
+NS weight fixed, and then taking \(c\to\infty\).  The leading coherent
+sources grow as \(\sqrt c\); their Gaussian sewing produces the universal
+factor \(\mathcal E_R(c,q)\) in
+\eqref{eq:sphere-r-oscillator-factor}.  Thus the canonical statement is
+about the sewn functional,
+\begin{equation}
+ \left\langle\mathcal V_{L,\infty}\right|q^N
+ \left|\mathcal V_{R,\infty}\right\rangle
+ :=
+ \lim_{c\to\infty}
+ \mathcal E_R(c,q)^{-1}
+ H_\beta(c;q).
+ \label{eq:contracted-renormalized-vertices}
+\end{equation}
+Splitting the counterterm into a separate square root assigned to each
+vertex is a convention, whereas the combined sewn limit above is
+unambiguous.
+
+Since different positive mode numbers form independent free
+super-oscillators, the contracted Ward identities are expected to reduce
+the block to a product of small mode kernels,
+\begin{equation}
+ \mathbf S_\beta(q)
+ =
+ \left\langle v_L\right|
+ \overrightarrow{\prod_{n=1}^{\infty}}
+ \mathbf K_n(q^n)
+ \left|v_R\right\rangle .
+ \label{eq:contracted-mode-product}
+\end{equation}
+The arrow records the ground-fiber and fermionic ordering.  Once
+\(\mathbf K_n\) is derived, truncating
+\eqref{eq:contracted-mode-product} at total \(q\)-degree \(N\) gives the
+first \(N\) seed coefficients exactly; it is not a truncation of the
+original super-Virasoro Gram problem.
+
+\paragraph{Derivation target.}
+The next representation-theoretic task is therefore finite and concrete:
+\begin{enumerate}
+ \item contract the two ordered N--R--R Ward identities using
+       Eqs.~\eqref{eq:contracted-oscillators} and
+       \eqref{eq:contracted-G0-action};
+
+ \item isolate the coherent \(O(c)\) overlap producing
+       \(\mathcal E_R\);
+
+ \item determine the finite ground-fiber kernels \(\mathbf K_n\);
+
+ \item check that their product reproduces \(S_1\) and \(S_2\);
+
+ \item use the resulting exact product as the regular input at every call
+       of the fixed-\(\beta\) \(c\)-recursion.
+\end{enumerate}
+This approach addresses the accuracy problem directly: the regular block
+is derived as an exact contracted-algebra block and is not estimated by
+ordinary descendant-level truncation.
+
+\subsection{\texorpdfstring{Complete fixed-\(\beta\) \(c\)-recursion
+recipe}{Complete fixed-beta c-recursion recipe}}
+\label{sec:complete-fixed-beta-recipe}
+
+The following data are sufficient to turn the pole identities into an
+algorithm.  We state them for the \(NRR\) theta block, whose natural reduced
+chiral block is
+\begin{equation}
+ \mathbf F_\Theta
+ =
+ \mathbf F_\Theta
+ \left(c;h_N,\beta_1,\beta_2;q_N,q_1,q_2\right).
+ \label{eq:nrr-natural-variables}
+\end{equation}
+The reduction must first extract the primary propagation factors
+\begin{equation}
+ q_N^{h_N-c/24},
+ \qquad q_1^{-\beta_1^2},
+ \qquad q_2^{-\beta_2^2},
+ \label{eq:nrr-primary-prefactors}
+\end{equation}
+and fix the normalization of the two ordered R--R--NS tensors.  All R
+ground indices are kept open until the final sewing or GSO contraction.
+
+\paragraph{1. Meromorphy and the subtraction degree.}
+At each fixed plumbing multidegree \(\boldsymbol n\), one must prove that the
+reduced coefficient is meromorphic in \(c\), with only Kac poles, and
+determine its growth at \(c=\infty\).  If it is bounded, then
+\begin{equation}
+ \mathbf F_{\Theta,\boldsymbol n}(c)
+ =
+ \mathbf U_{\Theta,\boldsymbol n}
+ +
+ \sum_{p\in\mathcal P_{\boldsymbol n}}
+ \frac{\mathbf R_{p,\boldsymbol n}}{c-c_p}.
+ \label{eq:nrr-partial-fraction}
+\end{equation}
+If it grows polynomially, \(\mathbf U_{\Theta,\boldsymbol n}\) must be
+replaced by the complete subtraction polynomial.  This analytic statement,
+not merely the list of Kac zeros, is what closes a \(c\)-recursion.
+
+\paragraph{2. Pole tables.}
+For the NS edge, hold \(h_N\) fixed and solve
+\begin{equation}
+ h_N=h^{\NS}_{r,s}(c^{\NS}_{r,s}(h_N)),
+ \qquad r+s\ {\rm even}.
+\end{equation}
+Use
+\begin{equation}
+ J^{\NS}_{r,s}(h_N)
+ =
+ \left[-\partial_c h^{\NS}_{r,s}(c)\right]^{-1}
+ _{c=c^{\NS}_{r,s}(h_N)}.
+ \label{eq:nrr-ns-jacobian}
+\end{equation}
+For an R edge \(e\), hold \(\beta_e\) fixed and solve
+\begin{equation}
+ \beta_e=\epsilon\beta_{r,s}(b_*),
+ \qquad
+ c^*_{e,r,s,\epsilon}=c(b_*),
+ \qquad r+s\ {\rm odd}.
+ \label{eq:nrr-r-pole-table}
+\end{equation}
+Store the chosen \(b_*\) together with the \(c\)-pole: it is needed to
+evaluate \(A_{r,s}\), the fusion polynomials, and \(\beta'_{r,s}\).
+Equivalent \(b\leftrightarrow b^{-1}\) branches are canonicalized before
+the pole is inserted.
+
+\paragraph{3. Universal local residue kernels.}
+For a pole on the NS edge,
+\begin{equation}
+ \begin{aligned}
+ \Res_{c=c^{\NS}_{r,s}(h_N)}\mathbf F_\Theta
+ ={}&
+ q_N^{rs/2}
+ J^{\NS}_{r,s}A^{\NS}_{r,s}
+ \Sigma^{(L)}_{r,s}\Sigma^{(R)}_{r,s}\,
+ \mathbf F_\Theta
+ \left(c^{\NS}_{r,s};
+ h_N+\frac{rs}{2},\beta_1,\beta_2\right).
+ \end{aligned}
+ \label{eq:nrr-complete-ns-residue}
+\end{equation}
+For a pole on R edge \(e\),
+\begin{equation}
+ \begin{aligned}
+ \Res_{c=c^*_{e,r,s,\epsilon}}\mathbf F_\Theta
+ ={}&
+ q_e^{rs/2}
+ J^{R}_{r,s}(\beta_e;\epsilon)A^{(h),R}_{r,s}
+ \mathbf P^{(L,e;\epsilon)}_{r,s}
+ \\
+ &\times
+ \mathbf F_\Theta
+ \left(c^*_{e,r,s,\epsilon};
+ \beta_e\longrightarrow\beta'_{r,s}(b_*)\right)
+ \mathbf P^{(R,e;\epsilon)}_{r,s}.
+ \end{aligned}
+ \label{eq:nrr-complete-r-residue}
+\end{equation}
+All labels not displayed in the shifted argument are spectators.  One may
+equivalently use the published \(\beta\)-residue coefficient and replace
+\(J^R A^{(h),R}\) by
+\(-A^{(\beta),R}/\partial_c\beta_{r,s}\).
+
+\paragraph{4. Component and sewing ledger.}
+Every recursive state must include
+\begin{equation}
+\begin{gathered}
+ (\text{edge sector},\ \text{half-edge order},\ \pm\text{ three-form},
+ \ \text{ground parity},\\
+ \text{spin lift},\ \text{R orientation},\
+ \text{remaining multidegree}).
+\end{gathered}
+ \label{eq:nrr-recursion-state}
+\end{equation}
+The published fusion polynomials determine the scalar entries, but the
+ledger determines which entries and phases occur.  Odd Ramond plumbing
+matrices and GSO projectors are applied only after the open-index block has
+been assembled.
+
+\paragraph{5. Regular boundary data.}
+The one genuinely new representation-theory input is
+\begin{equation}
+ \mathbf U_\Theta(\boldsymbol q)
+ =
+ \lim_{\substack{c\to\infty\\h_N,\beta_1,\beta_2\ {\rm fixed}}}
+ \mathbf F_\Theta(c;h_N,\beta_1,\beta_2;\boldsymbol q).
+ \label{eq:nrr-complete-seed}
+\end{equation}
+It should be derived by contracting the large-\(c\) super-Virasoro
+oscillator algebra while keeping \(G_0^2=-\beta_e^2\) finite.  A direct
+Gram/Ward calculation through the first few multidegrees is needed only to
+identify and certify this seed, not as the final evaluation method.
+
+\paragraph{6. Triangular recursion and base cases.}
+At coefficient \((n_N,n_1,n_2)\), include a pole on edge \(e\) only when
+\(rs/2\leq n_e\), and call the shifted block at
+\(n_e-rs/2\).  Set negative multidegrees to zero and fix the level-zero
+matrix from the chosen R--R--NS three-point normalization.  Memoization keys
+must contain \(c\), all shifted labels, component data, and the remaining
+multidegree.
+
+\paragraph{7. Collision-safe evaluation.}
+Distinct Kac labels or quadratic branches can yield the same \(c_p\),
+especially at \(b=1\).  Equal pole keys must be merged as exact
+partial-fraction or Laurent objects before substituting the physical
+central charge.  The recursion is performed at generic long
+\(\beta_e\neq0\); the short quotient at \(\beta_e=0\) is a separate final
+limit.
+
+\paragraph{8. Certification.}
+The implementation should pass, in increasing order of cost:
+\begin{enumerate}
+ \item direct Gram/Ward coefficients at the first two nonzero
+ multidegrees;
+ \item the published sphere and torus R-channel recursions after the
+ appropriate graph degeneration;
+ \item \(b\leftrightarrow b^{-1}\) and \(\beta\leftrightarrow-\beta\)
+ component relations;
+ \item equality of the two torus two-point plumbing channels;
+ \item factorization and spin-structure checks after nonchiral sewing.
+\end{enumerate}
+
+Consequently, the currently known package is
+\begin{equation}
+ \boxed{
+ \text{pole positions}+\text{Jacobians}+\text{null norms}
+ +\text{fusion matrices}+\text{label shifts}.}
+\end{equation}
+The missing package is
+\begin{equation}
+ \boxed{
+ \text{fixed-\(\beta\) large-\(c\) seed}
+ +\text{fully explicit higher-genus component ledger}.}
+\end{equation}
+
+\subsection{Role of Virasoro-primary decomposition}
+
+Restricting a super-Virasoro module to Virasoro modules gives an infinite
+tower of Virasoro-primary families.  This may help derive the large-\(c\) or
+large-weight seed by resumming known Virasoro genus-two blocks.  It is
+unlikely to be an efficient final algorithm because it introduces an
+infinite sum, nontrivial branching three-point tensors, and spurious
+Virasoro poles that cancel only after complete supermultiplets are
+recombined.
+
+\section{Established results and open tasks}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}L{0.28\textwidth}L{0.24\textwidth}X@{}}
+\toprule
+Object & Status & Comment\\
+\midrule
+Virasoro sphere four-point \(h\)-recursion &
+Established &
+Elliptic seed equals one.\\
+
+Virasoro torus one-point and necklace recursion &
+Established &
+Universal character prefactor and local Kac residues.\\
+
+Arbitrary Virasoro plumbing graph &
+Established via \(c\)-recursion &
+Large-\(c\) seed is global block times vacuum factor.\\
+
+\(\mathcal N=1\) NS sphere and torus \(h\)-recursion &
+Established &
+Requires even/odd component bookkeeping.\\
+
+Ramond sphere and torus \(h\)-recursion &
+Established in fixed components &
+\(G_0\) mixing is encoded in parity relations, fusion polynomials, and
+explicit \(\beta\) prefactors.\\
+
+Genus-two \(NNN\) theta block &
+Not closed &
+Local poles are known; the multivariate regular seed is not.\\
+
+Genus-two \(NRR\) theta block &
+Not closed &
+Requires open R ground fibres, two \(G_0\) sewings, coupled component
+recursion, and a regular seed.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section{Recommended immediate derivation}
+
+The shortest useful calculation is not a high-level descendant expansion.
+It is the following finite problem:
+\begin{enumerate}
+ \item Choose an explicit ordered basis for the two independent R--R--NS
+ chiral tensors.
+ \item Write \(G_0\), \((-1)^F\), and the two spin-lift sewing maps as
+ \(2\times2\) matrices.
+ \item Derive the Ward-identity action of a null embedding on this tensor
+ basis.
+ \item Determine whether the two R-edge residue matrices can be
+ simultaneously reduced to scalar sectors.
+ \item Compute the joint large-\(\beta_1,\beta_2\) leading tensor and decide
+ whether the explicit factor \(\beta_1\beta_2\) leaves a finite seed.
+\end{enumerate}
+If step 4 succeeds, the published scalar Ramond \(h\)-recursion generalizes
+almost directly.  If it fails, the correct object is a small matrix-valued
+recursion.  In either case, step 5 decides whether \(h\)-recursion closes or
+whether genus-two \(c\)-recursion is necessary.
+
+\appendix
+
+\section{Basis-independent form of Ramond sewing}
+
+Let \(\mathcal G_\beta\) be the \(1|1\) Ramond ground fibre, \(B_0\) its BPZ
+metric, and \(S_\epsilon\) the spin-lift map.  The fixed-odd-modulus sewing
+operator is
+\begin{equation}
+ \mathcal K_\R(q,\alpha;\epsilon)
+ =
+ q^{L_0-c/24}\,
+ B^{-1}\,
+ S_\epsilon\,
+ e^{\alpha G_0}.
+ \label{eq:basis-independent-r-sewing}
+\end{equation}
+After Berezin integration,
+\begin{equation}
+ \int d\alpha\,
+ \mathcal K_\R(q,\alpha;\epsilon)
+ =
+ q^{L_0-c/24}\,
+ B^{-1}\,
+ S_\epsilon G_0.
+ \label{eq:integrated-r-sewing}
+\end{equation}
+The order of \(S_\epsilon\), \(G_0\), and the BPZ map is part of the
+definition.  A scalar component recursion is a projection of
+\eqref{eq:basis-independent-r-sewing}, not a replacement for it.
+
+\section{Notation dictionary}
+
+\begin{center}
+\begin{tabularx}{\textwidth}{@{}L{0.25\textwidth}L{0.25\textwidth}X@{}}
+\toprule
+Symbol & Meaning & Warning\\
+\midrule
+\(h\) or \(\Delta\) & Conformal weight & Both notations occur in the
+literature.\\
+\(q(z)\) & Elliptic nome & Not the same as a local sphere coordinate \(z\).\\
+\(A_{r,s}\) & Inverse null-norm slope & Its value depends on the
+differentiation variable.\\
+\(P_{r,s}\) & Null-vector fusion polynomial & Ordering and parity conventions
+matter.\\
+\(\pi=\mathrm e,\mathrm o\) & Superconformal component parity & Not a spin
+structure by itself.\\
+\((\pm)\) in R blocks & Chiral R--R--NS tensor structure & Not identical to
+the ground-state parity label.\\
+\(\beta\) & HJS Ramond momentum & For physical super-Liouville momentum,
+typically \(\beta=iP/\sqrt2\).\\
+\(\beta'_{r,s}\) & Momentum of shifted null submodule & It replaces
+\(\beta\) after taking a Ramond residue.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{thebibliography}{99}
+
+\bibitem{Zamolodchikov1987Recursion}
+A.~B. Zamolodchikov,
+\emph{Conformal symmetry in two-dimensional space: recursion representation
+of conformal block},
+Theor.\ Math.\ Phys.\ \textbf{73} (1987) 1088--1093.
+
+\bibitem{HadaszJaskolskiSuchanek2009Torus}
+L.~Hadasz, Z.~Jaskolski, and P.~Suchanek,
+\emph{Recursive representation of the torus one-point conformal block},
+JHEP \textbf{01} (2010) 063,
+\href{https://arxiv.org/abs/0911.2353}{arXiv:0911.2353}.
+
+\bibitem{ChoCollierYin2017Recursive}
+M.~Cho, S.~Collier, and X.~Yin,
+\emph{Recursive representations of arbitrary Virasoro conformal blocks},
+JHEP \textbf{09} (2017) 053,
+\href{https://arxiv.org/abs/1703.09805}{arXiv:1703.09805}.
+
+\bibitem{HadaszJaskolskiSuchanek2007NSBlocks}
+L.~Hadasz, Z.~Jaskolski, and P.~Suchanek,
+\emph{Recursion representation of the Neveu--Schwarz superconformal block},
+JHEP \textbf{03} (2007) 032,
+\href{https://arxiv.org/abs/hep-th/0611266}{hep-th/0611266}.
+
+\bibitem{HadaszJaskolskiSuchanek2008RamondBlocks}
+L.~Hadasz, Z.~Jaskolski, and P.~Suchanek,
+\emph{Elliptic recurrence representation of the \(N=1\) superconformal
+blocks in the Ramond sector},
+JHEP \textbf{11} (2008) 060,
+\href{https://arxiv.org/abs/0810.1203}{arXiv:0810.1203}.
+
+\bibitem{Suchanek2011EllipticRecursion}
+P.~Suchanek,
+\emph{Elliptic recursion for 4-point superconformal blocks and bootstrap in
+\(N=1\) SLFT},
+JHEP \textbf{02} (2011) 090,
+\href{https://arxiv.org/abs/1012.2974}{arXiv:1012.2974}.
+
+\bibitem{HadaszJaskolskiSuchanek2012Toric}
+L.~Hadasz, Z.~Jaskolski, and P.~Suchanek,
+\emph{Recurrence relations for toric \(N=1\) superconformal blocks},
+JHEP \textbf{09} (2012) 122,
+\href{https://arxiv.org/abs/1207.5740}{arXiv:1207.5740}.
+
+\bibitem{BelavinGeiko2018CRecursion}
+V.~A. Belavin and R.~V. Geiko,
+\emph{\(c\)-recursion for multi-point superconformal blocks: NS sector},
+JHEP \textbf{08} (2018) 112,
+\href{https://arxiv.org/abs/1806.09563}{arXiv:1806.09563}.
+
+\bibitem{Witten2012SuperRiemannSurfaces}
+E.~Witten,
+\emph{Notes on super Riemann surfaces and their moduli},
+\href{https://arxiv.org/abs/1209.2459}{arXiv:1209.2459}.
+
+\end{thebibliography}
+
+\end{document}

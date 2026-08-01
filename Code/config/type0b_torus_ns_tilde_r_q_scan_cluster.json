@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "modular_orbit": "ns_tilde_to_r",
+  "external_momentum": 0.33,
+  "levels": [12],
+  "taus": [
+    {"name": "y045", "tau": [0.20, 0.45], "scan_value": 0.45},
+    {"name": "y050", "tau": [0.20, 0.50], "scan_value": 0.50},
+    {"name": "y055", "tau": [0.20, 0.55], "scan_value": 0.55},
+    {"name": "y060", "tau": [0.20, 0.60], "scan_value": 0.60},
+    {"name": "y065", "tau": [0.20, 0.65], "scan_value": 0.65},
+    {"name": "y070", "tau": [0.20, 0.70], "scan_value": 0.70},
+    {"name": "y075", "tau": [0.20, 0.75], "scan_value": 0.75},
+    {"name": "y080", "tau": [0.20, 0.80], "scan_value": 0.80},
+    {"name": "y085", "tau": [0.20, 0.85], "scan_value": 0.85},
+    {"name": "y090", "tau": [0.20, 0.90], "scan_value": 0.90},
+    {"name": "y095", "tau": [0.20, 0.95], "scan_value": 0.95},
+    {"name": "y100", "tau": [0.20, 1.00], "scan_value": 1.00},
+    {"name": "y105", "tau": [0.20, 1.05], "scan_value": 1.05},
+    {"name": "y110", "tau": [0.20, 1.10], "scan_value": 1.10},
+    {"name": "y115", "tau": [0.20, 1.15], "scan_value": 1.15},
+    {"name": "y120", "tau": [0.20, 1.20], "scan_value": 1.20},
+    {"name": "y125", "tau": [0.20, 1.25], "scan_value": 1.25},
+    {"name": "y130", "tau": [0.20, 1.30], "scan_value": 1.30},
+    {"name": "y135", "tau": [0.20, 1.35], "scan_value": 1.35},
+    {"name": "y140", "tau": [0.20, 1.40], "scan_value": 1.40}
+  ],
+  "studies": [
+    {
+      "name": "quadrature_64",
+      "quadrature_order": 64,
+      "p_max": 5.5,
+      "structure_precision": 50,
+      "finite_part_samples": 40
+    },
+    {
+      "name": "production",
+      "quadrature_order": 96,
+      "p_max": 5.5,
+      "structure_precision": 50,
+      "finite_part_samples": 40
+    }
+  ],
+  "comparisons": [
+    {
+      "name": "scan_quadrature_64_to_96",
+      "left": "quadrature_64",
+      "right": "production"
+    }
+  ],
+  "accuracy_targets": [
+    {
+      "name": "spin-scan central order-12 residual",
+      "kind": "modular_residual",
+      "study": "production",
+      "tau": "y090",
+      "level": 12,
+      "maximum": 5e-12
+    },
+    {
+      "name": "spin-scan spectral quadrature convergence",
+      "kind": "comparison_relative_change",
+      "comparison": "scan_quadrature_64_to_96",
+      "maximum": 5e-11
+    },
+    {
+      "name": "spin-scan finite-part two-radius stability",
+      "kind": "finite_part_two_radius",
+      "study": "production",
+      "maximum": 5e-12
+    }
+  ],
+  "default_shard_count": 16
+}
