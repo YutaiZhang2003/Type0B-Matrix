@@ -344,6 +344,137 @@ class NSSphereFourPointBlock:
             raise ValueError("parity must be 'even' or 'odd'")
         return z**leading_power * series
 
+    def _global_z_block(self, z, h, parity: Parity):
+        """Exact reduced global osp(1|2) block in one parity sector."""
+
+        left = h + self.h3 - self.h4
+        right = h + self.h2 - self.h1
+        if parity == "even":
+            return mpmath.hyp2f1(
+                left + (mpmath.mpf("0.5") if self.star3 else 0),
+                right + (mpmath.mpf("0.5") if self.star2 else 0),
+                2 * h,
+                z,
+            )
+        if parity != "odd":
+            raise ValueError("parity must be 'even' or 'odd'")
+
+        left_prefactor = left if self.star3 else 1
+        right_prefactor = right if self.star2 else 1
+        left_parameter = left + (1 if self.star3 else mpmath.mpf("0.5"))
+        right_parameter = right + (1 if self.star2 else mpmath.mpf("0.5"))
+        sign = -1 if self.star3 else 1
+        return (
+            sign
+            * mpmath.sqrt(z)
+            * left_prefactor
+            * right_prefactor
+            / (2 * h)
+            * mpmath.hyp2f1(
+                left_parameter,
+                right_parameter,
+                2 * h + 1,
+                z,
+            )
+        )
+
+    def recursive_z_block(
+        self,
+        z: Number,
+        recursion_order: int,
+        parity: Parity = "even",
+    ) -> complex:
+        """Evaluate the local block by the direct Zamolodchikov c-recursion.
+
+        ``recursion_order=N`` retains every nested Kac-residue path whose
+        accumulated physical null level is at most ``N``.  At every leaf the
+        global osp(1|2) block is evaluated as an exact hypergeometric
+        function.  Consequently this method does not truncate a local-z or
+        elliptic-q series; increasing ``N`` only deepens the c-recursion.
+
+        The returned block includes the conventional leading factor
+        ``z**(h-h1-h2)`` (with the marked-field shift when applicable).
+        It is intended for the channel domain ``|z| < 1``.
+        """
+
+        return self.recursive_z_blocks((z,), recursion_order, parity)[0]
+
+    def recursive_z_blocks(
+        self,
+        z_values: Sequence[Number],
+        recursion_order: int,
+        parity: Parity = "even",
+    ) -> tuple[complex, ...]:
+        """Vectorized direct c-recursion on a cross-ratio grid.
+
+        The recursion tree and all Kac residues are built once for the entire
+        grid.  Only the exact hypergeometric leaves depend on ``z``.
+        """
+
+        if not isinstance(recursion_order, int) or recursion_order < 0:
+            raise ValueError("recursion_order must be a nonnegative integer")
+        if parity not in ("even", "odd"):
+            raise ValueError("parity must be 'even' or 'odd'")
+        points = tuple(mpmath.mpc(z) for z in z_values)
+        if not points:
+            raise ValueError("z_values must not be empty")
+        if any(z == 0 for z in points):
+            raise ValueError("the full block is singular or vanishing at z=0")
+
+        cache = {}
+
+        def recurse(twice_budget: int, sector: Parity, h, c):
+            key = (twice_budget, sector, h, c)
+            if key in cache:
+                return cache[key]
+
+            result = [self._global_z_block(z, h, sector) for z in points]
+            sector_index = 0 if sector == "even" else 1
+            for r in range(2, twice_budget + 1):
+                for s in range(1, twice_budget // r + 1):
+                    shift = r * s
+                    if (r + s) % 2 or shift > twice_budget:
+                        continue
+                    residue, c_pole = self._residue(
+                        sector_index, r, s, h
+                    )
+                    denominator = c - c_pole
+                    scale = max(1, abs(c), abs(c_pole))
+                    if abs(denominator) <= self.pole_tolerance * scale:
+                        raise ZeroDivisionError(
+                            f"c-recursion encountered the ({r},{s}) pole: "
+                            f"c={c!r}, c_rs={c_pole!r}"
+                        )
+                    tail_sector: Parity = sector
+                    if shift % 2:
+                        tail_sector = "odd" if sector == "even" else "even"
+                    tails = recurse(
+                        twice_budget - shift,
+                        tail_sector,
+                        h + mpmath.mpf(shift) / 2,
+                        c_pole,
+                    )
+                    coefficient = residue / denominator
+                    shift_level = mpmath.mpf(shift) / 2
+                    for index, z in enumerate(points):
+                        result[index] += (
+                            z**shift_level * coefficient * tails[index]
+                        )
+            cache[key] = tuple(result)
+            return cache[key]
+
+        reduced = recurse(
+            2 * recursion_order,
+            parity,
+            self.internal_weight,
+            self.c,
+        )
+        leading_power = self.internal_weight - self.h1 - self.exponent_h2
+        return tuple(
+            complex(z**leading_power * value)
+            for z, value in zip(points, reduced)
+        )
+
     @staticmethod
     def _elliptic_series_data(order: int) -> tuple[List[complex], List[complex], List[complex]]:
         theta3 = [0.0j] * (order + 1)
@@ -577,6 +708,31 @@ class HighPrecisionNSSphereFourPointBlock(NSSphereFourPointBlock):
     def z_block(self, z: Number, order: int, parity: Parity = "even") -> complex:
         with mpmath.workdps(self.working_precision):
             return complex(super().z_block(z, order, parity))
+
+    def recursive_z_block(
+        self,
+        z: Number,
+        recursion_order: int,
+        parity: Parity = "even",
+    ) -> complex:
+        with mpmath.workdps(self.working_precision):
+            return complex(
+                super().recursive_z_block(z, recursion_order, parity)
+            )
+
+    def recursive_z_blocks(
+        self,
+        z_values: Sequence[Number],
+        recursion_order: int,
+        parity: Parity = "even",
+    ) -> tuple[complex, ...]:
+        with mpmath.workdps(self.working_precision):
+            return tuple(
+                complex(value)
+                for value in super().recursive_z_blocks(
+                    z_values, recursion_order, parity
+                )
+            )
 
     def elliptic_coefficients(self, order: int, parity: Parity = "even"):
         with mpmath.workdps(self.working_precision):

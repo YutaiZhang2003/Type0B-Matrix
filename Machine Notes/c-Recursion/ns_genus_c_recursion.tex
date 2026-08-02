@@ -5,6 +5,7 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,bm,mathtools,mathrsfs}
 \usepackage{booktabs,tabularx}
+\usepackage{graphicx}
 \usepackage{enumitem}
 \usepackage{xcolor}
 \usepackage{hyperref}
@@ -2354,6 +2355,134 @@ The reproducible calculation and its complete coefficient ledger are
  \texttt{Machine Notes/c-Recursion/ns\_sphere\_c\_h\_order10.json}.
 \end{center}
 
+\subsubsection{Nonchiral sphere crossing from the direct \texorpdfstring{\(c\)}{c}-recursion}
+\label{sec:ns-sphere-direct-c-crossing}
+
+The preceding test compares two chiral recursion schemes at fixed internal
+momentum.  We next assemble the nonchiral super-Liouville continuum and
+compare two different OPE channels.  For four bottom NS primaries ordered as
+\begin{equation}
+ \left\langle
+ V_{P_4}(\infty)V_{P_3}(1)V_{P_2}(z,\bar z)V_{P_1}(0)
+ \right\rangle,
+ \label{eq:ns-crossing-ordered-correlator}
+\end{equation}
+write \(C_{ijP}=C(P_i,P_j,P)\) and
+\(\widetilde C_{ijP}=\widetilde C(P_i,P_j,P)\).  The direct-channel
+continuum decomposition is
+\begin{align}
+ G_{4321}^{(s)}(z,\bar z)
+ =\int_0^\infty\frac{dP}{\pi}\bigg[
+  C_{12P}C_{34P}
+  \F_{\rm e}^{4321}(P;z)\F_{\rm e}^{4321}(P;\bar z)
+  +\widetilde C_{12P}\widetilde C_{34P}
+  \F_{\rm o}^{4321}(P;z)\F_{\rm o}^{4321}(P;\bar z)
+ \bigg].
+ \label{eq:ns-crossing-s-channel}
+\end{align}
+The \(t\)-channel is computed independently after the permutation
+\((P_1,P_2,P_3,P_4)\mapsto(P_3,P_2,P_1,P_4)\):
+\begin{align}
+ G_{4123}^{(t)}(1-z,1-\bar z)
+ =\int_0^\infty\frac{dP}{\pi}\bigg[&
+  C_{32P}C_{14P}
+  \F_{\rm e}^{4123}(P;1-z)\F_{\rm e}^{4123}(P;1-\bar z)
+  \nonumber\\[-0.2em]
+  &+\widetilde C_{32P}\widetilde C_{14P}
+  \F_{\rm o}^{4123}(P;1-z)\F_{\rm o}^{4123}(P;1-\bar z)
+ \bigg].
+ \label{eq:ns-crossing-t-channel}
+\end{align}
+No equality between Eqs.~\eqref{eq:ns-crossing-s-channel} and
+\eqref{eq:ns-crossing-t-channel} is imposed numerically.
+
+Each chiral block is evaluated from the functional recursion
+\eqref{eq:sphere-recursion} itself.  At every leaf we retain the exact
+hypergeometric global \(\osp\) block of
+Eq.~\eqref{eq:sphere-global-hypergeometric}; there is no local-\(z\) or
+elliptic-\(q\) series cutoff.  Recursion order \(N\) retains every nested
+Kac-residue path whose accumulated physical null level is at most \(N\).
+The implementation constructs the residue tree once per internal momentum
+and evaluates its hypergeometric leaves on the full \(z\)-grid.
+
+At the self-dual point we use
+\begin{equation}
+ c=\frac{27}{2},\qquad b=1,\qquad
+ (P_1,P_2,P_3,P_4)
+ =\left(\frac12,\frac13,\frac14,\frac35\right).
+ \label{eq:ns-crossing-numerical-point}
+\end{equation}
+The order-twelve run uses \(80\)-digit block arithmetic, \(35\)-digit
+structure constants, \(P\leq5\), and a 40-point Gauss--Legendre quadrature.
+For
+\begin{equation}
+ \delta_{s/t}(z)=
+ \frac{\left|G_{4321}^{(s)}(z)-G_{4123}^{(t)}(1-z)\right|}
+ {\max\!\left(\left|G_{4321}^{(s)}(z)\right|,
+              \left|G_{4123}^{(t)}(1-z)\right|\right)},
+ \label{eq:ns-crossing-relative-residual}
+\end{equation}
+the independently computed values are
+\begin{center}
+\scriptsize
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+\(z\) & \(G_{4321}^{(s)}(z)\) & \(G_{4123}^{(t)}(1-z)\)
+      & \(\delta_{s/t}(z)\)\\
+\midrule
+0.30 & 0.250435355646635 & 0.250435348477313 & \(2.863\times10^{-8}\)\\
+0.35 & 0.228247438016132 & 0.228247436965260 & \(4.604\times10^{-9}\)\\
+0.40 & 0.213525561198958 & 0.213525561041801 & \(7.360\times10^{-10}\)\\
+0.45 & 0.204170165991172 & 0.204170165968469 & \(1.112\times10^{-10}\)\\
+0.50 & 0.199078377621857 & 0.199078377622339 & \(2.419\times10^{-12}\)\\
+0.55 & 0.197758604465580 & 0.197758604490486 & \(1.259\times10^{-10}\)\\
+0.60 & 0.200188174928437 & 0.200188175091731 & \(8.157\times10^{-10}\)\\
+0.65 & 0.206826227176964 & 0.206826228216805 & \(5.028\times10^{-9}\)\\
+0.70 & 0.218798349671143 & 0.218798356420083 & \(3.085\times10^{-8}\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Thus the observed order-twelve crossing residual satisfies
+\begin{equation}
+ \max_{0.30\leq z\leq0.70}\delta_{s/t}(z)
+ =3.0846\times10^{-8}.
+ \label{eq:ns-crossing-order12-result}
+\end{equation}
+Figure~\ref{fig:ns-sphere-direct-c-crossing} displays both channel sums and
+their signed relative difference; the two channel curves have not been
+averaged or otherwise forced to coincide.
+
+\begin{figure}[t]
+ \centering
+ \includegraphics[width=\textwidth]{../../Data Set/ns_liouville_crossing_direct_c_recursion.png}
+ \caption{Direct \(c\)-recursion evaluation of the same nonchiral NS
+ sphere four-point function in the \(s\)- and \(t\)-channels at
+ \(\widehat c=9\).  The right panel shows
+ \((G^{(s)}-G^{(t)})/\max(|G^{(s)}|,|G^{(t)}|)\), without assuming
+ crossing.}
+ \label{fig:ns-sphere-direct-c-crossing}
+\end{figure}
+
+The accuracy claim requires a qualification.  At the same 40 momentum nodes,
+the maximum order-ten crossing residual is \(3.7697\times10^{-7}\), while
+the maximum order-ten to order-twelve drift of either individual channel is
+\(3.4612\times10^{-7}\).  The number in
+Eq.~\eqref{eq:ns-crossing-order12-result} is therefore an observed
+order-twelve residual, not a certified \(3\times10^{-8}\) error bound for the
+infinite-recursion correlator.  Increasing the recursion order is postponed.
+Moreover, crossing cannot diagnose a systematic error common to both channel
+implementations.  The independent \(c\)- versus \(h\)-recursion comparison
+above tests the chiral kernel, but the nonchiral structure-constant assembly
+and continuum normalization remain shared inputs in this crossing test.
+
+The reproducible implementation, raw ledger, and plot are
+\begin{center}
+ \path{Code/stress_ns_crossing.py},\\
+ \path{Data Set/ns_liouville_crossing_direct_c_recursion_order10.json},\\
+ \path{Data Set/ns_liouville_crossing_direct_c_recursion_order12.json},\\
+ \path{Data Set/ns_liouville_crossing_direct_c_recursion.svg}.
+\end{center}
+
 \subsection{\texorpdfstring{Torus one-point block}
 {Torus one-point block}}
 \label{sec:torus-one-point-c-h-check}
@@ -3282,6 +3411,7 @@ Script & Role\\
 \path{Code/ns_regular_block.py} & endpoint reflection/Koszul signs, frame-derived orientation, polarization, and regular-block assembly\\
 \path{Code/ns_vacuum_schottky.py} & lifted primitive Schottky product\\
 \path{Code/compare_ns_sphere_c_h_recursion.py} & order-ten sphere \(c\)- versus \(h\)-recursion comparison at \(\widehat c=9\)\\
+\path{Code/stress_ns_crossing.py} & direct-recursion nonchiral sphere crossing test at \(\widehat c=9\)\\
 \path{Code/compare_ns_torus_c_h_recursion.py} & order-ten torus one-point \(c\)- versus \(h\)-recursion comparison at \(\widehat c=9\)\\
 \path{Code/ns_genus12_finite_c_check.py} & direct genus-one and genus-two finite-\(c\) sewing\\
 \path{Code/ns_genus2_symbolic_low_order.py} & exact symbolic coefficient comparison\\

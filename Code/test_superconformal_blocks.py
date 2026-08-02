@@ -170,6 +170,39 @@ class NSSphereFourPointBlockTests(unittest.TestCase):
             places=14,
         )
 
+    def test_direct_c_recursion_resums_exact_global_leaves(self):
+        block = HighPrecisionNSSphereFourPointBlock.from_liouville_momenta(
+            p1=0.5,
+            p2=1.0 / 3.0,
+            p3=0.25,
+            p4=0.6,
+            internal_momentum=0.7,
+        )
+        z = 1.0e-3
+        for parity in ("even", "odd"):
+            with self.subTest(parity=parity):
+                direct = block.recursive_z_block(z, 4, parity)
+                coefficient_series = block.z_block(z, 8, parity)
+                self.assertLess(abs(direct - coefficient_series), 1.0e-13)
+
+    def test_direct_c_recursion_grid_matches_scalar_evaluation(self):
+        block = HighPrecisionNSSphereFourPointBlock.from_liouville_momenta(
+            p1=0.4,
+            p2=0.7,
+            p3=0.3,
+            p4=0.55,
+            internal_momentum=0.8,
+        )
+        points = (0.1, 0.3, 0.5)
+        for parity in ("even", "odd"):
+            with self.subTest(parity=parity):
+                grid = block.recursive_z_blocks(points, 4, parity)
+                scalar = tuple(
+                    block.recursive_z_block(z, 4, parity) for z in points
+                )
+                for actual, expected in zip(grid, scalar):
+                    self.assertAlmostEqual(actual, expected, places=14)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -16,7 +16,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from functools import lru_cache
 import math
-from typing import Dict, Literal, Optional, Tuple, Union
+from typing import Dict, Literal, Optional, Sequence, Tuple, Union
 
 import mpmath
 
@@ -98,6 +98,7 @@ class BRYNSFourPointCorrelator:
         p4: Number,
         block_order: int = 8,
         bry_q_order: Optional[int] = None,
+        c_recursion_order: Optional[int] = None,
         structure_precision: int = 30,
         central_charge_shift: float = 1.0e-5,
         block_working_precision: int = 60,
@@ -106,6 +107,16 @@ class BRYNSFourPointCorrelator:
             raise ValueError("block_order must be positive")
         if bry_q_order is not None and bry_q_order < 1:
             raise ValueError("bry_q_order must be positive when specified")
+        if c_recursion_order is not None and (
+            not isinstance(c_recursion_order, int) or c_recursion_order < 0
+        ):
+            raise ValueError(
+                "c_recursion_order must be a nonnegative integer when specified"
+            )
+        if bry_q_order is not None and c_recursion_order is not None:
+            raise ValueError(
+                "choose either direct c-recursion or elliptic-q truncation"
+            )
         if structure_precision < 15:
             raise ValueError("structure_precision must be at least 15 digits")
         if central_charge_shift < 0 or not math.isfinite(central_charge_shift):
@@ -118,6 +129,9 @@ class BRYNSFourPointCorrelator:
         self.p4 = _finite_complex("p4", p4)
         self.block_order = int(block_order)
         self.bry_q_order = None if bry_q_order is None else int(bry_q_order)
+        self.c_recursion_order = (
+            None if c_recursion_order is None else int(c_recursion_order)
+        )
         self.structure_precision = int(structure_precision)
         self.central_charge_shift = float(central_charge_shift)
         self.block_working_precision = int(block_working_precision)
@@ -150,9 +164,25 @@ class BRYNSFourPointCorrelator:
         z: Number,
         parity: Literal["even", "odd"],
     ) -> complex:
+        if self.c_recursion_order is not None:
+            return block.recursive_z_block(
+                z, self.c_recursion_order, parity
+            )
         if self.bry_q_order is not None:
             return block.bry_elliptic_block(z, self.bry_q_order, parity)
         return block.elliptic_block(z, self.block_order, parity)
+
+    def _block_values(
+        self,
+        block: HighPrecisionNSSphereFourPointBlock,
+        z_values: Sequence[Number],
+        parity: Literal["even", "odd"],
+    ) -> Tuple[complex, ...]:
+        if self.c_recursion_order is not None:
+            return block.recursive_z_blocks(
+                z_values, self.c_recursion_order, parity
+            )
+        return tuple(self._block_value(block, z, parity) for z in z_values)
 
     def _structure_products(self, internal_momentum: float) -> Tuple[complex, complex]:
         if internal_momentum not in self._structure_cache:
@@ -276,6 +306,61 @@ class BRYNSFourPointCorrelator:
             ct_product * se * se_bar + c_product * so * so_bar
         ) / math.pi
 
+    def g_momentum_integrand(self, internal_momentum: Number, z: Number) -> complex:
+        """Return only the dP integrand of BRY's G correlator.
+
+        This is the efficient path for the four-bottom-component NS crossing
+        equation.  It avoids constructing the doubly-starred blocks needed
+        only by H and J.
+        """
+
+        internal_momentum = _real_nonnegative("internal_momentum", internal_momentum)
+        z = self._validate_z(z)
+        if internal_momentum == 0:
+            return 0.0j
+
+        c_product, ct_product = self._structure_products(internal_momentum)
+        primary, _ = self._blocks(internal_momentum)
+        zbar = z.conjugate()
+        pe = self._block_value(primary, z, "even")
+        po = self._block_value(primary, z, "odd")
+        pe_bar = self._block_value(primary, zbar, "even")
+        po_bar = self._block_value(primary, zbar, "odd")
+        return (c_product * pe * pe_bar + ct_product * po * po_bar) / math.pi
+
+    def g_momentum_integrands_grid(
+        self,
+        internal_momentum: Number,
+        z_values: Sequence[Number],
+    ) -> Tuple[complex, ...]:
+        """Vectorized dP integrands for a direct-recursion z grid."""
+
+        internal_momentum = _real_nonnegative(
+            "internal_momentum", internal_momentum
+        )
+        points = tuple(self._validate_z(z) for z in z_values)
+        if not points:
+            raise ValueError("z_values must not be empty")
+        if internal_momentum == 0:
+            return tuple(0.0j for _ in points)
+
+        c_product, ct_product = self._structure_products(internal_momentum)
+        primary, _ = self._blocks(internal_momentum)
+        pe = self._block_values(primary, points, "even")
+        po = self._block_values(primary, points, "odd")
+        if all(point.imag == 0 for point in points):
+            pe_bar = pe
+            po_bar = po
+        else:
+            conjugates = tuple(point.conjugate() for point in points)
+            pe_bar = self._block_values(primary, conjugates, "even")
+            po_bar = self._block_values(primary, conjugates, "odd")
+        return tuple(
+            (c_product * even * even_bar + ct_product * odd * odd_bar)
+            / math.pi
+            for even, even_bar, odd, odd_bar in zip(pe, pe_bar, po, po_bar)
+        )
+
     def evaluate(
         self,
         z: Number,
@@ -311,6 +396,42 @@ class BRYNSFourPointCorrelator:
             total += weight * self.h_momentum_integrand(momentum, z)
         return total
 
+    def evaluate_g(
+        self,
+        z: Number,
+        *,
+        p_max: float = 6.0,
+        quadrature_order: int = 48,
+    ) -> complex:
+        """Integrate only G over 0 <= P <= p_max."""
+
+        z = self._validate_z(z)
+        total = 0.0j
+        for momentum, weight in _legendre_interval(quadrature_order, float(p_max)):
+            total += weight * self.g_momentum_integrand(momentum, z)
+        return total
+
+    def evaluate_g_grid(
+        self,
+        z_values: Sequence[Number],
+        *,
+        p_max: float = 6.0,
+        quadrature_order: int = 48,
+    ) -> Tuple[complex, ...]:
+        """Integrate G on a grid while sharing each direct recursion tree."""
+
+        points = tuple(self._validate_z(z) for z in z_values)
+        if not points:
+            raise ValueError("z_values must not be empty")
+        totals = [0.0j] * len(points)
+        for momentum, weight in _legendre_interval(
+            quadrature_order, float(p_max)
+        ):
+            values = self.g_momentum_integrands_grid(momentum, points)
+            for index, value in enumerate(values):
+                totals[index] += weight * value
+        return tuple(totals)
+
     def correlator(
         self,
         kind: CorrelatorKind,
@@ -321,6 +442,10 @@ class BRYNSFourPointCorrelator:
     ) -> complex:
         """Evaluate one named correlator; useful for plotting a z-grid."""
 
+        if kind == "G":
+            return self.evaluate_g(
+                z, p_max=p_max, quadrature_order=quadrature_order
+            )
         if kind == "H":
             return self.evaluate_h(
                 z, p_max=p_max, quadrature_order=quadrature_order
@@ -348,6 +473,7 @@ class BRYFourTachyonSphere:
         omega3: Number,
         block_order: int = 8,
         bry_q_order: Optional[int] = None,
+        c_recursion_order: Optional[int] = None,
         structure_precision: int = 30,
         central_charge_shift: float = 1.0e-5,
         block_working_precision: int = 60,
@@ -363,6 +489,7 @@ class BRYFourTachyonSphere:
             p4=self.omega,
             block_order=block_order,
             bry_q_order=bry_q_order,
+            c_recursion_order=c_recursion_order,
             structure_precision=structure_precision,
             central_charge_shift=central_charge_shift,
             block_working_precision=block_working_precision,

@@ -228,6 +228,12 @@ The physical map is
 - stress_rrrr_crossing.py: reproducible physical RRRR crossing scans using
   either the symmetric displaced-\(c\) diagnostic or the production
   coefficient-wise finite part directly at \(c=27/2\).
+- stress_ns_crossing.py: independent \(s\)- and \(t\)-channel continuum
+  decompositions of the four-bottom-component NS Liouville sphere correlator
+  at \(\widehat c=9\), evaluated with the direct exact-\(c\) recursion and
+  exact hypergeometric global blocks at its leaves.  It records recursion-order
+  convergence and renders the final channel curves without imposing equality
+  or truncating a local-\(z\) or elliptic-\(q\) series.
 - superconformal_torus_blocks.py: genus-one NS and generic long-R toric
   recursions, lifted NS plumbing, explicit unnormalized Ramond ground-fiber
   matrices, cycle projections, and exact-\(c=27/2\) finite-part wrappers.
