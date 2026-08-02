@@ -2,7 +2,10 @@
 
 import unittest
 
+import mpmath
+
 from superconformal_blocks import (
+    HighPrecisionNSSphereFourPointBlock,
     NSSphereFourPointBlock,
     central_charge,
     elliptic_nome,
@@ -11,6 +14,42 @@ from superconformal_blocks import (
 
 
 class NSSphereFourPointBlockTests(unittest.TestCase):
+    def test_high_precision_seed_preserves_internal_weight_type(self):
+        """Sub-binary64 changes in a shifted weight must reach the seed."""
+
+        precision = 90
+        with mpmath.workdps(precision):
+            block = HighPrecisionNSSphereFourPointBlock(
+                c=mpmath.mpf("13.5"),
+                h1=mpmath.mpf("0.625"),
+                h2=mpmath.mpf("0.555555555555555555555555555555555555"),
+                h3=mpmath.mpf("0.53125"),
+                h4=mpmath.mpf("0.68"),
+                internal_weight=mpmath.mpf("0.745"),
+                working_precision=precision,
+            )
+            shifted_weight = mpmath.mpf("0.8125")
+            perturbation = mpmath.mpf("1e-50")
+            unperturbed = block.seed_coefficient(20, shifted_weight)
+            perturbed = block.seed_coefficient(
+                20, shifted_weight + perturbation
+            )
+
+            self.assertNotEqual(unperturbed, perturbed)
+
+            order = 10
+            expected = (
+                mpmath.rf(shifted_weight + block.h3 - block.h4, order)
+                * mpmath.rf(shifted_weight + block.h2 - block.h1, order)
+                / (
+                    mpmath.factorial(order)
+                    * mpmath.rf(2 * shifted_weight, order)
+                )
+            )
+            self.assertLess(
+                abs(unperturbed - expected), mpmath.mpf("1e-85")
+            )
+
     def test_type_0b_liouville_parameters(self):
         self.assertAlmostEqual(central_charge(1.0).real, 13.5)
         self.assertAlmostEqual(central_charge(1.0).imag, 0.0)

@@ -47,8 +47,10 @@ def elliptic_nome(z: Number) -> complex:
     return complex(mpmath.exp(-mpmath.pi * mpmath.ellipk(1 - z_mp) / mpmath.ellipk(z_mp)))
 
 
-def _rising(value: complex, order: int) -> complex:
-    result = 1.0 + 0.0j
+def _rising(value: Number, order: int):
+    """Return a rising factorial without coercing ``value``'s numeric type."""
+
+    result = 1
     for offset in range(order):
         result *= value + offset
     return result
@@ -179,7 +181,11 @@ class NSSphereFourPointBlock:
             raise ValueError("twice_level must be nonnegative")
         if twice_level == 0:
             return 1.0 + 0.0j
-        h = self.internal_weight if internal_weight is None else complex(internal_weight)
+        # Do not normalize through Python's binary64 ``complex`` type here.
+        # The multiprecision subclass deliberately passes ``mpmath`` numbers
+        # into this seed, and resonant finite-part calculations amplify even a
+        # tiny loss of precision before the Kac terms cancel.
+        h = self.internal_weight if internal_weight is None else internal_weight
 
         if twice_level % 2 == 0:
             m = twice_level // 2
