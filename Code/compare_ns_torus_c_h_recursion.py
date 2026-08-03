@@ -201,6 +201,58 @@ def _regular_torus_coefficient(twice_level: int, weight, external_weight):
     )
 
 
+def _global_torus_block(q, lift_sign: int, weight, external_weight):
+    r"""Exact global \(\mathfrak{osp}(1|2)\) torus one-point block.
+
+    This is the closed-form resummation of ``_global_torus_coefficient``.
+    The two hypergeometric terms are respectively the integer- and
+    half-integer-level global families.  ``lift_sign`` supplies the NS square
+    root of the reduced plumbing coordinate.
+    """
+
+    if lift_sign not in (-1, 1):
+        raise ValueError("lift_sign must be +1 or -1")
+    q = mpmath.mpc(q)
+    if not abs(q) < 1:
+        raise ValueError("the torus plumbing coordinate must satisfy |q| < 1")
+    h = mpmath.mpc(weight)
+    d = mpmath.mpc(external_weight)
+    common = (1 - q) ** (-d)
+    even = common * mpmath.hyp2f1(2 * h - d, 1 - d, 2 * h, q)
+    odd = (
+        lift_sign
+        * mpmath.sqrt(q)
+        * (2 * h - d)
+        / (2 * h)
+        * common
+        * mpmath.hyp2f1(2 * h + 1 - d, 1 - d, 2 * h + 1, q)
+    )
+    return even + odd
+
+
+def _non_global_ns_vacuum_block(q, lift_sign: int):
+    r"""Exact non-global NS vacuum product in a chosen square-root lift."""
+
+    if lift_sign not in (-1, 1):
+        raise ValueError("lift_sign must be +1 or -1")
+    q = mpmath.mpc(q)
+    if not abs(q) < 1:
+        raise ValueError("the torus plumbing coordinate must satisfy |q| < 1")
+    lifted_sqrt = lift_sign * mpmath.sqrt(q)
+    return mpmath.qp(-q * lifted_sqrt, q) / mpmath.qp(q**2, q)
+
+
+def _regular_torus_block(q, lift_sign: int, weight, external_weight):
+    """Exact large-c seed: non-global vacuum product times global block."""
+
+    return _non_global_ns_vacuum_block(q, lift_sign) * _global_torus_block(
+        q,
+        lift_sign,
+        weight,
+        external_weight,
+    )
+
+
 class TorusHRecursion:
     """Fixed-b NS torus one-point h-recursion."""
 
@@ -337,6 +389,119 @@ class TorusCRecursion:
             )
             for level in range(max_twice_level + 1)
         }
+
+    def recursive_blocks(
+        self,
+        q_values: Sequence[complex],
+        recursion_order: int,
+        lift_signs: Sequence[int] | int = 1,
+    ) -> tuple[complex, ...]:
+        r"""Evaluate the functional \(c\)-recursion without a q-series cutoff.
+
+        ``recursion_order`` is twice the maximum accumulated physical null
+        level along a nested Kac-residue path.  Every terminal node is the
+        exact regular block ``_regular_torus_block``; consequently increasing
+        this order deepens only the Zamolodchikov recursion and never truncates
+        a local or elliptic q expansion.
+        """
+
+        if not isinstance(recursion_order, int) or recursion_order < 0:
+            raise ValueError("recursion_order must be a nonnegative integer")
+        q_tuple = tuple(mpmath.mpc(q) for q in q_values)
+        if not q_tuple:
+            return ()
+        if isinstance(lift_signs, int):
+            signs = (lift_signs,) * len(q_tuple)
+        else:
+            signs = tuple(int(sign) for sign in lift_signs)
+        if len(signs) != len(q_tuple):
+            raise ValueError("lift_signs must have one entry per q value")
+        if any(sign not in (-1, 1) for sign in signs):
+            raise ValueError("every lift sign must be +1 or -1")
+        if any(not abs(q) < 1 for q in q_tuple):
+            raise ValueError("every torus plumbing coordinate must satisfy |q| < 1")
+
+        @lru_cache(maxsize=None)
+        def recurse(remaining: int, internal_weight, c_value):
+            values = [
+                _regular_torus_block(
+                    q,
+                    lift_sign,
+                    internal_weight,
+                    self.external_weight,
+                )
+                for q, lift_sign in zip(q_tuple, signs)
+            ]
+            for r in range(2, remaining + 1):
+                for s in range(1, remaining // r + 1):
+                    product = r * s
+                    if product > remaining or (r + s) % 2:
+                        continue
+                    b_pole, c_pole, jacobian = _c_pole(
+                        internal_weight, r, s
+                    )
+                    shifted = internal_weight + mpmath.mpf(product) / 2
+                    left = _ns_ns_fusion_polynomial(
+                        b=b_pole,
+                        r=r,
+                        s=s,
+                        lower_weight=shifted,
+                        upper_weight=self.external_weight,
+                        starred=bool(product % 2),
+                    )
+                    right = _ns_ns_fusion_polynomial(
+                        b=b_pole,
+                        r=r,
+                        s=s,
+                        lower_weight=internal_weight,
+                        upper_weight=self.external_weight,
+                        starred=False,
+                    )
+                    sewing_sign = -1 if product % 2 else 1
+                    residue = (
+                        sewing_sign
+                        * jacobian
+                        * _ns_a_factor(b_pole, r, s)
+                        * left
+                        * right
+                    )
+                    denominator = c_value - c_pole
+                    children = recurse(
+                        remaining - product,
+                        shifted,
+                        c_pole,
+                    )
+                    for index, (q, lift_sign, child) in enumerate(
+                        zip(q_tuple, signs, children)
+                    ):
+                        values[index] += (
+                            residue
+                            / denominator
+                            * lift_sign**product
+                            * q ** (mpmath.mpf(product) / 2)
+                            * child
+                        )
+            return tuple(values)
+
+        return recurse(
+            recursion_order,
+            self.internal_weight,
+            self.c,
+        )
+
+    def recursive_block(
+        self,
+        q: complex,
+        recursion_order: int,
+        lift_sign: int = 1,
+    ):
+        """Scalar wrapper for :meth:`recursive_blocks`."""
+
+        return self.recursive_blocks(
+            (q,),
+            recursion_order,
+            (lift_sign,),
+        )[0]
 
 
 def _finite_part_coefficients(
