@@ -1,0 +1,79 @@
+{
+  "schema": "ns-genus2-cutoff-smoking-gun-v1",
+  "point_id": "o0026",
+  "matching_assumed": false,
+  "baseline": {
+    "summary": "ns_genus2_fivepoint_n8_r24_theta_spin_bosonized_summary.json",
+    "recursion_order": 24,
+    "quadrature_order": 8,
+    "q_l_theta": 4.2933647486166285e-19,
+    "q_l_glasses": 4.1664040560255356e-19,
+    "theta_over_glasses": 1.030472486797693,
+    "relative_difference": 0.0304724867976931
+  },
+  "recursion_scan": {
+    "summary": "ns_genus2_o0026_recursion_cutoff_smoking_gun_summary.json",
+    "quadrature_order": 8,
+    "rows": [
+      {
+        "recursion_order": 12,
+        "q_l_theta": 4.2933647485928803e-19,
+        "q_l_glasses": 4.16615805108229e-19,
+        "theta_over_glasses": 1.030533334537691
+      },
+      {
+        "recursion_order": 16,
+        "q_l_theta": 4.293364748616595e-19,
+        "q_l_glasses": 4.1663744033086446e-19,
+        "theta_over_glasses": 1.0304798208262569
+      },
+      {
+        "recursion_order": 20,
+        "q_l_theta": 4.2933647486166285e-19,
+        "q_l_glasses": 4.166400943244689e-19,
+        "theta_over_glasses": 1.030473256679196
+      },
+      {
+        "recursion_order": 22,
+        "q_l_theta": 4.2933647486166285e-19,
+        "q_l_glasses": 4.166403558999227e-19,
+        "theta_over_glasses": 1.0304726097267201
+      },
+      {
+        "recursion_order": 24,
+        "source": "audited baseline",
+        "q_l_theta": 4.2933647486166285e-19,
+        "q_l_glasses": 4.1664040560255356e-19,
+        "theta_over_glasses": 1.030472486797693
+      }
+    ],
+    "ratio_absolute_shift_r12_to_r24": -6.084773999792681e-05,
+    "ratio_absolute_shift_r22_to_r24": -1.229290269577632e-07
+  },
+  "momentum_scan": {
+    "summary": "ns_genus2_o0026_momentum_cutoff_smoking_gun_summary.json",
+    "recursion_order": 24,
+    "quadrature_order": 10,
+    "q_l_theta": 4.293395848058384e-19,
+    "q_l_glasses": 4.1664771346863606e-19,
+    "theta_over_glasses": 1.030461876849248,
+    "relative_difference": 0.03046187684924795,
+    "theta_relative_shift_n8_to_n10": 7.243605790963e-06,
+    "glasses_relative_shift_n8_to_n10": 1.753998408272e-05,
+    "ratio_absolute_shift_n8_to_n10": -1.0609948445150508e-05,
+    "deviation_shift_percentage_points": -0.0010609948445150508,
+    "fraction_of_n8_deviation_removed": 0.00034818124676170924
+  },
+  "validation": {
+    "recursion_shards": 4096,
+    "momentum_shards": 2000,
+    "physical_lifts": {
+      "theta": [1, 1, -1],
+      "glasses": [1, 1, 1]
+    },
+    "free_denominators_identical_to_baseline": true,
+    "global_nonconverged_calls": 0,
+    "momentum_scan_global_worst_last_shell_relative": 5.632260621142868e-32
+  },
+  "verdict": "Neither the c-recursion cutoff nor the N=8 momentum quadrature cutoff accounts for the approximately 3 percent theta/glasses deviation at o0026."
+}

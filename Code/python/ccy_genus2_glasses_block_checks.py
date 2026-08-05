@@ -10,6 +10,7 @@ try:
     from ccy_genus2_glasses_block import (
         ccy_genus2_glasses_block,
         genus2_global_glasses_sl2_block,
+        genus2_global_glasses_sl2_block_resummed,
         handle_residue_prefactor,
     )
     from virasoro_blocks import (
@@ -23,6 +24,7 @@ except ImportError:  # pragma: no cover - supports package-style execution
     from plumbing.ccy_genus2_glasses_block import (
         ccy_genus2_glasses_block,
         genus2_global_glasses_sl2_block,
+        genus2_global_glasses_sl2_block_resummed,
         handle_residue_prefactor,
     )
     from plumbing.virasoro_blocks import (
@@ -64,13 +66,58 @@ def check_order_zero_and_one() -> None:
         order=1,
         include_vacuum_seed=False,
     ).value
-    global1 = genus2_global_glasses_sl2_block(h_left, h_right, h_bridge, q_left, q_right, q_bridge, 1)
+    global1 = genus2_global_glasses_sl2_block_resummed(
+        h_left, h_right, h_bridge, q_left, q_right, q_bridge
+    )
     print("order zero/one")
     print(f"  order0={order0!r}")
     print(f"  order1={order1!r}")
     print(f"  global1={global1!r}")
-    require(abs(order0 - 1.0) < 1.0e-14, "order-zero block should be one without vacuum seed")
-    require(abs(order1 - global1) < 1.0e-14, "order-one block should equal the global seed")
+    require(abs(order0 - global1) < 1.0e-13, "order-zero recursion should equal the resummed global seed")
+    require(abs(order1 - global1) < 1.0e-13, "order-one recursion should equal the resummed global seed")
+
+
+def check_resummed_global_stress_node() -> None:
+    """Guard the momentum node where the order-eight seed was five percent off."""
+
+    h_left, h_right, h_bridge = 1.0151939793, 1.0160246881, 8.1555784605
+    q_left = 8.5041562371975202e-2 - 7.0049067041844130e-3j
+    q_right = 9.6618242420529660e-2 - 7.9125639350899318e-3j
+    q_bridge = 2.1511343383673703e-1 - 6.2845287031467311e-3j
+    exact30 = genus2_global_glasses_sl2_block_resummed(
+        h_left,
+        h_right,
+        h_bridge,
+        q_left,
+        q_right,
+        q_bridge,
+        working_precision=30,
+    )
+    exact70 = genus2_global_glasses_sl2_block_resummed(
+        h_left,
+        h_right,
+        h_bridge,
+        q_left,
+        q_right,
+        q_bridge,
+        working_precision=70,
+    )
+    truncated8 = genus2_global_glasses_sl2_block(
+        h_left, h_right, h_bridge, q_left, q_right, q_bridge, 8
+    )
+    truncated28 = genus2_global_glasses_sl2_block(
+        h_left, h_right, h_bridge, q_left, q_right, q_bridge, 28
+    )
+    error8 = abs(truncated8 - exact70) / abs(exact70)
+    error28 = abs(truncated28 - exact70) / abs(exact70)
+    precision_change = abs(exact30 - exact70) / abs(exact70)
+    print("\nresummed glasses global stress node")
+    print(f"  order-eight error={error8:.6e}")
+    print(f"  order-twenty-eight error={error28:.6e}")
+    print(f"  30-to-70-digit change={precision_change:.6e}")
+    require(error8 > 0.049, "stress node no longer detects the old global cutoff")
+    require(error28 < 2.0e-12, "resummed glasses seed disagrees with the converged direct sum")
+    require(precision_change < 1.0e-14, "glasses hypergeometric evaluation is precision-sensitive")
 
 
 def check_handle_residue_matches_torus_one_point() -> None:
@@ -254,6 +301,7 @@ def check_against_direct_descendant_sum() -> None:
 
 def run() -> None:
     check_order_zero_and_one()
+    check_resummed_global_stress_node()
     check_handle_residue_matches_torus_one_point()
     check_separating_limit_matches_two_tori()
     check_order_three_finite()

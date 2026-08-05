@@ -1,0 +1,457 @@
+{
+  "schema": "ns-genus2-cannon-v4",
+  "config_digest": "a200ad947a9e6b36fdbaa8bed5b048a2ac5288267c95df9823d93ea6a83da59e",
+  "implementation_fingerprint": "f7feb7e41d26cbebc4fd0e9bf467d0be46e31d21b597508f1f1c2dbd52323483",
+  "config": {
+    "description": "Corrected-spin o0026 recursion-cutoff smoking-gun scan at fixed N=8",
+    "recursion_orders": [
+      12,
+      16,
+      20,
+      22
+    ],
+    "quadrature_orders": [
+      8
+    ],
+    "finite_part_radii": [
+      0.035,
+      0.045
+    ],
+    "points": [
+      {
+        "id": "o0026",
+        "secondary_finite_part_radius": false,
+        "q_values": {
+          "theta": [
+            "+2.4398274612050000e-09-1.5117616857149999e-10j",
+            "+1.4833292767230000e-01+6.0603425047370003e-03j",
+            "+3.7869569836680002e-09-1.6934814905830000e-09j"
+          ],
+          "glasses": [
+            "+1.5388585893452059e-01+2.8976276925814107e-04j",
+            "+1.5105853512050485e-01+5.3746023051509037e-03j",
+            "+1.5290700987239295e-01-5.6170441759951090e-03j"
+          ]
+        },
+        "omega": {
+          "theta": [
+            [
+              "+9.25489363241253082e-01+6.17662920319015729e+00j",
+              "-1.06692671123550653e+00+3.07177822941305712e+00j"
+            ],
+            [
+              "-1.06692671123550653e+00+3.07177822941305712e+00j",
+              "+9.39572160109121923e-01+3.37536024737102913e+00j"
+            ]
+          ],
+          "glasses": [
+            [
+              "+2.39858860607022677e-04+2.95755345519691515e-01j",
+              "+1.06688366041709712e-03+2.65808594498070268e-02j"
+            ],
+            [
+              "+1.06688366041709712e-03+2.65808594498070268e-02j",
+              "+5.49205548579311323e-03+2.98554995765713038e-01j"
+            ]
+          ]
+        },
+        "provenance": {
+          "source_overlap": "StringMC overlap_samples.csv:o0026",
+          "theta_word": "T12^-1 T22 gl-shear-12 T11 full-s I",
+          "theta_period_residual": 5.20787340735281e-10,
+          "theta_validation_residual": 9.979722047988188e-09,
+          "glasses_seam_residual": 3.3988061198598537e-10,
+          "matching_assumed": false,
+          "audit_purpose": "Attribute the final 3 percent channel deviation to the accumulated c-recursion cutoff"
+        }
+      }
+    ],
+    "physical_lifts": {
+      "theta": [
+        1,
+        1,
+        -1
+      ],
+      "glasses": [
+        1,
+        1,
+        1
+      ]
+    },
+    "numerics": {
+      "block_method": "collision_aware_mp",
+      "block_working_precision": 70,
+      "finite_part_samples": 24,
+      "structure_precision": 40,
+      "global_method": "resummed",
+      "global_tolerance": 2e-08,
+      "global_max_total_occupation": 22,
+      "vacuum_word_length": 8,
+      "vacuum_max_mode": 50,
+      "free_word_length": 13,
+      "free_max_mode": 70
+    },
+    "provenance": {
+      "baseline": "Data Set/ns_genus2_fivepoint_n8_r24_theta_spin_bosonized_summary.json:o0026",
+      "fixed_quadrature_order": 8,
+      "matching_assumed": false
+    }
+  },
+  "task_count": 4096,
+  "analytic_checks": {
+    "theta_geometry_edge_order": [
+      "q_zero",
+      "q_one",
+      "q_infinity"
+    ],
+    "theta_ccy_descendant_edge_order": [
+      "q_infinity",
+      "q_one",
+      "q_zero"
+    ],
+    "theta_descendant_order_relative_error": 0.0,
+    "theta_old_order_relative_displacement": 0.05572838773910474,
+    "theta_global_method": "middle-edge hypergeometric resummation",
+    "theta_resummation_direct_relative_errors": [
+      1.0938182916362306e-14,
+      9.475646887071265e-15
+    ],
+    "theta_resummation_endpoint_shells": [
+      17,
+      18
+    ],
+    "glasses_geometry_edge_order": [
+      "q_left",
+      "q_right",
+      "q_bridge"
+    ],
+    "glasses_ccy_descendant_edge_order": [
+      "q_left",
+      "q_right",
+      "q_bridge"
+    ],
+    "glasses_orientation_bits": [
+      0,
+      0,
+      0
+    ],
+    "glasses_orientation_formula": "e_bridge*(e_left+e_right) mod 2",
+    "separating_global_relative_error": 2.387678472024168e-16,
+    "separating_global_sum_converged": true,
+    "glasses_global_method": "three-factor hypergeometric resummation",
+    "glasses_resummation_direct_relative_errors": [
+      1.7499556065629176e-16,
+      5.906243056653495e-16
+    ],
+    "handle_residue_torus_relative_error": 4.4320007265820583e-16,
+    "handle_residue_torus_relative_errors": {
+      "3,1,sector=0": 0.0,
+      "3,1,sector=1": 6.938893903907228e-18,
+      "2,2,sector=0": 4.4320007265820583e-16,
+      "2,2,sector=1": 2.1216917571809745e-16
+    },
+    "spin_source_characteristic": {
+      "alpha": [
+        0,
+        0
+      ],
+      "beta": [
+        0,
+        0
+      ]
+    },
+    "spin_target_characteristic": {
+      "alpha": [
+        0,
+        0
+      ],
+      "beta": [
+        1,
+        1
+      ]
+    },
+    "glasses_edge_lifts": [
+      1,
+      1,
+      1
+    ],
+    "theta_edge_lifts": [
+      1,
+      1,
+      -1
+    ],
+    "symplectic_matrix": [
+      [
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      [
+        -2,
+        1,
+        0,
+        -1
+      ],
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        -1,
+        1,
+        0,
+        0
+      ]
+    ]
+  },
+  "free_superfield": {
+    "o0026": {
+      "theta": {
+        "value": 0.2960395164318905,
+        "chiral_log": [
+          4.674092322915381e-05,
+          -4.7599130240100845e-06
+        ],
+        "scalar_chiral_log_real": 1.0722803758651516e-09,
+        "scalar_chiral_log_imag": -2.3165962586815626e-10,
+        "characteristic_alpha": [
+          0,
+          0
+        ],
+        "characteristic_beta": [
+          1,
+          1
+        ],
+        "theta_abs": 1.0000934829988803,
+        "det_im_omega": 11.412527184503038,
+        "primitive_count": 96174,
+        "max_word_length": 13,
+        "max_mode": 70,
+        "previous_word_relative_change": 0.0
+      },
+      "glasses": {
+        "value": 36.744676090067514,
+        "chiral_log": [
+          1.1932322513913607,
+          0.01789402476974574
+        ],
+        "scalar_chiral_log_real": 0.38964289837766997,
+        "scalar_chiral_log_imag": 0.008813901872726203,
+        "characteristic_alpha": [
+          0,
+          0
+        ],
+        "characteristic_beta": [
+          0,
+          0
+        ],
+        "theta_abs": 3.378851326992267,
+        "det_im_omega": 0.08759269384022814,
+        "primitive_count": 96174,
+        "max_word_length": 13,
+        "max_mode": 70,
+        "previous_word_relative_change": 1.6739776401510335e-10
+      }
+    }
+  },
+  "rows": [
+    {
+      "point_id": "o0026",
+      "channel": "theta",
+      "recursion_order": 12,
+      "quadrature_order": 8,
+      "node_count": 512,
+      "finite_part_radius": 0.035,
+      "z_liouville": 7.49799180372361e-24,
+      "z_free_superfield": 0.2960395164318905,
+      "q_l": 4.2933647485928803e-19,
+      "runtime_seconds_sum": 1241.5302686691284,
+      "global_method": "resummed",
+      "global_resummed_calls": 562176,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 4.105281553323885e-34,
+      "confluent_moment_groups": 1418,
+      "confluent_direct_groups": 6774,
+      "confluent_max_moment_terms": 39,
+      "confluent_max_moment_ratio": 0.1936676782298666
+    },
+    {
+      "point_id": "o0026",
+      "channel": "glasses",
+      "recursion_order": 12,
+      "quadrature_order": 8,
+      "node_count": 512,
+      "finite_part_radius": 0.035,
+      "z_liouville": 5.0872789507199577e-05,
+      "z_free_superfield": 36.744676090067514,
+      "q_l": 4.16615805108229e-19,
+      "runtime_seconds_sum": 907.4595365524292,
+      "global_method": "resummed",
+      "global_resummed_calls": 142848,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 0.0,
+      "confluent_moment_groups": 1436,
+      "confluent_direct_groups": 6756,
+      "confluent_max_moment_terms": 50,
+      "confluent_max_moment_ratio": 0.19842397335357148
+    },
+    {
+      "point_id": "o0026",
+      "channel": "theta",
+      "recursion_order": 16,
+      "quadrature_order": 8,
+      "node_count": 512,
+      "finite_part_radius": 0.035,
+      "z_liouville": 7.497991803765025e-24,
+      "z_free_superfield": 0.2960395164318905,
+      "q_l": 4.293364748616595e-19,
+      "runtime_seconds_sum": 3483.20392203331,
+      "global_method": "resummed",
+      "global_resummed_calls": 1524736,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 1.8323943912769345e-33,
+      "confluent_moment_groups": 1418,
+      "confluent_direct_groups": 9846,
+      "confluent_max_moment_terms": 39,
+      "confluent_max_moment_ratio": 0.1936676782298666
+    },
+    {
+      "point_id": "o0026",
+      "channel": "glasses",
+      "recursion_order": 16,
+      "quadrature_order": 8,
+      "node_count": 512,
+      "finite_part_radius": 0.035,
+      "z_liouville": 5.087543137559146e-05,
+      "z_free_superfield": 36.744676090067514,
+      "q_l": 4.1663744033086446e-19,
+      "runtime_seconds_sum": 2603.527410030365,
+      "global_method": "resummed",
+      "global_resummed_calls": 392160,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 0.0,
+      "confluent_moment_groups": 1445,
+      "confluent_direct_groups": 9819,
+      "confluent_max_moment_terms": 50,
+      "confluent_max_moment_ratio": 0.19842397335357148
+    },
+    {
+      "point_id": "o0026",
+      "channel": "theta",
+      "recursion_order": 20,
+      "quadrature_order": 8,
+      "node_count": 512,
+      "finite_part_radius": 0.035,
+      "z_liouville": 7.497991803765084e-24,
+      "z_free_superfield": 0.2960395164318905,
+      "q_l": 4.2933647486166285e-19,
+      "runtime_seconds_sum": 9626.182107686996,
+      "global_method": "resummed",
+      "global_resummed_calls": 3345408,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 6.756999260548898e-33,
+      "confluent_moment_groups": 1418,
+      "confluent_direct_groups": 12918,
+      "confluent_max_moment_terms": 39,
+      "confluent_max_moment_ratio": 0.1936676782298666
+    },
+    {
+      "point_id": "o0026",
+      "channel": "glasses",
+      "recursion_order": 20,
+      "quadrature_order": 8,
+      "node_count": 512,
+      "finite_part_radius": 0.035,
+      "z_liouville": 5.087575545369012e-05,
+      "z_free_superfield": 36.744676090067514,
+      "q_l": 4.1664009432446887e-19,
+      "runtime_seconds_sum": 7699.319162607193,
+      "global_method": "resummed",
+      "global_resummed_calls": 868368,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 0.0,
+      "confluent_moment_groups": 1397,
+      "confluent_direct_groups": 12939,
+      "confluent_max_moment_terms": 50,
+      "confluent_max_moment_ratio": 0.19842397335357148
+    },
+    {
+      "point_id": "o0026",
+      "channel": "theta",
+      "recursion_order": 22,
+      "quadrature_order": 8,
+      "node_count": 512,
+      "finite_part_radius": 0.035,
+      "z_liouville": 7.497991803765084e-24,
+      "z_free_superfield": 0.2960395164318905,
+      "q_l": 4.2933647486166285e-19,
+      "runtime_seconds_sum": 15501.30993771553,
+      "global_method": "resummed",
+      "global_resummed_calls": 4680704,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 1.2247188563939982e-32,
+      "confluent_moment_groups": 1418,
+      "confluent_direct_groups": 13942,
+      "confluent_max_moment_terms": 39,
+      "confluent_max_moment_ratio": 0.1936676782298666
+    },
+    {
+      "point_id": "o0026",
+      "channel": "glasses",
+      "recursion_order": 22,
+      "quadrature_order": 8,
+      "node_count": 512,
+      "finite_part_radius": 0.035,
+      "z_liouville": 5.087578739456428e-05,
+      "z_free_superfield": 36.744676090067514,
+      "q_l": 4.166403558999227e-19,
+      "runtime_seconds_sum": 12642.727936029434,
+      "global_method": "resummed",
+      "global_resummed_calls": 1217808,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 0.0,
+      "confluent_moment_groups": 1397,
+      "confluent_direct_groups": 13963,
+      "confluent_max_moment_terms": 50,
+      "confluent_max_moment_ratio": 0.19842397335357148
+    }
+  ],
+  "crossing": [
+    {
+      "point_id": "o0026",
+      "recursion_order": 12,
+      "quadrature_order": 8,
+      "finite_part_radius": 0.035,
+      "theta_over_glasses": 1.030533334537691,
+      "relative_difference": 0.030533334537691026
+    },
+    {
+      "point_id": "o0026",
+      "recursion_order": 16,
+      "quadrature_order": 8,
+      "finite_part_radius": 0.035,
+      "theta_over_glasses": 1.0304798208262569,
+      "relative_difference": 0.030479820826256887
+    },
+    {
+      "point_id": "o0026",
+      "recursion_order": 20,
+      "quadrature_order": 8,
+      "finite_part_radius": 0.035,
+      "theta_over_glasses": 1.030473256679196,
+      "relative_difference": 0.030473256679196092
+    },
+    {
+      "point_id": "o0026",
+      "recursion_order": 22,
+      "quadrature_order": 8,
+      "finite_part_radius": 0.035,
+      "theta_over_glasses": 1.03047260972672,
+      "relative_difference": 0.030472609726720057
+    }
+  ],
+  "radius_stability": []
+}

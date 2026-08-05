@@ -1,0 +1,82 @@
+{
+  "description": "Order-twelve genus-two hat-c=9 NS super-Liouville locality check at the independently period-matched overlap o0239",
+  "recursion_order": 12,
+  "quadrature_orders": [8],
+  "finite_part_radii": [0.035, 0.045],
+  "points": [
+    {
+      "id": "o0239-periodmatched",
+      "secondary_finite_part_radius": true,
+      "q_values": {
+        "theta": [
+          "+2.9366308988465585e-07+9.9645708083707020e-08j",
+          "+1.8032211933869038e-01+3.2993395519553450e-02j",
+          "+1.7126200123324566e-07+8.5876560437564340e-08j"
+        ],
+        "glasses": [
+          "+8.5041562371975202e-02-7.0049067041844130e-03j",
+          "+9.6618242420529660e-02-7.9125639350899318e-03j",
+          "+2.1511343383673703e-01-6.2845287031467311e-03j"
+        ]
+      },
+      "omega": {
+        "theta": [
+          ["+1.38844005205162047e-01+4.78391115369880282e+00j", "+7.39742596612202874e-02+2.46179680997269967e+00j"],
+          ["+7.39742596612197323e-02+2.46179680997269967e+00j", "+1.02776190528947264e-01+2.73181028626691358e+00j"]
+        ],
+        "glasses": [
+          ["-1.35017764576547735e-02+3.89309185707945482e-01j", "+1.31513579568482948e-03+3.86713414897741775e-02j"],
+          ["+1.31513579568482948e-03+3.86713414897741775e-02j", "-1.33584892394418200e-02+3.69363485940291891e-01j"]
+        ]
+      },
+      "provenance": {
+        "source_overlap": "StringMC q06_search_N256:o0239",
+        "theta_word": "T12^-1 T22 gl-shear-12 T11 full-s I",
+        "theta_integer_branch": [[-1, 1], [1, -1]],
+        "period_algorithm": "glasses collocation plus theta Schottky inverse",
+        "glasses_collocation_basis_order": 40,
+        "glasses_collocation_samples": 240,
+        "glasses_seam_residual": 1.2092944829144358e-12,
+        "glasses_symmetry_error": 3.5815449953774324e-17,
+        "theta_schottky_word_length": 9,
+        "theta_period_max_residual": 1.467945235148232e-11,
+        "theta_q_relative_change_vs_schottky_w9": [
+          1.4268778135685745e-08,
+          4.722098279850992e-09,
+          9.931936835418614e-09
+        ],
+        "theta_q_relative_change_schottky_w8_to_w9": [
+          8.803647715245316e-08,
+          2.914017005325865e-08,
+          6.130134472577063e-08
+        ],
+        "petersson_norm_glasses": 8.684593513855432e-04,
+        "petersson_norm_theta": 8.684593513855414e-04,
+        "petersson_relative_mismatch": 2.0e-15,
+        "theta_global_n8_max_endpoint_shell": 5,
+        "theta_global_n8_nonconverged_calls": 0,
+        "matching_assumed": false
+      }
+    }
+  ],
+  "physical_lifts": {
+    "theta": [1, 1, 1],
+    "glasses": [1, 1, 1]
+  },
+  "numerics": {
+    "finite_part_samples": 24,
+    "structure_precision": 40,
+    "global_method": "auto",
+    "global_tolerance": 2e-8,
+    "global_max_total_occupation": 22,
+    "vacuum_word_length": 8,
+    "vacuum_max_mode": 50,
+    "free_word_length": 14,
+    "free_max_mode": 70
+  },
+  "provenance": {
+    "selection": "Replacement for o0026 chosen to improve relative theta-q conditioning while retaining uniform N=8 global-block convergence",
+    "configuration_status": "prepared but not submitted",
+    "matching_assumed": false
+  }
+}

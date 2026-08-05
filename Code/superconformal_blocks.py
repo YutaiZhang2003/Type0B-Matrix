@@ -18,6 +18,13 @@ from typing import Dict, List, Literal, Sequence, Union
 
 import mpmath
 
+from ns_recursion_recipe import (
+    ns_c_pole_mp,
+    ns_fusion_polynomial_mp,
+    ns_inverse_null_slope_mp,
+    ns_ordinary_edge_scalar_kernel_mp,
+)
+
 
 Number = Union[complex, float]
 Parity = Literal["even", "odd"]
@@ -652,17 +659,10 @@ class HighPrecisionNSSphereFourPointBlock(NSSphereFourPointBlock):
 
     @staticmethod
     def _pole_data(r: int, s: int, h):
-        discriminant = mpmath.sqrt(
-            16 * h * h + 8 * (r * s - 1) * h + (r - s) ** 2
-        )
-        b_squared = -(4 * h + r * s - 1 + discriminant) / (r * r - 1)
-        b_pole = mpmath.sqrt(b_squared)
-        c_pole = mpmath.mpf("7.5") + 3 * b_squared + 3 / b_squared
-        derivative_b_squared = -(
-            4 + (16 * h + 4 * (r * s - 1)) / discriminant
-        ) / (r * r - 1)
-        derivative_c = 3 * (1 - 1 / (b_squared * b_squared)) * derivative_b_squared
-        return b_pole, c_pole, derivative_c
+        pole = ns_c_pole_mp(r, s, h)
+        # The base class historically stores dc/dh and inserts its minus sign
+        # in ``_residue``.  The shared recipe exposes J=-dc/dh.
+        return pole.b, pole.c, -pole.jacobian
 
     @staticmethod
     def _fusion_polynomial(
@@ -673,33 +673,53 @@ class HighPrecisionNSSphereFourPointBlock(NSSphereFourPointBlock):
         second_weight,
         second_is_starred: bool,
     ):
-        q_pole = b_pole + 1 / b_pole
-        a_first = mpmath.sqrt(q_pole * q_pole / 4 - 2 * first_weight)
-        a_second = mpmath.sqrt(q_pole * q_pole / 4 - 2 * second_weight)
-        congruence = 0 if second_is_starred else 2
-        result = mpmath.mpc(1)
-        denominator = 2 * mpmath.sqrt(2)
-        for p in range(1 - r, r, 2):
-            for q in range(1 - s, s, 2):
-                if ((p + q) - (r + s)) % 4 != congruence:
-                    continue
-                linear = p * b_pole + q / b_pole
-                result *= (2 * a_first - 2 * a_second - linear) / denominator
-                result *= (2 * a_first + 2 * a_second + linear) / denominator
-        return result
+        return ns_fusion_polynomial_mp(
+            r=r,
+            s=s,
+            alpha=1 if second_is_starred else 0,
+            first_weight=first_weight,
+            second_weight=second_weight,
+            b=b_pole,
+        )
 
     @staticmethod
     def _a_factor(r: int, s: int, b_pole):
         """Multiprecision residue normalization at the active workdps."""
 
-        result = mpmath.mpc("0.5")
-        sqrt_two = mpmath.sqrt(2)
-        for p in range(1 - r, r + 1):
-            for q in range(1 - s, s + 1):
-                if (p, q) in ((0, 0), (r, s)) or (p + q) % 2:
-                    continue
-                result *= sqrt_two / (p * b_pole + q / b_pole)
-        return result
+        return ns_inverse_null_slope_mp(r, s, b_pole)
+
+    def _residue(self, twice_level: int, r: int, s: int, h):
+        """Standard-frame sphere specialization of the graph NS recipe.
+
+        ``twice_level mod 2`` is the current block sector.  The external top
+        components shift the two endpoint three-form labels.  The final
+        ``star3`` phase is the standard bra-incidence reordering used by the
+        sphere convention and is deliberately supplied outside the shared
+        weight-only scalar kernel.  This method uses the principal pole sheet
+        and is not an analytic-continuation driver.
+        """
+
+        sector = int(twice_level) % 2
+        left_sector = int(self.star2) ^ sector
+        right_sector = int(self.star3) ^ sector
+        pole, residue, child_sectors = ns_ordinary_edge_scalar_kernel_mp(
+            r=r,
+            s=s,
+            internal_weight=h,
+            left_weights=(self.h1, self.h2),
+            right_weights=(self.h4, self.h3),
+            left_sector=left_sector,
+            right_sector=right_sector,
+        )
+        parity = (r * s) % 2
+        expected_children = (
+            left_sector ^ parity,
+            right_sector ^ parity,
+        )
+        if child_sectors != expected_children:  # pragma: no cover
+            raise AssertionError("ordinary-edge incidence transport changed")
+        bra_phase = (-1) ** (int(self.star3) * r * s)
+        return bra_phase * residue, pole.c
 
     def coefficient(self, twice_level: int):
         with mpmath.workdps(self.working_precision):

@@ -1,0 +1,131 @@
+{
+  "scope": "First genus-two NS super-Liouville theta/glasses c-recursion comparison",
+  "status": "exploratory_order_four_result_not_an_equality_claim",
+  "quantity": "Q_L = Z_L / Z_(one free scalar + one NS Majorana)^9",
+  "normalization": "raw plumbing cylinder convention; common Casimir factors omitted edge by edge; unit noncompact scalar zero-mode volume",
+  "central_charge": 13.5,
+  "hat_c": 9,
+  "source": {
+    "project": "../Project/StringMC",
+    "csv": "plumbing/results/genus2_plumbing_moduli_samples/direct_bulk_N128_overlap_N32/overlap_samples.csv",
+    "overlap_id": "o0026",
+    "theta_word": "T12^-1 T22 gl-shear-12 T11 full-s I",
+    "both_q_max": 0.1538861317418747,
+    "theta_period_residual": 5.20787340735281e-10,
+    "theta_validation_residual": 9.979722047988188e-09,
+    "theta_map_stability": 2.3171038303230696e-08,
+    "glasses_seam_residual": 3.3988061198598537e-10,
+    "glasses_symmetry_error": 1.3748165240186437e-12
+  },
+  "plumbing_data": {
+    "theta_q_zero_one_infinity": [
+      {"real": 2.439827461205e-09, "imag": -1.511761685715e-10},
+      {"real": 0.1483329276723, "imag": 0.006060342504737},
+      {"real": 3.786956983668e-09, "imag": -1.693481490583e-09}
+    ],
+    "glasses_q_left_right_bridge": [
+      {"real": 0.1538858589345206, "imag": 0.0002897627692581411},
+      {"real": 0.1510585351205049, "imag": 0.005374602305150904},
+      {"real": 0.152907009872393, "imag": -0.005617044175995109}
+    ],
+    "theta_omega": [
+      [{"real": 0.9254893632412531, "imag": 6.176629203190157}, {"real": -1.0669267112355065, "imag": 3.071778229413057}],
+      [{"real": -1.0669267112355065, "imag": 3.071778229413057}, {"real": 0.9395721601091219, "imag": 3.375360247371029}]
+    ],
+    "glasses_omega": [
+      [{"real": 0.00023985886060702268, "imag": 0.2957553455196915}, {"real": 0.0010668836604170971, "imag": 0.026580859449807027}],
+      [{"real": 0.0010668836604170971, "imag": 0.026580859449807027}, {"real": 0.005492055485793113, "imag": 0.29855499576571304}]
+    ]
+  },
+  "spin_transport": {
+    "symplectic_matrix": [[2, -1, -1, -1], [-2, 1, 0, -1], [1, 0, 0, 0], [-1, 1, 0, 0]],
+    "glasses_characteristic": {"alpha": [0, 0], "beta": [0, 0]},
+    "theta_characteristic": {"alpha": [0, 0], "beta": [1, 1]},
+    "glasses_edge_lifts": [1, 1, 1],
+    "theta_edge_lifts": [1, -1, -1]
+  },
+  "analytic_checks": {
+    "glasses_orientation_bits": [0, 0, 0],
+    "glasses_orientation_formula": "e_bridge*(e_left+e_right) mod 2",
+    "separating_global_relative_error": 2.3886691539668126e-16,
+    "handle_residue_torus_relative_error": 0.0,
+    "note": "The checks use torus factorization and the independent torus c-recursion, not theta/glasses matching."
+  },
+  "numerical_controls": {
+    "recursion_order_definition": "maximum accumulated twice-level of nested Kac residues; no plumbing-q polynomial cutoff",
+    "maximum_recursion_order": 4,
+    "structure_constant_decimal_precision": 28,
+    "global_osp_shell_tolerance": 2e-08,
+    "global_osp_max_total_occupation": 18,
+    "vacuum_primitive_word_length": 7,
+    "vacuum_max_mode": 44,
+    "free_superfield_primitive_word_length": 13,
+    "free_superfield_max_mode": 60,
+    "free_glasses_W12_to_W13_relative_change": 2.336450220402415e-06,
+    "free_theta_W12_to_W13_relative_change": 0.0,
+    "glasses_global_q4_max16_to_max20_partition_relative_change": 2.1111866886088333e-10
+  },
+  "free_superfield": {
+    "theta": {
+      "value": 0.2960400840954449,
+      "det_im_omega": 11.412527184503038,
+      "primitive_count_W13": 96174
+    },
+    "glasses": {
+      "value": 34.42513862336598,
+      "det_im_omega": 0.08759269384022814,
+      "primitive_count_W13": 96174
+    }
+  },
+  "common_quadrature_N4_recursion_scan": [
+    {
+      "recursion_order": 0,
+      "theta_Z_L": 7.790991491800028e-24,
+      "glasses_Z_L": 5.2587719965294817e-05,
+      "theta_Q_L": 4.461059953755577e-19,
+      "glasses_Q_L": 7.7446725788597525e-19,
+      "theta_over_glasses": 0.5760165982914126
+    },
+    {
+      "recursion_order": 3,
+      "theta_Z_L": 7.79845982391822e-24,
+      "glasses_Z_L": 5.0970116177314346e-05,
+      "theta_Q_L": 4.465336261510357e-19,
+      "glasses_Q_L": 7.50644563712317e-19,
+      "theta_over_glasses": 0.5948669286868623
+    },
+    {
+      "recursion_order": 4,
+      "theta_Z_L": 7.805029151951353e-24,
+      "glasses_Z_L": 5.076632308826578e-05,
+      "theta_Q_L": 4.469097806654199e-19,
+      "glasses_Q_L": 7.476432722519586e-19,
+      "theta_over_glasses": 0.5977580448484389
+    }
+  ],
+  "common_quadrature_N6_order4": {
+    "theta_Z_L": 7.519918189960956e-24,
+    "glasses_Z_L": 5.044813178635273e-05,
+    "theta_Q_L": 4.3058455304515165e-19,
+    "glasses_Q_L": 7.429572211122933e-19,
+    "theta_over_glasses": 0.5795549741080873,
+    "relative_difference": -0.4204450258919127,
+    "theta_global_worst_last_shell_relative": 1.1156232420003679e-09,
+    "glasses_global_worst_last_shell_relative_unweighted": 0.00048512422532045194,
+    "note": "The worst glasses shell occurs in a high-momentum shifted leaf; the integrated q4 max-occupation stress test changes Z_L by 2.1e-10 relative."
+  },
+  "theta_quadrature_N8_order4": {
+    "theta_Z_L": 7.50266197543312e-24,
+    "theta_Q_L": 4.295964758836689e-19,
+    "N6_to_N8_relative_change": -0.002294734343103899
+  },
+  "channel_adaptive_indicator": {
+    "theta_N8_over_glasses_N6": 0.5782250494052847,
+    "relative_difference": -0.42177495059471526
+  },
+  "interpretation": {
+    "matching_assumed": false,
+    "observed": "The order-four results differ by about 42 percent.",
+    "conclusion": "This is not a crossing failure claim: higher confluent-pole recursion orders have not yet been implemented. The discrepancy is much larger than the audited numerical truncations and therefore cannot be presented as a successful match at the current order."
+  }
+}

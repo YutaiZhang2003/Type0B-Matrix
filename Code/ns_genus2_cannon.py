@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic Cannon array for the order-eight genus-two NS partition.
+"""Deterministic Cannon array for genus-two NS partition convergence runs.
 
 Each array element evaluates one Cartesian momentum node for one point and
 channel.  The primary finite-part radius is used at every point; configured
@@ -21,10 +21,16 @@ import sys
 import time
 from typing import Sequence
 
+import mpmath
 import numpy as np
 
 from ns_genus2_partition import (
+    C_HAT9,
+    GLASSES_CCY_DESCENDANT_EDGE_ORDER,
+    GLASSES_GEOMETRY_EDGE_ORDER,
     NSGenus2CRecursion,
+    THETA_CCY_DESCENDANT_EDGE_ORDER,
+    THETA_GEOMETRY_EDGE_ORDER,
     _primary_gaussian_rule,
     _structure_weight,
     free_superfield_partition,
@@ -33,7 +39,7 @@ from ns_genus2_partition import (
 )
 
 
-SCHEMA = "ns-genus2-cannon-order8-fivepoint-v2"
+SCHEMA = "ns-genus2-cannon-v4"
 
 
 def _load(path: Path) -> dict:
@@ -51,13 +57,17 @@ def _implementation_fingerprint(root: Path) -> str:
         "ns_genus2_partition.py",
         "compare_ns_torus_c_h_recursion.py",
         "ns_genus_c_recursion_checks.py",
+        "ns_recursion_recipe.py",
         "ns_global_osp_block.py",
         "ns_regular_block.py",
         "ns_vacuum_schottky.py",
         "super_liouville_structure_constants.py",
         "superconformal_blocks.py",
+        "python/ccy_genus2_block.py",
+        "python/free_boson_plumbing.py",
         "python/genus2_vacuum_blocks.py",
         "python/plumbing_algorithms.py",
+        "python/virasoro_blocks.py",
     )
     digest = hashlib.sha256()
     for relative in files:
@@ -65,24 +75,44 @@ def _implementation_fingerprint(root: Path) -> str:
         digest.update(relative.encode())
         digest.update(path.read_bytes())
     digest.update(sys.version.encode())
+    digest.update(mpmath.__version__.encode())
     digest.update(np.__version__.encode())
     return digest.hexdigest()
+
+
+def _recursion_orders(config: dict) -> tuple[int, ...]:
+    """Return one or more accumulated twice-level cutoffs.
+
+    ``recursion_order`` remains supported for archived production configs;
+    new convergence runs may use ``recursion_orders`` to evaluate several
+    cutoffs with the same geometry and momentum rule.
+    """
+
+    if "recursion_orders" in config:
+        orders = tuple(int(value) for value in config["recursion_orders"])
+    else:
+        orders = (int(config["recursion_order"]),)
+    if not orders or len(set(orders)) != len(orders):
+        raise ValueError("recursion orders must be a nonempty unique list")
+    return orders
 
 
 def _designs(config: dict) -> list[dict]:
     designs = []
     for point in config["points"]:
-        for quadrature_order in config["quadrature_orders"]:
-            node_count = int(quadrature_order) ** 3
-            for channel in ("theta", "glasses"):
-                designs.append(
-                    {
-                        "point_id": str(point["id"]),
-                        "channel": channel,
-                        "quadrature_order": int(quadrature_order),
-                        "node_count": node_count,
-                    }
-                )
+        for recursion_order in _recursion_orders(config):
+            for quadrature_order in config["quadrature_orders"]:
+                node_count = int(quadrature_order) ** 3
+                for channel in ("theta", "glasses"):
+                    designs.append(
+                        {
+                            "point_id": str(point["id"]),
+                            "channel": channel,
+                            "recursion_order": int(recursion_order),
+                            "quadrature_order": int(quadrature_order),
+                            "node_count": node_count,
+                        }
+                    )
     return designs
 
 
@@ -132,11 +162,20 @@ def evaluate_task(config: dict, task_index: int) -> dict:
     design, node_index = decode_task(config, task_index)
     q_values, indices, momenta, measure = _node_data(config, design, node_index)
     channel = str(design["channel"])
+    if channel == "theta":
+        geometry_edge_order = THETA_GEOMETRY_EDGE_ORDER
+        descendant_edge_order = THETA_CCY_DESCENDANT_EDGE_ORDER
+    elif channel == "glasses":
+        geometry_edge_order = GLASSES_GEOMETRY_EDGE_ORDER
+        descendant_edge_order = GLASSES_CCY_DESCENDANT_EDGE_ORDER
+    else:  # pragma: no cover - designs only contain the two known channels
+        raise ValueError(f"unknown channel {channel!r}")
     lifts = tuple(int(value) for value in config["physical_lifts"][channel])
     numerics = config["numerics"]
     recursion = NSGenus2CRecursion(
         channel=channel,
         q_values=q_values,
+        global_method=str(numerics.get("global_method", "auto")),
         global_tolerance=float(numerics["global_tolerance"]),
         global_max_total_occupation=int(numerics["global_max_total_occupation"]),
         vacuum_word_length=int(numerics["vacuum_word_length"]),
@@ -161,18 +200,37 @@ def evaluate_task(config: dict, task_index: int) -> dict:
     }
     radius_results = []
     started = time.time()
+    block_method = str(numerics.get("block_method", "contour_finite_part"))
+    if block_method not in {"contour_finite_part", "collision_aware_mp"}:
+        raise ValueError(
+            "numerics.block_method must be contour_finite_part or "
+            "collision_aware_mp"
+        )
+    block_working_precision = int(
+        numerics.get("block_working_precision", 60)
+    )
     for radius in radii:
         sectors = []
         contribution = 0.0
         for sector in (0, 1):
-            block = recursion.finite_part_block(
-                momenta=momenta,
-                sector=sector,
-                recursion_order=int(config["recursion_order"]),
-                lifts=lifts,
-                radius=radius,
-                samples=int(numerics["finite_part_samples"]),
-            )
+            if block_method == "collision_aware_mp":
+                block = recursion.collision_aware_block_mp(
+                    weights=weights,
+                    sector=sector,
+                    recursion_order=int(design["recursion_order"]),
+                    lifts=lifts,
+                    central_charge=C_HAT9,
+                    working_precision=block_working_precision,
+                )
+            else:
+                block = recursion.finite_part_block(
+                    momenta=momenta,
+                    sector=sector,
+                    recursion_order=int(design["recursion_order"]),
+                    lifts=lifts,
+                    radius=radius,
+                    samples=int(numerics["finite_part_samples"]),
+                )
             sector_value = measure * structures[sector] * abs(primary * block) ** 2
             contribution += float(sector_value)
             sectors.append(
@@ -195,15 +253,26 @@ def evaluate_task(config: dict, task_index: int) -> dict:
         "task_index": int(task_index),
         "node_index": int(node_index),
         **design,
+        "q_edge_order": list(geometry_edge_order),
+        "descendant_tensor_edge_order": list(descendant_edge_order),
         "indices": list(indices),
         "momenta": list(momenta),
         "measure": float(measure),
         "radius_results": radius_results,
         "runtime_seconds": float(time.time() - started),
+        "block_method": block_method,
+        "block_working_precision": block_working_precision,
+        "global_method": recursion.effective_global_method,
+        "global_method_requested": recursion.global_method,
+        "global_resummed_calls": recursion.global_resummed_calls,
         "global_max_occupation_used": recursion.global_max_used,
         "global_nonconverged_calls": recursion.global_nonconverged_calls,
         "global_worst_last_shell_relative": recursion.global_worst_last_shell_relative,
         "block_calls": recursion.block_calls,
+        "confluent_moment_groups": recursion.confluent_moment_groups,
+        "confluent_direct_groups": recursion.confluent_direct_groups,
+        "confluent_max_moment_terms": recursion.confluent_max_moment_terms,
+        "confluent_max_moment_ratio": recursion.confluent_max_moment_ratio,
     }
 
 
@@ -271,6 +340,8 @@ def reduce(config_path: Path, shard_dir: Path, output: Path) -> dict:
             for shard in shards
             if shard["point_id"] == design["point_id"]
             and shard["channel"] == design["channel"]
+            and int(shard.get("recursion_order", config.get("recursion_order", -1)))
+            == design["recursion_order"]
             and shard["quadrature_order"] == design["quadrature_order"]
         ]
         selected.sort(key=lambda row: row["node_index"])
@@ -300,11 +371,31 @@ def reduce(config_path: Path, shard_dir: Path, output: Path) -> dict:
                     "runtime_seconds_sum": math.fsum(
                         float(row["runtime_seconds"]) for row in selected
                     ),
+                    "global_method": selected[0].get("global_method", "direct"),
+                    "global_resummed_calls": sum(
+                        int(row.get("global_resummed_calls", 0)) for row in selected
+                    ),
                     "global_nonconverged_calls": sum(
                         int(row["global_nonconverged_calls"]) for row in selected
                     ),
                     "global_worst_last_shell_relative": max(
                         float(row["global_worst_last_shell_relative"])
+                        for row in selected
+                    ),
+                    "confluent_moment_groups": sum(
+                        int(row.get("confluent_moment_groups", 0))
+                        for row in selected
+                    ),
+                    "confluent_direct_groups": sum(
+                        int(row.get("confluent_direct_groups", 0))
+                        for row in selected
+                    ),
+                    "confluent_max_moment_terms": max(
+                        int(row.get("confluent_max_moment_terms", 0))
+                        for row in selected
+                    ),
+                    "confluent_max_moment_ratio": max(
+                        float(row.get("confluent_max_moment_ratio", 0.0))
                         for row in selected
                     ),
                 }
@@ -316,25 +407,28 @@ def reduce(config_path: Path, shard_dir: Path, output: Path) -> dict:
         radii = [float(config["finite_part_radii"][0])]
         if bool(point.get("secondary_finite_part_radius", False)):
             radii.append(float(config["finite_part_radii"][1]))
-        for order in config["quadrature_orders"]:
-            for radius in radii:
-                pair = {
-                    row["channel"]: row
-                    for row in rows
-                    if row["point_id"] == point_id
-                    and row["quadrature_order"] == int(order)
-                    and row["finite_part_radius"] == radius
-                }
-                ratio = pair["theta"]["q_l"] / pair["glasses"]["q_l"]
-                crossing.append(
-                    {
-                        "point_id": point_id,
-                        "quadrature_order": int(order),
-                        "finite_part_radius": radius,
-                        "theta_over_glasses": ratio,
-                        "relative_difference": ratio - 1.0,
+        for recursion_order in _recursion_orders(config):
+            for order in config["quadrature_orders"]:
+                for radius in radii:
+                    pair = {
+                        row["channel"]: row
+                        for row in rows
+                        if row["point_id"] == point_id
+                        and row["recursion_order"] == recursion_order
+                        and row["quadrature_order"] == int(order)
+                        and row["finite_part_radius"] == radius
                     }
-                )
+                    ratio = pair["theta"]["q_l"] / pair["glasses"]["q_l"]
+                    crossing.append(
+                        {
+                            "point_id": point_id,
+                            "recursion_order": recursion_order,
+                            "quadrature_order": int(order),
+                            "finite_part_radius": radius,
+                            "theta_over_glasses": ratio,
+                            "relative_difference": ratio - 1.0,
+                        }
+                    )
 
     radius_stability = []
     radius_a, radius_b = (float(value) for value in config["finite_part_radii"])
@@ -342,20 +436,28 @@ def reduce(config_path: Path, shard_dir: Path, output: Path) -> dict:
         if not bool(point.get("secondary_finite_part_radius", False)):
             continue
         for channel in ("theta", "glasses"):
-            for order in config["quadrature_orders"]:
-                values = {
-                    row["finite_part_radius"]: row["q_l"]
-                    for row in rows
-                    if row["point_id"] == point["id"]
-                    and row["channel"] == channel
-                    and row["quadrature_order"] == int(order)
-                }
-                relative = abs(values[radius_a] - values[radius_b]) / max(
-                    abs(values[radius_a]), abs(values[radius_b]), 1.0e-300
-                )
-                radius_stability.append(
-                    {"point_id": point["id"], "channel": channel, "quadrature_order": int(order), "relative": relative}
-                )
+            for recursion_order in _recursion_orders(config):
+                for order in config["quadrature_orders"]:
+                    values = {
+                        row["finite_part_radius"]: row["q_l"]
+                        for row in rows
+                        if row["point_id"] == point["id"]
+                        and row["channel"] == channel
+                        and row["recursion_order"] == recursion_order
+                        and row["quadrature_order"] == int(order)
+                    }
+                    relative = abs(values[radius_a] - values[radius_b]) / max(
+                        abs(values[radius_a]), abs(values[radius_b]), 1.0e-300
+                    )
+                    radius_stability.append(
+                        {
+                            "point_id": point["id"],
+                            "channel": channel,
+                            "recursion_order": recursion_order,
+                            "quadrature_order": int(order),
+                            "relative": relative,
+                        }
+                    )
 
     summary = {
         "schema": SCHEMA,
@@ -467,54 +569,93 @@ def recompute_free(summary_path: Path, output: Path) -> dict:
     return summary
 
 
-def recombine_theta(
+def recombine_channel(
     config_path: Path,
-    theta_shard_dir: Path,
+    rerun_shard_dir: Path,
     source_summary_path: Path,
     output: Path,
+    rerun_channel: str,
 ) -> dict:
-    """Combine freshly evaluated theta numerators with unchanged glasses data."""
+    """Combine one freshly evaluated channel with the preserved other channel."""
+
+    if rerun_channel not in ("theta", "glasses"):
+        raise ValueError("rerun_channel must be 'theta' or 'glasses'")
+    preserved_channel = "glasses" if rerun_channel == "theta" else "theta"
 
     config = _load(config_path)
     source = _load(source_summary_path)
     if source["config_digest"] != _digest(config):
-        raise RuntimeError("source summary and theta rerun use different configs")
+        # A channel-only spin correction intentionally changes that channel's
+        # plumbing lifts while preserving every momentum node, geometry,
+        # cutoff, and the opposite-channel numerator.  Permit exactly that
+        # one-field difference so audited source shards can be reused.
+        source_config = json.loads(json.dumps(source["config"]))
+        current_config = json.loads(json.dumps(config))
+        source_config["physical_lifts"][rerun_channel] = current_config[
+            "physical_lifts"
+        ][rerun_channel]
+        if source_config != current_config:
+            raise RuntimeError(
+                "source summary and channel rerun differ beyond the rerun "
+                "channel's physical lifts"
+            )
     current_implementation = _implementation_fingerprint(
         Path(__file__).resolve().parent
     )
-    theta_shards = []
+    rerun_shards = []
     for task_index in range(task_count(config)):
         design, _ = decode_task(config, task_index)
-        if design["channel"] != "theta":
+        if design["channel"] != rerun_channel:
             continue
-        path = theta_shard_dir / f"task-{task_index:06d}.json"
+        path = rerun_shard_dir / f"task-{task_index:06d}.json"
         if not path.exists():
-            raise RuntimeError(f"missing theta shard {path}")
+            raise RuntimeError(f"missing {rerun_channel} shard {path}")
         shard = _load(path)
         if shard.get("config_digest") != _digest(config):
             raise RuntimeError(f"configuration mismatch in {path}")
         if shard.get("implementation_fingerprint") != current_implementation:
             raise RuntimeError(f"implementation mismatch in {path}")
-        theta_shards.append(shard)
+        if shard.get("channel") != rerun_channel:
+            raise RuntimeError(f"channel mismatch in {path}")
+        rerun_shards.append(shard)
 
-    free_summary_path = output.with_suffix(".free-tmp.json")
-    free_summary = recompute_free(source_summary_path, free_summary_path)
-    free_summary_path.unlink()
-    free = free_summary["free_superfield"]
+    numerics = config["numerics"]
+    free = {}
+    for point in config["points"]:
+        point_id = str(point["id"])
+        free[point_id] = {}
+        for channel in ("theta", "glasses"):
+            diagnostics = asdict(
+                free_superfield_partition(
+                    channel=channel,
+                    q_values=_q_values(config, point_id, channel),
+                    omega=_omega_from_config(config, point_id, channel),
+                    physical_lifts=tuple(config["physical_lifts"][channel]),
+                    max_word_length=int(numerics["free_word_length"]),
+                    max_mode=int(numerics["free_max_mode"]),
+                )
+            )
+            diagnostics["chiral_log"] = [
+                float(diagnostics["chiral_log"].real),
+                float(diagnostics["chiral_log"].imag),
+            ]
+            free[point_id][channel] = diagnostics
 
     rows = []
     for old_row in source["rows"]:
         row = dict(old_row)
-        if row["channel"] == "theta":
+        if row["channel"] == rerun_channel:
             selected = [
                 shard
-                for shard in theta_shards
+                for shard in rerun_shards
                 if shard["point_id"] == row["point_id"]
                 and shard["quadrature_order"] == row["quadrature_order"]
             ]
             selected.sort(key=lambda shard: shard["node_index"])
             if len(selected) != int(row["node_count"]):
-                raise RuntimeError(f"incomplete theta design for {row['point_id']}")
+                raise RuntimeError(
+                    f"incomplete {rerun_channel} design for {row['point_id']}"
+                )
             contributions = []
             for shard in selected:
                 radius_result = next(
@@ -534,6 +675,22 @@ def recombine_theta(
             )
             row["global_worst_last_shell_relative"] = max(
                 float(shard["global_worst_last_shell_relative"])
+                for shard in selected
+            )
+            row["confluent_moment_groups"] = sum(
+                int(shard.get("confluent_moment_groups", 0))
+                for shard in selected
+            )
+            row["confluent_direct_groups"] = sum(
+                int(shard.get("confluent_direct_groups", 0))
+                for shard in selected
+            )
+            row["confluent_max_moment_terms"] = max(
+                int(shard.get("confluent_max_moment_terms", 0))
+                for shard in selected
+            )
+            row["confluent_max_moment_ratio"] = max(
+                float(shard.get("confluent_max_moment_ratio", 0.0))
                 for shard in selected
             )
         denominator = float(free[row["point_id"]][row["channel"]]["value"])
@@ -576,19 +733,38 @@ def recombine_theta(
         radius_stability.append({**old_stability, "relative": relative})
 
     summary = dict(source)
+    summary["config"] = config
+    summary["config_digest"] = _digest(config)
+    summary["task_count"] = task_count(config)
+    source_fingerprints = source.get(
+        "channel_numerator_implementation_fingerprints", {}
+    )
     summary["channel_numerator_implementation_fingerprints"] = {
-        "theta": current_implementation,
-        "glasses": source["implementation_fingerprint"],
+        rerun_channel: current_implementation,
+        preserved_channel: source_fingerprints.get(
+            preserved_channel, source["implementation_fingerprint"]
+        ),
     }
     summary["free_implementation_fingerprint"] = current_implementation
     summary["consistent_recombination"] = {
         "completed_at_utc": datetime.now(timezone.utc).isoformat(),
-        "theta_liouville_numerator": "fresh fixed-marking Cannon shards",
-        "glasses_liouville_numerator": "preserved; code path unaffected",
-        "free_superfield": "fresh fixed-marking evaluation in both channels",
+        "rerun_channel": rerun_channel,
+        f"{rerun_channel}_liouville_numerator": (
+            "fresh Cannon shards with current implementation"
+        ),
+        f"{preserved_channel}_liouville_numerator": (
+            "preserved from source summary; code path unaffected"
+        ),
+        "free_superfield": (
+            "fresh bosonized scalar-Majorana evaluation in both channels"
+        ),
         "source_summary": str(source_summary_path),
-        "theta_shard_count": len(theta_shards),
+        f"{rerun_channel}_shard_count": len(rerun_shards),
     }
+    if rerun_channel == "glasses":
+        summary["consistent_recombination"]["glasses_correction"] = (
+            "self-loop toric sign S_rs^alpha=(-1)^(alpha*rs)"
+        )
     summary.pop("free_rerun", None)
     summary["analytic_checks"] = run_internal_checks()
     summary["free_superfield"] = free
@@ -598,6 +774,40 @@ def recombine_theta(
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(summary, indent=2) + "\n")
     return summary
+
+
+def recombine_theta(
+    config_path: Path,
+    theta_shard_dir: Path,
+    source_summary_path: Path,
+    output: Path,
+) -> dict:
+    """Combine freshly evaluated theta numerators with unchanged glasses data."""
+
+    return recombine_channel(
+        config_path,
+        theta_shard_dir,
+        source_summary_path,
+        output,
+        "theta",
+    )
+
+
+def recombine_glasses(
+    config_path: Path,
+    glasses_shard_dir: Path,
+    source_summary_path: Path,
+    output: Path,
+) -> dict:
+    """Combine corrected glasses numerators with unchanged theta data."""
+
+    return recombine_channel(
+        config_path,
+        glasses_shard_dir,
+        source_summary_path,
+        output,
+        "glasses",
+    )
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -620,6 +830,14 @@ def main(argv: Sequence[str] | None = None) -> int:
     recombine_parser.add_argument("--theta-shard-dir", type=Path, required=True)
     recombine_parser.add_argument("--source-summary", type=Path, required=True)
     recombine_parser.add_argument("--output", type=Path, required=True)
+    recombine_glasses_parser = subparsers.add_parser("recombine-glasses")
+    recombine_glasses_parser.add_argument(
+        "--glasses-shard-dir", type=Path, required=True
+    )
+    recombine_glasses_parser.add_argument(
+        "--source-summary", type=Path, required=True
+    )
+    recombine_glasses_parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     config = _load(args.config)
     if args.command == "plan":
@@ -658,6 +876,20 @@ def main(argv: Sequence[str] | None = None) -> int:
         summary = recombine_theta(
             args.config,
             args.theta_shard_dir,
+            args.source_summary,
+            args.output,
+        )
+        print(
+            json.dumps(
+                {"output": str(args.output), "crossing": summary["crossing"]},
+                indent=2,
+            )
+        )
+        return 0
+    if args.command == "recombine-glasses":
+        summary = recombine_glasses(
+            args.config,
+            args.glasses_shard_dir,
             args.source_summary,
             args.output,
         )

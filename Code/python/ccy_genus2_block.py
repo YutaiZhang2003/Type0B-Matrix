@@ -29,6 +29,8 @@ import math
 from dataclasses import dataclass
 from functools import lru_cache
 
+import mpmath
+
 try:
     from genus2_vacuum_blocks import oscillator_log_factor, schottky_vacuum_block
     from plumbing_algorithms import (
@@ -181,6 +183,127 @@ def genus2_global_sl2_block(
                     / (norm1 * norm2 * sl2_descendant_norm(h3, k_level))
                 )
     return total
+
+
+@dataclass(frozen=True)
+class GlobalSL2Resummation:
+    """Value and endpoint-shell certificate for the resummed global block."""
+
+    value: complex
+    last_shell: complex
+    endpoint_total: int
+    converged: bool
+
+
+def genus2_global_sl2_block_resummed(
+    h1: complex,
+    h2: complex,
+    h3: complex,
+    q1: complex,
+    q2: complex,
+    q3: complex,
+    *,
+    tolerance: float = 1.0e-13,
+    max_endpoint_total: int = 52,
+    working_precision: int = 50,
+) -> GlobalSL2Resummation:
+    r"""Resum the middle edge and adaptively sum the two endpoint edges.
+
+    For fixed endpoint occupations ``i,k``, translation covariance gives
+
+    .. math::
+
+       \sum_{j\geq0}\frac{q_2^j\rho_{ijk}^2}{j!(2h_2)_j}
+       = s_{ik}^2\,{}_2F_1(a_{ik},a_{ik};2h_2;q_2),
+
+    where ``s_ik=rho(i,0,k)`` and
+    ``a_ik=h2+h3+k-h1-i``.  Thus ``max_endpoint_total`` is only a
+    convergence guard for the remaining representation, not the
+    c-recursion order.  Three consecutive small endpoint shells are required
+    before the result is certified.
+    """
+
+    if tolerance <= 0:
+        raise ValueError("tolerance must be positive")
+    max_endpoint_total = _validate_order(max_endpoint_total)
+    working_precision = int(working_precision)
+    if working_precision < 20:
+        raise ValueError("working_precision must be at least 20 decimal digits")
+
+    h1 = _as_complex(h1)
+    h2 = _as_complex(h2)
+    h3 = _as_complex(h3)
+    q1 = _as_complex(q1)
+    q2 = _as_complex(q2)
+    q3 = _as_complex(q3)
+    if any(abs(q) >= 1 for q in (q1, q2, q3)):
+        raise ValueError("global-block plumbing coordinates must satisfy |q_i| < 1")
+
+    total = 0.0 + 0.0j
+    last_shell = 0.0 + 0.0j
+    small_shells = 0
+    converged = False
+    used = 0
+    with mpmath.workdps(working_precision):
+        for endpoint_total in range(max_endpoint_total + 1):
+            shell = 0.0 + 0.0j
+            for i_level in range(endpoint_total + 1):
+                k_level = endpoint_total - i_level
+                s_ik = rho_lminus1_two_edge(i_level, k_level, h1, h2, h3)
+                a_ik = h2 + h3 + k_level - h1 - i_level
+                shell += complex(
+                    (mpmath.mpc(q1) ** i_level)
+                    * (mpmath.mpc(q3) ** k_level)
+                    * (mpmath.mpc(s_ik) ** 2)
+                    / (
+                        mpmath.factorial(i_level)
+                        * mpmath.rf(2 * mpmath.mpc(h1), i_level)
+                        * mpmath.factorial(k_level)
+                        * mpmath.rf(2 * mpmath.mpc(h3), k_level)
+                    )
+                    * mpmath.hyp2f1(
+                        mpmath.mpc(a_ik),
+                        mpmath.mpc(a_ik),
+                        2 * mpmath.mpc(h2),
+                        mpmath.mpc(q2),
+                    )
+                )
+            total += shell
+            last_shell = shell
+            used = endpoint_total
+            scale = max(1.0, abs(total))
+            if endpoint_total >= 3 and abs(shell) <= tolerance * scale:
+                small_shells += 1
+            else:
+                small_shells = 0
+            if small_shells >= 3:
+                converged = True
+                break
+
+    return GlobalSL2Resummation(
+        value=complex(total),
+        last_shell=complex(last_shell),
+        endpoint_total=used,
+        converged=converged,
+    )
+
+
+def _certified_global_sl2_value(
+    h1: complex,
+    h2: complex,
+    h3: complex,
+    q1: complex,
+    q2: complex,
+    q3: complex,
+) -> complex:
+    result = genus2_global_sl2_block_resummed(h1, h2, h3, q1, q2, q3)
+    if not result.converged:
+        raise RuntimeError(
+            "theta global block failed its pointwise endpoint-shell test: "
+            f"endpoint_total={result.endpoint_total}, "
+            f"last_shell={result.last_shell!r}, value={result.value!r}"
+        )
+    return result.value
 
 
 def _matrix_eigenvalue_ratio(a: complex, b: complex, c: complex, d: complex) -> complex:
@@ -621,14 +744,13 @@ def ccy_genus2_block_partial_fraction(
 
     @lru_cache(maxsize=None)
     def recurse(current_h1: complex, current_h2: complex, current_h3: complex, remaining: int) -> PartialFractionInC:
-        seed = vacuum_seed * genus2_global_sl2_block(
+        seed = vacuum_seed * _certified_global_sl2_value(
             current_h1,
             current_h2,
             current_h3,
             q1,
             q2,
             q3,
-            remaining,
         )
         total = PartialFractionInC(constant=seed)
         weights = (current_h1, current_h2, current_h3)
@@ -682,9 +804,11 @@ def ccy_genus2_block(
 ) -> CCYGenus2BlockResult:
     """Evaluate the CCY genus-two block by c-recursion.
 
-    The recursion is truncated by total plumbing degree.  The optional vacuum
-    seed is a finite Schottky primitive-class product and is therefore an
-    approximation to the exact c=infinity vacuum block.
+    ``order`` truncates only the null-vector c-recursion depth.  The global
+    seed is resummed independently and must pass its pointwise endpoint-shell
+    convergence test.  The optional vacuum seed is a finite Schottky
+    primitive-class product and is therefore an approximation to the exact
+    c=infinity vacuum block.
     """
     order = _validate_order(order)
     c = _as_complex(c)
@@ -738,14 +862,13 @@ def ccy_genus2_block(
 
     @lru_cache(maxsize=None)
     def recurse(current_c: complex, current_h1: complex, current_h2: complex, current_h3: complex, remaining: int) -> complex:
-        seed = vacuum_seed * genus2_global_sl2_block(
+        seed = vacuum_seed * _certified_global_sl2_value(
             current_h1,
             current_h2,
             current_h3,
             q1,
             q2,
             q3,
-            remaining,
         )
         total = seed
         weights = (current_h1, current_h2, current_h3)

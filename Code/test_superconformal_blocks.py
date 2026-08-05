@@ -3,7 +3,12 @@
 import unittest
 
 import mpmath
+import numpy as np
 
+from ns_genus12_finite_c_check import (
+    NSDescendantThreeForm,
+    NumericNSVermaModule,
+)
 from superconformal_blocks import (
     HighPrecisionNSSphereFourPointBlock,
     NSSphereFourPointBlock,
@@ -14,6 +19,88 @@ from superconformal_blocks import (
 
 
 class NSSphereFourPointBlockTests(unittest.TestCase):
+    def test_c_recursion_matches_independent_pbw_sewing_through_first_poles(self):
+        """Check the recipe without reusing any Kac-residue ingredients.
+
+        The PBW oracle builds finite-c Gram matrices from the NS algebra and
+        the two descendant three-forms from Ward identities.  Twice-levels
+        three and four cross the first odd (3,1) and even (2,2) poles, so this
+        catches parity transport as well as the ordinary-edge normalization.
+        """
+
+        central_charge_value = 14.19870372000744
+        internal_weight = 0.73
+        external_weights = (0.37, 0.61, 0.48, 0.29)
+        module = NumericNSVermaModule(
+            c=central_charge_value,
+            weight=internal_weight,
+        )
+        left_form = NSDescendantThreeForm(
+            c=central_charge_value,
+            bra_weight=external_weights[3],
+            middle_weight=external_weights[2],
+            ket_weight=internal_weight,
+        )
+        right_form = NSDescendantThreeForm(
+            c=central_charge_value,
+            bra_weight=internal_weight,
+            middle_weight=external_weights[1],
+            ket_weight=external_weights[0],
+        )
+        top_component = (("G", -1),)
+        for star2 in (False, True):
+            for star3 in (False, True):
+                common = dict(
+                    c=central_charge_value,
+                    h1=external_weights[0],
+                    h2=external_weights[1],
+                    h3=external_weights[2],
+                    h4=external_weights[3],
+                    internal_weight=internal_weight,
+                    star2=star2,
+                    star3=star3,
+                )
+                blocks = (
+                    NSSphereFourPointBlock(**common),
+                    HighPrecisionNSSphereFourPointBlock(
+                        **common,
+                        working_precision=70,
+                    ),
+                )
+                middle2 = top_component if star2 else ()
+                middle3 = top_component if star3 else ()
+                for twice_level in range(9):
+                    basis = module.basis(twice_level)
+                    inverse_gram = module.numeric_inverse_gram(twice_level)
+                    left_vector = np.asarray(
+                        [
+                            left_form.value((), middle3, state)
+                            for state in basis
+                        ],
+                        dtype=np.complex128,
+                    )
+                    right_vector = np.asarray(
+                        [
+                            right_form.value(state, middle2, ())
+                            for state in basis
+                        ],
+                        dtype=np.complex128,
+                    )
+                    direct = np.einsum(
+                        "a,ab,b->", left_vector, inverse_gram, right_vector
+                    )
+                    for block in blocks:
+                        with self.subTest(
+                            star2=star2,
+                            star3=star3,
+                            twice_level=twice_level,
+                            implementation=type(block).__name__,
+                        ):
+                            self.assertLess(
+                                abs(direct - block.coefficient(twice_level)),
+                                5.0e-12,
+                            )
+
     def test_high_precision_seed_preserves_internal_weight_type(self):
         """Sub-binary64 changes in a shifted weight must reach the seed."""
 

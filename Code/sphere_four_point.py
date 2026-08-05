@@ -86,7 +86,9 @@ class BRYNSFourPointCorrelator:
 
     The default finite momentum cutoff is a numerical truncation, not a
     physical regulator.  Convergence should be checked by increasing both
-    ``p_max`` and ``quadrature_order``.
+    ``p_max`` and ``quadrature_order``.  When selected,
+    ``c_recursion_order=N`` is a maximum accumulated *physical* null level,
+    i.e. twice-level ``2*N`` in the general graph-recursion convention.
     """
 
     def __init__(

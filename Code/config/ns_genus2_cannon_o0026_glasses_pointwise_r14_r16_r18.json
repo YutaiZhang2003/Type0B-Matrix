@@ -1,0 +1,71 @@
+{
+  "description": "Pointwise glasses-channel recursion convergence probe at o0026",
+  "recursion_orders": [14, 16, 18],
+  "quadrature_orders": [8],
+  "finite_part_radii": [0.035, 0.045],
+  "points": [
+    {
+      "id": "o0026",
+      "secondary_finite_part_radius": false,
+      "q_values": {
+        "theta": [
+          "+2.4398274612050000e-09-1.5117616857149999e-10j",
+          "+1.4833292767230000e-01+6.0603425047370003e-03j",
+          "+3.7869569836680002e-09-1.6934814905830000e-09j"
+        ],
+        "glasses": [
+          "+1.5388585893452059e-01+2.8976276925814107e-04j",
+          "+1.5105853512050485e-01+5.3746023051509037e-03j",
+          "+1.5290700987239295e-01-5.6170441759951090e-03j"
+        ]
+      },
+      "omega": {
+        "theta": [
+          ["+9.25489363241253082e-01+6.17662920319015729e+00j", "-1.06692671123550653e+00+3.07177822941305712e+00j"],
+          ["-1.06692671123550653e+00+3.07177822941305712e+00j", "+9.39572160109121923e-01+3.37536024737102913e+00j"]
+        ],
+        "glasses": [
+          ["+2.39858860607022677e-04+2.95755345519691515e-01j", "+1.06688366041709712e-03+2.65808594498070268e-02j"],
+          ["+1.06688366041709712e-03+2.65808594498070268e-02j", "+5.49205548579311323e-03+2.98554995765713038e-01j"]
+        ]
+      },
+      "provenance": {
+        "both_q_max": 0.1538861317418747,
+        "theta_period_residual": 5.20787340735281e-10,
+        "theta_validation_residual": 9.979722047988188e-9,
+        "glasses_seam_residual": 3.3988061198598537e-10
+      }
+    }
+  ],
+  "physical_lifts": {
+    "theta": [1, -1, -1],
+    "glasses": [1, 1, 1]
+  },
+  "numerics": {
+    "finite_part_samples": 24,
+    "structure_precision": 40,
+    "global_method": "auto",
+    "global_tolerance": 2e-8,
+    "global_max_total_occupation": 22,
+    "vacuum_word_length": 8,
+    "vacuum_max_mode": 50,
+    "free_word_length": 13,
+    "free_max_mode": 70
+  },
+  "pointwise_probe": {
+    "channel": "glasses",
+    "grid_indices": [
+      [0, 0, 0],
+      [0, 0, 7],
+      [0, 7, 7],
+      [1, 0, 7],
+      [3, 3, 3],
+      [7, 0, 0],
+      [7, 0, 7],
+      [7, 7, 7]
+    ],
+    "flat_node_indices": [0, 7, 63, 71, 219, 448, 455, 511],
+    "selection": "Includes the R8-to-R12 worst even and odd nodes, low/central/high controls, and bridge-tail corners",
+    "matching_assumed": false
+  }
+}

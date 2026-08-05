@@ -14,6 +14,8 @@ set -euo pipefail
 : "${NS_G2_PYTHON:?set NS_G2_PYTHON}"
 : "${NS_G2_CONFIG:?set NS_G2_CONFIG}"
 : "${NS_G2_SHARDS:?set NS_G2_SHARDS}"
+: "${NS_G2_TASK_COUNT:?set NS_G2_TASK_COUNT}"
+: "${NS_G2_TASKS_PER_ARRAY:=1}"
 
 cd "${NS_G2_ROOT}"
 export OMP_NUM_THREADS=1
@@ -23,8 +25,16 @@ export NUMEXPR_NUM_THREADS=1
 export PYTHONUNBUFFERED=1
 export PYTHONPATH="${NS_G2_ROOT}/Code:${NS_G2_ROOT}/Code/python${PYTHONPATH:+:${PYTHONPATH}}"
 
-"${NS_G2_PYTHON}" Code/ns_genus2_cannon.py \
-  --config "${NS_G2_CONFIG}" \
-  worker \
-  --output-dir "${NS_G2_SHARDS}" \
-  --task-index "${SLURM_ARRAY_TASK_ID}"
+TASK_START=$((SLURM_ARRAY_TASK_ID * NS_G2_TASKS_PER_ARRAY))
+TASK_STOP=$((TASK_START + NS_G2_TASKS_PER_ARRAY))
+if (( TASK_STOP > NS_G2_TASK_COUNT )); then
+  TASK_STOP=${NS_G2_TASK_COUNT}
+fi
+
+for ((TASK_INDEX=TASK_START; TASK_INDEX<TASK_STOP; TASK_INDEX++)); do
+  "${NS_G2_PYTHON}" Code/ns_genus2_cannon.py \
+    --config "${NS_G2_CONFIG}" \
+    worker \
+    --output-dir "${NS_G2_SHARDS}" \
+    --task-index "${TASK_INDEX}"
+done

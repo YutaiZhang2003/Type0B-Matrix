@@ -1,0 +1,308 @@
+{
+  "schema": "ns-genus2-cannon-v4",
+  "config_digest": "bf89608d10634480833a2d869d94c6b7d9033565cdc56cd5a5dc39a51222f0ec",
+  "implementation_fingerprint": "f7feb7e41d26cbebc4fd0e9bf467d0be46e31d21b597508f1f1c2dbd52323483",
+  "config": {
+    "description": "Corrected-spin o0026 momentum-cutoff smoking-gun run at R=24,N=10",
+    "recursion_order": 24,
+    "quadrature_orders": [
+      10
+    ],
+    "finite_part_radii": [
+      0.035,
+      0.045
+    ],
+    "points": [
+      {
+        "id": "o0026",
+        "secondary_finite_part_radius": false,
+        "q_values": {
+          "theta": [
+            "+2.4398274612050000e-09-1.5117616857149999e-10j",
+            "+1.4833292767230000e-01+6.0603425047370003e-03j",
+            "+3.7869569836680002e-09-1.6934814905830000e-09j"
+          ],
+          "glasses": [
+            "+1.5388585893452059e-01+2.8976276925814107e-04j",
+            "+1.5105853512050485e-01+5.3746023051509037e-03j",
+            "+1.5290700987239295e-01-5.6170441759951090e-03j"
+          ]
+        },
+        "omega": {
+          "theta": [
+            [
+              "+9.25489363241253082e-01+6.17662920319015729e+00j",
+              "-1.06692671123550653e+00+3.07177822941305712e+00j"
+            ],
+            [
+              "-1.06692671123550653e+00+3.07177822941305712e+00j",
+              "+9.39572160109121923e-01+3.37536024737102913e+00j"
+            ]
+          ],
+          "glasses": [
+            [
+              "+2.39858860607022677e-04+2.95755345519691515e-01j",
+              "+1.06688366041709712e-03+2.65808594498070268e-02j"
+            ],
+            [
+              "+1.06688366041709712e-03+2.65808594498070268e-02j",
+              "+5.49205548579311323e-03+2.98554995765713038e-01j"
+            ]
+          ]
+        },
+        "provenance": {
+          "source_overlap": "StringMC overlap_samples.csv:o0026",
+          "theta_word": "T12^-1 T22 gl-shear-12 T11 full-s I",
+          "theta_period_residual": 5.20787340735281e-10,
+          "theta_validation_residual": 9.979722047988188e-09,
+          "glasses_seam_residual": 3.3988061198598537e-10,
+          "matching_assumed": false,
+          "audit_purpose": "Attribute the final 3 percent channel deviation to the momentum quadrature cutoff"
+        }
+      }
+    ],
+    "physical_lifts": {
+      "theta": [
+        1,
+        1,
+        -1
+      ],
+      "glasses": [
+        1,
+        1,
+        1
+      ]
+    },
+    "numerics": {
+      "block_method": "collision_aware_mp",
+      "block_working_precision": 70,
+      "finite_part_samples": 24,
+      "structure_precision": 40,
+      "global_method": "resummed",
+      "global_tolerance": 2e-08,
+      "global_max_total_occupation": 22,
+      "vacuum_word_length": 8,
+      "vacuum_max_mode": 50,
+      "free_word_length": 13,
+      "free_max_mode": 70
+    },
+    "provenance": {
+      "baseline": "Data Set/ns_genus2_fivepoint_n8_r24_theta_spin_bosonized_summary.json:o0026",
+      "fixed_recursion_order": 24,
+      "matching_assumed": false
+    }
+  },
+  "task_count": 2000,
+  "analytic_checks": {
+    "theta_geometry_edge_order": [
+      "q_zero",
+      "q_one",
+      "q_infinity"
+    ],
+    "theta_ccy_descendant_edge_order": [
+      "q_infinity",
+      "q_one",
+      "q_zero"
+    ],
+    "theta_descendant_order_relative_error": 0.0,
+    "theta_old_order_relative_displacement": 0.05572838773910474,
+    "theta_global_method": "middle-edge hypergeometric resummation",
+    "theta_resummation_direct_relative_errors": [
+      1.0938182916362306e-14,
+      9.475646887071265e-15
+    ],
+    "theta_resummation_endpoint_shells": [
+      17,
+      18
+    ],
+    "glasses_geometry_edge_order": [
+      "q_left",
+      "q_right",
+      "q_bridge"
+    ],
+    "glasses_ccy_descendant_edge_order": [
+      "q_left",
+      "q_right",
+      "q_bridge"
+    ],
+    "glasses_orientation_bits": [
+      0,
+      0,
+      0
+    ],
+    "glasses_orientation_formula": "e_bridge*(e_left+e_right) mod 2",
+    "separating_global_relative_error": 2.387678472024168e-16,
+    "separating_global_sum_converged": true,
+    "glasses_global_method": "three-factor hypergeometric resummation",
+    "glasses_resummation_direct_relative_errors": [
+      1.7499556065629176e-16,
+      5.906243056653495e-16
+    ],
+    "handle_residue_torus_relative_error": 4.4320007265820583e-16,
+    "handle_residue_torus_relative_errors": {
+      "3,1,sector=0": 0.0,
+      "3,1,sector=1": 6.938893903907228e-18,
+      "2,2,sector=0": 4.4320007265820583e-16,
+      "2,2,sector=1": 2.1216917571809745e-16
+    },
+    "spin_source_characteristic": {
+      "alpha": [
+        0,
+        0
+      ],
+      "beta": [
+        0,
+        0
+      ]
+    },
+    "spin_target_characteristic": {
+      "alpha": [
+        0,
+        0
+      ],
+      "beta": [
+        1,
+        1
+      ]
+    },
+    "glasses_edge_lifts": [
+      1,
+      1,
+      1
+    ],
+    "theta_edge_lifts": [
+      1,
+      1,
+      -1
+    ],
+    "symplectic_matrix": [
+      [
+        2,
+        -1,
+        -1,
+        -1
+      ],
+      [
+        -2,
+        1,
+        0,
+        -1
+      ],
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        -1,
+        1,
+        0,
+        0
+      ]
+    ]
+  },
+  "free_superfield": {
+    "o0026": {
+      "theta": {
+        "value": 0.2960395164318905,
+        "chiral_log": [
+          4.674092322915381e-05,
+          -4.7599130240100845e-06
+        ],
+        "scalar_chiral_log_real": 1.0722803758651516e-09,
+        "scalar_chiral_log_imag": -2.3165962586815626e-10,
+        "characteristic_alpha": [
+          0,
+          0
+        ],
+        "characteristic_beta": [
+          1,
+          1
+        ],
+        "theta_abs": 1.0000934829988803,
+        "det_im_omega": 11.412527184503038,
+        "primitive_count": 96174,
+        "max_word_length": 13,
+        "max_mode": 70,
+        "previous_word_relative_change": 0.0
+      },
+      "glasses": {
+        "value": 36.744676090067514,
+        "chiral_log": [
+          1.1932322513913607,
+          0.01789402476974574
+        ],
+        "scalar_chiral_log_real": 0.38964289837766997,
+        "scalar_chiral_log_imag": 0.008813901872726203,
+        "characteristic_alpha": [
+          0,
+          0
+        ],
+        "characteristic_beta": [
+          0,
+          0
+        ],
+        "theta_abs": 3.378851326992267,
+        "det_im_omega": 0.08759269384022814,
+        "primitive_count": 96174,
+        "max_word_length": 13,
+        "max_mode": 70,
+        "previous_word_relative_change": 1.6739776401510335e-10
+      }
+    }
+  },
+  "rows": [
+    {
+      "point_id": "o0026",
+      "channel": "theta",
+      "recursion_order": 24,
+      "quadrature_order": 10,
+      "node_count": 1000,
+      "finite_part_radius": 0.035,
+      "z_liouville": 7.498046116261934e-24,
+      "z_free_superfield": 0.2960395164318905,
+      "q_l": 4.293395848058384e-19,
+      "runtime_seconds_sum": 51539.635872364044,
+      "global_method": "resummed",
+      "global_resummed_calls": 14202720,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 5.632260621142868e-32,
+      "confluent_moment_groups": 2856,
+      "confluent_direct_groups": 31144,
+      "confluent_max_moment_terms": 48,
+      "confluent_max_moment_ratio": 0.19745506754776682
+    },
+    {
+      "point_id": "o0026",
+      "channel": "glasses",
+      "recursion_order": 24,
+      "quadrature_order": 10,
+      "node_count": 1000,
+      "finite_part_radius": 0.035,
+      "z_liouville": 5.087668582434022e-05,
+      "z_free_superfield": 36.744676090067514,
+      "q_l": 4.1664771346863606e-19,
+      "runtime_seconds_sum": 37701.710464954376,
+      "global_method": "resummed",
+      "global_resummed_calls": 3008000,
+      "global_nonconverged_calls": 0,
+      "global_worst_last_shell_relative": 0.0,
+      "confluent_moment_groups": 2718,
+      "confluent_direct_groups": 31282,
+      "confluent_max_moment_terms": 53,
+      "confluent_max_moment_ratio": 0.1978801682244298
+    }
+  ],
+  "crossing": [
+    {
+      "point_id": "o0026",
+      "recursion_order": 24,
+      "quadrature_order": 10,
+      "finite_part_radius": 0.035,
+      "theta_over_glasses": 1.030461876849248,
+      "relative_difference": 0.03046187684924795
+    }
+  ],
+  "radius_stability": []
+}

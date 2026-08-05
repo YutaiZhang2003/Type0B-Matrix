@@ -7,15 +7,35 @@ import cmath
 from itertools import product
 import unittest
 
+import mpmath
+
+from compare_ns_torus_c_h_recursion import _global_torus_block
+from ns_genus2_cannon import _designs, task_count
 from ns_genus2_partition import (
+    GLASSES_CCY_DESCENDANT_EDGE_ORDER,
+    GLASSES_GEOMETRY_EDGE_ORDER,
     GLASSES_ORIENTATION,
+    MAX_RECURSION_ORDER,
+    NSGenus2CRecursion,
+    THETA_CCY_DESCENDANT_EDGE_ORDER,
+    THETA_GEOMETRY_EDGE_ORDER,
+    _MPPartialFractionInC,
+    _free_scalar_chiral_log,
     _free_superfield_chiral_log,
+    _spin_characteristic_from_lifts,
+    _theta_geometry_to_ccy_order,
+    _theta_global_term,
     _theta_schottky_data,
     direct_global_block,
+    free_superfield_partition,
+    ns_weight,
+    resummed_glasses_global_block,
+    resummed_theta_global_block,
     run_internal_checks,
 )
+from ns_global_osp_block import osp_norm, osp_three_point
 from ns_vacuum_schottky import ccy_theta_generators, theta_lift_signs
-from plumbing_algorithms import generators_for_theta
+from plumbing_algorithms import generators_for_glasses, generators_for_theta
 
 
 class GenusTwoNSPartitionTests(unittest.TestCase):
@@ -30,6 +50,9 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
         ) / max(1.0, *(abs(value) for value in left_entries))
 
     def test_orientation_polynomial(self) -> None:
+        self.assertEqual(
+            GLASSES_GEOMETRY_EDGE_ORDER, GLASSES_CCY_DESCENDANT_EDGE_ORDER
+        )
         self.assertEqual(GLASSES_ORIENTATION.edge_linear_bits, (0, 0, 0))
         for left in (0, 1):
             for right in (0, 1):
@@ -41,12 +64,243 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
 
     def test_separating_and_spin_checks(self) -> None:
         checks = run_internal_checks()
+        self.assertLess(checks["theta_descendant_order_relative_error"], 2.0e-14)
+        self.assertGreater(checks["theta_old_order_relative_displacement"], 1.0e-2)
+        self.assertLess(
+            max(checks["theta_resummation_direct_relative_errors"]),
+            2.0e-11,
+        )
         self.assertLess(checks["separating_global_relative_error"], 2.0e-10)
+        self.assertLess(
+            max(checks["glasses_resummation_direct_relative_errors"]),
+            2.0e-11,
+        )
         self.assertLess(checks["handle_residue_torus_relative_error"], 2.0e-12)
+        self.assertEqual(
+            set(checks["handle_residue_torus_relative_errors"]),
+            {
+                "3,1,sector=0",
+                "3,1,sector=1",
+                "2,2,sector=0",
+                "2,2,sector=1",
+            },
+        )
+        self.assertLess(
+            max(checks["handle_residue_torus_relative_errors"].values()),
+            2.0e-12,
+        )
         self.assertEqual(
             checks["spin_target_characteristic"],
             {"alpha": [0, 0], "beta": [1, 1]},
         )
+        self.assertEqual(checks["theta_edge_lifts"], [1, 1, -1])
+
+    def test_functional_recursion_preserves_order_twelve_benchmarks(self) -> None:
+        self.assertEqual(MAX_RECURSION_ORDER, 24)
+        weights = (0.731, 0.913, 1.173)
+        q_values = (0.07 + 0.002j, 0.11 - 0.003j, 0.09 + 0.001j)
+        expected = {
+            "theta": {
+                8: 1.1465972995303109 + 0.00019436414116389458j,
+                12: 1.1465958254326356 + 0.00019437734174836604j,
+            },
+            "glasses": {
+                8: 1.6588936042693476 - 0.0044695949872146454j,
+                12: 1.6588957654591328 - 0.004468927690739714j,
+            },
+        }
+        lifts = {"theta": (1, -1, -1), "glasses": (1, 1, 1)}
+        for channel in ("theta", "glasses"):
+            recursion = NSGenus2CRecursion(
+                channel=channel,
+                q_values=q_values,
+                global_max_total_occupation=22,
+                vacuum_word_length=3,
+                vacuum_max_mode=20,
+            )
+            for order in (8, 12):
+                with self.subTest(channel=channel, order=order):
+                    observed = recursion.block(
+                        weights=weights,
+                        sector=0,
+                        recursion_order=order,
+                        lifts=lifts[channel],
+                        central_charge=41.3,
+                    )
+                    self.assertLess(abs(observed - expected[channel][order]), 2.0e-13)
+                    collision_aware = recursion.collision_aware_block(
+                        weights=weights,
+                        sector=0,
+                        recursion_order=order,
+                        lifts=lifts[channel],
+                        central_charge=41.3,
+                    )
+                    self.assertLess(abs(collision_aware - observed), 3.0e-12)
+                    if order == 8:
+                        collision_aware_mp = recursion.collision_aware_block_mp(
+                            weights=weights,
+                            sector=0,
+                            recursion_order=order,
+                            lifts=lifts[channel],
+                            central_charge=41.3,
+                            working_precision=50,
+                        )
+                        self.assertLess(
+                            abs(collision_aware_mp - observed), 3.0e-12
+                        )
+            with self.assertRaisesRegex(ValueError, "0..24"):
+                recursion.block(
+                    weights=weights,
+                    sector=0,
+                    recursion_order=25,
+                    lifts=lifts[channel],
+                    central_charge=41.3,
+                )
+
+    def test_fixed_difference_family_is_combined_by_confluent_moments(self) -> None:
+        with mpmath.workdps(90):
+            anchor = mpmath.mpf("1.5")
+            evaluation_point = mpmath.mpf("13.5")
+            pole_deltas = tuple(
+                mpmath.mpf(value)
+                for value in (
+                    "-0.0012",
+                    "-0.00053",
+                    "-0.00030",
+                    "-0.00019",
+                )
+            )
+            diagnostics = {
+                "moment_groups": 0,
+                "direct_groups": 0,
+                "max_moment_terms": 0,
+                "max_moment_ratio": mpmath.mpf(0),
+            }
+            partial_fraction = _MPPartialFractionInC(
+                moment_diagnostics=diagnostics
+            )
+            tolerance = mpmath.mpf("1e-60")
+            for index, pole_delta in enumerate(pole_deltas):
+                barycentric_weight = 1 / mpmath.fprod(
+                    pole_delta - other
+                    for other_index, other in enumerate(pole_deltas)
+                    if other_index != index
+                )
+                partial_fraction.add_pole_coefficient(
+                    anchor + pole_delta,
+                    1,
+                    barycentric_weight,
+                    tolerance,
+                    family_key=2,
+                )
+            observed = partial_fraction.value(evaluation_point, tolerance)
+            expected = 1 / mpmath.fprod(
+                evaluation_point - anchor - pole_delta
+                for pole_delta in pole_deltas
+            )
+            self.assertLess(abs(observed - expected), mpmath.mpf("1e-55"))
+            self.assertEqual(diagnostics["moment_groups"], 1)
+            self.assertEqual(diagnostics["direct_groups"], 0)
+            self.assertGreater(diagnostics["max_moment_terms"], 3)
+
+    def test_order_twenty_four_threshold_family_uses_moments(self) -> None:
+        q_values = (
+            0.15388585893452059 + 0.00028976276925814107j,
+            0.15105853512050485 + 0.005374602305150904j,
+            0.15290700987239295 - 0.005617044175995109j,
+        )
+        momenta = (
+            0.1999067241791299,
+            0.19895686082147337,
+            0.19960253618399287,
+        )
+        recursion = NSGenus2CRecursion(
+            channel="glasses",
+            q_values=q_values,
+            global_method="auto",
+            global_tolerance=2.0e-8,
+            global_max_total_occupation=22,
+            vacuum_word_length=8,
+            vacuum_max_mode=50,
+        )
+        observed = recursion.collision_aware_block_mp(
+            weights=tuple(ns_weight(momentum) for momentum in momenta),
+            sector=0,
+            recursion_order=24,
+            lifts=(1, 1, 1),
+            working_precision=50,
+        )
+        expected = 2.2949002226189887 + 0.027463595284562905j
+        self.assertLess(abs(observed - expected), 3.0e-14)
+        self.assertGreaterEqual(recursion.confluent_moment_groups, 1)
+        self.assertGreater(recursion.confluent_max_moment_terms, 3)
+        self.assertLessEqual(recursion.confluent_max_moment_ratio, 0.2)
+
+    def test_cannon_designs_include_recursion_order(self) -> None:
+        config = {
+            "points": [{"id": "audit"}],
+            "recursion_orders": [10, 12],
+            "quadrature_orders": [8],
+        }
+        designs = _designs(config)
+        self.assertEqual(task_count(config), 2 * 2 * 8**3)
+        self.assertEqual(
+            [(row["recursion_order"], row["channel"]) for row in designs],
+            [
+                (10, "theta"),
+                (10, "glasses"),
+                (12, "theta"),
+                (12, "glasses"),
+            ],
+        )
+
+    def test_theta_geometry_is_reversed_only_at_ccy_tensor_boundary(self) -> None:
+        self.assertEqual(
+            _theta_geometry_to_ccy_order(THETA_GEOMETRY_EDGE_ORDER),
+            THETA_CCY_DESCENDANT_EDGE_ORDER,
+        )
+        weights = (0.71, 1.23, 0.94)
+        q_values = (0.073 + 0.004j, 0.121 - 0.006j, 0.097 + 0.003j)
+        occupations = (0, 1, 0)
+        fermions = (0, 0, 0)
+        lifts = (1, -1, -1)
+        observed = _theta_global_term(
+            weights, q_values, occupations, fermions, lifts
+        )
+        ccy_occupations = _theta_geometry_to_ccy_order(occupations)
+        ccy_fermions = _theta_geometry_to_ccy_order(fermions)
+        ccy_weights = _theta_geometry_to_ccy_order(weights)
+        ccy_rho = osp_three_point(
+            n1=int(ccy_occupations[0]),
+            n2=int(ccy_occupations[1]),
+            n3=int(ccy_occupations[2]),
+            epsilon1=int(ccy_fermions[0]),
+            epsilon2=int(ccy_fermions[1]),
+            epsilon3=int(ccy_fermions[2]),
+            d1=ccy_weights[0],
+            d2=ccy_weights[1],
+            d3=ccy_weights[2],
+        )
+        expected = q_values[1] * ccy_rho**2 / osp_norm(
+            weights[1], occupations[1], fermions[1]
+        )
+        self.assertLess(abs(observed - expected), 2.0e-14)
+
+        old_rho = osp_three_point(
+            n1=occupations[0],
+            n2=occupations[1],
+            n3=occupations[2],
+            epsilon1=fermions[0],
+            epsilon2=fermions[1],
+            epsilon3=fermions[2],
+            d1=weights[0],
+            d2=weights[1],
+            d3=weights[2],
+        )
+        old_value = q_values[1] * old_rho**2 / osp_norm(
+            weights[1], occupations[1], fermions[1]
+        )
+        self.assertGreater(abs(observed - old_value), 1.0e-2)
 
     def test_odd_glasses_sector_starts_on_bridge(self) -> None:
         result = direct_global_block(
@@ -59,6 +313,163 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
             max_total_occupation=10,
         )
         self.assertEqual(result.value, 0.0j)
+
+    def test_resummed_glasses_block_matches_direct_sum(self) -> None:
+        weights = (1.30, 0.57, 2.10)
+        q_values = (0.13 + 0.011j, 0.09 - 0.007j, 0.14 + 0.005j)
+        lifts = (-1, 1, -1)
+        for sector in (0, 1):
+            with self.subTest(sector=sector):
+                direct = direct_global_block(
+                    channel="glasses",
+                    weights=weights,
+                    q_values=q_values,
+                    sector=sector,
+                    lifts=lifts,
+                    tolerance=2.0e-14,
+                    max_total_occupation=34,
+                )
+                resummed = resummed_glasses_global_block(
+                    weights=weights,
+                    q_values=q_values,
+                    sector=sector,
+                    lifts=lifts,
+                )
+                self.assertTrue(direct.converged)
+                self.assertLess(
+                    abs(direct.value - resummed.value)
+                    / max(1.0, abs(resummed.value)),
+                    8.0e-14,
+                )
+
+    def test_resummed_glasses_separating_limit(self) -> None:
+        weights = (0.73, 0.91, 0.62)
+        q_values = (0.11 + 0.006j, 0.14 - 0.004j, 0.0)
+        even = resummed_glasses_global_block(
+            weights=weights,
+            q_values=q_values,
+            sector=0,
+            lifts=(1, 1, 1),
+        )
+        expected = complex(
+            _global_torus_block(q_values[0], 1, weights[0], weights[2])
+            * _global_torus_block(q_values[1], 1, weights[1], weights[2])
+        )
+        self.assertLess(abs(even.value - expected), 2.0e-14)
+        odd = resummed_glasses_global_block(
+            weights=weights,
+            q_values=q_values,
+            sector=1,
+            lifts=(1, 1, 1),
+        )
+        self.assertEqual(odd.value, 0.0j)
+
+    def test_resummed_regular_seed_matches_direct_audit_path(self) -> None:
+        settings = {
+            "channel": "glasses",
+            "q_values": (0.09 + 0.002j, 0.11 - 0.003j, 0.07 + 0.001j),
+            "global_tolerance": 2.0e-13,
+            "global_max_total_occupation": 30,
+            "vacuum_word_length": 4,
+            "vacuum_max_mode": 25,
+        }
+        resummed = NSGenus2CRecursion(**settings, global_method="auto")
+        direct = NSGenus2CRecursion(**settings, global_method="direct")
+        weights = (0.71 + 0.01j, 0.83 - 0.02j, 0.64 + 0.005j)
+        lifts = (1, -1, -1)
+        for sector in (0, 1):
+            with self.subTest(sector=sector):
+                exact_value = resummed._regular(weights, sector, lifts)
+                direct_value = direct._regular(weights, sector, lifts)
+                self.assertLess(
+                    abs(exact_value - direct_value)
+                    / max(1.0, abs(exact_value)),
+                    2.0e-13,
+                )
+
+    def test_resummed_theta_block_matches_direct_sum(self) -> None:
+        weights = (0.71, 0.83, 0.64)
+        q_values = (0.09 + 0.002j, 0.11 - 0.003j, 0.07 + 0.001j)
+        lifts = (1, -1, -1)
+        for sector in (0, 1):
+            with self.subTest(sector=sector):
+                direct = direct_global_block(
+                    channel="theta",
+                    weights=weights,
+                    q_values=q_values,
+                    sector=sector,
+                    lifts=lifts,
+                    tolerance=2.0e-13,
+                    max_total_occupation=38,
+                )
+                resummed = resummed_theta_global_block(
+                    weights=weights,
+                    q_values=q_values,
+                    sector=sector,
+                    lifts=lifts,
+                    tolerance=2.0e-13,
+                    max_total_endpoint_occupation=38,
+                )
+                self.assertTrue(direct.converged)
+                self.assertTrue(resummed.converged)
+                self.assertLess(
+                    abs(direct.value - resummed.value)
+                    / max(1.0, abs(resummed.value)),
+                    3.0e-13,
+                )
+
+    def test_resummed_theta_regular_seed_matches_direct_audit_path(self) -> None:
+        settings = {
+            "channel": "theta",
+            "q_values": (0.07 + 0.002j, 0.10 - 0.003j, 0.06 + 0.001j),
+            "global_tolerance": 2.0e-13,
+            "global_max_total_occupation": 34,
+            "vacuum_word_length": 4,
+            "vacuum_max_mode": 25,
+        }
+        resummed = NSGenus2CRecursion(**settings, global_method="auto")
+        direct = NSGenus2CRecursion(**settings, global_method="direct")
+        weights = (0.71 + 0.01j, 0.83 - 0.02j, 0.64 + 0.005j)
+        lifts = (1, -1, -1)
+        for sector in (0, 1):
+            with self.subTest(sector=sector):
+                exact_value = resummed._regular(weights, sector, lifts)
+                direct_value = direct._regular(weights, sector, lifts)
+                self.assertLess(
+                    abs(exact_value - direct_value)
+                    / max(1.0, abs(exact_value)),
+                    4.0e-13,
+                )
+
+    def test_nonconverged_global_seed_is_a_hard_failure(self) -> None:
+        recursion = NSGenus2CRecursion(
+            channel="theta",
+            q_values=(0.12, 0.18, 0.11),
+            global_method="resummed",
+            global_tolerance=1.0e-15,
+            global_max_total_occupation=0,
+            vacuum_word_length=2,
+            vacuum_max_mode=8,
+        )
+        with self.assertRaisesRegex(RuntimeError, "pointwise convergence"):
+            recursion._global((0.71, 0.83, 0.64), 0, (1, 1, 1))
+
+    def test_finite_part_sampling_rejects_laurent_aliasing(self) -> None:
+        recursion = NSGenus2CRecursion(
+            channel="glasses",
+            q_values=(0.12, 0.13, 0.14),
+            global_method="resummed",
+            vacuum_word_length=2,
+            vacuum_max_mode=8,
+        )
+        with self.assertRaisesRegex(ValueError, "samples >= 2"):
+            recursion.finite_part_block(
+                momenta=(0.2, 0.3, 0.4),
+                sector=0,
+                recursion_order=12,
+                lifts=(1, 1, 1),
+                samples=23,
+            )
 
     def test_theta_schottky_marking_matches_period_coordinates(self) -> None:
         q_values = (0.073 + 0.004j, 0.121 - 0.006j, 0.097 + 0.003j)
@@ -116,6 +527,65 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
             max_mode=30,
         )
         self.assertGreater(abs(cmath.exp(period_log - wrong_log) - 1.0), 1.0e-4)
+
+    def test_transported_physical_spin_characteristics(self) -> None:
+        q_values = (0.11, 0.12, 0.13)
+        self.assertEqual(
+            _spin_characteristic_from_lifts(
+                "glasses", q_values, (1, 1, 1)
+            ),
+            ((0, 0), (0, 0)),
+        )
+        self.assertEqual(
+            _spin_characteristic_from_lifts(
+                "theta", q_values, (1, 1, -1)
+            ),
+            ((0, 0), (1, 1)),
+        )
+        self.assertEqual(
+            _spin_characteristic_from_lifts(
+                "theta", q_values, (1, -1, -1)
+            ),
+            ((0, 0), (1, 0)),
+        )
+
+    def test_bosonized_free_superfield_at_overlap_point(self) -> None:
+        q_values = (
+            0.15388585893452059 + 0.00028976276925814107j,
+            0.15105853512050485 + 0.005374602305150904j,
+            0.15290700987239295 - 0.005617044175995109j,
+        )
+        omega = [
+            [
+                0.00023985886060702268 + 0.2957553455196915j,
+                0.0010668836604170971 + 0.026580859449807027j,
+            ],
+            [
+                0.0010668836604170971 + 0.026580859449807027j,
+                0.005492055485793113 + 0.29855499576571304j,
+            ],
+        ]
+        result = free_superfield_partition(
+            channel="glasses",
+            q_values=q_values,
+            omega=omega,
+            physical_lifts=(1, 1, 1),
+            max_word_length=9,
+            max_mode=70,
+        )
+        self.assertLess(
+            abs(result.value - 36.7446750673705) / result.value,
+            2.0e-13,
+        )
+        scalar_log, _ = _free_scalar_chiral_log(
+            generators_for_glasses(*q_values),
+            max_word_length=9,
+            max_mode=70,
+        )
+        self.assertLess(
+            abs(cmath.exp(scalar_log) - (1.4763960934445186 + 0.013013146374300157j)),
+            3.0e-13,
+        )
 
 
 if __name__ == "__main__":

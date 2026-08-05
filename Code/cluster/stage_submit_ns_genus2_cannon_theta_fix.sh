@@ -1,5 +1,5 @@
 #!/bin/bash
-# Stage the fixed-marking theta numerator rerun and consistent recombination.
+# Stage the transported-spin theta numerator rerun and bosonized-free recombination.
 
 set -euo pipefail
 
@@ -13,7 +13,8 @@ REMOTE_RUN_ROOT=$2
 REMOTE_PYTHON=$3
 SCRIPT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 LOCAL_ROOT=$(cd "${SCRIPT_DIR}/../.." && pwd)
-LOCAL_SUBMISSION_JSON=${4:-"${LOCAL_ROOT}/Data Set/ns_genus2_cannon_theta_freefixed_submission.json"}
+LOCAL_SUBMISSION_JSON=${4:-"${LOCAL_ROOT}/Data Set/ns_genus2_cannon_theta_spin_bosonized_submission.json"}
+LOCAL_SOURCE_SUMMARY=${NS_G2_SOURCE_SUMMARY_LOCAL:-"${LOCAL_ROOT}/Data Set/ns_genus2_fivepoint_n8_r24_confluent_moments_summary.json"}
 PARTITION=${NS_G2_PARTITION:-yin}
 ARRAY_CAP=${NS_G2_ARRAY_CAP:-200}
 REMOTE_ROOT="${REMOTE_RUN_ROOT}/code"
@@ -37,19 +38,23 @@ ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/python' '${REMOTE_ROOT}/Code/co
     ./Code/test_ns_genus2_partition.py \
     ./Code/compare_ns_torus_c_h_recursion.py \
     ./Code/ns_genus_c_recursion_checks.py \
+    ./Code/ns_recursion_recipe.py \
     ./Code/ns_global_osp_block.py \
     ./Code/ns_regular_block.py \
     ./Code/ns_vacuum_schottky.py \
     ./Code/super_liouville_structure_constants.py \
     ./Code/superconformal_blocks.py \
+    ./Code/python/ccy_genus2_block.py \
+    ./Code/python/free_boson_plumbing.py \
     ./Code/python/genus2_vacuum_blocks.py \
     ./Code/python/plumbing_algorithms.py \
+    ./Code/python/virasoro_blocks.py \
     ./Code/config/ns_genus2_cannon_fivepoint_order8.json \
     ./Code/cluster/ns_genus2_cannon_array.slurm \
     ./Code/cluster/ns_genus2_cannon_theta_recombine.slurm \
     "${SSH_HOST}:${REMOTE_ROOT}/"
   rsync -az \
-    './Data Set/ns_genus2_cannon_fivepoint_order8_summary.json' \
+    "${LOCAL_SOURCE_SUMMARY}" \
     "${SSH_HOST}:${REMOTE_SOURCE_SUMMARY}"
 )
 
@@ -60,8 +65,8 @@ ARRAY_JOB=$(ssh "${SSH_HOST}" "cd '${REMOTE_RUN_ROOT}'; sbatch --parsable --part
 REDUCE_JOB=$(ssh "${SSH_HOST}" "cd '${REMOTE_RUN_ROOT}'; sbatch --parsable --partition='serial_requeue' --dependency=afterok:${ARRAY_JOB} --kill-on-invalid-dep=yes --export='${COMMON_EXPORT},NS_G2_SOURCE_SUMMARY=${REMOTE_SOURCE_SUMMARY},NS_G2_SUMMARY=${REMOTE_SUMMARY}' '${REMOTE_ROOT}/Code/cluster/ns_genus2_cannon_theta_recombine.slurm'")
 
 mkdir -p "$(dirname "${LOCAL_SUBMISSION_JSON}")"
-printf '{\n  "status": "submitted",\n  "scope": "fixed theta Liouville numerator plus consistent free recombination",\n  "ssh_host": "%s",\n  "remote_run_root": "%s",\n  "remote_python": "%s",\n  "partition": "%s",\n  "theta_task_count": %d,\n  "array_cap": %d,\n  "array_job_id": "%s",\n  "reduce_job_id": "%s",\n  "remote_summary": "%s"\n}\n' \
-  "${SSH_HOST}" "${REMOTE_RUN_ROOT}" "${REMOTE_PYTHON}" "${PARTITION}" \
+printf '{\n  "status": "submitted",\n  "scope": "theta [00|11] transported-spin numerator plus exact bosonized free-superfield recombination",\n  "source_summary": "%s",\n  "preserved_channel": "glasses",\n  "theta_edge_lifts": [1, 1, -1],\n  "free_denominator": "det(Im Omega)^(-1/2) |theta_delta| |P_bos|^3",\n  "ssh_host": "%s",\n  "remote_run_root": "%s",\n  "remote_python": "%s",\n  "partition": "%s",\n  "theta_task_count": %d,\n  "array_cap": %d,\n  "array_job_id": "%s",\n  "reduce_job_id": "%s",\n  "remote_summary": "%s"\n}\n' \
+  "${LOCAL_SOURCE_SUMMARY}" "${SSH_HOST}" "${REMOTE_RUN_ROOT}" "${REMOTE_PYTHON}" "${PARTITION}" \
   "${THETA_TASK_COUNT}" "${ARRAY_CAP}" "${ARRAY_JOB}" "${REDUCE_JOB}" "${REMOTE_SUMMARY}" \
   > "${LOCAL_SUBMISSION_JSON}"
 

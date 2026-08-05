@@ -56,6 +56,7 @@ class CrossingResult:
     def json_record(self) -> dict:
         return {
             "recursion_order": self.recursion_order,
+            "recursion_twice_level": 2 * self.recursion_order,
             "z": self.z,
             "left": [self.left.real, self.left.imag],
             "right": [self.right.real, self.right.imag],
@@ -353,6 +354,8 @@ def build_ledger(
             "b": 1.0,
             "momenta": list(map(float, momenta)),
             "recursion_orders": list(orders),
+            "recursion_order_unit": "maximum accumulated physical null level",
+            "recursion_twice_levels": [2 * order for order in orders],
             "z_values": list(map(float, z_values)),
             "structure_precision": structure_precision,
             "block_working_precision": block_working_precision,

@@ -39,7 +39,6 @@ try:
         primitive_conjugacy_words,
         word_multiplier,
     )
-    from liouville_genus2 import parse_complex
     from plumbing_algorithms import (
         GeneratorData,
         generators_for_glasses,
@@ -54,7 +53,6 @@ except ImportError:  # pragma: no cover - supports package-style execution
         primitive_conjugacy_words,
         word_multiplier,
     )
-    from plumbing.liouville_genus2 import parse_complex
     from plumbing.plumbing_algorithms import (
         GeneratorData,
         generators_for_glasses,
@@ -62,6 +60,12 @@ except ImportError:  # pragma: no cover - supports package-style execution
         schottky_glasses_period_matrix,
         schottky_theta_period_matrix_cross_ratio,
     )
+
+
+def parse_complex(value: str) -> complex:
+    """Parse command-line complex numbers without importing Liouville code."""
+
+    return complex(value.replace("i", "j"))
 
 
 @dataclass(frozen=True)

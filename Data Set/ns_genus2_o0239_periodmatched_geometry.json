@@ -1,0 +1,66 @@
+{
+  "schema": "ns-genus2-period-matched-geometry-v1",
+  "overlap_id": "o0239-periodmatched",
+  "selection_reason": "The old o0026 theta endpoints were O(1e-9). This point raises them to O(1e-7), directly certifies their relative stability, and keeps the only O(0.1) theta coordinate on the analytically resummed middle edge.",
+  "q_values": {
+    "theta_geometry_order_q_zero_q_one_q_infinity": [
+      "+2.9366308988465585e-07+9.9645708083707020e-08j",
+      "+1.8032211933869038e-01+3.2993395519553450e-02j",
+      "+1.7126200123324566e-07+8.5876560437564340e-08j"
+    ],
+    "glasses_order_q_left_q_right_q_bridge": [
+      "+8.5041562371975202e-02-7.0049067041844130e-03j",
+      "+9.6618242420529660e-02-7.9125639350899318e-03j",
+      "+2.1511343383673703e-01-6.2845287031467311e-03j"
+    ],
+    "theta_absolute_values": [
+      3.1010849311185727e-07,
+      1.8331565909847033e-01,
+      1.9158668194580457e-07
+    ],
+    "glasses_absolute_values": [
+      8.532957311859046e-02,
+      9.694170122531956e-02,
+      2.1520521535978843e-01
+    ]
+  },
+  "period_match": {
+    "theta_word": "T12^-1 T22 gl-shear-12 T11 full-s I",
+    "theta_integer_branch": [[-1, 1], [1, -1]],
+    "glasses_collocation_basis_order": 40,
+    "glasses_collocation_samples": 240,
+    "glasses_seam_residual": 1.2092944829144358e-12,
+    "glasses_symmetry_error": 3.5815449953774324e-17,
+    "theta_schottky_word_length": 9,
+    "theta_forward_max_residual": 1.467945235148232e-11,
+    "petersson_norm_glasses": 8.684593513855432e-04,
+    "petersson_norm_theta": 8.684593513855414e-04
+  },
+  "relative_q_checks": {
+    "schottky_w8_to_w9": [
+      8.803647715245316e-08,
+      2.914017005325865e-08,
+      6.130134472577063e-08
+    ],
+    "collocation_target_vs_schottky_w9": [
+      1.4268778135685745e-08,
+      4.722098279850992e-09,
+      9.931936835418614e-09
+    ]
+  },
+  "global_block_acceptance": {
+    "quadrature_order": 8,
+    "physical_lifts_theta": [1, 1, 1],
+    "tolerance": 2e-08,
+    "tested_theta_sector_node_calls": 1024,
+    "maximum_endpoint_shell_used": 5,
+    "nonconverged_calls": 0,
+    "worst_last_shell_relative": 8.843612870248902e-27,
+    "order_12_shift_stress_nonconverged_calls": 0
+  },
+  "notes": [
+    "No equality of the Liouville partition functions was assumed in selecting or validating this geometry.",
+    "The glasses global block is evaluated by the existing exact hypergeometric resummation; its 30- versus 70-digit representative checks agreed at double-precision output.",
+    "This geometry is prepared for a future Cannon run but has not been submitted."
+  ]
+}

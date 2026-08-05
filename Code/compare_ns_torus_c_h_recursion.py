@@ -25,6 +25,8 @@ from typing import Dict, Sequence
 
 import mpmath
 
+from ns_recursion_recipe import ns_self_loop_scalar_kernel_mp
+
 
 def _central_charge(b):
     return mpmath.mpf("1.5") + 3 * (b + 1 / b) ** 2
@@ -111,6 +113,21 @@ def _c_pole(weight, r: int, s: int):
         3 * (1 - 1 / b_squared**2) * derivative_b_squared
     )
     return b_pole, c_pole, -derivative_c
+
+
+def _recipe_torus_residue(internal_weight, external_weight, r: int, s: int):
+    """Standard-frame alpha=0 principal-sheet self-loop specialization."""
+
+    pole, residue, child_sector = ns_self_loop_scalar_kernel_mp(
+        r=r,
+        s=s,
+        handle_weight=internal_weight,
+        external_weight=external_weight,
+        sector=0,
+    )
+    if child_sector != 0:  # pragma: no cover - guaranteed by the recipe
+        raise AssertionError("a self-loop changed its final three-form sector")
+    return pole.c, residue
 
 
 @lru_cache(maxsize=None)
@@ -341,34 +358,10 @@ class TorusCRecursion:
                 product = r * s
                 if product > twice_level or (r + s) % 2:
                     continue
-                b_pole, c_pole, jacobian = _c_pole(
-                    internal_weight, r, s
+                c_pole, residue = _recipe_torus_residue(
+                    internal_weight, self.external_weight, r, s
                 )
                 shifted = internal_weight + mpmath.mpf(product) / 2
-                left = _ns_ns_fusion_polynomial(
-                    b=b_pole,
-                    r=r,
-                    s=s,
-                    lower_weight=shifted,
-                    upper_weight=self.external_weight,
-                    starred=bool(product % 2),
-                )
-                right = _ns_ns_fusion_polynomial(
-                    b=b_pole,
-                    r=r,
-                    s=s,
-                    lower_weight=internal_weight,
-                    upper_weight=self.external_weight,
-                    starred=False,
-                )
-                sewing_sign = -1 if product % 2 else 1
-                residue = (
-                    sewing_sign
-                    * jacobian
-                    * _ns_a_factor(b_pole, r, s)
-                    * left
-                    * right
-                )
                 result += (
                     residue
                     / (c - c_pole)
@@ -437,34 +430,10 @@ class TorusCRecursion:
                     product = r * s
                     if product > remaining or (r + s) % 2:
                         continue
-                    b_pole, c_pole, jacobian = _c_pole(
-                        internal_weight, r, s
+                    c_pole, residue = _recipe_torus_residue(
+                        internal_weight, self.external_weight, r, s
                     )
                     shifted = internal_weight + mpmath.mpf(product) / 2
-                    left = _ns_ns_fusion_polynomial(
-                        b=b_pole,
-                        r=r,
-                        s=s,
-                        lower_weight=shifted,
-                        upper_weight=self.external_weight,
-                        starred=bool(product % 2),
-                    )
-                    right = _ns_ns_fusion_polynomial(
-                        b=b_pole,
-                        r=r,
-                        s=s,
-                        lower_weight=internal_weight,
-                        upper_weight=self.external_weight,
-                        starred=False,
-                    )
-                    sewing_sign = -1 if product % 2 else 1
-                    residue = (
-                        sewing_sign
-                        * jacobian
-                        * _ns_a_factor(b_pole, r, s)
-                        * left
-                        * right
-                    )
                     denominator = c_value - c_pole
                     children = recurse(
                         remaining - product,

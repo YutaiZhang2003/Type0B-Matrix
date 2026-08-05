@@ -234,6 +234,14 @@ The physical map is
   exact hypergeometric global blocks at its leaves.  It records recursion-order
   convergence and renders the final channel curves without imposing equality
   or truncating a local-\(z\) or elliptic-\(q\) series.
+- stress_ns_torus_modularity_c_recursion.py: ordinary-NS torus one-point
+  modularity from two independently assembled super-Liouville continuum
+  integrals.  Each chiral block uses the functional central-charge recursion
+  with exact hypergeometric global and infinite-product vacuum leaves, so the
+  numerical order controls only nested Kac residues and never a \(q\)-series
+  cutoff.  The default audit is the asymmetric point \(\tau=i/4\), where
+  \(|q|=0.20788\) but \(|\widetilde q|=1.22\times10^{-11}\); the earlier scan
+  in which both nomes were small is preserved explicitly as a calibration.
 - superconformal_torus_blocks.py: genus-one NS and generic long-R toric
   recursions, lifted NS plumbing, explicit unnormalized Ramond ground-fiber
   matrices, cycle projections, and exact-\(c=27/2\) finite-part wrappers.

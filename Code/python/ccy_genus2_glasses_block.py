@@ -26,6 +26,8 @@ from dataclasses import dataclass
 from functools import lru_cache
 from typing import Callable
 
+import mpmath
+
 try:
     from ccy_genus2_block import (
         PartialFractionInC,
@@ -130,6 +132,60 @@ def genus2_global_glasses_sl2_block(
                     / (norm_left * norm_right * sl2_descendant_norm(h_bridge, bridge_level))
                 )
     return total
+
+
+def genus2_global_glasses_sl2_block_resummed(
+    h_left: complex,
+    h_right: complex,
+    h_bridge: complex,
+    q_left: complex,
+    q_right: complex,
+    q_bridge: complex,
+    *,
+    working_precision: int = 50,
+) -> complex:
+    r"""Return the all-level glasses global block.
+
+    The three descendant sums factorize exactly as
+
+    ``T(hL,d;qL) T(hR,d;qR) 2F1(d,d;2d;qB)``, with
+
+    ``T(h,d;q)=(1-q)^(-d) 2F1(2h-d,1-d;2h;q)``.
+
+    No occupation or q-series cutoff is used.
+    """
+
+    working_precision = int(working_precision)
+    if working_precision < 20:
+        raise ValueError("working_precision must be at least 20 decimal digits")
+    h_left = _as_complex(h_left)
+    h_right = _as_complex(h_right)
+    h_bridge = _as_complex(h_bridge)
+    q_left = _as_complex(q_left)
+    q_right = _as_complex(q_right)
+    q_bridge = _as_complex(q_bridge)
+    if any(abs(q) >= 1 for q in (q_left, q_right, q_bridge)):
+        raise ValueError("global-block plumbing coordinates must satisfy |q_i| < 1")
+
+    with mpmath.workdps(working_precision):
+        d = mpmath.mpc(h_bridge)
+
+        def handle(weight: complex, q_value: complex) -> mpmath.mpc:
+            h = mpmath.mpc(weight)
+            q = mpmath.mpc(q_value)
+            return (1 - q) ** (-d) * mpmath.hyp2f1(
+                2 * h - d,
+                1 - d,
+                2 * h,
+                q,
+            )
+
+        value = (
+            handle(h_left, q_left)
+            * handle(h_right, q_right)
+            * mpmath.hyp2f1(d, d, 2 * d, mpmath.mpc(q_bridge))
+        )
+    return complex(value)
 
 
 @lru_cache(maxsize=128)
@@ -278,14 +334,13 @@ def ccy_genus2_glasses_block_partial_fraction(
         current_h_bridge: complex,
         remaining: int,
     ) -> PartialFractionInC:
-        seed = vacuum_seed * genus2_global_glasses_sl2_block(
+        seed = vacuum_seed * genus2_global_glasses_sl2_block_resummed(
             current_h_left,
             current_h_right,
             current_h_bridge,
             q_left,
             q_right,
             q_bridge,
-            remaining,
         )
         total = PartialFractionInC(constant=seed)
 

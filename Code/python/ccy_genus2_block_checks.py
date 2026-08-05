@@ -13,6 +13,7 @@ try:
         ccy_residue_prefactor_for_weights,
         c_rs_from_h,
         genus2_global_sl2_block,
+        genus2_global_sl2_block_resummed,
         genus2_vacuum_seed_schottky,
         minus_dc_dh_times_a_rs,
         rho_lminus1_triple,
@@ -28,6 +29,7 @@ except ImportError:  # pragma: no cover - supports package-style execution
         ccy_residue_prefactor_for_weights,
         c_rs_from_h,
         genus2_global_sl2_block,
+        genus2_global_sl2_block_resummed,
         genus2_vacuum_seed_schottky,
         minus_dc_dh_times_a_rs,
         rho_lminus1_triple,
@@ -92,13 +94,34 @@ def check_order_zero_and_one() -> None:
         order=1,
         include_vacuum_seed=False,
     ).value
-    global1 = genus2_global_sl2_block(h1, h2, h3, q1, q2, q3, order=1)
+    global1 = genus2_global_sl2_block_resummed(h1, h2, h3, q1, q2, q3).value
     print("\norder zero/one")
     print(f"  order0={order0!r}")
     print(f"  order1={order1!r}")
     print(f"  global1={global1!r}")
-    require(abs(order0 - 1.0) < 1.0e-14, "order-zero block should be one without vacuum seed")
-    require(abs(order1 - global1) < 1.0e-14, "order-one c-recursion should equal the global seed")
+    require(abs(order0 - global1) < 1.0e-13, "order-zero recursion should equal the resummed global seed")
+    require(abs(order1 - global1) < 1.0e-13, "order-one recursion should equal the resummed global seed")
+
+
+def check_resummed_global_stress_node() -> None:
+    """The old total-degree seed had a five-percent defect at this node."""
+
+    h1, h2, h3 = 1.0151939793, 1.0160246881, 8.1555784605
+    q1 = 2.9366308988465585e-7 + 9.964570808370702e-8j
+    q2 = 1.8032211933869038e-1 + 3.299339551955345e-2j
+    q3 = 1.7126200123324566e-7 + 8.587656043756434e-8j
+    resummed = genus2_global_sl2_block_resummed(h1, h2, h3, q1, q2, q3)
+    require(resummed.converged, "theta resummation did not certify the stress node")
+    truncated8 = genus2_global_sl2_block(h1, h2, h3, q1, q2, q3, order=8)
+    truncated24 = genus2_global_sl2_block(h1, h2, h3, q1, q2, q3, order=24)
+    error8 = abs(truncated8 - resummed.value) / abs(resummed.value)
+    error24 = abs(truncated24 - resummed.value) / abs(resummed.value)
+    print("\nresummed theta global stress node")
+    print(f"  endpoint shell={resummed.endpoint_total}")
+    print(f"  order-eight error={error8:.6e}")
+    print(f"  order-twenty-four error={error24:.6e}")
+    require(error8 > 0.05, "stress node no longer detects the old global cutoff")
+    require(error24 < 3.0e-9, "resummed theta seed disagrees with the converged direct sum")
 
 
 def check_partial_fraction_matches_simple_recursion() -> None:
@@ -365,6 +388,7 @@ def run() -> None:
     check_degenerate_pole_location()
     check_global_torus_level_one_identity()
     check_order_zero_and_one()
+    check_resummed_global_stress_node()
     check_partial_fraction_matches_simple_recursion()
     check_order_two_finite()
     check_vacuum_seed_uses_theta_chart()

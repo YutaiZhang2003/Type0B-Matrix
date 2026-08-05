@@ -31,6 +31,7 @@
 \newcommand{\V}{\mathcal V}
 \newcommand{\U}{\mathcal U}
 \newcommand{\Rcal}{\mathcal R}
+\newcommand{\Mcal}{\mathcal M}
 \newcommand{\ve}{\bm e}
 \newcommand{\half}{\tfrac12}
 \DeclareMathOperator{\Res}{Res}
@@ -51,9 +52,11 @@ We derive the central-charge recursion for an all-Neveu--Schwarz chiral
 block on a genus-\(g\), \(N\)-punctured surface in the plumbing frame of
 Cho--Collier--Yin.  At fixed plumbing degree the block is meromorphic in the
 ordinary central charge.  Its poles occur when an internal NS Verma module
-develops a singular vector.  The residue is local to that edge and is the
-product of the pole Jacobian, the inverse null-norm slope, and one ordered
-NS fusion polynomial at each adjacent trinion.
+develops a singular vector.  The residue is local to that edge.  For distinct
+endpoints it is the product of the pole Jacobian, inverse null-norm slope, and
+one ordered NS fusion polynomial at each adjacent trinion; a self-loop instead
+uses an incidence-ordered toric factor with a shifted second argument and an
+intermediate sector toggle.
 
 The regular term is derived directly in components.  At large \(c\), the
 module separates into a universal non-global vacuum Fock space and a global
@@ -109,43 +112,51 @@ For generic weights, the reduced block obeys
  &+\sum_{e\in E_{\rm int}(\Gamma)}
  \sum_{\substack{r\ge2,\ s\ge1\\r+s\in2\mathbb Z}}
  \frac{q_e^{rs/2}\,
-       \Rcal_{e;r,s}(\bm h)}
+       \widehat\Rcal_{e;r,s}(\bm h)}
       {c-c_{r,s}(h_e)}
  \\
  &\hspace{3.0em}\times
  \mathcal K_{\Gamma,e}^{\pi_{r,s}}
- \F_{\Gamma}^{\bm\alpha\oplus
-       \pi_{r,s}\partial e}
+ \F_{\Gamma}^{\mathsf T_e^{\pi_{r,s}}\bm\alpha}
  \left(c_{r,s}(h_e),
        \bm h+\frac{rs}{2}\ve_e;
        \bm q,\bm\xi\right).
 \end{aligned}}
 \label{eq:master-result}
 \end{equation}
-Here \(\partial e\) is the pair of vertices incident on \(e\), so an odd
-null toggles the three-form label at both endpoints.  The diagonal Koszul
+Here \(\mathsf T_e^p\) toggles the three-form label once per incidence
+(half-edge) of \(e\).  It therefore toggles both endpoint labels for an
+ordinary edge with distinct endpoints, while a self-loop toggles the same
+vertex twice and hence acts as the identity.  At a self-loop
+the intermediate label is nevertheless toggled between the two sequential
+null factorizations, as made explicit in
+Eq.~\eqref{eq:self-loop-null-factor}.  The diagonal Koszul
 transport \(\mathcal K_{\Gamma,e}\) is computed from the lifted plumbing
 frames; its coefficient definition is given below and is nontrivial only for
 an odd null.  The lift factor at the null level is contained in the chosen meaning of
 \(q_e^{rs/2}\).  Equivalently it can be displayed as
 \(q_e^{\lfloor rs/2\rfloor}\xi_e^{rs\bmod2}q_e^{(rs\bmod2)/2}\).
-The local residue coefficient is
+The local residue action is
 \begin{equation}
- \Rcal_{e;r,s}
+ \widehat\Rcal_{e;r,s}
  =J_{r,s}(h_e)A_{r,s}(h_e)
-  \Sigma_{r,s}^{(v_L,e)}
-  \Sigma_{r,s}^{(v_R,e)}.
+ \begin{cases}
+  \widehat\Sigma_{r,s}^{(v_L,e)}
+  \widehat\Sigma_{r,s}^{(v_R,e)},&v_L\ne v_R,\\[1mm]
+  \widehat\Mcal_{r,s}^{(v,e)},&v_L=v_R=v.
+ \end{cases}
  \label{eq:master-local-residue}
 \end{equation}
-The residue coefficient in Eq.~\eqref{eq:master-local-residue} is given
-explicitly below.  The regular term is defined by
+The hats matter.  The incidence factors are diagonal in the component-parity
+basis, while \(\widehat\Mcal\) is the incidence-ordered self-loop factor.
+Both are given explicitly below.  The regular term is defined by
 \begin{equation}
  \U_\Gamma^{\bm\alpha}(\bm h;\bm q,\bm\xi)
  :=\lim_{c\to\infty}
  \F_\Gamma^{\bm\alpha}(c,\bm h;\bm q,\bm\xi).
  \label{eq:regular-term-definition}
 \end{equation}
-This note computes it directly for the genus-two theta graph through total
+For primary or global external states this note computes it directly for the genus-two theta graph through total
 level six and gives its all-order formula for an arbitrary ordered plumbing
 graph in Eq.~\eqref{eq:regular-coefficient-formula} below, conditional on a
 specified ordered set of lifted local plumbing maps.
@@ -156,7 +167,8 @@ There are three distinct claims in Eq.~\eqref{eq:master-result}.
  established NS representation theory
  \cite{HadaszJaskolskiSuchanek2007NSBlocks,BelavinGeiko2018CRecursion}.
  \item Edge locality and graph assembly follow by the same inverse-Gram
- argument as CCY \cite{ChoCollierYin2017Recursive}.
+ argument as CCY \cite{ChoCollierYin2017Recursive}.  Distinct-endpoint edges
+ factor independently; self-loops use the sequential toric factorization.
  \item The component \(\osp\) network gives the global subsector of
  \(\U_\Gamma\).  The non-global sector resums to the lifted primitive
  Schottky product, and the polarization of the half-edge permutation gives
@@ -167,8 +179,10 @@ There are three distinct claims in Eq.~\eqref{eq:master-result}.
 Thus Eq.~\eqref{eq:master-result}, together with
 Eq.~\eqref{eq:regular-coefficient-formula}, is a higher-genus
 Zamolodchikov recursion formula at generic weights in a fully specified
-all-NS plumbing frame.  The remaining extension outside the present result
-is the treatment of higher-order poles on exceptional weight loci.
+all-NS plumbing frame, for primary or global external states and with the
+self-loop rule \eqref{eq:self-loop-null-factor}.  Extensions outside the
+present result include higher-order poles on exceptional weight loci and
+non-global external descendants with their additional large-\(c\) scaling.
 
 \section{Definition of the NS plumbing block}
 \label{sec:conventions}
@@ -307,20 +321,27 @@ independently at each coefficient.
 
 Choose an orientation of every internal edge.  Let \(I_e\) and \(J_e\)
 label equal-level descendants at its two ends.  At each external puncture
-\(i=1,\ldots,N\), fix a parity-homogeneous NS state
+\(i=1,\ldots,N\), fix a primary or global \(\osp\) descendant
 \begin{equation}
- |\Psi_i\rangle=\mathcal L_{K_i}\nu_{d_i},
+ |\Psi_i\rangle=L_{-1}^{n_i}G_{-1/2}^{\eta_i}\nu_{d_i},
  \qquad
  L_0|\Psi_i\rangle=h_i^{\rm ext}|\Psi_i\rangle,
  \qquad
- h_i^{\rm ext}=d_i+|K_i|.
+ h_i^{\rm ext}=d_i+n_i+\frac{\eta_i}{2},
+ \quad n_i\in\mathbb Z_{\geq0},\quad\eta_i\in\{0,1\}.
  \label{eq:fixed-external-state}
 \end{equation}
-Thus a bottom component has \(K_i=\varnothing\) and weight \(d_i\), while a
-top component has \(\mathcal L_{K_i}=G_{-1/2}\) and weight
-\(d_i+\frac12\).  More general fixed external descendants are included by
-the same formula.  We suppress these fixed external data in the arguments of
-the block.
+Thus a bottom component has \((n_i,\eta_i)=(0,0)\), while a top component has
+\((n_i,\eta_i)=(0,1)\).  Non-global external descendants are not included in
+the theorem.  This restriction is necessary: for example
+\begin{equation}
+ \rho(L_{-2}\nu_h,\mathbf1,L_{-2}\nu_h)
+ =\langle\nu_h|L_2L_{-2}|\nu_h\rangle=4h+\frac c2,
+ \label{eq:non-global-external-counterexample}
+\end{equation}
+which has no internal pole but grows with \(c\).  Such insertions require
+external vacuum factors and an amended entire part.  We suppress the permitted
+fixed external data in the arguments of the block.
 
 With the primary propagation factors \(\prod_e q_e^{h_e}\) removed, we
 define the reduced genus-\(g\), \(N\)-point NS super-Virasoro block associated
@@ -331,6 +352,7 @@ with the ordered plumbing graph \(\Gamma\) by
  =\sum_{\bm\ell\in(\half\mathbb Z_{\ge0})^{E_{\rm int}}}
  \prod_e q_e^{\ell_e}\xi_e^{2\ell_e}
  \sum_{\substack{|I_e|=|J_e|=\ell_e\\e\in E_{\rm int}}}
+ \Omega_\Gamma(\bm I,\bm J;\bm\eta)
  \left[\prod_e
   \bigl(B_{h_e,c}^{(\ell_e)}\bigr)^{-1}[I_e,J_e]
  \right]
@@ -352,6 +374,15 @@ are the corresponding products around closed cycles.  Here
 half-edges incident on \(v\).  The label \(K(v,e)\) is \(I_e\) or \(J_e\)
 according to the edge orientation and the canonical order of the three
 half-edges at \(v\).
+
+The factor \(\Omega_\Gamma(\bm I,\bm J;\bm\eta)\) is the global graded sewing
+sign obtained by permuting all parity-homogeneous half-edge states from vertex
+slot order to contraction order, including the fixed external parities
+\(\bm\eta\).  In the chosen lifted plumbing frame it is
+\((-1)^{Q_\Gamma}\), with the explicit orientation character
+\(Q_\Gamma\) defined in Eq.~\eqref{eq:graph-orientation-quadratic}.  This
+factor is part of the finite-\(c\) definition, not only of its large-\(c\)
+limit.
 
 This definition contains no cylinder Casimir factor \(q^{-c/24}\), no
 superghost determinant, no supermoduli measure, and no structure constants.
@@ -382,8 +413,11 @@ polynomial in \(c\) and the weights.  Their contraction is therefore a
 rational function of \(c\).  At generic weights its poles are the Kac zeros
 of one internal Gram matrix.  At fixed \(\bm\ell\), only finitely many
 \((r,s)\) obey \(rs/2\le\ell_e\), so the partial-fraction decomposition is
-finite.  Once the coefficient is shown to remain finite at \(c=\infty\),
-its entire part is a constant equal to that limit.
+finite.  For the primary/global external states in
+Eq.~\eqref{eq:fixed-external-state}, the coefficient remains finite at
+\(c=\infty\), so its entire part is a constant equal to that limit.  Equation
+\eqref{eq:non-global-external-counterexample} shows why this conclusion does
+not extend unchanged to arbitrary external descendants.
 
 \subsection{\texorpdfstring{NS Kac poles on the \(c\)-plane}
 {NS Kac poles on the c-plane}}
@@ -597,22 +631,25 @@ Consequently the complete \emph{canonical endpoint sign} is
           +p b\,\mathbf 1_{\{a=3\}}},
  \label{eq:canonical-endpoint-sign}
 \end{equation}
-and the endpoint factor obtained after applying the indicated weight order is
+and the endpoint operator is diagonal in the resolved component-parity basis,
+with eigenvalue
 \begin{equation}
- \Sigma_{r,s}^{(v,e)}
+ \left.\widehat\Sigma_{r,s}^{(v,e)}\right|_{\bm p_v}
  =s_{\rm can}(v,e;r,s)
    P_{r,s}^{\alpha_v}(d_{v,e}^{(1)},d_{v,e}^{(2)};h_e).
  \label{eq:sigma-vertex}
 \end{equation}
 This canonicalization must happen before the left and right factors are
-multiplied.  A topology formula with an undifferentiated symbol
-\(P_{r,s}^2\) loses precisely these slot-dependent signs.
+multiplied.  For a general multi-edge trinion the entries of \(\bm p_v\) are
+summed variables, so \(\widehat\Sigma\) cannot be replaced by a scalar
+depending only on weights.  A topology formula with an undifferentiated symbol
+\(P_{r,s}^2\) loses both this diagonal action and the slot-dependent signs.
 
 There is one important bookkeeping rule.  If the odd coordinate on half-edge
 \(h=(v,e)\) differs from its canonical trinion frame by
 \(\theta_h=(-1)^{f_h}\theta_h^{\rm can}\), then an odd null would contribute
 the additional incidence factor \((-1)^{p f_h}\).  In the master recursion
-we do \emph{not} put this factor into \(\Sigma\), because it is already
+we do \emph{not} put this factor into \(\widehat\Sigma\), because it is already
 included once in \(Q_\Gamma\) and hence in the transport operator
 \(\mathcal K_{\Gamma,e}\), as derived below.  If one instead uses unoriented
 scalar graph coefficients, the combined incidence sign is
@@ -650,57 +687,105 @@ weight state of weight
 \end{equation}
 
 The Ward identities factor every descendant three-form above the null
-state.  At either endpoint,
+state.  At one resolved incidence,
 \begin{equation}
  \rho_v^\alpha(\ldots,\mathcal L_K\chi_{r,s},\ldots)
- =\Sigma_{r,s}^{(v,e)}
+ =\left.\widehat\Sigma_{r,s}^{(v,e)}\right|_{\bm p_v}
   \rho_v^{\alpha\oplus\pi_{r,s}}
   (\ldots,\mathcal L_K\nu_{h_e'},\ldots).
  \label{eq:null-factorization}
 \end{equation}
-All other edges and vertices are spectators.  The level carried by the null
-state supplies \(q_e^{N_{r,s}}\).  Substituting
-Eqs.~\eqref{eq:inverse-gram-residue} and
-\eqref{eq:null-factorization} into Eq.~\eqref{eq:graph-block} gives
+For an ordinary edge \(v_L\ne v_R\), the two incidences belong to independent
+three-forms and Eq.~\eqref{eq:null-factorization} may be applied once at each
+endpoint.  All other edges and vertices are spectators.  The level carried by
+the null state supplies \(q_e^{N_{r,s}}\), giving
 \begin{equation}
-\boxed{
+\boxed{\begin{aligned}
  \Res_{c=c_{r,s}(h_e)}\F_\Gamma^{\bm\alpha}
- =q_e^{rs/2}\,
+ ={}&q_e^{rs/2}\,
   J_{r,s}A_{r,s}
-  \Sigma_{r,s}^{(v_L,e)}
-  \Sigma_{r,s}^{(v_R,e)}
+  \widehat\Sigma_{r,s}^{(v_L,e)}
+  \widehat\Sigma_{r,s}^{(v_R,e)}
   \mathcal K_{\Gamma,e}^{\pi_{r,s}}
-  \F_\Gamma^{\bm\alpha\oplus\pi_{r,s}\partial e}
+  \F_\Gamma^{\mathsf T_e^{\pi_{r,s}}\bm\alpha}
   \left(c_{r,s}(h_e),
-        \bm h+\frac{rs}{2}\ve_e\right).}
+        \bm h+\frac{rs}{2}\ve_e\right),
+ \qquad v_L\ne v_R.
+\end{aligned}}
  \label{eq:edge-residue}
 \end{equation}
-This proves the polar term in Eq.~\eqref{eq:master-result}.  It is local in
-the graph-theoretic sense: only the singular edge and its two incident
-vertices are changed.
+
+If \(e\) is a self-loop, the two null states occur in the same matrix element,
+\begin{equation}
+ \rho^{\alpha_v}
+ (\mathcal L_K\chi_{r,s},\nu_{d_v},\mathcal L_L\chi_{r,s}),
+ \label{eq:self-loop-null-matrix-element}
+\end{equation}
+and the two factorizations are not independent.  Order the two incidences
+\(a_1,a_2\) by the canonical trinion slots.  Factoring \(a_1\) first changes
+the other sewn weight from \(h_e\) to \(h_e'=h_e+N_{r,s}\) and changes the
+intermediate three-form label to \(\alpha_v\oplus\pi_{r,s}\).  Therefore the
+diagonal eigenvalue of the incidence-ordered operator is
+\begin{equation}
+\boxed{
+ \left.\widehat\Mcal_{r,s}^{(v,e)}\right|_{\bm p_v}
+ =s_{\rm loop}(v,e;r,s;\bm p_v)\,
+  P_{r,s}^{\alpha_v\oplus\pi_{r,s}}(d_v,h_e+N_{r,s};h_e)
+  P_{r,s}^{\alpha_v}(d_v,h_e;h_e).}
+ \label{eq:self-loop-null-factor}
+\end{equation}
+Here \(s_{\rm loop}\) is obtained by applying the canonical incidence sign
+\eqref{eq:canonical-endpoint-sign} first in the original tensor and then in
+the intermediate tensor, including its toggled parity.  In the standard torus
+rephasing it is the usual toric sign \(S_{rs}^{\alpha_v}\).  Equation
+\eqref{eq:self-loop-null-factor} is the toric null matrix element of
+Ref.~\cite{BelavinGeiko2018CRecursion}; notably, one polynomial sees the
+shifted weight and, for an odd null, the toggled intermediate sector.
+The self-loop residue is consequently
+\begin{equation}
+\boxed{\begin{aligned}
+ \Res_{c=c_{r,s}(h_e)}\F_\Gamma^{\bm\alpha}
+ ={}&q_e^{rs/2}J_{r,s}A_{r,s}
+  \widehat\Mcal_{r,s}^{(v,e)}
+  \mathcal K_{\Gamma,e}^{\pi_{r,s}}
+  \F_\Gamma^{\bm\alpha}
+  \left(c_{r,s}(h_e),
+        \bm h+\frac{rs}{2}\ve_e\right),
+ \qquad v_L=v_R=v.
+\end{aligned}}
+ \label{eq:self-loop-edge-residue}
+\end{equation}
+The final label is unchanged because it is toggled twice.  Equations
+\eqref{eq:edge-residue} and \eqref{eq:self-loop-edge-residue} prove the polar
+term in Eq.~\eqref{eq:master-result}.  The operation remains edge-local, but a
+self-loop is local to one trinion and must retain its incidence order.
 
 \subsection{Complete recursion}
 \label{sec:complete-recursion}
 
 \subsubsection{Functional form}
 
-Once the regular term of Section~\ref{sec:large-c} is supplied, substituting it and the local residue
-\eqref{eq:edge-residue} into the partial-fraction decomposition gives the
-master formula \eqref{eq:master-result}.  Written with all local arguments,
-the endpoint factor is
+Once the regular term of Section~\ref{sec:large-c} is supplied, substituting
+it and the local residues \eqref{eq:edge-residue} and
+\eqref{eq:self-loop-edge-residue} into the partial-fraction decomposition gives
+the master formula \eqref{eq:master-result}.  For \(v_L\ne v_R\), the
+componentwise eigenvalue of the residue action, written with all local
+arguments, is
 \begin{equation}
- \Rcal_{e;r,s}(\bm h)
+ \left.\widehat\Rcal_{e;r,s}(\bm h)\right|_{\bm p}
  =J_{r,s}(h_e)A_{r,s}(h_e)
- \Sigma_{r,s}^{(v_L,e)}
+ \left.\widehat\Sigma_{r,s}^{(v_L,e)}\right|_{\bm p_{v_L}}
  \bigl(h_{L,1},h_{L,2};h_e,\alpha_{v_L}\bigr)
- \Sigma_{r,s}^{(v_R,e)}
+ \left.\widehat\Sigma_{r,s}^{(v_R,e)}\right|_{\bm p_{v_R}}
  \bigl(h_{R,1},h_{R,2};h_e,\alpha_{v_R}\bigr),
  \label{eq:residue-all-arguments}
 \end{equation}
 where \(h_{L,a}\) and \(h_{R,a}\) are the other two weights at the adjacent
 vertices.  They can be internal or external weights.  The canonical slot
-rotation decides whether each \(\Sigma\) is
-Eq.~\eqref{eq:null-first-slot} or \eqref{eq:null-third-slot}.
+rotation decides whether each \(\widehat\Sigma\) uses
+Eq.~\eqref{eq:null-first-slot} or \eqref{eq:null-third-slot}.  For a self-loop,
+Eq.~\eqref{eq:self-loop-null-factor} replaces
+Eq.~\eqref{eq:residue-all-arguments}.
 
 \subsubsection{Triangular coefficient form}
 
@@ -742,15 +827,18 @@ Then
                   rs\le2\ell_e}}
  \frac{\xi_e^{\pi_{r,s}}
        \kappa_{\Gamma,e}^{(\pi_{r,s})}(\bm\ell)
-       \Rcal_{e;r,s}(\bm h)}{c-c_{r,s}(h_e)}
+       \widehat\Rcal_{e;r,s}(\bm h;\bm\ell)}{c-c_{r,s}(h_e)}
  F_{\bm\ell-(rs/2)\ve_e}^{
-    \bm\alpha\oplus\pi_{r,s}\partial e}
+    \mathsf T_e^{\pi_{r,s}}\bm\alpha}
  \left(c_{r,s}(h_e),
        \bm h+\frac{rs}{2}\ve_e\right).
 \end{aligned}}
 \label{eq:coefficient-recursion}
 \end{equation}
-The shifted coefficient has strictly smaller level on edge \(e\).  Hence the
+Here \(\widehat\Rcal_{e;r,s}(\bm h;\bm\ell)\) means the diagonal eigenvalue on
+the component parity selected by the coefficient \(\bm\ell\); it is not a
+weight-only scalar on a general graph.  The shifted coefficient has strictly
+smaller level on edge \(e\).  Hence the
 recursion terminates at any fixed multi-level.  Half-integral levels retain
 the lift sign belonging to the removed null level.
 
@@ -2349,6 +2437,29 @@ that loss before cancellation, producing artificial discrepancies of order
 implementation preserves the \texttt{mpmath} numeric type throughout the seed;
 a regression test probes changes below binary64 resolution.
 
+The standard-frame specialization is also enforced at the implementation
+level.  The production multiprecision sphere block calls the principal-sheet,
+weight-only ordinary-edge scalar kernel in
+\path{Code/ns_recursion_recipe.py}, then supplies the canonical bra-incidence
+phase appropriate to this sphere ordering.  Thus the module is not the full
+generic \(\widehat\Sigma\) operator of Eq.~\eqref{eq:sigma-vertex}: canonical
+slot signs and graph Koszul transport remain with the graph caller.  It also
+uses fresh principal square roots per call and is therefore not an
+analytic-continuation engine for complex-weight paths; such a caller must
+carry the continuous branch data required below Eq.~\eqref{eq:pole-x}.
+
+As an independent nonrecursive check, a finite-\(c\) PBW oracle
+constructs the NS Gram matrix and both descendant three-forms directly from
+the super-Virasoro commutators and Ward identities.  At the generic point
+\(c=14.19870372000744\), \(h=0.73\), and
+\((h_1,h_2,h_3,h_4)=(0.37,0.61,0.48,0.29)\), it agrees with the sphere
+\(c\)-recursion through twice-level eight.  For the unstarred block the
+maximum multiprecision discrepancy is \(3.26\times10^{-15}\); after extending
+the test to all four bottom/top choices at punctures two and three, the worst
+discrepancy is \(1.38\times10^{-14}\).  This range crosses both the first odd
+pole \((3,1)\) and the first even pole \((2,2)\), without importing any
+Kac-residue ingredient into the PBW side.
+
 The reproducible calculation and its complete coefficient ledger are
 \begin{center}
  \path{Code/compare_ns_sphere_c_h_recursion.py},\\
@@ -2502,8 +2613,17 @@ Eq.~\eqref{eq:master-result} specializes to
 \end{align}
 The regular term is the product of the non-global NS vacuum character
 \eqref{eq:torus-vacuum-character} and the global torus block
-\eqref{eq:torus-global}.  The residue contains the two toric null-vector
-matrix elements attached to the two ends of the closed edge.  This
+\eqref{eq:torus-global}.  The residue is the single sequential toric null
+matrix element
+\begin{equation}
+ \Rcal_{r,s}^{\rm tor}(h,d)
+ =J_{r,s}(h)A_{r,s}(h)S_{rs}^{0}
+  P_{r,s}^{\pi_{r,s}}(d,h+N_{r,s};h)
+  P_{r,s}^{0}(d,h;h),
+ \label{eq:torus-sequential-residue}
+\end{equation}
+which is Eq.~\eqref{eq:self-loop-null-factor} in the standard torus rephasing.
+This
 fixed-weight \(c\)-recursion was compared with the toric \(h\)-recursion of
 Ref.~\cite{HadaszJaskolskiSuchanek2012Toric}.
 
@@ -2591,8 +2711,19 @@ The self-dual finite part was extracted at \(60\)-digit working precision
 from \(32\) samples on each of the radii \(0.035\) and \(0.045\).  Changing
 the radius alters either recursion by at most \(7.35\times10^{-51}\).
 At the generic nonresonant point \(b=1.27\), the two recursions agree through
-\(q^6\) to \(1.12\times10^{-60}\).  Independent Gram-matrix and Ward-identity
-sewing agrees exactly through level one.  The order-ten result is therefore
+\(q^6\) to \(1.12\times10^{-60}\).  The production standard torus block uses
+the principal-sheet incidence-ordered self-loop scalar kernel in
+\path{Code/ns_recursion_recipe.py}.  Independently, direct Gram-matrix and
+Ward-identity sewing at \(c=14.19870372000744\), \(h=0.73\), and \(d=0.62\)
+agrees through twice-level eight to \(2.64\times10^{-13}\).  Thus this check
+also crosses the odd \((3,1)\) and even \((2,2)\) nulls and tests the
+intermediate sector toggle, shifted second incidence, and toric sign without
+reusing them on the PBW side.  This complete block comparison is for
+\(\alpha=0\).  A separate symmetric Laurent extraction from the direct PBW
+trace checks the local self-loop residues for both \(\alpha=0,1\) at
+\((3,1)\) and \((2,2)\), with maximum discrepancy
+\(2.18\times10^{-12}\).  It does not construct the full \(\alpha=1\)
+top-component regular block.  The order-ten result is therefore
 an agreement of the normalized conformal block, including both torus spin
 holonomies, with no theory-dependent OPE data.
 
@@ -2602,18 +2733,185 @@ The reproducible implementation and numerical ledger are
  \texttt{Machine Notes/c-Recursion/ns\_torus\_c\_h\_order10.json}.
 \end{center}
 
-\subsection{Genus-two vacuum theta graph}
+\subsubsection{Nonchiral NS--NS modularity from the direct \texorpdfstring{\(c\)}{c}-recursion}
+\label{sec:torus-one-point-direct-c-modularity}
+
+The preceding comparison validates the chiral recursion coefficient by
+coefficient.  We now test a genuinely different statement: modular covariance
+of the assembled nonchiral super-Liouville continuum.  A fixed-momentum block
+is not modular covariant by itself, because the modular kernel mixes internal
+representations.  For the ordinary NS trace, which is fixed as a spin structure
+by \(S\), define
+\begin{equation}
+ \mathcal G_{\NS}(\tau)
+ =\int_0^\infty\frac{dP}{\pi}\,
+ C(P,P_{\rm ext},P)
+ \left|q^{h(P)-c/24}\F_{1,1}(c,h(P),d;q,+1)\right|^2,
+ \qquad q=e^{2\pi i\tau}.
+ \label{eq:torus-direct-c-nonchiral-correlator}
+\end{equation}
+The two frames were evaluated independently and compared with
+\begin{equation}
+ \mathcal G_{\NS}(-1/\tau)=|\tau|^{2d}\mathcal G_{\NS}(\tau).
+ \label{eq:torus-direct-c-modular-law}
+\end{equation}
+No equality between the two numerical integrals was imposed.
+
+As in the sphere test, the block is evaluated from the functional recursion
+\eqref{eq:torus-one-point-c-recursion}, rather than from a truncated
+coefficient series.  Every terminal node retains the exact large-\(c\) seed
+\begin{equation}
+ \U_{1,1}(h,d;q,\xi)
+ =\V_{\NS}^{(\infty)}(q,\xi)
+  \G_{1,1}^{\osp}(h,d;q,\xi),
+ \label{eq:torus-direct-c-exact-seed}
+\end{equation}
+where the non-global vacuum factor is the convergent product
+\begin{equation}
+ \V_{\NS}^{(\infty)}(q,\xi)
+ =\frac{(-\xi q^{3/2};q)_\infty}{(q^2;q)_\infty},
+ \label{eq:torus-direct-c-vacuum-product}
+\end{equation}
+and the global trace has the closed form
+\begin{align}
+ \G_{1,1}^{\osp}(h,d;q,\xi)
+ ={}&(1-q)^{-d}\,{}_2F_1(2h-d,1-d;2h;q)
+ \nonumber\\
+ &+\xi q^{1/2}\frac{2h-d}{2h}(1-q)^{-d}
+ {}_2F_1(2h+1-d,1-d;2h+1;q).
+ \label{eq:torus-direct-c-global-hypergeometric}
+\end{align}
+Expanding Eqs.~\eqref{eq:torus-direct-c-exact-seed}--
+\eqref{eq:torus-direct-c-global-hypergeometric} reproduces the regular
+coefficients used in the independent \(c\)- versus \(h\)-recursion check.
+Recursion order \(N\) retains every nested Kac-residue path whose accumulated
+twice-level is at most \(N\); it does not truncate a local-\(q\) or
+elliptic-\(q\) series.
+
+It is important that a modular test force at least one plumbing frame out of
+the very-small-\(q\) regime.  Our first scan,
+\(\tau=0.2+i y\) with \(0.65\leq y\leq1.20\), did not do this: throughout
+that scan
+\begin{equation}
+ |q|\leq 1.684\times10^{-2},\qquad
+ |\widetilde q|=|e^{-2\pi i/\tau}|\leq 6.131\times10^{-3}.
+ \label{eq:torus-direct-c-small-q-calibration}
+\end{equation}
+The order-fourteen residual \(2.23\times10^{-14}\) found there is therefore
+retained only as a small-\(q\) implementation calibration.  It is not quoted
+as the nontrivial modularity result.
+
+For the hard audit we instead choose
+\begin{equation}
+ \widehat c=9,\qquad b=1,\qquad P_{\rm ext}=0.33,
+ \qquad d=0.55445,\qquad \tau=\frac{i}{4},\qquad
+ -\frac1\tau=4i,
+ \label{eq:torus-direct-c-modularity-parameters}
+\end{equation}
+so that
+\begin{equation}
+ |q|=e^{-\pi/2}=0.2078795764,\qquad
+ |\widetilde q|=e^{-8\pi}=1.216155671\times10^{-11}.
+ \label{eq:torus-direct-c-hard-nomes}
+\end{equation}
+The continuum is integrated through \(P=5.5\) with a 96-point
+Gauss--Legendre rule.  Blocks use 100--110-digit arithmetic and the structure
+constants use 45-digit arithmetic.  The modular factor is applied only after
+the two continuum sums have been completed: it is absent from the block
+recursion, structure constant, and quadrature accumulation in either frame.
+The recursion-order audit is
+\begin{center}
+\scriptsize
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+\(N\) & \(\mathcal G_{\NS}(i/4)\)
+ & \(4^{2d}\mathcal G_{\NS}(4i)\) & \(\delta_S\)\\
+\midrule
+12 & 0.419420508925143 & 0.419421352297236 & \(2.0108\times10^{-6}\)\\
+14 & 0.419422873756867 & 0.419421352297236 & \(3.6275\times10^{-6}\)\\
+16 & 0.419421128663541 & 0.419421352297236 & \(5.3320\times10^{-7}\)\\
+18 & 0.419421333942803 & 0.419421352297236 & \(4.3761\times10^{-8}\)\\
+20 & 0.419421361508904 & 0.419421352297236 & \(2.1963\times10^{-8}\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Here
+\begin{equation}
+ \delta_S(\tau)
+ =\frac{\left|\mathcal G_{\NS}(\tau)
+       -|\tau|^{-2d}\mathcal G_{\NS}(-1/\tau)\right|}
+ {\max\!\left(\left|\mathcal G_{\NS}(\tau)\right|,
+ \left||\tau|^{-2d}\mathcal G_{\NS}(-1/\tau)\right|\right)}.
+ \label{eq:torus-direct-c-modular-residual}
+\end{equation}
+Thus the observed order-twenty residual is
+\begin{equation}
+ \delta_S(i/4)=2.1963\times10^{-8}.
+ \label{eq:torus-direct-c-modular-result}
+\end{equation}
+
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=\textwidth]{../../Data Set/ns_torus_modularity_direct_c_recursion_hard_tau025.png}
+ \caption{Hard-point recursion-order convergence.  Solid black markers show
+ \(\mathcal G_{\NS}(i/4)\), while dashed blue markers show the independently
+ evaluated \(4^{2d}\mathcal G_{\NS}(4i)\).  Since
+ \(|\widetilde q|=1.22\times10^{-11}\), the dashed markers coincide; their
+ common horizontal value is output, not an imposed target.  The right panel
+ shows the absolute modular residual.}
+ \label{fig:torus-direct-c-modularity}
+\end{figure}
+
+The residual is an observed consistency check, not a certified error bound
+for the infinite recursion.  The largest order-eighteen to order-twenty drift
+of either individual frame is \(6.5724\times10^{-8}\), larger than
+Eq.~\eqref{eq:torus-direct-c-modular-result}; the nonmonotonic order-twelve to
+order-fourteen step also makes clear that the last residual alone must not be
+used as an error estimate.  By contrast, replacing \((P_{\max},n_P)=(5.0,64)\)
+with \((5.5,96)\) changes either frame at orders twelve and fourteen by at most
+\(1.31\times10^{-14}\).  The hard-point uncertainty is therefore controlled
+by recursion order, not by the displayed quadrature or momentum tail.
+Modularity still cannot expose a systematic error common to the two frames;
+the structure constants and spectral normalization remain common inputs.
+
+The reproducible implementation, numerical ledger, and plot are
+\begin{center}
+ \path{Code/stress_ns_torus_modularity_c_recursion.py},\\
+ \texttt{Data Set/}\path{ns_torus_modularity_direct_c_recursion_hard_tau025.json},\\
+ \texttt{Data Set/}\path{ns_torus_modularity_direct_c_recursion_hard_tau025.svg}.
+\end{center}
+The earlier calibration is preserved separately as
+\texttt{Data Set/}\path{ns_torus_modularity_direct_c_recursion_small_q_order14.json}.
+
+\subsection{Genus-two vacuum graphs}
 
 Let \(h_1,h_2,h_3\) and \(q_1,q_2,q_3\) label the three edges.  A pole on
 edge \(i\) gives
 \begin{equation}
- \Rcal_{i;r,s}
+ \left.\widehat\Rcal_{i;r,s}\right|_{\bm p}
  =J_{r,s}(h_i)A_{r,s}(h_i)
-  \Sigma_{r,s}^{(L,i)}(h_j,h_k;h_i)
-  \Sigma_{r,s}^{(R,i)}(h_j,h_k;h_i),
+  \left.\widehat\Sigma_{r,s}^{(L,i)}\right|_{\bm p_L}(h_j,h_k;h_i)
+  \left.\widehat\Sigma_{r,s}^{(R,i)}\right|_{\bm p_R}(h_j,h_k;h_i),
  \qquad \{i,j,k\}=\{1,2,3\}.
  \label{eq:theta-residue}
 \end{equation}
+Equation~\eqref{eq:theta-residue} applies to the theta graph, whose three edges
+all have distinct endpoints.  In the glasses graph the separating bridge also
+uses Eq.~\eqref{eq:edge-residue}, whereas each of the two handle edges is a
+self-loop and must use Eq.~\eqref{eq:self-loop-null-factor}.  This is exactly
+the sequential shifted-weight prescription tested against the torus block
+above.
+The glasses implementation also retains the toric reflection sign
+\begin{equation}
+ S_{rs}^{\alpha}=(-1)^{\alpha rs}.
+ \label{eq:glasses-toric-sector-sign}
+\end{equation}
+This factor is invisible in an \(\alpha=0\) regression.  The production check
+therefore compares both \(\alpha=0,1\) sectors with the independent torus
+formula for the odd \((3,1)\) and even \((2,2)\) nulls.  At
+\((h_L,h_B,\alpha)=(0.73,0.62,1)\), the corrected \((3,1)\) residue is
+\(+0.059809637121\); omitting Eq.~\eqref{eq:glasses-toric-sector-sign} gives
+the negative of this value, while the even-null residue is unchanged.
 Writing twice-levels as \(\bm\ell,\bm v,\bm r\), the regular term is
 \begin{equation}
  \boxed{
@@ -2633,6 +2931,201 @@ total level six are displayed in Eq.~\eqref{eq:theta-vacuum-level-six}.
 Deleting the displayed \((-1)^{B_\Theta}\) gives the wrong answer beginning
 at total level \(7/2\); using the correct primitive product gives the same
 vacuum coefficients as direct sewing.
+
+\subsubsection{Function-level genus-two global resummation}
+\label{sec:genus-two-global-resummation}
+
+The global factor in Eq.~\eqref{eq:theta-seed} must be evaluated at every
+terminal node of the functional \(c\)-recursion, including nodes with shifted
+internal weights.  A fixed cutoff on the three global occupations is therefore
+both expensive and logically independent of the recursion order.  In the two
+genus-two channels used in the locality test, the occupation sums can instead
+be reorganized into Gauss hypergeometric functions.  We keep the plumbing
+square-root lifts \(\xi_e=\pm1\) explicit and use the norm
+\eqref{eq:global-norm} throughout.
+
+\paragraph{Glasses channel.}
+Write the handle and bridge data as
+\begin{equation}
+ (h_L,q_L,\xi_L),\qquad (h_R,q_R,\xi_R),\qquad
+ (d,q_B,\xi_B),
+\end{equation}
+and fix the bridge fermion parity to
+\(\alpha=\epsilon_B\in\{0,1\}\).  Since a handle state occurs twice at its
+trinion, both vertex parities equal \(\alpha\).  In the ordered sewing frame
+the global orientation character is
+\begin{equation}
+ \Omega_{\rm gl}
+ =(-1)^{\alpha(\epsilon_L+\epsilon_R)}.
+ \label{eq:glasses-global-orientation}
+\end{equation}
+The direct global contraction is therefore
+\begin{align}
+ \G_{\rm gl}^{(\alpha)}
+ ={}&\sum_{\substack{n_L,n_R,n_B\geq0\\
+                     \epsilon_L,\epsilon_R\in\{0,1\}}}
+ (-1)^{\alpha(\epsilon_L+\epsilon_R)}
+ \prod_{e=L,R,B}
+ \frac{q_e^{n_e+\epsilon_e/2}\xi_e^{\epsilon_e}}
+      {n_e!(2h_e)_{n_e+\epsilon_e}}
+ \nonumber\\
+ &\quad\times
+ T_{n_L,n_B,n_L}^{\epsilon_L\alpha\epsilon_L}(h_L,d,h_L)
+ T_{n_R,n_B,n_R}^{\epsilon_R\alpha\epsilon_R}(h_R,d,h_R),
+ \qquad \epsilon_B=\alpha,
+ \label{eq:glasses-global-direct-sum}
+\end{align}
+where \(h_B=d\).  Equation~\eqref{eq:complete-global-vertex} gives
+\begin{equation}
+ T_{n,n_B,n}^{\epsilon\alpha\epsilon}(h,d,h)
+ =\left(-d-\frac\alpha2\right)^{\underline{n_B}}
+  t_{n,n}^{\epsilon\alpha\epsilon}(h,d,h).
+ \label{eq:glasses-middle-chain-factorization}
+\end{equation}
+Thus the bridge occupation separates from both handle traces.  Define
+\begin{equation}
+ D_\alpha:=d+\frac\alpha2,
+ \qquad
+ C_0(h,d):=2h-d,
+ \qquad
+ C_1(h,d):=2h+d-\frac12.
+ \label{eq:glasses-resummation-parameters}
+\end{equation}
+The bridge factor is
+\begin{equation}
+ \boxed{
+ B_\alpha(q,\xi;d)
+ =\frac{(\xi\sqrt q)^\alpha}{(2d)_\alpha}
+ {}_2F_1\!\left(D_\alpha,D_\alpha;2d+\alpha;q\right),}
+ \label{eq:glasses-resummed-bridge}
+\end{equation}
+while one handle contributes
+\begin{equation}
+ \boxed{\begin{aligned}
+ H_\alpha(q,\xi;h,d)
+ ={}&(1-q)^{-D_\alpha}
+ \Bigg[
+ {}_2F_1\!\left(2h-D_\alpha,1-D_\alpha;2h;q\right)
+ \\[-2mm]
+ &\quad+(-1)^\alpha\xi\sqrt q\,
+ \frac{C_\alpha(h,d)}{2h}
+ {}_2F_1\!\left(2h+1-D_\alpha,1-D_\alpha;2h+1;q\right)
+ \Bigg].
+ \end{aligned}}
+ \label{eq:glasses-resummed-handle}
+\end{equation}
+The factors \((-1)^\alpha\) multiplying both handle lifts absorb
+Eq.~\eqref{eq:glasses-global-orientation}.  Consequently the complete
+glasses global block is the function-level product
+\begin{equation}
+ \boxed{
+ \G_{\rm gl}^{(\alpha)}
+ =B_\alpha(q_B,\xi_B;d)
+  H_\alpha(q_L,\xi_L;h_L,d)
+  H_\alpha(q_R,\xi_R;h_R,d).}
+ \label{eq:glasses-global-resummed}
+\end{equation}
+This identity removes all three occupation cutoffs.  At \(q_B=0\), the
+odd sector vanishes and the even sector reduces to the product of the two
+independently known torus global blocks
+\eqref{eq:torus-direct-c-global-hypergeometric}.
+
+\paragraph{Theta channel.}
+Keep the geometric edge order \((0,1,\infty)\), but rotate the trinion to the
+CCY tensor order \((\infty,1,0)\).  For fixed endpoint states set
+\begin{equation}
+ X=h_\infty-h_1-h_0
+ +\frac{\epsilon_\infty-\epsilon_1-\epsilon_0}{2}
+ +n_\infty-n_0.
+ \label{eq:theta-middle-resummation-x}
+\end{equation}
+Translation covariance, Eq.~\eqref{eq:complete-global-vertex}, then isolates
+the complete middle chain:
+\begin{equation}
+ T_{n_\infty,n_1,n_0}^{
+   \epsilon_\infty\epsilon_1\epsilon_0}
+ (h_\infty,h_1,h_0)
+ =X^{\underline{n_1}}
+ t_{n_\infty,n_0}^{
+   \epsilon_\infty\epsilon_1\epsilon_0}
+ (h_\infty,h_1,h_0).
+ \label{eq:theta-middle-chain-factorization}
+\end{equation}
+\begin{samepage}
+Using \(X^{\underline n}=(-1)^n(-X)_n\), the entire occupation sum on the
+middle edge is
+\begin{align}
+ &\sum_{n_1=0}^{\infty}
+ \frac{q_1^{n_1+\epsilon_1/2}\xi_1^{\epsilon_1}}
+      {n_1!(2h_1)_{n_1+\epsilon_1}}
+ \left(X^{\underline{n_1}}\right)^2
+ \nonumber\\
+ &\hspace{20mm}=
+ \boxed{
+ \frac{(\xi_1\sqrt{q_1})^{\epsilon_1}}
+      {(2h_1)_{\epsilon_1}}
+ {}_2F_1\!\left(-X,-X;2h_1+\epsilon_1;q_1\right).}
+ \label{eq:theta-middle-edge-resummation}
+\end{align}
+\end{samepage}
+For a fixed theta sector \(\kappa\), the remaining representation is the
+two-endpoint sum
+\begin{align}
+ \G_\Theta^{(\kappa)}
+ ={}&\sum_{\substack{n_0,n_\infty\geq0\\
+       \epsilon_0,\epsilon_1,\epsilon_\infty\in\{0,1\}\\
+       \epsilon_0+\epsilon_1+\epsilon_\infty\equiv\kappa\ ({\rm mod}\ 2)}}
+ \Omega_\Theta(\bm\epsilon)
+ \prod_{e=0,\infty}
+ \frac{q_e^{n_e+\epsilon_e/2}\xi_e^{\epsilon_e}}
+      {n_e!(2h_e)_{n_e+\epsilon_e}}
+ \nonumber\\
+ &\quad\times
+ \left[t_{n_\infty,n_0}^{
+   \epsilon_\infty\epsilon_1\epsilon_0}
+   (h_\infty,h_1,h_0)\right]^2
+ \frac{(\xi_1\sqrt{q_1})^{\epsilon_1}}
+      {(2h_1)_{\epsilon_1}}
+ {}_2F_1\!\left(-X,-X;2h_1+\epsilon_1;q_1\right),
+ \label{eq:theta-global-middle-resummed}
+\end{align}
+where \(\Omega_\Theta\) is the full orientation character
+\eqref{eq:theta-koszul-ledger}.  Unlike the glasses graph, the two endpoint
+sums do not factorize into independent one-variable traces.  They are kept as
+an adaptive numerical representation after the non-small middle coordinate
+has been summed exactly.  At the five certified overlap points,
+\begin{equation}
+ 2.44\times10^{-9}\leq |q_0|\leq4.44\times10^{-9},
+ \qquad
+ 2.84\times10^{-9}\leq |q_\infty|\leq4.92\times10^{-9},
+ \qquad
+ 0.148\leq|q_1|\leq0.178.
+ \label{eq:theta-resummation-nome-ranges}
+\end{equation}
+Thus Eq.~\eqref{eq:theta-middle-edge-resummation} resums precisely the edge
+for which a direct occupation cutoff is potentially dangerous.  The endpoint
+shell is an independently monitored numerical tolerance, not a truncation of
+the Zamolodchikov recursion.
+
+Both identities were checked without assuming channel agreement.  For the
+glasses formula, direct sums in both bridge parities and with complex plumbing
+coordinates agree at the \(10^{-15}\) level whenever the direct sum converges.
+For the theta formula, twenty-four randomized tests with all three
+\(|q_e|\) between \(0.025\) and \(0.13\) gave a worst relative discrepancy
+\(1.55\times10^{-13}\), consistent with the \(2\times10^{-12}\) tolerance of
+the independent three-dimensional reference sum.  At the production theta
+point with the largest old last-shell diagnostic, the monitored shell changed
+from \(1.65\times10^{-9}\) to \(9.14\times10^{-36}\); the corresponding
+integrated node changed by \(1.22\times10^{-10}\).  At the worst old glasses
+node the last shell was \(3.27\times10^{-2}\), while the resummed integrated
+node changed by \(6.80\times10^{-6}\).  These are seed audits only and do not
+assert locality or equality of the final theta and glasses integrals.
+
+The function-level implementations and their direct-sum regression tests are
+\begin{center}
+ \path{Code/ns_genus2_partition.py},\qquad
+ \path{Code/test_ns_genus2_partition.py}.
+\end{center}
 
 \subsubsection{Theta-chart vacuum product}
 
@@ -3413,6 +3906,7 @@ Script & Role\\
 \path{Code/compare_ns_sphere_c_h_recursion.py} & order-ten sphere \(c\)- versus \(h\)-recursion comparison at \(\widehat c=9\)\\
 \path{Code/stress_ns_crossing.py} & direct-recursion nonchiral sphere crossing test at \(\widehat c=9\)\\
 \path{Code/compare_ns_torus_c_h_recursion.py} & order-ten torus one-point \(c\)- versus \(h\)-recursion comparison at \(\widehat c=9\)\\
+\path{Code/stress_ns_torus_modularity_c_recursion.py} & direct functional-\(c\) NS--NS torus modularity test\\
 \path{Code/ns_genus12_finite_c_check.py} & direct genus-one and genus-two finite-\(c\) sewing\\
 \path{Code/ns_genus2_symbolic_low_order.py} & exact symbolic coefficient comparison\\
 \path{Code/ns_osp_superspace.py}, \path{Code/ns_supermoduli_plumbing.py} & optional superspace and supermoduli reformulations\\
@@ -3430,11 +3924,14 @@ explicit global \(\osp\) network and the universal lifted vacuum product.
 Together they give the functional recursion
 \eqref{eq:master-result} and its triangular coefficient form
 \eqref{eq:coefficient-recursion} at generic weights for an arbitrary ordered
-plumbing graph.  Equations~\eqref{eq:canonical-endpoint-sign} and
+plumbing graph with primary or global external states, using
+Eq.~\eqref{eq:self-loop-null-factor} whenever an edge closes on one trinion.
+Equations~\eqref{eq:canonical-endpoint-sign} and
 \eqref{eq:frame-derived-beta} compute the endpoint and BPZ/spin-frame signs
 from the ordered lifted local coordinates, so no independent sign table is
 left unspecified.  The present manuscript does not extend the recursion to
-coincident Kac loci.
+coincident Kac loci or to non-global external descendants without additional
+large-\(c\) external factors.
 
 The genus-\(g\), zero-point block is the literal \(N=0\) specialization
 \eqref{eq:genus-g-zero-point-regular}; in the irreducible vacuum channel it
