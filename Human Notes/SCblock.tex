@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 %\usepackage{amssymb,epsf,graphicx}
-\usepackage{amsmath,amssymb,bm,epsf,epsfig,graphicx,hyperref,physics, cleveref, subfig, slashed, stmaryrd, tensor, mathrsfs, amssymb}
+\usepackage{amsmath,amssymb,bm,epsf,epsfig,graphicx,hyperref,physics, cleveref, subfig, slashed, stmaryrd, tensor, mathrsfs,}
+
 \usepackage[backend=bibtex,natbib,style=numeric-comp,sorting=none, doi=false, isbn=false,url=false]{biblatex}
 \usepackage{array,booktabs}
 \input epsf.sty
@@ -18,6 +19,8 @@
 \newcommand{\ie}{\begin{equation}\begin{aligned}}
 \newcommand{\fe}{\end{aligned}\end{equation}}
 \numberwithin{equation}{section}
+\newcommand{\R}{\mathrm{R}}
+\newcommand{\NS}{\mathrm{NS}}
 
 \renewcommand{\title}[1]{\vbox{\center\LARGE{#1}}\vspace{5mm}}
 \renewcommand{\author}[1]{\vbox{\center#1}\vspace{5mm}}
@@ -27,7 +30,7 @@
 
 \begin{document}
 
-This is a human-written working notes focusing on deriving the $c$-recursion relation for 2D $\mathcal{N}=1$ superconformal blocks in arbitrary plumbing channel. 
+This is a working notes focusing on deriving the $c$-recursion relation for 2D $\mathcal{N}=1$ superconformal blocks in arbitrary plumbing channel. Written by AI (an individual), not by AI (artificial intelligence).
 
 \section{Virasoro conformal blocks}
 
@@ -102,7 +105,7 @@ where the first factor is the large-$c$ limit of the vacuum block, and the secon
 
 Assembling all the pieces, we arrive at the final form for the $c$-recursion relation for genus-2 Virasoro conformal blocks in the theta channel:
 \ie
-F(h_1, h_2, h_3, c) &= F(0, 0, 0,c\rightarrow \infty)\times F_{SL(2,\mathbb{C})}(h_1, h_2, h_3)\\
+F(h_1, h_2, h_3, c) &= F(0, 0, 0,c\rightarrow \infty)\times F_{\mathfrak{sl}(2)}(h_1, h_2, h_3)\\
 &+ \sum_{r\geq 2,s\geq 1} -\left(\frac{\partial c_{rs}(h_1)}{\partial h_1}\right) \frac{A^c_{rs} q_1^{rs} [P_c^{rs}(h_3, h_2)]^2}{c-c_{r,s}(h_1)} F(h_1\rightarrow h_1+rs,c\rightarrow c_{rs}(h_1)) \\
 &+ 2\text{ permutation in }h_1, h_2, h_3.
 \fe
@@ -149,7 +152,7 @@ The sign $(\pm)$ is here indicating that we use the operator order $\langle \xi_
 
 We will keep using the theta channel as an example, with the plumbing data denoted by $(q_i, \eta_i)$. The all-NS conformal block is given by
 \ie
-F_a(h_1, h_2, h_3, c)= & \sum_{|A|=|B|,|C|=|D|,|E|=|F|, (-1)^{A+C+E}=(-1)^a} q_1^{|A|}\eta_1^A q_2^{|C|} \eta_2^C q_3^{|E|} \eta_3^E \mathbf{G}_{h_1}^{A B} \mathbf{G}_{h_2}^{C D} \mathbf{G}_{h_3}^{E F} \\
+\mathbf{F}_a(h_1, h_2, h_3, c)= & \sum_{|A|=|B|,|C|=|D|,|E|=|F|, (-1)^{A+C+E}=(-1)^a} q_1^{|A|}\eta_1^A q_2^{|C|} \eta_2^C q_3^{|E|} \eta_3^E \mathbf{G}_{h_1}^{A B} \mathbf{G}_{h_2}^{C D} \mathbf{G}_{h_3}^{E F} \\
 & \times (-1)^{AC+AE+CE}\rho_a(\mathbf{L}_{-A} \phi_1, \mathbf{L}_{-C} \phi_2, \mathbf{L}_{-E} \phi_3) \rho_a(\mathbf{L}_{-B} \phi_1, \mathbf{L}_{-D} \phi_2, \mathbf{L}_{-F} \phi_3) ,
 \fe
 where $\mathbf{G}$ denotes the inverse of the super-Gram matrix $\langle h|\mathbf{L}_{-A}^\dagger\mathbf{L}_{-B}|h\rangle$. $a$ takes value from $0, 1$. The sign $(-1)^{AC+AE+CE}$ comes from moving the operator orders. The condition $(-1)^{A+C+E}=(-1)^a$ ensures that only total-integer level or total-half-integer level intermediate states enters the 3-point function.
@@ -162,45 +165,48 @@ where $b$ is defined by $c= \frac{3}{2}+3(b+b^{-1})^2$. Conversely, for fixed $h
 \ie
 c_{r,s}(h) = \frac{15}{2}+3(x_{rs}+x_{rs}^{-1}),\quad b_{rs} = \sqrt{x_{rs}},\quad x_{rs} = \frac{r s-1+4 h+\sqrt{(r-s)^2+8(r s-1) h+16 h^2}}{1-r^2}.
 \fe
-At a pole $c_{rs}$ on the complex $c$-plane, the residues are contributed by the descendents of this null state, which we will call $\chi_{rs}=\sum_{M} \chi_{rs}^M \mathbf{L}_{-M}\phi$. The pole of $F_a$ at $c=c_{rs}(h_1)$ is given by
+At a pole $c_{rs}$ on the complex $c$-plane, the residues are contributed by the descendents of this null state, which we will call $\chi_{rs}=\sum_{M} \chi_{rs}^M \mathbf{L}_{-M}\phi$. The pole of $\mathbf{F}_a$ at $c=c_{rs}(h_1)$ is given by
 \ie
-W^{(1)}_{a, rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} \lim_{h_1\rightarrow h_{r,s}} \frac{h_1-h_{rs}}{\|\sum_{M} \chi_{rs}^M \mathbf{L}_{-M}\phi_1 \|^2} \\
+\mathbf{W}^{(1)}_{a, rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} \lim_{h_1\rightarrow h_{r,s}} \frac{h_1-h_{rs}}{\|\sum_{M} \chi_{rs}^M \mathbf{L}_{-M}\phi_1 \|^2} \\
 &\times  \sum_{|A|=|B|,|C|=|D|,|E|=|F|,(-1)^{A+C+E}=(-1)^{a+rs}} q_1^{|A|+\frac{rs}{2}}\eta_1^{A+rs} q_2^{|C|} \eta_2^C q_3^{|E|} \eta_3^E \mathbf{G}_{h_1+\frac{rs}{2}}^{A B} \mathbf{G}_{h_2}^{C D} \mathbf{G}_{h_3}^{E F} \\
 &\quad \quad \quad (-1)^{(A+rs)C+(A+rs)E+CE}\rho_a(\mathbf{L}_{-A} \chi_{rs}, \mathbf{L}_{-C} \phi_2, \mathbf{L}_{-E} \phi_3) \rho_a(\mathbf{L}_{-B} \chi_{rs}, \mathbf{L}_{-D} \phi_2, \mathbf{L}_{-F} \phi_3).
 \fe
 Normalizing $\chi_{rs}$ by taking the coefficient of $G_{-1/2}^{rs}\phi$ to be 1, the inverse residue of the null norm is given by
 \ie
-A_{r s}^c(h)=\lim_{h_1\rightarrow h_{r,s}} \frac{h_1-h_{rs}}{\|\sum_{M} \chi_{rs}^M \mathbf{L}_{-M}\phi_1 \|^2}=\frac{1}{2} \prod_{\substack{p=1-r, \ldots, r \\ q=1-s, \ldots, s \\ p+q \in 2\mathbb{Z} \\(p, q) \neq(0,0),(r, s)}}\left[\frac{p b_{r s}+q b_{r s}^{-1}}{\sqrt{2}}\right]^{-1}
+\mathbf{A}_{r s}^c(h)=\lim_{h_1\rightarrow h_{r,s}} \frac{h_1-h_{rs}}{\|\sum_{M} \chi_{rs}^M \mathbf{L}_{-M}\phi_1 \|^2}=\frac{1}{2} \prod_{\substack{p=1-r, \ldots, r \\ q=1-s, \ldots, s \\ p+q \in 2\mathbb{Z} \\(p, q) \neq(0,0),(r, s)}}\left[\frac{p b_{r s}+q b_{r s}^{-1}}{\sqrt{2}}\right]^{-1}
 \fe
 The 3-point functions can be factorized as
 \ie
-\rho_a(\mathbf{L}_{-A}\chi_{rs} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) = \begin{cases} \rho_{a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) P_{rs}^a(h_2, h_3),\quad rs\in 2\mathbb{Z}, \\ 
-\rho_{1-a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) P_{rs}^{a}(h_2, h_3),\quad rs\in 2\mathbb{Z}+1,
+\rho_a(\mathbf{L}_{-A}\chi_{rs} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) = (-1)^{rsE} \begin{cases} \rho_{a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^a(h_2, h_3),\quad rs\in 2\mathbb{Z}, \\ 
+\rho_{1-a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^{a}(h_2, h_3),\quad rs\in 2\mathbb{Z}+1,
 \end{cases}
 \fe
 where the two fusion polynomials are given by
 \ie
-P_{rs}^0(h_i, h_j;c)&=\prod_{\substack{p=1-r, 1-r+2, \ldots, r-1 \\ q=1-s, 1-s+2, \ldots, s-1 \\ p+q-(r+s) \in 4 \mathbb{Z}+2}} \frac{\lambda_i-\lambda_j+p b+q b^{-1}}{2 \sqrt{2}} \frac{\lambda_i+\lambda_j+p b+q b^{-1}}{2 \sqrt{2}},\\
-P_{rs}^1(h_i, h_j;c) &= \prod_{\substack{p=1-r, 1-r+2, \ldots, r-1 \\ q=1-s, 1-s+2, \ldots, s-1 \\ p+q-(r+s) \in 4 \mathbb{Z}}} \frac{\lambda_i-\lambda_j+p b+q b^{-1}}{2 \sqrt{2}} \frac{\lambda_i+\lambda_j+p b+q b^{-1}}{2 \sqrt{2}}.
+\mathbf{P}_{rs}^0(h_i, h_j;c)&=\prod_{\substack{p=1-r, 1-r+2, \ldots, r-1 \\ q=1-s, 1-s+2, \ldots, s-1 \\ p+q-(r+s) \in 4 \mathbb{Z}+2}} \frac{\lambda_i-\lambda_j+p b+q b^{-1}}{2 \sqrt{2}} \frac{\lambda_i+\lambda_j+p b+q b^{-1}}{2 \sqrt{2}},\\
+\mathbf{P}_{rs}^1(h_i, h_j;c) &= \prod_{\substack{p=1-r, 1-r+2, \ldots, r-1 \\ q=1-s, 1-s+2, \ldots, s-1 \\ p+q-(r+s) \in 4 \mathbb{Z}}} \frac{\lambda_i-\lambda_j+p b+q b^{-1}}{2 \sqrt{2}} \frac{\lambda_i+\lambda_j+p b+q b^{-1}}{2 \sqrt{2}}.
 \fe
 Here $\lambda_i$ is defined by
 \ie
 h_i=\frac{(b+b^{-1})^2-\lambda_i^2}{8}.
 \fe
-Plugging these results in the pole $W^{(1)}_{a,rs}$, one then have
+Plugging these results in the pole $\mathbf{W}^{(1)}_{a,rs}$, one then have
 \ie
-W^{(1)}_{a,rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} A_{rs}^c(h) q_1^{rs/2}\eta_1^{rs} [P_{rs}^a(h_2, h_3)]^2F_{a}(h_1 \rightarrow h_1+\tfrac{rs}{2}, c\rightarrow c_{rs}),\quad rs\in 2\mathbb{Z},\\
-W^{(1)}_{a,rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} A_{rs}^c(h) q_1^{rs/2}\eta_1^{rs} [P_{rs}^{a}(h_2, h_3)]^2F_{1-a}(h_1 \rightarrow h_1+\tfrac{rs}{2}, c\rightarrow c_{rs},\eta_{2,3}\rightarrow -\eta_{2,3}),\quad rs\in 2\mathbb{Z}+1,
+\mathbf{W}^{(1)}_{a,rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} \mathbf{A}_{rs}^c(h) q_1^{rs/2}\eta_1^{rs} [\mathbf{P}_{rs}^a(h_2, h_3)]^2\\
+&\quad \times \begin{cases}
+\mathbf{F}_{a}(h_1 \rightarrow h_1+\tfrac{rs}{2}, c\rightarrow c_{rs}),\quad rs\in 2\mathbb{Z}, & rs\in 2\mathbb{Z},\\
+\mathbf{F}_{1-a}(h_1 \rightarrow h_1+\tfrac{rs}{2}, c\rightarrow c_{rs},\eta_{2,3}\rightarrow -\eta_{2,3}),& rs\in 2\mathbb{Z}+1,
+\end{cases}
 \fe
 where the additional shift $\eta_{2,3}\rightarrow - \eta_{2,3}$ comes from the additional factor $(-1)^{rs(C+E)}$.
 
-The next ingredient is the large-$c$ seed term. The subalgebra of $\mathcal{N}=1$ SCA that's independent of $c$ is given by the $\mathfrak{osp}(1|2)$ algebra generated by $\{L_{\pm 1}, G_{\pm 1/2}\}$. We thus define $\hat{A}$ as the number of non-$L_{-1}, G_{-1/2}$ elements in $\mathbf{L}_{-A}$. The same $c$-power counting argument works also in the SUSY case: If we construct a orthonormal basis $\mathcal{L}_{-A}$ by applying Gram-Schmidt on $\mathbf{L}_{-A}$, then in the large $c$ limit the 3-point function $\rho(\mathcal{L}_{-A}\phi_1,\mathcal{L}_{-B}\phi_2, \mathcal{L}_{-C}\phi_3)$ factorizes into the large-$c$ vacuum block and the $\mathfrak{osp}(1|2)$ block,
+The next ingredient is the large-$c$ seed term. The subalgebra of $\mathcal{N}=1$ SCA that's independent of $c$ is given by the $\mathfrak{osp}(1|2)$ algebra generated by $\{L_{0,\pm 1}, G_{\pm 1/2}\}$. We thus define $\hat{A}$ as the number of non-$L_{-1}, G_{-1/2}$ elements in $\mathbf{L}_{-A}$. The same $c$-power counting argument works also in the SUSY case: If we construct a orthonormal basis $\mathcal{L}_{-A}$ by applying Gram-Schmidt on $\mathbf{L}_{-A}$, then in the large $c$ limit the 3-point function $\rho(\mathcal{L}_{-A}\phi_1,\mathcal{L}_{-B}\phi_2, \mathcal{L}_{-C}\phi_3)$ factorizes into the large-$c$ vacuum block and the $\mathfrak{osp}(1|2)$ block,
 \ie
-\lim_{c\rightarrow \infty}F_a(h_1, h_2, h_3,c) &= \sum_{\substack{a_1,a_2,a_3\in\{0,1\}\\a_1+a_2+a_3\equiv a\ (\mathrm{mod}\ 2)}} F_0(0,0,0,\infty;\eta_i\rightarrow (-1)^{a_i}\eta_i) \times F_{a_1a_2a_3}^{\mathfrak{osp}(1|2)}(h_1,h_2,h_3),
+\lim_{c\rightarrow \infty}\mathbf{F}_a(h_1, h_2, h_3,c) &= \sum_{\substack{a_1,a_2,a_3\in\{0,1\}\\a_1+a_2+a_3\equiv a\ (\mathrm{mod}\ 2)}} \mathbf{F}_0(0,0,0,\infty;\eta_i\rightarrow (-1)^{a_i}\eta_i) \times \mathbf{F}_{a_1a_2a_3}^{\mathfrak{osp}(1|2)}(h_1,h_2,h_3),
 \fe
 where the $\mathfrak{osp}(1|2)$ block is defined for $a_i\in\{0,1\}$ and $a_1+a_2+a_3\equiv a\ (\mathrm{mod}\ 2)$ by
 \ie
-F^{\mathfrak{osp}(1|2)}_{a_1a_2a_3}(h_1, h_2, h_3) &= \sum_{k_1, k_2, k_3} q_1^{k_1+\frac{1}{2}a_1}\eta_1^{a_1}q_2^{k_2+\frac{1}{2}a_2}\eta_2^{a_2}q_3^{k_3+\frac{1}{2}a_3}\eta_3^{a_3} (-1)^{a_1a_2+a_1a_3+a_2a_3}\\
+\mathbf{F}^{\mathfrak{osp}(1|2)}_{a_1a_2a_3}(h_1, h_2, h_3) &= \sum_{k_1, k_2, k_3} q_1^{k_1+\frac{1}{2}a_1}\eta_1^{a_1}q_2^{k_2+\frac{1}{2}a_2}\eta_2^{a_2}q_3^{k_3+\frac{1}{2}a_3}\eta_3^{a_3} (-1)^{a_1a_2+a_1a_3+a_2a_3}\\
 &\quad \times \left[\prod_{i=1}^3 \frac{1}{\|L_{-1}^{k_i}G_{-\frac{1}{2}}^{a_i}\phi_i\|^2}\right] \rho_a(L_{-1}^{k_1}G_{-\frac{1}{2}}^{a_1}\phi_1,L_{-1}^{k_2}G_{-\frac{1}{2}}^{a_2}\phi_2,L_{-1}^{k_3}G_{-\frac{1}{2}}^{a_3}\phi_3)^2
 \fe
 Importantly, the large-$c$ limit of the odd vacuum block is 0, due to the fact that one can only contract $G_r,G_{-r}$ pairwise. Due to the Grassmann parity of $G_{-1/2}^{a}\phi$, for each fixed $a$ one must sum over the corresponding 4 configurations of global $\mathfrak{sl}(2)$ primaries independently; the two values of $a$ give 8 configurations in total. The sign $\eta_i$ in the corresponding global block must be shifted. Similar to the Virasoro case, the vacuum block can also be directly computed in Schottky parameters. We will focus on the global $\mathfrak{osp}(1|2)$ blocks in the next section.
@@ -219,7 +225,7 @@ where $(x)_n$ is the rising Pochhammer symbol.
 
 For the genus-2 block in the theta channel, fix $a_i\in\{0,1\}$ and set $a\equiv a_1+a_2+a_3\ (\mathrm{mod}\ 2)$. We then have
 \ie
-F^{\mathfrak{osp}(1|2)}_{a_1a_2a_3}(h_1, h_2, h_3) &= \sum_{k_1, k_2, k_3} q_1^{k_1+\frac{1}{2}a_1}\eta_1^{a_1}q_2^{k_2+\frac{1}{2}a_2}\eta_2^{a_2}q_3^{k_3+\frac{1}{2}a_3}\eta_3^{a_3}(-1)^{a_1a_2+a_1a_3+a_2a_3}\\
+\mathbf{F}^{\mathfrak{osp}(1|2)}_{a_1a_2a_3}(h_1, h_2, h_3) &= \sum_{k_1, k_2, k_3} q_1^{k_1+\frac{1}{2}a_1}\eta_1^{a_1}q_2^{k_2+\frac{1}{2}a_2}\eta_2^{a_2}q_3^{k_3+\frac{1}{2}a_3}\eta_3^{a_3}(-1)^{a_1a_2+a_1a_3+a_2a_3}\\
 &\quad \times \left[\prod_{i=1}^3 \frac{1}{k_i!(2h_i)_{k_i+a_i}}\right] \rho_a(L_{-1}^{k_1}G_{-\frac{1}{2}}^{a_1}\phi_1,L_{-1}^{k_2}G_{-\frac{1}{2}}^{a_2}\phi_2,L_{-1}^{k_3}G_{-\frac{1}{2}}^{a_3}\phi_3)^2
 \fe
 The remaining object to compute is simply $\rho_a(L_{-1}^{k_1}G_{-\frac{1}{2}}^{a_1}\phi_1,L_{-1}^{k_2}G_{-\frac{1}{2}}^{a_2}\phi_2,L_{-1}^{k_3}G_{-\frac{1}{2}}^{a_3}\phi_3)$, which can be computed directly since $G^a_{-\frac{1}{2}}\phi$ is a $\mathfrak{sl}(2)$ primary and one can use the result for $\mathfrak{sl}(2)$ 3-point functions. To convert the component coefficients obtained from the superspace expansion to the fixed-parity trilinear form used here, one must include the factor $(-1)^{a_2(1-a_1)}$. Using the superspace formula \eqref{superspace23pt} with this conversion, one can extract
@@ -284,11 +290,600 @@ where $(x)^{(n)}$ is the falling Pochhammer symbol. Using the formula for $\math
  h_1+\frac{a_1}{2}+k_1
  -h_2-\frac{a_2}{2}-k_2+1
  -h_3-\frac{a_3}{2}-k_3
- \right)_{k_2}.
+ \right)_{k_2},
+\fe
+and hence
+\ie
+\mathbf{F}^{\mathfrak{osp}(1|2)}_{a_1a_2a_3}(h_1, h_2, h_3) &= \sum_{k_1, k_2, k_3} q_1^{k_1+\frac{1}{2}a_1}\eta_1^{a_1}q_2^{k_2+\frac{1}{2}a_2}\eta_2^{a_2}q_3^{k_3+\frac{1}{2}a_3}\eta_3^{a_3}(-1)^{a_1a_2+a_1a_3+a_2a_3} \left[\prod_{i=1}^3 \frac{1}{k_i!(2h_i)_{k_i+a_i}}\right]\\
+&\quad \times \Bigg[\rho_a\!\left(
+ G_{-1/2}^{a_1}\phi_1,
+ G_{-1/2}^{a_2}\phi_2,
+ G_{-1/2}^{a_3}\phi_3
+ \right) s_{k_1k_3}\!\left(
+ h_1+\frac{a_1}{2},
+ h_2+\frac{a_2}{2},
+ h_3+\frac{a_3}{2}
+ \right)
+ \\
+ &\quad\qquad \times
+ \left(
+ h_1+\frac{a_1}{2}+k_1
+ -h_2-\frac{a_2}{2}-k_2+1
+ -h_3-\frac{a_3}{2}-k_3
+ \right)_{k_2}\Bigg]^2.
 \fe
 Using this formula, one can compute the $\mathfrak{osp}(1|2)$ block directly as a $q$-expansion. This concludes our discussion for the all-NS $c$-recursion relation.
 
 \section{The Ramond blocks}
+
+Let us now consider the case with intermediate Ramond supermultiplets. The $h$-recursion relation of sphere 4-point Ramond block is derived in \cite{0810.1203, 1012.2974}, and that of torus 1-point Ramond block is derived in \cite{1207.5740}. In this section, we aim for $c$-recursion of arbitrary Ramond blocks.
+
+A Ramond multiplet has 2 ground states $w^\pm$ that are annihilated by $L_{m>0}, G_{n>0}$ and carries $L_0$ eigenvalue $h$. They are related by acting $G_0$ (we use the convention of \cite{0810.1203} for R-supermultiplet):
+\ie
+G_0 w^\pm = i \beta e^{\mp i\pi/4} w^\mp,
+\fe
+where $\beta$ is defined by $\beta^2 = \frac{c}{24}-h$. For R-sector $c$-recursion relation, instead of fixing the internal weight $h$, we fix $\beta$ of the internal primary, as doing so keeps the $G_0$ action on $w^\pm$ invariant. We take $w^+$ to be Grassmann even, and hence $w^-$ will be Grassmann odd. An arbitrary state in the Ramond multiplet can be then written as
+\ie
+\mathbb{L}_{-A} w^\pm \equiv L_{-n_1}\cdots L_{-n_k} G_{-m_1}\cdots G_{-m_\ell} w^\pm,\quad |A|= \sum_{i=1}^k n_i + \sum_{j=1}^\ell m_j,\quad (-1)^A \equiv (-1)^\ell,
+\fe
+where $n_1\geq \cdots \geq n_k, m_1>\cdots > m_\ell$. Throughout this notes, the NS-sector quantities will be written in \texttt{mathbf}, and the R-sector quantities in \texttt{mathbb}.
+
+For a sphere with (NS, R, R) insertions, we normalize the 3-point function such that
+\ie
+\rho^{++}(\phi_1, w^+_2, w_3^+) = 1,\quad \rho^{+-}(\phi_1, w^+_2, w_3^-) = 1,\quad \rho^{-+}(\phi_1, w^-_2, w_3^+) = 1,\quad \rho^{--}(\phi_1, w^-_2, w_3^-) = 1.
+\fe
+The 3-point functions with other slot orders can be related to these basic ones by a Mobius transformation. It turns out that all $\rho^{\pm, \pm}$'s with all slot orders are normalized to 1. One can introduce \cite{1012.2974}
+\ie
+\rho_{0}^{(\eta)}(\xi_1, \xi_2, \xi_3) &= \rho^{++}(\xi_1, \xi_2, \xi_3) + \eta \rho^{--}(\xi_1, \xi_2, \xi_3),\\ \rho_{1}^{(\eta)}(\xi_1, \xi_2, \xi_3) &= \rho^{+-}(\xi_1, \xi_2, \xi_3) + i\eta \rho^{-+}(\xi_1, \xi_2, \xi_3),
+\fe
+for $\eta = \pm$. The subscript $0,1$ indicates the total fermion parity, as $\rho(\mathbf{L}_{-A}\phi, \mathbb{L}_{-C}w^\alpha, \mathbb{L}_{-E}w^\gamma)$ can eventually be reduced to $\rho(\phi, w^{\alpha'}, w^{\gamma'})$ with $(-1)^{|\alpha'|+|\gamma'|} = (-1)^{A+C+E+|\alpha'|+|\gamma'|}$, where $|\alpha|=0$ for $\alpha = +$ and $|\alpha|=1$ for $\alpha = -$, as the total fermion parity stays the same under the contour pulling used in Ward identities. 
+
+The Ramond block in the glasses channel, with spin structure specified by the three signs $(\eta_1, \eta_2, \eta_3)$ and the edge 1 being NS, is defined by
+\ie \label{Rblock}
+\mathbb{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{|A|=|B|, |C|=|D|, |E|=|F|\\ (-1)^{A+C+E+|\alpha|+|\gamma|}=(-1)^f\\(-1)^{B+D+F+|\alpha'|+|\gamma'|}=(-1)^f}} q_1^{|A|} \eta_1^A q_2^{|C|} \eta_2^{C+|\alpha|} q_3^{|E|} \eta_3^{E+|\gamma|} \mathbf{G}^{AB}_{h_1} \mathbb{G}^{C\alpha, D\alpha'}_{\beta_2} \mathbb{G}^{E\gamma, F\gamma'}_{\beta_3}\\
+&\quad\quad \times (-1)^{A(C+|\alpha|)+A(E+|\gamma|)+(C+|\alpha|)(E+|\gamma|)}\\
+&\quad\quad \times \rho_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-C}w^\alpha_2, \mathbb{L}_{-E}w^\gamma_3)\rho_f^{(\eta')}(\mathbf{L}_{-B}\phi_1, \mathbb{L}_{-D}w^{\alpha'}_2, \mathbb{L}_{-F}w^{\gamma'}_3)
+\
+\fe
+where $\mathbb{G}$ is the inverse Gram matrix for R-multiplets (which excludes actions of $G_0$), and $\alpha,\alpha', \gamma, \gamma'$ are such that the total fermion parity $(-1)^{A+C+E+|\alpha|+|\gamma|}=(-1)^f$. 
+
+% One should note that since $\eta_i^F \mathbb{L}_{-A}w^+ = \eta_i^A L_{-A}w^+$ and $\eta_i^F \mathbb{L}_{-A}w^+ = -\eta_i^A L_{-A}w^+$, the action of $\eta_i^F$ will change the $\eta$-label of the 3-point function. We then have
+% \ie
+% \rho_f^{(\eta)}(\mathbf{L}_{-A} \phi_i, \eta_i^F \mathbb{L}_{-C} w^\alpha, \mathbb{L}_{-E} w^{\alpha^{\prime}})&=\eta_i^C \rho_f^{\left(\eta_i \eta\right)}(\mathbf{L}_{-A} \phi_i, \mathbb{L}_{-C} w^\alpha, \mathbb{L}_{-E} w^{\alpha^{\prime}}) ,\\
+% \rho_f^{(\eta)}(\mathbf{L}_{-A} \phi_i, \mathbb{L}_{-C} w^\alpha, \eta_i^F \mathbb{L}_{-E} w^{\alpha^{\prime}})&=\eta_i^{E+f} \rho_f^{(\eta_i \eta)}(\mathbf{L}_{-A} \phi_i, \mathbb{L}_{-C} w^\alpha, \mathbb{L}_{-E} w^{\alpha^{\prime}}),
+% \fe
+% where the additional sign $\eta_i^f$ on the second line comes from the fact that $\rho_1^{(\eta)}=\rho^{+-}+i\eta\rho^{-+}$, hence the third-slot ground state is odd in the $+-$ component. 
+
+Let's consider the case where the $w_2$ multiplet develops a null descendant. This happens when 
+\ie
+\beta=\beta_{r s}(c)=\frac{r b+s b^{-1}}{2 \sqrt{2}}, \quad r+s\in 2 \mathbb{Z}+1
+\fe
+and for fixed $\beta$, this becomes the following value for $c$:
+\ie
+x_{r s}^{\mathrm{R}}(\beta) & =\frac{4 \beta^2-r s+2 \sqrt{2} \beta \sqrt{2 \beta^2-r s}}{r^2}, \\
+c_{r s}^{\mathrm{R}}(\beta) & =\frac{15}{2}+3\left(x_{r s}^{\mathrm{R}}(\beta)+x_{r s}^{\mathrm{R}}(\beta)^{-1}\right) .
+\fe
+We choose $b_{rs}=\sqrt{x_{rs}^{\mathrm{R}}}$ continuously such that $\beta=\beta_{rs}(c_{rs}^{\mathrm{R}})$. Below, $b_{rs}$ and $c_{rs}^{\mathrm{R}}$ refer to this branch. When this happens, the R multiplet develops a doublet of null states $\chi_{rs}^\pm = \sum_{M,\alpha} \chi_{rs}^{M,\alpha} G_0^\alpha \mathbb{L}_{-M} w^\pm$ happens at level $h+rs/2$, and we normalize $\chi_{rs}^\pm$ such that the coefficient of $L_{-1}^{rs/2}w^\pm$ is 1. In $\beta$ variables, the weight $h_{rs}=h+rs/2$ translates to
+\ie
+\beta_{r s}^{\prime}=\frac{(-1)^s}{2 \sqrt{2}}\left(r b_{r s}-s b_{r s}^{-1}\right).
+\fe
+
+The Ramond block $\mathbb{F}^{(\eta, \eta')}_f(h_1, \beta_2, \beta_3, c)$ develops a pole when $c=c_{rs}^{\mathrm{R}}(\beta_2)$. The inverse norm for the null state is given by
+\ie
+\mathbb{A}_{r s}^c \equiv \lim _{c \rightarrow c_{r a}^{\mathrm{R}}(\beta)} \frac{\beta_{r s}(c)^2-\beta^2}{\left\|\chi_{r s}^{+}\right\|^2}=2^{r s-2}\left(r b_{r s}+s b_{r s}^{-1}\right) \prod_{\substack{p=1-r, \ldots, r, q=1-s, \ldots, s \\ p+q \in \mathbb{Z},(p, q) \neq(0,0)}}\left(p b_{r s}+q b_{r s}^{-1}\right)^{-1}
+\fe
+and the fusion polynomials are given by 
+\ie
+\mathbb{P}_{rs}^{\R,\eta}(h_i,\beta_j;c)
+={}&
+\prod_{\substack{0\le k\le r-1,\ 0\le\ell\le s-1\\k+\ell\in2\mathbb Z}}
+\frac{\lambda_i-2\sqrt2\,\eta\beta_j
+ -(1-r+2k)b-(1-s+2\ell)b^{-1}}{2\sqrt2}\\
+&\times
+\prod_{\substack{0\le k\le r-1,\ 0\le\ell\le s-1\\k+\ell\in2\mathbb Z+1}}
+\frac{\lambda_i+2\sqrt2\,\eta\beta_j
+ -(1-r+2k)b-(1-s+2\ell)b^{-1}}{2\sqrt2}.
+\fe
+The factorization relations are summarized in appendix A. Using the relation
+\ie
+\rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_i,
+  \mathbb{L}_{-C}\chi_{rs}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_j}^{\gamma})=
+ \mathbb{P}_{rs}^{\R,\eta}(h_i,\beta_j;c_{rs}^{\R})
+ \rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_i,
+  \mathbb{L}_{-C}w_{\beta'_{rs}}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_j}^{\gamma})
+\fe
+one can read off the polar value of $\mathbb{F}_f^{(\eta, \eta')}$ at $c=c_{rs}^{\R}(\beta_2)$:
+\ie
+\operatorname{Res}_{c=c_{rs}^{\R}(\beta_2)} \mathbb{F}_f^{(\eta, \eta')} &= \frac{\partial c_{rs}(\beta_2)}{\partial \beta^2_2}\mathbb{A}_{rs}^c\sum_{\substack{|A|=|B|, |C|=|D|, |E|=|F|\\ (-1)^{A+C+E+|\alpha|+|\gamma|}=(-1)^f\\(-1)^{B+D+F+|\alpha'|+|\gamma'|}=(-1)^f}} q_1^{|A|}\eta_1^{A} q_2^{|C|}\eta_2^{C+|\alpha|} q_3^{|E|} \eta_3^{E+|\gamma|} \\
+&\quad\quad \times (-1)^{A(C+|\alpha|)+A(E+|\gamma|)+(C+|\alpha|)(E+|\gamma|)}\mathbf{G}^{AB}_{h_1} \mathbb{G}^{C\alpha, D\alpha'}_{\beta'_{rs}} \mathbb{G}^{E\gamma, F\gamma'}_{\beta_3}\\
+&\quad\quad \times \rho_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-C}\chi^\alpha_{rs}, \mathbb{L}_{-E}w^\gamma_3)\rho_f^{(\eta')}(\mathbf{L}_{-B}\phi_1, \mathbb{L}_{-D}\chi^\alpha_{rs}, \mathbb{L}_{-F}w^{\gamma'}_3),
+\fe
+and hence
+\ie
+\operatorname{Res}_{c=c_{rs}^{\R}(\beta_2)} \mathbb{F}_f^{(\eta, \eta')}&=\frac{\partial c_{rs}(\beta_2)}{\partial \beta^2_2}\mathbb{A}_{rs}^c\mathbb{P}_{rs}^{\R,\eta}(h_1,\beta_3;c_{rs}^\R(\beta_2))\mathbb{P}_{rs}^{\R,\eta'}(h_1,\beta_3;c_{rs}^\R(\beta_2))\\
+&\quad \times\mathbb{F}_f^{(\eta, \eta')}(\beta_2\rightarrow \beta'_{rs},c\rightarrow c^{\R}_{rs}(\beta_2))
+\fe
+where we used the fact that $\chi_{rs}^{M,\alpha} G_0^\alpha \mathbb{L}_{-M}$ is Grassmann even, which ensures that the total fermion parity $f$ doesn't get shifted and there are no additional signs $\eta_2$. The residue at $c=c^{\R}_{rs}(\beta_3)$ can be worked out analogously.
+
+The Ramond also develops poles when the NS supermultiplet contains a null state. The relavant fusion polynomials are
+\ie
+\mathbb{P}_{rs}^{\NS,\eta}(\beta_2,\beta_3;c)
+={}&
+\prod_{\substack{0\le k\le r-1,\ 0\le\ell\le s-1\\k+\ell\in2\mathbb Z}}
+\frac{2\sqrt2(\beta_3-\eta\beta_2)
+ -(1-r+2k)b-(1-s+2\ell)b^{-1}}{2\sqrt2}\\
+&\times
+\prod_{\substack{0\le k\le r-1,\ 0\le\ell\le s-1\\k+\ell\in2\mathbb Z+1}}
+\frac{2\sqrt2(\beta_3+\eta\beta_2)
+ -(1-r+2k)b-(1-s+2\ell)b^{-1}}{2\sqrt2},
+\label{eq:ns-rr-fusion-polynomial}
+\fe
+and the factorization relation is given by
+\ie
+&\rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\chi_{rs},
+  \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma})\\
+&\quad=\mathbb{P}_{rs}^{\NS,\eta}(\beta_2,\beta_3;c_{rs})
+\begin{cases}
+\rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
+  \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma}),&rs\in2\mathbb Z,\\[0.4em]
+e^{i(-1)^f\pi/4}\rho_{1-f}^{(-\eta)}
+ (\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
+  \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma}),&rs\in2\mathbb Z+1.
+\end{cases}
+\fe
+From these, one can derive the residue at $c=c_{rs}(h_1)$:
+\ie
+&\operatorname{Res}_{c=c_{r s}\left(h_1\right)} \mathbb{F}_f^{\left(\eta, \eta^{\prime}\right)} = -\frac{\partial c_{r s}\left(h_1\right)}{\partial h_1} \mathbf{A}_{r s}^c(h_1) q_1^{r s / 2} \mathbb{P}_{r s}^{\mathrm{NS}, \eta}\left(\beta_2, \beta_3 ; c_{r s}(h_1)\right) \mathbb{P}_{r s}^{\mathrm{NS}, \eta^{\prime}}\left(\beta_2, \beta_3 ; c_{r s}(h_1)\right) \\
+&\qquad \times \begin{cases}
+\mathbb{F}_f^{\left(\eta, \eta^{\prime}\right)}\left(h_1\rightarrow h_1+ \tfrac{rs}{2}, c\rightarrow c_{r s}(h_1)\right),  & rs\in 2\mathbb{Z}, \\
+i(-1)^f \eta_1 \mathbb{F}_{1-f}^{\left(-\eta, -\eta^{\prime}\right)}\left(h_1\rightarrow h_1+ \tfrac{rs}{2}, c\rightarrow c_{r s}(h_1),\eta_2\rightarrow -\eta_2, \eta_3\rightarrow -\eta_3\right), & rs\in 2\mathbb{Z}+1.
+\end{cases}
+\fe
+
+We now have computed all the polar part in the following recursion relation
+\ie
+\mathbb{F}^{(\eta, \eta')}_f(h_1, \beta_2, \beta_3, c) &= \mathbb{F}^{(\eta, \eta')}_f(h_1, \beta_2, \beta_3, c\rightarrow \infty)\\
+&+ \sum_{r+s\in 2\mathbb{Z}} \frac{\operatorname{Res}_{c=c_{rs}(h_1)}\mathbb{F}^{(\eta, \eta')}_f}{c-c_{rs}(h_1)} + \sum_{i=2,3}\sum_{r+s\in 2\mathbb{Z}+1} \frac{\operatorname{Res}_{c=c_{rs}^{\R}(\beta_i)} \mathbb{F}_f^{(\eta, \eta')}}{c-c_{rs}^{\R}(\beta_i)}
+\fe
+The next ingredient of the $c$-recursion relation of the Ramond blocks is the large-$c$ limit, which we will compute in the next section.
+
+\section{The large-$c$ Ramond block}
+
+In the $c\rightarrow \infty$ limit, we fix $h$ of the NS supermultiplet, and fix $\beta$ of the R supermultiplet, which implies that $L_0 = \frac{c}{24} - \beta^2 + |A|$ is of order $\mathcal{O}(c)$ for a Ramond state $\mathbb{L}_{-A}w^\pm_\beta$.
+
+We first analyze the $c$-scaling behavior of the Gram matrix element $\langle w^\alpha_\beta|\mathbb{L}_{-A}^\dagger \mathbb{L}_{-B}|w^\gamma_\beta\rangle$, where there are no $G_0$'s in the lowering operators $\mathbb{L}_{-A}$. The SCA in the R-sector reads
+\ie
+{\left[L_m, L_n\right] } & =(m-n) L_{m+n}+\frac{c}{12}\left(m^3-m\right) \delta_{m+n, 0}, \\
+{\left[L_m, G_n\right] } & =\left(\frac{m}{2}-n\right) G_{m+n}, \\
+\left\{G_m, G_n\right\} & =2 L_{m+n}+\frac{c}{3}\left(m^2-\frac{1}{4}\right) \delta_{m+n, 0}.
+\fe
+Therefore, in the large-$c$ limit, the algebra becomes
+\ie
+{\left[L_m, L_{-n}\right] } =\frac{c}{12}m^3 \delta_{m, n},\quad \left\{G_m, G_{-n}\right\} = \frac{c}{3}m^2 \delta_{m, n},\quad {\left[L_m, G_{-n}\right] } = 0.
+\fe
+The leading term in the Gram matrix then comes from pairwise contractions between the generators. Let $\hat{A}$ be the total number of generators in $\mathbb{L}_{-A}$, then $\langle w^\alpha_\beta|\mathbb{L}_{-A}^\dagger \mathbb{L}_{-B}|w^\gamma_\beta\rangle$ is of order $\mathcal{O}(c^{\hat{A}})$ if $(A,\alpha)=(B,\gamma)$, at most $\mathcal{O}(c^{\hat{A}-1})$ if $\hat{A}=\hat{B}, (A,\alpha)\neq (B,\gamma)$, and at most $\mathcal{O}(c^{\mathrm{min}(\hat{A}, \hat{B})})$ if $\hat{A}\neq \hat{B}$. One can then apply Gram-Schmidt to $\mathbb{L}_{-A}w^{\pm}_\beta$ to obtain a orthonormal basis $\mathcal{L}_{-A}w^{\pm}_\beta$, and
+\ie
+\|\mathcal{L}_{-A}w^\pm_{\beta}\|^2 \sim \mathcal{O}(c^{\hat{A}}).
+\fe
+
+The next ingredient is the scaling behavior of the 3-point function $\rho_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2,\mathbb{L}_{-C}w^\gamma_3)$. One can use conformal Ward identities to convert a $L_{-n}, G_{-r}$ insertion in one slot to another slot. For a $L_{-n}$ insertion,
+\ie
+& \rho_f^{(\eta)}\left(L_{-n} \mathbf{L}_{-A} \phi_1, \mathbb{L}_{-B} w_2^\alpha, \mathbb{L}_{-C} w_3^\gamma\right) \\
+& \qquad=\rho_f^{(\eta)}\left(\mathbf{L}_{-A} \phi_1, \mathbb{L}_{-B} w_2^\alpha, L_n \mathbb{L}_{-C} w_3^\gamma\right)+\sum_{p=-1}^n\binom{n+1}{p+1} \rho_f^{(\eta)}\left(\mathbf{L}_{-A} \phi_1, L_p \mathbb{L}_{-B} w_2^\alpha, \mathbb{L}_{-C} w_3^\gamma\right),\\
+& \rho_f^{(\eta)}\left(\mathbf{L}_{-A} \phi_1, \mathbb{L}_{-B} w_2^\alpha, L_{-n} \mathbb{L}_{-C} w_3^\gamma\right) \\
+& \qquad=\rho_f^{(\eta)}\left(L_n \mathbf{L}_{-A} \phi_1, \mathbb{L}_{-B} w_2^\alpha, \mathbb{L}_{-C} w_3^\gamma\right)-\sum_{p=0}^{\infty}\binom{1-n}{p} \rho_f^{(\eta)}\left(\mathbf{L}_{-A} \phi_1, L_{p-1} \mathbb{L}_{-B} w_2^\alpha, \mathbb{L}_{-C} w_3^\gamma\right) ,\\
+&\rho_f^{(\eta)}  \left(\mathbf{L}_{-A} \phi_1, L_{-n} \mathbb{L}_{-B} w_2^\alpha, \mathbb{L}_{-C} w_3^\gamma\right) = \sum_{p=0}^{\infty}\binom{n-2+p}{n-2} \rho_f^{(\eta)}\left(L_{n+p} \mathbf{L}_{-A} \phi_1, \mathbb{L}_{-B} w_2^\alpha, \mathbb{L}_{-C} w_3^\gamma\right) \\
+& \qquad+(-1)^n \sum_{p=0}^{\infty}\binom{n-2+p}{n-2} \rho_f^{(\eta)}\left(\mathbf{L}_{-A} \phi_1, \mathbb{L}_{-B} w_2^\alpha, L_{p-1} \mathbb{L}_{-C} w_3^\gamma\right) .
+\fe
+This imposes a problem to our infinite-$c$ limit. Each conformal Ward identity contains a $L_0$ term acting on a Ramond multiplet on the RHS. In our fixed $\beta$ large-$c$ limit, this will contribute to a term of order $\mathcal{O}(c)$. Therefore, for $\mathbf{L}_{-A}, \mathbb{L}_{-A}$ made from purely $L_{-n}$'s,
+\ie
+\rho_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2,\mathbb{L}_{-C}w^\gamma_3) \sim \mathcal{O}(c^{\hat{A}+\hat{B}+\hat{C}})
+\fe
+and the contribution of this term to the large-$c$ conformal block will scale like $\mathcal{O}(c^{\hat{A}+\hat{B}+\hat{C}})$. Namely, the large-$c$, fixed-$\beta$ limit of the Ramond block is not well-defined. 
+
+\textbf{[Other large-$c$ limits? Fixed $h$?]}
+
+\newpage
+\begin{appendix}
+\section{Fusion polynomials and factorization formulae}
+
+We collect the result for all useful fusion polynomials and factorization formulae in this appendix. They are taken directly from the menu of a fusion restaurant in Cambridge, MA. All the formulas here are tested against direct low-level computations and checked to be consistent with the Mobius tranformation that permutes the three slots.
+
+\subsection{Fusion polynomials on a (NS, NS, NS) sphere}
+
+The All-NS fusion polynomials are defined as
+\ie
+\mathbf{P}_{rs}^{0}(h_i,h_j;c)
+&={}&\prod_{\substack{
+p=1-r,1-r+2,\ldots,r-1\\
+q=1-s,1-s+2,\ldots,s-1\\
+p+q-(r+s)\in4\mathbb Z+2}}
+\frac{\lambda_i-\lambda_j+pb+qb^{-1}}{2\sqrt2}
+\frac{\lambda_i+\lambda_j+pb+qb^{-1}}{2\sqrt2},\\
+\mathbf{P}_{rs}^{1}(h_i,h_j;c)
+&={}&\prod_{\substack{
+p=1-r,1-r+2,\ldots,r-1\\
+q=1-s,1-s+2,\ldots,s-1\\
+p+q-(r+s)\in4\mathbb Z}}
+\frac{\lambda_i-\lambda_j+pb+qb^{-1}}{2\sqrt2}
+\frac{\lambda_i+\lambda_j+pb+qb^{-1}}{2\sqrt2}.
+\label{eq:ns-fusion-polynomials}
+\fe
+They satisfy the reflection relation
+\ie
+ \mathbf{P}_{rs}^{0}(h_i,h_j;c_{rs})
+ &= (-1)^{\lceil rs/2 \rceil}
+   \mathbf{P}_{rs}^{0}(h_j,h_i;c_{rs}),\\
+ \mathbf{P}_{rs}^{1}(h_i,h_j;c_{rs})
+ &=(-1)^{\lfloor rs/2\rfloor}
+   \mathbf{P}_{rs}^{1}(h_j,h_i;c_{rs}).
+ \label{eq:appendix-ns-polynomial-reflection}
+\fe
+
+For a null state in the first slot, the factorization relation is given by
+\ie
+&\rho_f(\mathbf{L}_{-A}\chi_{rs},
+        \mathbf{L}_{-C}\phi_2,
+        \mathbf{L}_{-E}\phi_3)
+\\
+&\quad=(-1)^{rsE}\mathbf{P}_{rs}^{f}(h_3,h_2;c_{rs})
+\begin{cases}
+\rho_f(\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
+       \mathbf{L}_{-C}\phi_2,
+       \mathbf{L}_{-E}\phi_3),&rs\in2\mathbb Z,\\[0.3em]
+\rho_{1-f}(\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
+       \mathbf{L}_{-C}\phi_2,
+       \mathbf{L}_{-E}\phi_3),&rs\in2\mathbb Z+1.
+\end{cases}
+\label{eq:appendix-ns-first-factorization}
+\fe
+For the second slot,
+\ie
+&\rho_f(\mathbf{L}_{-A}\phi_1,
+        \mathbf{L}_{-C}\chi_{rs},
+        \mathbf{L}_{-E}\phi_3)\\
+&\quad=\mathbf{P}_{rs}^{f}(h_3,h_1;c_{rs})
+\begin{cases}
+\rho_f(\mathbf{L}_{-A}\phi_1,
+       \mathbf{L}_{-C}\phi_{h_{rs}+rs/2},
+       \mathbf{L}_{-E}\phi_3),&rs\in2\mathbb Z,\\[0.3em]
+\rho_{1-f}(\mathbf{L}_{-A}\phi_1,
+       \mathbf{L}_{-C}\phi_{h_{rs}+rs/2},
+       \mathbf{L}_{-E}\phi_3),&rs\in2\mathbb Z+1,
+\end{cases}
+\label{eq:appendix-ns-second-factorization}
+\fe
+and for the third slot,
+\ie
+&\rho_f(\mathbf{L}_{-A}\phi_1,
+        \mathbf{L}_{-C}\phi_2,
+        \mathbf{L}_{-E}\chi_{rs})\\
+&\quad=(-1)^{rs(A+C)}\mathbf{P}_{rs}^{f}(h_1,h_2;c_{rs})
+\begin{cases}
+\rho_f(\mathbf{L}_{-A}\phi_1,
+       \mathbf{L}_{-C}\phi_2,
+       \mathbf{L}_{-E}\phi_{h_{rs}+rs/2}),&rs\in2\mathbb Z,\\[0.3em]
+\rho_{1-f}(\mathbf{L}_{-A}\phi_1,
+       \mathbf{L}_{-C}\phi_2,
+       \mathbf{L}_{-E}\phi_{h_{rs}+rs/2}),&rs\in2\mathbb Z+1.
+\end{cases}
+\label{eq:appendix-ns-third-factorization}
+\fe
+For the case where two of the three states are null states, one have
+\ie
+\rho_f(\mathbf{L}_{-A}\chi_{rs},
+        \mathbf{L}_{-C}\chi_{rs},
+        \mathbf{L}_{-E}\phi_3)&=(-1)^{rsE}
+ \mathbf{P}_{rs}^{f}(h_3,h_{rs};c_{rs})
+ \mathbf{P}_{rs}^{f+rs}
+ \left(h_3,h_{rs}+\frac{rs}{2};c_{rs}\right)\\
+&\qquad\quad\times
+ \rho_f(\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
+        \mathbf{L}_{-C}\phi_{h_{rs}+rs/2},
+        \mathbf{L}_{-E}\phi_3),
+\\
+\rho_f(\mathbf{L}_{-A}\chi_{rs},
+        \mathbf{L}_{-C}\phi_2,
+        \mathbf{L}_{-E}\chi_{rs})&=(-1)^{rs(f+rs)}
+ \mathbf{P}_{rs}^{f}(h_{rs},h_2;c_{rs})
+ \mathbf{P}_{rs}^{f+rs}
+ \left(h_{rs}+\frac{rs}{2},h_2;c_{rs}\right)\\
+&\qquad\quad\times
+ \rho_f(\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
+        \mathbf{L}_{-C}\phi_2,
+        \mathbf{L}_{-E}\phi_{h_{rs}+rs/2}),
+\\
+\rho_f(\mathbf{L}_{-A}\phi_1,
+        \mathbf{L}_{-C}\chi_{rs},
+        \mathbf{L}_{-E}\chi_{rs})&=(-1)^{rs(A+C)}
+ \mathbf{P}_{rs}^{f}(h_{rs},h_1;c_{rs})
+ \mathbf{P}_{rs}^{f+rs}
+ \left(h_1,h_{rs}+\frac{rs}{2};c_{rs}\right)\\
+&\qquad\quad\times
+ \rho_f(\mathbf{L}_{-A}\phi_1,
+        \mathbf{L}_{-C}\phi_{h_{rs}+rs/2},
+        \mathbf{L}_{-E}\phi_{h_{rs}+rs/2}).
+\fe
+
+\subsection{NS null states on a (NS, R, R) sphere}
+The two fusion polynomial for a NS null state on a (NS, R, R) sphere is defined as
+\ie
+\mathbb{P}_{rs}^{\NS,\eta}(\beta_2,\beta_3;c)
+={}&
+\prod_{\substack{0\le k\le r-1,\ 0\le\ell\le s-1\\k+\ell\in2\mathbb Z}}
+\frac{2\sqrt2(\beta_3-\eta\beta_2)
+ -(1-r+2k)b-(1-s+2\ell)b^{-1}}{2\sqrt2}\\
+&\times
+\prod_{\substack{0\le k\le r-1,\ 0\le\ell\le s-1\\k+\ell\in2\mathbb Z+1}}
+\frac{2\sqrt2(\beta_3+\eta\beta_2)
+ -(1-r+2k)b-(1-s+2\ell)b^{-1}}{2\sqrt2}.
+\label{eq:ns-rr-fusion-polynomial}
+\fe
+For the NS null state in the first slot, the factorization relation reads
+\ie
+&\rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\chi_{rs},
+  \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma})\\
+&\quad=\mathbb{P}_{rs}^{\NS,\eta}(\beta_2,\beta_3;c_{rs})
+\begin{cases}
+\rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
+  \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma}),&rs\in2\mathbb Z,\\[0.4em]
+e^{i(-1)^f\pi/4}\rho_{1-f}^{(-\eta)}
+ (\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
+  \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma}),&rs\in2\mathbb Z+1.
+\end{cases}
+\fe
+For the third slot,
+\ie
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbb{L}_{-C}w_{\beta_2}^{\gamma},
+  \mathbf{L}_{-E}\chi_{rs})
+\\
+&\quad=
+\mathbb{P}_{rs}^{\NS,(-1)^f\eta}(\beta_2,\beta_1;c_{rs})
+\begin{cases}
+\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbb{L}_{-C}w_{\beta_2}^{\gamma},
+  \mathbf{L}_{-E}\phi_{h_{rs}+rs/2}),&rs\in2\mathbb Z,\\[0.4em]
+\eta e^{i(-1)^f\pi/4}\rho_{1-f}^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbb{L}_{-C}w_{\beta_2}^{\gamma},
+  \mathbf{L}_{-E}\phi_{h_{rs}+rs/2}),&rs\in2\mathbb Z+1.
+\end{cases}
+\fe
+Finally, for the second slot with even $rs$, one have
+\ie
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbf{L}_{-C}\chi_{rs},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma})
+\\
+&\quad=\frac12\sum_{\epsilon=\pm1}
+ \mathbb{P}_{rs}^{\NS,\epsilon}(\beta_3,\beta_1;c_{rs})
+ \Big[
+ \rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbf{L}_{-C}\phi_{h_{rs}+rs/2},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma})
+\\[-0.2em]
+&\hspace{55mm}
+ {}-i\eta\epsilon\,
+ \rho_f^{(-\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbf{L}_{-C}\phi_{h_{rs}+rs/2},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma})
+ \Big].
+\label{eq:appendix-rnr-ns-even-factorization}
+\fe
+and for odd $rs$, 
+\ie
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbf{L}_{-C}\chi_{rs},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma})
+\\
+&\quad=\frac{(-1)^{(rs-1)/2}i^f e^{i\pi/4}}2
+ \sum_{\epsilon=\pm1}
+ \mathbb{P}_{rs}^{\NS,\epsilon}(\beta_3,\beta_1;c_{rs})
+ \Big[
+ \eta\,\rho_{1-f}^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbf{L}_{-C}\phi_{h_{rs}+rs/2},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma})
+\\[-0.2em]
+&\hspace{70mm}
+ {}+i\epsilon\,
+ \rho_{1-f}^{(-\eta)}
+ (\mathbb{L}_{-A}w_{\beta_1}^{\alpha},
+  \mathbf{L}_{-C}\phi_{h_{rs}+rs/2},
+  \mathbb{L}_{-E}w_{\beta_3}^{\gamma})
+ \Big].
+ \fe
+
+\subsection{Ramond null state on a (NS, R, R) sphere}
+
+The two fusion polynomials associated with a Ramond null state are defined as 
+\ie
+\mathbb{P}_{rs}^{\R,\eta}(h_i,\beta_j;c)
+={}&
+\prod_{\substack{0\le k\le r-1,\ 0\le\ell\le s-1\\k+\ell\in2\mathbb Z}}
+\frac{\lambda_i-2\sqrt2\,\eta\beta_j
+ -(1-r+2k)b-(1-s+2\ell)b^{-1}}{2\sqrt2}\\
+&\times
+\prod_{\substack{0\le k\le r-1,\ 0\le\ell\le s-1\\k+\ell\in2\mathbb Z+1}}
+\frac{\lambda_i+2\sqrt2\,\eta\beta_j
+ -(1-r+2k)b-(1-s+2\ell)b^{-1}}{2\sqrt2}.
+\label{eq:r-fusion-polynomial}
+\fe
+The factorization relations are
+\ie
+&\rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_i,
+  \mathbb{L}_{-C}\chi_{rs}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_j}^{\gamma})=
+ \mathbb{P}_{rs}^{\R,\eta}(h_i,\beta_j;c_{rs}^{\R})
+ \rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_i,
+  \mathbb{L}_{-C}w_{\beta'_{rs}}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_j}^{\gamma}),
+\\[0.6em]
+&\rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_i,
+  \mathbb{L}_{-C}w_{\beta_j}^{\gamma},
+  \mathbb{L}_{-E}\chi_{rs}^{\alpha})=
+ \mathbb{P}_{rs}^{\R,\eta}(h_i,\beta_j;c_{rs}^{\R})
+ \rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_i,
+  \mathbb{L}_{-C}w_{\beta_j}^{\gamma},
+  \mathbb{L}_{-E}w_{\beta'_{rs}}^{\alpha}),
+\\[0.6em]
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}\chi_{rs}^{\alpha},
+  \mathbb{L}_{-C}w_{\beta_j}^{\gamma},
+  \mathbf{L}_{-E}\phi_i)=
+ \mathbb{P}_{rs}^{\R,(-1)^f\eta}(h_i,\beta_j;c_{rs}^{\R})
+ \rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta'_{rs}}^{\alpha},
+  \mathbb{L}_{-C}w_{\beta_j}^{\gamma},
+  \mathbf{L}_{-E}\phi_i),
+\\[0.6em]
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_j}^{\gamma},
+  \mathbb{L}_{-C}\chi_{rs}^{\alpha},
+  \mathbf{L}_{-E}\phi_i)=
+ \mathbb{P}_{rs}^{\R,(-1)^f\eta}(h_i,\beta_j;c_{rs}^{\R})
+ \rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_j}^{\gamma},
+  \mathbb{L}_{-C}w_{\beta'_{rs}}^{\alpha},
+  \mathbf{L}_{-E}\phi_i),
+\label{eq:appendix-nrr-rrn-r-factorizations}
+\fe
+and for the (R, NS, R) order,
+\ie
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}\chi_{rs}^{\alpha},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}w_{\beta_j}^{\gamma})
+\\[-0.2em]
+&\quad=\frac{(-1)^{rs/2}}2
+ \sum_{\epsilon=\pm1}
+ \mathbb{P}_{rs}^{\R,\epsilon}(h_i,\beta_j;c_{rs}^{\R})
+ \left[
+ \begin{aligned}
+ &
+ \rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta'_{rs}}^{\alpha},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}w_{\beta_j}^{\gamma})
+\\[-0.2em]
+&
+ {}-i\eta\epsilon\,
+ \rho_f^{(-\eta)}
+ (\mathbb{L}_{-A}w_{\beta'_{rs}}^{\alpha},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}w_{\beta_j}^{\gamma})
+ \end{aligned}
+ \right],
+\\[0.6em]
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_j}^{\gamma},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}\chi_{rs}^{\alpha})
+\\[-0.2em]
+&\quad=\frac{(-1)^{rs/2}}2
+ \sum_{\epsilon=\pm1}
+ \mathbb{P}_{rs}^{\R,\epsilon}(h_i,\beta_j;c_{rs}^{\R})
+ \left[
+ \begin{aligned}
+ &
+ \rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_j}^{\gamma},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}w_{\beta'_{rs}}^{\alpha})
+\\[-0.2em]
+&
+ {}-i\eta\epsilon\,
+ \rho_f^{(-\eta)}
+ (\mathbb{L}_{-A}w_{\beta_j}^{\gamma},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}w_{\beta'_{rs}}^{\alpha})
+ \end{aligned}
+ \right].
+\label{eq:appendix-rnr-r-factorizations}
+\fe
+
+For the case where the two Ramond states are simutaneously null state,
+\ie
+&\rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_i,
+  \mathbb{L}_{-C}\chi_{rs}^{\alpha},
+  \mathbb{L}_{-E}\chi_{rs}^{\gamma})
+\\[-0.2em]
+&\quad=
+ \mathbb{P}_{rs}^{\R,\eta}(h_i,\beta_{rs};c_{rs}^{\R})
+ \mathbb{P}_{rs}^{\R,\eta}(h_i,\beta_{rs}^{\prime};c_{rs}^{\R})
+ \rho_f^{(\eta)}
+ (\mathbf{L}_{-A}\phi_i,
+  \mathbb{L}_{-C}w_{\beta_{rs}^{\prime}}^{\alpha},
+  \mathbb{L}_{-E}w_{\beta_{rs}^{\prime}}^{\gamma}),
+\\[0.6em]
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}\chi_{rs}^{\alpha},
+  \mathbb{L}_{-C}\chi_{rs}^{\gamma},
+  \mathbf{L}_{-E}\phi_i)
+\\[-0.2em]
+&\quad=
+ \mathbb{P}_{rs}^{\R,(-1)^f\eta}(h_i,\beta_{rs};c_{rs}^{\R})
+ \mathbb{P}_{rs}^{\R,(-1)^f\eta}(h_i,\beta_{rs}^{\prime};c_{rs}^{\R})
+ \rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_{rs}^{\prime}}^{\alpha},
+  \mathbb{L}_{-C}w_{\beta_{rs}^{\prime}}^{\gamma},
+  \mathbf{L}_{-E}\phi_i),
+\\[0.6em]
+&\rho_f^{(\eta)}
+ (\mathbb{L}_{-A}\chi_{rs}^{\alpha},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}\chi_{rs}^{\gamma})
+\\[-0.2em]
+&\quad=\frac12\sum_{\epsilon=\pm1}
+ \mathbb{P}_{rs}^{\R,\epsilon}(h_i,\beta_{rs};c_{rs}^{\R})
+ \mathbb{P}_{rs}^{\R,\epsilon}(h_i,\beta_{rs}^{\prime};c_{rs}^{\R})
+ \left[
+ \begin{aligned}
+ &
+ \rho_f^{(\eta)}
+ (\mathbb{L}_{-A}w_{\beta_{rs}^{\prime}}^{\alpha},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}w_{\beta_{rs}^{\prime}}^{\gamma})
+\\[-0.2em]
+&
+ \quad-i\eta\epsilon\,
+ \rho_f^{(-\eta)}
+ (\mathbb{L}_{-A}w_{\beta_{rs}^{\prime}}^{\alpha},
+  \mathbf{L}_{-C}\phi_i,
+  \mathbb{L}_{-E}w_{\beta_{rs}^{\prime}}^{\gamma})
+ \end{aligned}
+ \right].
+\fe
+
+\section{Ward identities for (NS, R, R) 3-point function}
+
+\end{appendix}
 
 \end{document}
 \bye
