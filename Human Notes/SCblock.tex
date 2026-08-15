@@ -151,7 +151,7 @@ by essentially normalizing
 The sign $(\pm)$ is here indicating that we use the operator order $\langle \xi_3\xi_2\xi_1\bar{\xi}_3\bar{\xi}_2\bar{\xi}_1 \rangle$ to define the $\rho$ on the RHS, which can differ from the operator order in LHS by a sign. Again, we denote $\rho_a(\xi_1, \xi_2, \xi_3)=\rho_a(\xi_1, \xi_2, \xi_3|1)$.
 
 We will keep using the theta channel as an example, with the plumbing data denoted by $(q_i, \eta_i)$. The all-NS conformal block is given by
-\ie
+\ie \label{NSblock}
 \mathbf{F}_a(h_1, h_2, h_3, c)= & \sum_{|A|=|B|,|C|=|D|,|E|=|F|, (-1)^{A+C+E}=(-1)^a} q_1^{|A|}\eta_1^A q_2^{|C|} \eta_2^C q_3^{|E|} \eta_3^E \mathbf{G}_{h_1}^{A B} \mathbf{G}_{h_2}^{C D} \mathbf{G}_{h_3}^{E F} \\
 & \times (-1)^{AC+AE+CE}\rho_a(\mathbf{L}_{-A} \phi_1, \mathbf{L}_{-C} \phi_2, \mathbf{L}_{-E} \phi_3) \rho_a(\mathbf{L}_{-B} \phi_1, \mathbf{L}_{-D} \phi_2, \mathbf{L}_{-F} \phi_3) ,
 \fe
@@ -490,7 +490,89 @@ This imposes a problem to our infinite-$c$ limit. Each conformal Ward identity c
 \fe
 and the contribution of this term to the large-$c$ conformal block will scale like $\mathcal{O}(c^{\hat{A}+\hat{B}+\hat{C}})$. Namely, the large-$c$, fixed-$\beta$ limit of the Ramond block is not well-defined. 
 
-\textbf{[Other large-$c$ limits? Fixed $h$?]}
+\section{Two copies of Virasoro from SCA}
+
+We now turn to another approach of computing the superconformal blocks. The idea is: Take the $\mathcal{N}=1$ SCA with arbitrary shift $\nu$ in the fermionic levels, tensor it with a auxiliary free fermion algebra $\mathsf{F}$, there will then be a subalgebra $\mathsf{Vir}\oplus \mathsf{Vir}\subset \mathsf{SCA}_\nu \otimes \mathsf{F}$ \cite{1312.4520,1608.02568}. Using the branching rules of this subalgebra reduction, one can decompose the superconformal block into ordinary Virasoro blocks.
+
+The enlarged algebra $\mathsf{SCA}_\nu \otimes \mathsf{F}$ is given by:
+\ie
+{\left[L_m, L_n\right] } & =(m-n) L_{m+n}+\frac{c}{12}\left(m^3-m\right) \delta_{m+n, 0}, \\
+{\left[L_m, G_r\right] } & =\left(\frac{m}{2}-r\right) G_{m+r}, \\
+\left\{G_r, G_s\right\} & =2 L_{r+s}+\frac{c}{3}\left(r^2-\frac{1}{4}\right) \delta_{r+s, 0} ,\\
+\{\psi_r, \psi_s\} &= \delta_{r+s,0},\quad \{\psi_r, G_s\}=[\psi_r, L_n] = 0.
+\fe
+where the levels $m,n\in\mathbb{Z}$, $r, s\in \mathbb{Z}+\nu$. We also introduce the following operators
+\ie
+L_n^{\mathrm{F}} = \frac{1}{2} \sum_{r\in \mathbb{Z}+\nu} r:\psi_{n-r}\psi_r: + \frac{1-2\nu}{16}\delta_{n,0},\quad U_n = \sum_{r\in \mathbb{Z}+\nu} \psi_{n-r} G_r.
+\fe
+For $b\neq 1$, one can then define
+\ie
+\begin{aligned}
+& L_n^{(1)}=\frac{b^{-1}}{b^{-1}-b} L_n-\frac{b^{-1}+2 b}{b^{-1}-b} L_n^{\mathrm{F}}+\frac{1}{b^{-1}-b} U_n, \\
+& L_n^{(2)}=\frac{b}{b-b^{-1}} L_n-\frac{b+2 b^{-1}}{b-b^{-1}} L_n^{\mathrm{F}}+\frac{1}{b-b^{-1}} U_n ,
+\end{aligned}
+\fe
+which satisfies $L_n^{(1)}+L_n^{(2)}=L_n+L_n^{\mathrm{F}}$. Note that in order to have $(L_n^{(i)})^\dagger = L_{-n}^{(i)}$, we take the BPZ conjugate of $\psi_r$ to be $(\psi_r)^\dagger = -\psi_{-r}$. One can also prove that these operators are the generators of two commuting copies of the Virasoro algebra
+\ie
+[L_m^{(i)}, L_n^{(j)}] = \left[(m-n) L_{m+n} + \frac{c^{(i)}}{12} (m^3-m)\delta_{m+n,0}\right]\delta_{ij},
+\fe
+and the two central charges are given by
+\ie
+c^{(i)}=1+6\left(b^{(i)}+\frac{1}{b^{(i)}}\right)^2,\quad (b^{(1)})^2 = \frac{2b^2}{1-b^2},\quad (b^{(2)})^{-2} = \frac{2}{b^2-1}.
+\fe
+This proves the subalgebra relation $\mathsf{Vir}\oplus \mathsf{Vir}\subset \mathsf{SCA}_\nu \otimes \mathsf{F}$. Under the subalgebra reduction $\mathsf{Vir}\oplus \mathsf{Vir}\subset \mathsf{SCA}_\nu \otimes \mathsf{F}$, a highest-weight representation of $\mathsf{SCA}_\nu \otimes \mathsf{F}$ can be decomposed into irreps of $\mathsf{Vir}\oplus \mathsf{Vir}$. This decomposition is worked out in \cite{1608.02568}. We now discuss this decomposition in both NS and R sectors.
+
+As always, we denote a NS sector primary of $\mathsf{SCA}_{1/2}$ by $\phi$, with its conformal weight denoted by $h$. We further define the "Liouville momentum" $P$ by
+\ie
+h=\frac{1}{2}\left(\frac{1}{4}Q^2-P^2\right),
+\fe
+where $Q=b+b^{-1}$. The space $\mathcal{M}_{\mathrm{NS}}(h)$ is then defined by acting arbitrary $\psi_{-r}, L_{-n}, G_{-r}$ on $\mathbf{1}_{\mathsf{F}}\otimes \phi$. Denoting the Virasoro Verma module with lowest weight $h$ by $\mathcal{V}_c(h)$, it's proven that \cite{1111.2803}
+\ie \label{NSbranching}
+\mathcal{M}_{\mathrm{NS}}(h) \cong \bigoplus_{n \in \frac{1}{2} \mathbb{Z}} \mathcal{V}_{c^{(1)}}(h_{n}^{(1)}) \otimes \mathcal{V}_{c^{(2)}}(h_{n}^{(2)})
+\fe
+for $P\notin \frac{1}{2}(b\mathbb{Z}+b^{-1}\mathbb{Z})$. The weights $h^{(i)}_{n}$'s are given by $h^{(i)}_n = \frac{1}{4}(Q^{(i)})^2-(P_{n}^{(i)})^2$
+\ie \label{branchweights}
+P_n^{(1)}=\frac{P}{\sqrt{2-2 b^2}}+n b^{(1)},\quad P_n^{(2)}=\frac{P}{\sqrt{2-2 b^{-2}}}+n(b^{(2)})^{-1}.
+\fe
+We will denote the highest weight vector in $\mathcal{V}_{c^{(1)}}(h_{n}^{(1)}) \otimes \mathcal{V}_{c^{(2)}}(h_{n}^{(2)})$ by $v_{n}$. 
+
+In the R sector, due to the existence of the fermion zero mode $\psi_0$, there exists two ground states $u^\pm$ in the $\mathsf{F}$ module, with $\psi_0$ action $\psi_0 u^\pm = 2^{-1/2}u^\mp$. The $\mathsf{SCA}_0\otimes \mathsf{F}$ module contains 4 ground states given by $u^\pm \otimes w^\pm_\beta$, where $w^\pm_\beta$ is a R ground state as always. The Liouville momentum of $w_\beta^\pm$ is defined by
+\ie
+h = \frac{c}{24}-\beta^2 = \frac{1}{16} + \frac{1}{2}\left(\frac{1}{4}Q^2-P^2\right),\quad P^2 = 2\beta^2.
+\fe
+Defining the space $\mathcal{M}_{\R}(\beta)$ by acting lowering operators on the 4 ground states $u^\pm \otimes w_\beta^\pm$. For $P\notin \frac{1}{2}(b\mathbb{Z}+b^{-1}\mathbb{Z})$ it can be decomposed into \cite{1608.02568}
+\ie\label{Rbranching}
+\mathcal{M}_{\mathrm{R}}(\beta) \cong \bigoplus_{\epsilon=0,1} \bigoplus_{n \in \frac{1}{2} \mathbb{Z}+\frac{1}{4}} \mathcal{V}_{c^{(1)}}(h_{n}^{(1)}) \otimes \mathcal{V}_{c^{(2)}}(h_{n}^{(2)}),
+\fe
+where the direct sum over $\epsilon$ indicates that there are two copies of each $\mathcal{V}_{c^{(1)}}(h_{n}^{(1)}) \otimes \mathcal{V}_{c^{(2)}}(h_{n}^{(2)})$, and $\epsilon$ denotes the total fermion parity of the lowest weight state (including the $\psi$ parity). The weights are given by the same expression \eqref{branchweights}. One can directly check that the characters of the two sides of \eqref{NSbranching}, \eqref{Rbranching} agrees via the Jacobi triple product identity. The ground state of $\mathcal{V}_{c^{(1)}}(h_{n}^{(1)}) \otimes \mathcal{V}_{c^{(2)}}(h_{n}^{(2)})$ constructed from $u^\pm$ will be denoted by $v^\pm_n$.
+
+Let's inspect on how the superconformal blocks $\mathbf{F}_a(h_1, h_2, h_3, c)$, $\mathbb{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3,c)$ decompose under $\mathsf{Vir}\oplus \mathsf{Vir}\subset \mathsf{SCA}_\nu \otimes \mathsf{F}$. We first define the all-NS $\mathsf{SCA}_\nu \otimes \mathsf{F}$ block in the theta channel as
+\ie
+\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c)= & \sum_{
+  \substack{
+  |A|=|A'|,|B|=|B'|,|C|=|C'|,\mathsf{A}, \mathsf{B}, \mathsf{C}\\
+  (-1)^{A+B+C}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}=(-1)^a\\
+  }
+} q_1^{|A|}\eta_1^A q_2^{|B|} \eta_2^B  q_3^{|C|} \eta_3^C \mathbf{G}_{h_1}^{AA'} \mathbf{G}_{h_2}^{BB'} \mathbf{G}_{h_3}^{CC'} \\
+& \times (-1)^{AB+AC+BC+\mathsf{AB}+\mathsf{AC}+\mathsf{BC}}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\\
+& \times \hat{\rho}_a(\Psi_{-\mathsf{A}}\mathbf{L}_{-A} \phi_1, \Psi_{-\mathsf{B}}\mathbf{L}_{-B} \phi_2, \Psi_{-\mathsf{C}}\mathbf{L}_{-C} \phi_3) \hat{\rho}_a(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'} \phi_1, \Psi_{-\mathsf{B}}\mathbf{L}_{-B'} \phi_2, \Psi_{-\mathsf{C}}\mathbf{L}_{-C'} \phi_3) ,
+\fe
+where ${\Psi}_{-\mathsf{A}}v$ stands for $\Psi_{-\mathsf{A}}v \equiv \psi_{-r_1}\cdots \psi_{-r_m} v$, $|\mathsf{A}|$ stands for the total level of fermion lowering operators, and $(-1)^{\mathsf{A}}$ is the total $\psi$ parity. We have used the fact that $\langle \mathbf{L}_{-A}v| \Psi_{-\mathsf{A}}^\dagger \Psi_{-\mathsf{B}}|\mathbf{L}_{-A}v\rangle$ is the matrix $(-1)^{\mathsf{A}}\delta_{\mathsf{A},\mathsf{B}}\mathbf{G}_{AB}$, which give rises to the sign $(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}$. The 3-point function $\hat{\rho}^{L/R}$ is labeled by the total parity, including the fermionic one. 
+
+For states $u\otimes x$, the 3-point function can be factorized into
+\ie
+& \hat{\rho}_a\left(u_1 \otimes x_1, u_2 \otimes x_2, u_3 \otimes x_3\right)=(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|} \rho^{\mathsf{F}}(u_1, u_2, u_3) \rho_a(x_1, x_2, x_3),
+\fe
+where $\rho^{\mathsf{F}}(u_1, u_2, u_3)$ is the 3-point function in the free fermion theory. Importantly, $\rho^{\mathsf{F}}$ is only nonzero if $\mathsf{A}+\mathsf{B}+\mathsf{C}\equiv 0$ mod 2. If we define the free fermion block as
+\ie
+\mathbf{F}^{\mathsf{F}}(q_i, \eta_i) =& \sum_{\substack{\mathsf{A}, \mathsf{B}, \mathsf{C}\\(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}=1}}(-1)^{\mathsf{AB}+\mathsf{AC}+\mathsf{BC}}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\left[{\rho}^{\mathsf{F}}(\Psi_{-\mathsf{A}}\mathbf{1}_\mathsf{F}, \Psi_{-\mathsf{B}}\mathbf{1}_\mathsf{F}, \Psi_{-\mathsf{C}}\mathbf{1}_\mathsf{F})\right]^2,
+\fe
+then the all-NS $\mathsf{SCA}_\nu \otimes \mathsf{F}$ block can be factorized into
+\ie
+\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c;q_i, \eta_i)=\mathbf{F}_{\mathsf{F}}(q_i, \eta_i)\times {\mathbf{F}}_a(h_1, h_2, h_3, c;q_i, \eta_i).
+\fe
+
+Using the decomposition of the representation $\mathcal{M}_{\text{NS}}$ under $\mathsf{Vir}\oplus \mathsf{Vir}\subset \mathsf{SCA}_\nu \otimes \mathsf{F}$, we can also express $\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c)$ in terms of Virasoro blocks.
 
 \newpage
 \begin{appendix}
@@ -880,8 +962,6 @@ For the case where the two Ramond states are simutaneously null state,
  \end{aligned}
  \right].
 \fe
-
-\section{Ward identities for (NS, R, R) 3-point function}
 
 \end{appendix}
 
