@@ -39,6 +39,7 @@ ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/python' '${REMOTE_ROOT}/Code/co
     ./Code/ns_genus2_cannon.py \
     ./Code/ns_genus2_partition.py \
     ./Code/test_ns_genus2_partition.py \
+    ./Code/test_free_majorana_pair_of_pants.py \
     ./Code/compare_ns_torus_c_h_recursion.py \
     ./Code/ns_genus_c_recursion_checks.py \
     ./Code/ns_recursion_recipe.py \
@@ -49,6 +50,7 @@ ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/python' '${REMOTE_ROOT}/Code/co
     ./Code/superconformal_blocks.py \
     ./Code/python/ccy_genus2_block.py \
     ./Code/python/free_boson_plumbing.py \
+    ./Code/python/free_majorana_pair_of_pants.py \
     ./Code/python/genus2_vacuum_blocks.py \
     ./Code/python/plumbing_algorithms.py \
     ./Code/python/virasoro_blocks.py \
@@ -58,7 +60,11 @@ ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/python' '${REMOTE_ROOT}/Code/co
 )
 rsync -az "${LOCAL_CONFIG}" "${SSH_HOST}:${REMOTE_CONFIG}"
 
-ssh "${SSH_HOST}" "set -e; '${REMOTE_PYTHON}' -c 'import numpy, scipy, mpmath; print(numpy.__version__, scipy.__version__, mpmath.__version__)'; cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' -m unittest Code/test_ns_genus2_partition.py; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' Code/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan"
+if [[ ${NS_G2_SKIP_PREFLIGHT:-0} != 1 ]]; then
+  ssh "${SSH_HOST}" "set -e; '${REMOTE_PYTHON}' -c 'import numpy, scipy, mpmath; print(numpy.__version__, scipy.__version__, mpmath.__version__)'; cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' -m unittest Code/test_ns_genus2_partition.py Code/test_free_majorana_pair_of_pants.py; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' Code/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan"
+else
+  echo "remote preflight skipped only because the identical staged snapshot was already verified"
+fi
 
 TASK_COUNT=$(ssh "${SSH_HOST}" "cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' Code/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan --task-count-only")
 if [[ ${TASK_COUNT} -le 0 || ${ARRAY_CAP} -le 0 || ${TASKS_PER_ARRAY} -le 0 ]]; then

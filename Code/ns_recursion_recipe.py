@@ -45,6 +45,10 @@ class NSPoleMP:
 def ns_c_pole_mp(r: int, s: int, weight) -> NSPoleMP:
     """Return the principal-sheet ``c_(r,s)(h)`` and ``J=-dc/dh``.
 
+    Here ``c`` is the ordinary super-Virasoro central charge.  Belavin--Geiko
+    denote ``hat_c = 2*c/3`` by ``c``; both their pole value and Jacobian are
+    multiplied by ``3/2`` before entering this API.
+
     The discriminant and ``b`` square roots are fresh principal roots.  This
     function does not preserve a sheet along a complex continuation path.
     """

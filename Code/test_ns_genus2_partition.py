@@ -10,15 +10,30 @@ import unittest
 import mpmath
 
 from compare_ns_torus_c_h_recursion import _global_torus_block
-from ns_genus2_cannon import _designs, task_count
+from ns_genus2_cannon import (
+    SCHEMA,
+    _cutoff_pairs,
+    _digest,
+    _designs,
+    _node_data,
+    _validate_shard,
+    _validate_config_spin_characteristics,
+    channel_task_chunks,
+    decode_task,
+    task_count,
+)
 from ns_genus2_partition import (
+    C_ORDINARY_AT_HAT_C_9,
     GLASSES_CCY_DESCENDANT_EDGE_ORDER,
     GLASSES_GEOMETRY_EDGE_ORDER,
     GLASSES_ORIENTATION,
+    GLASSES_TO_THETA_BRANCH_COMPOSED,
+    HAT_C_TARGET,
     MAX_RECURSION_ORDER,
     NSGenus2CRecursion,
     THETA_CCY_DESCENDANT_EDGE_ORDER,
     THETA_GEOMETRY_EDGE_ORDER,
+    THETA_INTEGER_BRANCH,
     _MPPartialFractionInC,
     _free_scalar_chiral_log,
     _free_superfield_chiral_log,
@@ -26,6 +41,7 @@ from ns_genus2_partition import (
     _theta_geometry_to_ccy_order,
     _theta_global_term,
     _theta_schottky_data,
+    _transport_spin_characteristic,
     direct_global_block,
     free_superfield_partition,
     ns_weight,
@@ -48,6 +64,11 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
         return max(
             abs(a - scale * b) for a, b in zip(left_entries, right_entries)
         ) / max(1.0, *(abs(value) for value in left_entries))
+
+    def test_central_charge_convention_is_explicit(self) -> None:
+        self.assertEqual(HAT_C_TARGET, 9.0)
+        self.assertEqual(C_ORDINARY_AT_HAT_C_9, 13.5)
+        self.assertEqual(C_ORDINARY_AT_HAT_C_9, 1.5 * HAT_C_TARGET)
 
     def test_orientation_polynomial(self) -> None:
         self.assertEqual(
@@ -91,9 +112,19 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
         )
         self.assertEqual(
             checks["spin_target_characteristic"],
-            {"alpha": [0, 0], "beta": [1, 1]},
+            {"alpha": [0, 0], "beta": [0, 0]},
         )
-        self.assertEqual(checks["theta_edge_lifts"], [1, 1, -1])
+        self.assertEqual(checks["theta_edge_lifts"], [-1, 1, 1])
+        self.assertEqual(checks["same_spin_theta_lifts"], [-1, 1, 1])
+        self.assertEqual(checks["same_spin_glasses_lifts"], [1, 1, 1])
+        self.assertEqual(
+            checks["theta_integer_branch"],
+            [list(row) for row in THETA_INTEGER_BRANCH],
+        )
+        self.assertEqual(
+            checks["symplectic_matrix"],
+            [list(row) for row in GLASSES_TO_THETA_BRANCH_COMPOSED],
+        )
 
     def test_functional_recursion_preserves_order_twelve_benchmarks(self) -> None:
         self.assertEqual(MAX_RECURSION_ORDER, 24)
@@ -253,6 +284,72 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
                 (12, "glasses"),
             ],
         )
+
+        axis_config = {
+            "points": config["points"],
+            "convergence_designs": [
+                {"recursion_order": 20, "quadrature_order": 10},
+                {"recursion_order": 22, "quadrature_order": 10},
+                {"recursion_order": 24, "quadrature_order": 8},
+                {"recursion_order": 24, "quadrature_order": 10},
+                {"recursion_order": 24, "quadrature_order": 12},
+            ],
+        }
+        self.assertEqual(
+            _cutoff_pairs(axis_config),
+            ((20, 10), (22, 10), (24, 8), (24, 10), (24, 12)),
+        )
+        self.assertEqual(
+            task_count(axis_config),
+            2 * (10**3 + 10**3 + 8**3 + 10**3 + 12**3),
+        )
+
+    def test_cannon_shard_identity_validation(self) -> None:
+        config = {
+            "points": [
+                {
+                    "id": "audit",
+                    "q_values": {
+                        "theta": [0.11, 0.12, 0.13],
+                        "glasses": [0.14, 0.15, 0.16],
+                    },
+                }
+            ],
+            "recursion_order": 8,
+            "quadrature_orders": [2],
+        }
+        design = _designs(config)[0]
+        _, indices, momenta, measure = _node_data(config, design, 0)
+        shard = {
+            "schema": SCHEMA,
+            "task_index": 0,
+            "node_index": 0,
+            "config_digest": _digest(config),
+            "implementation_fingerprint": "review-fingerprint",
+            **design,
+            "indices": list(indices),
+            "momenta": list(momenta),
+            "measure": measure,
+            "q_edge_order": list(THETA_GEOMETRY_EDGE_ORDER),
+            "descendant_tensor_edge_order": list(
+                THETA_CCY_DESCENDANT_EDGE_ORDER
+            ),
+        }
+        _validate_shard(config, 0, shard, "review-fingerprint")
+
+        wrong_node = dict(shard, node_index=1)
+        with self.assertRaisesRegex(RuntimeError, "node_index mismatch"):
+            _validate_shard(config, 0, wrong_node, "review-fingerprint")
+        wrong_implementation = dict(
+            shard, implementation_fingerprint="other-fingerprint"
+        )
+        with self.assertRaisesRegex(RuntimeError, "implementation mismatch"):
+            _validate_shard(
+                config, 0, wrong_implementation, "review-fingerprint"
+            )
+        wrong_indices = dict(shard, indices=[1, 0, 0])
+        with self.assertRaisesRegex(RuntimeError, "indices mismatch"):
+            _validate_shard(config, 0, wrong_indices, "review-fingerprint")
 
     def test_theta_geometry_is_reversed_only_at_ccy_tensor_boundary(self) -> None:
         self.assertEqual(
@@ -538,16 +635,116 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
         )
         self.assertEqual(
             _spin_characteristic_from_lifts(
+                "theta", q_values, (1, 1, 1)
+            ),
+            ((0, 0), (1, 0)),
+        )
+        self.assertEqual(
+            _spin_characteristic_from_lifts(
                 "theta", q_values, (1, 1, -1)
             ),
-            ((0, 0), (1, 1)),
+            ((0, 0), (0, 1)),
         )
         self.assertEqual(
             _spin_characteristic_from_lifts(
                 "theta", q_values, (1, -1, -1)
             ),
-            ((0, 0), (1, 0)),
+            ((0, 0), (0, 0)),
         )
+        self.assertEqual(
+            _spin_characteristic_from_lifts(
+                "theta", q_values, (-1, 1, 1)
+            ),
+            ((0, 0), (0, 0)),
+        )
+
+        branch_composed = (
+            (0, 0, -1, -1),
+            (0, 0, 0, -1),
+            (1, 0, 0, 0),
+            (-1, 1, 0, 0),
+        )
+        self.assertEqual(
+            _transport_spin_characteristic(
+                branch_composed, ((0, 0), (0, 0))
+            ),
+            ((0, 0), (0, 0)),
+        )
+
+    def test_cannon_config_fails_closed_on_spin_mismatch(self) -> None:
+        config = {
+            "points": [
+                {
+                    "id": "spin-probe",
+                    "q_values": {
+                        "theta": [0.11, 0.12, 0.13],
+                        "glasses": [0.14, 0.15, 0.16],
+                    },
+                    "omega": {
+                        "glasses": [[1j, 0j], [0j, 1j]],
+                        "theta": [[2j, 1j], [1j, 1j]],
+                    },
+                }
+            ],
+            "physical_lifts": {
+                "theta": [-1, 1, 1],
+                "glasses": [1, 1, 1],
+            },
+            "expected_spin_characteristics": {
+                "theta": {"alpha": [0, 0], "beta": [0, 0]},
+                "glasses": {"alpha": [0, 0], "beta": [0, 0]},
+            },
+            "provenance": {
+                "symplectic_matrix_glasses_to_theta_after_branch": [
+                    [0, 0, -1, -1],
+                    [0, 0, 0, -1],
+                    [1, 0, 0, 0],
+                    [-1, 1, 0, 0],
+                ],
+                "spin_transport_source_channel": "glasses",
+                "spin_transport_target_channel": "theta",
+                "spin_transport_period_tolerance": 1.0e-12,
+            },
+        }
+        ledger = _validate_config_spin_characteristics(config)
+        self.assertEqual(
+            ledger["spin-probe"]["theta"],
+            {"alpha": [0, 0], "beta": [0, 0]},
+        )
+        config["physical_lifts"]["theta"] = [1, 1, 1]
+        config["expected_spin_characteristics"]["theta"]["beta"] = [1, 0]
+        with self.assertRaisesRegex(ValueError, "modular spin mismatch"):
+            _validate_config_spin_characteristics(config)
+        config["physical_lifts"]["theta"] = [-1, 1, 1]
+        config["expected_spin_characteristics"]["theta"]["beta"] = [0, 0]
+        config["expected_spin_characteristics"]["theta"]["beta"] = [1, 1]
+        with self.assertRaisesRegex(ValueError, "spin characteristic mismatch"):
+            _validate_config_spin_characteristics(config)
+
+        del config["expected_spin_characteristics"]
+        with self.assertRaisesRegex(ValueError, "must specify"):
+            _validate_config_spin_characteristics(config)
+
+    def test_channel_task_chunks_cover_only_requested_channel(self) -> None:
+        config = {
+            "points": [{"id": "p0"}, {"id": "p1"}],
+            "recursion_orders": [2],
+            "quadrature_orders": [2],
+        }
+        chunks = channel_task_chunks(config, "theta", 3)
+        flattened = [
+            task_index
+            for start, stop in chunks
+            for task_index in range(start, stop + 1)
+        ]
+        expected = [
+            task_index
+            for task_index in range(task_count(config))
+            if decode_task(config, task_index)[0]["channel"] == "theta"
+        ]
+        self.assertEqual(flattened, expected)
+        self.assertEqual(len(chunks), 6)
+        self.assertTrue(all(stop - start + 1 <= 3 for start, stop in chunks))
 
     def test_bosonized_free_superfield_at_overlap_point(self) -> None:
         q_values = (

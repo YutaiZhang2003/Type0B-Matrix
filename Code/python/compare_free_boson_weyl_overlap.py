@@ -24,7 +24,6 @@ try:
         theta_maximal_F_asymptotic,
         theta_maximal_raw_oscillator_asymptotic,
     )
-    from liouville_genus2 import format_complex, parse_complex
     from plumbing_algorithms import schottky_glasses_period_matrix, schottky_theta_period_matrix_cross_ratio
 except ImportError:  # pragma: no cover - supports package-style execution
     from plumbing.free_boson_pair_of_pants import (
@@ -43,8 +42,20 @@ except ImportError:  # pragma: no cover - supports package-style execution
         theta_maximal_F_asymptotic,
         theta_maximal_raw_oscillator_asymptotic,
     )
-    from plumbing.liouville_genus2 import format_complex, parse_complex
     from plumbing.plumbing_algorithms import schottky_glasses_period_matrix, schottky_theta_period_matrix_cross_ratio
+
+
+def parse_complex(value: str) -> complex:
+    """Parse a command-line complex number without Liouville dependencies."""
+
+    return complex(value.replace("i", "j"))
+
+
+def format_complex(value: complex) -> str:
+    """Render one plumbing coordinate in the review-table convention."""
+
+    value = complex(value)
+    return f"{value.real:+.12e}{value.imag:+.12e}j"
 
 
 DEFAULT_GLASSES_Q = (0.15 + 0.0j, 0.15 + 0.0j, 0.15 + 0.0j)

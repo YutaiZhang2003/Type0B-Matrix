@@ -169,6 +169,12 @@ The physical map is
   `order` counts coefficients; `bry_elliptic_block(..., L, ...)` instead
   implements BRY's parity-dependent truncation through displayed order
   \(q^L\).
+- two_virasoro_fusion.py: arbitrary-precision all-NS
+  \(\mathsf{Vir}\oplus\mathsf{Vir}\) branching coefficients from the
+  free-field Fermi-sea prescription, including the parity-dependent blow-up
+  products, identity-specialized norms, and the canonical \(B_a^2\).
+- test_two_virasoro_fusion.py: low-level product formulas, negative-label
+  continuation, norm, trinion-ordering, and \(b=1\) complex-momentum checks.
 - test_superconformal_blocks.py: BRY ancillary-notebook regression,
   endpoint-pole, and independent \(z\)-versus-\(q\) checks.
 - ramond_sphere_blocks.py: Hadasz--Jaskolski--Suchanek elliptic recursion for

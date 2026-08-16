@@ -2862,6 +2862,77 @@ Thus the observed order-twenty residual is
  \label{fig:torus-direct-c-modularity}
 \end{figure}
 
+\paragraph{Ten-point fixed-spin scan.}
+To verify the modular law as a function rather than only at the hard endpoint,
+we also evaluated
+\begin{equation}
+ \tau=iy,\qquad
+ y\in\{0.25,0.30,0.35,0.40,0.50,0.60,0.70,0.80,0.90,1.00\},
+ \label{eq:torus-direct-c-imaginary-axis-scan}
+\end{equation}
+at recursion order sixteen, with \(P_{\max}=5\), a 64-point
+Gauss--Legendre momentum rule, 40-digit structure constants, and 90-digit
+block arithmetic.  Both independently evaluated frames use the ordinary
+NS--NS lift, \(\xi=+1\).  In particular, there is no \((-1)^F\) insertion
+in either trace and no Ramond sewing enters this test; the latter would be
+required instead for the \(S\)-transform of an NS trace with \((-1)^F\).
+The comparison is therefore literally
+\begin{equation}
+ \mathcal G_{\NS}(iy)
+ \quad\hbox{against}\quad
+ y^{-2d}\mathcal G_{\NS}(i/y),
+ \label{eq:torus-direct-c-fixed-spin-comparison}
+\end{equation}
+with neither value inferred from the other.  The numerical ledger is
+\begin{center}
+\scriptsize
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+\(y\) & \(\mathcal G_{\NS}(iy)\)
+ & \(y^{-2d}\mathcal G_{\NS}(i/y)\) & \(\delta_S\)\\
+\midrule
+0.25 & 0.419421128663541 & 0.419421352297242 & \(5.3320\times10^{-7}\)\\
+0.30 & 0.259386710420934 & 0.259386719354301 & \(3.4440\times10^{-8}\)\\
+0.35 & 0.184524865482789 & 0.184524865896108 & \(2.2399\times10^{-9}\)\\
+0.40 & 0.143178240490948 & 0.143178240511963 & \(1.4678\times10^{-10}\)\\
+0.50 & 0.100695749972421 & 0.100695749972486 & \(6.4568\times10^{-13}\)\\
+0.60 & 0.0799134998068302 & 0.0799134998068305 & \(4.1678\times10^{-15}\)\\
+0.70 & 0.0680022812375718 & 0.0680022812375719 & \(8.1631\times10^{-16}\)\\
+0.80 & 0.0604991475873248 & 0.0604991475873248 & \(4.5878\times10^{-16}\)\\
+0.90 & 0.0554891211033572 & 0.0554891211033572 & \(1.2505\times10^{-16}\)\\
+1.00 & 0.0520258341783173 & 0.0520258341783173 & 0\\
+\bottomrule
+\end{tabular}
+\end{center}
+\clearpage
+\begin{figure}[htbp]
+ \centering
+ \includegraphics[width=\textwidth]{../../Data Set/ns_torus_modularity_current_formalism_scan.png}
+ \caption{Ordinary NS--NS modular covariance on the imaginary axis.  The
+ black curve is the directly evaluated \(\mathcal G_{\NS}(iy)\); the dashed
+ blue curve is the independently evaluated and transformed-back
+ \(y^{-2d}\mathcal G_{\NS}(i/y)\).  Their signed relative difference is
+ shown on the right.  Both traces use \(\xi=+1\), so this is a fixed-spin
+ NS--NS comparison and contains neither a \((-1)^F\) insertion nor a hidden
+ Ramond sewing.}
+ \label{fig:torus-direct-c-imaginary-axis-scan}
+\end{figure}
+
+The maximum order-sixteen residual is \(5.3320\times10^{-7}\), at
+\(y=0.25\), precisely where \(|q|\) is largest.  The independent
+\((P_{\max},n_P)=(5.5,96)\) rerun changes the two order-sixteen endpoint
+values by at most \(1.31\times10^{-14}\) relatively, while increasing the
+recursion order to twenty reduces the endpoint residual to
+\(2.1963\times10^{-8}\), as recorded above.
+
+This scan is a direct consistency check of the genus-one specialization of
+the NS \(c\)-recursion: it probes the self-loop residue, the relative
+even/odd global normalization, the resummed regular seed, the NS structure
+constant, and the continuum measure in two modular frames.  It does not, by
+itself, test the multi-edge orientation ledger, the genus-two regular block,
+or genus-two plumbing normalizations, so agreement here cannot be used to
+assume the genus-two locality relation.
+
 The residual is an observed consistency check, not a certified error bound
 for the infinite recursion.  The largest order-eighteen to order-twenty drift
 of either individual frame is \(6.5724\times10^{-8}\), larger than
@@ -2878,7 +2949,11 @@ The reproducible implementation, numerical ledger, and plot are
 \begin{center}
  \path{Code/stress_ns_torus_modularity_c_recursion.py},\\
  \texttt{Data Set/}\path{ns_torus_modularity_direct_c_recursion_hard_tau025.json},\\
- \texttt{Data Set/}\path{ns_torus_modularity_direct_c_recursion_hard_tau025.svg}.
+ \texttt{Data Set/}\path{ns_torus_modularity_direct_c_recursion_hard_tau025.svg},\\
+ \texttt{Data Set/}\path{ns_torus_modularity_current_formalism_scan.json},\\
+ \texttt{Data Set/}\path{ns_torus_modularity_current_formalism_scan.svg},\\
+ \texttt{Data Set/}\path{ns_torus_modularity_current_formalism_scan.png},\\
+ \texttt{Data Set/}\path{ns_torus_modularity_current_formalism_audit_tau025.json}.
 \end{center}
 The earlier calibration is preserved separately as
 \texttt{Data Set/}\path{ns_torus_modularity_direct_c_recursion_small_q_order14.json}.

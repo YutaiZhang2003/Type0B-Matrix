@@ -47,6 +47,10 @@ def main() -> None:
     discrepancy_max = 100.0 * max(discrepancies)
     method = str(summary["config"]["numerics"].get("block_method", "contour_finite_part"))
     precision = summary["config"]["numerics"].get("block_working_precision")
+    lifts = summary["config"].get("physical_lifts", {})
+
+    def lift_label(channel: str) -> str:
+        return "".join("+" if int(value) > 0 else "-" for value in lifts[channel])
 
     parts = [
         '<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1120" viewBox="0 0 1800 1120" role="img">',
@@ -60,6 +64,10 @@ def main() -> None:
     if method == "collision_aware_mp":
         parts.append(
             f'<text x="900" y="112" text-anchor="middle" class="tiny">Resummed global blocks; analytically combined c-poles evaluated at {precision}-digit working precision</text>'
+        )
+    if set(lifts) == {"theta", "glasses"}:
+        parts.append(
+            f'<text x="900" y="140" text-anchor="middle" class="tiny">Channel sewing lifts: theta {lift_label("theta")}, glasses {lift_label("glasses")}; both represent the transported [00|00] spin structure</text>'
         )
     if summary.get("free_rerun"):
         parts.append(
@@ -111,11 +119,16 @@ def main() -> None:
         )
 
     x0, y0, x1, y1 = 130, 780, 1690, 1030
-    r_min, r_max = 0.5, 1.02
-    for tick in (0.5, 0.6, 0.7, 0.8, 0.9, 1.0):
+    ratio_floor = min(1.0, min(ratios))
+    ratio_ceiling = max(1.0, max(ratios))
+    ratio_span = max(ratio_ceiling - ratio_floor, 0.01)
+    r_min = ratio_floor - 0.15 * ratio_span
+    r_max = ratio_ceiling + 0.15 * ratio_span
+    for index in range(6):
+        tick = r_min + index * (r_max - r_min) / 5.0
         yy = _map(tick, r_min, r_max, y1, y0)
         parts.append(f'<line x1="{x0}" y1="{yy:.2f}" x2="{x1}" y2="{yy:.2f}" class="grid"/>')
-        parts.append(f'<text x="{x0-16}" y="{yy+6:.2f}" text-anchor="end" class="small">{tick:.1f}</text>')
+        parts.append(f'<text x="{x0-16}" y="{yy+6:.2f}" text-anchor="end" class="small">{tick:.3f}</text>')
     parts.extend(
         [
             f'<rect x="{x0}" y="{y0}" width="{x1-x0}" height="{y1-y0}" class="axis"/>',
