@@ -45,15 +45,14 @@ The human note reduces the all-NS superconformal block to two ordinary
 Virasoro blocks and leaves one quantity undetermined:
 the normalized three-point coefficient of the
 \(\Vir\oplus\Vir\) highest-weight vectors \(v_n\).
-Here we translate the free-field prescription of arXiv:1111.2803 into the
-notation and ordered three-point convention of the human note.  Writing
-\(k=2n\in\mathbb Z\), the vector is a finite Fermi-sea product of the modes
-\(\chi_r=f_r-i\vartheta_r\).  The paper gives a factorized blow-up ratio
-\(l\), and its identity specialization gives the Shapovalov norm.  A separate
-step is required to identify the paper's ordered matrix element with the
-fixed-parity trilinear form \(\widehat\rho_a\) of the human note.  We keep
-these two quantities distinct below and state explicitly what has and has not
-been checked.  No Whittaker vector is used.
+We use the free-field highest-vector prescription suggested by
+arXiv:1111.2803, but every norm and three-point coefficient is evaluated with
+the BPZ, tensor-product, and fixed-parity conventions of the human note.
+Writing \(k=2n\in\mathbb Z\), the vector is a finite Fermi-sea product of the
+modes \(\chi_r=f_r-i\vartheta_r\).  The factorized ratio \(l\) in the paper is
+recorded only as a comparison; it is not identified with the human-note
+three-point function.  The complete direct calculation at
+\(n_i\in\{0,\pm\frac12\}\) is given below.  No Whittaker vector is used.
 \end{abstract}
 
 \tableofcontents
@@ -219,9 +218,9 @@ with the auxiliary free-fermion factor first.  The branching rule is
 The corresponding highest-weight vector is denoted by \(v_n\), and its
 parity is \(2n\pmod2\).
 
-For the ordered trinion used throughout the human note, slot (1) is the
-BPZ-conjugate state at infinity, slot (2) is inserted at (1), and slot
-(3) is the ket at (0).  In precisely this order the human note defines
+For the ordered trinion used throughout the human note, slot \(1\) is the
+BPZ-conjugate state at infinity, slot \(2\) is inserted at \(1\), and slot
+\(3\) is the ket at \(0\).  In precisely this order the human note defines
 \begin{equation}
  B_a(h_1,h_2,h_3;n_1,n_2,n_3)
  =\frac{
@@ -235,24 +234,20 @@ BPZ-conjugate state at infinity, slot (2) is inserted at (1), and slot
  a=2(n_1+n_2+n_3)\pmod2.
  \label{eq:B-definition}
 \end{equation}
-Only \(B_a^2\) enters the conformal-block decomposition.  Our target is
-therefore
+Only \(B_a^2\) enters the conformal-block decomposition.  Directly from the
+human definition,
 \begin{equation}
- \mathcal B_a:=B_a^2
- =\frac{(T_a^{\mathrm H})^2}
+ \bigl[B_a(h_1,h_2,h_3;n_1,n_2,n_3)\bigr]^2
+ =\frac{\hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})^2}
  {N_{k_1}(P_1)N_{k_2}(P_2)N_{k_3}(P_3)},
- \qquad k_i:=2n_i,
+ \qquad
+ k_i=2n_i,
+ \qquad
+ N_{k_i}(P_i)=\lVert v_{i,n_i}\rVert^2.
  \label{eq:B-square-target}
 \end{equation}
-where
-\begin{equation}
- T_a^{\mathrm H}:=\hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3}),
- \qquad
- N_k(P):=\langle P,k\mid P,k\rangle.
- \label{eq:T-N}
-\end{equation}
 
-No reversal of the labels (1\leftrightarrow3) is made in this note.  Other
+No reversal of the labels \(1\leftrightarrow3\) is made in this note.  Other
 slot orders must be obtained with the M\"obius and Koszul conventions already
 fixed in the human note.
 
