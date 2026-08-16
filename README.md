@@ -175,6 +175,14 @@ The physical map is
   products, identity-specialized norms, and the canonical \(B_a^2\).
 - test_two_virasoro_fusion.py: low-level product formulas, negative-label
   continuation, norm, trinion-ordering, and \(b=1\) complex-momentum checks.
+- ns_genus2_three_way_symbolic_check.py: exact coefficientwise comparison of
+  direct NS PBW sewing, NS c-recursion, and the two-Virasoro branching
+  expansion with an ordinary Virasoro c-recursion in each factor. It follows
+  the human note's ordinary product with the auxiliary fermion block: direct
+  PBW and NS recursion agree, while the present diagonal double-Virasoro sum
+  has a convention mismatch beginning at total level 3/2.
+- test_ns_genus2_three_way_symbolic_check.py: branching-weight, ordinary
+  series-division, SCA-recursion, and Virasoro (2,1)-kernel regressions.
 - test_superconformal_blocks.py: BRY ancillary-notebook regression,
   endpoint-pole, and independent \(z\)-versus-\(q\) checks.
 - ramond_sphere_blocks.py: Hadasz--Jaskolski--Suchanek elliptic recursion for

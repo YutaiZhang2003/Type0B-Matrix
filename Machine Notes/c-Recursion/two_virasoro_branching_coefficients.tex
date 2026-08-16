@@ -45,14 +45,15 @@ The human note reduces the all-NS superconformal block to two ordinary
 Virasoro blocks and leaves one quantity undetermined:
 the normalized three-point coefficient of the
 \(\Vir\oplus\Vir\) highest-weight vectors \(v_n\).
-Here we compute that quantity from the free-field prescription of
-arXiv:1111.2803.  Writing \(k=2n\in\mathbb Z\), the vector is a finite
-Fermi-sea product of the modes
-\(\chi_r=f_r-i\vartheta_r\).  Its three-point numerator is the factorized
-blow-up factor \(l\) of that paper.  Specializing the same formula to the
-identity operator gives the Shapovalov norm.  Combining the two produces a
-closed product formula for the squared branching coefficient that appears in
-the human note.  No Whittaker vector is used.
+Here we translate the free-field prescription of arXiv:1111.2803 into the
+notation and ordered three-point convention of the human note.  Writing
+\(k=2n\in\mathbb Z\), the vector is a finite Fermi-sea product of the modes
+\(\chi_r=f_r-i\vartheta_r\).  The paper gives a factorized blow-up ratio
+\(l\), and its identity specialization gives the Shapovalov norm.  A separate
+step is required to identify the paper's ordered matrix element with the
+fixed-parity trilinear form \(\widehat\rho_a\) of the human note.  We keep
+these two quantities distinct below and state explicitly what has and has not
+been checked.  No Whittaker vector is used.
 \end{abstract}
 
 \tableofcontents
@@ -218,15 +219,17 @@ with the auxiliary free-fermion factor first.  The branching rule is
 The corresponding highest-weight vector is denoted by \(v_n\), and its
 parity is \(2n\pmod2\).
 
-For an ordered trinion, the human note defines
+For the ordered trinion used throughout the human note, slot (1) is the
+BPZ-conjugate state at infinity, slot (2) is inserted at (1), and slot
+(3) is the ket at (0).  In precisely this order the human note defines
 \begin{equation}
- B_a(h_3,h_2,h_1;n_3,n_2,n_1)
+ B_a(h_1,h_2,h_3;n_1,n_2,n_3)
  =\frac{
-  \hatrho_a(v_{3,n_3},v_{2,n_2},v_{1,n_1})
+  \hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})
  }{
-  \lVert v_{3,n_3}\rVert
-  \lVert v_{2,n_2}\rVert
   \lVert v_{1,n_1}\rVert
+  \lVert v_{2,n_2}\rVert
+  \lVert v_{3,n_3}\rVert
  },
  \qquad
  a=2(n_1+n_2+n_3)\pmod2.
@@ -236,21 +239,22 @@ Only \(B_a^2\) enters the conformal-block decomposition.  Our target is
 therefore
 \begin{equation}
  \mathcal B_a:=B_a^2
- =\frac{T_a^2}{N_{k_3}(P_3)N_{k_2}(P_2)N_{k_1}(P_1)},
+ =\frac{(T_a^{\mathrm H})^2}
+ {N_{k_1}(P_1)N_{k_2}(P_2)N_{k_3}(P_3)},
  \qquad k_i:=2n_i,
  \label{eq:B-square-target}
 \end{equation}
 where
 \begin{equation}
- T_a:=\hatrho_a(v_{3,n_3},v_{2,n_2},v_{1,n_1}),
+ T_a^{\mathrm H}:=\hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3}),
  \qquad
  N_k(P):=\langle P,k\mid P,k\rangle.
  \label{eq:T-N}
 \end{equation}
 
-The order in Eq.~\eqref{eq:B-definition} is bra, inserted field, ket.  Other
-slot orders are obtained with the Mobius and Koszul conventions already fixed
-in the human note.
+No reversal of the labels (1\leftrightarrow3) is made in this note.  Other
+slot orders must be obtained with the M\"obius and Koszul conventions already
+fixed in the human note.
 
 \section{Highest vector from the free-field realization}
 
@@ -333,7 +337,7 @@ Parameterize the inserted NS weight by
 \end{equation}
 For the ordered matrix element
 \begin{equation}
- \langle P_3,k_3|\mathbb V_{\alpha_2}^{(k_2)}(1)|P_1,k_1\rangle,
+ \langle P_1,k_1|\mathbb V_{\alpha_2}^{(k_2)}(1)|P_3,k_3\rangle,
  \label{eq:ordered-matrix-element}
 \end{equation}
 the state-field correspondence identifies
@@ -354,17 +358,27 @@ arXiv:1111.2803 is
  \end{cases}
  \label{eq:l-definition}
 \end{equation}
-The denominators are exactly the human note's kinematic normalizations:
-\(\rho_0(\phi_3,\phi_2,\phi_1)=1\) in the even case and
-\(\rho_1(\phi_3,G_{-1/2}\phi_2,\phi_1)=1\) in the odd case.  Therefore
+The corresponding primary denominators have the same numerical normalization
+as the human note:
+\(\rho_0(\phi_1,\phi_2,\phi_3)=1\) in the even case and
+\(\rho_1(\phi_1,G_{-1/2}\phi_2,\phi_3)=1\) in the odd case.  Define the
+literature ratio in the human slot labels by
 \begin{equation}
- \boxed{
- T_a
- =l(\alpha_2,k_2\mid P_3,k_3,P_1,k_1),
+ L_a^{\mathrm{lit}}(1,2,3)
+ :=l(\alpha_2,k_2\mid P_1,k_1,P_3,k_3),
  \qquad
- a=k_1+k_2+k_3\pmod2.}
- \label{eq:T-equals-l}
+ a=k_1+k_2+k_3\pmod2.
+ \label{eq:L-lit-definition}
 \end{equation}
+Matching the two primary denominators does \emph{not} by itself prove
+\begin{equation}
+ T_a^{\mathrm H}=L_a^{\mathrm{lit}}(1,2,3).
+ \label{eq:T-versus-L-question}
+\end{equation}
+Equation~\eqref{eq:T-versus-L-question} is a convention-sensitive statement
+about the complete highest vectors.  It must also match the auxiliary
+fermion BPZ sign, the fixed-parity conversion in the human note, and the
+state--field map for the middle vector.  This is the central audit below.
 
 \subsection{The product formula}
 
@@ -401,7 +415,7 @@ Finally define
  \label{eq:Int}
 \end{equation}
 
-The numerator is then
+The literature ratio is then
 \begin{equation}
  \boxed{
  l(\alpha,m\mid P',k',P,k)
@@ -418,8 +432,75 @@ The numerator is then
  \end{cases}}
  \label{eq:l-product}
 \end{equation}
-This is already the desired unnormalized three-point coefficient of the
-three highest vectors.
+This is the factorized matrix-element ratio of arXiv:1111.2803.  It becomes
+the desired human-note numerator only after
+Eq.~\eqref{eq:T-versus-L-question}, including any convention factor, has
+been established.
+
+\subsection{Endpoint order and the first convention check}
+
+The fixed-parity trilinear form used in the human note obeys the endpoint
+reflection rule
+\begin{equation}
+ \hatrho_a(x_1,x_2,x_3)
+ =(-1)^{|x_2|(|x_1|+|x_3|)}
+ \hatrho_a(x_3,x_2,x_1),
+ \label{eq:human-reflection}
+\end{equation}
+with the weights and labels in slots (1) and (3) exchanged on the
+right-hand side.  For the branching primaries this sign is
+\((-1)^{k_2(k_1+k_3)}\).  Thus the reversed expression
+\(\hatrho_a(v_{3,n_3},v_{2,n_2},v_{1,n_1})\), used in an earlier version of
+this note, is not the definition in the human note and cannot be substituted
+without this reflection sign.
+
+Already at (n_i=0,\pm\tfrac12), one must expand the explicit vectors
+\begin{equation}
+ v_{i,\epsilon_i/2}
+ =G_{-1/2}\phi_i+a_i f_{-1/2}\phi_i,
+ \qquad
+ a_i:=\frac Q2+\epsilon_iP_i,
+ \qquad \epsilon_i=\pm1,
+ \label{eq:level-half-vectors-a}
+\end{equation}
+inside the tensor-product trilinear form of the human note.  Its auxiliary
+BPZ convention gives
+\begin{equation}
+ \rho^{\Ff}(f\one,f\one,\one)=-1,
+ \qquad
+ \rho^{\Ff}(f\one,\one,f\one)=-1,
+ \qquad
+ \rho^{\Ff}(\one,f\one,f\one)=+1.
+ \label{eq:fermion-level-half-rhos}
+\end{equation}
+Using the human note's fixed-parity component table then gives
+\begin{align}
+ T_0^{\mathrm H}[\epsilon_1/2,\epsilon_2/2,0]
+ &=-\frac12\left[
+  \left(\frac Q2+\epsilon_1P_1+\epsilon_2P_2\right)^2-P_3^2
+ \right],
+ \notag\\
+ T_0^{\mathrm H}[\epsilon_1/2,0,\epsilon_3/2]
+ &=\frac12\left[
+  P_2^2-\left(\frac Q2+\epsilon_1P_1+\epsilon_3P_3\right)^2
+ \right],
+ \notag\\
+ T_0^{\mathrm H}[0,\epsilon_2/2,\epsilon_3/2]
+ &=\frac12\left[
+  \left(\frac Q2+\epsilon_2P_2+\epsilon_3P_3\right)^2-P_1^2
+ \right].
+ \label{eq:human-two-branch-direct}
+\end{align}
+The product formula for (L^{\mathrm{lit}}) has the same last two entries
+but the opposite sign in the first entry.  Equivalently, on these cases,
+\begin{equation}
+ T_a^{\mathrm H}=(-1)^{k_1k_2}L_a^{\mathrm{lit}}.
+ \label{eq:low-level-convention-factor}
+\end{equation}
+This establishes a genuine convention factor at the first nontrivial level.
+Whether Eq.~\eqref{eq:low-level-convention-factor} is the complete all-level
+translation must be checked with an explicit
+\(|k|=2\) vector; it is not assumed below for an unsquared coefficient.
 
 \section{Norm from the same formula}
 
@@ -485,18 +566,18 @@ These agree with Eq.~\eqref{eq:norm-master}, because
  \label{eq:level-half-orthogonality}
 \end{equation}
 
-\section{Closed formula for the human-note coefficient}
+\section{Squared coefficient obtained from the literature ratio}
 
-Combining Eqs.~\eqref{eq:B-square-target}, \eqref{eq:T-equals-l}, and
-\eqref{eq:norm-master} gives
+The product formula and the norm determine the following
+literature-normalized candidate:
 \begin{equation}
  \boxed{
- \mathcal B_a
- (P_3,P_2,P_1;k_3,k_2,k_1)
+ \mathcal B_a^{\mathrm{lit}}
+ (P_1,P_2,P_3;k_1,k_2,k_3)
  =\frac{
- l\left(\frac Q2+P_2,k_2\mid P_3,k_3,P_1,k_1\right)^2
+ l\left(\frac Q2+P_2,k_2\mid P_1,k_1,P_3,k_3\right)^2
  }{
- N_{k_3}(P_3)N_{k_2}(P_2)N_{k_1}(P_1)
+ N_{k_1}(P_1)N_{k_2}(P_2)N_{k_3}(P_3)
  },}
  \label{eq:B-final}
 \end{equation}
@@ -508,13 +589,17 @@ Eq.~\eqref{eq:norm-master}, and
  a=k_1+k_2+k_3\pmod2.
  \label{eq:final-dictionary}
 \end{equation}
-This is the coefficient that multiplies the product of the two Virasoro
-blocks in the all-NS decomposition of the human note.
+At the cases checked in Eq.~\eqref{eq:human-two-branch-direct}, the
+translation is a sign and hence
+\(\mathcal B_a^{\mathrm{lit}}=\mathcal B_a\).  The all-level identification
+requires proving that the translation between \(T_a^{\mathrm H}\) and
+\(L_a^{\mathrm{lit}}\) remains a pure sign for the explicit higher branching
+vectors.
 
 If an unsquared \(B_a\) is desired, one must choose square roots of the three
-complex Shapovalov norms and fix an overall sign for every branch vector.
-The sewn conformal block is insensitive to that choice and naturally uses
-Eq.~\eqref{eq:B-final}.
+complex Shapovalov norms, fix an overall phase for every branch vector, and
+include the human-to-literature trilinear convention factor.  Principal
+square roots alone do not define the human-note coefficient.
 
 \section{Low-level values}
 
@@ -554,7 +639,7 @@ the human-note Ward identities.
 
 For example,
 \begin{equation}
- \mathcal B_0(P_3,P_2,P_1;1,0,1)
+ \mathcal B_0^{\mathrm{lit}}(P_1,P_2,P_3;1,0,1)
  =\frac{
   (\alpha_2+P_3+P_1)^2
   (\alpha_2-P_3-P_1-Q)^2
@@ -570,17 +655,20 @@ For example,
 
 We now remove the product notation completely at the first nontrivial
 branching level.  In this subsection the slot order
-\((n_1,n_2,n_3)\) is ket, inserted field, bra.  To keep the left-hand sides
-readable, define only
+\((n_1,n_2,n_3)\) is exactly the human order: BPZ-conjugate state at
+infinity, inserted field at one, and ket at zero.  To keep the left-hand
+sides readable, define
 \begin{equation}
- \mathcal B_a[n_1,n_2,n_3]
- :=\mathcal B_a(P_3,P_2,P_1;2n_3,2n_2,2n_1),
+ \mathcal B_a^{\mathrm{lit}}[n_1,n_2,n_3]
+ :=\mathcal B_a^{\mathrm{lit}}(P_1,P_2,P_3;2n_1,2n_2,2n_3),
  \qquad
- T_a[n_1,n_2,n_3]
- :=\hatrho_a(v_{3,n_3},v_{2,n_2},v_{1,n_1}).
+ L_a^{\mathrm{lit}}[n_1,n_2,n_3]
+ :=l\left(\frac Q2+P_2,2n_2\mid P_1,2n_1,P_3,2n_3\right).
  \label{eq:small-n-slot-notation}
 \end{equation}
-No momentum argument is suppressed on the right-hand sides below.
+The human numerator remains
+\(T_a^{\mathrm H}[n_1,n_2,n_3]
+=\hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})\).
 
 Whenever \(n_i\ne0\), write
 \begin{equation}
@@ -602,26 +690,31 @@ The free-field vector and its norm take the uniform form
 \paragraph{Zero or one nonzero label.}
 For the vacuum branch,
 \begin{equation}
- T_0[0,0,0]=1,
+ T_0^{\mathrm H}[0,0,0]
+ =L_0^{\mathrm{lit}}[0,0,0]=1,
  \qquad
- \mathcal B_0[0,0,0]=1.
+ \mathcal B_0^{\mathrm{lit}}[0,0,0]=1.
  \label{eq:small-n-vacuum}
 \end{equation}
 If exactly one label is nonzero, the numerator remains one and
 \begin{align}
- T_1[\epsilon_1/2,0,0]
- &=T_1[0,\epsilon_2/2,0]
- =T_1[0,0,\epsilon_3/2]=1,
+ T_1^{\mathrm H}[\epsilon_1/2,0,0]
+ &=T_1^{\mathrm H}[0,\epsilon_2/2,0]
+ =T_1^{\mathrm H}[0,0,\epsilon_3/2]
  \notag\\
- \mathcal B_1[\epsilon_1/2,0,0]
+ &=L_1^{\mathrm{lit}}[\epsilon_1/2,0,0]
+ =L_1^{\mathrm{lit}}[0,\epsilon_2/2,0]
+ =L_1^{\mathrm{lit}}[0,0,\epsilon_3/2]=1,
+ \notag\\
+ \mathcal B_1^{\mathrm{lit}}[\epsilon_1/2,0,0]
  &=-\frac{\epsilon_1}
  {P_1(Q+2\epsilon_1P_1)},
  \notag\\
- \mathcal B_1[0,\epsilon_2/2,0]
+ \mathcal B_1^{\mathrm{lit}}[0,\epsilon_2/2,0]
  &=-\frac{\epsilon_2}
  {P_2(Q+2\epsilon_2P_2)},
  \notag\\
- \mathcal B_1[0,0,\epsilon_3/2]
+ \mathcal B_1^{\mathrm{lit}}[0,0,\epsilon_3/2]
  &=-\frac{\epsilon_3}
  {P_3(Q+2\epsilon_3P_3)}.
  \label{eq:small-n-one-leg}
@@ -631,14 +724,14 @@ For example, a \(+\frac12\) label gives
 \([P_i(Q-2P_i)]^{-1}\).
 
 \paragraph{Exactly two nonzero labels.}
-When the ket label vanishes, one finds
+When the bra label vanishes, the literature ratio is
 \begin{align}
- T_0[0,\epsilon_2/2,\epsilon_3/2]
+ L_0^{\mathrm{lit}}[0,\epsilon_2/2,\epsilon_3/2]
  &=\frac12\left[
  \left(\frac Q2+\epsilon_2P_2+\epsilon_3P_3\right)^2-P_1^2
  \right],
  \notag\\
- \mathcal B_0[0,\epsilon_2/2,\epsilon_3/2]
+ \mathcal B_0^{\mathrm{lit}}[0,\epsilon_2/2,\epsilon_3/2]
  &=
  \frac{
  \left[
@@ -651,17 +744,19 @@ When the ket label vanishes, one finds
  {}\times(Q+2\epsilon_3P_3)
  \end{gathered}
  }.
- \label{eq:small-n-ket-zero}
+ \label{eq:small-n-bra-zero}
 \end{align}
-When the inserted label vanishes, the ordered trinion gives instead
+Here \(T_0^{\mathrm H}=L_0^{\mathrm{lit}}\), as shown directly in
+Eq.~\eqref{eq:human-two-branch-direct}.  When the inserted label vanishes,
+the literature ratio is
 \begin{align}
- T_0[\epsilon_1/2,0,\epsilon_3/2]
+ L_0^{\mathrm{lit}}[\epsilon_1/2,0,\epsilon_3/2]
  &=\frac12\left[
  P_2^2-
  \left(\frac Q2+\epsilon_1P_1+\epsilon_3P_3\right)^2
  \right],
  \notag\\
- \mathcal B_0[\epsilon_1/2,0,\epsilon_3/2]
+ \mathcal B_0^{\mathrm{lit}}[\epsilon_1/2,0,\epsilon_3/2]
  &=
  \frac{
  \left[
@@ -677,14 +772,15 @@ When the inserted label vanishes, the ordered trinion gives instead
  }.
  \label{eq:small-n-insertion-zero}
 \end{align}
-Finally, when the bra label vanishes,
+Again \(T_0^{\mathrm H}=L_0^{\mathrm{lit}}\).  Finally, when the ket label
+vanishes, the literature ratio is
 \begin{align}
- T_0[\epsilon_1/2,\epsilon_2/2,0]
+ L_0^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,0]
  &=\frac12\left[
  \left(\frac Q2+\epsilon_1P_1+\epsilon_2P_2\right)^2-P_3^2
  \right],
  \notag\\
- \mathcal B_0[\epsilon_1/2,\epsilon_2/2,0]
+ \mathcal B_0^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,0]
  &=
  \frac{
  \left[
@@ -697,17 +793,21 @@ Finally, when the bra label vanishes,
  {}\times(Q+2\epsilon_2P_2)
  \end{gathered}
  }.
- \label{eq:small-n-bra-zero}
+ \label{eq:small-n-ket-zero}
 \end{align}
-The relative sign in Eq.~\eqref{eq:small-n-insertion-zero} is part of the
-ordered three-point prescription; it should not be replaced by a symmetric
-guess.  It disappears after squaring the numerator but remains relevant if
-an unsquared coefficient is assigned.
+In this last case the human numerator has the opposite sign:
+\begin{equation}
+ T_0^{\mathrm H}[\epsilon_1/2,\epsilon_2/2,0]
+ =-L_0^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,0].
+ \label{eq:small-n-human-ket-zero-sign}
+\end{equation}
+The sign is fixed by the human BPZ and fixed-parity conventions; it is not a
+freely chosen phase.  It disappears after squaring this numerator.
 
 \paragraph{Three nonzero labels.}
 All eight sign choices are covered by
 \begin{align}
- T_1[\epsilon_1/2,\epsilon_2/2,\epsilon_3/2]
+ L_1^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,\epsilon_3/2]
  &=\frac12
  \left(
  \frac Q2+\epsilon_1P_1+\epsilon_2P_2+\epsilon_3P_3+b
@@ -718,7 +818,7 @@ All eight sign choices are covered by
  \frac Q2+\epsilon_1P_1+\epsilon_2P_2+\epsilon_3P_3+b^{-1}
  \right),
  \label{eq:small-n-three-leg-T}\\
- \mathcal B_1[\epsilon_1/2,\epsilon_2/2,\epsilon_3/2]
+ \mathcal B_1^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,\epsilon_3/2]
  &=
  -\frac{
  \begin{gathered}
@@ -740,10 +840,15 @@ All eight sign choices are covered by
  }.
  \label{eq:small-n-three-leg-B}
 \end{align}
+The displayed \(L_1^{\mathrm{lit}}\) is not yet identified with
+\(T_1^{\mathrm H}\).  This is the first case in the \(27\)-entry table where
+the convention translation must be checked using all terms in the
+tensor-product highest vectors.
 Equations~\eqref{eq:small-n-vacuum}--\eqref{eq:small-n-three-leg-B}
-exhaust all \(27\) choices \(n_i\in\{0,\pm\frac12\}\).  They are precisely
-the formulas evaluated by
-\texttt{Code/two\_virasoro\_fusion.py}.
+exhaust all \(27\) literature expressions
+\(n_i\in\{0,\pm\frac12\}\).  They are the formulas evaluated by
+\texttt{Code/two\_virasoro\_fusion.py}; its unsquared output should therefore
+be read as \(L_a^{\mathrm{lit}}\), not yet as \(T_a^{\mathrm H}\).
 
 \section{What remains to be audited}
 
