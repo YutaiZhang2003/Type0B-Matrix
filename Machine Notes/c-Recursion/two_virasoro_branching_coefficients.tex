@@ -1,0 +1,882 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,bm}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+\allowdisplaybreaks
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  urlcolor=blue!55!black,
+  pdftitle={Free-field computation of the two-Virasoro branching coefficient},
+  pdfauthor={Machine working note}
+}
+
+\newcommand{\Ff}{\mathsf F}
+\newcommand{\SCA}{\mathsf{SCA}}
+\newcommand{\Vir}{\mathsf{Vir}}
+\newcommand{\V}{\mathcal V}
+\newcommand{\M}{\mathcal M}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\se}{s_{\mathrm{even}}}
+\newcommand{\so}{s_{\mathrm{odd}}}
+\newcommand{\hatrho}{\widehat\rho}
+
+\title{Free-Field Computation of the
+\(\Vir\oplus\Vir\) Branching Coefficient\\[0.3em]
+\large Highest-vector prescription, norm, and three-point numerator}
+\author{Machine working note}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+The human note reduces the all-NS superconformal block to two ordinary
+Virasoro blocks and leaves one quantity undetermined:
+the normalized three-point coefficient of the
+\(\Vir\oplus\Vir\) highest-weight vectors \(v_n\).
+We use the free-field highest-vector prescription suggested by
+arXiv:1111.2803, but every norm and three-point coefficient is evaluated with
+the BPZ, tensor-product, and fixed-parity conventions of the human note.
+Writing \(k=2n\in\mathbb Z\), the vector is a finite Fermi-sea product of the
+modes \(\chi_r=f_r-i\vartheta_r\).  The factorized ratio \(l\) in the paper is
+recorded only as a comparison; it is not identified with the human-note
+three-point function.  The complete direct calculation at
+\(n_i\in\{0,\pm\frac12\}\) is given below.  No Whittaker vector is used.
+\end{abstract}
+
+\tableofcontents
+
+\section{NS free-field realization}
+
+We first fix the realization in which the branching vector will be computed.
+Set
+\begin{equation}
+ Q=b+b^{-1},\qquad
+ c=\frac32+3Q^2,\qquad
+ h(P)=\frac12\left(\frac{Q^2}{4}-P^2\right).
+ \label{eq:free-field-parameters}
+\end{equation}
+All modes in this section are NS modes:
+\(m\in\mathbb Z\) and \(r\in\mathbb Z+\frac12\).
+
+\subsection{Oscillators and Fock vacuum}
+
+The auxiliary Majorana fermion has modes \(f_r\); this is the fermion denoted
+by \(\psi_r\) in the human note.  The free-field realization of the SCA uses
+a Heisenberg oscillator \(c_m^\epsilon\), an NS fermion
+\(\vartheta_r^\epsilon\), and a bosonic zero mode \(\mathcal P\).
+Here \(\epsilon\in\{+1,-1\}\) labels two \emph{alternative reflected
+realizations} of the same SCA module; the \(+\) and \(-\) oscillators are not
+two simultaneous free fields.  Their nonzero brackets are
+\begin{align}
+ [c_m^\epsilon,c_n^\epsilon]&=m\delta_{m+n,0},
+ &\{\vartheta_r^\epsilon,\vartheta_s^\epsilon\}&=\delta_{r+s,0},
+ &\{f_r,f_s\}&=\delta_{r+s,0},
+ \label{eq:free-field-algebra}\\
+ [\mathcal P,c_m^\epsilon]&=[\mathcal P,\vartheta_r^\epsilon]=0,
+ &[f_r,c_m^\epsilon]&=0,
+ &\{f_r,\vartheta_s^\epsilon\}&=0.
+ \notag
+\end{align}
+The auxiliary BPZ convention inherited from the human note is
+\begin{equation}
+ f_r^\dagger=-f_{-r}.
+ \label{eq:f-BPZ}
+\end{equation}
+
+Let \(\one_{\Ff}\) be annihilated by \(f_r\) for \(r>0\), and let
+\(\lvert P\rangle_\epsilon\) be annihilated by \(c_m^\epsilon\) and
+\(\vartheta_r^\epsilon\) for \(m,r>0\), with
+\(\mathcal P\lvert P\rangle_\epsilon=P\lvert P\rangle_\epsilon\).  We write
+\begin{equation}
+ \lvert\mathrm{vac};P\rangle
+ :=\one_{\Ff}\otimes\lvert P\rangle_\epsilon.
+ \label{eq:free-field-vacuum}
+\end{equation}
+Thus the tensor-product module is the span of arbitrary finite products of
+the negative modes \(f_{-r}\), \(c_{-m}^\epsilon\), and
+\(\vartheta_{-r}^\epsilon\) acting on
+\(\lvert\mathrm{vac};P\rangle\).
+
+\subsection{SCA generators}
+
+In the realization labelled by \(\epsilon\), the abstract SCA generators act
+for \(m\ne0\) as
+\begin{align}
+ L_m
+ &=\frac12\sum_{j\ne0,m}c_j^\epsilon c_{m-j}^\epsilon
+  +\frac12\sum_{r\in\mathbb Z+\frac12}
+       \left(r-\frac m2\right)
+       \vartheta_{m-r}^\epsilon\vartheta_r^\epsilon
+  +\frac i2(Qm+2\epsilon\mathcal P)c_m^\epsilon,
+ \notag\\
+ G_r
+ &=\sum_{m\ne0}c_m^\epsilon\vartheta_{r-m}^\epsilon
+   +i(Qr+\epsilon\mathcal P)\vartheta_r^\epsilon,
+ \label{eq:free-field-SCA}\\
+ L_0
+ &=\sum_{m>0}c_{-m}^\epsilon c_m^\epsilon
+   +\sum_{r>0}r\vartheta_{-r}^\epsilon\vartheta_r^\epsilon
+   +\frac12\left(\frac{Q^2}{4}-\mathcal P^2\right).
+ \notag
+\end{align}
+These formulas obey the \(\mathcal N=1\) SCA relations at the central charge
+in Eq.~\eqref{eq:free-field-parameters}, and
+\(L_0\lvert P\rangle_\epsilon=h(P)\lvert P\rangle_\epsilon\).
+The realization \(\epsilon=-1\) is used for \(k>0\), and
+\(\epsilon=+1\) for \(k<0\).  They are related by the super-Liouville
+reflection operator.
+
+It is now meaningful to define the isotropic fermionic modes
+\begin{equation}
+ \chi_r^\epsilon:=f_r-i\vartheta_r^\epsilon,
+ \qquad
+ \{\chi_r^\epsilon,\chi_s^\epsilon\}=0.
+ \label{eq:chi-definition}
+\end{equation}
+The vanishing anticommutator is the reason that the highest vector below is a
+finite Fermi-sea product.
+
+\subsection{The commuting Virasoro pair}
+
+For completeness, define the auxiliary-fermion stress tensor and the mixed
+bilinear
+\begin{equation}
+ L_n^{\Ff}=\frac12\sum_{r\in\mathbb Z+\frac12}
+ r:f_{n-r}f_r:,
+ \qquad
+ U_n=\sum_{r\in\mathbb Z+\frac12}f_{n-r}G_r.
+ \label{eq:LF-U}
+\end{equation}
+The two commuting Virasoro generators used in the human note are
+\begin{align}
+ L_n^{(1)}
+ &=\frac{b^{-1}}{b^{-1}-b}L_n
+   -\frac{b^{-1}+2b}{b^{-1}-b}L_n^{\Ff}
+   +\frac{1}{b^{-1}-b}U_n,
+ \notag\\
+ L_n^{(2)}
+ &=\frac{b}{b-b^{-1}}L_n
+   -\frac{b+2b^{-1}}{b-b^{-1}}L_n^{\Ff}
+   +\frac{1}{b-b^{-1}}U_n.
+ \label{eq:two-Vir-generators}
+\end{align}
+They obey
+\begin{equation}
+ [L_m^{(1)},L_n^{(2)}]=0,
+ \qquad
+ c^{(i)}=1+6\bigl(Q^{(i)}\bigr)^2,
+ \qquad
+ Q^{(i)}=b^{(i)}+\bigl(b^{(i)}\bigr)^{-1},
+ \label{eq:two-Vir-central-charges}
+\end{equation}
+where
+\begin{equation}
+ b^{(1)}=\frac{2b}{\sqrt{2-2b^2}},
+ \qquad
+ \bigl(b^{(2)}\bigr)^{-1}
+ =\frac{2b^{-1}}{\sqrt{2-2b^{-2}}}.
+ \label{eq:two-Vir-couplings}
+\end{equation}
+This finishes the algebraic setup.  Every branching vector computed below is
+an explicit vector in the Fock space of
+Eqs.~\eqref{eq:free-field-algebra}--\eqref{eq:free-field-vacuum}.
+
+\section{The quantity left open in the human note}
+
+The human note uses
+\begin{equation}
+ \M_{\mathrm{NS}}(h)
+ =\V_{\Ff_{1/2}}\otimes\V_{\SCA_{1/2}}(h),
+ \qquad
+ h=\frac12\left(\frac{Q^2}{4}-P^2\right),
+ \qquad Q=b+b^{-1},
+ \label{eq:module}
+\end{equation}
+with the auxiliary free-fermion factor first.  The branching rule is
+\begin{equation}
+ \M_{\mathrm{NS}}(h)
+ \cong
+ \bigoplus_{n\in\frac12\mathbb Z}
+ \V_{c^{(1)}}(h_n^{(1)})\otimes
+ \V_{c^{(2)}}(h_n^{(2)}),
+ \qquad
+ h_n^{(1)}+h_n^{(2)}=h+2n^2.
+ \label{eq:branching}
+\end{equation}
+The corresponding highest-weight vector is denoted by \(v_n\), and its
+parity is \(2n\pmod2\).
+
+For the ordered trinion used throughout the human note, slot \(1\) is the
+BPZ-conjugate state at infinity, slot \(2\) is inserted at \(1\), and slot
+\(3\) is the ket at \(0\).  In precisely this order the human note defines
+\begin{equation}
+ B_a(h_1,h_2,h_3;n_1,n_2,n_3)
+ =\frac{
+  \hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})
+ }{
+  \lVert v_{1,n_1}\rVert
+  \lVert v_{2,n_2}\rVert
+  \lVert v_{3,n_3}\rVert
+ },
+ \qquad
+ a=2(n_1+n_2+n_3)\pmod2.
+ \label{eq:B-definition}
+\end{equation}
+Only \(B_a^2\) enters the conformal-block decomposition.  Directly from the
+human definition,
+\begin{equation}
+ \bigl[B_a(h_1,h_2,h_3;n_1,n_2,n_3)\bigr]^2
+ =\frac{\hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})^2}
+ {N_{k_1}(P_1)N_{k_2}(P_2)N_{k_3}(P_3)},
+ \qquad
+ k_i=2n_i,
+ \qquad
+ N_{k_i}(P_i)=\lVert v_{i,n_i}\rVert^2.
+ \label{eq:B-square-target}
+\end{equation}
+
+No reversal of the labels \(1\leftrightarrow3\) is made in this note.  Other
+slot orders must be obtained with the M\"obius and Koszul conventions already
+fixed in the human note.
+
+\section{Highest vector from the free-field realization}
+
+\subsection{The Fermi-sea vector}
+
+Set \(k=2n\in\mathbb Z\).  For \(k\ne0\), the prescription is
+\begin{equation}
+ |P,k\rangle
+ =\Omega_k(P)
+ \prod_{j=1}^{|k|}
+ \chi_{-(2j-1)/2}^{-\operatorname{sgn}(k)}
+ |\mathrm{vac};P\rangle,
+ \qquad
+ |P,0\rangle=|\mathrm{vac};P\rangle.
+ \label{eq:free-field-vector}
+\end{equation}
+The product is ordered with increasing \(j\) from left to right.  Its total
+level is
+\begin{equation}
+ \sum_{j=1}^{|k|}\frac{2j-1}{2}=\frac{k^2}{2}=2n^2,
+ \label{eq:Fermi-level}
+\end{equation}
+which is precisely the shift in Eq.~\eqref{eq:branching}.
+
+The factor \(\Omega_k(P)\) is fixed by the standard SCA-PBW normalization
+\begin{equation}
+ |P,k\rangle
+ =\left(G_{-1/2}^{k^2}+\text{terms of lower degree in }G\right)|P\rangle.
+ \label{eq:PBW-normalization}
+\end{equation}
+This fixes the vector, including its scale, without referring to a Whittaker
+state.
+
+The commutators quoted in the literature are
+\begin{align}
+ [L_m^{(1)}+L_m^{(2)},\chi_r^\epsilon]
+ &=-\left(\frac m2+r\right)\chi_{m+r}^\epsilon,
+ \notag\\
+ [bL_m^{(1)}+b^{-1}L_m^{(2)},\chi_r^\epsilon]
+ &=-\left((m+r)Q+\epsilon\mathcal P\right)
+      \chi_{m+r}^\epsilon
+   +i\sum_{j\ne0}c_j^\epsilon\chi_{m+r-j}^\epsilon.
+ \label{eq:chi-commutators}
+\end{align}
+They prove directly that Eq.~\eqref{eq:free-field-vector} is killed by both
+positive Virasoro algebras.  The two weights are
+\begin{align}
+ h_n^{(1)}
+ &=\frac14(Q^{(1)})^2
+  -\left(\frac{P}{\sqrt{2-2b^2}}+nb^{(1)}\right)^2,
+ \notag\\
+ h_n^{(2)}
+ &=\frac14(Q^{(2)})^2
+  -\left(\frac{P}{\sqrt{2-2b^{-2}}}+n(b^{(2)})^{-1}\right)^2.
+ \label{eq:branch-weights}
+\end{align}
+
+The first nontrivial vectors, already converted back to the human note's SCA
+and auxiliary-fermion modes, are
+\begin{align}
+ |P,1\rangle
+ &=\left[G_{-1/2}+\left(\frac Q2+P\right)f_{-1/2}\right]|P,0\rangle,
+ \notag\\
+ |P,-1\rangle
+ &=\left[G_{-1/2}+\left(\frac Q2-P\right)f_{-1/2}\right]|P,0\rangle.
+ \label{eq:k-one-vectors}
+\end{align}
+They are the human-note vectors \(v_{1/2}\) and \(v_{-1/2}\).
+
+\section{Factorized three-point numerator}
+
+\subsection{Dictionary for an ordered trinion}
+
+Parameterize the inserted NS weight by
+\begin{equation}
+ h_2=\frac12\alpha_2(Q-\alpha_2),
+ \qquad
+ \alpha_2=\frac Q2+P_2.
+ \label{eq:alpha-dictionary}
+\end{equation}
+For the ordered matrix element
+\begin{equation}
+ \langle P_1,k_1|\mathbb V_{\alpha_2}^{(k_2)}(1)|P_3,k_3\rangle,
+ \label{eq:ordered-matrix-element}
+\end{equation}
+the state-field correspondence identifies
+\(\mathbb V_{\alpha_2}^{(k_2)}\) with the same highest vector
+\(|P_2,k_2\rangle\) used on the middle leg.  The normalized ratio in
+arXiv:1111.2803 is
+\begin{equation}
+ l(\alpha,m\mid P',k',P,k)
+ =\begin{cases}
+ \displaystyle
+ \frac{\langle P',k'|\mathbb V_\alpha^{(m)}|P,k\rangle}
+ {\langle P'|\mathbb V_\alpha^{(0)}|P\rangle},
+ &m+k+k'\text{ even},\\[1.1em]
+ \displaystyle
+ \frac{\langle P',k'|\mathbb V_\alpha^{(m)}|P,k\rangle}
+ {\langle P'|\mathbb V_\alpha^{(\pm1)}|P\rangle},
+ &m+k+k'\text{ odd}.
+ \end{cases}
+ \label{eq:l-definition}
+\end{equation}
+The corresponding primary denominators have the same numerical normalization
+as the human note:
+\(\rho_0(\phi_1,\phi_2,\phi_3)=1\) in the even case and
+\(\rho_1(\phi_1,G_{-1/2}\phi_2,\phi_3)=1\) in the odd case.  Define the
+literature ratio in the human slot labels by
+\begin{equation}
+ L_a^{\mathrm{lit}}(1,2,3)
+ :=l(\alpha_2,k_2\mid P_1,k_1,P_3,k_3),
+ \qquad
+ a=k_1+k_2+k_3\pmod2.
+ \label{eq:L-lit-definition}
+\end{equation}
+Matching the two primary denominators does \emph{not} by itself prove
+\begin{equation}
+ T_a^{\mathrm H}=L_a^{\mathrm{lit}}(1,2,3).
+ \label{eq:T-versus-L-question}
+\end{equation}
+Equation~\eqref{eq:T-versus-L-question} is a convention-sensitive statement
+about the complete highest vectors.  It must also match the auxiliary
+fermion BPZ sign, the fixed-parity conversion in the human note, and the
+state--field map for the middle vector.  This is the central audit below.
+
+\subsection{The product formula}
+
+For \(\sigma,\tau\in\{+1,-1\}\), define
+\begin{equation}
+ x_{\sigma\tau}:=\alpha+\sigma P'+\tau P,
+ \qquad
+ r_{\sigma\tau}:=\frac{m+\sigma k'+\tau k}{2}.
+ \label{eq:x-r}
+\end{equation}
+For a nonnegative integer \(r\), set
+\begin{align}
+ \se(x,r)
+ &=2^{-r^2/2}
+ \prod_{\substack{i,j\ge1,\ i+j\le2r\\i+j\equiv0\ ({\rm mod}\ 2)}}
+ \left[x+(i-1)b+(j-1)b^{-1}\right],
+ \notag\\
+ \so(x,r)
+ &=2^{-r(r+1)/2}
+ \prod_{\substack{i,j\ge1,\ i+j\le2r+1\\i+j\equiv1\ ({\rm mod}\ 2)}}
+ \left[x+(i-1)b+(j-1)b^{-1}\right].
+ \label{eq:s-positive}
+\end{align}
+For negative integer \(r\), extend them by
+\begin{equation}
+ \se(x,r)=(-1)^r\se(Q-x,-r),
+ \qquad
+ \so(x,r)=\so(Q-x,-r).
+ \label{eq:s-negative}
+\end{equation}
+Finally define
+\begin{equation}
+ \operatorname{Int}(x):=\operatorname{sgn}(x)\lfloor|x|\rfloor.
+ \label{eq:Int}
+\end{equation}
+
+The literature ratio is then
+\begin{equation}
+ \boxed{
+ l(\alpha,m\mid P',k',P,k)
+ =\begin{cases}
+ \displaystyle
+ \prod_{\sigma,\tau=\pm1}
+ \se\left(x_{\sigma\tau},r_{\sigma\tau}\right),
+ &m+k+k'\text{ even},\\[1.2em]
+ \displaystyle
+ \prod_{\sigma,\tau=\pm1}
+ \so\left(x_{\sigma\tau},
+ \operatorname{Int}(r_{\sigma\tau})\right),
+ &m+k+k'\text{ odd}.
+ \end{cases}}
+ \label{eq:l-product}
+\end{equation}
+This is the factorized matrix-element ratio of arXiv:1111.2803.  It becomes
+the desired human-note numerator only after
+Eq.~\eqref{eq:T-versus-L-question}, including any convention factor, has
+been established.
+
+\subsection{Endpoint order and the first convention check}
+
+The fixed-parity trilinear form used in the human note obeys the endpoint
+reflection rule
+\begin{equation}
+ \hatrho_a(x_1,x_2,x_3)
+ =(-1)^{|x_2|(|x_1|+|x_3|)}
+ \hatrho_a(x_3,x_2,x_1),
+ \label{eq:human-reflection}
+\end{equation}
+with the weights and labels in slots (1) and (3) exchanged on the
+right-hand side.  For the branching primaries this sign is
+\((-1)^{k_2(k_1+k_3)}\).  Thus the reversed expression
+\(\hatrho_a(v_{3,n_3},v_{2,n_2},v_{1,n_1})\), used in an earlier version of
+this note, is not the definition in the human note and cannot be substituted
+without this reflection sign.
+
+Already at (n_i=0,\pm\tfrac12), one must expand the explicit vectors
+\begin{equation}
+ v_{i,\epsilon_i/2}
+ =G_{-1/2}\phi_i+a_i f_{-1/2}\phi_i,
+ \qquad
+ a_i:=\frac Q2+\epsilon_iP_i,
+ \qquad \epsilon_i=\pm1,
+ \label{eq:level-half-vectors-a}
+\end{equation}
+inside the tensor-product trilinear form of the human note.  Its auxiliary
+BPZ convention gives
+\begin{equation}
+ \rho^{\Ff}(f\one,f\one,\one)=-1,
+ \qquad
+ \rho^{\Ff}(f\one,\one,f\one)=-1,
+ \qquad
+ \rho^{\Ff}(\one,f\one,f\one)=+1.
+ \label{eq:fermion-level-half-rhos}
+\end{equation}
+Using the human note's fixed-parity component table then gives
+\begin{align}
+ T_0^{\mathrm H}[\epsilon_1/2,\epsilon_2/2,0]
+ &=-\frac12\left[
+  \left(\frac Q2+\epsilon_1P_1+\epsilon_2P_2\right)^2-P_3^2
+ \right],
+ \notag\\
+ T_0^{\mathrm H}[\epsilon_1/2,0,\epsilon_3/2]
+ &=\frac12\left[
+  P_2^2-\left(\frac Q2+\epsilon_1P_1+\epsilon_3P_3\right)^2
+ \right],
+ \notag\\
+ T_0^{\mathrm H}[0,\epsilon_2/2,\epsilon_3/2]
+ &=\frac12\left[
+  \left(\frac Q2+\epsilon_2P_2+\epsilon_3P_3\right)^2-P_1^2
+ \right].
+ \label{eq:human-two-branch-direct}
+\end{align}
+The product formula for (L^{\mathrm{lit}}) has the same last two entries
+but the opposite sign in the first entry.  Equivalently, on these cases,
+\begin{equation}
+ T_a^{\mathrm H}=(-1)^{k_1k_2}L_a^{\mathrm{lit}}.
+ \label{eq:low-level-convention-factor}
+\end{equation}
+This establishes a genuine convention factor at the first nontrivial level.
+Whether Eq.~\eqref{eq:low-level-convention-factor} is the complete all-level
+translation must be checked with an explicit
+\(|k|=2\) vector; it is not assumed below for an unsquared coefficient.
+
+\section{Norm from the same formula}
+
+Take the inserted field to be the identity:
+\begin{equation}
+ \alpha=0,
+ \qquad m=0,
+ \qquad P'=P,
+ \qquad k'=k.
+ \label{eq:norm-specialization}
+\end{equation}
+Then Eq.~\eqref{eq:l-definition} becomes the norm, while the four factors in
+Eq.~\eqref{eq:l-product} reduce to
+\begin{equation}
+ (x_{++},r_{++})=(2P,k),
+ \quad
+ (x_{+-},r_{+-})=(0,0),
+ \quad
+ (x_{-+},r_{-+})=(0,0),
+ \quad
+ (x_{--},r_{--})=(-2P,-k).
+ \label{eq:norm-four-factors}
+\end{equation}
+Since \(\se(x,0)=1\), we obtain
+\begin{equation}
+ \boxed{
+ N_k(P)
+ =\langle P,k|P,k\rangle
+ =\se(2P,k)\se(-2P,-k).}
+ \label{eq:norm-master}
+\end{equation}
+Equivalently, for \(p\ge0\),
+\begin{align}
+ N_p(P)&=(-1)^p\se(2P,p)\se(Q+2P,p),
+ \notag\\
+ N_{-p}(P)&=(-1)^p\se(Q-2P,p)\se(-2P,p).
+ \label{eq:norm-piecewise}
+\end{align}
+
+At level \(1/2\), Eq.~\eqref{eq:k-one-vectors} gives an independent direct
+check.  Using
+\begin{equation}
+ \langle G_{-1/2}\phi,G_{-1/2}\phi\rangle=2h,
+ \qquad
+ \langle f_{-1/2}\one,f_{-1/2}\one\rangle=-1,
+ \label{eq:level-half-inner-products}
+\end{equation}
+and vanishing mixed inner product, one finds
+\begin{align}
+ N_1(P)
+ &=2h-\left(\frac Q2+P\right)^2
+ =-P(Q+2P),
+ \notag\\
+ N_{-1}(P)
+ &=2h-\left(\frac Q2-P\right)^2
+ =P(Q-2P).
+ \label{eq:level-half-norms}
+\end{align}
+These agree with Eq.~\eqref{eq:norm-master}, because
+\(\se(x,1)=x/\sqrt2\).  The same computation also gives
+\begin{equation}
+ \langle P,1|P,-1\rangle=0.
+ \label{eq:level-half-orthogonality}
+\end{equation}
+
+\section{Squared coefficient obtained from the literature ratio}
+
+The product formula and the norm determine the following
+literature-normalized candidate:
+\begin{equation}
+ \boxed{
+ \mathcal B_a^{\mathrm{lit}}
+ (P_1,P_2,P_3;k_1,k_2,k_3)
+ =\frac{
+ l\left(\frac Q2+P_2,k_2\mid P_1,k_1,P_3,k_3\right)^2
+ }{
+ N_{k_1}(P_1)N_{k_2}(P_2)N_{k_3}(P_3)
+ },}
+ \label{eq:B-final}
+\end{equation}
+where \(l\) is Eq.~\eqref{eq:l-product}, \(N\) is
+Eq.~\eqref{eq:norm-master}, and
+\begin{equation}
+ k_i=2n_i,
+ \qquad
+ a=k_1+k_2+k_3\pmod2.
+ \label{eq:final-dictionary}
+\end{equation}
+At the cases checked in Eq.~\eqref{eq:human-two-branch-direct}, the
+translation is a sign and hence
+\(\mathcal B_a^{\mathrm{lit}}=\mathcal B_a\).  The all-level identification
+requires proving that the translation between \(T_a^{\mathrm H}\) and
+\(L_a^{\mathrm{lit}}\) remains a pure sign for the explicit higher branching
+vectors.
+
+If an unsquared \(B_a\) is desired, one must choose square roots of the three
+complex Shapovalov norms, fix an overall phase for every branch vector, and
+include the human-to-literature trilinear convention factor.  Principal
+square roots alone do not define the human-note coefficient.
+
+\section{Low-level values}
+
+The product formula immediately gives
+\begin{equation}
+ l(\alpha,0\mid P',0,P,0)=1,
+ \qquad
+ l(\alpha,1\mid P',0,P,0)=1.
+ \label{eq:base-l}
+\end{equation}
+The first is the even primary normalization; the second is the odd
+normalization.
+
+With one \(k=1\) branch vector and the other two labels zero,
+\begin{equation}
+ l(\alpha,0\mid P',0,P,1)
+ =l(\alpha,0\mid P',1,P,0)=1.
+ \label{eq:one-branch-l}
+\end{equation}
+Consequently the corresponding squared normalized coefficient is simply the
+inverse norm of that leg.
+
+With two \(k=1\) vectors, the even numerators are
+\begin{align}
+ l(\alpha,0\mid P',1,P,1)
+ &=\frac12(\alpha+P'+P)(\alpha-P'-P-Q),
+ \notag\\
+ l(\alpha,1\mid P',1,P,0)
+ &=\frac12(\alpha+P'+P)(\alpha+P'-P),
+ \notag\\
+ l(\alpha,1\mid P',0,P,1)
+ &=\frac12(\alpha+P'+P)(\alpha-P'+P).
+ \label{eq:two-branch-l}
+\end{align}
+These are the first nontrivial polynomial checks to reproduce directly from
+the human-note Ward identities.
+
+For example,
+\begin{equation}
+ \mathcal B_0^{\mathrm{lit}}(P_1,P_2,P_3;1,0,1)
+ =\frac{
+  (\alpha_2+P_3+P_1)^2
+  (\alpha_2-P_3-P_1-Q)^2
+ }{
+  4N_1(P_3)N_1(P_1)
+ },
+ \qquad \alpha_2=\frac Q2+P_2.
+ \label{eq:B-example}
+\end{equation}
+
+\subsection{Complete unpacking for
+\texorpdfstring{\(n_i=0,\pm\frac12\)}{ni = 0, +/- 1/2}}
+
+We now remove the product notation completely at the first nontrivial
+branching level.  In this subsection the slot order
+\((n_1,n_2,n_3)\) is exactly the human order: BPZ-conjugate state at
+infinity, inserted field at one, and ket at zero.  To keep the left-hand
+sides readable, define
+\begin{equation}
+ \mathcal B_a^{\mathrm{lit}}[n_1,n_2,n_3]
+ :=\mathcal B_a^{\mathrm{lit}}(P_1,P_2,P_3;2n_1,2n_2,2n_3),
+ \qquad
+ L_a^{\mathrm{lit}}[n_1,n_2,n_3]
+ :=l\left(\frac Q2+P_2,2n_2\mid P_1,2n_1,P_3,2n_3\right).
+ \label{eq:small-n-slot-notation}
+\end{equation}
+The human numerator remains
+\(T_a^{\mathrm H}[n_1,n_2,n_3]
+=\hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})\).
+
+Whenever \(n_i\ne0\), write
+\begin{equation}
+ \epsilon_i:=2n_i\in\{+1,-1\}.
+ \label{eq:small-n-epsilon}
+\end{equation}
+The free-field vector and its norm take the uniform form
+\begin{align}
+ |P,\epsilon\rangle
+ &=\left[
+ G_{-1/2}+\left(\frac Q2+\epsilon P\right)f_{-1/2}
+ \right]|P,0\rangle,
+ \notag\\
+ \langle P,\epsilon|P,\epsilon\rangle
+ &=-\epsilon P\left(Q+2\epsilon P\right).
+ \label{eq:small-n-vector-and-norm}
+\end{align}
+
+\paragraph{Zero or one nonzero label.}
+For the vacuum branch,
+\begin{equation}
+ T_0^{\mathrm H}[0,0,0]
+ =L_0^{\mathrm{lit}}[0,0,0]=1,
+ \qquad
+ \mathcal B_0^{\mathrm{lit}}[0,0,0]=1.
+ \label{eq:small-n-vacuum}
+\end{equation}
+If exactly one label is nonzero, the numerator remains one and
+\begin{align}
+ T_1^{\mathrm H}[\epsilon_1/2,0,0]
+ &=T_1^{\mathrm H}[0,\epsilon_2/2,0]
+ =T_1^{\mathrm H}[0,0,\epsilon_3/2]
+ \notag\\
+ &=L_1^{\mathrm{lit}}[\epsilon_1/2,0,0]
+ =L_1^{\mathrm{lit}}[0,\epsilon_2/2,0]
+ =L_1^{\mathrm{lit}}[0,0,\epsilon_3/2]=1,
+ \notag\\
+ \mathcal B_1^{\mathrm{lit}}[\epsilon_1/2,0,0]
+ &=-\frac{\epsilon_1}
+ {P_1(Q+2\epsilon_1P_1)},
+ \notag\\
+ \mathcal B_1^{\mathrm{lit}}[0,\epsilon_2/2,0]
+ &=-\frac{\epsilon_2}
+ {P_2(Q+2\epsilon_2P_2)},
+ \notag\\
+ \mathcal B_1^{\mathrm{lit}}[0,0,\epsilon_3/2]
+ &=-\frac{\epsilon_3}
+ {P_3(Q+2\epsilon_3P_3)}.
+ \label{eq:small-n-one-leg}
+\end{align}
+For example, a \(+\frac12\) label gives
+\(-[P_i(Q+2P_i)]^{-1}\), whereas a \(-\frac12\) label gives
+\([P_i(Q-2P_i)]^{-1}\).
+
+\paragraph{Exactly two nonzero labels.}
+When the bra label vanishes, the literature ratio is
+\begin{align}
+ L_0^{\mathrm{lit}}[0,\epsilon_2/2,\epsilon_3/2]
+ &=\frac12\left[
+ \left(\frac Q2+\epsilon_2P_2+\epsilon_3P_3\right)^2-P_1^2
+ \right],
+ \notag\\
+ \mathcal B_0^{\mathrm{lit}}[0,\epsilon_2/2,\epsilon_3/2]
+ &=
+ \frac{
+ \left[
+ \left(\frac Q2+\epsilon_2P_2+\epsilon_3P_3\right)^2-P_1^2
+ \right]^2
+ }{
+ \begin{gathered}
+ 4\epsilon_2\epsilon_3P_2P_3
+ (Q+2\epsilon_2P_2)\\[-0.2em]
+ {}\times(Q+2\epsilon_3P_3)
+ \end{gathered}
+ }.
+ \label{eq:small-n-bra-zero}
+\end{align}
+Here \(T_0^{\mathrm H}=L_0^{\mathrm{lit}}\), as shown directly in
+Eq.~\eqref{eq:human-two-branch-direct}.  When the inserted label vanishes,
+the literature ratio is
+\begin{align}
+ L_0^{\mathrm{lit}}[\epsilon_1/2,0,\epsilon_3/2]
+ &=\frac12\left[
+ P_2^2-
+ \left(\frac Q2+\epsilon_1P_1+\epsilon_3P_3\right)^2
+ \right],
+ \notag\\
+ \mathcal B_0^{\mathrm{lit}}[\epsilon_1/2,0,\epsilon_3/2]
+ &=
+ \frac{
+ \left[
+ P_2^2-
+ \left(\frac Q2+\epsilon_1P_1+\epsilon_3P_3\right)^2
+ \right]^2
+ }{
+ \begin{gathered}
+ 4\epsilon_1\epsilon_3P_1P_3
+ (Q+2\epsilon_1P_1)\\[-0.2em]
+ {}\times(Q+2\epsilon_3P_3)
+ \end{gathered}
+ }.
+ \label{eq:small-n-insertion-zero}
+\end{align}
+Again \(T_0^{\mathrm H}=L_0^{\mathrm{lit}}\).  Finally, when the ket label
+vanishes, the literature ratio is
+\begin{align}
+ L_0^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,0]
+ &=\frac12\left[
+ \left(\frac Q2+\epsilon_1P_1+\epsilon_2P_2\right)^2-P_3^2
+ \right],
+ \notag\\
+ \mathcal B_0^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,0]
+ &=
+ \frac{
+ \left[
+ \left(\frac Q2+\epsilon_1P_1+\epsilon_2P_2\right)^2-P_3^2
+ \right]^2
+ }{
+ \begin{gathered}
+ 4\epsilon_1\epsilon_2P_1P_2
+ (Q+2\epsilon_1P_1)\\[-0.2em]
+ {}\times(Q+2\epsilon_2P_2)
+ \end{gathered}
+ }.
+ \label{eq:small-n-ket-zero}
+\end{align}
+In this last case the human numerator has the opposite sign:
+\begin{equation}
+ T_0^{\mathrm H}[\epsilon_1/2,\epsilon_2/2,0]
+ =-L_0^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,0].
+ \label{eq:small-n-human-ket-zero-sign}
+\end{equation}
+The sign is fixed by the human BPZ and fixed-parity conventions; it is not a
+freely chosen phase.  It disappears after squaring this numerator.
+
+\paragraph{Three nonzero labels.}
+All eight sign choices are covered by
+\begin{align}
+ L_1^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,\epsilon_3/2]
+ &=\frac12
+ \left(
+ \frac Q2+\epsilon_1P_1+\epsilon_2P_2+\epsilon_3P_3+b
+ \right)
+ \notag\\[-0.2em]
+ &\hspace{3.5em}\times
+ \left(
+ \frac Q2+\epsilon_1P_1+\epsilon_2P_2+\epsilon_3P_3+b^{-1}
+ \right),
+ \label{eq:small-n-three-leg-T}\\
+ \mathcal B_1^{\mathrm{lit}}[\epsilon_1/2,\epsilon_2/2,\epsilon_3/2]
+ &=
+ -\frac{
+ \begin{gathered}
+ \epsilon_1\epsilon_2\epsilon_3
+ \left(
+ \frac Q2+\epsilon_1P_1+\epsilon_2P_2+\epsilon_3P_3+b
+ \right)^2\\[-0.2em]
+ {}\times
+ \left(
+ \frac Q2+\epsilon_1P_1+\epsilon_2P_2+\epsilon_3P_3+b^{-1}
+ \right)^2
+ \end{gathered}
+ }{
+ \begin{gathered}
+ 4P_1P_2P_3
+ (Q+2\epsilon_1P_1)(Q+2\epsilon_2P_2)\\[-0.2em]
+ {}\times(Q+2\epsilon_3P_3)
+ \end{gathered}
+ }.
+ \label{eq:small-n-three-leg-B}
+\end{align}
+The displayed \(L_1^{\mathrm{lit}}\) is not yet identified with
+\(T_1^{\mathrm H}\).  This is the first case in the \(27\)-entry table where
+the convention translation must be checked using all terms in the
+tensor-product highest vectors.
+Equations~\eqref{eq:small-n-vacuum}--\eqref{eq:small-n-three-leg-B}
+exhaust all \(27\) literature expressions
+\(n_i\in\{0,\pm\frac12\}\).  They are the formulas evaluated by
+\texttt{Code/two\_virasoro\_fusion.py}; its unsquared output should therefore
+be read as \(L_a^{\mathrm{lit}}\), not yet as \(T_a^{\mathrm H}\).
+
+\section{What remains to be audited}
+
+The calculation above settles the all-NS coefficient, modulo a direct audit
+of the literature product formula against the human note's ordered Ward
+identities.  The efficient audit is:
+\begin{enumerate}
+ \item reproduce Eqs.~\eqref{eq:level-half-norms} from the Gram form;
+ \item reproduce Eqs.~\eqref{eq:one-branch-l} and
+ Eq.~\eqref{eq:two-branch-l} from the three-point Ward identities;
+ \item check a \(|k|=2\) case using the explicit level-two vectors in
+ Appendix B of arXiv:1111.2803; and
+ \item only then use Eq.~\eqref{eq:B-final} as the all-level input to the
+ block decomposition.
+\end{enumerate}
+
+The Ramond branching vectors have an analogous free-field prescription in
+arXiv:1608.02568.  It uses integer \(\chi_r^\pm\) modes and has two parity
+copies.  Their norms and \((\mathrm{NS},\mathrm R,\mathrm R)\) three-point
+coefficients require a separate translation to the human note's phase
+convention
+\begin{equation}
+ G_0w_\beta^\pm=i\beta e^{\mp i\pi/4}w_\beta^\mp.
+\end{equation}
+No Whittaker coefficient is used here.
+
+\section{Sources}
+
+The free-field vector, its PBW normalization, the blow-up factors, and the
+functions \(\se,\so\) are in
+\href{https://arxiv.org/abs/1111.2803}{arXiv:1111.2803}, especially
+Sec.~3.2, Proposition 3.2, and Appendix B.  The later presentation and the
+Ramond analogue are in
+\href{https://arxiv.org/abs/1608.02568}{arXiv:1608.02568}, Sec.~4.
+
+\end{document}

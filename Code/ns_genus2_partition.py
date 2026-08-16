@@ -101,7 +101,10 @@ from super_liouville_structure_constants import (  # noqa: E402
 )
 
 
-C_HAT9 = 13.5
+# Keep the two conventions explicit.  The block and Gram-matrix APIs always
+# receive the ordinary super-Virasoro central charge; ``hat c`` is metadata.
+HAT_C_TARGET = 9.0
+C_ORDINARY_AT_HAT_C_9 = 1.5 * HAT_C_TARGET
 # Higher orders are enabled for pointwise convergence diagnostics.  Production
 # locality comparisons remain gated on an explicit order-to-order audit.
 MAX_RECURSION_ORDER = 24
@@ -115,6 +118,23 @@ THETA_GEOMETRY_EDGE_ORDER = ("q_zero", "q_one", "q_infinity")
 THETA_CCY_DESCENDANT_EDGE_ORDER = ("q_infinity", "q_one", "q_zero")
 GLASSES_GEOMETRY_EDGE_ORDER = ("q_left", "q_right", "q_bridge")
 GLASSES_CCY_DESCENDANT_EDGE_ORDER = GLASSES_GEOMETRY_EDGE_ORDER
+
+# The stored theta periods include this final integer branch shift relative to
+# the unbranched modular word.  With Omega -> Omega + N, the symplectic factor
+# is [[I,N],[0,I]], so its sign is fixed by direct matrix composition.
+THETA_INTEGER_BRANCH = ((-1, 1), (1, -1))
+GLASSES_TO_THETA_UNBRANCHED = (
+    (2, -1, -1, -1),
+    (-2, 1, 0, -1),
+    (1, 0, 0, 0),
+    (-1, 1, 0, 0),
+)
+GLASSES_TO_THETA_BRANCH_COMPOSED = (
+    (0, 0, -1, -1),
+    (0, 0, 0, -1),
+    (1, 0, 0, 0),
+    (-1, 1, 0, 0),
+)
 
 # Slot order is (0_L,1_L,infinity_L,0_R,1_R,infinity_R).  The self-sewn
 # handles are (0_L,infinity_L) and (0_R,infinity_R), and the separating edge
@@ -196,19 +216,30 @@ class _MPPartialFractionInC:
             coefficients.append(mpmath.mpc(0))
         coefficients[order - 1] += coefficient
 
-    @staticmethod
-    def _direct_group_value(entries, evaluation_point, tolerance):
+    def _record_ratio(self, key, numerator, denominator) -> None:
+        if self.moment_diagnostics is None or numerator == 0:
+            return
+        ratio = numerator / abs(denominator) if denominator != 0 else mpmath.inf
+        self.moment_diagnostics[key] = max(
+            self.moment_diagnostics.get(key, mpmath.mpf(0)), ratio
+        )
+
+    def _direct_group_value(self, entries, evaluation_point, tolerance):
         value = mpmath.mpc(0)
+        absolute_sum = mpmath.mpf(0)
         for pole, coefficients, _ in entries:
             delta = evaluation_point - pole
             if abs(delta) < tolerance:
                 raise ZeroDivisionError(
                     "requested central charge lies on an uncancelled NS pole"
                 )
-            value += sum(
-                coefficient / delta**order
-                for order, coefficient in enumerate(coefficients, start=1)
-            )
+            for order, coefficient in enumerate(coefficients, start=1):
+                term = coefficient / delta**order
+                value += term
+                absolute_sum += abs(term)
+        self._record_ratio(
+            "max_direct_cancellation_ratio", absolute_sum, value
+        )
         return value
 
     def _fixed_difference_moment_value(
@@ -243,6 +274,7 @@ class _MPPartialFractionInC:
             return None
 
         value = mpmath.mpc(0)
+        absolute_moment_sum = mpmath.mpf(0)
         small_terms = 0
         terms_used = 0
         # A common numerator with N Laurent coefficients can have its first
@@ -254,13 +286,14 @@ class _MPPartialFractionInC:
         ) + 3
         for moment_order in range(self._MAX_MOMENT_TERMS):
             term = mpmath.mpc(0)
+            absolute_term_sum = mpmath.mpf(0)
             for (_, coefficients, _), pole_delta in zip(
                 entries, pole_deltas
             ):
                 for pole_order, coefficient in enumerate(
                     coefficients, start=1
                 ):
-                    term += (
+                    summand = (
                         mpmath.binomial(
                             pole_order + moment_order - 1, moment_order
                         )
@@ -268,7 +301,13 @@ class _MPPartialFractionInC:
                         * pole_delta**moment_order
                         / center_delta ** (pole_order + moment_order)
                     )
+                    term += summand
+                    absolute_term_sum += abs(summand)
+            self._record_ratio(
+                "max_moment_cancellation_ratio", absolute_term_sum, term
+            )
             value += term
+            absolute_moment_sum += abs(term)
             terms_used = moment_order + 1
             scale = max(mpmath.mpf(1), abs(value))
             if terms_used >= minimum_terms and abs(term) <= tolerance * scale:
@@ -286,6 +325,11 @@ class _MPPartialFractionInC:
                         self.moment_diagnostics["max_moment_ratio"],
                         max_ratio,
                     )
+                    self._record_ratio(
+                        "max_moment_series_cancellation_ratio",
+                        absolute_moment_sum,
+                        value,
+                    )
                 return value
         raise RuntimeError(
             "fixed-(r-s) confluent moment sum did not converge: "
@@ -302,6 +346,7 @@ class _MPPartialFractionInC:
             groups.setdefault(family_key, []).append(entry)
 
         value = mpmath.mpc(self.constant)
+        absolute_group_sum = abs(value)
         for family_key, entries in groups.items():
             family_value = None
             if (
@@ -323,6 +368,10 @@ class _MPPartialFractionInC:
                     entries, evaluation_point, tolerance
                 )
             value += family_value
+            absolute_group_sum += abs(family_value)
+        self._record_ratio(
+            "max_total_cancellation_ratio", absolute_group_sum, value
+        )
         return value
 
     def finite_part_at(self, pole, tolerance):
@@ -388,6 +437,7 @@ class FreeSuperfieldDiagnostics:
     max_word_length: int
     max_mode: int
     previous_word_relative_change: float
+    fermion_method: str
 
 
 @dataclass(frozen=True)
@@ -1031,6 +1081,10 @@ class NSGenus2CRecursion:
         self.confluent_direct_groups = 0
         self.confluent_max_moment_terms = 0
         self.confluent_max_moment_ratio = 0.0
+        self.confluent_max_direct_cancellation_ratio = 0.0
+        self.confluent_max_moment_cancellation_ratio = 0.0
+        self.confluent_max_moment_series_cancellation_ratio = 0.0
+        self.confluent_max_total_cancellation_ratio = 0.0
 
     @lru_cache(maxsize=None)
     def _vacuum(self, lifts: tuple[int, int, int]) -> complex:
@@ -1395,7 +1449,7 @@ class NSGenus2CRecursion:
         sector: int,
         recursion_order: int,
         lifts: Sequence[int],
-        central_charge: complex = C_HAT9,
+        central_charge: complex = C_ORDINARY_AT_HAT_C_9,
     ) -> complex:
         if recursion_order < 0 or recursion_order > MAX_RECURSION_ORDER:
             raise ValueError(
@@ -1484,7 +1538,7 @@ class NSGenus2CRecursion:
         sector: int,
         recursion_order: int,
         lifts: Sequence[int],
-        central_charge: complex = C_HAT9,
+        central_charge: complex = C_ORDINARY_AT_HAT_C_9,
         pole_tolerance: float = 1.0e-10,
     ) -> complex:
         r"""Evaluate the block after analytically combining confluent poles.
@@ -1588,7 +1642,7 @@ class NSGenus2CRecursion:
         sector: int,
         recursion_order: int,
         lifts: Sequence[int],
-        central_charge: complex = C_HAT9,
+        central_charge: complex = C_ORDINARY_AT_HAT_C_9,
         working_precision: int = 60,
     ) -> complex:
         """Arbitrary-precision collision-aware NS c-recursion."""
@@ -1614,6 +1668,10 @@ class NSGenus2CRecursion:
                 "direct_groups": 0,
                 "max_moment_terms": 0,
                 "max_moment_ratio": mpmath.mpf(0),
+                "max_direct_cancellation_ratio": mpmath.mpf(0),
+                "max_moment_cancellation_ratio": mpmath.mpf(0),
+                "max_moment_series_cancellation_ratio": mpmath.mpf(0),
+                "max_total_cancellation_ratio": mpmath.mpf(0),
             }
 
             @lru_cache(maxsize=None)
@@ -1698,6 +1756,26 @@ class NSGenus2CRecursion:
             self.confluent_max_moment_ratio = max(
                 self.confluent_max_moment_ratio,
                 float(moment_diagnostics["max_moment_ratio"]),
+            )
+            self.confluent_max_direct_cancellation_ratio = max(
+                self.confluent_max_direct_cancellation_ratio,
+                float(moment_diagnostics["max_direct_cancellation_ratio"]),
+            )
+            self.confluent_max_moment_cancellation_ratio = max(
+                self.confluent_max_moment_cancellation_ratio,
+                float(moment_diagnostics["max_moment_cancellation_ratio"]),
+            )
+            self.confluent_max_moment_series_cancellation_ratio = max(
+                self.confluent_max_moment_series_cancellation_ratio,
+                float(
+                    moment_diagnostics[
+                        "max_moment_series_cancellation_ratio"
+                    ]
+                ),
+            )
+            self.confluent_max_total_cancellation_ratio = max(
+                self.confluent_max_total_cancellation_ratio,
+                float(moment_diagnostics["max_total_cancellation_ratio"]),
             )
             return complex(value)
 
@@ -1817,15 +1895,18 @@ def _spin_characteristic_from_lifts(
 
     All computations here use NS representations on the Schottky A-cycles,
     hence ``alpha=(0,0)``.  The beta bits are determined by the chosen
-    determinant-one generator lifts.  In the glasses marking ``+`` is beta
-    zero.  The fixed theta period marking includes the integer B-cycle shift
-    encoded by :func:`generators_for_theta`, giving
+    determinant-one generator lifts and by the BPZ half-edge frame.  In the
+    glasses marking ``+`` is beta zero.  In the fixed branch-composed theta
+    marking the independent direct Majorana pants-sewing oracle gives
 
     ``(s1,s2)=(+,+),(+,-),(-,+),(-,-)``
-    ``-> beta=(0,1),(0,0),(1,1),(1,0)``.
+    ``-> beta=(1,1),(1,0),(0,1),(0,0)``.
 
-    In particular the transported physical marking is ``[00|00]`` in the
-    glasses channel and ``[00|11]`` in the theta channel.
+    The first theta bit contains the BPZ affine shift that was absent from the
+    older generator-sign-only ledger.  Consequently physical theta lifts
+    ``(-,+,+)`` (equivalently ``(+,-,-)``) realize ``[00|00]`` and match
+    glasses lifts ``(+,+,+)``.  Theta ``(+,+,+)`` instead realizes
+    ``[00|10]``.
     """
 
     lifts = tuple(int(value) for value in physical_lifts)
@@ -1837,12 +1918,59 @@ def _spin_characteristic_from_lifts(
     elif channel == "theta":
         _, generator_signs = _theta_schottky_data(q_values, lifts)
         beta = (
-            int(generator_signs[0] < 0),
+            int(generator_signs[0] > 0),
             int(generator_signs[1] > 0),
         )
     else:
         raise ValueError("channel must be theta or glasses")
     return (0, 0), beta  # type: ignore[return-value]
+
+
+def _transport_spin_characteristic(
+    symplectic_matrix: Sequence[Sequence[int]],
+    characteristic: tuple[tuple[int, int], tuple[int, int]],
+) -> tuple[tuple[int, int], tuple[int, int]]:
+    r"""Transport a genus-two half-characteristic with the affine action.
+
+    The period convention is ``Omega'=(A Omega+B)(C Omega+D)^(-1)``.  For a
+    binary characteristic ``[alpha|beta]`` the corresponding action is
+
+    ``alpha' = D alpha - C beta + diag(C D^T)``,
+    ``beta'  =-B alpha + A beta + diag(A B^T)`` modulo two.
+
+    Keeping the diagonal affine terms here is essential: a purely linear
+    transport can silently select a different spin structure.
+    """
+
+    matrix = np.asarray(symplectic_matrix, dtype=int)
+    if matrix.shape != (4, 4):
+        raise ValueError("genus-two spin transport requires a 4x4 matrix")
+    identity = np.eye(2, dtype=int)
+    symplectic_form = np.block(
+        [
+            [np.zeros((2, 2), dtype=int), identity],
+            [-identity, np.zeros((2, 2), dtype=int)],
+        ]
+    )
+    if not np.array_equal(matrix.T @ symplectic_form @ matrix, symplectic_form):
+        raise ValueError("spin transport matrix is not symplectic")
+
+    A, B = matrix[:2, :2], matrix[:2, 2:]
+    C, D = matrix[2:, :2], matrix[2:, 2:]
+    alpha = np.asarray(characteristic[0], dtype=int)
+    beta = np.asarray(characteristic[1], dtype=int)
+    if alpha.shape != (2,) or beta.shape != (2,):
+        raise ValueError("genus-two characteristic must have two alpha and beta bits")
+    transported_alpha = (
+        D @ alpha - C @ beta + np.diag(C @ D.T)
+    ) % 2
+    transported_beta = (
+        -B @ alpha + A @ beta + np.diag(A @ B.T)
+    ) % 2
+    return (
+        tuple(int(value) for value in transported_alpha),
+        tuple(int(value) for value in transported_beta),
+    )  # type: ignore[return-value]
 
 
 @lru_cache(maxsize=None)
@@ -1923,6 +2051,7 @@ def _free_superfield_partition_cached(
         previous_word_relative_change=float(
             abs(value - previous_value) / max(1.0e-300, abs(value))
         ),
+        fermion_method="exact theta-function bosonization resummation",
     )
 
 
@@ -2345,32 +2474,57 @@ def run_internal_checks() -> dict[str, object]:
                 )
     handle_residue_error = max(handle_residue_errors.values())
 
-    # The modular word maps glasses characteristic [00|00] to theta [00|11].
+    # Use the complete glasses-to-theta word, including the final integer
+    # branch transformation used by the stored theta period matrices.  It
+    # maps the selected glasses characteristic [00|00] to [00|00].  The
+    # independent Majorana pants-sewing oracle fixes which theta plumbing
+    # lifts realize that transported characteristic: (-,+,+), not (+,+,+).
+    unbranched_symplectic_matrix = np.asarray(
+        GLASSES_TO_THETA_UNBRANCHED, dtype=int
+    )
+    theta_integer_branch = np.asarray(THETA_INTEGER_BRANCH, dtype=int)
+    identity = np.eye(2, dtype=int)
+    branch_symplectic_matrix = np.block(
+        [
+            [identity, theta_integer_branch],
+            [np.zeros((2, 2), dtype=int), identity],
+        ]
+    )
     symplectic_matrix = np.asarray(
-        [[2, -1, -1, -1], [-2, 1, 0, -1], [1, 0, 0, 0], [-1, 1, 0, 0]],
-        dtype=int,
+        GLASSES_TO_THETA_BRANCH_COMPOSED, dtype=int
     )
-    A, B = symplectic_matrix[:2, :2], symplectic_matrix[:2, 2:]
-    C, D = symplectic_matrix[2:, :2], symplectic_matrix[2:, 2:]
-    theta_alpha = tuple((np.diag(C @ D.T) % 2).tolist())
-    theta_beta = tuple((np.diag(A @ B.T) % 2).tolist())
-    if (theta_alpha, theta_beta) != ((0, 0), (1, 1)):
+    if not np.array_equal(
+        branch_symplectic_matrix @ unbranched_symplectic_matrix,
+        symplectic_matrix,
+    ):
+        raise AssertionError("theta integer branch does not compose the modular word")
+    source_characteristic = ((0, 0), (0, 0))
+    target_characteristic = _transport_spin_characteristic(
+        symplectic_matrix, source_characteristic
+    )
+    if target_characteristic != ((0, 0), (0, 0)):
         raise AssertionError("spin characteristic transport changed")
+    same_spin_theta_lifts = (-1, 1, 1)
     _, theta_generator_signs = _theta_schottky_data(
-        (0.11, 0.12, 0.13), (1, 1, -1)
+        (0.11, 0.12, 0.13), same_spin_theta_lifts
     )
-    if theta_generator_signs != (-1, 1):
-        raise AssertionError("theta edge lifts do not realize [00|11]")
+    if theta_generator_signs != (-1, -1):
+        raise AssertionError("theta edge lifts do not realize [00|00]")
     theta_characteristic = _spin_characteristic_from_lifts(
-        "theta", (0.11, 0.12, 0.13), (1, 1, -1)
+        "theta", (0.11, 0.12, 0.13), same_spin_theta_lifts
     )
     glasses_characteristic = _spin_characteristic_from_lifts(
         "glasses", (0.11, 0.12, 0.13), (1, 1, 1)
     )
-    if theta_characteristic != ((0, 0), (1, 1)):
+    if theta_characteristic != ((0, 0), (0, 0)):
         raise AssertionError("theta edge lifts have the wrong characteristic")
     if glasses_characteristic != ((0, 0), (0, 0)):
         raise AssertionError("glasses edge lifts have the wrong characteristic")
+    stale_theta_characteristic = _spin_characteristic_from_lifts(
+        "theta", (0.11, 0.12, 0.13), (1, 1, 1)
+    )
+    if stale_theta_characteristic != ((0, 0), (1, 0)):
+        raise AssertionError("theta BPZ affine spin shift changed")
     return {
         "theta_geometry_edge_order": list(THETA_GEOMETRY_EDGE_ORDER),
         "theta_ccy_descendant_edge_order": list(
@@ -2389,6 +2543,12 @@ def run_internal_checks() -> dict[str, object]:
         ),
         "glasses_orientation_bits": list(GLASSES_ORIENTATION.edge_linear_bits),
         "glasses_orientation_formula": "e_bridge*(e_left+e_right) mod 2",
+        "same_spin_theta_lifts": list(same_spin_theta_lifts),
+        "same_spin_glasses_lifts": [1, 1, 1],
+        "same_spin_characteristic": {
+            "alpha": [0, 0],
+            "beta": [0, 0],
+        },
         "separating_global_relative_error": float(factorization_error),
         "separating_global_sum_converged": global_glasses.converged,
         "glasses_global_method": "three-factor hypergeometric resummation",
@@ -2396,9 +2556,11 @@ def run_internal_checks() -> dict[str, object]:
         "handle_residue_torus_relative_error": float(handle_residue_error),
         "handle_residue_torus_relative_errors": handle_residue_errors,
         "spin_source_characteristic": {"alpha": [0, 0], "beta": [0, 0]},
-        "spin_target_characteristic": {"alpha": [0, 0], "beta": [1, 1]},
+        "spin_target_characteristic": {"alpha": [0, 0], "beta": [0, 0]},
         "glasses_edge_lifts": [1, 1, 1],
-        "theta_edge_lifts": [1, 1, -1],
+        "theta_edge_lifts": list(same_spin_theta_lifts),
+        "theta_integer_branch": theta_integer_branch.tolist(),
+        "unbranched_symplectic_matrix": unbranched_symplectic_matrix.tolist(),
         "symplectic_matrix": symplectic_matrix.tolist(),
     }
 
@@ -2508,7 +2670,20 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
         channel: _omega(source, f"{channel}_omega")
         for channel in ("theta", "glasses")
     }
-    lifts = {"theta": (1, 1, -1), "glasses": (1, 1, 1)}
+    # The two channel lifts must realize the same intrinsic spin structure.
+    # The BPZ affine shift in the branch-composed theta frame makes (-,+,+),
+    # rather than the formerly used (+,+,-), the [00|00] representative.
+    lifts = {"theta": (-1, 1, 1), "glasses": (1, 1, 1)}
+    spin_characteristics = {
+        channel: _spin_characteristic_from_lifts(
+            channel, q_values[channel], lifts[channel]
+        )
+        for channel in ("theta", "glasses")
+    }
+    if len(set(spin_characteristics.values())) != 1:
+        raise RuntimeError(
+            "theta and glasses plumbing lifts select different spin structures"
+        )
     settings = []
     for text in args.settings:
         recursion_text, quadrature_text = text.split(":", 1)
@@ -2592,10 +2767,19 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
             "raw plumbing cylinder convention; common Casimir factors omitted; "
             "unit noncompact scalar zero-mode volume"
         ),
-        "central_charge": C_HAT9,
-        "hat_c": 9,
+        "central_charge_convention": "ordinary c; hat_c=2c/3",
+        "central_charge": C_ORDINARY_AT_HAT_C_9,
+        "hat_c": HAT_C_TARGET,
         "source_csv": str(args.overlap_csv),
         "source_row": source_subset,
+        "physical_lifts": {channel: list(value) for channel, value in lifts.items()},
+        "spin_characteristics": {
+            channel: {
+                "alpha": list(characteristic[0]),
+                "beta": list(characteristic[1]),
+            }
+            for channel, characteristic in spin_characteristics.items()
+        },
         "checks": checks,
         "numerics": {
             "structure_precision": args.structure_precision,

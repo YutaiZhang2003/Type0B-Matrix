@@ -29,7 +29,7 @@
 \newcommand{\Res}{\operatorname*{Res}}
 
 \title{Fixed-\(\beta\) \(c\)-Recursion for the Sphere Ramond Channel\\[0.35em]
-\large The large-\(c\) block of the contracted Ramond algebra}
+\large Direct Ward--Gram power counting and the regular seed}
 \author{Private working note}
 \date{\today}
 
@@ -46,15 +46,19 @@ Ramond momenta \(\beta\) are held fixed, so
 The Ramond Kac determinant gives the moving \(c\)-plane poles, while the
 singular-vector norm and factorization of the two endpoint Ward forms
 give their residues directly.  The regular block at \(c=\infty\) is a
-separate problem and is determined solely from the contracted algebra.
+separate problem.  We first determine its allowed powers by direct
+Ward--Gram counting, following the same Gram--Schmidt and normalized
+three-point-function argument as the human note, and introduce the
+contracted algebra only afterwards as an equivalent organization.
 
-The nonzero super-Virasoro modes contract to free bosonic and fermionic
-oscillators, while \(D=L_0-c/24\) and \(G_0\) remain finite.  The
-N--R--R vertices are coherent in this basis, so the raw block must first
-be stripped of its universal \(O(c)\) factor.  The finite remainder is
-the full four-point block of this current algebra: both contracted
-vertices are sewn over all \(a_n\)- and \(\psi_n\)-Fock excitations and
-the Ramond ground fibre.
+The direct count keeps \(h_\R=c/24-\beta^2\) throughout.  Every nonzero
+Ramond mode costs \(c^{1/2}\) in unit normalization.  Pairwise leading
+contractions---the central term together with the order-\(c\) \(L_0\)
+background---are neutral, an unpaired mode costs \(c^{-1/2}\), while a
+Virasoro mode ending singly on the order-\(c\) Ramond weight contributes
+\(c^{1/2}\).  These coherent sources make the raw block polynomially
+unbounded.  Only after this classification do we identify and remove the
+universal background.
 
 The all-level sewing can be evaluated without guessing the displaced
 vertices.  Decompose the Ramond module into orthogonal global
@@ -129,8 +133,10 @@ the internal ground space obeys \(G_0^2=-\beta^2\), independently of
 The construction has two logically independent ingredients.  At finite
 \(c\), the Ramond Kac determinant and singular-vector factorization
 determine the complete pole part directly on the fixed-\(\beta\)
-\(c\)-plane.  At \(c=\infty\), the contracted Ramond algebra determines
-the regular part.  The nontrivial large-\(c\) problem is
+\(c\)-plane.  At \(c=\infty\), the regular part is first constrained by
+direct power counting of the exact Ward--Gram sewing.  The contracted
+Ramond algebra is introduced later as a reorganization of the surviving
+background sector.  The nontrivial large-\(c\) problem is
 \begin{equation}
  \boxed{\text{compute the regular \(c\to\infty\) block at fixed
  \(\beta,\beta_2,\beta_3,h_1,h_4\).}}
@@ -533,6 +539,386 @@ formula holds for the oscillator-normalized block
 the factor \(\E_R(c,q)\) is holomorphic and nonzero in \(c\), and its
 value at the pole cancels against the identical factor multiplying
 the shifted block.
+
+\section{Faithful fixed-\texorpdfstring{\(\beta\)}{beta} power counting
+before contraction}
+\label{sec:precontract-power-count}
+
+We now determine the possible powers of \(c\) directly from the exact
+Ramond Gram matrices and descendant three-point functions.  This is the
+Ramond analogue of the Gram--Schmidt argument in the human note.  No
+oscillator prefactor or contracted algebra is introduced in this section.
+
+\subsection{PBW Gram bounds and explicit Gram--Schmidt orthogonalization}
+
+We now repeat the bosonic PBW argument step by step.  Write a canonical
+Ramond PBW label as
+\begin{equation}
+ I=(\lambda;\mu;\epsilon),
+ \qquad
+ \lambda=(1^{a_1}2^{a_2}\cdots),
+ \qquad
+ \mu=(\mu_1>\cdots>\mu_f\geq1),
+ \label{eq:ramond-pbw-occupation-label}
+\end{equation}
+where the strict partition \(\mu\) records the fermionic modes and
+\(f+\epsilon\) has the chosen total parity.  The Shapovalov form is even,
+so opposite total-parity sectors are orthogonal and Gram--Schmidt can be
+performed in each sector separately.  In one fixed parity block set
+\begin{equation}
+ v_I=
+ \prod_{n\geq1}L_{-n}^{a_n}
+ G_{-\mu_1}\cdots G_{-\mu_f}G_0^\epsilon w_\beta^+,
+ \qquad
+ \nu_R(I)=\sum_{n\geq1}a_n+f.
+ \label{eq:ramond-pbw-mode-count}
+\end{equation}
+Thus \(\nu_R\) counts every nonzero creation mode but does not count
+\(G_0\).  The latter acts only in the finite ground fibre,
+\begin{equation}
+ b_\epsilon
+ =\langle G_0^\epsilon w_\beta^+|G_0^\epsilon w_\beta^+\rangle,
+ \qquad
+ b_0=1,
+ \qquad
+ b_1=-\beta^2.
+ \label{eq:ramond-ground-fibre-diagonal}
+\end{equation}
+
+The fixed-\(\beta\) family changes which modes are large.  Acting on either
+ground-fibre state, the matched one-mode contractions are
+\begin{align}
+ \langle L_{-n}e_a|L_{-n}e_b\rangle
+ &=\left(\frac{cn^3}{12}-2n\beta^2\right)(B_0)_{ab},
+ \notag\\
+ \langle G_{-n}e_a|G_{-n}e_b\rangle
+ &=\left(\frac{cn^2}{3}-2\beta^2\right)(B_0)_{ab},
+ \qquad n\geq1.
+ \label{eq:precontract-one-mode-norms}
+\end{align}
+The displayed coefficients include both the central term and the leading
+piece of \(L_0=c/24-\beta^2\).  They are the Ramond analogues of the
+matched central contractions in the bosonic proof.  In particular,
+\(L_{-1}\) and \(G_{-1}\) now have order-\(c\) squared norm.  This is the
+essential difference from a fixed-weight Virasoro module and from a
+fixed-weight NS module, where \(L_{-1}\), and respectively
+\(L_{-1},G_{-1/2}\), form an unscaled global family.  At fixed \(\beta\),
+only the \(G_0\) ground fibre remains unscaled.
+
+Let
+\begin{equation}
+ (B_{\R,n})_{IJ}=\langle v_I|v_J\rangle
+ \label{eq:ramond-pbw-gram-entry}
+\end{equation}
+at a fixed level and in a fixed parity block.  Commuting the positive modes
+of the bra to the right gives the precise analogues of the bosonic Gram
+bounds:
+\begin{equation}
+ \boxed{
+ \begin{aligned}
+ (B_{\R,n})_{II}
+ &=\kappa_I c^{\nu_R(I)}
+   +O\!\left(c^{\nu_R(I)-1}\right),\\
+ (B_{\R,n})_{IJ}
+ &=O\!\left(c^{\nu_R(I)-1}\right),
+ &&\nu_R(I)=\nu_R(J),\quad I\ne J,\\
+ (B_{\R,n})_{IJ}
+ &=O\!\left(c^{\min(\nu_R(I),\nu_R(J))}\right),
+ &&\nu_R(I)\ne\nu_R(J),
+ \end{aligned}}
+ \label{eq:ramond-pbw-gram-bounds}
+\end{equation}
+where, for the canonical ordering in
+Eq.~\eqref{eq:ramond-pbw-occupation-label},
+\begin{equation}
+ \kappa_I
+ =b_\epsilon
+ \prod_{n\geq1}
+  \left[a_n!\left(\frac{n^3}{12}\right)^{a_n}\right]
+ \prod_{j=1}^{f}\frac{\mu_j^2}{3}.
+ \label{eq:ramond-pbw-leading-diagonal}
+\end{equation}
+For a generic long module \(\beta\ne0\), \(\kappa_I\ne0\).
+
+The proof of Eq.~\eqref{eq:ramond-pbw-gram-bounds} is the same triangular
+commutator proof as in the bosonic case, with one superalgebra refinement.
+Every power of \(c\) uses one mode from the bra and one from the ket in a
+matched \(L_n\)--\(L_{-n}\) commutator or
+\(G_n\)--\(G_{-n}\) anticommutator.  A mixed \(L\)--\(G\) commutator, a
+mismatched mode number, or a mode ending on \(G_0\) supplies no power of
+\(c\).  Hence there can be at most
+\(\min(\nu_R(I),\nu_R(J))\) large contractions.  If the two mode counts
+are equal, attaining that maximum requires identical bosonic occupation
+numbers, identical strict fermionic partitions, and the same ground-fibre
+label.  Canonical PBW ordering then gives \(I=J\).  For \(I\ne J\), at
+least one contraction is nonleading and the degree drops by one.  Fermion
+reordering only supplies the canonical Koszul sign; it does not change the
+power of \(c\).
+
+Equivalently, define the symmetrically rescaled Gram matrix
+\begin{equation}
+ \widetilde B_{IJ}(c)
+ =c^{-\nu_R(I)/2}(B_{\R,n})_{IJ}c^{-\nu_R(J)/2}.
+ \label{eq:ramond-rescaled-gram}
+\end{equation}
+Then
+\begin{equation}
+ \widetilde B_{II}=\kappa_I+O(c^{-1}),
+ \qquad
+ \widetilde B_{IJ}=
+ \begin{cases}
+ O(c^{-1}),&\nu_R(I)=\nu_R(J),\ I\ne J,\\
+ O\!\left(c^{-|\nu_R(I)-\nu_R(J)|/2}\right),
+ &\nu_R(I)\ne\nu_R(J).
+ \end{cases}
+ \label{eq:ramond-rescaled-gram-limit}
+\end{equation}
+Thus the rescaled PBW Gram matrix has the nondegenerate diagonal limit
+\(\operatorname{diag}(\kappa_I)\).  This makes the power counting visible
+before any contracted-algebra interpretation.
+
+To implement the orthogonalization, order the fixed-level PBW basis first
+by increasing \(\nu_R\) and then by a fixed canonical word order.  Within
+one fixed parity block, the ordinary Gram--Schmidt recursion is
+\begin{equation}
+ \mathcal R_I
+ =v_I-
+ \sum_{J\prec I}
+ \frac{\langle\mathcal R_J|v_I\rangle}
+      {\|\mathcal R_J\|^2}\,\mathcal R_J.
+ \label{eq:ramond-gram-schmidt-recursion}
+\end{equation}
+Induction using Eq.~\eqref{eq:ramond-pbw-gram-bounds} gives the triangular
+form
+\begin{equation}
+ \boxed{
+ \mathcal R_I
+ =v_I
+ +\sum_{\substack{J\prec I\\\nu_R(J)<\nu_R(I)}}
+   O(c^0)v_J
+ +\sum_{\substack{J\prec I\\\nu_R(J)=\nu_R(I)}}
+   O(c^{-1})v_J,}
+ \label{eq:ramond-gram-schmidt-triangular}
+\end{equation}
+and
+\begin{equation}
+ \boxed{
+ \|\mathcal R_I\|^2
+ =\kappa_Ic^{\nu_R(I)}
+  \left[1+O(c^{-1})\right].}
+ \label{eq:precontract-gram-power}
+\end{equation}
+The order-one admixtures from lower mode count do not alter the leading
+norm because their norms contain fewer powers of \(c\).  Equal-count
+admixtures are themselves suppressed by \(c^{-1}\).
+
+In this basis the inverse-Gram contraction takes exactly the spectral form
+used in the bosonic argument:
+\begin{equation}
+ \bm\rho_{L,n}B_{\R,n}^{-1}\bm\rho_{R,n}^{\mathsf T}
+ =\sum_{I:\,|I|=n}
+ \frac{\rho_L(\mathcal R_I)\rho_R(\mathcal R_I)}
+      {\|\mathcal R_I\|^2}.
+ \label{eq:ramond-orthogonal-spectral-sewing}
+\end{equation}
+On a plumbing graph, the same change of basis is made independently on
+each internal edge.  The only additional superalgebra datum is the Koszul
+sign obtained when the odd half-edge labels are put into the chosen global
+contraction order; this sign does not affect the powers of \(c\).
+
+For later vertex counting it is useful to state the corresponding result
+for unit vectors.  With
+\(\widetilde v_J=c^{-\nu_R(J)/2}v_J\), one has
+\begin{equation}
+ \widehat{\mathcal R}_I
+ =\kappa_I^{-1/2}\widetilde v_I
+ +\sum_{\nu_R(J)<\nu_R(I)}
+  O\!\left(c^{-[\nu_R(I)-\nu_R(J)]/2}\right)\widetilde v_J
+ +\sum_{\substack{J\ne I\\\nu_R(J)=\nu_R(I)}}
+  O(c^{-1})\widetilde v_J.
+ \label{eq:ramond-unit-gram-schmidt-state}
+\end{equation}
+Therefore the triangular change of PBW basis cannot hide an enhancement
+of a normalized three-point tensor.
+
+As a minimal certificate, at level one take
+\(v_1=L_{-1}w_\beta^+\) and
+\(v_2=G_{-1}G_0w_\beta^+\).  Their Gram matrix is
+\begin{equation}
+ \begin{pmatrix}
+ c/12-2\beta^2&-3\beta^2/2\\
+ -3\beta^2/2&-\beta^2(c/3-2\beta^2)
+ \end{pmatrix}.
+ \label{eq:ramond-level-one-gram-schmidt-example}
+\end{equation}
+Both diagonal entries are order \(c\), whereas the off-diagonal entry is
+order one.  Gram--Schmidt gives
+\begin{equation}
+ \mathcal R_2
+ =G_{-1}G_0w_\beta^+
+ +\frac{3\beta^2/2}{c/12-2\beta^2}L_{-1}w_\beta^+,
+ \qquad
+ \|\mathcal R_2\|^2=-\frac{\beta^2c}{3}+O(c^0),
+ \label{eq:ramond-level-one-orthogonal-state}
+\end{equation}
+which exhibits explicitly the \(O(c^{-1})\) mixing of two distinct PBW
+states with equal \(\nu_R\).
+
+\subsection{Descendant three-point powers}
+
+The Gram power is only half of the count.  At the two sphere endpoints,
+the exact Virasoro Ward identities give
+\begin{align}
+ \rho_L(L_{-n}v)
+ &=\left(h_\R(\beta)+|v|+n h_\R(\beta_3)-h_4\right)\rho_L(v),
+ \notag\\
+ \rho_R(L_{-n}v)
+ &=\left(h_\R(\beta)+|v|+n h_\R(\beta_2)-h_1\right)\rho_R(v)
+ \notag\\
+ &=\left(\frac{n+1}{24}c+O(c^0)\right)\rho_R(v),
+ \label{eq:precontract-virasoro-source}
+\end{align}
+and the same leading expression holds on the left.  This is the unusual
+fixed-\(\beta\) effect: the internal and external R weights all move as
+\(c/24\).  A Virasoro mode may therefore end singly on an order-\(c\)
+background weight.  A supercurrent has no analogous one-mode source,
+because its Ward identity ends on \(G_0\) or on an external ground-fibre
+matrix and
+\begin{equation}
+ G_0^2=-\beta^2=O(c^0).
+ \label{eq:precontract-finite-g0}
+\end{equation}
+Two counted modes can instead close through a matched commutator or
+anticommutator.  Its central term, together with the contribution of
+\(L_0=c/24-\beta^2\) when a zero mode is produced, supplies one power of
+\(c\).  It follows immediately that
+an unnormalized descendant three-point numerator obeys
+\begin{equation}
+ \rho_{L,R}(\mathcal R_I)
+ =O\!\left(c^{p(I)}\right),
+ \qquad
+ p(I)\leq \ell(I)+\left\lfloor\frac{f(I)}2\right\rfloor .
+ \label{eq:precontract-raw-three-point-bound}
+\end{equation}
+In particular, division by the Gram norm does not by itself suppress a
+Ramond descendant.
+
+To repeat the human-note counting term by term, choose one term in the
+exact Ward reduction and partition its \(\nu_R\) counted modes into
+\begin{equation}
+ \begin{gathered}
+ s=\text{Virasoro modes ending singly on an order-\(c\) R weight},\\
+ 2r=\text{modes exhausted in \(r\) pairwise order-\(c\) contractions},\\
+ u=\text{unpaired modes ending on finite data}.
+ \end{gathered}
+ \label{eq:precontract-sru-definition}
+\end{equation}
+Then
+\begin{equation}
+ \nu_R=s+2r+u.
+ \label{eq:precontract-sru-partition}
+\end{equation}
+The numerator supplies \(c^{s+r}\), while unit normalization supplies
+\(c^{-\nu_R/2}\).  Hence one normalized endpoint tensor scales as
+\begin{equation}
+ \boxed{
+ \rho_{L,R}^{(s,r,u)}(\widehat{\mathcal R}_I)
+ =O\!\left(c^{s+r-\nu_R/2}\right)
+ =O\!\left(c^{(s-u)/2}\right).}
+ \label{eq:precontract-normalized-three-point-count}
+\end{equation}
+This is the desired faithful count.  A matched order-\(c\) pair is neutral
+after normalization, each singly sourced Virasoro mode contributes
+\(+\tfrac12\), and each unpaired mode contributes \(-\tfrac12\).  The
+fixed-\(\beta\) source term is precisely what is absent from the ordinary
+fixed-weight argument in the human note.
+
+\subsection{Sewing and the regular powers}
+
+For the sphere channel, sewing two normalized endpoint tensors gives
+\begin{equation}
+ c^{\Delta_e},
+ \qquad
+ \boxed{
+ \Delta_e=\frac{s_L+s_R-u_L-u_R}{2}.}
+ \label{eq:precontract-sphere-power-balance}
+\end{equation}
+Therefore
+\begin{equation}
+ \begin{array}{c|c}
+ \Delta_e>0&\text{term in the raw subtraction polynomial},\\
+ \Delta_e=0&\text{finite background survivor},\\
+ \Delta_e<0&\text{vanishing contribution}.
+ \end{array}
+ \label{eq:precontract-power-classification}
+\end{equation}
+Pair-only patterns have \(s=u=0\) and give the Ramond oscillator analogue
+of the human note's vacuum block.  Source patterns generate positive powers
+of \(c\).  A locally unpaired mode is suppressed unless a source at the
+other endpoint compensates it.
+
+At a fixed coefficient, the exact global-family decomposition used below
+organizes these patterns without changing their powers.  The part with no
+unpaired oscillator is the universal background Gram covector.  At positive
+quasi-primary level \(m\), its Gram-dual vector lies in
+\begin{equation}
+ L_{-1}\mathcal W^{\rm even}_{c,\beta,m-1}.
+ \label{eq:precontract-background-image}
+\end{equation}
+This follows by simultaneous induction in level and mode number: removing
+the leftmost descendant with the exact Ward identity produces either the
+single source or the matched pair above, and the same order-\(c\) term is
+obtained by commuting the adjoint mode through the Gram product.  After
+subtracting this Gram component, at least one normalized oscillator is
+unpaired.
+
+If \(\chi_m\) is quasi-primary, BPZ invariance annihilates the background
+piece exactly:
+\begin{equation}
+ \langle L_{-1}u_{m-1}|\chi_m\rangle
+ =\langle u_{m-1}|L_1\chi_m\rangle=0.
+ \label{eq:precontract-background-annihilation}
+\end{equation}
+Equation~\eqref{eq:precontract-normalized-three-point-count} then gives
+\begin{equation}
+ \rho_{L,R}(\widehat\chi_m)=O(c^{-1/2}),
+ \qquad
+ K_m(c)=O(c^{-1}),
+ \qquad m\geq1,
+ \label{eq:precontract-positive-family-suppression}
+\end{equation}
+for generic nonzero \(\beta\).  This is obtained before introducing the
+contracted algebra.  The explicit global-family sum below then identifies
+the surviving background and evaluates it.
+
+For later higher-genus use, the identical bookkeeping can be stated on a
+complete plumbing graph.  At a trinion \(v\), let \(s_v,r_v,u_v\) be the
+numbers of sources, matched order-\(c\) pairs, and unpaired counted modes
+across all incident internal legs.  If \(\nu_{v,e}\) is the number of nonzero modes
+from leg \(e\), then
+\begin{align}
+ \sum_{e\ni v}\nu_{v,e}&=s_v+2r_v+u_v,
+ \notag\\
+ \rho_v^{\rm normalized}&=O(c^{d_v}),
+ &d_v&=\frac{s_v-u_v}{2}.
+ \label{eq:precontract-vertex-power}
+\end{align}
+For a fixed assignment of orthogonal states on a trivalent graph
+\(\Gamma\), the total power is
+\begin{equation}
+ \boxed{
+ \Delta_\Gamma
+ =\sum_{v\in V(\Gamma)}d_v
+ =\frac12\sum_{v\in V(\Gamma)}(s_v-u_v).}
+ \label{eq:precontract-graph-power}
+\end{equation}
+The raw regular datum at each plumbing multidegree is the sum of all
+configurations with \(\Delta_\Gamma\geq0\), taking connected contractions
+before discarding locally suppressed terms.  Unlike the primary-endpoint
+sphere channel, descendant-valued surface states can pair a positive-level
+R quasi-primary with oscillators from adjacent edges.  Hence the sphere
+suppression cannot be promoted to a universal higher-genus product without
+performing this simultaneous graph-level count.
 
 \section{The contracted Ramond algebra}
 
@@ -1065,7 +1451,10 @@ The standard \(\mathfrak{sl}_2\) decomposition is orthogonal:
 \end{equation}
 Indeed, if \(m>m'\), moving \(L_1^{N-m}\) through the pairing reduces
 the cross term to
-\(\langle\chi_{m,a}|L_{-1}^{m-m'}\chi_{m',b}\rangle=0\).
+\begin{equation}
+ \langle\chi_{m,a}|L_{-1}^{m-m'}\chi_{m',b}\rangle=0.
+ \label{eq:global-family-cross-term}
+\end{equation}
 
 Define the quasi-primary endpoint couplings
 \begin{align}
@@ -1130,92 +1519,38 @@ fixed \(m\ge1\),
 \end{equation}
 
 \paragraph{Proof.}
-Normalize the nonzero modes as in
-Eq.~\eqref{eq:normalized-modes}, and choose a \(c\)-dependent basis
-\(\widehat\chi_{m,a}\) of \(\mathcal Q_m^{\rm even}\) whose Gram matrix
-has a finite nondegenerate limit.  To see that such a basis exists, note
-that \(L_1=\sqrt{c/12}\,a_1\).  Thus the limiting quasi-primary space is
-the kernel of the Fock annihilator \(a_1\), namely the span of the
-contracted basis vectors with no \(a_1^\dagger\) factor.  The restriction
-of Eq.~\eqref{eq:contracted-gram} to this span is nondegenerate for
-\(\beta\ne0\).  Gaussian elimination in powers of \(c^{-1/2}\) then
-lifts this limiting basis to \(\ker L_1\) at finite large \(c\), with a
-finite nondegenerate Gram limit.
+Use the Gram--Schmidt basis of
+Sec.~\ref{sec:precontract-power-count}.  At fixed level, rescale each
+orthogonal basis vector by the square root of its leading Gram power; the
+resulting Gram matrix has a finite nondegenerate limit for generic
+\(\beta\ne0\).  No contracted commutator is needed for this statement: it
+is the finite-dimensional Gaussian elimination implied by
+Eq.~\eqref{eq:precontract-gram-power}.
 
-Rotate either N--R--R pair of pants to the R--R presentation using the
-Möbius map \(f\) of Eq.~\eqref{eq:radial-reordering-map}.  The internal
-puncture is fixed by \(f\).  Consequently its local state transport is
-generated by \(L_0,L_1\) (and the choice of spin lift), with no
-\(L_{-1}\).  Since \(L_1\widehat\chi_{m,a}=0\), the transported
-quasi-primary is therefore just a nonzero scalar multiple of
-\(\widehat\chi_{m,a}\).  In particular, none of the lower-level terms
-responsible for Eq.~\eqref{eq:coherent-source} is produced.  This is the
-exact step that fails if one first works with a PBW descendant instead
-of projecting to a quasi-primary.
-
-In the resulting R--R presentation, expand
-\(\widehat\chi_{m,a}\) in normalized creation modes and move one creation
-mode at a time through the bottom NS intertwiner.  The creation-mode
-counterparts of Eq.~\eqref{eq:normalized-field-action} show that each
-commutator is \(O(c^{-1/2})\) on fixed-level states; the outgoing creation
-mode itself annihilates the external Ramond ground-state bra.  The
-derivatives in the commutator are finite here: the common \(c/24\) part
-of the two Ramond weights cancels, while the NS weight and all momenta
-are fixed.  At strict leading order the intertwiner is thus the identity
-on the nonzero oscillator Fock space, tensored with a finite map on the
-\(G_0\) ground fibre.  A positive-level state contains at least one
-nonzero creation operator, so induction on their number gives
+The normalized three-point count
+Eq.~\eqref{eq:precontract-normalized-three-point-count} shows that all
+terms without an unpaired oscillator form the universal background
+covector.  By Eq.~\eqref{eq:precontract-background-image}, its Gram-dual
+lies in \(L_{-1}\mathcal W_{c,\beta,m-1}^{\rm even}\).  Hence, for every
+\(\chi_{m,a}\in\ker L_1\),
+\[
+ \langle L_{-1}u|\chi_{m,a}\rangle
+ =\langle u|L_1\chi_{m,a}\rangle=0.
+\]
+The quasi-primary projection therefore removes every source/pair pattern
+with \(u=0\).  Every remaining normalized endpoint term contains at least
+one unpaired nonzero mode, and so
 \begin{equation}
  \rho_{L,R}\!\left(\widehat\chi_{m,a}\right)
  =O(c^{-1/2}),
- \qquad m\ge1.
+ \qquad m\ge1,
  \label{eq:unit-quasiprimary-coupling}
 \end{equation}
-There is no hidden coherent enhancement in
-Eq.~\eqref{eq:unit-quasiprimary-coupling}.  Equivalently, within the
-ground global family one has
-\[
- \langle\widehat\chi_{m,a}|L_{-1}^m w_\beta^+\rangle
- =
- \langle L_1^m\widehat\chi_{m,a}|w_\beta^+\rangle=0.
-\]
-Thus the \(O(\sqrt c)\) coherent piece is removed exactly by the
-global-family projection before the \(c\to\infty\) limit is taken.
-
-The ordered Ward system gives the same conclusion.  If
-\(|C_{R,N}\rangle\) is the right chain vector,
-the Virasoro identity is
-\begin{equation}
- L_n|C_{R,N}\rangle
- =
- \left(h_\R(\beta)+N-n+n h_\R(\beta_2)-h_1\right)
- |C_{R,N-n}\rangle .
- \label{eq:right-chain-virasoro}
-\end{equation}
-On the other hand,
-\begin{equation}
- L_n\frac{L_{-1}^N}{N!}w_\beta^+
- =
- \left((n+1)h_\R(\beta)+N-n\right)
- \frac{L_{-1}^{N-n}}{(N-n)!}w_\beta^+ .
- \label{eq:global-chain-leading}
-\end{equation}
-The difference between the coefficients in
-Eqs.~\eqref{eq:right-chain-virasoro} and
-\eqref{eq:global-chain-leading} is
-\[
- n\left(h_\R(\beta_2)-h_\R(\beta)\right)-h_1
- =
- n(\beta^2-\beta_2^2)-h_1,
-\]
-which is finite.  The two generalized Ramond supercurrent Ward
-identities give the analogous statement in the fermionic directions:
-after \(G_n=n\sqrt{c/3}\,\psi_n\) is extracted, their sources contain
-only the finite operators \(G_0\) and the fixed external momenta.  This
-is the Ward-identity form of the R--R commutator induction above.
-Applying the endpoint estimate on both pairs of pants and sewing with
-the finite inverse quasi-primary Gram matrix proves
-Eq.~\eqref{eq:positive-quasiprimary-suppression}. \(\square\)
+directly from Eq.~\eqref{eq:precontract-normalized-three-point-count}.
+Sewing the two endpoints with the finite limiting inverse quasi-primary
+Gram matrix gives \(K_m(c)=O(c^{-1})\).  This proves
+Eq.~\eqref{eq:positive-quasiprimary-suppression} before any use of the
+contracted algebra. \(\square\)
 
 The use of the complete even quasi-primary space is important here.
 The \(G_0\)-ground direction and the fermionic descendants participate
@@ -1387,6 +1722,124 @@ between the finite-\(c\) long block analytically continued to
 \(\beta=0\) and the finite-\(c\) short block; subleading terms must be
 computed with the quotient Gram matrices.  The two arguments establish
 only that their normalized leading large-\(c\) term is the same.
+
+\section{Coefficientwise finite-pole-free part at
+\texorpdfstring{\(c=\infty\)}{c=infinity}}
+\label{sec:coefficientwise-infinity}
+
+The phrase ``regular part at infinity'' requires care in the fixed-\(\beta\)
+problem.  At every fixed local level,
+\begin{equation}
+ F_N(c)=
+ \bm\rho_{L,N}B_{\R,N}^{-1}\bm\rho_{R,N}^{\mathsf T}
+ \label{eq:raw-local-level-coefficient}
+\end{equation}
+is a rational function of \(c\).  Its unique polynomial division is
+\begin{equation}
+ F_N(c)=P_N(c)+R_N(c),
+ \qquad
+ R_N(c)=O(c^{-1}).
+ \label{eq:raw-polynomial-division}
+\end{equation}
+Here \(P_N\) is free of finite \(c\)-plane poles, but a nonconstant
+\(P_N\) has a pole at \(c=\infty\); it is not holomorphic there.  The
+terminology ``finite-pole-free part'' avoids this ambiguity.
+
+Subtracting only the leading power of \(P_N\) is insufficient.  Moreover,
+the lower-level proper remainders \(R_j=O(c^{-1})\) can be promoted to
+nonnegative powers when they are multiplied by the order-\(c\) coefficients
+of the coherent background.  This can be seen exactly at the first two
+levels.  Put
+\begin{equation}
+ t=\frac c{12},
+ \qquad
+ A=h_1+h_4+\beta_2^2+\beta_3^2.
+ \label{eq:infinity-ledger-tA}
+\end{equation}
+Direct polynomial division of the complete Ward--Gram coefficients gives
+\begin{align}
+ P_1(c)&=t-A,
+ \notag\\
+ P_2(c)&=\frac{(t-A)(t-A+1)}2+D_2,
+ \label{eq:raw-polynomial-parts-level-two}
+\end{align}
+where
+\begin{align}
+ D_2={}&
+ \beta^4-\beta^2\left(A+\frac14\right)
+ +\frac{\beta}{4}
+  \left(\beta_2\eta_2+\beta_3\eta_3\right)
+ \notag\\
+ &+\beta_2^2(\beta_3^2+h_4)
+ +\beta_3^2h_1+h_1h_4
+ -\frac14\beta_2\beta_3\eta_2\eta_3.
+ \label{eq:raw-level-two-extra-polynomial}
+\end{align}
+The extra constant \(D_2\) is not contained in the coefficient of the
+leading resummation \((1-z)^{-t+A}\).  If
+\(F_1=P_1+R_1\), exact division also gives
+\begin{equation}
+ \lim_{c\to\infty}tR_1(c)=D_2.
+ \label{eq:promoted-level-one-remainder}
+\end{equation}
+Thus an additive subtraction based only on the leading resummed expression
+misses a finite term already at level two.
+
+The correct operation is the exact multiplicative stripping
+\begin{equation}
+ \mathcal C(c;z)
+ =(1-z)^{c/12}\B(c;z)
+ =\sum_{N\ge0}C_N(c)z^N,
+ \label{eq:exact-multiplicative-local-stripping}
+\end{equation}
+where
+\begin{equation}
+ C_N(c)=
+ \sum_{k=0}^{N}(-1)^k\binom{c/12}{k}F_{N-k}(c),
+ \qquad F_0=1.
+ \label{eq:exact-stripped-coefficients}
+\end{equation}
+For the exact level-one and level-two Ward--Gram data,
+\begin{align}
+ \operatorname{Pol}_{\infty}C_1(c)&=-A,
+ \notag\\
+ \operatorname{Pol}_{\infty}C_2(c)&=\frac{A(A-1)}2,
+ \notag\\
+ C_1(c)+A&=O(c^{-1}),
+ \qquad
+ C_2(c)-\frac{A(A-1)}2=O(c^{-1}).
+ \label{eq:stripped-polynomial-parts-level-two}
+\end{align}
+Equation~\eqref{eq:promoted-level-one-remainder} is included automatically
+in Eq.~\eqref{eq:exact-stripped-coefficients}; it cancels the apparent
+\(D_2\) in the stripped polynomial part.  This is the coefficientwise
+criterion needed for the \(c\)-recursion:
+\begin{equation}
+ \boxed{
+ C_N(c)=S_N+O(c^{-1})
+ \quad\hbox{at every fixed level}.}
+ \label{eq:proper-recursion-normalization-criterion}
+\end{equation}
+Only after this criterion is established may the constant \(S_N\) be used
+as the regular seed and the proper remainder be reconstructed from its
+finite Kac poles.
+
+There is no branch point at \(c=\infty\) in this coefficientwise statement:
+every \(F_N(c)\) and \(C_N(c)\) is rational in \(c\).  The all-level
+resummation
+\begin{equation}
+ (1-z)^{-c/12}
+ =\exp\!\left[-\frac c{12}\log(1-z)\right]
+ \label{eq:resummed-essential-infinity}
+\end{equation}
+is entire at every finite \(c\) and has an essential singularity at
+\(c=\infty\) for fixed generic \(z\).  The choice of \(\log(1-z)\) is a
+branch choice in the \(z\)-plane, not in the \(c\)-plane.  The unbounded
+sequence of coefficientwise pole orders is precisely what resums into this
+essential singularity.
+
+The symbolic ledger and its exact assertions are implemented in
+\path{Code/analyze_ramond_sphere_c_infinity.py}.
 
 \section{Conversion to the elliptic block}
 
