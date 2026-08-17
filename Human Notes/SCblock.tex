@@ -585,10 +585,10 @@ Let's inspect on how the superconformal blocks $\mathbf{F}_a(h_1, h_2, h_3, c)$,
   (-1)^{A+B+C}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}=(-1)^a\\
   }
 } q_1^{|A|}\eta_1^A q_2^{|B|} \eta_2^B  q_3^{|C|} \eta_3^C \mathbf{G}_{h_1}^{AA'} \mathbf{G}_{h_2}^{BB'} \mathbf{G}_{h_3}^{CC'} \\
-& \times (-1)^{AB+AC+BC+\mathsf{AB}+\mathsf{AC}+\mathsf{BC}}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\\
+& \times (-1)^{(A+\mathsf{A})(B+\mathsf{B})+(A+\mathsf{A})(C+\mathsf{C})+(B+\mathsf{B})(C+\mathsf{C})}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\\
 & \times \hat{\rho}_a(\Psi_{-\mathsf{A}}\mathbf{L}_{-A} \phi_1, \Psi_{-\mathsf{B}}\mathbf{L}_{-B} \phi_2, \Psi_{-\mathsf{C}}\mathbf{L}_{-C} \phi_3) \hat{\rho}_a(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'} \phi_1, \Psi_{-\mathsf{B}}\mathbf{L}_{-B'} \phi_2, \Psi_{-\mathsf{C}}\mathbf{L}_{-C'} \phi_3) ,
 \fe
-where ${\Psi}_{-\mathsf{A}}v$ stands for $\Psi_{-\mathsf{A}}v \equiv \psi_{-r_1}\cdots \psi_{-r_m} v$, $|\mathsf{A}|$ stands for the total level of fermion lowering operators, and $(-1)^{\mathsf{A}}$ is the total $\psi$ parity. We have used the fact that $\langle \mathbf{L}_{-A}v| \Psi_{-\mathsf{A}}^\dagger \Psi_{-\mathsf{B}}|\mathbf{L}_{-A}v\rangle$ is the matrix $(-1)^{\mathsf{A}}\delta_{\mathsf{A},\mathsf{B}}\mathbf{G}_{AB}$, which give rises to the sign $(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}$. The 3-point function $\hat{\rho}^{L/R}$ is labeled by the total parity, including the fermionic one.\footnote{The sign $(-1)^{AB+AC+BC+\mathsf{AB}+\mathsf{AC}+\mathsf{BC}}$ arises from the moving the operator order from $\mathbf{L}_{-C}\Psi_{-\mathsf{C}}\phi_3\mathbf{L}_{-B}\Psi_{-\mathsf{B}}\phi_2\mathbf{L}_{-A}\Psi_{-\mathsf{A}}\phi_1\Psi_{-\mathsf{A}}\mathbf{L}_{-A'}\phi_1\Psi_{-\mathsf{B}}\mathbf{L}_{-B'}\phi_2\Psi_{-\mathsf{C}}\mathbf{L}_{-C'}\phi_3$ to the order in the 3-point functions. We have used the fact $\mathsf{A}+\mathsf{B}+\mathsf{C}$ is always even.}
+where ${\Psi}_{-\mathsf{A}}v$ stands for $\Psi_{-\mathsf{A}}v \equiv \psi_{-r_1}\cdots \psi_{-r_m} v$, $|\mathsf{A}|$ stands for the total level of fermion lowering operators, and $(-1)^{\mathsf{A}}$ is the total $\psi$ parity. We have used the fact that $\langle \mathbf{L}_{-A}v| \Psi_{-\mathsf{A}}^\dagger \Psi_{-\mathsf{B}}|\mathbf{L}_{-A}v\rangle$ is the matrix $(-1)^{\mathsf{A}}\delta_{\mathsf{A},\mathsf{B}}\mathbf{G}_{AB}$, which give rises to the sign $(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}$. The 3-point function $\hat{\rho}^{L/R}$ is labeled by the total parity, including the fermionic one.
 
 For states $u\otimes x$, the 3-point function can be factorized into
 \ie
@@ -600,7 +600,12 @@ where $\rho^{\mathsf{F}}(u_1, u_2, u_3)$ is the 3-point function in the free fer
 \fe
 then the all-NS $\mathsf{SCA}_\nu \otimes \mathsf{F}$ block can be factorized into
 \ie
-\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c;q_i, \eta_i)=\mathbf{F}_{\mathsf{F}}(q_i, \eta_i)\times {\mathbf{F}}_a(h_1, h_2, h_3, c;q_i, \eta_i).
+\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c;q_i, \eta_i)=\mathbf{F}_{\mathsf{F}}(q_i, \eta_i)\star {\mathbf{F}}_a(h_1, h_2, h_3, c;q_i, \eta_i),
+\fe
+where the symbol $\star$ stands for convolution: Denote the coefficient of $q_1^{n_1/2}q_2^{n_2/2}q_3^{n_3/2}$ in the $q$-series $\mathbf{F}_a$ by $\mathbf{F}_a[q_1^{n_1/2}q_2^{n_2/2}q_3^{n_3/2}]$, this equation can be written as
+\ie
+\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c)&[q_1^{n_1/2}q_2^{n_2/2}q_3^{n_3/2}]\\
+&=\sum_{r_i+s_i=n_i}(-1)^{\sum_{i<j} (r_is_j+s_ir_j)}\mathbf{F}_{\mathsf{F}}[q_1^{r_1/2}q_2^{r_2/2}q_3^{r_3/2}] {\mathbf{F}}_a(h_1, h_2, h_3, c)[q_1^{s_1/2}q_2^{s_2/2}q_3^{s_3/2}]
 \fe
 
 Using the decomposition of the representation $\mathcal{M}_{\text{NS}}$ under $\mathsf{Vir}\oplus \mathsf{Vir}\subset \mathsf{SCA}_\nu \otimes \mathsf{F}$, we can also express $\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c)$ in terms of Virasoro blocks. Using the fact that a basis of state of a $\mathsf{SCA}_{1/2}\otimes \mathsf{F}$ module is given by $\{L_{-A}^{(1)}L_{-B}^{(2)}v_n\}$, one have
@@ -625,9 +630,9 @@ the $\mathsf{SCA}_\nu \otimes \mathsf{F}$ block can be decomposed into
 &\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c) = \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2}q_2^{2n_2^2}q_3^{2n_3^2}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}(-1)^{4n_1n_2+4n_1n_3+4n_2n_3}\\
 &\qquad \times [B_a(h_1,h_2,h_3;n_1,n_2,n_3)]^2 F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}),
 \fe
-where $F(h_1, h_2, h_3, c)$ is the Virasoro conformal block, which can be computed efficiently using the $c$-relation relation in section 1. Since the fermion block $\mathbf{F}_{\mathsf{F}}$ will always have the identity term $1$, one can invert $\mathbf{F}_{\mathsf{F}}$ as a formal power series in $q$. The all-NS superconformal block $\mathbf{F}_a$ can then be computed as
+where $F(h_1, h_2, h_3, c)$ is the Virasoro conformal block, which can be computed efficiently using the $c$-relation relation in section 1. Since the fermion block $\mathbf{F}_{\mathsf{F}}$ will always have the identity term $1$, one can find $\mathbf{F}_{\mathsf{F}}^{-1}$ as a formal power series in $q$, such that $\mathbf{F}_{\mathsf{F}}\star \mathbf{F}_{\mathsf{F}}^{-1}=1$. The all-NS superconformal block $\mathbf{F}_a$ can then be computed as
 \ie
-&\mathbf{F}_a(h_1, h_2, h_3, c) = (\mathbf{F}_{\mathsf{F}})^{-1}\sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2}q_2^{2n_2^2}q_3^{2n_3^2}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}(-1)^{4n_1n_2+4n_1n_3+4n_2n_3}\\
+&\mathbf{F}_a(h_1, h_2, h_3, c) = (\mathbf{F}_{\mathsf{F}})^{-1}\star \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2}q_2^{2n_2^2}q_3^{2n_3^2}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}(-1)^{4n_1n_2+4n_1n_3+4n_2n_3}\\
 &\qquad \times [B_a(h_1,h_2,h_3;n_1,n_2,n_3)]^2 F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}).
 \fe
 
@@ -702,7 +707,7 @@ B_a&(h_1, h_2, h_3;n_1, n_2, n_3) = \frac{(-i)^a}{\prod_{i=1}^3\sqrt{\ell(2P_i, 
 
 \subsubsection*{Checks against $c$-recursion}
 
-As a check of the formalism developed in this section, we compute the all-NS block $\mathbf{F}_a(h_1, h_2, h_3, c)$ as a $q$-expansion independently using the $c$-recursion relation and the double Virasoro decomposition. For all the vacuum blocks appearing in $\mathbf{F},\mathbf{F}_{\mathsf{F}}$ and $F$, we use the Schottky frame so that the Weyl anomaly factor on both sides agrees.
+As a check of the formalism developed in this section, we compute the all-NS block $\mathbf{F}_a(h_1, h_2, h_3, c)$ as a $q$-expansion independently using the $c$-recursion relation and the double Virasoro decomposition. For all the vacuum blocks appearing in $\mathbf{F},\mathbf{F}_{\mathsf{F}}$ and $F$, we use the Schottky frame so that the Weyl anomaly factor on both sides agrees. We have tested numerically that, up to total level 4, the all-NS theta channel block $\mathbf{F}_a$ computed from the two methods agrees to machine precision for all 8 independent choices of $\{\eta_i\}$ and $a$. 
 
 \section{Ramond blocks from double Virasoro}
 
