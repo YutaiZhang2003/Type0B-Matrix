@@ -479,8 +479,18 @@ class ExactNSDescendantThreeForm:
 
 
 def theta_orientation_sign(levels: Sequence[int]) -> int:
+    """Return the literal sign in the human-note all-NS definition.
+
+    At fixed twice-levels, every PBW state on an edge has parity equal to
+    that level modulo two.  Thus this is precisely
+
+        (-1)^(A C + A E + C E)
+
+    from Eq. (NSblock), with no additional linear infinity-edge factor.
+    """
+
     e0, e1, einf = (int(level) % 2 for level in levels)
-    exponent = e0 * e1 + e0 * einf + e1 * einf + einf
+    exponent = e0 * e1 + e0 * einf + e1 * einf
     return -1 if exponent % 2 else 1
 
 
