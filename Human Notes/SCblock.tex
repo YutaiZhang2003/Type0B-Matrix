@@ -1003,6 +1003,69 @@ As a check of the formalism developed in this section, we compute the all-NS blo
 
 \section{Ramond blocks from double Virasoro}
 
+We now generalize the discussion above to Ramond blocks. Denoting the fermion ground states by $u^\mathsf{a}$ with $\mathsf{a}=0,1$, normalizing
+\ie
+\langle u^0|u^0\rangle = 1,\quad \langle u^1|u^1 \rangle=-1,\quad \psi_0 u^\mathsf{a}=\frac{1}{\sqrt{2}}u^{1-\mathsf{a}},
+\fe
+the ramond $\mathsf{SCA}_0\otimes \mathsf{F}_0$ block is defined as
+\ie 
+\widehat{\mathbb{F}}_f^{(\eta, \eta')}&(h_1, \beta_2, \beta_3, c) = \sum_{
+\substack{|A|=|A'|, |B|=|B'|, |C|=|C'|\\
+(-1)^{A+B+C+|\alpha|+|\gamma|}=(-1)^f\\
+(-1)^{A'+B'+C'+|\alpha'|+|\gamma'|}=(-1)^f\\
+(-1)^{\mathsf{A+B+C+b+c}}=1}
+} q_1^{|A|} \eta_1^A q_2^{|B|} \eta_2^{B+|\alpha|} q_3^{|C|} \eta_3^{C+|\gamma|} \mathbf{G}^{AA'}_{h_1} \mathbb{G}^{B\alpha, B'\alpha'}_{\beta_2} \mathbb{G}^{C\gamma, C'\gamma'}_{\beta_3}\\
+&\quad\quad \times (-1)^{\text{sgn}(A)\text{sgn}(B)+\text{sgn}(A)\text{sgn}(C)+\text{sgn}(B)\text{sgn}(C)} q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}}\\
+&\quad\quad \times \hat{\rho}_f^{(\eta)}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
+&\quad\quad \times \hat{\rho}_f^{(\eta')}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B'}w^{\alpha'}_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}} \otimes\mathbb{L}_{-C'}w^{\gamma'}_3)
+\fe
+where $\boldsymbol{\Psi}_{-\mathsf{B}}$ denotes a chain of R-sector fermion lowering operators (there are no \texttt{mathbb} version of $\Psi$, sadly). Note that $\boldsymbol\Psi_{-\mathsf{A}}$ does not contain the fermion zero mode $\psi_0$. We have used $\langle u^\mathsf{a}|\boldsymbol\Psi_{-\mathsf{A}}^\dagger \boldsymbol\Psi_{-\mathsf{B}}|u^{\mathsf{b}}\rangle=(-1)^{\mathsf{A}+\mathsf{a}}\delta_{\mathsf{AB}}\delta^{\mathsf{a}\mathsf{b}}$, as well as the convention $\langle u_1\otimes x_1| u_2\otimes x_2 \rangle=\langle u_1|u_2\rangle \langle x_1|x_2\rangle$ without the additional operator exchanging sign. The shorthand $\text{sgn}$ is defined such that ${\text{sgn}(A)}=A+\mathsf{A} \mod 2$ for NS sector and ${\text{sgn}(B)}=B+\mathsf{B}+\mathsf{b}+|\alpha| \mod 2$ for R sector. We have also used the fact that the fermion correlator is 0 unless $(-1)^{\mathsf{A+B+C+b+c}}=1$.
+
+The 3-point function can be factorized as (we treat this formula as the definition of $\hat{\rho}^{(\eta)}_f$)
+\ie
+\hat{\rho}_f^{(\eta)}&(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
+&=(-1)^{A\mathsf{A}+(B+|\alpha|)(\mathsf{C+c})}\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}) {\rho}_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3) 
+\fe
+Therefore, if we define the fermion Ramond block as
+\ie
+\mathbb{F}_{\mathsf{F}} = \sum_{\mathsf{A+B+C+b+c}\equiv 0 \mod 2} &q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}} (-1)^{\mathsf{A(B+b)+A(C+c)+(B+b)(C+c)}}\\
+& \times [\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}})]^2,
+\fe
+one then have the decomposition
+\[\widehat{\mathbb{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3, c) = \mathbb{F}_{\mathsf{F}}\star_{\R}\mathbb{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3, c)\]
+where the R-sector convolution acts on monomials of $q_i$ and $\eta_i$ as
+\ie
+q_1^{r_1}q_2^{r_2}q_3^{r_3}&\eta_1^{\epsilon_1}\eta_2^{\epsilon_2}\eta_3^{\epsilon_3} \star_{\R} q_1^{s_1}q_2^{s_2}q_3^{s_3}\eta_1^{\delta_1}\eta_2^{\delta_2}\eta_3^{\delta_3}\\
+&=(-1)^{\sum_{i<j} (\epsilon_i \delta_j + \delta_i \epsilon_j)}q_1^{r_1+s_1}q_2^{r_2+s_2}q_3^{r_3+s_3}\eta_1^{\epsilon_1+\delta_1}\eta_2^{\epsilon_2+\delta_2}\eta_3^{\epsilon_3+\delta_3}.
+\fe
+
+Using the decomposition \eqref{Rbranching}, one can see that every state in $\mathcal{M}(\beta)$ can be written as $L_{-A}^{(1)}L_{-B}^{(2)}v^\alpha_n$, with $\alpha = \pm$ and $n\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}$. The state $v^\alpha_n$ has conformal weight $h_n^{(1)}+h_{n}^{(2)}-h=2n^2 -\frac{1}{16}$ and fermion parity $(-1)^\alpha$. Therefore,
+\ie
+\widehat{\mathbb{F}}^{(\eta, \eta')}_f&(h_1, \beta_2, \beta_3, c) = \sum_{\substack{
+  |A|=|A'|, |B|=|B'|, |C|=|C'|\\
+  |D|=|D'|, |E|=|E'|, |F|=|F'|\\
+  n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\
+  (-1)^{2n_1 + \alpha_2 + \alpha_3}=(-1)^f
+  }} q_1^{2n_1^2+|A|+|B|}q_2^{2n_2^2-\frac{1}{8}+|C|+|D|}q_3^{2n_3^2-\frac{1}{8}+|E|+|F|}\eta_1^{2n_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
+&\times (-1)^{2n_1\alpha_2+2n_1\alpha_3+\alpha_2\alpha_3} \frac{(G_{h_{1,n_1}^{(1)}})^{AA'}(G_{h_{1,n_1}^{(2)}})^{BB'}(G_{h_{2,n_2}^{(1)}})^{CC'}(G_{h_{2,n_2}^{(2)}})^{DD'}(G_{h_{3,n_3}^{(1)}})^{EE'}(G_{h_{3,n_3}^{(2)}})^{FF'}}{\|v_{1,n_1}\|^2\|v_{2,n_2}^{\alpha_2}\|^2\|v_{3,n_3}^{\alpha_3}\|^2}\\
+&\times \hat{\rho}_f^{(\eta)}(L_{-A}^{(1)}L_{-B}^{(2)}v_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3}^{\alpha_3})\hat{\rho}_f^{(\eta')}(L_{-A'}^{(1)}L_{-B'}^{(2)}v_{1,n_1},L_{-C'}^{(1)}L_{-D'}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E'}^{(1)}L_{-F'}^{(2)}v_{3,n_3}^{\alpha_3}),
+\fe
+where we used the fact that $u^{\mathsf{a}}$ has conformal weight $\frac{1}{16}$ and the fact that $\langle v_n^0|v_n^1\rangle = 0$. The factorization relation of the 3-point function reads
+\ie
+\hat{\rho}_f^{(\eta)}&(L_{-A}^{(1)}L_{-B}^{(2)}v_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3}^{\alpha_3})\\
+&\quad =\hat{\rho}_f^{(\eta)}(v_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})\rho(L_{-A}\nu_{h_{1,n_1}^{(1)}}, L_{-C}\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1}^{(2)}}, L_{-D}\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3}^{(2)}}),
+\fe
+and therefore,
+\ie
+\widehat{\mathbb{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}\\
+&\quad \times (-1)^{2n_1\alpha_2+2n_1\alpha_3+\alpha_2\alpha_3} \mathbb{B}^{(\eta)}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) \mathbb{B}^{(\eta')}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3)\\
+&\quad \times F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}),
+\fe
+where the R-sector branching coefficients are defined as
+\ie
+\mathbb{B}^{(\eta)}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) = \frac{\hat{\rho}_f^{(\eta)}(v_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})}{\|v_{1,n_1}\|\|v_{2,n_2}^{\alpha_2}\|\|v_{3,n_3}^{\alpha_3}\|}.
+\fe
+
 \newpage
 \begin{appendix}
 \section{Fusion polynomials and factorization formulae}
