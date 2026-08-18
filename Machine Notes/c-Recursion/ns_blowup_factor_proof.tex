@@ -1,0 +1,964 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.5em}
+\setlength{\emergencystretch}{2em}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  urlcolor=blue!55!black,
+  pdftitle={Understanding the NS blow-up-factor proof},
+  pdfauthor={Machine working note}
+}
+
+\newcommand{\cH}{\mathcal H}
+\newcommand{\Ibra}[1]{{}_{\mathsf I}\!\langle #1|}
+
+\title{Understanding the NS Blow-Up-Factor Proof}
+\author{Machine working note}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Free-field realization}
+
+This note follows the proof in arXiv:1312.4520, but uses standard
+physicists' notation.  We denote the bosonic oscillators by \(a_n\), the NS
+fermion by \(\psi_r\), and the bosonic zero modes by
+\(\widehat p,\widehat q\).  Thus \(a_n\) is the oscillator denoted by
+\(c_n\) in the paper.
+
+Set
+\begin{equation}
+ Q=b+b^{-1},
+ \qquad
+ c_{\mathrm{NS}}=\frac32+3Q^2.
+ \label{eq:Q-and-central-charge}
+\end{equation}
+
+\subsection{Oscillators and Fock states}
+
+The free fields satisfy
+\begin{equation}
+ [a_m,a_n]=m\delta_{m+n,0},
+ \qquad
+ \{\psi_r,\psi_s\}=\delta_{r+s,0},
+ \qquad
+ [\widehat p,\widehat q]=-i,
+ \label{eq:free-field-algebra}
+\end{equation}
+where \(m,n\in\mathbb Z\setminus\{0\}\) and
+\(r,s\in\mathbb Z+\frac12\).  The momentum-\(p\) Fock vacuum obeys
+\begin{equation}
+ \widehat p\lvert p\rangle=p\lvert p\rangle,
+ \qquad
+ a_n\lvert p\rangle=0,
+ \qquad
+ \psi_r\lvert p\rangle=0,
+ \qquad n,r>0.
+ \label{eq:Fock-vacuum}
+\end{equation}
+The corresponding Fock space is denoted by \(\cH_p\).
+
+\subsection{The \texorpdfstring{\(\mathsf I\)}{I}-pairing and BPZ pairing}
+
+We distinguish the free-field Hermitian conjugation \(\mathsf I\) from
+BPZ conjugation \(\dagger\).  The former is the antilinear
+anti-involution defined by
+\begin{equation}
+ (\lambda X)^{\mathsf I}
+ =\overline{\lambda}\,X^{\mathsf I},
+ \qquad
+ (XY)^{\mathsf I}=Y^{\mathsf I}X^{\mathsf I},
+ \qquad
+ \widehat p^{\mathsf I}=\widehat p,
+ \qquad
+ \widehat q^{\mathsf I}=\widehat q,
+ \qquad
+ a_n^{\mathsf I}=a_{-n},
+ \qquad
+ \psi_r^{\mathsf I}=\psi_{-r}.
+ \label{eq:free-field-Hermitian-conjugation}
+\end{equation}
+In the notation of the human note,
+\begin{equation}
+ c_n=a_n,
+ \qquad
+ \eta_r=\psi_r,
+ \qquad
+ \widehat P=i\widehat p.
+ \label{eq:human-note-free-field-dictionary}
+\end{equation}
+Therefore Eq.~\eqref{eq:free-field-Hermitian-conjugation} is equivalently
+\begin{equation}
+ c_n^{\mathsf I}=c_{-n},
+ \qquad
+ \eta_r^{\mathsf I}=\eta_{-r},
+ \qquad
+ \widehat P^{\mathsf I}=-\widehat P.
+ \label{eq:I-rules-human-note-notation}
+\end{equation}
+The auxiliary fermion denoted by \(\psi_r\) in the human note is denoted by
+\(f_r\) in this machine note.  When it is introduced below, its convention
+is
+\begin{equation}
+ f_r^{\mathsf I}=-f_{-r},
+ \qquad\text{equivalently}\qquad
+ \psi_r^{\mathsf I}=-\psi_{-r}
+ \quad\text{in the notation of the human note}.
+ \label{eq:auxiliary-I-rule-human-note-notation}
+\end{equation}
+We denote the corresponding free-field Hermitian product by
+\(\langle\,\cdot,\cdot\,\rangle_{\mathsf I}\), and write
+\begin{equation}
+ \Ibra{u}:=(|u\rangle)^{\mathsf I}.
+ \label{eq:I-bra-definition}
+\end{equation}
+By contrast, \(\dagger\) is reserved for BPZ conjugation on an abstract
+NS module:
+\begin{equation}
+ L_n^\dagger=L_{-n},
+ \qquad
+ G_r^\dagger=G_{-r}.
+ \label{eq:BPZ-conjugation}
+\end{equation}
+For real \(Q\) and \(p\), the free-field conjugation is compatible with
+the two realizations below:
+\begin{equation}
+ \bigl(L_n^{(\epsilon)}\bigr)^{\mathsf I}
+ =L_{-n}^{(\epsilon)},
+ \qquad
+ \bigl(G_r^{(\epsilon)}\bigr)^{\mathsf I}
+ =G_{-r}^{(\epsilon)}.
+ \label{eq:I-compatible-with-SCA}
+\end{equation}
+Thus both pairings give the same adjoint relations for the SCA generators,
+but they are defined in different places: \(\dagger\) acts on the abstract
+NS module, whereas \(\mathsf I\) acts on the free-field realization.  If
+\(\iota_\epsilon(p)\) is the module identification normalized by
+\(\iota_\epsilon(p)|\Delta_p\rangle=|\epsilon p\rangle\), then on the real
+momentum slice it may be chosen so that
+\begin{equation}
+ \langle u|v\rangle_{\mathrm{BPZ}}
+ =
+ \Ibra{\iota_\epsilon(p)u}
+ \iota_\epsilon(p)v\rangle.
+ \label{eq:BPZ-I-pairing-identification}
+\end{equation}
+The equality follows because the two sides have the same normalized
+highest-weight matrix element and obey the same recursion under
+\(L_n\) and \(G_r\).  Accordingly, the abstract matrix elements on the
+left-hand side of the comparison below use the BPZ pairing, while their
+free-field representatives on the right-hand side use the
+\(\mathsf I\)-pairing.  This compatibility does not identify
+\(\mathsf I\) with BPZ conjugation, especially after analytic continuation
+in the momenta.
+
+\subsection{Super-Virasoro generators}
+
+On \(\cH_p\) there are two reflected free-field realizations, labelled by
+\(\epsilon=\pm1\):
+\begin{align}
+ L_0^{(\epsilon)}
+ &=
+ \sum_{m=1}^{\infty}a_{-m}a_m
+ +\sum_{r\geq\frac12}r\psi_{-r}\psi_r
+ +\frac{Q^2}{8}+\frac{p^2}{2},
+ \label{eq:L0-free-field}
+ \\
+ L_n^{(\epsilon)}
+ &=
+ \frac12\sum_{m\neq0,n}a_{n-m}a_m
+ +\frac12\sum_{r\in\mathbb Z+\frac12}r\psi_{n-r}\psi_r
+ +\left(\frac{i nQ}{2}+\epsilon p\right)a_n,
+ \qquad n\neq0,
+ \label{eq:Ln-free-field}
+ \\
+ G_r^{(\epsilon)}
+ &=
+ \sum_{m\neq0}a_m\psi_{r-m}
+ +\left(iQr+\epsilon p\right)\psi_r.
+ \label{eq:Gr-free-field}
+\end{align}
+They satisfy the NS super-Virasoro algebra with central charge
+\eqref{eq:Q-and-central-charge}.  In either realization, \(\lvert p\rangle\)
+is a highest-weight state of weight
+\begin{equation}
+ \Delta_p=\frac{Q^2}{8}+\frac{p^2}{2}.
+ \label{eq:Delta-p}
+\end{equation}
+
+For most of the proof one chooses one realization and writes it simply as
+\(L_n(p),G_r(p)\).  The second realization becomes important when the
+reflection map is introduced.
+
+\subsection{The chiral exponential vertex}
+
+Split the chiral boson into creation and annihilation parts,
+\begin{equation}
+ \varphi_{<}(z)
+ =-i\sum_{n=1}^{\infty}\frac{a_{-n}}{n}z^n,
+ \qquad
+ \varphi_{>}(z)
+ =i\sum_{n=1}^{\infty}\frac{a_n}{n}z^{-n},
+ \label{eq:boson-splitting}
+\end{equation}
+and define
+\begin{equation}
+ \psi(z)
+ =\sum_{r\in\mathbb Z+\frac12}\psi_r z^{-r-\frac12}.
+ \label{eq:fermion-field}
+\end{equation}
+
+The free-field vertex operator of momentum \(\alpha\) is the ordered
+exponential
+\begin{equation}
+ \boxed{
+ E^{\alpha}(z)
+ =z^{-\Delta_\alpha}
+ e^{\frac{\alpha}{2}\widehat q}
+ e^{\alpha\varphi_{<}(z)}
+ z^{-i\alpha\widehat p}
+ e^{\alpha\varphi_{>}(z)}
+ e^{\frac{\alpha}{2}\widehat q}
+ },
+ \qquad
+ \Delta_\alpha=\frac12\alpha(Q-\alpha).
+ \label{eq:ordered-exponential}
+\end{equation}
+In physicists' shorthand,
+\begin{equation}
+ E^{\alpha}(z)
+ =z^{-\Delta_\alpha}:e^{\alpha\varphi(z)}:,
+ \label{eq:normal-ordered-shorthand}
+\end{equation}
+where the normal-ordering symbol includes the symmetric zero-mode ordering
+displayed explicitly in Eq.~\eqref{eq:ordered-exponential}.
+
+The two basic checks are
+\begin{align}
+ [\widehat p,E^{\alpha}(z)]
+ &=-i\alpha E^{\alpha}(z),
+ \label{eq:E-momentum-shift}
+ \\
+ [L_n(p),E^{\alpha}(z)]
+ &=z^n\left(z\partial_z+(n+1)\Delta_\alpha\right)E^{\alpha}(z),
+ \label{eq:E-Virasoro-primary}
+ \\
+ [G_r(p),E^{\alpha}(z)]
+ &=-i\alpha z^{r+\frac12}\psi(z)E^{\alpha}(z).
+ \label{eq:E-superpartner}
+\end{align}
+Hence \(E^{\alpha}(z)\) is the free-field representative of an NS primary
+vertex and shifts the Fock momentum according to
+\begin{equation}
+ E^{\alpha}(z):\cH_p\longrightarrow\cH_{p-i\alpha}.
+ \label{eq:E-map}
+\end{equation}
+
+At this stage no screening charge has been introduced.  The ordered
+exponential is the local chiral primary vertex; screening charges will enter
+only when we ask for a nonzero matrix element between Fock spaces whose
+momenta do not satisfy the neutrality condition for \(E^{\alpha}\) alone.
+
+\section{Why the screened matrix element represents an NS primary}
+
+The goal of this section is to explain the identity written as Eq.~(2.9) in
+arXiv:1312.4520.  The logic has three steps:
+\begin{enumerate}
+ \item define a screened matrix element in the free-field Fock space and
+       determine its SCA properties;
+ \item define the corresponding matrix element of an abstract NS primary
+       chiral vertex;
+ \item compare the two constructions and fix the normalization for which
+       they agree exactly.
+\end{enumerate}
+
+\subsection{Screening charges}
+
+For either
+\begin{equation}
+ \beta=b
+ \qquad\text{or}\qquad
+ \beta=b^{-1},
+ \label{eq:screening-momenta}
+\end{equation}
+one has
+\begin{equation}
+ \Delta_\beta
+ =\frac12\beta(Q-\beta)
+ =\frac12.
+ \label{eq:screening-weight-half}
+\end{equation}
+Consequently,
+\begin{equation}
+ S_\beta(z):=\psi(z)E^\beta(z)
+ \label{eq:screening-current}
+\end{equation}
+is a fermion-odd field of conformal weight one.  Its transformations are
+total derivatives:
+\begin{align}
+ [L_n(p),S_\beta(z)]
+ &=
+ \partial_z\!\left(z^{n+1}S_\beta(z)\right),
+ \label{eq:screening-L-total-derivative}
+ \\
+ \{G_r(p),S_\beta(z)\}
+ &=
+ \frac{i}{\beta}
+ \partial_z\!\left(z^{r+\frac12}E^\beta(z)\right).
+ \label{eq:screening-G-total-derivative}
+\end{align}
+For a closed Coulomb-gas contour, define
+\begin{equation}
+ \mathcal Q_\beta
+ :=
+ \oint dz\,S_\beta(z)
+ =
+ \oint dz\,\psi(z)E^\beta(z).
+ \label{eq:screening-charge-general}
+\end{equation}
+The total derivatives imply
+\begin{equation}
+ [L_n(p),\mathcal Q_\beta]=0,
+ \qquad
+ \{G_r(p),\mathcal Q_\beta\}=0.
+ \label{eq:screening-supercommutes}
+\end{equation}
+Thus a screening charge shifts the Fock momentum while supercommuting with
+the SCA:
+\begin{equation}
+ \mathcal Q_b:\mathcal H_p\longrightarrow\mathcal H_{p-ib},
+ \qquad
+ \mathcal Q_{1/b}:\mathcal H_p\longrightarrow\mathcal H_{p-i/b}.
+ \label{eq:screening-momentum-shifts}
+\end{equation}
+
+\subsection{Step 1: the screened free-field matrix element}
+
+Fix nonnegative integers \(r,s\).  For the even NS primary component, assume
+\begin{equation}
+ r+s\in2\mathbb Z,
+ \label{eq:even-screening-number}
+\end{equation}
+so that the product of screening charges is even.  Define the screened
+free-field operator
+\begin{equation}
+ \mathcal I_{\alpha;r,s}(z)
+ :=
+ E^\alpha(z)\mathcal Q_b^r\mathcal Q_{1/b}^s
+ \label{eq:screened-free-field-operator}
+\end{equation}
+and its matrix element
+\begin{equation}
+ \mathcal F_{\alpha;r,s}^{\pm,\pm}(q,p;z)
+ :=
+ \Ibra{\pm q}
+ E^\alpha(z)\mathcal Q_b^r\mathcal Q_{1/b}^s
+ |\pm p\rangle.
+ \label{eq:screened-free-field-matrix-element}
+\end{equation}
+The signs in front of \(p\) and \(q\) are independent.
+
+The operator in Eq.~\eqref{eq:screened-free-field-operator} shifts the
+momentum by
+\begin{equation}
+ -i\left(\alpha+rb+sb^{-1}\right).
+ \label{eq:first-total-momentum-shift}
+\end{equation}
+Therefore Eq.~\eqref{eq:screened-free-field-matrix-element} can be nonzero
+only on the neutrality locus
+\begin{equation}
+ \boxed{
+ \pm q
+ =
+ \pm p-i\alpha-i\left(rb+sb^{-1}\right)
+ }.
+ \label{eq:first-neutrality-condition}
+\end{equation}
+
+The screening charges do not alter the SCA transformation law of
+\(E^\alpha\).  Hence
+\begin{equation}
+ [L_n(p),\mathcal I_{\alpha;r,s}(z)]
+ =
+ z^n\left(
+ z\partial_z+(n+1)\Delta_\alpha
+ \right)\mathcal I_{\alpha;r,s}(z),
+ \label{eq:screened-L-transformation}
+\end{equation}
+where
+\begin{equation}
+ \Delta_\alpha=\frac12\alpha(Q-\alpha).
+ \label{eq:abstract-primary-weight}
+\end{equation}
+Define the odd partner
+\begin{equation}
+ \mathcal I_{\alpha;r,s}^{*}(z)
+ :=
+ -i\alpha\,
+ \psi(z)E^\alpha(z)
+ \mathcal Q_b^r\mathcal Q_{1/b}^s.
+ \label{eq:screened-odd-partner}
+\end{equation}
+Then
+\begin{align}
+ [G_r(p),\mathcal I_{\alpha;r,s}(z)]
+ &=
+ z^{r+\frac12}\mathcal I_{\alpha;r,s}^{*}(z),
+ \label{eq:screened-G-transformation}
+ \\
+ [L_n(p),\mathcal I_{\alpha;r,s}^{*}(z)]
+ &=
+ z^n\left(
+ z\partial_z+(n+1)\left(\Delta_\alpha+\frac12\right)
+ \right)\mathcal I_{\alpha;r,s}^{*}(z),
+ \label{eq:screened-star-L-transformation}
+ \\
+ \{G_r(p),\mathcal I_{\alpha;r,s}^{*}(z)\}
+ &=
+ z^{r-\frac12}
+ \left(
+ z\partial_z+(2r+1)\Delta_\alpha
+ \right)\mathcal I_{\alpha;r,s}(z).
+ \label{eq:screened-star-G-transformation}
+\end{align}
+These are precisely the transformation laws of an NS primary
+supermultiplet.
+
+In particular, the \(L_0\) Ward identity fixes the coordinate dependence:
+\begin{equation}
+ \mathcal F_{\alpha;r,s}^{\pm,\pm}(q,p;z)
+ =
+ z^{\Delta_q-\Delta_\alpha-\Delta_p}
+ \mathcal F_{\alpha;r,s}^{\pm,\pm}(q,p;1),
+ \label{eq:free-field-primary-z-dependence}
+\end{equation}
+where
+\begin{equation}
+ \Delta_p=\frac{Q^2}{8}+\frac{p^2}{2},
+ \qquad
+ \Delta_q=\frac{Q^2}{8}+\frac{q^2}{2}.
+ \label{eq:p-and-q-weights}
+\end{equation}
+
+\subsection{Step 2: the abstract NS-primary matrix element}
+
+Let \(\mathcal V_{\Delta_p}\) and \(\mathcal V_{\Delta_q}\) be NS
+super-Virasoro highest-weight modules.  Their highest-weight states satisfy
+\begin{align}
+ L_0|\Delta_p\rangle
+ &=\Delta_p|\Delta_p\rangle,
+ &
+ L_n|\Delta_p\rangle
+ &=
+ G_r|\Delta_p\rangle=0,
+ \qquad n,r>0,
+ \label{eq:incoming-NS-primary}
+ \\
+ \langle\Delta_q|L_0
+ &=\Delta_q\langle\Delta_q|,
+ &
+ \langle\Delta_q|L_{-n}
+ &=
+ \langle\Delta_q|G_{-r}=0,
+ \qquad n,r>0.
+ \label{eq:outgoing-NS-primary}
+\end{align}
+We use unit normalization in each fixed module:
+\begin{equation}
+ \langle\Delta_p|\Delta_p\rangle
+ =
+ \langle\Delta_q|\Delta_q\rangle
+ =
+ \langle\Delta_\alpha|\Delta_\alpha\rangle
+ =1.
+ \label{eq:abstract-highest-state-normalization}
+\end{equation}
+
+An even NS primary chiral vertex \(V_{\Delta_\alpha}(z)\), together with its
+odd superpartner \(V_{\Delta_\alpha}^{*}(z)\), is defined by
+\begin{align}
+ [L_n,V_{\Delta_\alpha}(z)]
+ &=
+ z^n\left(
+ z\partial_z+(n+1)\Delta_\alpha
+ \right)V_{\Delta_\alpha}(z),
+ \label{eq:abstract-primary-L-transformation}
+ \\
+ [G_r,V_{\Delta_\alpha}(z)]
+ &=
+ z^{r+\frac12}V_{\Delta_\alpha}^{*}(z),
+ \label{eq:abstract-primary-G-transformation}
+ \\
+ [L_n,V_{\Delta_\alpha}^{*}(z)]
+ &=
+ z^n\left(
+ z\partial_z+(n+1)\left(\Delta_\alpha+\frac12\right)
+ \right)V_{\Delta_\alpha}^{*}(z),
+ \label{eq:abstract-star-L-transformation}
+ \\
+ \{G_r,V_{\Delta_\alpha}^{*}(z)\}
+ &=
+ z^{r-\frac12}
+ \left(
+ z\partial_z+(2r+1)\Delta_\alpha
+ \right)V_{\Delta_\alpha}(z).
+ \label{eq:abstract-star-G-transformation}
+\end{align}
+The primary matrix element is
+\begin{equation}
+ \mathcal A_\alpha(q,p;z)
+ :=
+ \langle\Delta_q|
+ V_{\Delta_\alpha}(z)
+ |\Delta_p\rangle.
+ \label{eq:abstract-primary-matrix-element}
+\end{equation}
+Its \(L_0\) Ward identity gives
+\begin{equation}
+ \mathcal A_\alpha(q,p;z)
+ =
+ z^{\Delta_q-\Delta_\alpha-\Delta_p}
+ \mathcal A_\alpha(q,p;1).
+ \label{eq:abstract-primary-z-dependence}
+\end{equation}
+The remaining SCA Ward identities determine every descendant matrix element
+in terms of the single constant
+\begin{equation}
+ C_{q\alpha p}
+ :=
+ \langle\Delta_q|
+ V_{\Delta_\alpha}(1)
+ |\Delta_p\rangle.
+ \label{eq:abstract-chiral-vertex-constant}
+\end{equation}
+The unit norms of the three primary states do not determine
+\(C_{q\alpha p}\); it is the remaining normalization of the chiral vertex.
+
+\subsection{Step 3: comparison and exact normalization}
+
+Normalize the Fock vacua in each fixed-momentum fiber by
+\begin{equation}
+ \Ibra{\pm p}\pm p\rangle
+ =
+ \Ibra{\pm q}\pm q\rangle
+ =1.
+ \label{eq:Fock-vacuum-normalization}
+\end{equation}
+Before restricting to fixed fibers, this is the usual delta-function
+normalization
+\begin{equation}
+ \Ibra{p_1}p_2\rangle=\delta(p_1-p_2).
+ \label{eq:delta-function-normalization}
+\end{equation}
+Fix the module identifications by
+\begin{equation}
+ \iota_\pm(p)|\Delta_p\rangle=|\pm p\rangle,
+ \qquad
+ \iota_\pm(q)|\Delta_q\rangle=|\pm q\rangle.
+ \label{eq:normalized-module-identifications}
+\end{equation}
+For generic real momenta these extend to unitary isomorphisms between the
+abstract NS Verma modules and their free-field realizations.
+
+The screened operator \(\mathcal I_{\alpha;r,s}\) and the abstract chiral
+vertex \(V_{\Delta_\alpha}\) now have
+\begin{enumerate}
+ \item the same NS superconformal transformation laws,
+ \item the same conformal weight \(\Delta_\alpha\),
+ \item the same fermion parity, and
+ \item compatible incoming and outgoing modules on the neutrality locus
+       \eqref{eq:first-neutrality-condition}.
+\end{enumerate}
+They therefore define the same chiral intertwiner up to one overall
+constant.  Exact equality is obtained by choosing
+\begin{equation}
+ \boxed{
+ C_{q\alpha p}
+ =
+ \mathcal F_{\alpha;r,s}^{\pm,\pm}(q,p;1)
+ =
+ \Ibra{\pm q}
+ E^\alpha(1)\mathcal Q_b^r\mathcal Q_{1/b}^s
+ |\pm p\rangle
+ }.
+ \label{eq:compatible-chiral-vertex-normalization}
+\end{equation}
+With this normalization,
+\begin{equation}
+ \boxed{
+ \langle\Delta_q|
+ V_{\Delta_\alpha}(z)
+ |\Delta_p\rangle
+ =
+ \Ibra{\pm q}
+ E^\alpha(z)\mathcal Q_b^r\mathcal Q_{1/b}^s
+ |\pm p\rangle
+ },
+ \label{eq:first-form-of-2.9}
+\end{equation}
+which is the first line of Eq.~(2.9).
+
+For descendant states \(u\in\mathcal V_{\Delta_q}\) and
+\(v\in\mathcal V_{\Delta_p}\), the normalization-independent form of the
+same statement is
+\begin{equation}
+ \boxed{
+ \frac{
+  \langle u|V_{\Delta_\alpha}(1)|v\rangle
+ }{
+  \langle\Delta_q|V_{\Delta_\alpha}(1)|\Delta_p\rangle
+ }
+ =
+ \frac{
+  \Ibra{\iota_\pm(q)u}
+  E^\alpha(1)\mathcal Q_b^r\mathcal Q_{1/b}^s
+  |\iota_\pm(p)v\rangle
+ }{
+  \Ibra{\pm q}
+  E^\alpha(1)\mathcal Q_b^r\mathcal Q_{1/b}^s
+  |\pm p\rangle
+ }
+ }.
+ \label{eq:normalized-screened-Ward-identity}
+\end{equation}
+Thus the unit normalization of the states is necessary, but it is not
+sufficient by itself: one must also fix the remaining chiral-vertex constant
+as in Eq.~\eqref{eq:compatible-chiral-vertex-normalization}.
+
+\subsection{The reflected exponential and the eight representations}
+
+Since
+\begin{equation}
+ \Delta_{Q-\alpha}
+ =
+ \frac12(Q-\alpha)\alpha
+ =
+ \Delta_\alpha,
+ \label{eq:reflected-alpha-weight}
+\end{equation}
+the exponential \(E^{Q-\alpha}\) has the same SCA primary weight.  Its total
+momentum shift in the presence of the same screening charges is
+\begin{equation}
+ -i\left(Q-\alpha+rb+sb^{-1}\right)
+ =
+ i\alpha-i\left((r+1)b+(s+1)b^{-1}\right).
+ \label{eq:second-total-momentum-shift}
+\end{equation}
+The second neutrality locus is therefore
+\begin{equation}
+ \boxed{
+ \pm q
+ =
+ \pm p+i\alpha
+ -i\left((r+1)b+(s+1)b^{-1}\right)
+ }.
+ \label{eq:second-neutrality-condition}
+\end{equation}
+With the analogous choice of chiral-vertex normalization,
+\begin{equation}
+ \boxed{
+ \langle\Delta_q|
+ V_{\Delta_\alpha}(z)
+ |\Delta_p\rangle
+ =
+ \Ibra{\pm q}
+ E^{Q-\alpha}(z)\mathcal Q_b^r\mathcal Q_{1/b}^s
+ |\pm p\rangle
+ }.
+ \label{eq:second-form-of-2.9}
+\end{equation}
+
+The abstract weights depend only on \(p^2\) and \(q^2\), so the signs in
+front of \(p\) and \(q\) can be chosen independently.  There are four sign
+choices and two exponential choices,
+\begin{equation}
+ E^\alpha
+ \qquad\text{or}\qquad
+ E^{Q-\alpha}.
+\end{equation}
+This gives the eight free-field representations stated below Eq.~(2.9).
+
+\subsection{The precise meaning of Eq.~(2.9)}
+
+Equation~(2.9) is a statement about matrix elements on the charge-neutral
+loci \eqref{eq:first-neutrality-condition} and
+\eqref{eq:second-neutrality-condition}.  It is not one global operator
+identity
+\begin{equation}
+ V_{\Delta_\alpha}(z)
+ =
+ E^\alpha(z)\mathcal Q_b^r\mathcal Q_{1/b}^s
+ \label{eq:not-global-operator-identity}
+\end{equation}
+valid for fixed \(r,s\) on every Fock module.  Rather, each admissible
+screened expression realizes the same normalized chiral intertwiner on its
+own neutrality locus.  Later, the blow-up-factor proof evaluates matrix
+elements on many such loci and uses polynomiality to continue the result to
+generic momenta.
+
+For the even primary matrix element in Eq.~(2.9), the total number \(r+s\)
+of screening charges is even.  For the odd superpartner matrix elements in
+Eqs.~(2.10) and (2.11), it is odd.
+
+\section{From the screened intertwiner to Eq.~(3.13)}
+
+We now explain the precise chain of substitutions that turns the normalized
+three-point block into the free-field matrix element in Eq.~(3.13).  The
+essential input is not an explicit formula for the reflected fermion.
+Instead, one first works in a free-field chart in which no reflected
+fermions occur.
+
+\subsection{The unreflected \texorpdfstring{\(\chi\)}{chi}-states}
+
+Introduce the additional fermion \(f_r\) by
+\begin{equation}
+ \{f_r,f_s\}=\delta_{r+s,0},
+ \qquad
+ f_r^{\mathsf I}=-f_{-r},
+ \label{eq:auxiliary-fermion-I-rule}
+\end{equation}
+and define
+\begin{equation}
+ \chi_r=f_r-i\psi_r.
+ \label{eq:chi-mode-definition}
+\end{equation}
+The two fermions anticommute with one another.  It follows that
+\begin{equation}
+ \chi_r^{\mathsf I}=-\chi_{-r},
+ \qquad
+ \{\chi_r,\chi_s\}=0.
+ \label{eq:chi-I-and-anticommutator}
+\end{equation}
+Let
+\begin{equation}
+ |p,0\rangle:=|p\rangle\otimes|0_f\rangle.
+ \label{eq:extended-Fock-vacuum}
+\end{equation}
+For \(j>0\), the double-Virasoro highest-weight state has the unreflected
+free-field representative
+\begin{equation}
+ |p,j\rangle
+ =
+ \chi_{-j+\frac12}\cdots
+ \chi_{-\frac32}\chi_{-\frac12}|p,0\rangle.
+ \label{eq:positive-j-unreflected-state}
+\end{equation}
+The pole-cleared state used in the three-point block is
+\begin{equation}
+ |\xi_{p,j}\rangle
+ :=
+ \Omega(p,j)|p,j\rangle,
+ \label{eq:xi-state-definition}
+\end{equation}
+where \(\Omega(p,j)\) is the polynomial introduced in Eq.~(2.24) of the
+paper.  For real \(p,Q,b\),
+\begin{equation}
+ \Omega(p,j)^{\mathsf I}
+ =
+ \overline{\Omega(p,j)}
+ =
+ \Omega(-p,j).
+ \label{eq:Omega-I-conjugation}
+\end{equation}
+Consequently, the free-field Hermitian bra associated with
+Eq.~\eqref{eq:xi-state-definition} is
+\begin{equation}
+ \bigl(|\xi_{p,j}\rangle\bigr)^{\mathsf I}
+ =
+ \Omega(-p,j)\,
+ \Ibra{p,0}
+ \chi_{-\frac12}^{\mathsf I}
+ \chi_{-\frac32}^{\mathsf I}\cdots
+ \chi_{-j+\frac12}^{\mathsf I}.
+ \label{eq:positive-j-I-bra}
+\end{equation}
+The replacement \(p\mapsto-p\) in the coefficient in
+Eq.~\eqref{eq:positive-j-I-bra} is caused by complex conjugation under
+\(\mathsf I\).  It is not an application of the reflection map.
+
+\subsection{Turning the middle state into contour insertions}
+
+The local field
+\begin{equation}
+ \chi(\xi)
+ =
+ \sum_{r\in\mathbb Z+\frac12}
+ \chi_r\,\xi^{-r-\frac12}
+ \label{eq:chi-local-field}
+\end{equation}
+implements the \(\chi\)-modes through the state-operator correspondence.
+Around an insertion at \(z=1\),
+\begin{equation}
+ \chi_{-\ell+\frac12}\mathcal O(1)
+ =
+ \frac{1}{2\pi i}
+ \oint_{1}
+ \frac{d\xi}{(\xi-1)^\ell}
+ \chi(\xi)\mathcal O(1),
+ \qquad
+ \ell=1,2,\ldots.
+ \label{eq:chi-mode-contour-extraction}
+\end{equation}
+Therefore the field associated with the middle state can be written as
+\begin{align}
+ V_{\xi_{p_2,j_2}}(1)
+ ={}&
+ \frac{\Omega(p_2,j_2)}{(2\pi i)^{j_2}}
+ \oint_{1}\frac{d\xi_{j_2}}{(\xi_{j_2}-1)^{j_2}}
+ \cdots
+ \oint_{1}\frac{d\xi_1}{\xi_1-1}
+ \nonumber\\
+ &\quad\times
+ \chi(\xi_{j_2})\cdots\chi(\xi_1)
+ V_{p_2,0}(1).
+ \label{eq:middle-chi-state-operator-map}
+\end{align}
+The contours and the fermionic fields are ordered as displayed.  This
+ordering is inherited from the ordered product of modes in the state and
+must be kept fixed when signs are evaluated.
+
+\subsection{Replacing the primary vertex by a screened intertwiner}
+
+Choose a screening realization satisfying
+\begin{equation}
+ p_3
+ =
+ p_1-i\left(\alpha_2+rb+sb^{-1}\right),
+ \label{eq:3.13-neutrality-condition}
+\end{equation}
+and abbreviate
+\begin{equation}
+ \mathcal S_{\alpha_2;r,s}
+ :=
+ E^{\alpha_2}(1)\mathcal Q_b^r\mathcal Q_{1/b}^s,
+ \qquad
+ \mathcal N_{31}
+ :=
+ \Ibra{p_3}
+ \mathcal S_{\alpha_2;r,s}
+ |p_1\rangle.
+ \label{eq:screened-intertwiner-and-normalization}
+\end{equation}
+The Ward-identity argument of the previous section identifies the
+normalized abstract primary vertex with the normalized screened
+intertwiner:
+\begin{equation}
+ \frac{
+  V_{p_2,0}(1)
+ }{
+  \langle p_3|V_{p_2,0}(1)|p_1\rangle
+ }
+ \quad\longleftrightarrow\quad
+ \frac{
+  \mathcal S_{\alpha_2;r,s}
+ }{
+  \mathcal N_{31}
+ }.
+ \label{eq:normalized-primary-to-screened-intertwiner}
+\end{equation}
+This is an equality of normalized chiral intertwiners on the neutrality
+locus, not a global operator identity.  Once the primary matrix element is
+fixed, the SCA Ward identities guarantee equality of all descendant matrix
+elements.
+
+\subsection{Substitution into the normalized three-point block}
+
+Suppose \(j_1,j_2,j_3>0\) and
+\(j_1+j_2+j_3\in2\mathbb Z\).  The normalized block is
+\begin{equation}
+ \rho_{\mathrm{NS}}^{\mathcal A}
+ \left(
+  \xi_{p_3,j_3},
+  \xi_{p_2,j_2},
+  \xi_{p_1,j_1}
+  \mathrel{|}1
+ \right)
+ :=
+ \frac{
+  \langle\xi_{p_3,j_3}|
+  V_{\xi_{p_2,j_2}}(1)
+  |\xi_{p_1,j_1}\rangle
+ }{
+  \langle p_3|V_{p_2,0}(1)|p_1\rangle
+ }.
+ \label{eq:normalized-A-three-point-block}
+\end{equation}
+The bras in Eq.~\eqref{eq:normalized-A-three-point-block} are abstract BPZ
+bras.  After applying the normalized module identification, the
+right-hand free-field calculation uses the \(\mathsf I\)-pairing.
+
+Substituting Eqs.~\eqref{eq:positive-j-unreflected-state},
+\eqref{eq:positive-j-I-bra},
+\eqref{eq:middle-chi-state-operator-map}, and
+\eqref{eq:normalized-primary-to-screened-intertwiner} gives
+\begin{align}
+ &\rho_{\mathrm{NS}}^{\mathcal A}
+ \left(
+  \xi_{p_3,j_3},
+  \xi_{p_2,j_2},
+  \xi_{p_1,j_1}
+  \mathrel{|}1
+ \right)
+ \nonumber\\
+ &=
+ \frac{
+  \Omega(-p_3,j_3)\Omega(p_2,j_2)\Omega(p_1,j_1)
+ }{
+  (2\pi i)^{j_2}\mathcal N_{31}
+ }
+ \oint_{1}\frac{d\xi_{j_2}}{(\xi_{j_2}-1)^{j_2}}
+ \cdots
+ \oint_{1}\frac{d\xi_1}{\xi_1-1}
+ \nonumber\\
+ &\quad\times
+ \Ibra{p_3,0}
+ \chi_{-\frac12}^{\mathsf I}\cdots
+ \chi_{-j_3+\frac12}^{\mathsf I}
+ \chi(\xi_{j_2})\cdots\chi(\xi_1)
+ \mathcal S_{\alpha_2;r,s}
+ \nonumber\\
+ &\hspace{8em}\times
+ \chi_{-j_1+\frac12}\cdots\chi_{-\frac12}
+ |p_1,0\rangle.
+ \label{eq:3.13-with-I-conjugation}
+\end{align}
+This is Eq.~(3.13), with the paper's free-field dagger replaced by our
+\(\mathsf I\).  Expanding
+\(\chi_r^{\mathsf I}=-\chi_{-r}\) produces the factor
+\((-1)^{j_3}\) that appears when the correlator is separated into its
+bosonic and fermionic parts.
+
+\subsection{What happened to the reflected fermion?}
+
+Equation~\eqref{eq:3.13-with-I-conjugation} does not express
+\(\psi_r^R(p)\) in terms of the original fermions.  It avoids that problem:
+\begin{enumerate}
+ \item For \(j_1,j_2,j_3>0\), all three states are represented in the
+       unreflected \(\chi\)-basis.
+ \item Other sign choices are analyzed using the alternative free-field
+       realizations associated with \(E^{\alpha}\), \(E^{Q-\alpha}\), and
+       the independent signs of the incoming and outgoing momenta.
+ \item The factors \(\Omega(p_i,j_i)\) remove the possible poles and turn
+       the normalized block into a polynomial of bounded degree.
+ \item Free-field calculations on the admissible screening loci determine
+       the zeros and normalization of this polynomial, after which the
+       result is continued to generic momenta.
+\end{enumerate}
+Thus the authors circumvent the absence of a closed formula for the
+reflected fermion; they do not solve for it in the original oscillator
+basis.  The calculation succeeds because each required specialization can
+be evaluated in a free-field chart adapted to that specialization.
+
+\end{document}
