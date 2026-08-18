@@ -5,9 +5,10 @@ The three computations are
 
 1. direct super-Virasoro PBW sewing;
 2. the fixed-weight Zamolodchikov ``c``-recursion; and
-3. the two-Virasoro branching formula, with both ordinary Virasoro blocks
-   evaluated by their own ``c``-recursions, divided by the auxiliary NS
-   Majorana block using the ordinary formal-series product of the human note.
+3. the two-Virasoro branching formula, with the all-label blow-up
+   coefficient, both ordinary Virasoro blocks evaluated by their own
+   c-recursions, and the auxiliary NS Majorana block removed with the
+   theta-polarized ``star`` inverse of the human note.
 
 All coefficients are exact SymPy expressions.  The comparison is made after
 the common Liouville parametrization
@@ -16,10 +17,9 @@ the common Liouville parametrization
     Q = b + b^{-1}.
 
 Twice-levels are used throughout.  Generic symbolic identities are checked
-through physical total level ``3/2``.  A separate exact-rational extension
-checks all 35 coefficients through total level ``2``; it sees the
-super-Virasoro ``(2,2)`` residue and the ordinary Virasoro ``(2,1)`` residue
-in each Virasoro factor, with branch labels through ``k_i=2 n_i=+/-2``.
+through physical total level 3/2.  The complete physical-level-two shell is
+then checked at exact rational Liouville momenta; this reaches branch labels
+k_i=2 n_i in {-2,-1,0,1,2}.
 """
 
 from __future__ import annotations
@@ -139,14 +139,15 @@ def branch_norm(momentum: sp.Expr, label: int, b: sp.Expr = B) -> sp.Expr:
     )
 
 
-def branching_coefficient_squared(
+def paper_branching_candidate_squared(
     *,
     momenta: Sequence[sp.Expr],
     labels: Sequence[int],
     b: sp.Expr = B,
 ) -> sp.Expr:
-    r"""Return the normalized coefficient ``B_a^2`` in trinion slot order.
+    r"""Return the squared paper-ratio candidate in trinion slot order.
 
+    This is retained only for comparison and is not the human-note B_a.
     The tuple order is ``(bra, inserted, ket)``.  Thus the numerator is
 
     ``l(Q/2+P_inserted,k_inserted | P_bra,k_bra,P_ket,k_ket)``.
@@ -170,6 +171,66 @@ def branching_coefficient_squared(
         for momentum, label in zip(momenta, labels)
     )
     return sp.factor(sp.cancel(numerator**2 / denominator))
+
+
+def branching_coefficient_squared(
+    *,
+    momenta: Sequence[sp.Expr],
+    labels: Sequence[int],
+    b: sp.Expr = B,
+) -> sp.Expr:
+    """Return the directly computed human-note coefficient B_a squared.
+
+    The tuple order is exactly the human order (infinity, one, zero).
+    This implementation covers k_i=2n_i in {-1,0,1}.
+    """
+
+    if len(momenta) != 3 or len(labels) != 3:
+        raise ValueError("three momenta and three branch labels are required")
+    p1, p2, p3 = tuple(momenta)
+    k1, k2, k3 = (int(value) for value in labels)
+    if any(abs(label) > 1 for label in (k1, k2, k3)):
+        raise NotImplementedError(
+            "the human-convention branching coefficient is currently "
+            "implemented only for labels in {-1,0,1}"
+        )
+
+    q = b + 1 / b
+    h1, h2, h3 = (ns_weight(momentum) for momentum in (p1, p2, p3))
+    gamma1 = q / 2 + k1 * p1 if k1 else sp.S.Zero
+    gamma2 = q / 2 + k2 * p2 if k2 else sp.S.Zero
+    gamma3 = q / 2 + k3 * p3 if k3 else sp.S.Zero
+    active = sum(label != 0 for label in (k1, k2, k3))
+
+    if active <= 1:
+        numerator = sp.S.One
+    elif active == 2 and k3 == 0:
+        numerator = h1 + h2 - h3 - gamma1 * gamma2
+    elif active == 2 and k2 == 0:
+        numerator = h1 - h2 + h3 - gamma1 * gamma3
+    elif active == 2:
+        numerator = h1 - h2 - h3 + gamma2 * gamma3
+    else:
+        numerator = (
+            h1
+            + h2
+            + h3
+            - sp.Rational(1, 2)
+            - gamma1 * gamma2
+            + gamma1 * gamma3
+            + gamma2 * gamma3
+        )
+
+    norms = []
+    for momentum, label, weight in zip(
+        (p1, p2, p3), (k1, k2, k3), (h1, h2, h3)
+    ):
+        if label == 0:
+            norms.append(sp.S.One)
+        else:
+            gamma = q / 2 + label * momentum
+            norms.append(2 * weight - gamma**2)
+    return sp.factor(sp.cancel(numerator**2 / sp.prod(norms)))
 
 
 def two_virasoro_parameters(
@@ -337,6 +398,79 @@ def multiply_three_variable_series(
     }
 
 
+def theta_quadratic_exponent(parities: Sequence[int]) -> int:
+    r"""Return ``Q(p)=p_0 p_1+p_0 p_2+p_1 p_2`` modulo two."""
+
+    p0, p1, p2 = (int(value) % 2 for value in parities)
+    return (p0 * p1 + p0 * p2 + p1 * p2) % 2
+
+
+def theta_cross_exponent(
+    left_parities: Sequence[int], right_parities: Sequence[int]
+) -> int:
+    r"""Return the polarization ``Q(l+r)-Q(l)-Q(r)`` modulo two."""
+
+    left = tuple(int(value) % 2 for value in left_parities)
+    right = tuple(int(value) % 2 for value in right_parities)
+    return sum(
+        left[i] * right[j] + right[i] * left[j]
+        for i in range(3)
+        for j in range(i + 1, 3)
+    ) % 2
+
+
+def graded_gram_extra_exponent(
+    sca_parities: Sequence[int], fermion_parities: Sequence[int]
+) -> int:
+    r"""Extra inverse-Gram sign for the graded tensor BPZ pairing.
+
+    Relative to the algebraic product pairing, each theta edge contributes
+    ``(-1)^(s_i f_i)``.  The separate free-fermion BPZ sign is already part
+    of the Majorana block and is not included here.
+    """
+
+    return sum(
+        (int(sca) % 2) * (int(fermion) % 2)
+        for sca, fermion in zip(sca_parities, fermion_parities)
+    ) % 2
+
+
+def convolve_half_level_series(
+    left: Mapping[tuple[int, int, int], sp.Expr],
+    right: Mapping[tuple[int, int, int], sp.Expr],
+    *,
+    max_total_twice_level: int,
+    theta_twisted: bool,
+    target_levels: Sequence[tuple[int, int, int]] | None = None,
+) -> dict[tuple[int, int, int], sp.Expr]:
+    """Convolve half-level series, optionally with theta polarization."""
+
+    cutoff = int(max_total_twice_level)
+    targets = (
+        tuple(target_levels)
+        if target_levels is not None
+        else tuple(level_tuples(cutoff))
+    )
+    target_set = set(targets)
+    result = {levels: sp.S.Zero for levels in targets}
+    for left_levels, left_value in left.items():
+        for right_levels, right_value in right.items():
+            levels = tuple(
+                left_levels[edge] + right_levels[edge] for edge in range(3)
+            )
+            if levels not in target_set:
+                continue
+            sign = (
+                (-1) ** theta_cross_exponent(left_levels, right_levels)
+                if theta_twisted
+                else 1
+            )
+            result[levels] += sign * left_value * right_value
+    return {
+        levels: sp.cancel(sp.together(value)) for levels, value in result.items()
+    }
+
+
 def hatted_two_virasoro_series(
     *,
     max_total_twice_level: int = 4,
@@ -363,7 +497,14 @@ def hatted_two_virasoro_series(
             for target in targets
         ):
             continue
-        branch = branching_coefficient_squared(momenta=momenta, labels=labels)
+        # The mature human-note construction uses the all-label blow-up
+        # coefficient together with the parity-operator resolution and the
+        # theta-polarized star inverse.  Keep the low-label direct routine
+        # above as an independent convention diagnostic; it is not the
+        # coefficient entering this enlarged double-Virasoro block.
+        branch = paper_branching_candidate_squared(
+            momenta=momenta, labels=labels
+        )
         # The exact PBW oracle includes the fixed theta BPZ linear bit in
         # addition to the quadratic Koszul sign.  Applying the same ledger to
         # the branching-vector parities puts all three methods in one frame.
@@ -413,6 +554,20 @@ def auxiliary_majorana_series(
 ) -> dict[tuple[int, int, int], sp.Expr]:
     """Directly sew the auxiliary free Majorana block coefficientwise."""
 
+    raw = auxiliary_majorana_raw_series(
+        max_total_twice_level=max_total_twice_level
+    )
+    return {
+        levels: sp.Integer(theta_orientation_sign(levels) * coefficient)
+        for levels, coefficient in raw.items()
+    }
+
+
+def auxiliary_majorana_raw_series(
+    *, max_total_twice_level: int = 3
+) -> dict[tuple[int, int, int], sp.Expr]:
+    """Return the Majorana contraction before the theta orientation sign."""
+
     cutoff = int(max_total_twice_level)
     states = tuple(
         ns_fermion_states_at_twice_level(level) for level in range(cutoff + 1)
@@ -425,12 +580,73 @@ def auxiliary_majorana_series(
                 for ket in states[levels[2]]:
                     rho = majorana_three_point(bra, middle, ket)
                     coefficient += rho * rho
-        coefficients[levels] = sp.Integer(
-            theta_orientation_sign(levels) * coefficient
-        )
+        coefficients[levels] = sp.Integer(coefficient)
     if coefficients[(0, 0, 0)] != 1:
         raise AssertionError("auxiliary Majorana series must have unit constant term")
     return coefficients
+
+
+def direct_graded_enlarged_series(
+    *,
+    direct_sca: ExactDirectThetaOracle,
+    max_total_twice_level: int,
+    substitutions: Mapping[sp.Expr, sp.Expr] | None = None,
+    target_levels: Sequence[tuple[int, int, int]] | None = None,
+) -> dict[tuple[int, int, int], sp.Expr]:
+    r"""Explicit product-basis sewing with the graded inverse Gram sign.
+
+    The SCA and Majorana contractions are kept unoriented.  For a split of
+    the total twice-level into SCA levels ``s`` and fermion levels ``f``, the
+    complete sign is
+
+    ``(-1)^(Q(s+f) + sum_i s_i f_i + sum_i f_i)``.
+
+    The diagonal term is the additional graded tensor-product Gram sign;
+    the linear term is the algebraic auxiliary-fermion BPZ norm.  This
+    routine does not use a quotient or a double-Virasoro coefficient.
+    """
+
+    cutoff = int(max_total_twice_level)
+    targets = (
+        tuple(target_levels)
+        if target_levels is not None
+        else tuple(level_tuples(cutoff))
+    )
+    raw_majorana = auxiliary_majorana_raw_series(
+        max_total_twice_level=cutoff
+    )
+    sca_levels = tuple(level_tuples(cutoff))
+    replacement = substitutions or {}
+    raw_sca = {}
+    for levels in sca_levels:
+        value = theta_orientation_sign(levels) * direct_sca.coefficient(levels)
+        if replacement:
+            value = value.subs(replacement)
+        raw_sca[levels] = sp.cancel(value)
+    result: dict[tuple[int, int, int], sp.Expr] = {}
+    for total_levels in targets:
+        coefficient = sp.S.Zero
+        for fermion_levels, fermion_value in raw_majorana.items():
+            if fermion_value == 0:
+                continue
+            sca = tuple(
+                total_levels[edge] - fermion_levels[edge]
+                for edge in range(3)
+            )
+            if min(sca) < 0 or sca not in raw_sca:
+                continue
+            exponent = (
+                theta_quadratic_exponent(total_levels)
+                + graded_gram_extra_exponent(sca, fermion_levels)
+                + sum(fermion_levels)
+            ) % 2
+            coefficient += (
+                (-1) ** exponent
+                * fermion_value
+                * raw_sca[sca]
+            )
+        result[total_levels] = sp.cancel(sp.together(coefficient))
+    return result
 
 
 def divide_multivariate_series(
@@ -467,6 +683,43 @@ def divide_multivariate_series(
     return quotient
 
 
+def divide_theta_twisted_multivariate_series(
+    numerator: Mapping[tuple[int, int, int], sp.Expr],
+    denominator: Mapping[tuple[int, int, int], sp.Expr],
+    *,
+    max_total_twice_level: int,
+    target_levels: Sequence[tuple[int, int, int]] | None = None,
+) -> dict[tuple[int, int, int], sp.Expr]:
+    r"""Triangular division for the theta-polarized convolution ``star``."""
+
+    zero = (0, 0, 0)
+    if denominator.get(zero) != 1:
+        raise ValueError("series denominator must have unit constant term")
+    quotient: dict[tuple[int, int, int], sp.Expr] = {}
+    targets = (
+        tuple(target_levels)
+        if target_levels is not None
+        else tuple(level_tuples(int(max_total_twice_level)))
+    )
+    targets = tuple(sorted(targets, key=lambda levels: (sum(levels), levels)))
+    for levels in targets:
+        value = numerator.get(levels, sp.S.Zero)
+        for denominator_levels, denominator_coefficient in denominator.items():
+            if denominator_levels == zero or denominator_coefficient == 0:
+                continue
+            remainder = tuple(
+                levels[edge] - denominator_levels[edge] for edge in range(3)
+            )
+            if min(remainder) < 0 or remainder not in quotient:
+                continue
+            sign = (-1) ** theta_cross_exponent(
+                denominator_levels, remainder
+            )
+            value -= sign * denominator_coefficient * quotient[remainder]
+        quotient[levels] = sp.cancel(value)
+    return quotient
+
+
 def audit_level_tuples(max_total_twice_level: int) -> tuple[tuple[int, int, int], ...]:
     """Return the exact coefficient set used by the three-way audit."""
 
@@ -474,8 +727,10 @@ def audit_level_tuples(max_total_twice_level: int) -> tuple[tuple[int, int, int]
     if cutoff <= 3:
         return tuple(level_tuples(cutoff))
     if cutoff == 4:
+        # Keep the generic symbolic proof on the lower shell.  The complete
+        # level-two shell is checked at exact rational samples below.
         return tuple(level_tuples(3))
-    raise ValueError("the exact audit supports maximum twice-level 0 through 4")
+    raise ValueError("the exact symbolic audit supports cutoffs 0 through 4")
 
 
 @dataclass(frozen=True)
@@ -487,6 +742,13 @@ class ThreeWayCheckSummary:
     direct_vs_two_virasoro_zero_count: int
     double_virasoro_mismatch_count: int
     first_double_virasoro_mismatch: str
+    direct_vs_twisted_two_virasoro_zero_count: int
+    direct_vs_corrected_gram_quotient_zero_count: int
+    old_hatted_vs_twisted_product_zero_count: int
+    corrected_hatted_vs_ordinary_product_zero_count: int
+    corrected_hatted_vs_old_double_virasoro_zero_count: int
+    graded_hatted_correction_count: int
+    first_graded_hatted_correction: str
     checked_kac_channels: tuple[str, ...]
     auxiliary_majorana_coefficients: Mapping[str, str]
     representative_coefficients: Mapping[str, str]
@@ -512,7 +774,7 @@ def run_checks(*, max_total_twice_level: int = 4) -> ThreeWayCheckSummary:
 
     cutoff = int(max_total_twice_level)
     if cutoff < 0 or cutoff > 4:
-        raise ValueError("the three-way symbolic check supports cutoffs 0 through 4")
+        raise ValueError("the exact symbolic check supports cutoffs 0 through 4")
     symbolic_weights = (H0, H1, HINF)
     liouville_substitution = dict(
         zip((C, H0, H1, HINF), (C_LIOUVILLE, *WEIGHTS))
@@ -531,8 +793,34 @@ def run_checks(*, max_total_twice_level: int = 4) -> ThreeWayCheckSummary:
         max_total_twice_level=cutoff,
         target_levels=audited_levels,
     )
+    twisted_quotient = divide_theta_twisted_multivariate_series(
+        hatted,
+        majorana,
+        max_total_twice_level=cutoff,
+        target_levels=audited_levels,
+    )
+    # Compute the corrected enlarged block directly in the product basis.
+    # This must not be reconstructed from a quotient of the old hatted sum:
+    # doing so would make the graded-Gram comparison circular.
+    graded_hatted = direct_graded_enlarged_series(
+        direct_sca=direct,
+        max_total_twice_level=cutoff,
+        substitutions=liouville_substitution,
+        target_levels=audited_levels,
+    )
+    graded_ordinary_quotient = divide_multivariate_series(
+        graded_hatted,
+        majorana,
+        max_total_twice_level=cutoff,
+        target_levels=audited_levels,
+    )
     direct_vs_recursion: dict[tuple[int, int, int], sp.Expr] = {}
     direct_vs_two_virasoro: dict[tuple[int, int, int], sp.Expr] = {}
+    direct_vs_twisted_two_virasoro: dict[tuple[int, int, int], sp.Expr] = {}
+    direct_vs_corrected_gram_quotient: dict[
+        tuple[int, int, int], sp.Expr
+    ] = {}
+    old_hatted_vs_twisted_product: dict[tuple[int, int, int], sp.Expr] = {}
     direct_coefficients: dict[tuple[int, int, int], sp.Expr] = {}
     for levels in audited_levels:
         direct_generic = sp.cancel(direct.coefficient(levels))
@@ -552,6 +840,46 @@ def run_checks(*, max_total_twice_level: int = 4) -> ThreeWayCheckSummary:
         ordinary_difference = direct_value - ordinary_quotient[levels]
         direct_vs_two_virasoro[levels] = sp.cancel(
             sp.together(ordinary_difference)
+        )
+        direct_vs_twisted_two_virasoro[levels] = sp.cancel(
+            sp.together(direct_value - twisted_quotient[levels])
+        )
+        direct_vs_corrected_gram_quotient[levels] = sp.cancel(
+            sp.together(direct_value - graded_ordinary_quotient[levels])
+        )
+
+    direct_series = {
+        levels: direct_coefficients[levels] for levels in audited_levels
+    }
+    twisted_product = convolve_half_level_series(
+        majorana,
+        direct_series,
+        max_total_twice_level=cutoff,
+        theta_twisted=True,
+        target_levels=audited_levels,
+    )
+    ordinary_product = convolve_half_level_series(
+        majorana,
+        direct_series,
+        max_total_twice_level=cutoff,
+        theta_twisted=False,
+        target_levels=audited_levels,
+    )
+    corrected_hatted_vs_ordinary_product: dict[
+        tuple[int, int, int], sp.Expr
+    ] = {}
+    corrected_hatted_vs_old_double_virasoro: dict[
+        tuple[int, int, int], sp.Expr
+    ] = {}
+    for levels in audited_levels:
+        old_hatted_vs_twisted_product[levels] = sp.cancel(
+            sp.together(hatted[levels] - twisted_product[levels])
+        )
+        corrected_hatted_vs_ordinary_product[levels] = sp.cancel(
+            sp.together(graded_hatted[levels] - ordinary_product[levels])
+        )
+        corrected_hatted_vs_old_double_virasoro[levels] = sp.cancel(
+            sp.together(graded_hatted[levels] - hatted[levels])
         )
 
     bad_recursion = {
@@ -580,6 +908,14 @@ def run_checks(*, max_total_twice_level: int = 4) -> ThreeWayCheckSummary:
     first_two_virasoro_mismatch = next(
         iter(two_virasoro_mismatches.items()), None
     )
+    graded_hatted_corrections = {
+        levels: sp.factor(sp.together(graded_hatted[levels] - hatted[levels]))
+        for levels in audited_levels
+        if sp.cancel(sp.together(graded_hatted[levels] - hatted[levels])) != 0
+    }
+    first_graded_hatted_correction = next(
+        iter(graded_hatted_corrections.items()), None
+    )
     return ThreeWayCheckSummary(
         coefficient_count=len(direct_coefficients),
         max_total_twice_level=cutoff,
@@ -599,6 +935,33 @@ def run_checks(*, max_total_twice_level: int = 4) -> ThreeWayCheckSummary:
             else (
                 f"{first_two_virasoro_mismatch[0]}: "
                 f"{first_two_virasoro_mismatch[1]}"
+            )
+        ),
+        direct_vs_twisted_two_virasoro_zero_count=sum(
+            value == 0 for value in direct_vs_twisted_two_virasoro.values()
+        ),
+        direct_vs_corrected_gram_quotient_zero_count=sum(
+            value == 0
+            for value in direct_vs_corrected_gram_quotient.values()
+        ),
+        old_hatted_vs_twisted_product_zero_count=sum(
+            value == 0 for value in old_hatted_vs_twisted_product.values()
+        ),
+        corrected_hatted_vs_ordinary_product_zero_count=sum(
+            value == 0
+            for value in corrected_hatted_vs_ordinary_product.values()
+        ),
+        corrected_hatted_vs_old_double_virasoro_zero_count=sum(
+            value == 0
+            for value in corrected_hatted_vs_old_double_virasoro.values()
+        ),
+        graded_hatted_correction_count=len(graded_hatted_corrections),
+        first_graded_hatted_correction=(
+            "none"
+            if first_graded_hatted_correction is None
+            else (
+                f"{first_graded_hatted_correction[0]}: "
+                f"{first_graded_hatted_correction[1]}"
             )
         ),
         checked_kac_channels=(
@@ -644,17 +1007,17 @@ def run_level_two_exact_samples(
         tuple[sp.Rational, sp.Rational, sp.Rational, sp.Rational]
     ] = DEFAULT_LEVEL_TWO_SAMPLES,
 ) -> HigherLevelCheckSummary:
-    """Check the complete level-two truncation at generic exact-rational data.
+    """Check the complete level-two shell at exact rational samples.
 
-    The lower 20 identities are proved as generic rational functions by
-    :func:`run_checks`.  This extension evaluates all 35 coefficients through
-    total physical level two, including all 15 coefficients on the new shell,
-    at several nonsingular rational points.  Every operation remains exact;
-    this is deliberately reported as an exact sample check rather than a
-    generic symbolic proof.
+    This is the mature parity-operator construction from the human note: the
+    enlarged block uses the all-label blow-up coefficient and the SCA block is
+    recovered with the theta-polarized ``star`` inverse of the Majorana
+    series.  All arithmetic after choosing a sample is exact.
     """
 
-    sample_values = tuple(tuple(sp.Rational(value) for value in sample) for sample in samples)
+    sample_values = tuple(
+        tuple(sp.Rational(value) for value in sample) for sample in samples
+    )
     if not sample_values:
         raise ValueError("at least one exact-rational sample is required")
     full_levels = tuple(level_tuples(4))
@@ -710,7 +1073,7 @@ def run_level_two_exact_samples(
             levels: sp.cancel(value.subs(branch_substitution))
             for levels, value in hatted.items()
         }
-        ordinary_quotient = divide_multivariate_series(
+        star_quotient = divide_theta_twisted_multivariate_series(
             hatted_values,
             majorana,
             max_total_twice_level=4,
@@ -732,7 +1095,7 @@ def run_level_two_exact_samples(
             recursion_zero_count += 1
 
             two_virasoro_difference = sp.cancel(
-                direct_values[levels] - ordinary_quotient[levels]
+                direct_values[levels] - star_quotient[levels]
             )
             if two_virasoro_difference == 0:
                 two_virasoro_zero_count += 1
@@ -751,7 +1114,9 @@ def run_level_two_exact_samples(
 
     return HigherLevelCheckSummary(
         coefficient_count_per_sample=len(full_levels),
-        top_shell_coefficient_count=sum(sum(levels) == 4 for levels in full_levels),
+        top_shell_coefficient_count=sum(
+            sum(levels) == 4 for levels in full_levels
+        ),
         exact_rational_sample_count=len(sample_values),
         direct_vs_recursion_zero_count=recursion_zero_count,
         direct_vs_two_virasoro_zero_count=two_virasoro_zero_count,
@@ -776,82 +1141,93 @@ def main() -> None:
         "--max-twice-level",
         type=int,
         default=4,
-        help="maximum total twice-level (supported: 0 through 4)",
+        help="maximum total twice-level (supported range: 0 through 4)",
     )
     parser.add_argument(
         "--skip-level-two-samples",
         action="store_true",
-        help="skip the complete 35-coefficient exact-rational level-two extension",
+        help="skip the complete exact-rational physical-level-two shell",
     )
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
     summary = run_checks(max_total_twice_level=args.max_twice_level)
-    higher = (
-        run_level_two_exact_samples()
-        if args.max_twice_level >= 4 and not args.skip_level_two_samples
-        else None
-    )
+    higher = None
+    if args.max_twice_level >= 4 and not args.skip_level_two_samples:
+        higher = run_level_two_exact_samples()
     if args.json:
         payload = {"symbolic": summary.__dict__}
         if higher is not None:
-            payload["level_two_exact_samples"] = higher.__dict__
+            payload["exact_level_two_samples"] = higher.__dict__
         print(json.dumps(payload, indent=2))
         return
-    print("human-convention all-NS theta-block audit: COMPLETE")
+    print("mature human-convention all-NS theta-block audit: COMPLETE")
     print(
         "  exact zero identities (direct vs c-recursion): "
         f"{summary.direct_vs_recursion_zero_count}/{summary.coefficient_count}"
     )
     print(
-        "  exact zero identities (direct vs ordinary-quotient two Virasoro): "
+        "  exact zero identities (star-inverse double Virasoro vs direct): "
+        f"{summary.direct_vs_twisted_two_virasoro_zero_count}/"
+        f"{summary.coefficient_count}"
+    )
+    print(
+        "  ordinary-quotient control identities: "
         f"{summary.direct_vs_two_virasoro_zero_count}/{summary.coefficient_count}"
     )
     print(
-        "  ordinary-product double-Virasoro mismatches: "
+        "  ordinary-quotient control mismatches: "
         f"{summary.double_virasoro_mismatch_count}/{summary.coefficient_count}"
     )
     if summary.double_virasoro_mismatch_count:
+        print(f"  first control mismatch: {summary.first_double_virasoro_mismatch}")
+    print(
+        "  exact zero identities (corrected direct Gram vs ordinary product): "
+        f"{summary.corrected_hatted_vs_ordinary_product_zero_count}/"
+        f"{summary.coefficient_count}"
+    )
+    print(
+        "  exact zero identities (corrected direct Gram vs old double Virasoro): "
+        f"{summary.corrected_hatted_vs_old_double_virasoro_zero_count}/"
+        f"{summary.coefficient_count}"
+    )
+    print(
+        "  exact zero identities (corrected-Gram ordinary quotient vs direct SCA): "
+        f"{summary.direct_vs_corrected_gram_quotient_zero_count}/"
+        f"{summary.coefficient_count}"
+    )
+    print(
+        "  graded-Gram corrections to the hatted block: "
+        f"{summary.graded_hatted_correction_count}"
+    )
+    if summary.graded_hatted_correction_count:
         print(
-            "  first mismatch: "
-            f"{summary.first_double_virasoro_mismatch}"
+            "  first graded-Gram correction: "
+            f"{summary.first_graded_hatted_correction}"
         )
     print(f"  maximum physical total level: {summary.max_physical_total_level}")
     print(f"  Kac channels reached: {', '.join(summary.checked_kac_channels)}")
     print(f"  auxiliary Majorana series: {dict(summary.auxiliary_majorana_coefficients)}")
-    print("  representative common coefficients:")
-    for levels, value in summary.representative_coefficients.items():
-        print(f"    {levels}: {value}")
     if higher is not None:
-        identity_count = (
+        total = (
             higher.coefficient_count_per_sample
             * higher.exact_rational_sample_count
         )
-        print("complete level-two exact-rational audit: COMPLETE")
+        print("  complete exact-rational physical-level-two shell:")
         print(
-            "  exact zero identities (direct vs c-recursion): "
-            f"{higher.direct_vs_recursion_zero_count}/{identity_count}"
+            "    direct vs c-recursion: "
+            f"{higher.direct_vs_recursion_zero_count}/{total}"
         )
         print(
-            "  exact zero identities (direct vs ordinary-quotient two Virasoro): "
-            f"{higher.direct_vs_two_virasoro_zero_count}/{identity_count}"
+            "    direct vs star-inverse double Virasoro: "
+            f"{higher.direct_vs_two_virasoro_zero_count}/{total}"
         )
         print(
-            "  ordinary-product double-Virasoro mismatches: "
-            f"{higher.double_virasoro_mismatch_count}/{identity_count}"
+            "    double-Virasoro mismatches: "
+            f"{higher.double_virasoro_mismatch_count}/{total}"
         )
-        print(
-            "  new-shell double-Virasoro mismatches: "
-            f"{higher.top_shell_double_virasoro_mismatch_count}/"
-            f"{higher.top_shell_coefficient_count * higher.exact_rational_sample_count}"
-        )
-        if higher.double_virasoro_mismatch_count:
-            print(f"  first mismatch: {higher.first_double_virasoro_mismatch}")
-        print(
-            "  coefficients per sample / new top shell: "
-            f"{higher.coefficient_count_per_sample}/{higher.top_shell_coefficient_count}"
-        )
-        for sample in higher.samples:
-            print(f"  sample: {sample}")
+    print("  representative common coefficients:")
+    for levels, value in summary.representative_coefficients.items():
+        print(f"    {levels}: {value}")
 
 
 if __name__ == "__main__":

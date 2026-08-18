@@ -8,12 +8,14 @@ import math
 try:
     from ccy_genus2_block import (
         b_from_c_rs_h,
+        b_square_rs_from_h,
         ccy_genus2_block,
         ccy_genus2_block_partial_fraction,
         ccy_residue_prefactor_for_weights,
         c_rs_from_h,
         genus2_global_sl2_block,
         genus2_global_sl2_block_resummed,
+        genus2_global_sl2_block_resummed_fp,
         genus2_vacuum_seed_schottky,
         minus_dc_dh_times_a_rs,
         rho_lminus1_triple,
@@ -24,12 +26,14 @@ try:
 except ImportError:  # pragma: no cover - supports package-style execution
     from plumbing.ccy_genus2_block import (
         b_from_c_rs_h,
+        b_square_rs_from_h,
         ccy_genus2_block,
         ccy_genus2_block_partial_fraction,
         ccy_residue_prefactor_for_weights,
         c_rs_from_h,
         genus2_global_sl2_block,
         genus2_global_sl2_block_resummed,
+        genus2_global_sl2_block_resummed_fp,
         genus2_vacuum_seed_schottky,
         minus_dc_dh_times_a_rs,
         rho_lminus1_triple,
@@ -54,6 +58,18 @@ def check_degenerate_pole_location() -> None:
     print(f"  c_({r},{s})={pole_c!r}")
     print(f"  d_({r},{s})(c_rs)-h={degenerate - h!r}")
     require(abs(degenerate - h) < 1.0e-11, "c_rs(h) does not solve d_rs(c)=h")
+
+
+def check_s1_negative_weight_analytic_branch() -> None:
+    """The double-Virasoro sum routinely visits the negative-real h branch."""
+
+    r, s, h = 2, 1, -1.6
+    expected = 2.0 * (r * s - 1.0 + 2.0 * h) / (1.0 - r * r)
+    observed = b_square_rs_from_h(r, s, h)
+    print("\nnegative-weight analytic CCY branch")
+    print(f"  b^2_(2,1)={observed!r}")
+    require(abs(observed - expected) < 1.0e-14, "negative-weight s=1 branch changed")
+    require(abs(observed) > 0.0, "negative-weight s=1 branch cancelled spuriously")
 
 
 def check_global_torus_level_one_identity() -> None:
@@ -122,6 +138,38 @@ def check_resummed_global_stress_node() -> None:
     print(f"  order-twenty-four error={error24:.6e}")
     require(error8 > 0.05, "stress node no longer detects the old global cutoff")
     require(error24 < 3.0e-9, "resummed theta seed disagrees with the converged direct sum")
+
+
+def check_fast_resummed_global_matches_high_precision() -> None:
+    """Audit the String-MC machine-precision leaf at ordinary and heavy weights."""
+
+    q_values = (0.013, 0.017, 0.011)
+    samples = (
+        (0.91, 0.97, 1.03),
+        (10.0 + 100.0j, 8.0 + 110.0j, 12.0 + 95.0j),
+    )
+    print("\nfast/high-precision theta global resummation")
+    for weights in samples:
+        high_precision = genus2_global_sl2_block_resummed(
+            *weights, *q_values
+        )
+        fast = genus2_global_sl2_block_resummed_fp(*weights, *q_values)
+        error = abs(fast.value - high_precision.value) / max(
+            1.0, abs(high_precision.value)
+        )
+        print(
+            f"  weights={weights!r}, endpoint shell={fast.endpoint_total}, "
+            f"relative error={error:.3e}"
+        )
+        require(fast.converged, "fast theta global resummation did not certify")
+        require(
+            fast.endpoint_total == high_precision.endpoint_total,
+            "fast theta global resummation changed the endpoint shell",
+        )
+        require(
+            error < 2.0e-13,
+            "fast theta global resummation disagrees with high precision",
+        )
 
 
 def check_partial_fraction_matches_simple_recursion() -> None:
@@ -386,9 +434,11 @@ def check_resonant_residue_limit_at_c25() -> None:
 
 def run() -> None:
     check_degenerate_pole_location()
+    check_s1_negative_weight_analytic_branch()
     check_global_torus_level_one_identity()
     check_order_zero_and_one()
     check_resummed_global_stress_node()
+    check_fast_resummed_global_matches_high_precision()
     check_partial_fraction_matches_simple_recursion()
     check_order_two_finite()
     check_vacuum_seed_uses_theta_chart()

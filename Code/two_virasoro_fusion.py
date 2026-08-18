@@ -1,25 +1,21 @@
 """All-NS two-Virasoro branching (fusion) coefficients.
 
-This module implements the free-field prescription used in
-Machine Notes/c-Recursion/two_virasoro_branching_coefficients.tex.
-The formulas are the factorized blow-up products of arXiv:1111.2803,
-translated to the ordered trinion convention of the human note.
+The public trinion order is exactly the order in the human note:
 
-The public trinion ordering is
+    slot 1 = BPZ-conjugate state at infinity,
+    slot 2 = inserted state at one,
+    slot 3 = ket state at zero.
 
-    leg 1 = ket,  leg 2 = inserted field,  leg 3 = bra.
+ns_fusion_data computes the human-note coefficient directly for all triples
+with k_i = 2 n_i in {-1, 0, 1}.  It uses branching vectors obtained from the
+human Virasoro highest-weight equations and evaluates their norms and
+trilinear forms with the human algebraic dagger, tensor-product, and
+fixed-parity conventions.  Higher labels are rejected until the dictionary
+between that Shapovalov pairing and geometric graded BPZ has been fixed.
 
-For integer branch labels k_i = 2 n_i, the unnormalized numerator is
-
-    l(Q/2 + P2, k2 | P3, k3, P1, k1),
-
-and the canonical coefficient entering the conformal-block decomposition is
-
-    B_a^2 = l^2 / (N_{k3}(P3) N_{k2}(P2) N_{k1}(P1)).
-
-The unsquared coefficient depends on choices of square roots of the three
-Shapovalov norms.  ns_fusion_coefficient uses principal square roots and
-documents that convention explicitly.
+blow_up_factor and the general-label part of branch_norm implement the
+factorized ratio from arXiv:1111.2803 for comparison.  That ratio is not
+identified with the human-note three-point numerator.
 """
 
 from __future__ import annotations
@@ -291,13 +287,16 @@ def branch_norm(
     *,
     precision: int = 50,
 ) -> mpmath.mpc:
-    r"""Return the Shapovalov norm \(N_k(P)=\langle P,k\mid P,k\rangle\).
+    r"""Return the paper-product candidate for \(N_k(P)\).
 
-    It is computed from the same prescription by the identity specialization
+    It is obtained by the identity specialization of the literature ratio,
 
     .. math::
 
        N_k(P)=s_{\rm even}(2P,k)s_{\rm even}(-2P,-k).
+
+    For k in {-1,0,1}, this agrees with the direct human Gram calculation.
+    General k is retained for comparison and is not used by ns_fusion_data.
     """
 
     precision = _working_precision(precision)
@@ -309,15 +308,77 @@ def branch_norm(
 
 @dataclass(frozen=True)
 class NSFusionData:
-    """The numerator, norms, parity, and normalized all-NS coefficient."""
+    """Human-note numerator, norms, parity, and normalized coefficient."""
 
     parity: int
     numerator: mpmath.mpc
-    ket_norm: mpmath.mpc
-    inserted_norm: mpmath.mpc
-    bra_norm: mpmath.mpc
+    slot1_norm: mpmath.mpc
+    slot2_norm: mpmath.mpc
+    slot3_norm: mpmath.mpc
     coefficient_squared: mpmath.mpc
     principal_coefficient: mpmath.mpc
+
+
+def _human_direct_norm_mp(
+    p: mpmath.mpc,
+    k: int,
+    q: mpmath.mpc,
+) -> mpmath.mpc:
+    """Direct human Shapovalov norm for k in {-1, 0, 1}."""
+
+    if k == 0:
+        return mpmath.mpc(1)
+    h = (q**2 / 4 - p**2) / 2
+    gamma = q / 2 + k * p
+    return 2 * h - gamma**2
+
+
+def _human_direct_numerator_mp(
+    *,
+    q: mpmath.mpc,
+    p1: mpmath.mpc,
+    p2: mpmath.mpc,
+    p3: mpmath.mpc,
+    k1: int,
+    k2: int,
+    k3: int,
+) -> mpmath.mpc:
+    r"""Return \(\widehat\rho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})\).
+
+    This is the direct expansion in the human convention for the implemented
+    level-one-half cases.
+    """
+
+    momenta = (p1, p2, p3)
+    labels = (k1, k2, k3)
+    weights = tuple((q**2 / 4 - p**2) / 2 for p in momenta)
+    gammas = tuple(
+        q / 2 + k * p if k else mpmath.mpc(0)
+        for p, k in zip(momenta, labels)
+    )
+    active = sum(k != 0 for k in labels)
+
+    if active <= 1:
+        return mpmath.mpc(1)
+
+    h1, h2, h3 = weights
+    gamma1, gamma2, gamma3 = gammas
+    if active == 2:
+        if k3 == 0:
+            return h1 + h2 - h3 - gamma1 * gamma2
+        if k2 == 0:
+            return h1 - h2 + h3 - gamma1 * gamma3
+        return h1 - h2 - h3 + gamma2 * gamma3
+
+    return (
+        h1
+        + h2
+        + h3
+        - mpmath.mpf("0.5")
+        - gamma1 * gamma2
+        + gamma1 * gamma3
+        + gamma2 * gamma3
+    )
 
 
 def ns_fusion_data(
@@ -331,10 +392,13 @@ def ns_fusion_data(
     k3: int,
     precision: int = 50,
 ) -> NSFusionData:
-    r"""Compute the all-NS branching coefficient in human-note ordering.
+    r"""Compute the directly verified human-note branching coefficient.
 
-    The ordered legs are (1,2,3) = (ket, inserted, bra) and k_i=2n_i must be
-    integers.  The returned parity is a=(k1+k2+k3) mod 2.
+    The slots are (1,2,3) = (BPZ/infinity, insertion/one, ket/zero).
+    The supported labels are all in {-1,0,1}.  The returned parity is
+    a=(k1+k2+k3) mod 2.  Labels with absolute value above one are rejected:
+    their branching vectors contain more than one odd mode, so an explicit
+    dictionary between the human and geometric pairings is required.
 
     coefficient_squared is the canonical quantity \(B_a^2\) entering the
     conformal-block decomposition.  principal_coefficient uses the principal
@@ -346,24 +410,31 @@ def ns_fusion_data(
     k1 = _integer_label(k1, "k1")
     k2 = _integer_label(k2, "k2")
     k3 = _integer_label(k3, "k3")
+    labels = (k1, k2, k3)
+    if not all(abs(k) <= 1 for k in labels):
+        raise NotImplementedError(
+            "the human-convention calculation currently supports all "
+            "k_i in {-1,0,1}; higher labels require an explicit pairing "
+            "dictionary"
+        )
 
     with mpmath.workdps(precision):
         b_mp = _nonzero_b(b)
         q = b_mp + 1 / b_mp
         p1_mp, p2_mp, p3_mp = _mp(p1), _mp(p2), _mp(p3)
-        numerator = _blow_up_factor_mp(
-            q / 2 + p2_mp,
-            k2,
-            p3_mp,
-            k3,
-            p1_mp,
-            k1,
-            b_mp,
+        numerator = _human_direct_numerator_mp(
+            q=q,
+            p1=p1_mp,
+            p2=p2_mp,
+            p3=p3_mp,
+            k1=k1,
+            k2=k2,
+            k3=k3,
         )
-        ket_norm = _branch_norm_mp(p1_mp, k1, b_mp)
-        inserted_norm = _branch_norm_mp(p2_mp, k2, b_mp)
-        bra_norm = _branch_norm_mp(p3_mp, k3, b_mp)
-        denominator = bra_norm * inserted_norm * ket_norm
+        slot1_norm = _human_direct_norm_mp(p1_mp, k1, q)
+        slot2_norm = _human_direct_norm_mp(p2_mp, k2, q)
+        slot3_norm = _human_direct_norm_mp(p3_mp, k3, q)
+        denominator = slot1_norm * slot2_norm * slot3_norm
         if denominator == 0:
             raise ZeroDivisionError(
                 "the normalized fusion coefficient is singular because "
@@ -372,16 +443,16 @@ def ns_fusion_data(
 
         coefficient_squared = numerator**2 / denominator
         principal_coefficient = numerator / (
-            mpmath.sqrt(bra_norm)
-            * mpmath.sqrt(inserted_norm)
-            * mpmath.sqrt(ket_norm)
+            mpmath.sqrt(slot1_norm)
+            * mpmath.sqrt(slot2_norm)
+            * mpmath.sqrt(slot3_norm)
         )
         return NSFusionData(
             parity=(k1 + k2 + k3) % 2,
             numerator=+numerator,
-            ket_norm=+ket_norm,
-            inserted_norm=+inserted_norm,
-            bra_norm=+bra_norm,
+            slot1_norm=+slot1_norm,
+            slot2_norm=+slot2_norm,
+            slot3_norm=+slot3_norm,
             coefficient_squared=+coefficient_squared,
             principal_coefficient=+principal_coefficient,
         )
@@ -440,22 +511,28 @@ def ns_fusion_coefficient(
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Compute the all-NS two-Virasoro branching coefficient in "
-            "(ket, inserted, bra) ordering."
+            "Compute the directly verified all-NS two-Virasoro branching "
+            "coefficient in human-note slot order (infinity, one, zero)."
         )
     )
     parser.add_argument("--b", required=True, help="free-field parameter b")
-    parser.add_argument("--p1", required=True, help="ket momentum P1")
-    parser.add_argument("--p2", required=True, help="inserted momentum P2")
-    parser.add_argument("--p3", required=True, help="bra momentum P3")
-    parser.add_argument("--k1", required=True, type=int, help="ket label k1=2n1")
+    parser.add_argument(
+        "--p1", required=True, help="slot-1 BPZ/infinity momentum P1"
+    )
+    parser.add_argument("--p2", required=True, help="slot-2 momentum P2 at one")
+    parser.add_argument("--p3", required=True, help="slot-3 ket momentum P3")
+    parser.add_argument(
+        "--k1", required=True, type=int, help="slot-1 label k1=2n1"
+    )
     parser.add_argument(
         "--k2",
         required=True,
         type=int,
-        help="inserted label k2=2n2",
+        help="slot-2 label k2=2n2",
     )
-    parser.add_argument("--k3", required=True, type=int, help="bra label k3=2n3")
+    parser.add_argument(
+        "--k3", required=True, type=int, help="slot-3 label k3=2n3"
+    )
     parser.add_argument("--precision", type=int, default=50)
     return parser
 
@@ -474,10 +551,10 @@ def main() -> None:
     )
     digits = args.precision
     print(f"parity a = {data.parity}")
-    print(f"numerator = {mpmath.nstr(data.numerator, digits)}")
-    print(f"N_k1(P1) = {mpmath.nstr(data.ket_norm, digits)}")
-    print(f"N_k2(P2) = {mpmath.nstr(data.inserted_norm, digits)}")
-    print(f"N_k3(P3) = {mpmath.nstr(data.bra_norm, digits)}")
+    print(f"human rho-hat numerator = {mpmath.nstr(data.numerator, digits)}")
+    print(f"N_k1(P1) = {mpmath.nstr(data.slot1_norm, digits)}")
+    print(f"N_k2(P2) = {mpmath.nstr(data.slot2_norm, digits)}")
+    print(f"N_k3(P3) = {mpmath.nstr(data.slot3_norm, digits)}")
     print(f"B_a^2 = {mpmath.nstr(data.coefficient_squared, digits)}")
     print(
         "B_a (principal norm roots) = "
