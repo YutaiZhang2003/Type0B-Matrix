@@ -141,9 +141,13 @@ class TwoVirasoroFusionTests(unittest.TestCase):
     def test_human_note_trinion_order_and_normalization(self):
         with mpmath.workdps(self.precision):
             b = mpmath.mpf("1.17")
+            q = b + 1 / b
             p1 = mpmath.mpf("0.21")
             p2 = mpmath.mpf("-0.34")
             p3 = mpmath.mpf("0.46")
+            h1 = (q**2 / 4 - p1**2) / 2
+            h2 = (q**2 / 4 - p2**2) / 2
+            h3 = (q**2 / 4 - p3**2) / 2
 
             vacuum = ns_fusion_data(
                 b=b,
@@ -159,7 +163,7 @@ class TwoVirasoroFusionTests(unittest.TestCase):
             self.assert_mp_close(vacuum.numerator, 1)
             self.assert_mp_close(vacuum.coefficient_squared, 1)
 
-            one_bra_branch = ns_fusion_data(
+            one_slot3_branch = ns_fusion_data(
                 b=b,
                 p1=p1,
                 p2=p2,
@@ -169,53 +173,124 @@ class TwoVirasoroFusionTests(unittest.TestCase):
                 k3=1,
                 precision=self.precision,
             )
-            self.assertEqual(one_bra_branch.parity, 1)
-            self.assert_mp_close(one_bra_branch.numerator, 1)
+            self.assertEqual(one_slot3_branch.parity, 1)
+            self.assert_mp_close(one_slot3_branch.numerator, 1)
             self.assert_mp_close(
-                one_bra_branch.coefficient_squared,
+                one_slot3_branch.coefficient_squared,
                 1 / branch_norm(p3, 1, b, precision=self.precision),
             )
 
-            alpha2 = (b + 1 / b) / 2 + p2
-            expected_numerator = blow_up_factor(
-                alpha2,
-                1,
-                p3,
-                -1,
-                p1,
-                2,
-                b,
-                precision=self.precision,
-            )
-            data = ns_fusion_data(
+            gamma1 = q / 2 + p1
+            gamma2 = q / 2 - p2
+            gamma3 = q / 2 + p3
+
+            two_slot12 = ns_fusion_data(
                 b=b,
                 p1=p1,
                 p2=p2,
                 p3=p3,
-                k1=2,
-                k2=1,
-                k3=-1,
+                k1=1,
+                k2=-1,
+                k3=0,
                 precision=self.precision,
             )
-            self.assertEqual(data.parity, 0)
-            self.assert_mp_close(data.numerator, expected_numerator)
             self.assert_mp_close(
-                data.coefficient_squared,
+                two_slot12.numerator,
+                h1 + h2 - h3 - gamma1 * gamma2,
+            )
+
+            two_slot13 = ns_fusion_data(
+                b=b,
+                p1=p1,
+                p2=p2,
+                p3=p3,
+                k1=1,
+                k2=0,
+                k3=1,
+                precision=self.precision,
+            )
+            self.assert_mp_close(
+                two_slot13.numerator,
+                h1 - h2 + h3 - gamma1 * gamma3,
+            )
+
+            two_slot23 = ns_fusion_data(
+                b=b,
+                p1=p1,
+                p2=p2,
+                p3=p3,
+                k1=0,
+                k2=-1,
+                k3=1,
+                precision=self.precision,
+            )
+            self.assert_mp_close(
+                two_slot23.numerator,
+                h1 - h2 - h3 + gamma2 * gamma3,
+            )
+
+            three_slots = ns_fusion_data(
+                b=b,
+                p1=p1,
+                p2=p2,
+                p3=p3,
+                k1=1,
+                k2=-1,
+                k3=1,
+                precision=self.precision,
+            )
+            expected_human = (
+                h1
+                + h2
+                + h3
+                - mpmath.mpf("0.5")
+                - gamma1 * gamma2
+                + gamma1 * gamma3
+                + gamma2 * gamma3
+            )
+            self.assert_mp_close(three_slots.numerator, expected_human)
+            self.assert_mp_close(
+                three_slots.coefficient_squared,
                 ns_fusion_coefficient_squared(
                     b=b,
                     p1=p1,
                     p2=p2,
                     p3=p3,
-                    k1=2,
-                    k2=1,
-                    k3=-1,
+                    k1=1,
+                    k2=-1,
+                    k3=1,
                     precision=self.precision,
                 ),
             )
             self.assert_mp_close(
-                data.principal_coefficient**2,
-                data.coefficient_squared,
+                three_slots.principal_coefficient**2,
+                three_slots.coefficient_squared,
                 tolerance="1e-58",
+            )
+
+            paper_ratio = blow_up_factor(
+                q / 2 + p2,
+                -1,
+                p1,
+                1,
+                p3,
+                1,
+                b,
+                precision=self.precision,
+            )
+            self.assertGreater(abs(three_slots.numerator - paper_ratio), 0.1)
+            self.assertGreater(abs(three_slots.numerator + paper_ratio), 0.1)
+
+    def test_higher_human_branch_labels_are_not_silently_imported(self):
+        with self.assertRaises(NotImplementedError):
+            ns_fusion_data(
+                b=1.2,
+                p1=0.1,
+                p2=0.2,
+                p3=0.3,
+                k1=2,
+                k2=0,
+                k3=0,
             )
 
     def test_branch_labels_must_be_exact_integers(self):
@@ -253,17 +328,17 @@ class TwoVirasoroFusionTests(unittest.TestCase):
                 p1=mpmath.mpc(0, "0.23"),
                 p2=mpmath.mpc(0, "0.37"),
                 p3=mpmath.mpc(0, "0.41"),
-                k1=2,
+                k1=1,
                 k2=-1,
                 k3=1,
                 precision=self.precision,
             )
-            self.assertEqual(data.parity, 0)
+            self.assertEqual(data.parity, 1)
             for value in (
                 data.numerator,
-                data.ket_norm,
-                data.inserted_norm,
-                data.bra_norm,
+                data.slot1_norm,
+                data.slot2_norm,
+                data.slot3_norm,
                 data.coefficient_squared,
                 data.principal_coefficient,
             ):
@@ -274,7 +349,7 @@ class TwoVirasoroFusionTests(unittest.TestCase):
                 p1="0.23j",
                 p2="0.37i",
                 p3="0+0.41j",
-                k1=2,
+                k1=1,
                 k2=-1,
                 k3=1,
                 precision=self.precision,

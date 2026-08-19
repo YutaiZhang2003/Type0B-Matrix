@@ -288,6 +288,105 @@ def genus2_global_sl2_block_resummed(
     )
 
 
+def genus2_global_sl2_block_resummed_fp(
+    h1: complex,
+    h2: complex,
+    h3: complex,
+    q1: complex,
+    q2: complex,
+    q3: complex,
+    *,
+    tolerance: float = 1.0e-13,
+    max_endpoint_total: int = 52,
+) -> GlobalSL2Resummation:
+    r"""Fast double-precision form of the theta middle-edge resummation.
+
+    This is the bosonic component of the production String-MC theta global
+    block.  It uses the same exact middle-edge Gauss resummation as
+    :func:`genus2_global_sl2_block_resummed`, but evaluates ``hyp2f1`` in
+    ``mpmath.fp`` arithmetic and advances the two endpoint plumbing/norm
+    factors recursively.  The latter avoids rebuilding factorials and
+    Pochhammer symbols for every endpoint pair.
+
+    The high-precision routine remains the audit/fallback implementation.
+    """
+
+    if tolerance <= 0:
+        raise ValueError("tolerance must be positive")
+    max_endpoint_total = _validate_order(max_endpoint_total)
+    h1 = _as_complex(h1)
+    h2 = _as_complex(h2)
+    h3 = _as_complex(h3)
+    q1 = _as_complex(q1)
+    q2 = _as_complex(q2)
+    q3 = _as_complex(q3)
+    if any(abs(q) >= 1 for q in (q1, q2, q3)):
+        raise ValueError("global-block plumbing coordinates must satisfy |q_i| < 1")
+
+    # q^n/[n! (2h)_n] on the two unresummed endpoint edges.
+    endpoint1 = [1.0 + 0.0j]
+    endpoint3 = [1.0 + 0.0j]
+    for level in range(1, max_endpoint_total + 1):
+        endpoint1.append(
+            endpoint1[-1] * q1 / (level * (2.0 * h1 + level - 1.0))
+        )
+        endpoint3.append(
+            endpoint3[-1] * q3 / (level * (2.0 * h3 + level - 1.0))
+        )
+
+    total = 0.0 + 0.0j
+    last_shell = 0.0 + 0.0j
+    small_shells = 0
+    converged = False
+    used = 0
+    for endpoint_total in range(max_endpoint_total + 1):
+        shell = 0.0 + 0.0j
+        for i_level in range(endpoint_total + 1):
+            k_level = endpoint_total - i_level
+            s_ik = rho_lminus1_two_edge(
+                i_level, k_level, h1, h2, h3
+            )
+            a_ik = h2 + h3 + k_level - h1 - i_level
+            middle_family = complex(
+                mpmath.fp.hyp2f1(a_ik, a_ik, 2.0 * h2, q2)
+            )
+            shell += (
+                endpoint1[i_level]
+                * endpoint3[k_level]
+                * s_ik
+                * s_ik
+                * middle_family
+            )
+        if not (
+            math.isfinite(shell.real)
+            and math.isfinite(shell.imag)
+        ):
+            return GlobalSL2Resummation(
+                value=complex(total),
+                last_shell=complex(shell),
+                endpoint_total=endpoint_total,
+                converged=False,
+            )
+        total += shell
+        last_shell = shell
+        used = endpoint_total
+        scale = max(1.0, abs(total))
+        if endpoint_total >= 3 and abs(shell) <= tolerance * scale:
+            small_shells += 1
+        else:
+            small_shells = 0
+        if small_shells >= 3:
+            converged = True
+            break
+
+    return GlobalSL2Resummation(
+        value=complex(total),
+        last_shell=complex(last_shell),
+        endpoint_total=used,
+        converged=converged,
+    )
+
+
 def _certified_global_sl2_value(
     h1: complex,
     h2: complex,
@@ -296,7 +395,16 @@ def _certified_global_sl2_value(
     q2: complex,
     q3: complex,
 ) -> complex:
-    result = genus2_global_sl2_block_resummed(h1, h2, h3, q1, q2, q3)
+    try:
+        result = genus2_global_sl2_block_resummed_fp(
+            h1, h2, h3, q1, q2, q3
+        )
+    except (ArithmeticError, OverflowError, ValueError):
+        result = GlobalSL2Resummation(0.0j, 0.0j, 0, False)
+    if not result.converged:
+        result = genus2_global_sl2_block_resummed(
+            h1, h2, h3, q1, q2, q3
+        )
     if not result.converged:
         raise RuntimeError(
             "theta global block failed its pointwise endpoint-shell test: "
@@ -412,8 +520,20 @@ def b_square_rs_from_h(r: int, s: int, h: complex) -> complex:
     if r < 2 or s < 1:
         raise ValueError("c-recursion uses r >= 2 and s >= 1")
     h = _as_complex(h)
+    a_value = r * s - 1.0 + 2.0 * h
+    # On the analytic CCY branch the s=1 radical is exactly a_value.  Using
+    # the principal numerical square root instead changes it to |a_value|
+    # on the negative real axis and can spuriously return b^2=0.  These
+    # negative weights occur routinely in the second Virasoro factor of the
+    # double-Virasoro branching sum.
+    if s == 1:
+        return 2.0 * a_value / (1.0 - r * r)
     radical = (r - s) ** 2 + 4.0 * (r * s - 1.0) * h + 4.0 * h * h
-    return (r * s - 1.0 + 2.0 * h + cmath.sqrt(radical)) / (1.0 - r * r)
+    root = cmath.sqrt(radical)
+    numerator = a_value + root
+    if abs(numerator) <= 1.0e-12 * max(1.0, abs(a_value), abs(root)):
+        return (s * s - 1.0) / (root - a_value)
+    return numerator / (1.0 - r * r)
 
 
 def central_charge_from_b_square(b_square: complex) -> complex:
