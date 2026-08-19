@@ -161,14 +161,14 @@ We now generalize this $c$-recursion relation to superconformal blocks in $\math
 
 Apart from the bosonic moduli, one also needs to specify a spin structure to put a SCFT on a Riemann surface. A plumbing channel is specified by a choice of NS and R for each punctures, a modulus $q$ and a sign $\eta$ for each pair of plumbed punctures. Only NS and NS, R and R punctures are allowed to be plumbed together, and the NS/R configuration of punctured on each 3-punctured sphere must be (NS, NS, NS) or (NS, R, R). For genus-$g$ surface, there are $2^g$ choices of NS/R punctures and $2^g$ independent sign choices for each tube.
 
-In this section, we only consider the case where all puncture are NS, where the $c$-recursion relation is more or less parallel to the Virasoro case. The NS sector supervirasoro algebra is given by 
-
 
 Similar to the notation $L_{-A}\nu$, we will denote a NS superconformal primary by $\phi$, and its descendent by
 \ie
 \mathbf{L}_{-A}\phi \equiv L_{-n_1}\cdots L_{-n_\ell} G_{-r_1}\cdots G_{-r_p} \phi,\quad |A|\equiv \sum_{i=1}^\ell n_i + \sum_{j=1}^{p} r_j,\quad (-1)^A \equiv (-1)^{p}
 \fe
-where $n_1 \geq ... \geq n_\ell, r_1>...>r_p$. We will also take $\phi$ to be Grassmann even. \todo[inline]{Yutai: I do not know why we can choose the parity of phi in general. I would assume it to be generic.} In the language of 2D $\mathcal{N}=1$ superspace, one can pack $\phi$ and its level-$\frac{1}{2}$ descendent $\chi \equiv G_{-1/2}\phi$ in the primary superfield $\Phi(z,\theta)$, defined by
+where $n_1 \geq ... \geq n_\ell, r_1>...>r_p$. We will also take $\phi$ to be Grassmann even. \todo[inline]{Yutai: I do not know why we can choose the parity of phi in general. I would assume it to be generic.} 
+
+In the language of 2D $\mathcal{N}=1$ superspace, one can pack $\phi$ and its level-$\frac{1}{2}$ descendent $\chi \equiv G_{-1/2}\phi$ in the primary superfield $\Phi(z,\theta)$, defined by
 \ie
 \Phi(z,\theta) = \phi(z)+\theta \chi(z).
 \fe
@@ -198,6 +198,10 @@ by essentially normalizing
 The sign $(\pm)$ is here indicating that we use the operator order $\langle \xi_3\xi_2\xi_1\bar{\xi}_3\bar{\xi}_2\bar{\xi}_1 \rangle$ to define the $\rho$ on the RHS, which can differ from the operator order in LHS by a sign. Again, we denote $\rho_a(\xi_1, \xi_2, \xi_3)=\rho_a(\xi_1, \xi_2, \xi_3|1)$.
 
 The anti-holomorphic sector is entirely analogous to the holomorphic sector. We distinguish quantities in the anti-holomorphic sector by adding a tilde over them.
+The standard BPZ bilinear pairing in a superconformal field theory would factorize into holomorphic and antiholomorphic pieces as
+\ie
+\bpzbraket{ \mathbf{L}_{-A} \phi  \otimes \widetilde{\mathbf{L}}_{-\widetilde{A}} \widetilde{\phi} }{ \mathbf{L}_{-B} \phi \otimes  \widetilde{\mathbf{L}}_{-\widetilde{B}} \widetilde{\phi}} =(-1)^{(B+p_{\phi})(A+p_{\widetilde{\phi}})}\bpzbraket{\mathbf{L}_{-A} \phi}{\mathbf{L}_{-B} \phi } \times \bpzbraket{ \widetilde{\mathbf{L}}_{-\widetilde{A} }\widetilde{\phi}}{ \widetilde{\mathbf{L}}_{-\widetilde{B}}\widetilde{\phi}}.
+\fe
 
 
 \subsubsection*{Conformal Block Decomposition of Genus 2 Partition Function}
@@ -662,8 +666,8 @@ Normalizing $\chi_{rs}$ by taking the coefficient of $G_{-1/2}^{rs}\phi$ to be 1
 \fe
 The 3-point functions can be factorized as
 \ie
-\rho_a(\mathbf{L}_{-A}\chi_{rs} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) = (-1)^{rsE} \begin{cases} \rho_{a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^a(h_2, h_3),\quad rs\in 2\mathbb{Z}, \\ 
-\rho_{1-a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^{a}(h_2, h_3),\quad rs\in 2\mathbb{Z}+1,
+\rho_a(\mathbf{L}_{-A}\chi_{rs} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) = (-1)^{rsC} \begin{cases} \rho_{a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^a(h_3, h_2),\quad rs\in 2\mathbb{Z}, \\ 
+\rho_{1-a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^{a}(h_3, h_2),\quad rs\in 2\mathbb{Z}+1,
 \end{cases}
 \fe
 where the two fusion polynomials are given by
@@ -677,7 +681,7 @@ h_i=\frac{(b+b^{-1})^2-\lambda_i^2}{8}.
 \fe
 Plugging these results in the pole $\mathbf{W}^{(1)}_{a,rs}$, one then have
 \ie
-\mathbf{W}^{(1)}_{a,rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} \mathbf{A}_{rs}^c(h) q_1^{rs/2}\eta_1^{rs} [\mathbf{P}_{rs}^a(h_2, h_3)]^2\\
+\mathbf{W}^{(1)}_{a,rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} \mathbf{A}_{rs}^c(h) q_1^{rs/2}\eta_1^{rs} [\mathbf{P}_{rs}^a(h_3, h_2)]^2\\
 &\quad \times \begin{cases}
 \mathbf{F}_{a}(h_1 \rightarrow h_1+\tfrac{rs}{2}, c\rightarrow c_{rs}),\quad rs\in 2\mathbb{Z}, & rs\in 2\mathbb{Z},\\
 \mathbf{F}_{1-a}(h_1 \rightarrow h_1+\tfrac{rs}{2}, c\rightarrow c_{rs},\eta_{2,3}\rightarrow -\eta_{2,3}),& rs\in 2\mathbb{Z}+1,
@@ -1093,9 +1097,9 @@ In the above definition, each sum resolves the $(-1)^{p_{\mathsf{SCA}}\cdot p_{\
 
 For states $u\otimes x$, the 3-point function can be factorized into
 \ie
-& \hat{\rho}_a\left(u_1 \otimes x_1, u_2 \otimes x_2, u_3 \otimes x_3\right)=(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|} \rho^{\mathsf{F}}(u_1, u_2, u_3) \rho_a(x_1, x_2, x_3),
+& \hat{\rho}_a\left(u_1 \otimes x_1, u_2 \otimes x_2, u_3 \otimes x_3\right)=(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|+a |u_3|} \rho^{\mathsf{F}}(u_1, u_2, u_3) \rho_a(x_1, x_2, x_3),
 \fe
-where $\rho^{\mathsf{F}}(u_1, u_2, u_3)$ is the 3-point function in the free fermion theory. The sign $(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|}$ comes from moving operator order, and the additional sign $(-1)^{a|u_3|}$ comes from Importantly, $\rho^{\mathsf{F}}$ is only nonzero if $\mathsf{A}+\mathsf{B}+\mathsf{C}\equiv 0$ mod 2. If we define the free fermion block as
+where $\rho^{\mathsf{F}}(u_1, u_2, u_3)$ is the normalized 3-point function in the free fermion theory.  The sign $(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|+a \left|u_3\right|}$ comes from moving operator order. Importantly, $\rho^{\mathsf{F}}$ is only nonzero if $\mathsf{A}+\mathsf{B}+\mathsf{C}\equiv 0$ mod 2. If we define the free fermion block as
 \ie
 \mathbf{F}^{\mathsf{F}}(q_i, \eta_i) =& \sum_{\substack{\mathsf{A}, \mathsf{B}, \mathsf{C}\\(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}=1}}(-1)^{\mathsf{AB}+\mathsf{AC}+\mathsf{BC}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\left[{\rho}^{\mathsf{F}}(\Psi_{-\mathsf{A}}\mathbf{1}_\mathsf{F}, \Psi_{-\mathsf{B}}\mathbf{1}_\mathsf{F}, \Psi_{-\mathsf{C}}\mathbf{1}_\mathsf{F})\right]^2,
 \fe
@@ -1219,15 +1223,15 @@ In our convention, their result reads
 \ie
 \hat{\rho}_a&(v_{1,n_1},v_{2,n_2},v_{3,n_3}) = (-1)^{n_1+n_2+n_3}i^a 2^{-\left(n_1+n_2+n_3\right)}  \\
 &\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right)\ell\left(\tfrac{Q}{2}-P_1+P_2+P_3, 2(-n_1+n_2+n_3)\right)\\
-&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right) \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right).
+&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2-P_3, 2(n_1+n_2-n_3)\right) \ell\left(\tfrac{Q}{2}-P_1+P_2-P_3, 2(-n_1+n_2-n_3)\right).
 \fe
-For $(-1)^{2(n_1+n_2+n_3)}\neq (-1)^a$, the 3-point function is 0 by definition. Again, we should emphasize that this result only works for positive $n_i$. For negative $n_i$, one should use the reflection relation $v_n(P)=v_{-n}(P)$ to convert it to a positive value. The values of $P_i$ is the same in the definition of $v_n$. This formula has been checked directly against low-level $(n=0,1,\frac{1}{2})$ 3-point functions.
+For $(-1)^{2(n_1+n_2+n_3)}\neq (-1)^a$, the 3-point function is 0 by definition. Again, we should emphasize that this result only works for positive $n_i$. For negative $n_i$, one should use the reflection relation $v_n(P)=v_{-n}(-P)$ to convert it to a positive value. The values of $P_i$ is the same in the definition of $v_n$. This formula has been checked directly against low-level $(n=0,1,\frac{1}{2})$ 3-point functions.
 
 Putting everything together, we arrive at the final form for the NS branching coefficient:
 \ie
 B_a&(h_1, h_2, h_3;n_1, n_2, n_3) = \frac{(-i)^a}{\prod_{i=1}^3\sqrt{\ell(2P_i, 4n_i)\ell(Q+2P_i, 4n_i)}}\\
 &\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right)\ell\left(\tfrac{Q}{2}-P_1+P_2+P_3, 2(-n_1+n_2+n_3)\right)\\
-&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right) \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right).
+&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2-P_3, 2(n_1+n_2-n_3)\right) \ell\left(\tfrac{Q}{2}-P_1+P_2-P_3, 2(-n_1+n_2-n_3)\right).
 \fe
 
 
@@ -1253,12 +1257,12 @@ the ramond $\mathsf{SCA}_0\otimes \mathsf{F}_0$ block is defined as
 &\quad\quad \times \hat{\rho}_f^{(\eta)}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
 &\quad\quad \times \hat{\rho}_f^{(\eta')}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B'}w^{\alpha'}_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}} \otimes\mathbb{L}_{-C'}w^{\gamma'}_3)
 \fe
-where $\boldsymbol{\Psi}_{-\mathsf{B}}$ denotes a chain of R-sector fermion lowering operators (there are no \texttt{mathbb} version of $\Psi$, sadly). Note that $\boldsymbol\Psi_{-\mathsf{A}}$ does not contain the fermion zero mode $\psi_0$. We have used $\langle u^\mathsf{a}|\boldsymbol\Psi_{-\mathsf{A}}^\dagger \boldsymbol\Psi_{-\mathsf{B}}|u^{\mathsf{b}}\rangle=(-1)^{\mathsf{A}+\mathsf{a}}\delta_{\mathsf{AB}}\delta^{\mathsf{a}\mathsf{b}}$, as well as the convention $\langle u_1\otimes x_1| u_2\otimes x_2 \rangle=\langle u_1|u_2\rangle \langle x_1|x_2\rangle$ without the additional operator exchanging sign. The shorthand $\text{sgn}$ is defined such that ${\text{sgn}(A)}=A+\mathsf{A} \mod 2$ for NS sector and ${\text{sgn}(B)}=B+\mathsf{B}+\mathsf{b}+|\alpha| \mod 2$ for R sector. We have also used the fact that the fermion correlator is 0 unless $(-1)^{\mathsf{A+B+C+b+c}}=1$.
+where $\boldsymbol{\Psi}_{-\mathsf{B}}$ denotes a chain of R-sector fermion lowering operators (there are no \texttt{mathbb} version of $\Psi$, sadly). Note that $\boldsymbol\Psi_{-\mathsf{A}}$ does not contain the fermion zero mode $\psi_0$. We have used $\langle u^\mathsf{a}|\boldsymbol\Psi_{-\mathsf{A}}^\dagger \boldsymbol\Psi_{-\mathsf{B}}|u^{\mathsf{b}}\rangle=(-1)^{\mathsf{A}+\mathsf{a}}\delta_{\mathsf{AB}}\delta^{\mathsf{a}\mathsf{b}}$, as well as $\langle u_1\otimes x_1|(-1)^{p_{\mathsf{SCA}} \cdot p_{F}}| u_2\otimes x_2 \rangle=\langle u_1|u_2\rangle \langle x_1|x_2\rangle$ without the additional operator exchanging sign. The shorthand $\text{sgn}$ is defined such that ${\text{sgn}(A)}=A+\mathsf{A} \mod 2$ for NS sector and ${\text{sgn}(B)}=B+\mathsf{B}+\mathsf{b}+|\alpha| \mod 2$ for R sector. We have also used the fact that the fermion correlator is 0 unless $(-1)^{\mathsf{A+B+C+b+c}}=1$.
 
 The 3-point function can be factorized as (we treat this formula as the definition of $\hat{\rho}^{(\eta)}_f$)
 \ie
 \hat{\rho}_f^{(\eta)}&(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
-&=(-1)^{A\mathsf{A}+(B+|\alpha|)(\mathsf{C+c})}\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}) {\rho}_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3) 
+&=(-1)^{A\mathsf{A}+(B+|\alpha|)(\mathsf{C+c})+f(\mathsf{C+c})}\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}) {\rho}_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3) 
 \fe
 Therefore, if we define the fermion Ramond block as
 \ie
@@ -1278,7 +1282,7 @@ Using the decomposition \eqref{Rbranching}, one can see that every state in $\ma
 \widehat{\mathbb{F}}^{(\eta, \eta')}_f&(h_1, \beta_2, \beta_3, c) = \sum_{\substack{
   |A|=|A'|, |B|=|B'|, |C|=|C'|\\
   |D|=|D'|, |E|=|E'|, |F|=|F'|\\
-  n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\
+  n_1\in \frac{1}{2}\mathbb{Z},~ n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\
   (-1)^{2n_1 + \alpha_2 + \alpha_3}=(-1)^f
   }} q_1^{2n_1^2+|A|+|B|}q_2^{2n_2^2-\frac{1}{8}+|C|+|D|}q_3^{2n_3^2-\frac{1}{8}+|E|+|F|}\eta_1^{2n_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
 &\times (-1)^{2n_1\alpha_2+2n_1\alpha_3+\alpha_2\alpha_3} \frac{(G_{h_{1,n_1}^{(1)}})^{AA'}(G_{h_{1,n_1}^{(2)}})^{BB'}(G_{h_{2,n_2}^{(1)}})^{CC'}(G_{h_{2,n_2}^{(2)}})^{DD'}(G_{h_{3,n_3}^{(1)}})^{EE'}(G_{h_{3,n_3}^{(2)}})^{FF'}}{\|v_{1,n_1}\|^2\|v_{2,n_2}^{\alpha_2}\|^2\|v_{3,n_3}^{\alpha_3}\|^2}\\
@@ -1291,7 +1295,7 @@ where we used the fact that $u^{\mathsf{a}}$ has conformal weight $\frac{1}{16}$
 \fe
 and therefore,
 \ie
-\widehat{\mathbb{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}\\
+\widehat{\mathbb{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{n_1 \in \frac{1}{2} \mathbb{Z}, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
 &\quad \times (-1)^{2n_1\alpha_2+2n_1\alpha_3+\alpha_2\alpha_3} \mathbb{B}^{(\eta)}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) \mathbb{B}^{(\eta')}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3)\\
 &\quad \times F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}),
 \fe
