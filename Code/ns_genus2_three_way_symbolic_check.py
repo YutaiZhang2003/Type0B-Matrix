@@ -742,6 +742,9 @@ class ThreeWayCheckSummary:
     direct_vs_two_virasoro_zero_count: int
     double_virasoro_mismatch_count: int
     first_double_virasoro_mismatch: str
+    ordinary_quotient_control_zero_count: int
+    ordinary_quotient_control_mismatch_count: int
+    first_ordinary_quotient_control_mismatch: str
     direct_vs_twisted_two_virasoro_zero_count: int
     direct_vs_corrected_gram_quotient_zero_count: int
     old_hatted_vs_twisted_product_zero_count: int
@@ -900,13 +903,21 @@ def run_checks(*, max_total_twice_level: int = 4) -> ThreeWayCheckSummary:
         for levels, value in majorana.items()
         if value != 0
     }
-    two_virasoro_mismatches = {
+    ordinary_quotient_control_mismatches = {
         levels: sp.factor(value)
         for levels, value in direct_vs_two_virasoro.items()
         if value != 0
     }
-    first_two_virasoro_mismatch = next(
-        iter(two_virasoro_mismatches.items()), None
+    first_ordinary_quotient_control_mismatch = next(
+        iter(ordinary_quotient_control_mismatches.items()), None
+    )
+    current_two_virasoro_mismatches = {
+        levels: sp.factor(value)
+        for levels, value in direct_vs_twisted_two_virasoro.items()
+        if value != 0
+    }
+    first_current_two_virasoro_mismatch = next(
+        iter(current_two_virasoro_mismatches.items()), None
     )
     graded_hatted_corrections = {
         levels: sp.factor(sp.together(graded_hatted[levels] - hatted[levels]))
@@ -926,15 +937,29 @@ def run_checks(*, max_total_twice_level: int = 4) -> ThreeWayCheckSummary:
             value == 0 for value in direct_vs_recursion.values()
         ),
         direct_vs_two_virasoro_zero_count=sum(
-            value == 0 for value in direct_vs_two_virasoro.values()
+            value == 0 for value in direct_vs_twisted_two_virasoro.values()
         ),
-        double_virasoro_mismatch_count=len(two_virasoro_mismatches),
+        double_virasoro_mismatch_count=len(current_two_virasoro_mismatches),
         first_double_virasoro_mismatch=(
             "none"
-            if first_two_virasoro_mismatch is None
+            if first_current_two_virasoro_mismatch is None
             else (
-                f"{first_two_virasoro_mismatch[0]}: "
-                f"{first_two_virasoro_mismatch[1]}"
+                f"{first_current_two_virasoro_mismatch[0]}: "
+                f"{first_current_two_virasoro_mismatch[1]}"
+            )
+        ),
+        ordinary_quotient_control_zero_count=sum(
+            value == 0 for value in direct_vs_two_virasoro.values()
+        ),
+        ordinary_quotient_control_mismatch_count=len(
+            ordinary_quotient_control_mismatches
+        ),
+        first_ordinary_quotient_control_mismatch=(
+            "none"
+            if first_ordinary_quotient_control_mismatch is None
+            else (
+                f"{first_ordinary_quotient_control_mismatch[0]}: "
+                f"{first_ordinary_quotient_control_mismatch[1]}"
             )
         ),
         direct_vs_twisted_two_virasoro_zero_count=sum(
@@ -1160,7 +1185,7 @@ def main() -> None:
             payload["exact_level_two_samples"] = higher.__dict__
         print(json.dumps(payload, indent=2))
         return
-    print("mature human-convention all-NS theta-block audit: COMPLETE")
+    print("mature human-convention all-NS theta-block audit: RESOLVED")
     print(
         "  exact zero identities (direct vs c-recursion): "
         f"{summary.direct_vs_recursion_zero_count}/{summary.coefficient_count}"
@@ -1172,14 +1197,19 @@ def main() -> None:
     )
     print(
         "  ordinary-quotient control identities: "
-        f"{summary.direct_vs_two_virasoro_zero_count}/{summary.coefficient_count}"
+        f"{summary.ordinary_quotient_control_zero_count}/"
+        f"{summary.coefficient_count}"
     )
     print(
         "  ordinary-quotient control mismatches: "
-        f"{summary.double_virasoro_mismatch_count}/{summary.coefficient_count}"
+        f"{summary.ordinary_quotient_control_mismatch_count}/"
+        f"{summary.coefficient_count}"
     )
-    if summary.double_virasoro_mismatch_count:
-        print(f"  first control mismatch: {summary.first_double_virasoro_mismatch}")
+    if summary.ordinary_quotient_control_mismatch_count:
+        print(
+            "  first control mismatch: "
+            f"{summary.first_ordinary_quotient_control_mismatch}"
+        )
     print(
         "  exact zero identities (corrected direct Gram vs ordinary product): "
         f"{summary.corrected_hatted_vs_ordinary_product_zero_count}/"

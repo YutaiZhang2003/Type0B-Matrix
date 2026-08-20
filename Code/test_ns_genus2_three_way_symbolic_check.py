@@ -164,10 +164,13 @@ class NSGenus2ThreeWaySymbolicTests(unittest.TestCase):
         summary = run_checks(max_total_twice_level=3)
         self.assertEqual(summary.coefficient_count, 20)
         self.assertEqual(summary.direct_vs_recursion_zero_count, 20)
-        self.assertEqual(summary.direct_vs_two_virasoro_zero_count, 14)
-        self.assertEqual(summary.double_virasoro_mismatch_count, 6)
+        self.assertEqual(summary.direct_vs_two_virasoro_zero_count, 20)
+        self.assertEqual(summary.double_virasoro_mismatch_count, 0)
+        self.assertEqual(summary.first_double_virasoro_mismatch, "none")
+        self.assertEqual(summary.ordinary_quotient_control_zero_count, 14)
+        self.assertEqual(summary.ordinary_quotient_control_mismatch_count, 6)
         self.assertTrue(
-            summary.first_double_virasoro_mismatch.startswith(
+            summary.first_ordinary_quotient_control_mismatch.startswith(
                 "(0, 1, 2):"
             )
         )

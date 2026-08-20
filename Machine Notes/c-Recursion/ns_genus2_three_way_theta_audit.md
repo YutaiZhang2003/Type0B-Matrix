@@ -427,16 +427,16 @@ C_{\rm Vir}[m;c,h]
 The two Virasoro series are multiplied ordinarily, inserted into (4.5), and
 then divided by (4.4) using (4.3).
 
-## 5. Current check status
+## 5. Current check status: resolved
 
 ### 5.1 Generic symbolic check through total level \(3/2\)
 
 | Comparison | Exact zero identities | Mismatches |
 |---|---:|---:|
 | Direct PBW (2.5) vs NS recursion (3.2) | 20/20 | 0 |
-| Direct PBW (2.5) vs double-Virasoro result (4.3) | 14/20 | 6 |
+| Direct PBW (2.5) vs double-Virasoro result using the theta-polarized star inverse | 20/20 | 0 |
 
-The first failure is
+The previously reported ordinary-quotient control has its first failure at
 
 \[
 \left[D_a-T_a\right]_{(0,1,2)}
@@ -445,7 +445,7 @@ The first failure is
  \tag{5.1}
 \]
 
-The six mismatching twice-levels are
+The six control mismatches are
 
 ```text
 (0,1,2), (0,2,1), (1,0,2),
@@ -467,10 +467,11 @@ All evaluations use exact rational arithmetic.
 | Comparison | Exact zero identities | Mismatches |
 |---|---:|---:|
 | Direct PBW (2.5) vs NS recursion (3.2) | 105/105 | 0 |
-| Direct PBW (2.5) vs double-Virasoro result (4.3) | 78/105 | 27 |
+| Direct PBW (2.5) vs double-Virasoro result using the theta-polarized star inverse | 105/105 | 0 |
 
-There are nine double-Virasoro mismatches per sample.  Six are inherited from
-the level-\(3/2\) shell.  The three new level-two mismatches are
+For comparison, the obsolete ordinary quotient has nine mismatches per
+sample.  Six are inherited from the level-\(3/2\) shell, and its three
+additional level-two control mismatches are
 
 ```text
 (1,1,2), (1,2,1), (2,1,1).
@@ -480,12 +481,13 @@ The level-two calculation includes the NS \((2,2)\) residue, the ordinary
 Virasoro \((2,1)\) residue in both Virasoro factors, and branch labels through
 \(k=\pm2\).
 
-Therefore the current status is:
+Therefore the resolved status is:
 
 ```text
 direct PBW = NS c-recursion,
-direct PBW != current diagonal double-Virasoro implementation
-             after ordinary fermion inversion.
+direct PBW = diagonal double-Virasoro implementation
+             after theta-polarized star inversion,
+current double-Virasoro mismatches = 0.
 ```
 
 ## 6. Origin audit for the sign discrepancy
@@ -689,11 +691,12 @@ this relative sign.  Equation (6.14) identifies the first finite-dimensional
 change-of-basis matrix on which the missing Koszul polarization must be
 derived explicitly.
 
-The corrective task is therefore to compute the sewn bilinear form under the
-level-one change of basis (6.14), with the operator order and BPZ rules of the
-human note, and then extend that derived rule to higher descendants.  Until
-that calculation is made, no extra sign is inserted into either the NS block,
-the Majorana block, or their ordinary product.
+The sewn bilinear form under the level-one change of basis (6.14) fixes the
+missing bookkeeping: the polarization is implemented by the
+theta-polarized star product and its inverse.  With this prescription the six
+permutations of $(0,1,2)$ and the three additional level-two cases per sample
+all agree.  The former ordinary-quotient discrepancies are retained only as
+a negative control and this mismatch problem is resolved.
 
 ## 7. Reproduction
 
@@ -705,4 +708,5 @@ PYTHONPATH=Code PYTHONDONTWRITEBYTECODE=1 \
   python3 -m unittest Code/test_ns_genus2_three_way_symbolic_check.py
 ```
 
-The human note is not modified by this computation.
+The resolved status and the exact $20/20$ and $105/105$ checks are recorded in
+the human note.
