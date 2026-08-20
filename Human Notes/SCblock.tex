@@ -161,14 +161,14 @@ We now generalize this $c$-recursion relation to superconformal blocks in $\math
 
 Apart from the bosonic moduli, one also needs to specify a spin structure to put a SCFT on a Riemann surface. A plumbing channel is specified by a choice of NS and R for each punctures, a modulus $q$ and a sign $\eta$ for each pair of plumbed punctures. Only NS and NS, R and R punctures are allowed to be plumbed together, and the NS/R configuration of punctured on each 3-punctured sphere must be (NS, NS, NS) or (NS, R, R). For genus-$g$ surface, there are $2^g$ choices of NS/R punctures and $2^g$ independent sign choices for each tube.
 
-In this section, we only consider the case where all puncture are NS, where the $c$-recursion relation is more or less parallel to the Virasoro case. The NS sector supervirasoro algebra is given by 
-
 
 Similar to the notation $L_{-A}\nu$, we will denote a NS superconformal primary by $\phi$, and its descendent by
 \ie
 \mathbf{L}_{-A}\phi \equiv L_{-n_1}\cdots L_{-n_\ell} G_{-r_1}\cdots G_{-r_p} \phi,\quad |A|\equiv \sum_{i=1}^\ell n_i + \sum_{j=1}^{p} r_j,\quad (-1)^A \equiv (-1)^{p}
 \fe
-where $n_1 \geq ... \geq n_\ell, r_1>...>r_p$. We will also take $\phi$ to be Grassmann even. \todo[inline]{Yutai: I do not know why we can choose the parity of phi in general. I would assume it to be generic.} In the language of 2D $\mathcal{N}=1$ superspace, one can pack $\phi$ and its level-$\frac{1}{2}$ descendent $\chi \equiv G_{-1/2}\phi$ in the primary superfield $\Phi(z,\theta)$, defined by
+where $n_1 \geq ... \geq n_\ell, r_1>...>r_p$. We will also take $\phi$ to be Grassmann even. \todo[inline]{Yutai: I do not know why we can choose the parity of phi in general. I would assume it to be generic.} 
+
+In the language of 2D $\mathcal{N}=1$ superspace, one can pack $\phi$ and its level-$\frac{1}{2}$ descendent $\chi \equiv G_{-1/2}\phi$ in the primary superfield $\Phi(z,\theta)$, defined by
 \ie
 \Phi(z,\theta) = \phi(z)+\theta \chi(z).
 \fe
@@ -198,11 +198,15 @@ by essentially normalizing
 The sign $(\pm)$ is here indicating that we use the operator order $\langle \xi_3\xi_2\xi_1\bar{\xi}_3\bar{\xi}_2\bar{\xi}_1 \rangle$ to define the $\rho$ on the RHS, which can differ from the operator order in LHS by a sign. Again, we denote $\rho_a(\xi_1, \xi_2, \xi_3)=\rho_a(\xi_1, \xi_2, \xi_3|1)$.
 
 The anti-holomorphic sector is entirely analogous to the holomorphic sector. We distinguish quantities in the anti-holomorphic sector by adding a tilde over them.
+The standard BPZ bilinear pairing in a superconformal field theory would factorize into holomorphic and antiholomorphic pieces as
+\ie
+\bpzbraket{ \mathbf{L}_{-A} \phi  \otimes \widetilde{\mathbf{L}}_{-\widetilde{A}} \widetilde{\phi} }{ \mathbf{L}_{-B} \phi \otimes  \widetilde{\mathbf{L}}_{-\widetilde{B}} \widetilde{\phi}} =(-1)^{(B+p_{\phi})(\widetilde{A}+p_{\widetilde{\phi}})}\bpzbraket{\mathbf{L}_{-A} \phi}{\mathbf{L}_{-B} \phi } \times \bpzbraket{ \widetilde{\mathbf{L}}_{-\widetilde{A} }\widetilde{\phi}}{ \widetilde{\mathbf{L}}_{-\widetilde{B}}\widetilde{\phi}}.
+\fe
 
 
-\subsubsection*{Conformal Block Decomposition}
+\subsubsection*{Conformal Block Decomposition of Genus 2 Partition Function}
 
-For illustration, we consider a 2d \(\mathcal N=(1,1)\) superconformal field theory and derive the conformal-block decomposition of its genus-two partition function. We work in the theta-graph plumbing channel, taking all three tubes to have (NS,NS) spin structure in both the holomorphic and anti-holomorphic sectors. As we will see, the fermionic nature of the super-Virasoro generators \(G_r\) introduces additional signs that obstruct a naive conformal-block decomposition.
+For illustration, we consider a 2d \(\mathcal N=(1,1)\) superconformal field theory and derive the conformal-block decomposition of its genus-two partition function. The final result present a nice holomorphic factorialization structure after keeping track of the signs in the computation.
 
 Let $\mathcal{O}_i(z,\bar{z})$ be the superconformal primary operator with conformal weight $(h_i,\tilde{h}_i)$. In the following derivation, for convenience, we will assume $\mathcal{O}_i$ to be orthogonal to each other, with
 \ie
@@ -220,9 +224,9 @@ with $\phi$ the holomorphic superconformal primary with parity $p_i$ and  $\wide
 \fe
 The parity of $\mathcal{O}_i$ is $p_i+\tilde{p}_i$. 
 
-In the theta plumbing channel, the genus-two partition function \(Z_{g=2}\) has a prescription
+Consider the genus-two partition function \(Z_{g=2}\). We work in the theta-graph plumbing channel, taking all three tubes to have (NS,NS) spin structure in both the holomorphic and anti-holomorphic sectors. In the theta plumbing channel, the genus-two partition function \(Z_{g=2}\) has a prescription
 \ie
-Z_{g=2}
+Z^{\Theta}_{g=2}
 ={}&
 \sum_{\mathcal{O}_1,\mathcal{O}_2,\mathcal{O}_3}
 \sum_{\substack{
@@ -272,7 +276,7 @@ q_3^{|E|}\eta_3^E
 \mathbf{L}_{-F} \widetilde{\mathbf{L}}_{-\widetilde F}\mathcal{O}_3
 \right\rangle\right.
 \fe
-The sign in the sum comes from reordering the operators into the prescription of the matrix element. The gram matrix is defined by
+In this prescription, we need to choose the Weyl frame to be the one defined by theta channel plumbing. The sign in the sum comes from reordering the operators into the prescription of the matrix element. The gram matrix is defined by
 \ie
 (\mathbb{G}_i)_{ A\widetilde A;B\widetilde B}
 &\equiv
@@ -287,9 +291,9 @@ The sign in the sum comes from reordering the operators into the prescription of
 }
 \fe
 It can be factorized into the holomorphic and anti-holomorphic pieces as
-\ie
+\ie\label{eq: Gram_Factorialization}
 (\mathbb{G}_i)_{ A\widetilde A;B\widetilde B}&= D_i
-(-1)^{(\widetilde A+ \tilde{p}_1)  (B+p_1)+ p_1\tilde{p}_1}
+(-1)^{(\widetilde A+ \tilde{p}_i)  (B+p_i)+ p_i\tilde{p}_i}
 (\mathbf{G}_{h_i})_{AB}
 (\widetilde{\mathbf{G}}_{\widetilde h_i})_
 {\widetilde A\widetilde B}.
@@ -434,7 +438,7 @@ K
 \fe
 Define the NS superconformal block by
 \ie \label{NSblock}
-\mathbf{F}_a(h_1, h_2, h_3, c)= & \sum_{|A|=|B|,|C|=|D|,|E|=|F|, (-1)^{A+C+E}=(-1)^a} q_1^{|A|}\eta_1^A q_2^{|C|} \eta_2^C q_3^{|E|} \eta_3^E \mathbf{G}_{h_1}^{A B} \mathbf{G}_{h_2}^{C D} \mathbf{G}_{h_3}^{E F} \\
+\mathbf{F}^{\Theta}_a(h_1, h_2, h_3, c)= & \sum_{|A|=|B|,|C|=|D|,|E|=|F|, (-1)^{A+C+E}=(-1)^a} q_1^{|A|}\eta_1^A q_2^{|C|} \eta_2^C q_3^{|E|} \eta_3^E \mathbf{G}_{h_1}^{A B} \mathbf{G}_{h_2}^{C D} \mathbf{G}_{h_3}^{E F} \\
 & \times (-1)^{K}\rho_a(\mathbf{L}_{-A} \phi_1, \mathbf{L}_{-C} \phi_2, \mathbf{L}_{-E} \phi_3) \rho_a(\mathbf{L}_{-B} \phi_1, \mathbf{L}_{-D} \phi_2, \mathbf{L}_{-F} \phi_3) ,
 \fe
 and analogously the anti-holomorphic block $\widetilde{F}_a$. The genus 2 partition function then reduces to
@@ -442,6 +446,197 @@ and analogously the anti-holomorphic block $\widetilde{F}_a$. The genus 2 partit
 Z_{g=2} = \sum_{\mathcal{O}_1,\mathcal{O}_2,\mathcal{O}_3} \sum_{a=0,1}  \left(C^{(a)}_{123} \right)^2(-1)^a \prod_{i=1}^{3}
 q_i^{h_i}\widetilde q_i^{\widetilde h_i}F_a(h_1, h_2, h_3, c) \widetilde{F}_a (\tilde{h}_1,\tilde{h}_2, \tilde{h}_3, \tilde{c}).
 \fe
+
+We can also compute the genus 2 partition function in the glass channel. It is given by the following prescription
+\ie
+Z^{Glass}_{g=2}
+={}&
+\sum_{\mathcal{O}_1,\mathcal{O}_2,\mathcal{O}_3}
+\sum_{\substack{
+|A|=|B|,\ |C|=|D|,\ |E|=|F|\\
+|\widetilde A|=|\widetilde B|,\ 
+|\widetilde C|=|\widetilde D|,\ 
+|\widetilde E|=|\widetilde F|
+}}
+\prod_{i=1}^{3}
+q_i^{h_i}\widetilde q_i^{\widetilde h_i}
+\times
+q_1^{|A|}\eta_1^A
+q_2^{|C|}\eta_2^C
+q_3^{|E|}\eta_3^E
+\widetilde q_1^{|\widetilde A|}
+\widetilde\eta_1^{\widetilde A}
+\widetilde q_2^{|\widetilde C|}
+\widetilde\eta_2^{\widetilde C}
+\widetilde q_3^{|\widetilde E|}
+\widetilde\eta_3^{\widetilde E}
+\\
+&\times
+(-1)^{
+(E+\widetilde E+p_3+\widetilde p_3)
+\left[
+(A+\widetilde A+p_1+\widetilde p_1)
++
+(C+\widetilde C+p_2+\widetilde p_2)
+\right]
+}
+\\
+&\times
+(\mathbb{G}_1)^{A\widetilde A;B\widetilde B}
+(\mathbb{G}_2)^{C\widetilde C;D\widetilde D}
+(\mathbb{G}_3)^{E\widetilde E;F\widetilde F}
+\\
+&\times
+\left\langle\!\left\langle
+\mathbf{L}_{-A} \widetilde{\mathbf{L}}_{-\widetilde A}\mathcal{O}_1
+\middle|
+\mathbf{L}_{-E} \widetilde{\mathbf{L}}_{-\widetilde E}\mathcal{O}_3(1,1)
+\middle|
+\mathbf{L}_{-B} \widetilde{\mathbf{L}}_{-\widetilde B}\mathcal{O}_1
+\right\rangle\right.
+\times
+\left\langle\!\left\langle
+\mathbf{L}_{-C} \widetilde{\mathbf{L}}_{-\widetilde C}\mathcal{O}_2
+\middle|
+\mathbf{L}_{-F} \widetilde{\mathbf{L}}_{-\widetilde F}\mathcal{O}_3(1,1)
+\middle|
+\mathbf{L}_{-D} \widetilde{\mathbf{L}}_{-\widetilde D}\mathcal{O}_2
+\right\rangle\right.
+\fe
+The gram matrix factorize in the same way as \eqref{eq: Gram_Factorialization}. The three point function would factorize as
+\ie
+&\left\langle\!\left\langle
+\mathbf{L}_{-A}
+\widetilde{\mathbf{L}}_{-\widetilde A}\mathcal{O}_1
+\middle|
+\mathbf{L}_{-E}
+\widetilde{\mathbf{L}}_{-\widetilde E}\mathcal{O}_3(1,1)
+\middle|
+\mathbf{L}_{-B}
+\widetilde{\mathbf{L}}_{-\widetilde B}\mathcal{O}_1
+\right\rangle\right.
+\\
+&\quad\times
+\left\langle\!\left\langle
+\mathbf{L}_{-C}
+\widetilde{\mathbf{L}}_{-\widetilde C}\mathcal{O}_2
+\middle|
+\mathbf{L}_{-F}
+\widetilde{\mathbf{L}}_{-\widetilde F}\mathcal{O}_3(1,1)
+\middle|
+\mathbf{L}_{-D}
+\widetilde{\mathbf{L}}_{-\widetilde D}\mathcal{O}_2
+\right\rangle\right.
+\\
+={}&
+(-1)^{
+p_1\widetilde p_1+p_2\widetilde p_2+p_3\widetilde p_3
++(A+p_1+a)(\widetilde A+\widetilde p_1+a)
++(C+p_2+a)(\widetilde C+\widetilde p_2+a)
+}
+D_1D_2D_3
+\left(C_{131}^{(a)}C_{232}^{(a)}\right)
+\\
+&\quad\times
+\rho_a\!\left(
+\mathbf{L}_{-A}\phi_1,
+\mathbf{L}_{-E}\phi_3,
+\mathbf{L}_{-B}\phi_1
+\right)
+\widetilde{\rho}_a\!\left(
+\widetilde{\mathbf{L}}_{-\widetilde A}\widetilde{\phi}_1,
+\widetilde{\mathbf{L}}_{-\widetilde E}\widetilde{\phi}_3,
+\widetilde{\mathbf{L}}_{-\widetilde B}\widetilde{\phi}_1
+\right)
+\\
+&\quad\times
+\rho_a\!\left(
+\mathbf{L}_{-C}\phi_2,
+\mathbf{L}_{-F}\phi_3,
+\mathbf{L}_{-D}\phi_2
+\right)
+\widetilde{\rho}_a\!\left(
+\widetilde{\mathbf{L}}_{-\widetilde C}\widetilde{\phi}_2,
+\widetilde{\mathbf{L}}_{-\widetilde F}\widetilde{\phi}_3,
+\widetilde{\mathbf{L}}_{-\widetilde D}\widetilde{\phi}_2
+\right).
+\fe
+where $a\equiv E+p_3\equiv \widetilde{E}+\tilde p_3 \pmod 2$.
+
+Using the factorialization properties, the glass channel genus 2 partition function can be expressed into
+\[
+\begin{aligned}
+Z_{g=2}^{\mathrm{Gl}}
+={}&
+\sum_{\mathcal O_1,\mathcal O_2,\mathcal O_3}
+\sum_{\substack{
+|A|=|B|,\ |C|=|D|,\ |E|=|F|\\
+|\widetilde A|=|\widetilde B|,\ 
+|\widetilde C|=|\widetilde D|,\ 
+|\widetilde E|=|\widetilde F|
+}}
+\prod_{i=1}^{3}
+q_i^{h_i}\widetilde q_i^{\widetilde h_i}
+q_1^{|A|}\eta_1^A
+q_2^{|C|}\eta_2^C
+q_3^{|E|}\eta_3^E
+\widetilde q_1^{|\widetilde A|}\widetilde\eta_1^{\widetilde A}
+\widetilde q_2^{|\widetilde C|}\widetilde\eta_2^{\widetilde C}
+\widetilde q_3^{|\widetilde E|}\widetilde\eta_3^{\widetilde E}
+\\
+&\times
+C_{131}^{(a)}C_{232}^{(a)} ~(-1)^{a+K_{\mathrm{Gl}}+\widetilde K_{\mathrm{Gl}}}
+~\mathbf G_{h_1}^{AB}
+\mathbf G_{h_2}^{CD}
+\mathbf G_{h_3}^{EF}
+\widetilde{\mathbf G}_{\widetilde h_1}^{\widetilde A\widetilde B}
+\widetilde{\mathbf G}_{\widetilde h_2}^{\widetilde C\widetilde D}
+\widetilde{\mathbf G}_{\widetilde h_3}^{\widetilde E\widetilde F}
+\\
+&\times
+\rho_a\!\left(
+\mathbf L_{-A}\phi_1,
+\mathbf L_{-E}\phi_3,
+\mathbf L_{-B}\phi_1
+\right)
+\rho_a\!\left(
+\mathbf L_{-C}\phi_2,
+\mathbf L_{-F}\phi_3,
+\mathbf L_{-D}\phi_2
+\right)
+\\
+&\times
+\widetilde\rho_a\!\left(
+\widetilde{\mathbf L}_{-\widetilde A}\widetilde\phi_1,
+\widetilde{\mathbf L}_{-\widetilde E}\widetilde\phi_3,
+\widetilde{\mathbf L}_{-\widetilde B}\widetilde\phi_1
+\right)
+\widetilde\rho_a\!\left(
+\widetilde{\mathbf L}_{-\widetilde C}\widetilde\phi_2,
+\widetilde{\mathbf L}_{-\widetilde F}\widetilde\phi_3,
+\widetilde{\mathbf L}_{-\widetilde D}\widetilde\phi_2
+\right).
+\end{aligned}
+\]
+where 
+\ie
+K_{\mathrm{Gl}}
+=a\bigl(A+p_1+C+p_2\bigr),\quad
+\widetilde K_{\mathrm{Gl}} =a\bigl(\widetilde A+\widetilde p_1
++\widetilde C+\widetilde p_2\bigr).
+\fe
+Define the NS superconformal block in glass channel as
+\ie
+ \label{NSblock}
+\mathbf{F}^{\mathrm{Gl}}_a(h_1, h_2, h_3, c)= & \sum_{|A|=|B|,|C|=|D|,|E|=|F|, (-1)^{E+p_3}=(-1)^a} q_1^{|A|}\eta_1^A q_2^{|C|} \eta_2^C q_3^{|E|} \eta_3^E \mathbf{G}_{h_1}^{A B} \mathbf{G}_{h_2}^{C D} \mathbf{G}_{h_3}^{E F} \\
+& \times (-1)^{K_{\mathrm{Gl}}}\rho_a(\mathbf{L}_{-A} \phi_1, \mathbf{L}_{-E} \phi_3, \mathbf{L}_{-B} \phi_1) \rho_a(\mathbf{L}_{-C} \phi_2, \mathbf{L}_{-F} \phi_3, \mathbf{L}_{-D} \phi_2).
+\fe
+and analogously the anti-holomorphic block $\widetilde{F}^{\mathrm{Gl}}_a$. The genus 2 partition function then reduces to
+\ie
+Z_{g=2} = \sum_{\mathcal{O}_1,\mathcal{O}_2,\mathcal{O}_3} \sum_{a=0,1}  \left(C^{(a)}_{131} C^{(a)}_{232}  \right) (-1)^a \prod_{i=1}^{3}
+q_i^{h_i}\widetilde q_i^{\widetilde h_i}F^{\mathrm{Gl}}_a(h_1, h_2, h_3, c) \widetilde{F}^{\mathrm{Gl}}_a (\tilde{h}_1,\tilde{h}_2, \tilde{h}_3, \tilde{c}).
+\fe
+
 
 \subsubsection*{c-Recursion for NS Block}
 We will keep using the theta channel as an example, with the plumbing data denoted by $(q_i, \eta_i)$. For simplicity, we will assume the holomorphic primary operators are grassmann even. The all-NS conformal block is given by
@@ -471,8 +666,8 @@ Normalizing $\chi_{rs}$ by taking the coefficient of $G_{-1/2}^{rs}\phi$ to be 1
 \fe
 The 3-point functions can be factorized as
 \ie
-\rho_a(\mathbf{L}_{-A}\chi_{rs} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) = (-1)^{rsE} \begin{cases} \rho_{a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^a(h_2, h_3),\quad rs\in 2\mathbb{Z}, \\ 
-\rho_{1-a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^{a}(h_2, h_3),\quad rs\in 2\mathbb{Z}+1,
+\rho_a(\mathbf{L}_{-A}\chi_{rs} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) = (-1)^{rsC} \begin{cases} \rho_{a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^a(h_3, h_2),\quad rs\in 2\mathbb{Z}, \\ 
+\rho_{1-a}(\mathbf{L}_{-A}\phi_{h_{rs}+\frac{rs}{2}} , \mathbf{L}_{-B}\phi_2,  \mathbf{L}_{-C}\phi_3) \mathbf{P}_{rs}^{a}(h_3, h_2),\quad rs\in 2\mathbb{Z}+1,
 \end{cases}
 \fe
 where the two fusion polynomials are given by
@@ -486,7 +681,7 @@ h_i=\frac{(b+b^{-1})^2-\lambda_i^2}{8}.
 \fe
 Plugging these results in the pole $\mathbf{W}^{(1)}_{a,rs}$, one then have
 \ie
-\mathbf{W}^{(1)}_{a,rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} \mathbf{A}_{rs}^c(h) q_1^{rs/2}\eta_1^{rs} [\mathbf{P}_{rs}^a(h_2, h_3)]^2\\
+\mathbf{W}^{(1)}_{a,rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} \mathbf{A}_{rs}^c(h) q_1^{rs/2}\eta_1^{rs} [\mathbf{P}_{rs}^a(h_3, h_2)]^2\\
 &\quad \times \begin{cases}
 \mathbf{F}_{a}(h_1 \rightarrow h_1+\tfrac{rs}{2}, c\rightarrow c_{rs}),\quad rs\in 2\mathbb{Z}, & rs\in 2\mathbb{Z},\\
 \mathbf{F}_{1-a}(h_1 \rightarrow h_1+\tfrac{rs}{2}, c\rightarrow c_{rs},\eta_{2,3}\rightarrow -\eta_{2,3}),& rs\in 2\mathbb{Z}+1,
@@ -902,9 +1097,9 @@ In the above definition, each sum resolves the $(-1)^{p_{\mathsf{SCA}}\cdot p_{\
 
 For states $u\otimes x$, the 3-point function can be factorized into
 \ie
-& \hat{\rho}_a\left(u_1 \otimes x_1, u_2 \otimes x_2, u_3 \otimes x_3\right)=(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|} \rho^{\mathsf{F}}(u_1, u_2, u_3) \rho_a(x_1, x_2, x_3),
+& \hat{\rho}_a\left(u_1 \otimes x_1, u_2 \otimes x_2, u_3 \otimes x_3\right)=(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|+a |u_3|} \rho^{\mathsf{F}}(u_1, u_2, u_3) \rho_a(x_1, x_2, x_3),
 \fe
-where $\rho^{\mathsf{F}}(u_1, u_2, u_3)$ is the 3-point function in the free fermion theory. The sign $(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|}$ comes from moving operator order, and the additional sign $(-1)^{a|u_3|}$ comes from Importantly, $\rho^{\mathsf{F}}$ is only nonzero if $\mathsf{A}+\mathsf{B}+\mathsf{C}\equiv 0$ mod 2. If we define the free fermion block as
+where $\rho^{\mathsf{F}}(u_1, u_2, u_3)$ is the normalized 3-point function in the free fermion theory.  The sign $(-1)^{\left|x_1\right|\left(\left|u_2\right|+\left|u_3\right|\right)+\left|x_2\right|\left|u_3\right|+a \left|u_3\right|}$ comes from moving operator order. Importantly, $\rho^{\mathsf{F}}$ is only nonzero if $\mathsf{A}+\mathsf{B}+\mathsf{C}\equiv 0$ mod 2. If we define the free fermion block as
 \ie
 \mathbf{F}^{\mathsf{F}}(q_i, \eta_i) =& \sum_{\substack{\mathsf{A}, \mathsf{B}, \mathsf{C}\\(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}=1}}(-1)^{\mathsf{AB}+\mathsf{AC}+\mathsf{BC}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\left[{\rho}^{\mathsf{F}}(\Psi_{-\mathsf{A}}\mathbf{1}_\mathsf{F}, \Psi_{-\mathsf{B}}\mathbf{1}_\mathsf{F}, \Psi_{-\mathsf{C}}\mathbf{1}_\mathsf{F})\right]^2,
 \fe
@@ -981,7 +1176,7 @@ For $P\notin \frac{1}{2}(b\mathbb{Z}+b^{-1}\mathbb{Z})$, $\mathcal{M}(P)$ is iso
 bases. One is the Fock basis inherited from $\mathcal{M}(P)$, obtained by acting the free field generators $c_{-n}, \eta_{-r} ,\psi_{-s}$ on the lowest weight vector $\mathbf{1}_{\mathsf{F}}\otimes \phi(P)$. Another basis is the PBW basis inherited from $\mathcal{M}_{NS}(h)$, obtained by acting the super-virasoro generators $L_{-n}, G_{-r} ,\psi_{-s}$ on $\mathbf{1}_{\mathsf{F}}\otimes \phi(P)$. One can thus consider the base transformation between Fock basis and PBW basis, which a prior would be complicated.
 
 For our application, we will always endow $\mathcal{M}(P)$ with the BPZ pairing, under which $L_n^\dagger = L_{-n}, G_{r}^\dagger = G_{-r}$. Under this pairing, one can speak of the BPZ conjugation of free field generators $c_n,\eta_r$, which generically does not admit a simple formula in terms of the original free field generators. Due to this reason, it is not straightforward to compute  the norm of the state in the Fock basis. The efficient way to compute the norm is to do the base transformation to the PBW basis and then compute the norm there.
-\todo[inline]{Yutai: I would actually expect that $P^{\dagger}=P$ under BPZ pairing.}
+\todo[inline]{Yutai: The derivation in the NS sector yet to be reviewed. The point seems to be that the BPZ pairing is better defined as the pairing between \(\mathcal{M}(P)\) and \(\mathcal{M}(-P)\). The BPZ conjugate then maps the super-Virasoro generator in one representation to another (isomorphic) representation. It is different from the usual representation theory setup where the pairing/inner product is defined on the same space.}
 
 The $\mathsf{Vir}\oplus\mathsf{Vir}$ primaries for $n>0$ in $\mathcal{M}(P)$ admits a simple formula in the Fock basis
 \ie
@@ -1028,23 +1223,21 @@ In our convention, their result reads
 \ie
 \hat{\rho}_a&(v_{1,n_1},v_{2,n_2},v_{3,n_3}) = (-1)^{n_1+n_2+n_3}i^a 2^{-\left(n_1+n_2+n_3\right)}  \\
 &\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right)\ell\left(\tfrac{Q}{2}-P_1+P_2+P_3, 2(-n_1+n_2+n_3)\right)\\
-&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right) \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right).
+&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2-P_3, 2(n_1+n_2-n_3)\right) \ell\left(\tfrac{Q}{2}-P_1+P_2-P_3, 2(-n_1+n_2-n_3)\right).
 \fe
-For $(-1)^{2(n_1+n_2+n_3)}\neq (-1)^a$, the 3-point function is 0 by definition. Again, we should emphasize that this result only works for positive $n_i$. For negative $n_i$, one should use the reflection relation $v_n(P)=v_{-n}(P)$ to convert it to a positive value. The values of $P_i$ is the same in the definition of $v_n$. This formula has been checked directly against low-level $(n=0,1,\frac{1}{2})$ 3-point functions.
+For $(-1)^{2(n_1+n_2+n_3)}\neq (-1)^a$, the 3-point function is 0 by definition. Again, we should emphasize that this result only works for positive $n_i$. For negative $n_i$, one should use the reflection relation $v_n(P)=v_{-n}(-P)$ to convert it to a positive value. The values of $P_i$ is the same in the definition of $v_n$. This formula has been checked directly against low-level $(n=0,1,\frac{1}{2})$ 3-point functions.
 
 Putting everything together, we arrive at the final form for the NS branching coefficient:
 \ie
 B_a&(h_1, h_2, h_3;n_1, n_2, n_3) = \frac{(-i)^a}{\prod_{i=1}^3\sqrt{\ell(2P_i, 4n_i)\ell(Q+2P_i, 4n_i)}}\\
 &\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right)\ell\left(\tfrac{Q}{2}-P_1+P_2+P_3, 2(-n_1+n_2+n_3)\right)\\
-&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right) \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right).
+&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2-P_3, 2(n_1+n_2-n_3)\right) \ell\left(\tfrac{Q}{2}-P_1+P_2-P_3, 2(-n_1+n_2-n_3)\right).
 \fe
 
 
 \subsubsection*{Checks against $c$-recursion}
 
 As a check of the formalism developed in this section, we compute the all-NS block $\mathbf{F}_a(h_1, h_2, h_3, c)$ as a $q$-expansion independently using the $c$-recursion relation and the double Virasoro decomposition. For all the vacuum blocks appearing in $\mathbf{F},\mathbf{F}_{\mathsf{F}}$ and $F$, we use the Schottky frame so that the Weyl anomaly factor on both sides agrees. We have tested numerically that, up to total level 4, the all-NS theta channel block $\mathbf{F}_a$ computed from the two methods agrees to machine precision for all 8 independent choices of $\{\eta_i\}$ and $a$. 
-
-The earlier coefficientwise mismatch in this comparison is resolved.  It was caused by replacing the theta-polarized convolution $\star$ in (7.30) by ordinary formal-series multiplication when removing the auxiliary Majorana block.  With the $\star$-inverse used in (7.33), the direct PBW block, the $c$-recursive block, and the double-Virasoro block agree in all 20 symbolic coefficients through total physical level $3/2$.  The complete exact-rational level-two check gives 35 agreements out of 35 coefficients at each of three generic samples, hence 105 out of 105 agreements and zero mismatches.  The former counts $14/20$ and $78/105$ are retained only as a negative control for the obsolete ordinary-quotient prescription; they are not failures of the conformal-block decomposition.
 
 \section{Ramond blocks from double Virasoro}
 
@@ -1064,12 +1257,12 @@ the ramond $\mathsf{SCA}_0\otimes \mathsf{F}_0$ block is defined as
 &\quad\quad \times \hat{\rho}_f^{(\eta)}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
 &\quad\quad \times \hat{\rho}_f^{(\eta')}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B'}w^{\alpha'}_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}} \otimes\mathbb{L}_{-C'}w^{\gamma'}_3)
 \fe
-where $\boldsymbol{\Psi}_{-\mathsf{B}}$ denotes a chain of R-sector fermion lowering operators (there are no \texttt{mathbb} version of $\Psi$, sadly). Note that $\boldsymbol\Psi_{-\mathsf{A}}$ does not contain the fermion zero mode $\psi_0$. We have used $\langle u^\mathsf{a}|\boldsymbol\Psi_{-\mathsf{A}}^\dagger \boldsymbol\Psi_{-\mathsf{B}}|u^{\mathsf{b}}\rangle=(-1)^{\mathsf{A}+\mathsf{a}}\delta_{\mathsf{AB}}\delta^{\mathsf{a}\mathsf{b}}$, as well as the convention $\langle u_1\otimes x_1| u_2\otimes x_2 \rangle=\langle u_1|u_2\rangle \langle x_1|x_2\rangle$ without the additional operator exchanging sign. The shorthand $\text{sgn}$ is defined such that ${\text{sgn}(A)}=A+\mathsf{A} \mod 2$ for NS sector and ${\text{sgn}(B)}=B+\mathsf{B}+\mathsf{b}+|\alpha| \mod 2$ for R sector. We have also used the fact that the fermion correlator is 0 unless $(-1)^{\mathsf{A+B+C+b+c}}=1$.
+where $\boldsymbol{\Psi}_{-\mathsf{B}}$ denotes a chain of R-sector fermion lowering operators (there are no \texttt{mathbb} version of $\Psi$, sadly). Note that $\boldsymbol\Psi_{-\mathsf{A}}$ does not contain the fermion zero mode $\psi_0$. We have used $\langle u^\mathsf{a}|\boldsymbol\Psi_{-\mathsf{A}}^\dagger \boldsymbol\Psi_{-\mathsf{B}}|u^{\mathsf{b}}\rangle=(-1)^{\mathsf{A}+\mathsf{a}}\delta_{\mathsf{AB}}\delta^{\mathsf{a}\mathsf{b}}$, as well as $\langle u_1\otimes x_1|(-1)^{p_{\mathsf{SCA}} \cdot p_{F}}| u_2\otimes x_2 \rangle=\langle u_1|u_2\rangle \langle x_1|x_2\rangle$ without the additional operator exchanging sign. The shorthand $\text{sgn}$ is defined such that ${\text{sgn}(A)}=A+\mathsf{A} \mod 2$ for NS sector and ${\text{sgn}(B)}=B+\mathsf{B}+\mathsf{b}+|\alpha| \mod 2$ for R sector. We have also used the fact that the fermion correlator is 0 unless $(-1)^{\mathsf{A+B+C+b+c}}=1$.
 
 The 3-point function can be factorized as (we treat this formula as the definition of $\hat{\rho}^{(\eta)}_f$)
 \ie
 \hat{\rho}_f^{(\eta)}&(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
-&=(-1)^{A\mathsf{A}+(B+|\alpha|)(\mathsf{C+c})}\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}) {\rho}_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3) 
+&=(-1)^{A\mathsf{A}+(B+|\alpha|)(\mathsf{C+c})+f(\mathsf{C+c})}\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}) {\rho}_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3) 
 \fe
 Therefore, if we define the fermion Ramond block as
 \ie
@@ -1089,7 +1282,7 @@ Using the decomposition \eqref{Rbranching}, one can see that every state in $\ma
 \widehat{\mathbb{F}}^{(\eta, \eta')}_f&(h_1, \beta_2, \beta_3, c) = \sum_{\substack{
   |A|=|A'|, |B|=|B'|, |C|=|C'|\\
   |D|=|D'|, |E|=|E'|, |F|=|F'|\\
-  n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\
+  n_1\in \frac{1}{2}\mathbb{Z},~ n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\
   (-1)^{2n_1 + \alpha_2 + \alpha_3}=(-1)^f
   }} q_1^{2n_1^2+|A|+|B|}q_2^{2n_2^2-\frac{1}{8}+|C|+|D|}q_3^{2n_3^2-\frac{1}{8}+|E|+|F|}\eta_1^{2n_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
 &\times (-1)^{2n_1\alpha_2+2n_1\alpha_3+\alpha_2\alpha_3} \frac{(G_{h_{1,n_1}^{(1)}})^{AA'}(G_{h_{1,n_1}^{(2)}})^{BB'}(G_{h_{2,n_2}^{(1)}})^{CC'}(G_{h_{2,n_2}^{(2)}})^{DD'}(G_{h_{3,n_3}^{(1)}})^{EE'}(G_{h_{3,n_3}^{(2)}})^{FF'}}{\|v_{1,n_1}\|^2\|v_{2,n_2}^{\alpha_2}\|^2\|v_{3,n_3}^{\alpha_3}\|^2}\\
@@ -1102,7 +1295,7 @@ where we used the fact that $u^{\mathsf{a}}$ has conformal weight $\frac{1}{16}$
 \fe
 and therefore,
 \ie
-\widehat{\mathbb{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}\\
+\widehat{\mathbb{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{n_1 \in \frac{1}{2} \mathbb{Z}, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
 &\quad \times (-1)^{2n_1\alpha_2+2n_1\alpha_3+\alpha_2\alpha_3} \mathbb{B}^{(\eta)}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) \mathbb{B}^{(\eta')}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3)\\
 &\quad \times F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}),
 \fe
