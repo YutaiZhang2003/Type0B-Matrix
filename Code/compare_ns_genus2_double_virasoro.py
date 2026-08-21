@@ -14,9 +14,8 @@ Majorana series use twice-level triples.  The default cutoff is total physical
 level four, so the double-Virasoro sum needs branch labels ``k=2n`` only in
 ``{-2,-1,0,1,2}`` and ordinary Virasoro descendants through total level four.
 
-The NS c-recursion backend carries one legacy linear infinity-edge frame sign.
-It is cancelled by evaluating that backend with lift ``-eta_infinity``.  The
-reported lifts therefore use the literal human-note theta sign
+The NS c-recursion backend, direct PBW oracle, Majorana quotient, and
+double-Virasoro answer all use the literal human-note theta sign
 
     (-1)^(p0 p1 + p0 pinfinity + p1 pinfinity).
 
@@ -82,6 +81,8 @@ def theta_quadratic_exponent(levels: Sequence[int]) -> int:
 
 
 def theta_orientation_sign(levels: Sequence[int]) -> int:
+    """Even-primary specialization of the current theta orientation sign."""
+
     return -1 if theta_quadratic_exponent(levels) else 1
 
 
@@ -524,13 +525,13 @@ def double_virasoro_enlarged_series(
     return coefficients
 
 
-def _human_backend_lifts(human_lifts: Sequence[int]) -> tuple[int, int, int]:
-    """Cancel the legacy linear infinity sign of the numeric NS backend."""
+def _validated_human_lifts(human_lifts: Sequence[int]) -> tuple[int, int, int]:
+    """Validate lifts without applying an internal frame rephasing."""
 
-    eta0, eta1, etainfinity = (int(value) for value in human_lifts)
-    if any(value not in (-1, 1) for value in (eta0, eta1, etainfinity)):
+    lifts = tuple(int(value) for value in human_lifts)
+    if len(lifts) != 3 or any(value not in (-1, 1) for value in lifts):
         raise ValueError("all plumbing lifts must be +1 or -1")
-    return eta0, eta1, -etainfinity
+    return lifts  # type: ignore[return-value]
 
 
 def ns_c_recursion_series(
@@ -538,7 +539,7 @@ def ns_c_recursion_series(
 ) -> ScalarSeries:
     """Return NS c-recursion coefficients in the literal human theta frame."""
 
-    backend_lifts = _human_backend_lifts((1, 1, 1))
+    backend_lifts = _validated_human_lifts((1, 1, 1))
     coefficients: ScalarSeries = {}
     for levels in level_tuples(cutoff):
         parity = sum(levels) % 2
@@ -558,7 +559,7 @@ def direct_ns_series(
     """Return the independent direct-PBW diagnostic in the human theta frame."""
 
     oracle = DirectThetaOracle(c=c, weights=weights)
-    backend_lifts = _human_backend_lifts((1, 1, 1))
+    backend_lifts = _validated_human_lifts((1, 1, 1))
     coefficients: ScalarSeries = {}
     for levels in level_tuples(cutoff):
         parity = sum(levels) % 2

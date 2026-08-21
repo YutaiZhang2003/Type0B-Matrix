@@ -12,7 +12,6 @@ from free_majorana_pair_of_pants import (
     ns_fermion_states_at_twice_level,
     theta_majorana_plumbing_partition,
 )
-from ns_genus2_partition import _spin_characteristic_from_lifts
 
 
 class FreeMajoranaPairOfPantsTests(unittest.TestCase):
@@ -58,26 +57,47 @@ class FreeMajoranaPairOfPantsTests(unittest.TestCase):
         self.assertEqual(result.chiral_value, 1.0)
         self.assertTrue(math.isfinite(result.chiral_value.real))
 
-    def test_production_lift_to_characteristic_uses_bpz_affine_shift(self) -> None:
-        q_values = (0.11, 0.12, 0.13)
-        self.assertEqual(
-            _spin_characteristic_from_lifts(
-                "glasses", q_values, (1, 1, 1)
-            ),
-            ((0, 0), (0, 0)),
-        )
-        self.assertEqual(
-            _spin_characteristic_from_lifts(
-                "theta", q_values, (1, 1, 1)
-            ),
-            ((0, 0), (1, 0)),
-        )
-        self.assertEqual(
-            _spin_characteristic_from_lifts(
-                "theta", q_values, (-1, 1, 1)
-            ),
-            ((0, 0), (0, 0)),
-        )
+    def test_direct_wick_selection_and_low_coefficients(self) -> None:
+        # These are coefficients of the defining Fock-space sewing sum,
+        # before any plumbing orientation sign.  No theta constant,
+        # bosonization identity, or Schottky product enters this check.
+        expected_nonzero = {
+            (0, 0, 0): 1,
+            (0, 1, 1): 1,
+            (1, 0, 1): 1,
+            (1, 1, 0): 1,
+            (0, 1, 3): 1,
+            (0, 3, 1): 1,
+            (3, 1, 0): 1,
+        }
+        for levels in (
+            (0, 0, 0),
+            (0, 1, 1),
+            (1, 0, 1),
+            (1, 1, 0),
+            (0, 1, 3),
+            (0, 3, 1),
+            (3, 1, 0),
+        ):
+            states = [ns_fermion_states_at_twice_level(level) for level in levels]
+            coefficient = sum(
+                majorana_three_point(bra, middle, ket) ** 2
+                for bra in states[0]
+                for middle in states[1]
+                for ket in states[2]
+            )
+            self.assertEqual(coefficient, expected_nonzero[levels], levels)
+
+        # A Wick correlator with odd total fermion number vanishes.
+        for levels in ((1, 0, 0), (1, 1, 1), (0, 2, 1), (3, 0, 0)):
+            states = [ns_fermion_states_at_twice_level(level) for level in levels]
+            coefficient = sum(
+                majorana_three_point(bra, middle, ket) ** 2
+                for bra in states[0]
+                for middle in states[1]
+                for ket in states[2]
+            )
+            self.assertEqual(coefficient, 0, levels)
 
 
 if __name__ == "__main__":

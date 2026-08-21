@@ -1,0 +1,565 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,bm,booktabs,array}
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+\usepackage{microtype}
+
+\newcommand{\SCA}{\mathsf{SCA}}
+\newcommand{\Ff}{\mathsf F}
+\newcommand{\Vir}{\mathsf{Vir}}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\hatrho}{\widehat\rho}
+\newcommand{\se}{s_{\rm e}}
+\newcommand{\so}{s_{\rm o}}
+\newcommand{\bpz}[2]{\bigl\langle\!\bigl\langle #1\bigm|#2\bigr\rangle\!\bigr\rangle}
+
+\title{The NS Sphere Block from Free Fermion plus Super-Virasoro\\
+and from Two Virasoro Algebras}
+\author{Machine note}
+\date{20 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We derive the two-Virasoro expansion of the sphere four-point block of four
+bottom NS superconformal primaries, using exactly the slot order and odd
+three-form sign of \texttt{Human Notes/SCblock.tex}.  The auxiliary fermion is
+put in the identity state at every external puncture.  With the ungraded
+pairing on \(\Ff_{1/2}\otimes\SCA_{1/2}\), its block is one and the enlarged
+block equals the super-Virasoro block.  Resolving the same block in the
+\(\Vir\oplus\Vir\) branching basis gives a sum over
+\(n\in\frac12\mathbb Z\).  The human-note endpoint convention supplies the
+essential factor \((-1)^{2n}\).  A direct PBW computation agrees with the resulting formula
+through even level two and odd level \(3/2\).  The nonchiral crossing equation
+is unchanged because this sign is common to the whole odd chiral block and
+therefore squares to one.
+\end{abstract}
+
+\section{Conventions and the ordered NS block}
+
+We use the ordinary central charge and momentum convention of the human note,
+\begin{equation}
+ Q=b+b^{-1},\qquad
+ c=\frac32+3Q^2,\qquad
+ h(P)=\frac12\left(\frac{Q^2}{4}-P^2\right).
+ \label{eq:sca-parameters}
+\end{equation}
+The Liouville continuum is reached by \(P=i p\); it is useful to keep \(P\)
+generic while proving the algebraic identity.  All external states
+\(\phi_i\) are even bottom components.  The ordered correlator is
+\begin{equation}
+ \left\langle
+ \phi_4(\infty)\phi_3(1)\phi_2(z)\phi_1(0)
+ \right\rangle .
+ \label{eq:ordered-correlator}
+\end{equation}
+
+Let \(\xi_A=\mathbf L_{-A}\phi_h\) be an ordered NS PBW state, let
+\(|A|\) be its level, and let \(p(A)\) be its fermion parity.  The inverse
+super-Gram matrix is \(\mathbf G_h^{AB}\).  We strip the common leading
+power and define the two parity blocks by
+\begin{align}
+ F_a^{4321}(h;z)
+ &=z^{h-h_1-h_2}\cF_a^{4321}(h;z),
+ \nonumber\\
+ \cF_a^{4321}(h;z)
+ &=\sum_{\substack{|A|=|B|\\p(A)=p(B)=a}}
+ z^{|A|}\,
+ \rho_a(\phi_4,\phi_3,\xi_A)\,
+ \mathbf G_h^{AB}\,
+ \rho_a(\xi_B,\phi_2,\phi_1),
+ \qquad a\in\{0,1\}.
+ \label{eq:sca-block-definition}
+\end{align}
+Thus \(\cF_0\) has integer powers and \(\cF_1\) has half-odd-integer
+powers.
+
+The sign which matters below is fixed by the component table in the human
+note.  For even primaries,
+\begin{equation}
+ \rho_1(G_{-1/2}\phi_1,\phi_2,\phi_3)=+1,
+ \qquad
+ \rho_1(\phi_1,G_{-1/2}\phi_2,\phi_3)=+1,
+ \qquad
+ \boxed{\rho_1(\phi_1,\phi_2,G_{-1/2}\phi_3)=-1.}
+ \label{eq:human-odd-table}
+\end{equation}
+The last minus sign is retained throughout this note.  Some production
+sphere-block code uses \(+1\) in the third entry; that is a different
+chiral convention and differs from the present odd block by an overall
+minus sign.
+
+\section{The ungraded tensor-product pairing}
+
+Adjoin an auxiliary NS Majorana fermion with
+\begin{equation}
+ \{\psi_r,\psi_s\}=\delta_{r+s,0},
+ \qquad \psi_r^\dagger=-\psi_{-r},
+ \qquad r\in\mathbb Z+\frac12.
+ \label{eq:fermion-algebra}
+\end{equation}
+The internal enlarged module is
+\begin{equation}
+ \mathcal M_{\rm NS}(h)
+ =\mathcal V_{\Ff_{1/2}}\otimes\mathcal V_{\SCA_{1/2}}(h).
+ \label{eq:enlarged-module}
+\end{equation}
+The essential choice is the prime, ungraded pairing
+\begin{equation}
+ \boxed{
+ \bpz{u\otimes x}{v\otimes y}'
+ =\bpz{u}{v}_{\Ff}\,\bpz{x}{y}_{\SCA}.}
+ \label{eq:ungraded-pairing}
+\end{equation}
+There is no Koszul sign crossing the two tensor factors.  This differs from
+the standard graded tensor-product pairing.
+
+For product states the normalized three-form is the one printed in the
+current human note,
+\begin{equation}
+ \hatrho_a(u_1\otimes x_1,u_2\otimes x_2,u_3\otimes x_3)
+ =(-1)^{|x_1|(|u_2|+|u_3|)+|x_2||u_3|}
+ \rho^{\Ff}(u_1,u_2,u_3)\rho_a(x_1,x_2,x_3).
+ \label{eq:three-form-factorization}
+\end{equation}
+
+At the external punctures choose
+\(\widehat\phi_i=\one_{\Ff}\otimes\phi_i\).  In the product PBW basis the
+Gram matrix and its inverse factor as ordinary tensor products because of
+Eq.~\eqref{eq:ungraded-pairing}.  Equation~\eqref{eq:three-form-factorization}
+has no crossing sign at either sphere trinion: the external SCA states and
+the external fermion vacua are even.  Moreover,
+\begin{equation}
+ \rho^{\Ff}(\one,\one,u)=\rho^{\Ff}(u,\one,\one)=0
+ \quad\text{unless}\quad u=\one.
+ \label{eq:fermion-identity-selection}
+\end{equation}
+It follows coefficient by coefficient that
+\begin{equation}
+ \widehat{\cF}_a^{4321}(h;z)
+ =\cF_{\Ff}^{1111}(z)\,\cF_a^{4321}(h;z),
+ \qquad
+ \boxed{\cF_{\Ff}^{1111}(z)=1,\quad
+ \widehat{\cF}_a^{4321}=\cF_a^{4321}.}
+ \label{eq:sphere-factorization}
+\end{equation}
+Unlike the genus-two theta graph, there is no multivariable polarized
+convolution: the free-fermion identity block kills every nonvacuum
+auxiliary state.
+
+\section{The same enlarged block in the double-Virasoro basis}
+
+For \(b\ne1\), the human-note generators give
+\(\Vir^{(1)}\oplus\Vir^{(2)}\subset\Ff\oplus\SCA\).  Their central charges
+are
+\begin{equation}
+ c^{(i)}=1+6\bigl(Q^{(i)}\bigr)^2,
+ \qquad
+ (b^{(1)})^2=\frac{2b^2}{1-b^2},
+ \qquad
+ (b^{(2)})^{-2}=\frac{2}{b^2-1},
+ \qquad Q^{(i)}=b^{(i)}+(b^{(i)})^{-1}.
+ \label{eq:double-central-charges}
+\end{equation}
+In the notation of the human note, the NS branching rule is
+\begin{equation}
+ \mathcal M_{\rm NS}(h(P))
+ \cong\bigoplus_{n\in\frac12\mathbb Z}
+ \mathcal V_{c^{(1)}}(h_n^{(1)}(P))\otimes
+ \mathcal V_{c^{(2)}}(h_n^{(2)}(P)),
+ \qquad
+ h_n^{(1)}+h_n^{(2)}=h(P)+2n^2.
+ \label{eq:branching-rule}
+\end{equation}
+In a square-root-free parametrization useful for computation,
+\begin{align}
+ h_n^{(1)}(P)
+ &=\frac{(Q^{(1)})^2}{4}
+ -\frac{(P+2nb)^2}{2-2b^2},
+ &
+ h_n^{(2)}(P)
+ &=\frac{(Q^{(2)})^2}{4}
+ -\frac{(P+2n/b)^2}{2-2b^{-2}}.
+ \label{eq:branch-weights}
+\end{align}
+The branch primary \(v_n(P)\) has parity \(2n\pmod2\) and ungraded norm
+\(N_n(P)=\bpz{v_n}{v_n}'\).
+
+Now the reason for Eq.~\eqref{eq:ungraded-pairing} becomes explicit.  If
+\(I,J\) and \(I',J'\) are ordinary Virasoro partitions, then
+\begin{align}
+ &\bpz{L_{-I}^{(1)}L_{-J}^{(2)}v_n}
+ {L_{-I'}^{(1)}L_{-J'}^{(2)}v_n}'
+ \nonumber\\
+ &\hspace{2cm}=
+ N_n(P)\,(G_{h_n^{(1)}}^{(1)})_{II'}
+ (G_{h_n^{(2)}}^{(2)})_{JJ'}.
+ \label{eq:double-gram-factorization}
+\end{align}
+The inverse therefore factorizes with no parity operator left on the tube.
+The graded product pairing would insert a state-dependent crossing sign and
+would not give Eq.~\eqref{eq:double-gram-factorization} in this basis.
+
+Let \(\cV(c;d_4,d_3,d_2,d_1;d;z)=1+O(z)\) denote the reduced ordinary
+Virasoro sphere block in the same slot order.  Define the two unnormalized
+branching vertices
+\begin{equation}
+ T_{43}(n)=\hatrho_{2n\bmod2}(v_{4,0},v_{3,0},v_n),
+ \qquad
+ T_{21}(n)=\hatrho_{2n\bmod2}(v_n,v_{2,0},v_{1,0}).
+ \label{eq:endpoint-vertices}
+\end{equation}
+We now use exactly the branching-coefficient notation of the human note:
+\begin{equation}
+ \boxed{
+ B_a(h_1,h_2,h_3;n_1,n_2,n_3)
+ =\frac{
+ \hatrho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})
+ }{
+ \lVert v_{1,n_1}\rVert
+ \lVert v_{2,n_2}\rVert
+ \lVert v_{3,n_3}\rVert
+ }.}
+ \label{eq:human-B-definition}
+\end{equation}
+The external branch vectors have unit norm.  Hence the two coefficients at
+the sphere endpoints are
+\begin{equation}
+ B_a(h_4,h_3,h;0,0,n)=\frac{T_{43}(n)}{\lVert v_n\rVert},
+ \qquad
+ B_a(h,h_2,h_1;n,0,0)=\frac{T_{21}(n)}{\lVert v_n\rVert}.
+ \label{eq:sphere-B-endpoints}
+\end{equation}
+Ordinary Virasoro Ward identities act independently in the two factors.
+Inserting the inverse of Eq.~\eqref{eq:double-gram-factorization} into the
+four-point block gives
+\begin{align}
+ \boxed{
+ \cF_a^{4321}(h(P);z)
+ =\sum_{\substack{n\in\frac12\mathbb Z\\(-1)^{2n}=(-1)^a}}
+ z^{2n^2}
+ B_a(h_4,h_3,h;0,0,n)
+ B_a(h,h_2,h_1;n,0,0)
+ \cV_n^{(1)}(z)\cV_n^{(2)}(z).}
+ \label{eq:final-B-formula}
+\end{align}
+where
+\begin{equation}
+ \cV_n^{(i)}(z)=
+ \cV\!\left(
+ c^{(i)};
+ h_{0}^{(i)}(P_4),h_{0}^{(i)}(P_3),
+ h_{0}^{(i)}(P_2),h_{0}^{(i)}(P_1);
+ h_n^{(i)}(P);z\right).
+ \label{eq:factor-blocks}
+\end{equation}
+The product of branching coefficients is independent of a rephasing of
+\(v_n\).  If the same square-root branch for \(\lVert v_n\rVert\) is used at
+both ends, it can equivalently be written
+\begin{equation}
+ B_a(h_4,h_3,h;0,0,n)
+ B_a(h,h_2,h_1;n,0,0)
+ =\frac{T_{43}(n)T_{21}(n)}{N_n(P)}.
+ \label{eq:B-product-phase-independent}
+\end{equation}
+Thus \(T_{43}T_{21}/N_n\) is only a phase-independent representation of the
+human-note product \(B_aB_a\), not a replacement notation for the branching
+coefficient.
+
+\section{The human-note endpoint sign and the explicit blow-up formula}
+
+We now translate the branching coefficients in
+Eq.~\eqref{eq:final-B-formula} to the factorized product \(l\) used in the
+human note and in the blow-up literature.  Only in the following product
+formula, \(m,k',k\in\mathbb Z\) are integer Fermi-sea labels; the internal
+sphere label is \(k=2n\).  For \(\sigma,\tau=\pm1\), set
+\begin{equation}
+ x_{\sigma\tau}=\alpha+\sigma P'+\tau P,
+ \qquad
+ r_{\sigma\tau}=\frac{m+\sigma k'+\tau k}{2}.
+ \label{eq:x-r}
+\end{equation}
+For \(r\ge0\), define
+\begin{align}
+ \se(x,r)
+ &=2^{-r^2/2}
+ \prod_{\substack{i,j\ge1,\ i+j\le2r\\i+j\equiv0\ (2)}}
+ [x+(i-1)b+(j-1)b^{-1}],
+ \nonumber\\
+ \so(x,r)
+ &=2^{-r(r+1)/2}
+ \prod_{\substack{i,j\ge1,\ i+j\le2r+1\\i+j\equiv1\ (2)}}
+ [x+(i-1)b+(j-1)b^{-1}],
+ \label{eq:s-functions}
+\end{align}
+and continue to negative \(r\) by
+\begin{equation}
+ \se(x,r)=(-1)^r\se(Q-x,-r),
+ \qquad
+ \so(x,r)=\so(Q-x,-r).
+ \label{eq:s-continuation}
+\end{equation}
+With \(\operatorname{Int}(x)=\operatorname{sgn}(x)\lfloor|x|\rfloor\),
+\begin{equation}
+ l(\alpha,m\mid P',k',P,k)
+ =\begin{cases}
+ \displaystyle\prod_{\sigma,\tau=\pm1}
+ \se(x_{\sigma\tau},r_{\sigma\tau}),
+ &m+k+k'\text{ even},\\[0.8em]
+ \displaystyle\prod_{\sigma,\tau=\pm1}
+ \so(x_{\sigma\tau},\operatorname{Int}r_{\sigma\tau}),
+ &m+k+k'\text{ odd}.
+ \end{cases}
+ \label{eq:l-product}
+\end{equation}
+For the branch label \(n\in\frac12\mathbb Z\), the norm is the identity
+specialization with the integer Fermi-sea label \(2n\):
+\begin{equation}
+ N_n(P)=\se(2P,2n)\se(-2P,-2n).
+ \label{eq:branch-norm}
+\end{equation}
+
+For the sphere endpoints define
+\begin{align}
+ L_{43}(n)
+ &=l\left(\frac Q2+P_3,0\mid P_4,0,P,2n\right),
+ \nonumber\\
+ L_{21}(n)
+ &=l\left(\frac Q2+P_2,0\mid P,2n,P_1,0\right).
+ \label{eq:sphere-l-factors}
+\end{align}
+The human-note odd table \eqref{eq:human-odd-table} fixes the ordered endpoint
+translation:
+\begin{equation}
+ \boxed{T_{43}(n)=(-1)^{2n}L_{43}(n),\qquad
+ T_{21}(n)=L_{21}(n).}
+ \label{eq:endpoint-translation}
+\end{equation}
+This is not an optional phase of \(v_n\): a rephasing of \(v_n\) occurs at
+both endpoints and cancels against \(N_n\).  It is the relative sign between
+placing the odd fixed-parity tensor in slot three and in slot one.  Direct
+branching-vector calculations verify Eq.~\eqref{eq:endpoint-translation} for
+\(n=0,\pm\frac12\), and for the one-active-leg cases \(n=1,\frac32\); the
+general factor is fixed by the same parity-homogeneous three-form
+normalization.
+
+Equations~\eqref{eq:sphere-B-endpoints} and
+\eqref{eq:endpoint-translation} give the explicit product of the two
+human-note branching coefficients:
+\begin{equation}
+ \boxed{
+ B_a(h_4,h_3,h;0,0,n)B_a(h,h_2,h_1;n,0,0)
+ =(-1)^{2n}\frac{L_{43}(n)L_{21}(n)}{N_n(P)}.}
+ \label{eq:explicit-B-product}
+\end{equation}
+Substituting Eq.~\eqref{eq:explicit-B-product} in the boxed block relation
+\eqref{eq:final-B-formula} reproduces the square-root-free expression used in
+the numerical check.  Since \((-1)^{2n}=(-1)^a\) within a fixed block, the
+sign is a common minus on the odd chiral block and is one on the even block.
+Equation~\eqref{eq:final-B-formula} is first derived for generic \(b\ne1\)
+and generic momenta; the \(b=1\) result is its analytic limit after the two
+Virasoro factors have been combined.
+
+\subsection{Analytic \texorpdfstring{level-\(1/2\)}{level-1/2} sign check}
+
+The first branch primaries are
+\begin{equation}
+ v_{\pm\frac12}(P)=
+ \left[G_{-1/2}+\left(\frac Q2\pm P\right)\psi_{-1/2}\right]\phi,
+ \label{eq:first-branch-vectors}
+\end{equation}
+and their ungraded norms are
+\begin{equation}
+ N_{+\frac12}(P)=-P(Q+2P),
+ \qquad
+ N_{-\frac12}(P)=P(Q-2P).
+ \label{eq:first-branch-norms}
+\end{equation}
+The external fermion identities kill the \(\psi_{-1/2}\) term.  Hence
+Eq.~\eqref{eq:human-odd-table} gives \(T_{43}(\pm\frac12)=-1\),
+\(T_{21}(\pm\frac12)=+1\), while
+\(L_{43}(\pm\frac12)=L_{21}(\pm\frac12)=1\).  The double-Virasoro answer at
+the first odd level is therefore
+\begin{align}
+ [z^{1/2}]\cF_1
+ &=-\left(\frac1{N_{+\frac12}}+\frac1{N_{-\frac12}}\right)
+ =-\frac{4}{Q^2-4P^2}
+ =\boxed{-\frac1{2h(P)}}.
+ \label{eq:level-half-check}
+\end{align}
+Direct super-Virasoro sewing gives the same result:
+\((-1)(+1))/\lVert G_{-1/2}\phi\rVert^2=-1/(2h)\).
+Dropping \((-1)^{2n}\) gives \(+1/(2h)\), the opposite convention.
+
+\section{Direct low-order PBW check}
+
+The reproducible calculation is
+\begin{center}
+ \path{Code/check_ns_sphere_double_virasoro.py}.
+\end{center}
+It constructs the finite-\(c\) NS PBW basis and Gram matrix directly,
+evaluates both descendant three-forms from Ward identities, and compares
+with Eq.~\eqref{eq:final-B-formula}.  Ordinary Virasoro Gram matrices
+are evaluated independently through level two.  The generic test point is
+\begin{gather}
+ b=1.37,\qquad Q=2.09992700729927018,
+ \nonumber\\
+ c=14.7290803079546091,\qquad P=0.47,
+ \nonumber\\
+ (P_1,P_2,P_3,P_4)=(0.23,-0.31,0.41,-0.19),\qquad
+ h(P)=0.440761679498108683.
+ \label{eq:numeric-point}
+\end{gather}
+The reduced coefficients are
+\begin{center}
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+\(2L\)&direct human sign&double Virasoro&absolute error&without \((-1)^{2n}\)\\
+\midrule
+0&\( 1.000000000000000\)&\( 1.000000000000000\)&0&\( 1.000000000000000\)\\
+1&\(-1.134399888323653\)&\(-1.134399888323653\)&\(5.04\times10^{-17}\)&\( 1.134399888323653\)\\
+2&\( 0.178198040229849\)&\( 0.178198040229849\)&\(1.54\times10^{-17}\)&\( 0.178198040229849\)\\
+3&\(-0.484955260912690\)&\(-0.484955260912690\)&\(1.75\times10^{-16}\)&\( 0.484955260912690\)\\
+4&\( 0.120205847599768\)&\( 0.120205847599768\)&\(7.79\times10^{-17}\)&\( 0.120205847599768\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Thus the check reaches even level two, including the new \(n=\pm1\) branch
+primaries, and odd level \(3/2\).  The maximum discrepancy is
+\(1.75\times10^{-16}\).  Omitting the human endpoint sign flips every odd
+coefficient and fails at the first possible order.
+
+\section{Crossing equation}
+
+For four bottom NS Liouville primaries the nonchiral direct-channel
+decomposition in the project convention is
+\begin{align}
+ G_{4321}^{(s)}(z,\bar z)
+ =\int_0^\infty\frac{dp}{\pi}\bigl[&
+ C_{12p}C_{34p}\,F_0^{4321}(p;z)F_0^{4321}(p;\bar z)
+ \nonumber\\[-0.2em]
+ &+\widetilde C_{12p}\widetilde C_{34p}\,
+ F_1^{4321}(p;z)F_1^{4321}(p;\bar z)\bigr].
+ \label{eq:s-channel-crossing}
+\end{align}
+The crossed channel is obtained by
+\((P_1,P_2,P_3,P_4;z)\mapsto(P_3,P_2,P_1,P_4;1-z)\).
+
+Equation~\eqref{eq:final-B-formula} changes the odd chiral convention by
+\(F_1^{\rm human}=-F_1^{\rm production}\), while leaving \(F_0\) unchanged.
+The same sign occurs in the antiholomorphic block, so
+\begin{equation}
+ F_1^{\rm human}(z)F_1^{\rm human}(\bar z)
+ =F_1^{\rm production}(z)F_1^{\rm production}(\bar z).
+ \label{eq:odd-sign-cancels}
+\end{equation}
+Consequently crossing is exactly insensitive to this simultaneous chiral
+sign flip.  It does, however, test the relative coefficient of the even and
+odd \emph{nonchiral} families.  We therefore performed a new computation in
+which the two continuum channels were evaluated independently, without
+averaging, rescaling, or imposing equality.  The driver is
+\begin{center}
+ \path{Code/stress_ns_crossing_extended.py}.
+\end{center}
+It works at the self-dual point \(b=1\), where the physical structure
+constants used here are implemented.  Changing only the block central charge
+would not define a check at another \(b\), so no such artificial \(b\)-scan
+was made.
+
+The blocks use the direct functional \(c\)-recursion at \(c=27/2\), with
+exact global \(\mathfrak{osp}(1|2)\) leaves and no local-\(z\) or elliptic-
+\(q\) truncation.  We used 80-digit block arithmetic, 35-digit structure
+constants, \(p\le5\), and 32-point Gauss--Legendre quadrature.  For each of
+the three momentum quadruples
+\begin{equation}
+ \left(\frac12,\frac13,\frac14,\frac35\right),\qquad
+ (0.20,0.45,0.70,0.35),\qquad
+ (0.80,0.15,0.55,0.40),
+ \label{eq:crossing-momenta}
+\end{equation}
+we evaluated seven real points \(z=0.2,0.3,\ldots,0.8\) and three complex
+points \(z=0.3+0.2i,0.5+0.25i,0.7+0.2i\).  Thus the main ledger contains
+90 raw channel comparisons.  With
+\begin{equation}
+ R=\frac{|G^{(s)}(z,\bar z)-G^{(t)}(1-z,1-\bar z)|}
+ {\max(|G^{(s)}(z,\bar z)|,|G^{(t)}(1-z,1-\bar z)|)},
+ \label{eq:crossing-residual}
+\end{equation}
+the maximum over the ten points is
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+momenta in Eq.~\eqref{eq:crossing-momenta}
+ &\(N=8\)&\(N=10\)&\(N=12\)&wrong \(G_0-G_1\), \(N=12\)\\
+\midrule
+first  &\(6.80\times10^{-5}\)&\(9.43\times10^{-6}\)&\(1.32\times10^{-6}\)&\(6.32\times10^{-2}\)\\
+second &\(7.25\times10^{-5}\)&\(1.01\times10^{-5}\)&\(1.42\times10^{-6}\)&\(6.55\times10^{-2}\)\\
+third  &\(7.92\times10^{-5}\)&\(1.12\times10^{-5}\)&\(1.58\times10^{-6}\)&\(7.34\times10^{-2}\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Here \(N\) is the maximum accumulated physical null level in the recursion.
+The worst order-twelve point is the third case at \(z=0.8\).  At \(z=0.5\)
+the three residuals are respectively \(7.11\times10^{-11}\),
+\(2.61\times10^{-11}\), and \(2.02\times10^{-10}\); the largest residual
+among the complex points is \(2.36\times10^{-8}\).  The maximum channel drift
+from \(N=10\) to \(N=12\) is \(9.57\times10^{-6}\), showing that the edge
+residual is dominated by recursion truncation.  At real \(z\), the largest
+spurious imaginary part is \(7.46\times10^{-37}\).
+
+As a negative control, the even and odd momentum integrals were also retained
+separately.  At \(N=12\), the largest even-only and odd-only crossing
+residuals are \(3.65\times10^{-2}\) and \(8.83\times10^{-1}\), whereas their
+physical sum gives the table above.  Replacing that sum by the deliberately
+wrong nonchiral combination \(G_0-G_1\) produces the last column.  This is a
+test of the physical even/odd assembly, not a test of the chiral phase in
+Eq.~\eqref{eq:odd-sign-cancels}.
+
+Finally, for the first momentum set and
+\(z=0.2,0.5,0.8,0.5+0.25i\), we varied the continuum integration at fixed
+\(N=12\):
+\begin{center}
+\begin{tabular}{@{}lrr@{}}
+\toprule
+integration & maximum \(R\) & maximum channel change from previous row\\
+\midrule
+\(p\le4\), 24 points &\(1.319268\times10^{-6}\)&---\\
+\(p\le5\), 32 points &\(1.319270\times10^{-6}\)&\(3.25\times10^{-9}\)\\
+\(p\le6\), 40 points &\(1.319261\times10^{-6}\)&\(6.01\times10^{-11}\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+At the last resolution, \(R(0.5)=1.40\times10^{-12}\) and
+\(R(0.5+0.25i)=5.79\times10^{-12}\).  The integration drift is therefore
+far below the order-twelve edge residual.  These are convergence diagnostics,
+not certified error bounds for the infinite recursion.
+
+The raw ledgers are
+\begin{center}
+\small
+\path{Data Set/ns_liouville_crossing_extended_fresh.json},\\
+\path{Data Set/ns_liouville_crossing_extended_p4_q24.json},\\
+\path{Data Set/ns_liouville_crossing_extended_p6_q40.json}.
+\end{center}
+They support nonchiral crossing and its physical even/odd coefficients, but
+the direct PBW comparison in the previous section remains what fixes the
+human-note chiral sign \((-1)^{2n}\).
+
+\section{Conclusion}
+
+With the ungraded pairing, the auxiliary-fermion/SCA Gram matrix and the
+double-Virasoro Gram matrix both factor without a parity insertion.  The
+auxiliary identity block is one, so the two computations of the enlarged
+sphere block give Eq.~\eqref{eq:final-B-formula}.  The only nontrivial
+ordered-sphere sign is \((-1)^{2n}\), inherited from the human note's
+third-slot odd tensor.  It passes the direct low-order computation; deleting
+it produces the opposite odd block.  The extended crossing scan strongly
+checks the physical nonchiral even/odd assembly and remains satisfied under
+recursion and integration refinement, but it cannot distinguish the two
+overall chiral odd-block sign conventions.
+
+\end{document}

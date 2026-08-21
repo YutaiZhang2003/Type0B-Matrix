@@ -405,18 +405,22 @@ def lift_consistency_errors() -> tuple[float, float]:
 
 
 def theta_lift_signs(edge_lifts: Sequence[int]) -> tuple[int, int]:
-    """Map theta-edge lifts to the two Schottky generator lift signs.
+    """Map human-note theta lifts to Schottky-generator lift signs.
 
-    In the marking of :func:`ccy_theta_generators`, the generators cross edge
-    pairs ``(0,infinity)`` and ``(0,1)``.  The determinant-one representative
-    of the second generator has a negative attracting half-multiplier; this
-    intrinsic sign produces the minus in the ``(0,1)`` primitive link.
+    The determinant-one representatives used by
+    :func:`ccy_theta_generators` have the raw shortest-link signs ``(+,+,-)``
+    on ``(0,infinity)``, ``(1,infinity)``, and ``(0,1)``.  The human note
+    absorbs the corresponding infinity-frame rephasing into its plumbing
+    lift, so its vacuum coefficient has ``(-,-,-)``.  Equivalently the raw
+    Schottky edge lifts are ``(eta_0,eta_1,-eta_infinity)``.  This conversion
+    belongs here at the geometric backend boundary; callers always pass the
+    public human-note lifts.
     """
 
     if len(edge_lifts) != 3 or any(sign not in (-1, 1) for sign in edge_lifts):
         raise ValueError("theta plumbing needs three edge lift signs")
-    xi_zero, xi_one, xi_infty = (int(sign) for sign in edge_lifts)
-    return xi_zero * xi_infty, xi_zero * xi_one
+    eta_zero, eta_one, eta_infty = (int(sign) for sign in edge_lifts)
+    return -eta_zero * eta_infty, eta_zero * eta_one
 
 
 def theta_expected_leading_coefficient(
@@ -425,23 +429,20 @@ def theta_expected_leading_coefficient(
 ) -> float:
     r"""Coefficient of t^3 from the three shortest fermionic theta links.
 
-    In the slot/lift convention used by the plumbing generators, the cycles
-    ``A``, ``B`` and ``A B`` have leading half-multiplier signs
+    In the literal human-note theta frame, all three shortest two-supercurrent
+    vacuum links carry a minus:
 
-        xi_0 xi_infty,  -xi_0 xi_1,  xi_1 xi_infty.
-
-    The middle minus is produced by the determinant-one representative of
-    the second generator; it is not an independently assigned sign.
+        -eta_0 eta_infinity, -eta_0 eta_1, -eta_1 eta_infinity.
     """
 
     if len(scales) != 3 or len(edge_lifts) != 3:
         raise ValueError("three theta edge scales and lifts are required")
     x_zero, x_one, x_infty = (float(value) for value in scales)
-    xi_zero, xi_one, xi_infty = (int(value) for value in edge_lifts)
+    eta_zero, eta_one, eta_infty = (int(value) for value in edge_lifts)
     return float(
-        xi_zero * xi_infty * (x_zero * x_infty) ** 1.5
-        + xi_one * xi_infty * (x_one * x_infty) ** 1.5
-        - xi_zero * xi_one * (x_zero * x_one) ** 1.5
+        -eta_zero * eta_infty * (x_zero * x_infty) ** 1.5
+        -eta_one * eta_infty * (x_one * x_infty) ** 1.5
+        -eta_zero * eta_one * (x_zero * x_one) ** 1.5
     )
 
 

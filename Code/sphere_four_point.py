@@ -49,6 +49,24 @@ class FourPointCorrelators:
         raise ValueError("kind must be 'G', 'H', or 'J'")
 
 
+@dataclass(frozen=True)
+class GChannelComponents:
+    """Even and odd NS-family contributions to the bottom-field correlator."""
+
+    even: complex
+    odd: complex
+
+    @property
+    def total(self) -> complex:
+        return self.even + self.odd
+
+    @property
+    def wrong_relative_sign(self) -> complex:
+        """Negative control: reverse the physical even/odd relative sign."""
+
+        return self.even - self.odd
+
+
 def _real_nonnegative(name: str, value: Number) -> float:
     value = complex(value)
     if abs(value.imag) > 1.0e-14 or value.real < 0 or not math.isfinite(value.real):
@@ -250,15 +268,18 @@ class BRYNSFourPointCorrelator:
         zbar = z.conjugate()
 
         pe = self._block_value(primary, z, "even")
-        po = self._block_value(primary, z, "odd")
+        # The block API uses the human-note fixed-parity rho_a.  BRY's
+        # scalar-correlator convention differs by one minus sign for the
+        # unstarred odd chiral block, so convert only at this literature
+        # boundary.
+        po = -self._block_value(primary, z, "odd")
         se = self._block_value(starred, z, "even")
-        # The low-level block module follows the signed ancillary-notebook
-        # phase.  BRY's scalar-correlator convention has one additional minus
-        # sign for the doubly-starred odd block.  It cancels in H but fixes the
-        # relative sign of the mixed even/odd products in J.
+        # BRY's scalar-correlator convention also has one minus sign for the
+        # doubly-starred odd block.  It cancels in H but fixes the relative
+        # sign of the mixed even/odd products in J.
         so = -self._block_value(starred, z, "odd")
         pe_bar = self._block_value(primary, zbar, "even")
-        po_bar = self._block_value(primary, zbar, "odd")
+        po_bar = -self._block_value(primary, zbar, "odd")
         se_bar = self._block_value(starred, zbar, "even")
         so_bar = -self._block_value(starred, zbar, "odd")
 
@@ -325,9 +346,9 @@ class BRYNSFourPointCorrelator:
         primary, _ = self._blocks(internal_momentum)
         zbar = z.conjugate()
         pe = self._block_value(primary, z, "even")
-        po = self._block_value(primary, z, "odd")
+        po = -self._block_value(primary, z, "odd")
         pe_bar = self._block_value(primary, zbar, "even")
-        po_bar = self._block_value(primary, zbar, "odd")
+        po_bar = -self._block_value(primary, zbar, "odd")
         return (c_product * pe * pe_bar + ct_product * po * po_bar) / math.pi
 
     def g_momentum_integrands_grid(
@@ -337,6 +358,20 @@ class BRYNSFourPointCorrelator:
     ) -> Tuple[complex, ...]:
         """Vectorized dP integrands for a direct-recursion z grid."""
 
+        return tuple(
+            value.total
+            for value in self.g_momentum_components_grid(
+                internal_momentum, z_values
+            )
+        )
+
+    def g_momentum_components_grid(
+        self,
+        internal_momentum: Number,
+        z_values: Sequence[Number],
+    ) -> Tuple[GChannelComponents, ...]:
+        """Vectorized even/odd dP integrands for a direct-recursion z grid."""
+
         internal_momentum = _real_nonnegative(
             "internal_momentum", internal_momentum
         )
@@ -344,22 +379,31 @@ class BRYNSFourPointCorrelator:
         if not points:
             raise ValueError("z_values must not be empty")
         if internal_momentum == 0:
-            return tuple(0.0j for _ in points)
+            return tuple(
+                GChannelComponents(even=0.0j, odd=0.0j) for _ in points
+            )
 
         c_product, ct_product = self._structure_products(internal_momentum)
         primary, _ = self._blocks(internal_momentum)
         pe = self._block_values(primary, points, "even")
-        po = self._block_values(primary, points, "odd")
+        po = tuple(
+            -value for value in self._block_values(primary, points, "odd")
+        )
         if all(point.imag == 0 for point in points):
             pe_bar = pe
             po_bar = po
         else:
             conjugates = tuple(point.conjugate() for point in points)
             pe_bar = self._block_values(primary, conjugates, "even")
-            po_bar = self._block_values(primary, conjugates, "odd")
+            po_bar = tuple(
+                -value
+                for value in self._block_values(primary, conjugates, "odd")
+            )
         return tuple(
-            (c_product * even * even_bar + ct_product * odd * odd_bar)
-            / math.pi
+            GChannelComponents(
+                even=c_product * even * even_bar / math.pi,
+                odd=ct_product * odd * odd_bar / math.pi,
+            )
             for even, even_bar, odd, odd_bar in zip(pe, pe_bar, po, po_bar)
         )
 
@@ -433,6 +477,32 @@ class BRYNSFourPointCorrelator:
             for index, value in enumerate(values):
                 totals[index] += weight * value
         return tuple(totals)
+
+    def evaluate_g_components_grid(
+        self,
+        z_values: Sequence[Number],
+        *,
+        p_max: float = 6.0,
+        quadrature_order: int = 48,
+    ) -> Tuple[GChannelComponents, ...]:
+        """Integrate the even and odd NS families separately on a z grid."""
+
+        points = tuple(self._validate_z(z) for z in z_values)
+        if not points:
+            raise ValueError("z_values must not be empty")
+        even_totals = [0.0j] * len(points)
+        odd_totals = [0.0j] * len(points)
+        for momentum, weight in _legendre_interval(
+            quadrature_order, float(p_max)
+        ):
+            values = self.g_momentum_components_grid(momentum, points)
+            for index, value in enumerate(values):
+                even_totals[index] += weight * value.even
+                odd_totals[index] += weight * value.odd
+        return tuple(
+            GChannelComponents(even=even, odd=odd)
+            for even, odd in zip(even_totals, odd_totals)
+        )
 
     def correlator(
         self,

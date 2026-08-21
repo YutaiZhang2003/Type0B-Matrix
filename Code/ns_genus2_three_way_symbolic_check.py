@@ -202,8 +202,10 @@ def branching_coefficient_squared(
     gamma3 = q / 2 + k3 * p3 if k3 else sp.S.Zero
     active = sum(label != 0 for label in (k1, k2, k3))
 
-    if active <= 1:
+    if active == 0:
         numerator = sp.S.One
+    elif active == 1:
+        numerator = -sp.S.One if k3 else sp.S.One
     elif active == 2 and k3 == 0:
         numerator = h1 + h2 - h3 - gamma1 * gamma2
     elif active == 2 and k2 == 0:
@@ -212,11 +214,8 @@ def branching_coefficient_squared(
         numerator = h1 - h2 - h3 + gamma2 * gamma3
     else:
         numerator = (
-            h1
-            + h2
-            + h3
-            - sp.Rational(1, 2)
-            - gamma1 * gamma2
+            -(h1 + h2 + h3 - sp.Rational(1, 2))
+            + gamma1 * gamma2
             + gamma1 * gamma3
             + gamma2 * gamma3
         )
@@ -420,18 +419,22 @@ def theta_cross_exponent(
 
 
 def graded_gram_extra_exponent(
-    sca_parities: Sequence[int], fermion_parities: Sequence[int]
+    sca_parities: Sequence[int],
+    fermion_parities: Sequence[int],
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> int:
     r"""Extra inverse-Gram sign for the graded tensor BPZ pairing.
 
     Relative to the algebraic product pairing, each theta edge contributes
-    ``(-1)^(s_i f_i)``.  The separate free-fermion BPZ sign is already part
-    of the Majorana block and is not included here.
+    ``(-1)^((p_i+s_i) f_i)``.  The separate free-fermion BPZ sign is already
+    part of the Majorana block and is not included here.
     """
 
     return sum(
-        (int(sca) % 2) * (int(fermion) % 2)
-        for sca, fermion in zip(sca_parities, fermion_parities)
+        ((int(primary) + int(sca)) % 2) * (int(fermion) % 2)
+        for primary, sca, fermion in zip(
+            primary_parities, sca_parities, fermion_parities
+        )
     ) % 2
 
 
@@ -505,9 +508,8 @@ def hatted_two_virasoro_series(
         branch = paper_branching_candidate_squared(
             momenta=momenta, labels=labels
         )
-        # The exact PBW oracle includes the fixed theta BPZ linear bit in
-        # addition to the quadratic Koszul sign.  Applying the same ledger to
-        # the branching-vector parities puts all three methods in one frame.
+        # Apply the literal human-note quadratic theta sign to the
+        # branching-vector parities, putting all three methods in one frame.
         branch *= theta_orientation_sign(base_levels)
         copy_central_charges: list[sp.Expr] = []
         copy_weights: list[list[sp.Expr]] = [[], []]

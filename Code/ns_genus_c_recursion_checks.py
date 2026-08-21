@@ -150,21 +150,31 @@ def ns_fusion_polynomial(
     *,
     r: int,
     s: int,
-    alpha: int,
+    a: int | None = None,
+    alpha: int | None = None,
     first_weight: Number,
     second_weight: Number,
     b: Number,
 ) -> complex:
-    """Return P_(r,s)^alpha for an ordered pair of NS weights."""
+    """Return ``P_(r,s)^a`` for an ordered pair of NS weights.
 
-    if alpha not in (0, 1):
-        raise ValueError("alpha must be 0 or 1")
+    ``a`` is the note's relative three-form label.  ``alpha`` is retained as
+    a compatibility alias for older callers and must agree with ``a`` if both
+    are supplied.
+    """
+
+    if a is None:
+        a = alpha
+    elif alpha is not None and int(alpha) != int(a):
+        raise ValueError("a and its compatibility alias alpha disagree")
+    if a not in (0, 1):
+        raise ValueError("a must be the relative label 0 or 1")
     if r < 1 or s < 1 or (r + s) % 2:
         raise ValueError("NS labels require positive r,s with r+s even")
     b = complex(b)
     lambda_i = momentum_from_weight(first_weight, b)
     lambda_j = momentum_from_weight(second_weight, b)
-    congruence = 2 if alpha == 0 else 0
+    congruence = 2 if a == 0 else 0
     denominator = 2.0 * math.sqrt(2.0)
     result = 1.0 + 0.0j
     for p in range(1 - r, r, 2):

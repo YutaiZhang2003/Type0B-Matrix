@@ -10,22 +10,20 @@ Levels are stored as twice-levels.  The genus-two cutoff is *total* level:
 ``sum(twice_levels) <= 2*order``.  This is the convention used by the CCY
 genus-two implementation already present in ``Code/python``.
 
-The recursive answer includes the necessary sector transport
+The recursive answer includes the necessary relative-label transport
 
-    alpha_v -> alpha_v + rs (mod 2)
+    a_v -> a_v + rs (mod 2)
 
 at both endpoints of an edge carrying an odd singular vector.  Omitting
 this transport is a genuine error: a fixed-parity three-form cannot factor
-through an odd null state into a shifted module with the same parity label.
+through an odd null state into a shifted module with the same relative label.
+Intrinsic primary parities ``p_i`` are not included in ``a_v``; they enter
+the graded Ward tensors, sewing powers, and orientation character separately.
 
-The theta orientation sign used below is the graded contraction sign for
-the half-edge order (zero, one, infinity), including the CCY infinity-tube
-spin-frame convention.  At total level three it reproduces the three
-shortest lifted Schottky links
-
-    +xi_0 xi_inf (q_0 q_inf)^(3/2),
-    +xi_1 xi_inf (q_1 q_inf)^(3/2),
-    -xi_0 xi_1   (q_0 q_1)^(3/2).
+The theta orientation sign is exactly the human-note graded contraction sign
+for the half-edge order (zero, one, infinity), with the fixed infinity-frame
+sign absorbed into the lifted plumbing coordinate.  At total level three
+all three two-supercurrent vacuum links therefore carry the same minus sign.
 
 Run from the repository root with
 
@@ -63,6 +61,11 @@ from ns_genus_c_recursion_checks import (
     ns_inverse_null_slope,
 )
 from ns_global_osp_block import osp_norm, osp_three_point
+from ns_human_convention import (
+    human_note_rho_sign,
+    normalize_parity_triple,
+    theta_orientation_sign as human_theta_orientation_sign,
+)
 from ns_regular_block import THETA_ORIENTATION, regular_coefficient
 
 
@@ -101,7 +104,7 @@ def _global_labels(state: State) -> tuple[int, int]:
     )
 
 
-def _is_primary_component_state(state: State) -> bool:
+def _is_global_boundary_state(state: State) -> bool:
     """Whether a state is a bottom primary or its G_-1/2 component."""
 
     return state in ((), (("G", -1),))
@@ -230,12 +233,10 @@ class NSVacuumModule:
 
 
 class NSDescendantThreeForm:
-    """The component-normalized NS three-form at ``(infinity,1,0)``.
+    """The human-note NS three-form at ``(infinity,1,0)``.
 
-    The two primary structures are each normalized to one.  Consequently
-    the returned tensor is the even structure when the total state parity is
-    even and the odd structure when it is odd.  A fixed structure is obtained
-    by applying the parity projector outside this class.
+    The Ward recurrence itself uses the fixed-parity convention printed in
+    ``Human Notes/SCblock.tex``; there is no caller-side convention change.
 
     The recursion implements Suchanek's NS Ward identities (2.23)--(2.29),
     with the Virasoro identities in exactly the CCY plane frame.
@@ -249,9 +250,13 @@ class NSDescendantThreeForm:
         middle_weight: complex,
         ket_weight: complex,
         vacuum: bool = False,
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> None:
         self.c = complex(c)
         self.vacuum = bool(vacuum)
+        self.primary_parities = normalize_parity_triple(
+            primary_parities, name="primary_parities"
+        )
         self.weights = (
             complex(bra_weight),
             complex(middle_weight),
@@ -260,6 +265,8 @@ class NSDescendantThreeForm:
         if self.vacuum:
             if any(weight != 0.0 for weight in self.weights):
                 raise ValueError("vacuum quotient requires zero primary weights")
+            if any(self.primary_parities):
+                raise ValueError("the NS vacuum primary must be even")
             self.modules = tuple(NSVacuumModule(c=self.c) for _ in range(3))
         else:
             self.modules = tuple(
@@ -274,17 +281,32 @@ class NSDescendantThreeForm:
     def _linear_action(
         self,
         *,
+        target_states: tuple[State, State, State],
         slot: int,
         mode: Mode,
         states: tuple[State, State, State],
     ) -> complex:
+        target_sign = human_note_rho_sign(
+            tuple(state_parity(state) for state in target_states),
+            self.primary_parities,
+        )
         result = 0.0 + 0.0j
         for acted_state, coefficient in self.modules[slot].mode_action(
             mode, states[slot]
         ).items():
             changed = list(states)
             changed[slot] = acted_state
-            result += coefficient * self.value(*changed)
+            changed_states = tuple(changed)
+            changed_sign = human_note_rho_sign(
+                tuple(state_parity(state) for state in changed_states),
+                self.primary_parities,
+            )
+            result += (
+                coefficient
+                * target_sign
+                * changed_sign
+                * self.value(*changed_states)
+            )
         return result
 
     def _reorder_leading_global_fermion(
@@ -300,8 +322,12 @@ class NSDescendantThreeForm:
             # G_-1/2 G_r = -G_r G_-1/2 + 2 L_(r-1/2).
             reordered = (next_mode, ("G", -1)) + remainder
             l_mode = ("L", next_mode[1] - 1)
-            return -self.value(reordered, middle, ket) + 2.0 * self.value(
-                (l_mode,) + remainder, middle, ket
+            return (
+                -self.value(reordered, middle, ket)
+                + 2.0
+                * self.value(
+                    (l_mode,) + remainder, middle, ket
+                )
             )
 
         # G_-1/2 L_n = L_n G_-1/2 + (-1/2-n/2) G_(n-1/2).
@@ -310,20 +336,54 @@ class NSDescendantThreeForm:
         coefficient = (-next_mode[1] - 2.0) / 4.0
         reordered = (next_mode, ("G", -1)) + remainder
         g_mode = ("G", next_mode[1] - 1)
-        return self.value(reordered, middle, ket) + coefficient * self.value(
-            (g_mode,) + remainder, middle, ket
+        return (
+            self.value(reordered, middle, ket)
+            + coefficient
+            * self.value((g_mode,) + remainder, middle, ket)
+        )
+
+    def _reflected_value(
+        self, bra: State, middle: State, ket: State
+    ) -> complex:
+        target_states = (bra, middle, ket)
+        reflected_states = (ket, middle, bra)
+        target_sign = human_note_rho_sign(
+            tuple(state_parity(state) for state in target_states),
+            self.primary_parities,
+        )
+        reflected_primary_parities = (
+            self.primary_parities[2],
+            self.primary_parities[1],
+            self.primary_parities[0],
+        )
+        reflected_sign = human_note_rho_sign(
+            tuple(state_parity(state) for state in reflected_states),
+            reflected_primary_parities,
+        )
+        reflected = NSDescendantThreeForm(
+            c=self.c,
+            bra_weight=self.weights[2],
+            middle_weight=self.weights[1],
+            ket_weight=self.weights[0],
+            vacuum=self.vacuum,
+            primary_parities=reflected_primary_parities,
+        )
+        return (
+            target_sign
+            * reflected_sign
+            * reflected.value(*reflected_states)
         )
 
     @lru_cache(maxsize=None)
     def value(self, bra: State, middle: State, ket: State) -> complex:
-        """Return ``rho(bra,middle,ket|z=1)``."""
+        """Return the fixed-parity human-note ``rho_a``."""
 
         # Only the eight zero-bosonic-level component tensors are boundary
         # data.  All L_-1 chains must themselves follow from the Ward
         # identities; using a separate closed formula here would make the
         # direct oracle circular with the proposed global seed.
         if all(
-            _is_primary_component_state(state)
+            _is_global_boundary_state(state)
             for state in (bra, middle, ket)
         ):
             (n3, e3), (n2, e2), (n1, e1) = (
@@ -339,6 +399,7 @@ class NSDescendantThreeForm:
                 d1=self.weights[0],
                 d2=self.weights[1],
                 d3=self.weights[2],
+                primary_parities=self.primary_parities,
             )
 
         states = (bra, middle, ket)
@@ -362,6 +423,7 @@ class NSDescendantThreeForm:
                 for m in range(max(0, max_first) + 1):
                     coefficient = generalized_binomial(k - 1.5 + m, m)
                     result += coefficient * self._linear_action(
+                        target_states=states,
                         slot=0,
                         mode=("G", int(round(2.0 * (k + m)))),
                         states=(bra, tail, ket),
@@ -372,10 +434,15 @@ class NSDescendantThreeForm:
                 max_second = int(
                     math.floor(state_twice_level(ket) / 2.0 + 0.5 + 1.0e-12)
                 )
-                ward_sign = -((-1) ** (parity_13 + int(round(k + 0.5))))
+                # Fixed-parity human-note normalization adds one minus to the
+                # ket term relative to the component-ordered S2b identity.
+                ward_sign = -((-1) ** (
+                    parity_13 + int(round(k + 0.5))
+                ))
                 for m in range(max(0, max_second) + 1):
                     coefficient = generalized_binomial(k - 1.5 + m, m)
                     result += ward_sign * coefficient * self._linear_action(
+                        target_states=states,
                         slot=2,
                         mode=("G", 2 * m - 1),
                         states=(bra, tail, ket),
@@ -398,6 +465,7 @@ class NSDescendantThreeForm:
             for m in range(max_first + 1):
                 coefficient = generalized_binomial(n - 2 + m, n - 2)
                 result += coefficient * self._linear_action(
+                    target_states=states,
                     slot=0,
                     mode=("L", 2 * (n + m)),
                     states=(bra, tail, ket),
@@ -406,6 +474,7 @@ class NSDescendantThreeForm:
             for m in range(max_second + 1):
                 coefficient = generalized_binomial(n - 2 + m, n - 2)
                 result += ((-1) ** n) * coefficient * self._linear_action(
+                    target_states=states,
                     slot=2,
                     mode=("L", 2 * (m - 1)),
                     states=(bra, tail, ket),
@@ -424,15 +493,12 @@ class NSDescendantThreeForm:
                     # With an empty middle slot, a lone global fermion can
                     # only remain together with a non-global ket.  Reflecting
                     # the two endpoint slots strictly reduces that case.
-                    return NSDescendantThreeForm(
-                        c=self.c,
-                        bra_weight=self.weights[2],
-                        middle_weight=self.weights[1],
-                        ket_weight=self.weights[0],
-                        vacuum=self.vacuum,
-                    ).value(ket, middle, bra)
+                    return self._reflected_value(bra, middle, ket)
                 parity_13 = (state_parity(tail) + state_parity(ket)) % 2
+                # The exponent is the parity of the full first-slot state
+                # G_-k tail plus the ket, hence the explicit +1.
                 result = ((-1) ** (parity_13 + 1)) * self._linear_action(
+                    target_states=states,
                     slot=2,
                     mode=("G", int(round(2.0 * k))),
                     states=(tail, middle, ket),
@@ -441,6 +507,7 @@ class NSDescendantThreeForm:
                 for m in range(-1, upper + 1):
                     coefficient = generalized_binomial(k + 0.5, m + 1)
                     result += coefficient * self._linear_action(
+                        target_states=states,
                         slot=1,
                         mode=("G", 2 * m + 1),
                         states=(tail, middle, ket),
@@ -449,6 +516,7 @@ class NSDescendantThreeForm:
 
             n = int(round(-_mode_index(mode)))
             result = self._linear_action(
+                target_states=states,
                 slot=2,
                 mode=("L", 2 * n),
                 states=(tail, middle, ket),
@@ -456,6 +524,7 @@ class NSDescendantThreeForm:
             for m in range(-1, n + 1):
                 coefficient = math.comb(n + 1, m + 1)
                 result += coefficient * self._linear_action(
+                    target_states=states,
                     slot=1,
                     mode=("L", 2 * m),
                     states=(tail, middle, ket),
@@ -463,24 +532,25 @@ class NSDescendantThreeForm:
             return result
 
         if ket:
-            reflected = NSDescendantThreeForm(
-                c=self.c,
-                bra_weight=self.weights[2],
-                middle_weight=self.weights[1],
-                ket_weight=self.weights[0],
-                vacuum=self.vacuum,
-            )
-            return reflected.value(ket, middle, bra)
+            return self._reflected_value(bra, middle, ket)
 
         return 1.0 + 0.0j
 
 
-def theta_orientation_sign(twice_levels: Sequence[int]) -> int:
-    """Return the theta-graph graded contraction/orientation sign."""
+def theta_orientation_sign(
+    twice_levels: Sequence[int],
+    primary_parities: Sequence[int] = (0, 0, 0),
+) -> int:
+    """Return ``(-1)^Q(A+p_1,C+p_2,E+p_3)`` from the note."""
 
     if len(twice_levels) != 3:
         raise ValueError("theta graph has three edge levels")
-    return THETA_ORIENTATION.sign(tuple(int(level) % 2 for level in twice_levels))
+    return human_theta_orientation_sign(
+        tuple(int(level) % 2 for level in twice_levels),
+        normalize_parity_triple(
+            primary_parities, name="primary_parities"
+        ),
+    )
 
 
 def _inverse(matrix: Sequence[Sequence[complex]]) -> np.ndarray:
@@ -502,15 +572,21 @@ class DirectThetaOracle:
         c: complex,
         weights: Sequence[complex],
         vacuum: bool = False,
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> None:
         if len(weights) != 3:
             raise ValueError("theta sewing requires three weights")
         self.c = complex(c)
         self.vacuum = bool(vacuum)
+        self.primary_parities = normalize_parity_triple(
+            primary_parities, name="primary_parities"
+        )
         self.weights = tuple(complex(weight) for weight in weights)
         if self.vacuum:
             if any(weight != 0.0 for weight in self.weights):
                 raise ValueError("vacuum quotient requires zero weights")
+            if any(self.primary_parities):
+                raise ValueError("the NS vacuum primary must be even")
             self.modules = tuple(NSVacuumModule(c=self.c) for _ in range(3))
         else:
             self.modules = tuple(
@@ -523,6 +599,7 @@ class DirectThetaOracle:
             middle_weight=self.weights[1],
             ket_weight=self.weights[2],
             vacuum=self.vacuum,
+            primary_parities=self.primary_parities,
         )
 
     @lru_cache(maxsize=None)
@@ -546,11 +623,15 @@ class DirectThetaOracle:
         if len(twice_levels) != 3 or len(lifts) != 3:
             raise ValueError("theta sewing requires three levels and lifts")
         levels = tuple(int(value) for value in twice_levels)
-        parity = sum(levels) % 2
+        relative_label = sum(levels) % 2
         if any(int(sector) not in (0, 1) for sector in sectors):
             raise ValueError("sector labels must be zero or one")
-        expected_sectors = (0, 0) if self.vacuum and parity == 0 else (parity, parity)
-        if self.vacuum and parity:
+        expected_sectors = (
+            (0, 0)
+            if self.vacuum and relative_label == 0
+            else (relative_label, relative_label)
+        )
+        if self.vacuum and relative_label:
             return 0.0 + 0.0j
         if sectors != expected_sectors:
             return 0.0 + 0.0j
@@ -577,9 +658,16 @@ class DirectThetaOracle:
             optimize=True,
         )
         lift = math.prod(
-            int(sign) ** (level % 2) for sign, level in zip(lifts, levels)
+            int(sign) ** ((level + primary) % 2)
+            for sign, level, primary in zip(
+                lifts, levels, self.primary_parities
+            )
         )
-        return complex(theta_orientation_sign(levels) * lift * contracted)
+        return complex(
+            theta_orientation_sign(levels, self.primary_parities)
+            * lift
+            * contracted
+        )
 
 
 def direct_theta_coefficient(
@@ -589,10 +677,15 @@ def direct_theta_coefficient(
     twice_levels: Sequence[int],
     sectors: tuple[int, int],
     lifts: Sequence[int] = (1, 1, 1),
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> complex:
     """Directly sew one finite-c theta-graph coefficient."""
 
-    return DirectThetaOracle(c=c, weights=weights).coefficient(
+    return DirectThetaOracle(
+        c=c,
+        weights=weights,
+        primary_parities=primary_parities,
+    ).coefficient(
         twice_levels=twice_levels,
         sectors=sectors,
         lifts=lifts,
@@ -605,12 +698,16 @@ def global_theta_coefficient(
     twice_levels: Sequence[int],
     sectors: tuple[int, int],
     lifts: Sequence[int] = (1, 1, 1),
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> complex:
     """One coefficient of the explicit global osp theta network."""
 
     levels = tuple(int(value) for value in twice_levels)
-    parity = sum(levels) % 2
-    if sectors != (parity, parity):
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
+    relative_label = sum(levels) % 2
+    if sectors != (relative_label, relative_label):
         return 0.0 + 0.0j
     occupations = tuple(level // 2 for level in levels)
     fermions = tuple(level % 2 for level in levels)
@@ -624,13 +721,23 @@ def global_theta_coefficient(
         d1=weights[0],
         d2=weights[1],
         d3=weights[2],
+        primary_parities=primaries,
     )
     denominator = math.prod(
         osp_norm(weight, occupation, fermion)
         for weight, occupation, fermion in zip(weights, occupations, fermions)
     )
-    lift = math.prod(int(sign) ** fermion for sign, fermion in zip(lifts, fermions))
-    return theta_orientation_sign(levels) * lift * rho * rho / denominator
+    lift = math.prod(
+        int(sign) ** (fermion ^ primary)
+        for sign, fermion, primary in zip(lifts, fermions, primaries)
+    )
+    return (
+        theta_orientation_sign(levels, primaries)
+        * lift
+        * rho
+        * rho
+        / denominator
+    )
 
 
 # Direct large-c sewing of the NS vacuum quotient gives these coefficients in
@@ -641,31 +748,31 @@ def global_theta_coefficient(
 # test to define its own regular part.
 THETA_VACUUM_SEED_LEVEL6: dict[tuple[int, int, int], int] = {
     (0, 0, 0): 1,
-    (0, 3, 3): 1,
-    (3, 0, 3): 1,
+    (0, 3, 3): -1,
+    (3, 0, 3): -1,
     (3, 3, 0): -1,
-    (0, 3, 5): 3,
+    (0, 3, 5): -3,
     (0, 4, 4): 1,
-    (0, 5, 3): 3,
+    (0, 5, 3): -3,
     (4, 0, 4): 1,
     (4, 4, 0): 1,
     (5, 3, 0): -3,
-    (0, 3, 7): 6,
+    (0, 3, 7): -6,
     (0, 4, 6): 4,
-    (0, 5, 5): 16,
+    (0, 5, 5): -16,
     (0, 6, 4): 4,
-    (0, 7, 3): 6,
-    (5, 0, 5): 1,
+    (0, 7, 3): -6,
+    (5, 0, 5): -1,
     (5, 5, 0): -1,
     (6, 4, 0): 4,
     (7, 3, 0): -6,
-    (0, 3, 9): 10,
+    (0, 3, 9): -10,
     (0, 4, 8): 10,
-    (0, 5, 7): 50,
+    (0, 5, 7): -50,
     (0, 6, 6): 25,
-    (0, 7, 5): 50,
+    (0, 7, 5): -50,
     (0, 8, 4): 10,
-    (0, 9, 3): 10,
+    (0, 9, 3): -10,
     (6, 0, 6): 1,
     (6, 6, 0): 1,
     (7, 5, 0): -8,
@@ -681,68 +788,68 @@ THETA_VACUUM_SEED_LEVEL6: dict[tuple[int, int, int], int] = {
 # with a maximum rounding error below 3e-13.
 THETA_VACUUM_SEED_LEVEL8: dict[tuple[int, int, int], int] = {
     **THETA_VACUUM_SEED_LEVEL6,
-    (0, 3, 11): 15,
+    (0, 3, 11): -15,
     (0, 4, 10): 20,
-    (0, 5, 9): 120,
+    (0, 5, 9): -120,
     (0, 6, 8): 90,
-    (0, 7, 7): 226,
+    (0, 7, 7): -226,
     (0, 8, 6): 90,
-    (0, 9, 5): 120,
+    (0, 9, 5): -120,
     (0, 10, 4): 20,
-    (0, 11, 3): 15,
+    (0, 11, 3): -15,
     (3, 3, 8): -3,
-    (3, 4, 7): 1,
+    (3, 4, 7): -1,
     (3, 7, 4): -1,
-    (3, 8, 3): 3,
-    (4, 3, 7): 1,
-    (4, 7, 3): 1,
-    (7, 0, 7): 2,
+    (3, 8, 3): -3,
+    (4, 3, 7): -1,
+    (4, 7, 3): -1,
+    (7, 0, 7): -2,
     (7, 3, 4): -1,
-    (7, 4, 3): 1,
+    (7, 4, 3): -1,
     (7, 7, 0): -2,
     (8, 3, 3): 3,
     (8, 6, 0): 10,
     (9, 5, 0): -30,
     (10, 4, 0): 20,
     (11, 3, 0): -15,
-    (0, 3, 13): 21,
+    (0, 3, 13): -21,
     (0, 4, 12): 35,
-    (0, 5, 11): 245,
+    (0, 5, 11): -245,
     (0, 6, 10): 245,
-    (0, 7, 9): 742,
+    (0, 7, 9): -742,
     (0, 8, 8): 443,
-    (0, 9, 7): 742,
+    (0, 9, 7): -742,
     (0, 10, 6): 245,
-    (0, 11, 5): 245,
+    (0, 11, 5): -245,
     (0, 12, 4): 35,
-    (0, 13, 3): 21,
+    (0, 13, 3): -21,
     (3, 3, 10): -6,
-    (3, 4, 9): 4,
+    (3, 4, 9): -4,
     (3, 5, 8): -16,
-    (3, 6, 7): 4,
+    (3, 6, 7): -4,
     (3, 7, 6): -4,
-    (3, 8, 5): 16,
+    (3, 8, 5): -16,
     (3, 9, 4): -4,
-    (3, 10, 3): 6,
-    (4, 3, 9): 3,
+    (3, 10, 3): -6,
+    (4, 3, 9): -3,
     (4, 4, 8): 2,
-    (4, 5, 7): 3,
-    (4, 7, 5): 3,
+    (4, 5, 7): -3,
+    (4, 7, 5): -3,
     (4, 8, 4): 2,
-    (4, 9, 3): 3,
+    (4, 9, 3): -3,
     (5, 3, 8): -1,
     (5, 7, 4): -3,
-    (5, 8, 3): 16,
-    (6, 7, 3): 4,
+    (5, 8, 3): -16,
+    (6, 7, 3): -4,
     (8, 0, 8): 3,
-    (8, 3, 5): 1,
+    (8, 3, 5): -1,
     (8, 4, 4): 2,
-    (8, 5, 3): 1,
+    (8, 5, 3): -1,
     (8, 8, 0): 3,
     (9, 3, 4): -3,
-    (9, 4, 3): 4,
+    (9, 4, 3): -4,
     (9, 7, 0): -22,
-    (10, 3, 3): 6,
+    (10, 3, 3): -6,
     (10, 6, 0): 45,
     (11, 5, 0): -80,
     (12, 4, 0): 35,
@@ -791,10 +898,14 @@ def regular_theta_coefficient(
     twice_levels: Sequence[int],
     sectors: tuple[int, int],
     lifts: Sequence[int] = (1, 1, 1),
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> complex:
     """Large-c coefficient from the explicit polarized Koszul formula."""
 
     levels = tuple(int(value) for value in twice_levels)
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
     if sum(levels) > 16:
         raise ValueError("the explicit theta vacuum seed is truncated at level eight")
     lifted_vacuum: dict[tuple[int, int, int], complex] = {}
@@ -813,8 +924,10 @@ def regular_theta_coefficient(
             twice_levels=remainder,
             sectors=sectors,
             lifts=lifts,
+            primary_parities=primaries,
         ),
         orientation=THETA_ORIENTATION,
+        global_edge_parity_offsets=primaries,
     )
 
 
@@ -852,7 +965,7 @@ def theta_residue_prefactor(
                 # not the polynomial label, that is toggled.  This is also
                 # what the direct (3,1) residue and the sphere NS recursion
                 # independently require.
-                alpha=int(sector),
+                a=int(sector),
                 first_weight=first_weight,
                 second_weight=second_weight,
                 b=pole.b,
@@ -882,12 +995,16 @@ def recursion_theta_coefficient(
     twice_levels: Sequence[int],
     sectors: tuple[int, int],
     lifts: Sequence[int] = (1, 1, 1),
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> complex:
     """Evaluate the sector-coupled NS c-recursion at one multi-level."""
 
     initial_weights = tuple(complex(value) for value in weights)
     initial_levels = tuple(int(value) for value in twice_levels)
     lift_values = tuple(int(value) for value in lifts)
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
 
     @lru_cache(maxsize=None)
     def recurse(
@@ -898,14 +1015,15 @@ def recursion_theta_coefficient(
     ) -> complex:
         if min(levels) < 0:
             return 0.0 + 0.0j
-        parity = sum(levels) % 2
-        if current_sectors != (parity, parity):
+        relative_label = sum(levels) % 2
+        if current_sectors != (relative_label, relative_label):
             return 0.0 + 0.0j
         total = regular_theta_coefficient(
             weights=current_weights,
             twice_levels=levels,
             sectors=current_sectors,
             lifts=lift_values,
+            primary_parities=primaries,
         )
         for edge, edge_level in enumerate(levels):
             for r in range(2, edge_level + 1):
@@ -932,8 +1050,10 @@ def recursion_theta_coefficient(
                     # encoded by the fixed graph convention in both seeds.
                     null_lift = lift_values[edge] ** (rs % 2)
                     orientation_transport = theta_orientation_sign(
-                        levels
-                    ) / theta_orientation_sign(shifted_levels)
+                        levels, primaries
+                    ) / theta_orientation_sign(
+                        shifted_levels, primaries
+                    )
                     denominator = current_c - pole_c
                     if abs(denominator) < 1.0e-14:
                         raise ZeroDivisionError(

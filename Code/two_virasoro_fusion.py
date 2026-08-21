@@ -9,9 +9,10 @@ The public trinion order is exactly the order in the human note:
 ns_fusion_data computes the human-note coefficient directly for all triples
 with k_i = 2 n_i in {-1, 0, 1}.  It uses branching vectors obtained from the
 human Virasoro highest-weight equations and evaluates their norms and
-trilinear forms with the human algebraic dagger, tensor-product, and
-fixed-parity conventions.  Higher labels are rejected until the dictionary
-between that Shapovalov pairing and geometric graded BPZ has been fixed.
+trilinear forms with the ungraded auxiliary-fermion x SCA pairing and the
+fixed-parity conventions, including arbitrary intrinsic primary parity.
+Higher labels are rejected until their branching vectors have an equally
+direct implementation.
 
 blow_up_factor and the general-label part of branch_norm implement the
 factorized ratio from arXiv:1111.2803 for comparison.  That ratio is not
@@ -23,9 +24,13 @@ from __future__ import annotations
 import argparse
 import operator
 from dataclasses import dataclass
-from typing import Union
+from typing import Sequence, Union
 
 import mpmath
+
+from ns_human_convention import (
+    normalize_parity_triple,
+)
 
 
 Scalar = Union[int, float, complex, str, mpmath.mpf, mpmath.mpc]
@@ -342,11 +347,15 @@ def _human_direct_numerator_mp(
     k1: int,
     k2: int,
     k3: int,
+    primary_parities: tuple[int, int, int] = (0, 0, 0),
 ) -> mpmath.mpc:
     r"""Return \(\widehat\rho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})\).
 
-    This is the direct expansion in the human convention for the implemented
-    level-one-half cases.
+    This is the direct expansion with the ungraded tensor-product pairing for
+    the implemented level-one-half cases.  Because the three-point form is a
+    matrix element, its crossing is ``(-1)^((p_2+|x_2|)|u_3|)`` in the same
+    pairing convention.  In particular a lone odd state in slot 3 has
+    numerator -1 for even primaries, consistently with its BPZ matrix element.
     """
 
     momenta = (p1, p2, p3)
@@ -356,26 +365,31 @@ def _human_direct_numerator_mp(
         q / 2 + k * p if k else mpmath.mpc(0)
         for p, k in zip(momenta, labels)
     )
+    primary1, primary2, _primary3 = primary_parities
+    parity_phase = _sign_from_parity(
+        primary1 * (k1 % 2) + primary2 * (k3 % 2)
+    )
+    if primary1:
+        gammas = (-gammas[0], gammas[1], gammas[2])
     active = sum(k != 0 for k in labels)
 
-    if active <= 1:
-        return mpmath.mpc(1)
+    if active == 0:
+        return mpmath.mpc(parity_phase)
+    if active == 1:
+        return mpmath.mpc(parity_phase * (-1 if k3 else 1))
 
     h1, h2, h3 = weights
     gamma1, gamma2, gamma3 = gammas
     if active == 2:
         if k3 == 0:
-            return h1 + h2 - h3 - gamma1 * gamma2
+            return parity_phase * (h1 + h2 - h3 - gamma1 * gamma2)
         if k2 == 0:
-            return h1 - h2 + h3 - gamma1 * gamma3
-        return h1 - h2 - h3 + gamma2 * gamma3
+            return parity_phase * (h1 - h2 + h3 - gamma1 * gamma3)
+        return parity_phase * (h1 - h2 - h3 + gamma2 * gamma3)
 
-    return (
-        h1
-        + h2
-        + h3
-        - mpmath.mpf("0.5")
-        - gamma1 * gamma2
+    return parity_phase * (
+        -(h1 + h2 + h3 - mpmath.mpf("0.5"))
+        + gamma1 * gamma2
         + gamma1 * gamma3
         + gamma2 * gamma3
     )
@@ -390,6 +404,7 @@ def ns_fusion_data(
     k1: int,
     k2: int,
     k3: int,
+    primary_parities: Sequence[int] = (0, 0, 0),
     precision: int = 50,
 ) -> NSFusionData:
     r"""Compute the directly verified human-note branching coefficient.
@@ -397,13 +412,18 @@ def ns_fusion_data(
     The slots are (1,2,3) = (BPZ/infinity, insertion/one, ket/zero).
     The supported labels are all in {-1,0,1}.  The returned parity is
     a=(k1+k2+k3) mod 2.  Labels with absolute value above one are rejected:
-    their branching vectors contain more than one odd mode, so an explicit
-    dictionary between the human and geometric pairings is required.
+    their branching vectors are not implemented in this numerical routine.
 
-    coefficient_squared is the canonical quantity \(B_a^2\) entering the
-    conformal-block decomposition.  principal_coefficient uses the principal
-    square root of each norm separately; changing any of those three roots
-    changes the sign or phase of the unsquared coefficient.
+    For intrinsic primary parities ``(p_1,p_2,p_3)``, the direct component
+    expansion is used with the matrix-element crossing inherited from the
+    ungraded tensor BPZ convention.  At this first branching level it equals
+    the even-primary expression with ``gamma_1 -> (-1)^p_1 gamma_1`` and the
+    overall factor ``(-1)^(p_1 k_1+p_2 k_3)``.  Therefore the squared
+    coefficient is generally *not* parity independent when ``p_1=1``.
+
+    ``principal_coefficient`` uses the principal square root of each norm
+    separately; changing any of those three roots changes the sign or phase
+    of the unsquared coefficient.
     """
 
     precision = _working_precision(precision)
@@ -411,11 +431,13 @@ def ns_fusion_data(
     k2 = _integer_label(k2, "k2")
     k3 = _integer_label(k3, "k3")
     labels = (k1, k2, k3)
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
     if not all(abs(k) <= 1 for k in labels):
         raise NotImplementedError(
             "the human-convention calculation currently supports all "
-            "k_i in {-1,0,1}; higher labels require an explicit pairing "
-            "dictionary"
+            "k_i in {-1,0,1}; higher branching vectors are not implemented"
         )
 
     with mpmath.workdps(precision):
@@ -430,6 +452,7 @@ def ns_fusion_data(
             k1=k1,
             k2=k2,
             k3=k3,
+            primary_parities=primaries,
         )
         slot1_norm = _human_direct_norm_mp(p1_mp, k1, q)
         slot2_norm = _human_direct_norm_mp(p2_mp, k2, q)
@@ -467,6 +490,7 @@ def ns_fusion_coefficient_squared(
     k1: int,
     k2: int,
     k3: int,
+    primary_parities: Sequence[int] = (0, 0, 0),
     precision: int = 50,
 ) -> mpmath.mpc:
     """Return the canonical squared coefficient B_a^2."""
@@ -479,6 +503,7 @@ def ns_fusion_coefficient_squared(
         k1=k1,
         k2=k2,
         k3=k3,
+        primary_parities=primary_parities,
         precision=precision,
     ).coefficient_squared
 
@@ -492,6 +517,7 @@ def ns_fusion_coefficient(
     k1: int,
     k2: int,
     k3: int,
+    primary_parities: Sequence[int] = (0, 0, 0),
     precision: int = 50,
 ) -> mpmath.mpc:
     """Return B_a using principal square roots of all three norms."""
@@ -504,6 +530,7 @@ def ns_fusion_coefficient(
         k1=k1,
         k2=k2,
         k3=k3,
+        primary_parities=primary_parities,
         precision=precision,
     ).principal_coefficient
 
@@ -533,6 +560,14 @@ def _build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--k3", required=True, type=int, help="slot-3 label k3=2n3"
     )
+    parser.add_argument(
+        "--primary-parities",
+        nargs=3,
+        type=int,
+        default=(0, 0, 0),
+        metavar=("EPS1", "EPS2", "EPS3"),
+        help="intrinsic primary parity bits in slots (infinity,one,zero)",
+    )
     parser.add_argument("--precision", type=int, default=50)
     return parser
 
@@ -547,6 +582,7 @@ def main() -> None:
         k1=args.k1,
         k2=args.k2,
         k3=args.k3,
+        primary_parities=args.primary_parities,
         precision=args.precision,
     )
     digits = args.precision

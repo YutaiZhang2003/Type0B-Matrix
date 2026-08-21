@@ -123,6 +123,14 @@ class FourPointCorrelatorTests(unittest.TestCase):
         self.assertAlmostEqual(g_only.real, self.values.G.real, places=13)
         self.assertAlmostEqual(g_only.imag, self.values.G.imag, places=13)
 
+    def test_separated_g_families_sum_to_full_contraction(self):
+        components = self.correlator.evaluate_g_components_grid(
+            (self.z,), p_max=5.0, quadrature_order=20
+        )[0]
+        self.assertAlmostEqual(components.total.real, self.values.G.real, places=13)
+        self.assertAlmostEqual(components.total.imag, self.values.G.imag, places=13)
+        self.assertNotEqual(components.wrong_relative_sign, components.total)
+
     def test_four_tachyon_combination(self):
         sphere = BRYFourTachyonSphere(
             omega=0.6,

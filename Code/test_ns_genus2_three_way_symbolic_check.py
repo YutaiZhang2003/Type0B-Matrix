@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from itertools import product
 from pathlib import Path
 import sys
 import unittest
@@ -132,33 +133,35 @@ class NSGenus2ThreeWaySymbolicTests(unittest.TestCase):
         self.assertEqual(quotient[(0, 1, 2)], 0)
 
     def test_graded_gram_cancels_theta_polarization(self) -> None:
-        for s0 in range(2):
-            for s1 in range(2):
-                for s2 in range(2):
-                    sca = (s0, s1, s2)
-                    for f0 in range(2):
-                        for f1 in range(2):
-                            for f2 in range(2):
-                                fermion = (f0, f1, f2)
-                                if sum(fermion) % 2:
-                                    continue
-                                total = tuple(
-                                    sca[edge] + fermion[edge]
-                                    for edge in range(3)
-                                )
-                                raw_graded = (
-                                    theta_quadratic_exponent(total)
-                                    + graded_gram_extra_exponent(sca, fermion)
-                                ) % 2
-                                separate = (
-                                    theta_quadratic_exponent(sca)
-                                    + theta_quadratic_exponent(fermion)
-                                ) % 2
-                                self.assertEqual(raw_graded, separate)
-                                self.assertEqual(
-                                    graded_gram_extra_exponent(sca, fermion),
-                                    theta_cross_exponent(sca, fermion),
-                                )
+        for primaries in product((0, 1), repeat=3):
+            for sca in product((0, 1), repeat=3):
+                for fermion in product((0, 1), repeat=3):
+                    if sum(fermion) % 2:
+                        continue
+                    absolute_sca = tuple(
+                        sca[edge] + primaries[edge] for edge in range(3)
+                    )
+                    total = tuple(
+                        absolute_sca[edge] + fermion[edge]
+                        for edge in range(3)
+                    )
+                    raw_graded = (
+                        theta_quadratic_exponent(total)
+                        + graded_gram_extra_exponent(
+                            sca, fermion, primaries
+                        )
+                    ) % 2
+                    separate = (
+                        theta_quadratic_exponent(absolute_sca)
+                        + theta_quadratic_exponent(fermion)
+                    ) % 2
+                    self.assertEqual(raw_graded, separate)
+                    self.assertEqual(
+                        graded_gram_extra_exponent(
+                            sca, fermion, primaries
+                        ),
+                        theta_cross_exponent(absolute_sca, fermion),
+                    )
 
     def test_exact_three_way_check_through_level_three_halves(self) -> None:
         summary = run_checks(max_total_twice_level=3)

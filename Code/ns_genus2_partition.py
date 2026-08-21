@@ -83,6 +83,12 @@ from ns_global_osp_block import (  # noqa: E402
     osp_three_point,
     osp_two_chain_kernel,
 )
+from ns_human_convention import (  # noqa: E402
+    glasses_primary_parity_rephasing,
+    normalize_parity_triple,
+    theta_orientation_sign,
+    theta_primary_parity_rephasing,
+)
 from ns_regular_block import (  # noqa: E402
     PlumbingFrameLedger,
     THETA_ORIENTATION,
@@ -499,10 +505,11 @@ def _theta_schottky_data(
     :func:`generators_for_theta`.  Relative to ``ccy_theta_generators``, this
     marking swaps the first and third plumbing parameters and inverts the
     second generator.  The inversion also contributes a central minus to the
-    determinant-one lift selected by the two implementations.  Consequently
+    determinant-one lift selected by the two implementations.  After the
+    Schottky backend boundary converts the public human-note infinity lift,
     the period-matched generator signs are
 
-        (xi_zero*xi_infinity, -xi_one*xi_infinity).
+        (-eta_zero*eta_infinity, -eta_one*eta_infinity).
 
     Keeping the generators and their lift signs in one helper prevents the
     Schottky oscillator product from drifting away from the period matrix.
@@ -515,10 +522,10 @@ def _theta_schottky_data(
     lifts = tuple(int(sign) for sign in edge_lifts)
     if any(sign not in (-1, 1) for sign in lifts):
         raise ValueError("theta plumbing lift signs must be +/-1")
-    xi_zero, xi_one, xi_infinity = lifts
+    eta_zero, eta_one, eta_infinity = lifts
     return (
         generators_for_theta(*(complex(value) for value in q_values)),
-        (xi_zero * xi_infinity, -xi_one * xi_infinity),
+        (-eta_zero * eta_infinity, -eta_one * eta_infinity),
     )
 
 
@@ -534,6 +541,7 @@ def _theta_global_term(
     occupations: Sequence[int],
     fermions: Sequence[int],
     lifts: Sequence[int],
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> complex:
     # q_values, weights, and lifts remain in geometric (zero,one,infinity)
     # edge order throughout the graph recursion.  Only the positional inputs
@@ -541,6 +549,10 @@ def _theta_global_term(
     ccy_occupations = _theta_geometry_to_ccy_order(occupations)
     ccy_fermions = _theta_geometry_to_ccy_order(fermions)
     ccy_weights = _theta_geometry_to_ccy_order(weights)
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
+    ccy_primaries = _theta_geometry_to_ccy_order(primaries)
     rho = osp_three_point(
         n1=int(ccy_occupations[0]),
         n2=int(ccy_occupations[1]),
@@ -551,6 +563,7 @@ def _theta_global_term(
         d1=ccy_weights[0],
         d2=ccy_weights[1],
         d3=ccy_weights[2],
+        primary_parities=ccy_primaries,
     )
     denominator = math.prod(
         osp_norm(weight, int(occupation), int(fermion))
@@ -558,12 +571,12 @@ def _theta_global_term(
     )
     plumbing = math.prod(
         _q_power(complex(q), int(occupation), int(fermion))
-        * int(lift) ** int(fermion)
-        for q, occupation, fermion, lift in zip(
-            q_values, occupations, fermions, lifts
+        * int(lift) ** (int(fermion) ^ primary)
+        for q, occupation, fermion, lift, primary in zip(
+            q_values, occupations, fermions, lifts, primaries
         )
     )
-    orientation = (-1) ** THETA_ORIENTATION.exponent(fermions)
+    orientation = theta_orientation_sign(fermions, primaries)
     return orientation * plumbing * rho * rho / denominator
 
 
@@ -573,10 +586,14 @@ def _glasses_global_term(
     occupations: Sequence[int],
     fermions: Sequence[int],
     lifts: Sequence[int],
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> complex:
     h_left, h_right, h_bridge = weights
     n_left, n_right, n_bridge = (int(value) for value in occupations)
     e_left, e_right, e_bridge = (int(value) for value in fermions)
+    p_left, p_right, p_bridge = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
     left = osp_three_point(
         n1=n_left,
         n2=n_bridge,
@@ -587,6 +604,7 @@ def _glasses_global_term(
         d1=h_left,
         d2=h_bridge,
         d3=h_left,
+        primary_parities=(p_left, p_bridge, p_left),
     )
     right = osp_three_point(
         n1=n_right,
@@ -598,6 +616,7 @@ def _glasses_global_term(
         d1=h_right,
         d2=h_bridge,
         d3=h_right,
+        primary_parities=(p_right, p_bridge, p_right),
     )
     denominator = (
         osp_norm(h_left, n_left, e_left)
@@ -606,12 +625,18 @@ def _glasses_global_term(
     )
     plumbing = math.prod(
         _q_power(complex(q), int(occupation), int(fermion))
-        * int(lift) ** int(fermion)
-        for q, occupation, fermion, lift in zip(
-            q_values, occupations, fermions, lifts
+        * int(lift) ** (int(fermion) ^ primary)
+        for q, occupation, fermion, lift, primary in zip(
+            q_values,
+            occupations,
+            fermions,
+            lifts,
+            (p_left, p_right, p_bridge),
         )
     )
-    orientation = (-1) ** GLASSES_ORIENTATION.exponent(fermions)
+    orientation = (-1) ** (
+        e_bridge * (e_left + p_left + e_right + p_right)
+    )
     return orientation * plumbing * left * right / denominator
 
 
@@ -621,6 +646,7 @@ def _resummed_theta_endpoint_term(
     endpoint_occupations: Sequence[int],
     fermions: Sequence[int],
     lifts: Sequence[int],
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> complex:
     r"""Sum the complete middle-edge family for fixed theta endpoints.
 
@@ -640,6 +666,9 @@ def _resummed_theta_endpoint_term(
     q_zero, q_one, q_infinity = (complex(value) for value in q_values)
     n_zero, n_infinity = (int(value) for value in endpoint_occupations)
     e_zero, e_one, e_infinity = (int(value) for value in fermions)
+    p_zero, p_one, p_infinity = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
 
     two_chain = osp_two_chain_kernel(
         k=n_infinity,
@@ -650,6 +679,7 @@ def _resummed_theta_endpoint_term(
         d1=h_infinity,
         d2=h_one,
         d3=h_zero,
+        primary_parities=(p_infinity, p_one, p_zero),
     )
     exponent = (
         h_infinity
@@ -661,7 +691,8 @@ def _resummed_theta_endpoint_term(
     )
     middle_norm_primary = 1.0 + 0.0j if e_one == 0 else 2 * h_one
     middle_family = (
-        (int(lifts[1]) * cmath.sqrt(q_one)) ** e_one
+        int(lifts[1]) ** (e_one ^ p_one)
+        * cmath.sqrt(q_one) ** e_one
         / middle_norm_primary
         * complex(
             mpmath.fp.hyp2f1(
@@ -676,11 +707,14 @@ def _resummed_theta_endpoint_term(
         h_infinity, n_infinity, e_infinity
     )
     endpoint_plumbing = (
-        _q_power(q_zero, n_zero, e_zero) * int(lifts[0]) ** e_zero
+        _q_power(q_zero, n_zero, e_zero)
+        * int(lifts[0]) ** (e_zero ^ p_zero)
         * _q_power(q_infinity, n_infinity, e_infinity)
-        * int(lifts[2]) ** e_infinity
+        * int(lifts[2]) ** (e_infinity ^ p_infinity)
     )
-    orientation = (-1) ** THETA_ORIENTATION.exponent(fermions)
+    orientation = theta_orientation_sign(
+        fermions, (p_zero, p_one, p_infinity)
+    )
     return complex(
         orientation
         * endpoint_plumbing
@@ -698,6 +732,7 @@ def resummed_theta_global_block(
     lifts: Sequence[int],
     tolerance: float,
     max_total_endpoint_occupation: int,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> GlobalSumDiagnostics:
     r"""Evaluate the theta global block with its middle edge resummed.
 
@@ -715,6 +750,9 @@ def resummed_theta_global_block(
     if tolerance <= 0 or max_total_endpoint_occupation < 0:
         raise ValueError("positive tolerance and endpoint occupation ceiling required")
     lift_tuple = tuple(int(value) for value in lifts)
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
     if any(value not in (-1, 1) for value in lift_tuple):
         raise ValueError("lifts must be +/-1")
     if any(not abs(complex(q)) < 1 for q in q_values):
@@ -743,6 +781,7 @@ def resummed_theta_global_block(
                     (n_zero, n_infinity),
                     fermions,
                     lift_tuple,
+                    primaries,
                 )
         total_value += shell
         last_shell = shell
@@ -771,6 +810,7 @@ def resummed_theta_global_component(
     lifts: Sequence[int],
     tolerance: float,
     max_total_endpoint_occupation: int,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> GlobalSumDiagnostics:
     """Middle-edge-resummed theta block for one fixed fermion triple."""
 
@@ -786,6 +826,9 @@ def resummed_theta_global_component(
     if any(not abs(complex(q)) < 1 for q in q_values):
         raise ValueError("the theta plumbing coordinates must satisfy |q| < 1")
     sigma = tuple(int(value) for value in fermions)
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
 
     total_value = 0.0 + 0.0j
     last_shell = 0.0 + 0.0j
@@ -801,6 +844,7 @@ def resummed_theta_global_component(
                     (n_zero, endpoint_total - n_zero),
                     sigma,
                     lift_tuple,
+                    primaries,
                 )
                 for n_zero in range(endpoint_total + 1)
             ),
@@ -863,7 +907,7 @@ def _resummed_glasses_handle(
         q_mp,
     )
     odd = (
-        lift
+        -lift
         * mpmath.sqrt(q_mp)
         * (2 * h + d - mpmath.mpf("0.5"))
         / (2 * h)
@@ -894,15 +938,15 @@ def _resummed_glasses_bridge(
     if not abs(q_mp) < 1:
         raise ValueError("the glasses plumbing coordinates must satisfy |q| < 1")
     d = mpmath.mpc(bridge_weight)
-    alpha = int(bridge_parity)
-    normalization = mpmath.rf(2 * d, alpha)
-    primary = (lift * mpmath.sqrt(q_mp)) ** alpha / normalization
+    a = int(bridge_parity)
+    normalization = mpmath.rf(2 * d, a)
+    primary = (lift * mpmath.sqrt(q_mp)) ** a / normalization
     return complex(
         primary
         * mpmath.hyp2f1(
-            d + mpmath.mpf(alpha) / 2,
-            d + mpmath.mpf(alpha) / 2,
-            2 * d + alpha,
+            d + mpmath.mpf(a) / 2,
+            d + mpmath.mpf(a) / 2,
+            2 * d + a,
             q_mp,
         )
     )
@@ -915,12 +959,13 @@ def resummed_glasses_global_block(
     sector: int,
     lifts: Sequence[int],
     working_precision: int = 30,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> GlobalSumDiagnostics:
     r"""Evaluate the glasses global block without an occupation cutoff.
 
-    At fixed bridge parity ``alpha=sector``, the orientation character is
+    At fixed relative bridge label ``a=sector``, the orientation character is
 
-    ``(-1)**(alpha*(e_left+e_right))``.
+    ``(-1)**(a*(e_left+e_right))``.
 
     It is therefore absorbed by flipping both handle lifts in the odd sector.
     The remaining three occupation sums factorize into one-variable kernels
@@ -935,11 +980,32 @@ def resummed_glasses_global_block(
     lift_tuple = tuple(int(value) for value in lifts)
     if any(value not in (-1, 1) for value in lift_tuple):
         raise ValueError("lifts must be +/-1")
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
+    if any(primaries):
+        prefactor, effective_lifts = glasses_primary_parity_rephasing(
+            lift_tuple, primaries
+        )
+        even_result = resummed_glasses_global_block(
+            weights=weights,
+            q_values=q_values,
+            sector=sector,
+            lifts=effective_lifts,
+            working_precision=working_precision,
+            primary_parities=(0, 0, 0),
+        )
+        return GlobalSumDiagnostics(
+            value=prefactor * even_result.value,
+            last_shell=prefactor * even_result.last_shell,
+            max_total_occupation=even_result.max_total_occupation,
+            converged=even_result.converged,
+        )
     h_left, h_right, h_bridge = (complex(value) for value in weights)
     q_left, q_right, q_bridge = (complex(value) for value in q_values)
-    alpha = int(sector)
-    effective_left_lift = lift_tuple[0] * (-1) ** alpha
-    effective_right_lift = lift_tuple[1] * (-1) ** alpha
+    a = int(sector)
+    effective_left_lift = lift_tuple[0] * (-1) ** a
+    effective_right_lift = lift_tuple[1] * (-1) ** a
 
     with mpmath.workdps(int(working_precision)):
         value = (
@@ -948,20 +1014,20 @@ def resummed_glasses_global_block(
                 effective_left_lift,
                 h_left,
                 h_bridge,
-                alpha,
+                a,
             )
             * _resummed_glasses_handle(
                 q_right,
                 effective_right_lift,
                 h_right,
                 h_bridge,
-                alpha,
+                a,
             )
             * _resummed_glasses_bridge(
                 q_bridge,
                 lift_tuple[2],
                 h_bridge,
-                alpha,
+                a,
             )
         )
     return GlobalSumDiagnostics(
@@ -981,6 +1047,7 @@ def direct_global_block(
     lifts: Sequence[int],
     tolerance: float,
     max_total_occupation: int,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> GlobalSumDiagnostics:
     """Directly sum an osp graph to a requested numerical tolerance.
 
@@ -993,6 +1060,9 @@ def direct_global_block(
         raise ValueError("channel must be theta or glasses")
     if sector not in (0, 1):
         raise ValueError("sector must be 0 or 1")
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
     total_value = 0.0 + 0.0j
     last_shell = 0.0 + 0.0j
     small_shells = 0
@@ -1018,7 +1088,12 @@ def direct_global_block(
                 if not allowed:
                     continue
                 shell += term_function(
-                    weights, q_values, occupations, fermions, lifts
+                    weights,
+                    q_values,
+                    occupations,
+                    fermions,
+                    lifts,
+                    primaries,
                 )
         total_value += shell
         last_shell = shell
@@ -1040,7 +1115,13 @@ def direct_global_block(
 
 
 class NSGenus2CRecursion:
-    """Functional genus-two N=1 c-recursion in one plumbing channel."""
+    """Functional genus-two N=1 c-recursion in one plumbing channel.
+
+    ``sector`` is the relative three-form label ``a`` of the current note.
+    Generic intrinsic parities are implemented by the exact graph-character
+    rephasing of the literal sewing lifts, so the residue recursion continues
+    to use precisely the same relative fusion-polynomial label.
+    """
 
     def __init__(
         self,
@@ -1085,6 +1166,17 @@ class NSGenus2CRecursion:
         self.confluent_max_moment_cancellation_ratio = 0.0
         self.confluent_max_moment_series_cancellation_ratio = 0.0
         self.confluent_max_total_cancellation_ratio = 0.0
+
+    def _primary_parity_rephasing(
+        self,
+        lifts: Sequence[int],
+        primary_parities: Sequence[int],
+    ) -> tuple[int, tuple[int, int, int]]:
+        """Return the exact generic-primary reduction to the even-primary block."""
+
+        if self.channel == "theta":
+            return theta_primary_parity_rephasing(lifts, primary_parities)
+        return glasses_primary_parity_rephasing(lifts, primary_parities)
 
     @lru_cache(maxsize=None)
     def _vacuum(self, lifts: tuple[int, int, int]) -> complex:
@@ -1177,7 +1269,7 @@ class NSGenus2CRecursion:
         if self.channel == "glasses":
             # Q_glasses=e_bridge(e_left+e_right).  The even vacuum trinion
             # has even bridge parity, whereas every global term in sector
-            # alpha has e_bridge=alpha.  Consequently the entire cross sign
+            # relative label a has e_bridge=a.  Consequently the cross sign
             # is implemented by flipping both vacuum handle lifts once in
             # the odd sector; no component-by-component projection is needed.
             vacuum_lifts = (
@@ -1322,7 +1414,7 @@ class NSGenus2CRecursion:
                 ns_fusion_polynomial(
                     r=r,
                     s=s,
-                    alpha=sector,
+                    a=sector,
                     first_weight=other[0],
                     second_weight=other[1],
                     b=pole.b,
@@ -1334,18 +1426,17 @@ class NSGenus2CRecursion:
             # incidence of an odd null toggles the intermediate three-form;
             # factoring the second toggles it back, so the final child sector
             # is unchanged.  The two sequential polynomials
-            # have labels alpha and alpha+rs and see the unshifted/shifted
+            # have labels a and a+rs and see the unshifted/shifted
             # copy of the self-glued handle, as in the independent torus
-            # c-recursion.  The toric reflection factor is
-            # S_rs^alpha = (-1)^(alpha*rs).
+            # c-recursion.  In the human-note convention, sector transport
+            # cancels the component-order toric reflection factor.
             bridge = weights[2]
             handle = weights[edge]
-            toric_sign = (-1) ** (sector * rs)
             polynomials = (
                 ns_fusion_polynomial(
                     r=r,
                     s=s,
-                    alpha=sector,
+                    a=sector,
                     first_weight=bridge,
                     second_weight=handle,
                     b=pole.b,
@@ -1353,7 +1444,7 @@ class NSGenus2CRecursion:
                 ns_fusion_polynomial(
                     r=r,
                     s=s,
-                    alpha=sector ^ (rs % 2),
+                    a=sector ^ (rs % 2),
                     first_weight=bridge,
                     second_weight=handle + rs / 2.0,
                     b=pole.b,
@@ -1365,7 +1456,7 @@ class NSGenus2CRecursion:
                 ns_fusion_polynomial(
                     r=r,
                     s=s,
-                    alpha=sector,
+                    a=sector,
                     first_weight=weights[0],
                     second_weight=weights[0],
                     b=pole.b,
@@ -1373,7 +1464,7 @@ class NSGenus2CRecursion:
                 ns_fusion_polynomial(
                     r=r,
                     s=s,
-                    alpha=sector,
+                    a=sector,
                     first_weight=weights[1],
                     second_weight=weights[1],
                     b=pole.b,
@@ -1450,6 +1541,7 @@ class NSGenus2CRecursion:
         recursion_order: int,
         lifts: Sequence[int],
         central_charge: complex = C_ORDINARY_AT_HAT_C_9,
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> complex:
         if recursion_order < 0 or recursion_order > MAX_RECURSION_ORDER:
             raise ValueError(
@@ -1462,6 +1554,11 @@ class NSGenus2CRecursion:
             raise ValueError("three weights and three lifts are required")
         if any(value not in (-1, 1) for value in lift_tuple):
             raise ValueError("lifts must be +/-1")
+        if sector not in (0, 1):
+            raise ValueError("sector must be the relative label zero or one")
+        primary_prefactor, lift_tuple = self._primary_parity_rephasing(
+            lift_tuple, primary_parities
+        )
 
         @lru_cache(maxsize=None)
         def recurse(
@@ -1498,9 +1595,16 @@ class NSGenus2CRecursion:
                         shifted = list(current_weights)
                         shifted[edge] += rs / 2.0
                         if rs % 2:
-                            child_lifts = _transport_lifts(
-                                self.orientation, current_lifts, edge
-                            )
+                            if self.channel == "glasses" and edge == 2:
+                                # An odd bridge null toggles the vertex sector.
+                                # In the human convention that sector change
+                                # itself flips both handle characters, exactly
+                                # cancelling the old component-order transport.
+                                child_lifts = current_lifts
+                            else:
+                                child_lifts = _transport_lifts(
+                                    self.orientation, current_lifts, edge
+                                )
                             orientation_constant = (-1) ** self.orientation.exponent(
                                 _unit(edge)
                             )
@@ -1523,7 +1627,7 @@ class NSGenus2CRecursion:
                         )
             return total
 
-        return recurse(
+        return primary_prefactor * recurse(
             int(recursion_order),
             complex(central_charge),
             weight_tuple,  # type: ignore[arg-type]
@@ -1540,6 +1644,7 @@ class NSGenus2CRecursion:
         lifts: Sequence[int],
         central_charge: complex = C_ORDINARY_AT_HAT_C_9,
         pole_tolerance: float = 1.0e-10,
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> complex:
         r"""Evaluate the block after analytically combining confluent poles.
 
@@ -1567,6 +1672,11 @@ class NSGenus2CRecursion:
             raise ValueError("three weights and three lifts are required")
         if any(value not in (-1, 1) for value in lift_tuple):
             raise ValueError("lifts must be +/-1")
+        if sector not in (0, 1):
+            raise ValueError("sector must be the relative label zero or one")
+        primary_prefactor, lift_tuple = self._primary_parity_rephasing(
+            lift_tuple, primary_parities
+        )
 
         @lru_cache(maxsize=None)
         def recurse(
@@ -1597,9 +1707,12 @@ class NSGenus2CRecursion:
                         shifted = list(current_weights)
                         shifted[edge] += rs / 2.0
                         if rs % 2:
-                            child_lifts = _transport_lifts(
-                                self.orientation, current_lifts, edge
-                            )
+                            if self.channel == "glasses" and edge == 2:
+                                child_lifts = current_lifts
+                            else:
+                                child_lifts = _transport_lifts(
+                                    self.orientation, current_lifts, edge
+                                )
                             orientation_constant = (-1) ** self.orientation.exponent(
                                 _unit(edge)
                             )
@@ -1631,7 +1744,7 @@ class NSGenus2CRecursion:
             int(sector),
             lift_tuple,  # type: ignore[arg-type]
         )
-        return partial_fraction.value(
+        return primary_prefactor * partial_fraction.value(
             complex(central_charge), pole_tolerance=pole_tolerance
         )
 
@@ -1644,6 +1757,7 @@ class NSGenus2CRecursion:
         lifts: Sequence[int],
         central_charge: complex = C_ORDINARY_AT_HAT_C_9,
         working_precision: int = 60,
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> complex:
         """Arbitrary-precision collision-aware NS c-recursion."""
 
@@ -1660,6 +1774,11 @@ class NSGenus2CRecursion:
             raise ValueError("three weights and three lifts are required")
         if any(value not in (-1, 1) for value in lift_tuple):
             raise ValueError("lifts must be +/-1")
+        if sector not in (0, 1):
+            raise ValueError("sector must be the relative label zero or one")
+        primary_prefactor, lift_tuple = self._primary_parity_rephasing(
+            lift_tuple, primary_parities
+        )
 
         with mpmath.workdps(int(working_precision)):
             tolerance = mpmath.mpf(10) ** (-(int(working_precision) // 2))
@@ -1704,9 +1823,12 @@ class NSGenus2CRecursion:
                             shifted = list(current_weights)
                             shifted[edge] += rs / 2.0
                             if rs % 2:
-                                child_lifts = _transport_lifts(
-                                    self.orientation, current_lifts, edge
-                                )
+                                if self.channel == "glasses" and edge == 2:
+                                    child_lifts = current_lifts
+                                else:
+                                    child_lifts = _transport_lifts(
+                                        self.orientation, current_lifts, edge
+                                    )
                                 orientation_constant = (
                                     -1
                                 ) ** self.orientation.exponent(_unit(edge))
@@ -1777,7 +1899,7 @@ class NSGenus2CRecursion:
                 self.confluent_max_total_cancellation_ratio,
                 float(moment_diagnostics["max_total_cancellation_ratio"]),
             )
-            return complex(value)
+            return primary_prefactor * complex(value)
 
     def finite_part_block(
         self,
@@ -1788,6 +1910,7 @@ class NSGenus2CRecursion:
         lifts: Sequence[int],
         radius: float = 0.035,
         samples: int = 24,
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> complex:
         r"""Return the b=1 constant Laurent coefficient of one block.
 
@@ -1831,6 +1954,7 @@ class NSGenus2CRecursion:
                 recursion_order=recursion_order,
                 lifts=lifts,
                 central_charge=central_charge,
+                primary_parities=primary_parities,
             )
         return total / int(samples)
 
@@ -1895,18 +2019,17 @@ def _spin_characteristic_from_lifts(
 
     All computations here use NS representations on the Schottky A-cycles,
     hence ``alpha=(0,0)``.  The beta bits are determined by the chosen
-    determinant-one generator lifts and by the BPZ half-edge frame.  In the
-    glasses marking ``+`` is beta zero.  In the fixed branch-composed theta
-    marking the independent direct Majorana pants-sewing oracle gives
+    determinant-one generator lifts.  In the glasses marking ``+`` is beta
+    zero.  At the theta Schottky boundary, the human-note plumbing lifts are
+    converted to the determinant-one representatives; the direct Majorana
+    pants-sewing oracle then gives
 
     ``(s1,s2)=(+,+),(+,-),(-,+),(-,-)``
     ``-> beta=(1,1),(1,0),(0,1),(0,0)``.
 
-    The first theta bit contains the BPZ affine shift that was absent from the
-    older generator-sign-only ledger.  Consequently physical theta lifts
-    ``(-,+,+)`` (equivalently ``(+,-,-)``) realize ``[00|00]`` and match
-    glasses lifts ``(+,+,+)``.  Theta ``(+,+,+)`` instead realizes
-    ``[00|10]``.
+    Thus human-note theta lifts ``(+,+,+)`` (equivalently ``(-,-,-)``)
+    realize ``[00|00]`` and match glasses lifts ``(+,+,+)``.  There is no
+    additional caller-side BPZ rephasing.
     """
 
     lifts = tuple(int(value) for value in physical_lifts)
@@ -2306,12 +2429,12 @@ def run_internal_checks() -> dict[str, object]:
 
     theta_resummation_errors = []
     theta_resummation_endpoint_shells = []
-    for alpha in (0, 1):
+    for a in (0, 1):
         theta_direct = direct_global_block(
             channel="theta",
             weights=theta_weights,
             q_values=theta_q,
-            sector=alpha,
+            sector=a,
             lifts=theta_lifts,
             tolerance=2.0e-13,
             max_total_occupation=40,
@@ -2319,7 +2442,7 @@ def run_internal_checks() -> dict[str, object]:
         theta_resummed = resummed_theta_global_block(
             weights=theta_weights,
             q_values=theta_q,
-            sector=alpha,
+            sector=a,
             lifts=theta_lifts,
             tolerance=2.0e-13,
             max_total_endpoint_occupation=40,
@@ -2334,7 +2457,7 @@ def run_internal_checks() -> dict[str, object]:
         ):
             raise AssertionError(
                 "theta middle-edge hypergeometric resummation failed: "
-                f"sector={alpha} error={error:.3e}"
+                f"sector={a} error={error:.3e}"
             )
         theta_resummation_errors.append(float(error))
         theta_resummation_endpoint_shells.append(
@@ -2387,12 +2510,12 @@ def run_internal_checks() -> dict[str, object]:
     # independent occupation-shell implementation.
     resummation_errors = []
     q_probe = (q_left, q_right, 0.047 + 0.003j)
-    for alpha in (0, 1):
+    for a in (0, 1):
         direct_probe = direct_global_block(
             channel="glasses",
             weights=(h_left, h_right, h_bridge),
             q_values=q_probe,
-            sector=alpha,
+            sector=a,
             lifts=(-1, 1, -1),
             tolerance=2.0e-13,
             max_total_occupation=24,
@@ -2400,7 +2523,7 @@ def run_internal_checks() -> dict[str, object]:
         resummed_probe = resummed_glasses_global_block(
             weights=(h_left, h_right, h_bridge),
             q_values=q_probe,
-            sector=alpha,
+            sector=a,
             lifts=(-1, 1, -1),
         )
         error = abs(direct_probe.value - resummed_probe.value) / max(
@@ -2409,13 +2532,13 @@ def run_internal_checks() -> dict[str, object]:
         if not direct_probe.converged or error > 2.0e-11:
             raise AssertionError(
                 "glasses global hypergeometric resummation failed: "
-                f"sector={alpha} converged={direct_probe.converged} error={error:.3e}"
+                f"sector={a} converged={direct_probe.converged} error={error:.3e}"
             )
         resummation_errors.append(float(error))
 
     # The self-sewn handle residue must reduce to the independently checked
     # sequential torus c-recursion residue.  Check both an odd and an even
-    # null: the former catches the intermediate sector toggle and toric sign,
+    # null: the former catches the intermediate relative-label toggle,
     # while the latter still requires the shifted h + rs/2 argument.
     from compare_ns_torus_c_h_recursion import (
         _c_pole,
@@ -2441,7 +2564,6 @@ def run_internal_checks() -> dict[str, object]:
             torus_b, torus_c, torus_jacobian = _c_pole(h_left, r, s)
             torus_residue = (
                 (-1 if rs % 2 else 1)
-                * (-1) ** (sector * rs)
                 * torus_jacobian
                 * _ns_a_factor(torus_b, r, s)
                 * _ns_ns_fusion_polynomial(
@@ -2504,7 +2626,7 @@ def run_internal_checks() -> dict[str, object]:
     )
     if target_characteristic != ((0, 0), (0, 0)):
         raise AssertionError("spin characteristic transport changed")
-    same_spin_theta_lifts = (-1, 1, 1)
+    same_spin_theta_lifts = (1, 1, 1)
     _, theta_generator_signs = _theta_schottky_data(
         (0.11, 0.12, 0.13), same_spin_theta_lifts
     )
@@ -2520,11 +2642,11 @@ def run_internal_checks() -> dict[str, object]:
         raise AssertionError("theta edge lifts have the wrong characteristic")
     if glasses_characteristic != ((0, 0), (0, 0)):
         raise AssertionError("glasses edge lifts have the wrong characteristic")
-    stale_theta_characteristic = _spin_characteristic_from_lifts(
-        "theta", (0.11, 0.12, 0.13), (1, 1, 1)
+    alternative_theta_characteristic = _spin_characteristic_from_lifts(
+        "theta", (0.11, 0.12, 0.13), (1, 1, -1)
     )
-    if stale_theta_characteristic != ((0, 0), (1, 0)):
-        raise AssertionError("theta BPZ affine spin shift changed")
+    if alternative_theta_characteristic != ((0, 0), (1, 1)):
+        raise AssertionError("theta human-lift spin map changed")
     return {
         "theta_geometry_edge_order": list(THETA_GEOMETRY_EDGE_ORDER),
         "theta_ccy_descendant_edge_order": list(
@@ -2671,9 +2793,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
         for channel in ("theta", "glasses")
     }
     # The two channel lifts must realize the same intrinsic spin structure.
-    # The BPZ affine shift in the branch-composed theta frame makes (-,+,+),
-    # rather than the formerly used (+,+,-), the [00|00] representative.
-    lifts = {"theta": (-1, 1, 1), "glasses": (1, 1, 1)}
+    # In the human-note theta frame, unit lifts represent [00|00] in both
+    # channels; the Schottky backend conversion is internal.
+    lifts = {"theta": (1, 1, 1), "glasses": (1, 1, 1)}
     spin_characteristics = {
         channel: _spin_characteristic_from_lifts(
             channel, q_values[channel], lifts[channel]

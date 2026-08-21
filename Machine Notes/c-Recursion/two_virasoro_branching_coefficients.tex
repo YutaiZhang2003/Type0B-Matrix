@@ -449,7 +449,7 @@ right-hand side.  For the branching primaries this sign is
 this note, is not the definition in the human note and cannot be substituted
 without this reflection sign.
 
-Already at (n_i=0,\pm\tfrac12), one must expand the explicit vectors
+Already at \(n_i=0,\pm\tfrac12\), one must expand the explicit vectors
 \begin{equation}
  v_{i,\epsilon_i/2}
  =G_{-1/2}\phi_i+a_i f_{-1/2}\phi_i,
@@ -486,7 +486,7 @@ Using the human note's fixed-parity component table then gives
  \right].
  \label{eq:human-two-branch-direct}
 \end{align}
-The product formula for (L^{\mathrm{lit}}) has the same last two entries
+The product formula for \(L^{\mathrm{lit}}\) has the same last two entries
 but the opposite sign in the first entry.  Equivalently, on these cases,
 \begin{equation}
  T_a^{\mathrm H}=(-1)^{k_1k_2}L_a^{\mathrm{lit}}.
@@ -845,6 +845,169 @@ exhaust all \(27\) literature expressions
 \texttt{Code/two\_virasoro\_fusion.py}; its unsquared output should therefore
 be read as \(L_a^{\mathrm{lit}}\), not yet as \(T_a^{\mathrm H}\).
 
+\section{Ramond extension: status of the literature}
+\label{sec:ramond-literature-status}
+
+This section records the literature status as of 20 August 2026.  It is
+important to distinguish three increasingly strong statements:
+\begin{enumerate}
+ \item the decomposition of an \(\Ff_0\oplus\SCA_0\) Ramond module into
+ two-Virasoro modules;
+ \item a norm or Whittaker overlap of one two-Virasoro highest vector; and
+ \item the generic, chiral \((\mathrm{NS},\mathrm R,\mathrm R)\) three-point
+ coefficient, including its Ramond-ground-state phases.
+\end{enumerate}
+Only the third statement supplies the coefficient required by the human
+note.  In its notation the target is
+\begin{equation}
+ \mathbb B_f^{(\eta)}
+ (h_1,\beta_2,\beta_3;n_1,n_2,n_3)
+ =
+ \frac{
+  \widehat\rho_f^{(\eta)}
+  (v_{1,n_1},v^{\alpha_2}_{2,n_2},v^{\alpha_3}_{3,n_3})
+ }{
+  \lVert v_{1,n_1}\rVert
+  \lVert v^{\alpha_2}_{2,n_2}\rVert
+  \lVert v^{\alpha_3}_{3,n_3}\rVert
+ },
+ \label{eq:ramond-target-B}
+\end{equation}
+where \(n_1\in\frac12\mathbb Z\),
+\(n_2,n_3\in\frac12\mathbb Z+\frac14\), and the parity labels and the
+chiral sign \(\eta\) must be retained.
+
+\subsection{What has actually been established}
+
+\paragraph{Gauge-theory and block evidence.}
+Ito's ALE-space proposal, arXiv:1110.2176, identifies Ramond Whittaker norms
+and overlaps with instanton partition functions.  Belavin--Mukhametzhanov,
+arXiv:1210.7454, similarly obtain four-point blocks containing Ramond fields
+from AGT data.  These works provide strong independent control of Ramond
+blocks, but neither computes Eq.~\eqref{eq:ramond-target-B}: their algebra and
+basis are not the present \(\Vir\oplus\Vir\subset\Ff\oplus\SCA\) branching
+basis, and they do not determine its chiral three-point normalization.
+
+\paragraph{The all-label double-Liouville candidate.}
+Schomerus--Suchanek, arXiv:1210.1856, construct an infinite tower
+\(\Phi^{(k)}_\alpha\) in super-Liouville theory times a free fermion.  Integer
+\(k\) belongs to the NS sector and half-integer \(k\) to the Ramond sector.
+They propose that every \(\Phi^{(k)}_\alpha\) is proportional to a primary of
+the two bosonic Liouville theories; this is precisely the local-field version
+of the branching-primary identification needed here.  They give a candidate
+normalization and test several nontrivial local three-point functions,
+including Ramond labels \(k=\pm\frac12\) and \(\pm\frac32\).
+
+This is the closest result in the literature to a formula for the full
+Ramond branching coefficient, but it is not yet Eq.~\eqref{eq:ramond-target-B}.
+The paper explicitly does not prove the three-point identity for arbitrary
+labels.  Its checks concern local, nonchiral correlators and leave a fourth
+root of unity \(\varpi(k_3,k_2,k_1)\), with \(\varpi^4=1\).  Consequently it
+does not fix the separate holomorphic coefficient, the two Ramond parity
+copies, or the phases associated with a convention such as
+\begin{equation}
+ G_0w_\beta^\pm=i\beta e^{\mp i\pi/4}w_\beta^\mp.
+ \label{eq:ramond-G0-phase-status}
+\end{equation}
+It should be used below as an all-label candidate and a magnitude check, not
+as an already proved chiral branching formula.
+
+\paragraph{The screening-charge proof stops in the NS sector.}
+Hadasz--Jask\'olski, arXiv:1312.4520, formulate the correspondence in terms
+of chiral structure constants and give a complete proof in the NS sector.
+Their reflection map, screening-charge matrix elements, singular-vector
+residues, and factorized chiral constants are the direct template for the
+calculation proposed below.  They cite the Ramond tests of
+Schomerus--Suchanek and remark that a Ramond extension appears
+straightforward, but they do not carry out that extension.  In particular,
+they do not introduce the Ramond zero-mode Clifford module needed to resolve
+the two parity copies in Eq.~\eqref{eq:ramond-target-B}.
+
+\paragraph{The Ramond module and highest vectors are known.}
+Bershtein--Shchechkin, arXiv:1608.02568, prove the generic Ramond branching
+rule
+\begin{equation}
+ \M_{\mathrm R}(\beta)
+ \cong
+ \bigoplus_{\epsilon=0,1}
+ \bigoplus_{n\in\frac12\mathbb Z+\frac14}
+ \V_{c^{(1)}}(h_n^{(1)})\otimes
+ \V_{c^{(2)}}(h_n^{(2)}),
+ \label{eq:ramond-literature-branching}
+\end{equation}
+and give explicit highest vectors as finite products of integer modes
+\(\chi_r^\pm=f_r-i\vartheta_r^\pm\), including the zero-mode factors that
+distinguish the two parity copies.  Thus the vectorial input for a direct
+free-field calculation is available.
+
+The same paper does \emph{not} obtain generic three-point matrix elements.
+For the much weaker irregular/Whittaker overlap it states a conjectural
+squared coefficient in terms of the odd product \(s_{\mathrm{odd}}\).  The
+conjecture was checked by computer for \(\lvert n\rvert\leq9/4\) (and in the
+reported series test through relative order ten), while its sign remains
+undetermined.  This supplies a valuable norm/irregular limit check, but not
+the coefficient in Eq.~\eqref{eq:ramond-target-B}.
+
+\paragraph{The recent screening algebra does not close the gap.}
+Ohkubo, arXiv:2505.02926, constructs a \(q\)-deformation of
+\(\Ff\oplus\SCA\), two commuting \(q\)-Virasoro algebras, and screening
+currents whose degeneration gives the super-Virasoro screenings.  The
+representation theory in that paper is NS.  Its conclusion says that a
+modified Fock module and half-integer highest-weight charge should allow the
+Ramond sector; no Ramond branching coefficient is computed.
+
+\subsection{Literature verdict and the remaining problem}
+
+No source found in the literature through the date above derives the generic
+chiral coefficient \(\mathbb B_f^{(\eta)}\) for all branching labels while
+also fixing the two Ramond ground-state copies and their phases.  The present
+status is therefore
+\begin{equation}
+ \boxed{
+ \begin{gathered}
+ \text{Ramond branching rule and explicit highest vectors: proved,}\\
+ \text{all-label local double-Liouville formula: proposed and tested,}\\
+ \text{generic chiral branching coefficient with phases: open.}
+ \end{gathered}}
+ \label{eq:ramond-literature-verdict}
+\end{equation}
+This conclusion is narrower than saying that Ramond blocks or Ramond
+super-Liouville three-point functions are unknown: both are known.  What is
+missing is their convention-complete projection onto the specific
+two-Virasoro branching highest vectors.
+
+\subsection{Screening-charge route to be pursued here}
+
+The most economical derivation is now well localized:
+\begin{enumerate}
+ \item Use the integer-mode products of arXiv:1608.02568 as the definitions of
+ the two Ramond branching vectors \(v_n^\epsilon(P)\), including their
+ \(\chi_0^\pm\) factors.
+ \item Extend the reflected-Fock-space BPZ pairing used in the NS calculation
+ to the four-dimensional zero-mode ground space
+ \(\Ff_0\otimes\SCA_0\).  The pairing must implement
+ Eq.~\eqref{eq:ramond-G0-phase-status}, rather than identify the two parity
+ copies implicitly.
+ \item Generalize the screening-charge matrix elements of
+ arXiv:1312.4520 from NS exponentials to the spin-field intertwiners of an
+ \((\mathrm{NS},\mathrm R,\mathrm R)\) vertex.  Charge neutrality fixes the
+ number of screenings; the zero-mode Clifford matrix fixes which of the two
+ chiral Ramond structures is selected.
+ \item Evaluate the resulting finite Selberg-type products and divide by the
+ three reflected-Fock norms.  The product must reduce to the
+ Schomerus--Suchanek double-Liouville candidate after multiplying the two
+ chiral halves and forgetting the zero-mode phase.
+ \item Anchor the remaining square-root choices at
+ \(n_2,n_3=\pm\frac14\) by a direct ground-state Ward-identity calculation,
+ then propagate them by the screening shifts.  In the Whittaker limit the
+ square must reproduce the \(s_{\mathrm{odd}}\) formula conjectured and tested
+ in arXiv:1608.02568.
+\end{enumerate}
+The first new calculation should therefore be the four-by-four matrix of
+ground-level \((\mathrm{NS},\mathrm R,\mathrm R)\) branching numerators.  It
+will separate a genuine dynamical product formula from the convention-only
+zero-mode phases before higher integer \(\chi_{-r}\) modes are introduced.
+
 \section{What remains to be audited}
 
 The calculation above settles the all-NS coefficient, modulo a direct audit
@@ -878,5 +1041,17 @@ functions \(\se,\so\) are in
 Sec.~3.2, Proposition 3.2, and Appendix B.  The later presentation and the
 Ramond analogue are in
 \href{https://arxiv.org/abs/1608.02568}{arXiv:1608.02568}, Sec.~4.
+
+The Ramond local-field candidate and its checked three-point examples are in
+\href{https://arxiv.org/abs/1210.1856}{arXiv:1210.1856}, Secs.~4.2--4.3.
+The chiral screening/reflection proof that presently exists only in the NS
+sector is
+\href{https://arxiv.org/abs/1312.4520}{arXiv:1312.4520}.  Indirect Ramond
+Whittaker and block evidence comes from
+\href{https://arxiv.org/abs/1110.2176}{arXiv:1110.2176} and
+\href{https://arxiv.org/abs/1210.7454}{arXiv:1210.7454}.  The recent
+\(q\)-deformed algebra and screening-current construction, which leaves its
+Ramond representation theory for future work, is
+\href{https://arxiv.org/abs/2505.02926}{arXiv:2505.02926}.
 
 \end{document}

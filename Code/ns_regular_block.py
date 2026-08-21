@@ -25,6 +25,8 @@ from dataclasses import dataclass
 from itertools import product
 from typing import Callable, Mapping, Sequence
 
+from ns_human_convention import ns_null_factorization_sign
+
 
 Level = tuple[int, ...]
 
@@ -281,7 +283,7 @@ def canonical_null_endpoint_sign(
     slot_parities: Sequence[int],
     canonical_order: Sequence[int],
 ) -> int:
-    """Return the canonical sign multiplying one ordered fusion polynomial.
+    """Return the component-order sign for canonicalizing one null incidence.
 
     Slots are initially ordered as ``(infinity, one, zero)``.  The supplied
     ``canonical_order`` is a permutation that moves the null leg to either
@@ -292,9 +294,10 @@ def canonical_null_endpoint_sign(
     * the NS reflection sign ``(-1)**(rs*b)`` when the null is third, where
       ``b`` is the parity in the canonical middle slot.
 
-    In the fixed-parity trilinear convention the fusion polynomial retains
-    the original vertex label; an odd null toggles only the shifted tensor.
-    Local frame signs are deliberately excluded: in the master recursion
+    This lower-level permutation/reflection sign is not the complete
+    human-note ``rho_a`` factorization sign for generic intrinsic parities.
+    That sign is :func:`ns_human_convention.ns_null_factorization_sign`.
+    Local frame signs are deliberately excluded here: in the master recursion
     they occur once, through the linear part of ``Q_Gamma`` and its transport
     ratio.  Use :func:`null_incidence_sign` only in a formulation where that
     frame sign has not already been included in the graph orientation.
@@ -360,15 +363,19 @@ def null_incidence_sign(
 #
 #   (0_L, 1_L, infinity_L, 0_R, 1_R, infinity_R),
 #
-# while contraction order pairs the two half-edges of each tube.  The final
-# right-trinion infinity frame is the determinant-one BPZ lift.  Deriving the
-# edge bits from these literal frame signs gives (0,0,1), rather than taking
-# that tuple as independent input.
+# while contraction order pairs the two half-edges of each tube.  In the
+# convention printed in ``Human Notes/SCblock.tex`` the fixed infinity-frame
+# sign is absorbed into the lifted plumbing coordinate.  Consequently the
+# theta orientation is the literal quadratic sign
+#
+#     (-1)^(p0 p1 + p0 p_infinity + p1 p_infinity)
+#
+# with no additional linear infinity-edge term.
 THETA_FRAME_LEDGER = PlumbingFrameLedger(
     edge_half_edges=((0, 3), (1, 4), (2, 5)),
     external_half_edges=(),
     contraction_order=(0, 3, 1, 4, 2, 5),
-    half_edge_frame_signs=(1, 1, 1, 1, 1, -1),
+    half_edge_frame_signs=(1, 1, 1, 1, 1, 1),
 )
 THETA_ORIENTATION = THETA_FRAME_LEDGER.orientation()
 
@@ -378,6 +385,7 @@ def regular_series(
     vacuum_coefficients: Mapping[Level, complex],
     global_coefficients: Mapping[Level, complex],
     orientation: PlumbingOrientation,
+    global_edge_parity_offsets: Sequence[int] = (),
     global_external_parities: Sequence[int] = (),
 ) -> dict[Level, complex]:
     """Assemble the unrestricted all-level double sum on finite input series.
@@ -389,6 +397,15 @@ def regular_series(
     """
 
     result: dict[Level, complex] = {}
+    offsets = (
+        _bits(
+            global_edge_parity_offsets,
+            orientation.edge_count,
+            "global_edge_parity_offsets",
+        )
+        if global_edge_parity_offsets
+        else (0,) * orientation.edge_count
+    )
     for vacuum_level, vacuum_value in vacuum_coefficients.items():
         if len(vacuum_level) != orientation.edge_count:
             raise ValueError("vacuum coefficient key has the wrong length")
@@ -401,7 +418,10 @@ def regular_series(
             )
             sign = orientation.cross_sign(
                 tuple(value % 2 for value in vacuum_level),
-                tuple(value % 2 for value in global_level),
+                tuple(
+                    value % 2 ^ offset
+                    for value, offset in zip(global_level, offsets)
+                ),
                 global_external_parities,
             )
             result[level] = result.get(level, 0.0 + 0.0j) + (
@@ -415,6 +435,7 @@ def regular_series_parity_resummed(
     vacuum_coefficients: Mapping[Level, complex],
     global_coefficients: Mapping[Level, complex],
     orientation: PlumbingOrientation,
+    global_edge_parity_offsets: Sequence[int] = (),
     global_external_parities: Sequence[int] = (),
 ) -> dict[Level, complex]:
     """Implement the finite parity-resummed function-level formula.
@@ -425,6 +446,15 @@ def regular_series_parity_resummed(
     """
 
     edge_count = orientation.edge_count
+    offsets = (
+        _bits(
+            global_edge_parity_offsets,
+            edge_count,
+            "global_edge_parity_offsets",
+        )
+        if global_edge_parity_offsets
+        else (0,) * edge_count
+    )
     result: dict[Level, complex] = {}
     for sigma in product((0, 1), repeat=edge_count):
         flip = tuple(
@@ -445,7 +475,10 @@ def regular_series_parity_resummed(
             for global_level, global_value in global_coefficients.items():
                 if len(global_level) != edge_count:
                     raise ValueError("global coefficient key has the wrong length")
-                if tuple(int(value) % 2 for value in global_level) != sigma:
+                if tuple(
+                    int(value) % 2 ^ offset
+                    for value, offset in zip(global_level, offsets)
+                ) != sigma:
                     continue
                 level = tuple(
                     int(vacuum_level[edge]) + int(global_level[edge])
@@ -463,6 +496,7 @@ def regular_coefficient(
     vacuum_coefficients: Mapping[Level, complex],
     global_coefficient: Callable[[Level], complex],
     orientation: PlumbingOrientation,
+    global_edge_parity_offsets: Sequence[int] = (),
     global_external_parities: Sequence[int] = (),
 ) -> complex:
     """Evaluate one coefficient of the regular block without a named product.
@@ -475,6 +509,15 @@ def regular_coefficient(
     target = tuple(int(value) for value in level)
     if len(target) != orientation.edge_count:
         raise ValueError("level vector has the wrong number of internal edges")
+    offsets = (
+        _bits(
+            global_edge_parity_offsets,
+            orientation.edge_count,
+            "global_edge_parity_offsets",
+        )
+        if global_edge_parity_offsets
+        else (0,) * orientation.edge_count
+    )
     result = 0.0 + 0.0j
     for vacuum_level, vacuum_value in vacuum_coefficients.items():
         if len(vacuum_level) != orientation.edge_count:
@@ -487,7 +530,10 @@ def regular_coefficient(
             continue
         sign = orientation.cross_sign(
             tuple(value % 2 for value in vacuum_level),
-            tuple(value % 2 for value in global_level),
+            tuple(
+                value % 2 ^ offset
+                for value, offset in zip(global_level, offsets)
+            ),
             global_external_parities,
         )
         result += sign * complex(vacuum_value) * complex(
@@ -497,8 +543,8 @@ def regular_coefficient(
 
 
 def _self_check() -> None:
-    if THETA_ORIENTATION.edge_linear_bits != (0, 0, 1):
-        raise AssertionError("theta frame ledger no longer derives beta=(0,0,1)")
+    if THETA_ORIENTATION.edge_linear_bits != (0, 0, 0):
+        raise AssertionError("theta orientation no longer matches the human note")
 
     # A redefinition of one intermediate canonical odd coordinate changes
     # its local frame sign and the adjacent transition sign together.  The
@@ -507,7 +553,7 @@ def _self_check() -> None:
         edge_half_edges=THETA_FRAME_LEDGER.edge_half_edges,
         external_half_edges=(),
         contraction_order=THETA_FRAME_LEDGER.contraction_order,
-        half_edge_frame_signs=(-1, 1, 1, 1, 1, -1),
+        half_edge_frame_signs=(-1, 1, 1, 1, 1, 1),
         edge_transition_signs=(-1, 1, 1),
     ).orientation()
     if reframed_theta.edge_linear_bits != THETA_ORIENTATION.edge_linear_bits:
@@ -516,23 +562,21 @@ def _self_check() -> None:
     for e0 in (0, 1):
         for e1 in (0, 1):
             for einf in (0, 1):
-                expected = (
-                    e0 * e1 + e0 * einf + e1 * einf + einf
-                ) % 2
+                expected = (e0 * e1 + e0 * einf + e1 * einf) % 2
                 if THETA_ORIENTATION.exponent((e0, e1, einf)) != expected:
                     raise AssertionError("theta orientation polynomial changed")
 
-    # On the BPZ-reflected theta trinion an odd null has the endpoint pattern
-    # (-,+,+) in the (infinity,one,zero) slots.  The middle slot is rotated
-    # cyclically to the canonical first-slot fusion polynomial.
-    theta_endpoint_signs = (
+    # The lower-level component-order canonicalizations are sign-free in the
+    # three minimal configurations.  They must not be confused with the full
+    # fixed-parity rho_a factorization signs checked immediately below.
+    component_endpoint_signs = (
         null_incidence_sign(
             r=3,
             s=1,
             null_slot=0,
             slot_parities=(1, 0, 0),
             canonical_order=(0, 1, 2),
-            half_edge_frame_sign=-1,
+            half_edge_frame_sign=1,
         ),
         null_incidence_sign(
             r=3,
@@ -551,8 +595,20 @@ def _self_check() -> None:
             half_edge_frame_sign=1,
         ),
     )
-    if theta_endpoint_signs != (-1, 1, 1):
-        raise AssertionError("theta odd-null endpoint signs changed")
+    if component_endpoint_signs != (1, 1, 1):
+        raise AssertionError("component-order endpoint signs changed")
+
+    human_endpoint_signs = tuple(
+        ns_null_factorization_sign(
+            slot=slot,
+            null_parity=1,
+            descendant_parities=(0, 0, 0),
+            primary_parities=(0, 0, 0),
+        )
+        for slot in range(3)
+    )
+    if human_endpoint_signs != (1, 1, -1):
+        raise AssertionError("human-note odd-null rho signs changed")
 
     # Belavin--Geiko reflection: a third-slot odd null crossing an odd middle
     # component supplies (-1)^rs.  A first-slot null has no such factor.

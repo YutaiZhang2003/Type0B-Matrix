@@ -98,20 +98,26 @@ def ns_fusion_polynomial_mp(
     *,
     r: int,
     s: int,
-    alpha: int,
+    a: int | None = None,
+    alpha: int | None = None,
     first_weight,
     second_weight,
     b,
 ):
-    """Return the principal-sheet weight-only factor ``P_(r,s)^alpha``.
+    """Return the principal-sheet weight-only factor ``P_(r,s)^a``.
 
     The two momentum square roots are evaluated independently on their
     principal branches.  Canonical slot-permutation and component signs are
-    not part of this scalar function.
+    not part of this scalar function.  ``a`` is the relative three-form label;
+    ``alpha`` is accepted only as a compatibility alias.
     """
 
-    if alpha not in (0, 1):
-        raise ValueError("alpha must be zero or one")
+    if a is None:
+        a = alpha
+    elif alpha is not None and int(alpha) != int(a):
+        raise ValueError("a and its compatibility alias alpha disagree")
+    if a not in (0, 1):
+        raise ValueError("a must be the relative label zero or one")
     if r < 1 or s < 1 or (r + s) % 2:
         raise ValueError("NS labels require positive r,s with r+s even")
     b = mpmath.mpc(b)
@@ -122,7 +128,7 @@ def ns_fusion_polynomial_mp(
 
     lambda_i = momentum(first_weight)
     lambda_j = momentum(second_weight)
-    congruence = 2 if alpha == 0 else 0
+    congruence = 2 if a == 0 else 0
     denominator = 2 * mpmath.sqrt(2)
     result = mpmath.mpc(1)
     for p in range(1 - r, r, 2):
@@ -154,12 +160,12 @@ def ns_ordinary_edge_scalar_kernel_mp(
     """
 
     if left_sector not in (0, 1) or right_sector not in (0, 1):
-        raise ValueError("endpoint sectors must be zero or one")
+        raise ValueError("endpoint relative labels must be zero or one")
     pole = ns_c_pole_mp(r, s, internal_weight)
     left = ns_fusion_polynomial_mp(
         r=r,
         s=s,
-        alpha=int(left_sector),
+        a=int(left_sector),
         first_weight=left_weights[0],
         second_weight=left_weights[1],
         b=pole.b,
@@ -167,7 +173,7 @@ def ns_ordinary_edge_scalar_kernel_mp(
     right = ns_fusion_polynomial_mp(
         r=r,
         s=s,
-        alpha=int(right_sector),
+        a=int(right_sector),
         first_weight=right_weights[0],
         second_weight=right_weights[1],
         b=pole.b,
@@ -196,21 +202,23 @@ def ns_self_loop_scalar_kernel_mp(
 ) -> tuple[NSPoleMP, object, int]:
     """Return the principal-sheet incidence-ordered self-loop scalar kernel.
 
-    The first incidence sees ``(external, h)`` in sector ``alpha``.  The
+    The first incidence sees ``(external, h)`` with relative label ``a``.  The
     second sees ``(external, h+rs/2)`` in the intermediate sector
-    ``alpha xor (rs mod 2)``.  The final sector is unchanged because the loop
-    meets the same vertex twice.  This includes the intrinsic toric sign but
-    not graph-level plumbing-lift or Koszul transport.
+    ``a xor (rs mod 2)``.  The final sector is unchanged because the loop
+    meets the same vertex twice.  In the human-note fixed-parity convention
+    the component-order toric phase is cancelled by sector transport.  The
+    returned scalar does not include graph-level plumbing-lift or Koszul
+    transport.
     """
 
     if sector not in (0, 1):
-        raise ValueError("sector must be zero or one")
+        raise ValueError("sector must be the relative label zero or one")
     rs = int(r) * int(s)
     pole = ns_c_pole_mp(r, s, handle_weight)
     first = ns_fusion_polynomial_mp(
         r=r,
         s=s,
-        alpha=int(sector),
+        a=int(sector),
         first_weight=external_weight,
         second_weight=handle_weight,
         b=pole.b,
@@ -218,14 +226,13 @@ def ns_self_loop_scalar_kernel_mp(
     second = ns_fusion_polynomial_mp(
         r=r,
         s=s,
-        alpha=int(sector) ^ (rs % 2),
+        a=int(sector) ^ (rs % 2),
         first_weight=external_weight,
         second_weight=mpmath.mpc(handle_weight) + mpmath.mpf(rs) / 2,
         b=pole.b,
     )
     residue = (
-        (-1) ** (int(sector) * rs)
-        * pole.jacobian
+        pole.jacobian
         * ns_inverse_null_slope_mp(r, s, pole.b)
         * first
         * second

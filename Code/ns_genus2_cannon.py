@@ -1082,7 +1082,7 @@ def recombine_channel(
     }
     if rerun_channel == "glasses":
         summary["consistent_recombination"]["glasses_correction"] = (
-            "self-loop toric sign S_rs^alpha=(-1)^(alpha*rs)"
+            "incidence-ordered P_rs^a P_rs^(a+rs); no separate toric sign"
         )
     summary.pop("free_rerun", None)
     summary["analytic_checks"] = run_internal_checks()

@@ -11,13 +11,10 @@ form with arbitrary global descendants on the three slots (infinity, one,
 zero).  :func:`trifundamental_coefficient` then assembles the direct NS
 analogue of CCY's sphere six-point trifundamental coefficient.
 
-Conventions start from Appendix A of Belavin--Geiko, arXiv:1806.09563, but
-the component tensors are converted to a *fixed-parity trilinear-form*
-convention before the parity projector is applied.  This distinction changes
-the reflected ``(1,b,0)`` kernels and replaces ``S+1/2`` by ``S-1/2`` in the
-``(1,1,1)`` entry.  The converted tensors obey odd-null factorization; using
-the unconverted component-map table with the projector does not.  Rising and
-falling Pochhammer symbols are kept distinct throughout.
+Conventions start from Appendix A of Belavin--Geiko, arXiv:1806.09563.  Every
+public three-point routine returns the fixed-parity trilinear form printed in
+``Human Notes/SCblock.tex``; component-ordered kernels are private recurrence
+details.  Rising and falling Pochhammer symbols are kept distinct throughout.
 """
 
 from __future__ import annotations
@@ -27,6 +24,8 @@ import json
 import math
 from dataclasses import asdict, dataclass
 from typing import Sequence, Union
+
+from ns_human_convention import human_note_rho_sign
 
 
 Number = Union[complex, float, int]
@@ -93,7 +92,7 @@ def osp_raising_coefficients(
     return n * (2.0 * h + n), 2.0 * h + n
 
 
-def osp_two_chain_kernel(
+def _osp_two_chain_kernel_component(
     *,
     k: int,
     m: int,
@@ -104,7 +103,7 @@ def osp_two_chain_kernel(
     d2: Number,
     d3: Number,
 ) -> complex:
-    r"""Return the reduced global three-point kernel tau_(k,m).
+    r"""Return the private component-ordered kernel tau_(k,m).
 
     This evaluates
 
@@ -113,7 +112,7 @@ def osp_two_chain_kernel(
             G_-1/2^e3 L_-1^m nu_3)
 
     at (infinity, 1, 0).  Both independent primary three-point structures
-    are normalized to one.  A physical vertex sector is selected separately
+    are normalized to one.  A relative three-form label is selected separately
     by :func:`osp_sector_vertex`.
     """
 
@@ -129,8 +128,8 @@ def osp_two_chain_kernel(
     s_value = h1 + h2 + h3
     bits = (epsilon1, epsilon2, epsilon3)
 
-    # In the fixed-parity trilinear-form convention, reflection of the two
-    # endpoints gives
+    # In this private component ordering, reflection of the two endpoints
+    # gives
     #
     #   T^{a b c}_{k,0,m}(d1,d2,d3)
     #     = (-1)^{b(a+c)}
@@ -141,7 +140,7 @@ def osp_two_chain_kernel(
     # component-map kernels are combined with a parity projector unchanged.
     if bits in ((1, 0, 0), (1, 1, 0)):
         reflection_sign = -1.0 if epsilon2 else 1.0
-        return reflection_sign * osp_two_chain_kernel(
+        return reflection_sign * _osp_two_chain_kernel_component(
             k=m,
             m=k,
             epsilon1=0,
@@ -199,6 +198,35 @@ def osp_two_chain_kernel(
     return result
 
 
+def osp_two_chain_kernel(
+    *,
+    k: int,
+    m: int,
+    epsilon1: int,
+    epsilon2: int,
+    epsilon3: int,
+    d1: Number,
+    d2: Number,
+    d3: Number,
+    primary_parities: Sequence[int] = (0, 0, 0),
+) -> complex:
+    r"""Return the reduced kernel in the graded human-note convention."""
+
+    sign = human_note_rho_sign(
+        (epsilon1, epsilon2, epsilon3), primary_parities
+    )
+    return sign * _osp_two_chain_kernel_component(
+        k=k,
+        m=m,
+        epsilon1=epsilon1,
+        epsilon2=epsilon2,
+        epsilon3=epsilon3,
+        d1=d1,
+        d2=d2,
+        d3=d3,
+    )
+
+
 def osp_three_point(
     *,
     n1: int,
@@ -210,12 +238,15 @@ def osp_three_point(
     d1: Number,
     d2: Number,
     d3: Number,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> complex:
-    r"""Return the global three-point form with three arbitrary chains.
+    r"""Return the human-note global three-form with arbitrary chains.
 
     Slot 1 is the BPZ-conjugate state at infinity, slot 2 is inserted at
-    one, and slot 3 is the ket at zero.  Translation covariance supplies
-    the falling Pochhammer multiplying the two-chain kernel.
+    one, and slot 3 is the ket at zero.  ``primary_parities`` are the
+    intrinsic parities of those three highest-weight states.  Translation
+    covariance supplies the falling Pochhammer multiplying the two-chain
+    kernel.
     """
 
     _validate_state(n1, epsilon1)
@@ -238,14 +269,15 @@ def osp_three_point(
         d1=d1,
         d2=d2,
         d3=d3,
+        primary_parities=primary_parities,
     )
 
 
 def osp_sector_vertex(*, sector: int, **three_point_arguments: Number) -> complex:
-    """Evaluate one of the two parity-homogeneous NS trinion tensors."""
+    """Project onto the note's relative trinion label ``a=sector``."""
 
     if sector not in (0, 1):
-        raise ValueError("sector must be 0 or 1")
+        raise ValueError("sector must be the relative label 0 or 1")
     fermion_parity = sum(
         int(three_point_arguments[key])
         for key in ("epsilon1", "epsilon2", "epsilon3")
@@ -300,7 +332,7 @@ def trifundamental_coefficient(
         _validate_state(n, epsilon)
 
     # Two bottom external states force the internal fermion label at each
-    # outer trinion to equal that trinion's parity sector.
+    # outer trinion to equal that trinion's relative label.
     if tuple((e1, e2, e3)) != tuple(int(value) for value in outer_sectors):
         return 0.0 + 0.0j
     if (e1 + e2 + e3) % 2 != central_sector:
@@ -427,11 +459,11 @@ def run_checks() -> GlobalCheckSummary:
         (0, 0, 0): 1.0,
         (1, 0, 0): 1.0,
         (0, 1, 0): 1.0,
-        (0, 0, 1): 1.0,
+        (0, 0, 1): -1.0,
         (1, 1, 0): b_value,
         (1, 0, 1): c_value,
         (0, 1, 1): -a_value,
-        (1, 1, 1): s_value - 0.5,
+        (1, 1, 1): -(s_value - 0.5),
     }
     primary_errors = []
     for bits, expected in primary_expected.items():

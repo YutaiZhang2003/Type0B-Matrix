@@ -26,6 +26,12 @@ from typing import Iterable, Mapping, Sequence
 
 import sympy as sp
 
+from ns_human_convention import (
+    human_note_rho_sign,
+    normalize_parity_triple,
+    theta_orientation_sign as human_theta_orientation_sign,
+)
+
 
 Mode = tuple[str, int]
 State = tuple[Mode, ...]
@@ -59,6 +65,71 @@ PBW_BASES: Mapping[int, tuple[State, ...]] = {
         (('G', -1), ('G', -3), ('L', -2)),
     ),
 }
+
+
+def _integer_partitions(
+    total: int, maximum: int | None = None
+) -> Iterable[tuple[int, ...]]:
+    if total == 0:
+        yield ()
+        return
+    if maximum is None or maximum > total:
+        maximum = total
+    for first in range(maximum, 0, -1):
+        for tail in _integer_partitions(total - first, first):
+            yield (first,) + tail
+
+
+def _strict_odd_partitions(
+    total: int, maximum: int | None = None
+) -> Iterable[tuple[int, ...]]:
+    if total == 0:
+        yield ()
+        return
+    if maximum is None or maximum > total:
+        maximum = total
+    if maximum % 2 == 0:
+        maximum -= 1
+    for first in range(maximum, 0, -2):
+        for tail in _strict_odd_partitions(total - first, first - 2):
+            yield (first,) + tail
+
+
+@lru_cache(maxsize=None)
+def exact_pbw_basis(twice_level: int) -> tuple[State, ...]:
+    """Return the complete HJS-ordered NS PBW basis at any finite level.
+
+    ``PBW_BASES`` keeps the explicit twice-level-zero-through-six oracle used
+    by the genus-two coefficient tests.  Ward reductions can temporarily visit
+    a higher level than their final matrix element, however, so the exact
+    module must not silently turn such an action into zero at that cutoff.
+    """
+
+    if not isinstance(twice_level, int) or twice_level < 0:
+        raise ValueError("twice_level must be a nonnegative integer")
+    if twice_level in PBW_BASES:
+        return PBW_BASES[twice_level]
+
+    states: list[State] = []
+    for g_twice_level in range(twice_level + 1):
+        remainder = twice_level - g_twice_level
+        if remainder % 2:
+            continue
+        for g_parts in _strict_odd_partitions(g_twice_level):
+            for l_parts in _integer_partitions(remainder // 2):
+                states.append(
+                    tuple(
+                        [("G", -part) for part in reversed(g_parts)]
+                        + [("L", -2 * part) for part in reversed(l_parts)]
+                    )
+                )
+    states.sort(
+        key=lambda state: (
+            sum(kind == "G" for kind, _ in state),
+            state,
+        )
+    )
+    return tuple(states)
 
 
 def state_twice_level(state: State) -> int:
@@ -98,6 +169,10 @@ def falling(value: sp.Expr, order: int) -> sp.Expr:
 def generalized_binomial(value: sp.Expr, order: int) -> sp.Expr:
     if order < 0:
         return sp.S.Zero
+    # ``value`` is sometimes a Python ``int`` (for the Virasoro Ward
+    # identities).  Sympify it before division so this exact oracle never
+    # leaks binary floating-point numbers through Python's ``/`` operator.
+    value = sp.sympify(value)
     result = sp.S.One
     for offset in range(order):
         result *= (value - offset) / (offset + 1)
@@ -112,7 +187,7 @@ class ExactNSVermaModule:
         self.weight = weight
 
     def basis(self, twice_level: int) -> tuple[State, ...]:
-        return PBW_BASES.get(twice_level, ())
+        return exact_pbw_basis(twice_level)
 
     @staticmethod
     def bpz(state: State) -> State:
@@ -208,7 +283,7 @@ def exact_osp_norm(weight: sp.Expr, n: int, epsilon: int) -> sp.Expr:
     return sp.factorial(n) * rising(2 * weight, n + epsilon)
 
 
-def exact_osp_two_chain_kernel(
+def _exact_osp_two_chain_kernel_component(
     *,
     k: int,
     m: int,
@@ -226,7 +301,7 @@ def exact_osp_two_chain_kernel(
     bits = (epsilon1, epsilon2, epsilon3)
     if bits in ((1, 0, 0), (1, 1, 0)):
         reflection_sign = -1 if epsilon2 else 1
-        return reflection_sign * exact_osp_two_chain_kernel(
+        return reflection_sign * _exact_osp_two_chain_kernel_component(
             k=m,
             m=k,
             epsilon1=0,
@@ -270,7 +345,39 @@ def exact_osp_two_chain_kernel(
     return sp.expand(result)
 
 
-def exact_osp_three_point(
+def exact_osp_two_chain_kernel(
+    *,
+    k: int,
+    m: int,
+    epsilon1: int,
+    epsilon2: int,
+    epsilon3: int,
+    d1: sp.Expr,
+    d2: sp.Expr,
+    d3: sp.Expr,
+    primary_parities: Sequence[int] = (0, 0, 0),
+) -> sp.Expr:
+    """Return the exact global kernel in the graded human-note convention."""
+
+    sign = human_note_rho_sign(
+        (epsilon1, epsilon2, epsilon3), primary_parities
+    )
+    return sp.expand(
+        sign
+        * _exact_osp_two_chain_kernel_component(
+            k=k,
+            m=m,
+            epsilon1=epsilon1,
+            epsilon2=epsilon2,
+            epsilon3=epsilon3,
+            d1=d1,
+            d2=d2,
+            d3=d3,
+        )
+    )
+
+
+def _exact_osp_three_point_component(
     *,
     n1: int,
     n2: int,
@@ -292,7 +399,7 @@ def exact_osp_three_point(
     )
     return sp.expand(
         falling(exponent, n2)
-        * exact_osp_two_chain_kernel(
+        * _exact_osp_two_chain_kernel_component(
             k=n1,
             m=n3,
             epsilon1=epsilon1,
@@ -305,7 +412,41 @@ def exact_osp_three_point(
     )
 
 
-def is_primary_component_state(state: State) -> bool:
+def exact_osp_three_point(
+    *,
+    n1: int,
+    n2: int,
+    n3: int,
+    epsilon1: int,
+    epsilon2: int,
+    epsilon3: int,
+    d1: sp.Expr,
+    d2: sp.Expr,
+    d3: sp.Expr,
+    primary_parities: Sequence[int] = (0, 0, 0),
+) -> sp.Expr:
+    """Return the exact global three-form in the graded human-note convention."""
+
+    sign = human_note_rho_sign(
+        (epsilon1, epsilon2, epsilon3), primary_parities
+    )
+    return sp.expand(
+        sign
+        * _exact_osp_three_point_component(
+            n1=n1,
+            n2=n2,
+            n3=n3,
+            epsilon1=epsilon1,
+            epsilon2=epsilon2,
+            epsilon3=epsilon3,
+            d1=d1,
+            d2=d2,
+            d3=d3,
+        )
+    )
+
+
+def is_global_boundary_state(state: State) -> bool:
     return state in ((), (("G", -1),))
 
 
@@ -317,11 +458,26 @@ def global_labels(state: State) -> tuple[int, int]:
 
 
 class ExactNSDescendantThreeForm:
-    """Exact Ward-identity three-form at (infinity,1,0)."""
+    """Exact human-note Ward three-form at ``(infinity,1,0)``.
 
-    def __init__(self, *, c: sp.Expr, weights: Sequence[sp.Expr]) -> None:
+    The recurrence itself propagates the fixed-parity ``rho_a`` printed in
+    ``Human Notes/SCblock.tex``; there is no caller-side convention change.
+    """
+
+    def __init__(
+        self,
+        *,
+        c: sp.Expr,
+        weights: Sequence[sp.Expr],
+        primary_parities: Sequence[int] = (0, 0, 0),
+    ) -> None:
+        if len(weights) != 3:
+            raise ValueError("an NS three-point form requires three weights")
         self.c = c
         self.weights = tuple(weights)
+        self.primary_parities = normalize_parity_triple(
+            primary_parities, name="primary_parities"
+        )
         self.modules = tuple(
             ExactNSVermaModule(c=c, weight=weight) for weight in self.weights
         )
@@ -334,23 +490,48 @@ class ExactNSDescendantThreeForm:
     def reflected(self) -> "ExactNSDescendantThreeForm":
         if self._reflection_partner is None:
             reflected = ExactNSDescendantThreeForm(
-                c=self.c, weights=(self.weights[2], self.weights[1], self.weights[0])
+                c=self.c,
+                weights=(self.weights[2], self.weights[1], self.weights[0]),
+                primary_parities=(
+                    self.primary_parities[2],
+                    self.primary_parities[1],
+                    self.primary_parities[0],
+                ),
             )
             reflected._reflection_partner = self
             self._reflection_partner = reflected
         return self._reflection_partner
 
-    def linear_action(
-        self, *, slot: int, mode: Mode, states: tuple[State, State, State]
+    def _human_linear_action(
+        self,
+        *,
+        target_states: tuple[State, State, State],
+        slot: int,
+        mode: Mode,
+        states: tuple[State, State, State],
     ) -> sp.Expr:
+        target_sign = human_note_rho_sign(
+            tuple(state_parity(state) for state in target_states),
+            self.primary_parities,
+        )
         result = sp.S.Zero
         for acted_state, coefficient in self.modules[slot].mode_action(mode, states[slot]):
             changed = list(states)
             changed[slot] = acted_state
-            result += coefficient * self.value(*changed)
+            changed_states = tuple(changed)
+            changed_sign = human_note_rho_sign(
+                tuple(state_parity(state) for state in changed_states),
+                self.primary_parities,
+            )
+            result += (
+                coefficient
+                * target_sign
+                * changed_sign
+                * self.value(*changed_states)
+            )
         return sp.cancel(result)
 
-    def reorder_leading_global_fermion(
+    def _reorder_leading_global_fermion(
         self, bra: State, middle: State, ket: State
     ) -> sp.Expr:
         next_mode = bra[1]
@@ -358,19 +539,50 @@ class ExactNSDescendantThreeForm:
         if next_mode[0] == "G":
             reordered = (next_mode, ("G", -1)) + remainder
             l_mode = ("L", next_mode[1] - 1)
-            return -self.value(reordered, middle, ket) + 2 * self.value(
-                (l_mode,) + remainder, middle, ket
+            return (
+                -self.value(reordered, middle, ket)
+                + 2
+                * self.value(
+                    (l_mode,) + remainder, middle, ket
+                )
             )
         coefficient = sp.Rational(-next_mode[1] - 2, 4)
         reordered = (next_mode, ("G", -1)) + remainder
         g_mode = ("G", next_mode[1] - 1)
-        return self.value(reordered, middle, ket) + coefficient * self.value(
-            (g_mode,) + remainder, middle, ket
+        return (
+            self.value(reordered, middle, ket)
+            + coefficient
+            * self.value((g_mode,) + remainder, middle, ket)
+        )
+
+    def _reflected_value(
+        self, bra: State, middle: State, ket: State
+    ) -> sp.Expr:
+        target_states = (bra, middle, ket)
+        reflected_states = (ket, middle, bra)
+        target_sign = human_note_rho_sign(
+            tuple(state_parity(state) for state in target_states),
+            self.primary_parities,
+        )
+        reflected_primary_parities = (
+            self.primary_parities[2],
+            self.primary_parities[1],
+            self.primary_parities[0],
+        )
+        reflected_sign = human_note_rho_sign(
+            tuple(state_parity(state) for state in reflected_states),
+            reflected_primary_parities,
+        )
+        return sp.cancel(
+            target_sign
+            * reflected_sign
+            * self.reflected().value(*reflected_states)
         )
 
     @lru_cache(maxsize=None)
     def value(self, bra: State, middle: State, ket: State) -> sp.Expr:
-        if all(is_primary_component_state(state) for state in (bra, middle, ket)):
+        """Return the fixed-parity human-note ``rho_a``."""
+        if all(is_global_boundary_state(state) for state in (bra, middle, ket)):
             (n3, e3), (n2, e2), (n1, e1) = (
                 global_labels(state) for state in (bra, middle, ket)
             )
@@ -384,6 +596,7 @@ class ExactNSDescendantThreeForm:
                 d1=self.weights[0],
                 d2=self.weights[1],
                 d3=self.weights[2],
+                primary_parities=self.primary_parities,
             )
         states = (bra, middle, ket)
         if middle:
@@ -397,17 +610,28 @@ class ExactNSDescendantThreeForm:
                     0, math.floor(state_twice_level(bra) / 2 - float(k))
                 )
                 for m in range(max_first + 1):
-                    result += generalized_binomial(k - sp.Rational(3, 2) + m, m) * self.linear_action(
+                    result += generalized_binomial(
+                        k - sp.Rational(3, 2) + m, m
+                    ) * self._human_linear_action(
+                        target_states=states,
                         slot=0,
                         mode=("G", int(2 * (k + m))),
                         states=(bra, tail, ket),
                     )
                 max_second = max(0, math.floor(state_twice_level(ket) / 2 + 0.5))
-                ward_sign = -((-1) ** (parity_13 + int(k + sp.Rational(1, 2))))
+                # The note's rho_a is the fixed-parity trilinear form, not
+                # the component-ordered form in the standard S2b identity.
+                # Converting the ket term to the human normalization supplies
+                # this additional minus.  The elementary k=3/2 contour gives
+                # rho_1(phi,G_-3/2 phi,phi)=rho_1(phi,phi,G_-1/2 phi)=-1.
+                ward_sign = -((-1) ** (
+                    parity_13 + int(k + sp.Rational(1, 2))
+                ))
                 for m in range(max_second + 1):
                     result += ward_sign * generalized_binomial(
                         k - sp.Rational(3, 2) + m, m
-                    ) * self.linear_action(
+                    ) * self._human_linear_action(
+                        target_states=states,
                         slot=2,
                         mode=("G", 2 * m - 1),
                         states=(bra, tail, ket),
@@ -424,7 +648,8 @@ class ExactNSDescendantThreeForm:
             result = sp.S.Zero
             max_first = max(0, state_twice_level(bra) // 2 - n)
             for m in range(max_first + 1):
-                result += generalized_binomial(n - 2 + m, n - 2) * self.linear_action(
+                result += generalized_binomial(n - 2 + m, n - 2) * self._human_linear_action(
+                    target_states=states,
                     slot=0,
                     mode=("L", 2 * (n + m)),
                     states=(bra, tail, ket),
@@ -433,7 +658,8 @@ class ExactNSDescendantThreeForm:
             for m in range(max_second + 1):
                 result += ((-1) ** n) * generalized_binomial(
                     n - 2 + m, n - 2
-                ) * self.linear_action(
+                ) * self._human_linear_action(
+                    target_states=states,
                     slot=2,
                     mode=("L", 2 * (m - 1)),
                     states=(bra, tail, ket),
@@ -443,55 +669,84 @@ class ExactNSDescendantThreeForm:
             mode = bra[0]
             tail = bra[1:]
             if mode == ("G", -1) and tail:
-                return sp.cancel(self.reorder_leading_global_fermion(bra, middle, ket))
+                return sp.cancel(
+                    self._reorder_leading_global_fermion(
+                        bra, middle, ket
+                    )
+                )
             if mode[0] == "G":
                 k = sp.Rational(-mode[1], 2)
                 if k <= sp.Rational(1, 2):
-                    return self.reflected().value(ket, middle, bra)
+                    return self._reflected_value(bra, middle, ket)
                 parity_13 = (state_parity(tail) + state_parity(ket)) % 2
-                result = ((-1) ** (parity_13 + 1)) * self.linear_action(
+                # Here the sign is the parity of the *full* first-slot state
+                # G_-k tail.  Relative to ``tail`` this supplies the explicit
+                # +1 in the exponent.  This is required already by the 111
+                # entry of the human-note base table.
+                result = ((-1) ** (parity_13 + 1)) * self._human_linear_action(
+                    target_states=states,
                     slot=2,
                     mode=("G", int(2 * k)),
                     states=(tail, middle, ket),
                 )
                 upper = int(k - sp.Rational(1, 2))
                 for m in range(-1, upper + 1):
-                    result += generalized_binomial(k + sp.Rational(1, 2), m + 1) * self.linear_action(
+                    result += generalized_binomial(
+                        k + sp.Rational(1, 2), m + 1
+                    ) * self._human_linear_action(
+                        target_states=states,
                         slot=1,
                         mode=("G", 2 * m + 1),
                         states=(tail, middle, ket),
                     )
                 return sp.cancel(result)
             n = -mode[1] // 2
-            result = self.linear_action(
+            result = self._human_linear_action(
+                target_states=states,
                 slot=2, mode=("L", 2 * n), states=(tail, middle, ket)
             )
             for m in range(-1, n + 1):
-                result += sp.binomial(n + 1, m + 1) * self.linear_action(
+                result += sp.binomial(n + 1, m + 1) * self._human_linear_action(
+                    target_states=states,
                     slot=1,
                     mode=("L", 2 * m),
                     states=(tail, middle, ket),
                 )
             return sp.cancel(result)
         if ket:
-            return self.reflected().value(ket, middle, bra)
+            return self._reflected_value(bra, middle, ket)
         return sp.S.One
 
 
-def theta_orientation_sign(levels: Sequence[int]) -> int:
+def _primary_parity_bits(primary_parities: Sequence[int]) -> tuple[int, int, int]:
+    if len(primary_parities) != 3:
+        raise ValueError("theta sewing requires three primary parities")
+    bits = tuple(int(value) for value in primary_parities)
+    if any(value not in (0, 1) for value in bits):
+        raise ValueError("primary parities must be zero or one")
+    return bits  # type: ignore[return-value]
+
+
+def theta_orientation_sign(
+    levels: Sequence[int], primary_parities: Sequence[int] = (0, 0, 0)
+) -> int:
     """Return the literal sign in the human-note all-NS definition.
 
-    At fixed twice-levels, every PBW state on an edge has parity equal to
-    that level modulo two.  Thus this is precisely
+    At fixed twice-levels, every PBW descendant on an edge has parity equal
+    to that level modulo two.  If the three highest-weight states have
+    intrinsic parities ``p_i``, this is precisely
 
-        (-1)^(A C + A E + C E)
+        (-1)^((A+p_1)(C+p_2)+(A+p_1)(E+p_3)+(C+p_2)(E+p_3))
 
     from Eq. (NSblock), with no additional linear infinity-edge factor.
     """
 
-    e0, e1, einf = (int(level) % 2 for level in levels)
-    exponent = e0 * e1 + e0 * einf + e1 * einf
-    return -1 if exponent % 2 else 1
+    if len(levels) != 3:
+        raise ValueError("theta sewing requires three edge levels")
+    return human_theta_orientation_sign(
+        tuple(int(level) % 2 for level in levels),
+        _primary_parity_bits(primary_parities),
+    )
 
 
 class ExactDirectThetaOracle:
@@ -501,21 +756,29 @@ class ExactDirectThetaOracle:
         self.modules = tuple(
             ExactNSVermaModule(c=c, weight=weight) for weight in self.weights
         )
-        self.form = ExactNSDescendantThreeForm(c=c, weights=self.weights)
 
     @lru_cache(maxsize=None)
     def inverse_gram(self, edge: int, twice_level: int) -> sp.Matrix:
         return self.modules[edge].gram_matrix(twice_level).inv()
 
     @lru_cache(maxsize=None)
-    def coefficient(self, levels: tuple[int, int, int]) -> sp.Expr:
+    def _unoriented_coefficient(
+        self,
+        levels: tuple[int, int, int],
+        primary_parities: tuple[int, int, int],
+    ) -> sp.Expr:
+        form = ExactNSDescendantThreeForm(
+            c=self.c,
+            weights=self.weights,
+            primary_parities=primary_parities,
+        )
         bases = tuple(self.modules[edge].basis(level) for edge, level in enumerate(levels))
         inverses = tuple(self.inverse_gram(edge, level) for edge, level in enumerate(levels))
         tensor: dict[tuple[int, int, int], sp.Expr] = {}
         for i0, state0 in enumerate(bases[0]):
             for i1, state1 in enumerate(bases[1]):
                 for i2, state2 in enumerate(bases[2]):
-                    tensor[i0, i1, i2] = self.form.value(state0, state1, state2)
+                    tensor[i0, i1, i2] = form.value(state0, state1, state2)
         contracted = sp.S.Zero
         for a in range(len(bases[0])):
             for b in range(len(bases[1])):
@@ -530,12 +793,35 @@ class ExactDirectThetaOracle:
                                     * inverses[2][d, dp]
                                     * tensor[ap, bp, dp]
                                 )
-        return sp.cancel(theta_orientation_sign(levels) * contracted)
+        return sp.cancel(contracted)
+
+    def coefficient(
+        self,
+        levels: tuple[int, int, int],
+        primary_parities: Sequence[int] = (0, 0, 0),
+    ) -> sp.Expr:
+        """Return the direct PBW coefficient for arbitrary primary parity.
+
+        Possible parity-reversal signs of either local trinion occur twice in
+        the sewn block and cancel.  Intrinsic parity therefore enters the
+        direct coefficient only through the absolute theta orientation.
+        """
+
+        parities = _primary_parity_bits(primary_parities)
+        return sp.cancel(
+            theta_orientation_sign(levels, parities)
+            * self._unoriented_coefficient(levels, parities)
+        )
 
 
 def exact_global_theta_coefficient(
-    *, weights: Sequence[sp.Expr], levels: Sequence[int], sectors: tuple[int, int]
+    *,
+    weights: Sequence[sp.Expr],
+    levels: Sequence[int],
+    sectors: tuple[int, int],
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> sp.Expr:
+    primaries = _primary_parity_bits(primary_parities)
     parity = sum(levels) % 2
     if sectors != (parity, parity):
         return sp.S.Zero
@@ -551,25 +837,38 @@ def exact_global_theta_coefficient(
         d1=weights[0],
         d2=weights[1],
         d3=weights[2],
+        primary_parities=primaries,
     )
     denominator = sp.prod(
         exact_osp_norm(weight, occupation, fermion)
         for weight, occupation, fermion in zip(weights, occupations, fermions)
     )
-    return sp.cancel(theta_orientation_sign(levels) * rho**2 / denominator)
+    return sp.cancel(
+        theta_orientation_sign(levels, primaries) * rho**2 / denominator
+    )
 
 
 THETA_VACUUM_ORDER3: Mapping[tuple[int, int, int], int] = {
     (0, 0, 0): 1,
-    (0, 3, 3): 1,
-    (3, 0, 3): 1,
+    (0, 3, 3): -1,
+    (3, 0, 3): -1,
     (3, 3, 0): -1,
 }
 
 
-def theta_cross_sign(vacuum_levels: Sequence[int], global_levels: Sequence[int]) -> int:
+def theta_cross_sign(
+    vacuum_levels: Sequence[int],
+    global_levels: Sequence[int],
+    primary_parities: Sequence[int] = (0, 0, 0),
+) -> int:
+    """Return the vacuum/global polarization sign for arbitrary primaries."""
+
+    primaries = _primary_parity_bits(primary_parities)
     v0, v1, vinf = (int(level) % 2 for level in vacuum_levels)
-    r0, r1, rinf = (int(level) % 2 for level in global_levels)
+    r0, r1, rinf = (
+        int(level) % 2 ^ primary
+        for level, primary in zip(global_levels, primaries)
+    )
     exponent = (
         v0 * r1
         + r0 * v1
@@ -582,10 +881,15 @@ def theta_cross_sign(vacuum_levels: Sequence[int], global_levels: Sequence[int])
 
 
 def exact_regular_theta_coefficient(
-    *, weights: Sequence[sp.Expr], levels: Sequence[int], sectors: tuple[int, int]
+    *,
+    weights: Sequence[sp.Expr],
+    levels: Sequence[int],
+    sectors: tuple[int, int],
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> sp.Expr:
     """Exact vacuum/global convolution through physical total order three."""
 
+    primaries = _primary_parity_bits(primary_parities)
     total = sp.S.Zero
     for vacuum_levels, vacuum_coefficient in THETA_VACUUM_ORDER3.items():
         global_levels = tuple(
@@ -594,10 +898,13 @@ def exact_regular_theta_coefficient(
         if min(global_levels) < 0:
             continue
         total += (
-            theta_cross_sign(vacuum_levels, global_levels)
+            theta_cross_sign(vacuum_levels, global_levels, primaries)
             * vacuum_coefficient
             * exact_global_theta_coefficient(
-                weights=weights, levels=global_levels, sectors=sectors
+                weights=weights,
+                levels=global_levels,
+                sectors=sectors,
+                primary_parities=primaries,
             )
         )
     return sp.cancel(total)
@@ -676,7 +983,13 @@ def exact_theta_residue(
 class ExactThetaRecursion:
     def __init__(self) -> None:
         self._cache: dict[
-            tuple[sp.Expr, tuple[sp.Expr, ...], tuple[int, ...], tuple[int, int]],
+            tuple[
+                sp.Expr,
+                tuple[sp.Expr, ...],
+                tuple[int, ...],
+                tuple[int, int],
+                tuple[int, int, int],
+            ],
             sp.Expr,
         ] = {}
 
@@ -687,15 +1000,20 @@ class ExactThetaRecursion:
         weights: tuple[sp.Expr, sp.Expr, sp.Expr],
         levels: tuple[int, int, int],
         sectors: tuple[int, int],
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> sp.Expr:
-        key = (c, weights, levels, sectors)
+        primaries = _primary_parity_bits(primary_parities)
+        key = (c, weights, levels, sectors, primaries)
         if key in self._cache:
             return self._cache[key]
         parity = sum(levels) % 2
         if sectors != (parity, parity):
             return sp.S.Zero
         total = exact_regular_theta_coefficient(
-            weights=weights, levels=levels, sectors=sectors
+            weights=weights,
+            levels=levels,
+            sectors=sectors,
+            primary_parities=primaries,
         )
         for edge, edge_level in enumerate(levels):
             for r, s, rs in ((3, 1, 3), (2, 2, 4), (5, 1, 5)):
@@ -716,8 +1034,8 @@ class ExactThetaRecursion:
                     (sectors[0] ^ 1, sectors[1] ^ 1) if rs % 2 else sectors
                 )
                 orientation_transport = sp.Rational(
-                    theta_orientation_sign(levels),
-                    theta_orientation_sign(shifted_levels),
+                    theta_orientation_sign(levels, primaries),
+                    theta_orientation_sign(shifted_levels, primaries),
                 )
                 total += (
                     orientation_transport
@@ -728,6 +1046,7 @@ class ExactThetaRecursion:
                         weights=tuple(shifted_weights),
                         levels=tuple(shifted_levels),
                         sectors=shifted_sectors,
+                        primary_parities=primaries,
                     )
                 )
         result = sp.cancel(total)
@@ -785,8 +1104,8 @@ def run_checks() -> SymbolicCheckSummary:
     )
     vacuum_seed_identities: dict[str, str] = {}
     for levels, expected_correction in {
-        (0, 3, 3): 1,
-        (3, 0, 3): 1,
+        (0, 3, 3): -1,
+        (3, 0, 3): -1,
         (3, 3, 0): -1,
     }.items():
         direct_large_c = sp.cancel(sp.limit(coefficients[levels], C, sp.oo))

@@ -50,6 +50,10 @@ from ns_genus2_partition import (
     run_internal_checks,
 )
 from ns_global_osp_block import osp_norm, osp_three_point
+from ns_human_convention import (
+    glasses_primary_parity_rephasing,
+    theta_primary_parity_rephasing,
+)
 from ns_vacuum_schottky import ccy_theta_generators, theta_lift_signs
 from plumbing_algorithms import generators_for_glasses, generators_for_theta
 
@@ -69,6 +73,90 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
         self.assertEqual(HAT_C_TARGET, 9.0)
         self.assertEqual(C_ORDINARY_AT_HAT_C_9, 13.5)
         self.assertEqual(C_ORDINARY_AT_HAT_C_9, 1.5 * HAT_C_TARGET)
+
+    def test_generic_primary_global_resummations_match_direct_sums(self) -> None:
+        weights = (0.71, 0.83, 0.94)
+        q_values = (0.010, 0.013, 0.009)
+        lifts = (1, -1, 1)
+        for channel in ("theta", "glasses"):
+            for sector in (0, 1):
+                for primaries in product((0, 1), repeat=3):
+                    direct = direct_global_block(
+                        channel=channel,
+                        weights=weights,
+                        q_values=q_values,
+                        sector=sector,
+                        lifts=lifts,
+                        tolerance=1.0e-14,
+                        max_total_occupation=18,
+                        primary_parities=primaries,
+                    )
+                    if channel == "theta":
+                        resummed = resummed_theta_global_block(
+                            weights=weights,
+                            q_values=q_values,
+                            sector=sector,
+                            lifts=lifts,
+                            tolerance=1.0e-14,
+                            max_total_endpoint_occupation=12,
+                            primary_parities=primaries,
+                        )
+                    else:
+                        resummed = resummed_glasses_global_block(
+                            weights=weights,
+                            q_values=q_values,
+                            sector=sector,
+                            lifts=lifts,
+                            primary_parities=primaries,
+                        )
+                    self.assertTrue(direct.converged)
+                    self.assertLess(
+                        abs(direct.value - resummed.value)
+                        / max(1.0, abs(resummed.value)),
+                        2.0e-11,
+                        (channel, sector, primaries),
+                    )
+
+    def test_functional_recursion_obeys_generic_primary_rephasing(self) -> None:
+        weights = (0.731, 0.913, 1.173)
+        q_values = (0.0013, 0.0017, 0.0011)
+        lifts = (1, -1, 1)
+        reducers = {
+            "theta": theta_primary_parity_rephasing,
+            "glasses": glasses_primary_parity_rephasing,
+        }
+        for channel, reducer in reducers.items():
+            recursion = NSGenus2CRecursion(
+                channel=channel,
+                q_values=q_values,
+                global_tolerance=1.0e-13,
+                global_max_total_occupation=16,
+                vacuum_word_length=3,
+                vacuum_max_mode=18,
+            )
+            for sector in (0, 1):
+                for primaries in product((0, 1), repeat=3):
+                    prefactor, effective_lifts = reducer(lifts, primaries)
+                    expected = prefactor * recursion.block(
+                        weights=weights,
+                        sector=sector,
+                        recursion_order=3,
+                        lifts=effective_lifts,
+                        central_charge=41.3,
+                    )
+                    observed = recursion.block(
+                        weights=weights,
+                        sector=sector,
+                        recursion_order=3,
+                        lifts=lifts,
+                        central_charge=41.3,
+                        primary_parities=primaries,
+                    )
+                    self.assertLess(
+                        abs(observed - expected),
+                        2.0e-13,
+                        (channel, sector, primaries),
+                    )
 
     def test_orientation_polynomial(self) -> None:
         self.assertEqual(
@@ -114,8 +202,8 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
             checks["spin_target_characteristic"],
             {"alpha": [0, 0], "beta": [0, 0]},
         )
-        self.assertEqual(checks["theta_edge_lifts"], [-1, 1, 1])
-        self.assertEqual(checks["same_spin_theta_lifts"], [-1, 1, 1])
+        self.assertEqual(checks["theta_edge_lifts"], [1, 1, 1])
+        self.assertEqual(checks["same_spin_theta_lifts"], [1, 1, 1])
         self.assertEqual(checks["same_spin_glasses_lifts"], [1, 1, 1])
         self.assertEqual(
             checks["theta_integer_branch"],
@@ -132,12 +220,16 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
         q_values = (0.07 + 0.002j, 0.11 - 0.003j, 0.09 + 0.001j)
         expected = {
             "theta": {
-                8: 1.1465972995303109 + 0.00019436414116389458j,
-                12: 1.1465958254326356 + 0.00019437734174836604j,
+                # Literal human-note theta orientation and lifts.
+                8: 1.097163792567563 + 0.0019394577120379352j,
+                12: 1.0971613337433175 + 0.0019395813465742041j,
             },
             "glasses": {
-                8: 1.6588936042693476 - 0.0044695949872146454j,
-                12: 1.6588957654591328 - 0.004468927690739714j,
+                # Human-note fixed-parity rho_a convention.  These differ
+                # from the former component-ordered Ward benchmarks only in
+                # the odd handle/bridge transport signs.
+                8: 1.6587896314716546 - 0.004469940511235218j,
+                12: 1.6587911258930406 - 0.004469282970501153j,
             },
         }
         lifts = {"theta": (1, -1, -1), "glasses": (1, 1, 1)}
@@ -261,7 +353,7 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
             lifts=(1, 1, 1),
             working_precision=50,
         )
-        expected = 2.2949002226189887 + 0.027463595284562905j
+        expected = 2.291673200615892 + 0.027492883704842413j
         self.assertLess(abs(observed - expected), 3.0e-14)
         self.assertGreaterEqual(recursion.confluent_moment_groups, 1)
         self.assertGreater(recursion.confluent_max_moment_terms, 3)
@@ -573,7 +665,7 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
         edge_lifts = (1, -1, -1)
         generators, signs = _theta_schottky_data(q_values, edge_lifts)
         expected = generators_for_theta(*q_values)
-        self.assertEqual(signs, (-1, -1))
+        self.assertEqual(signs, (1, -1))
         for observed, target in zip(generators, expected):
             self.assertLess(
                 self._projective_error(observed.gamma, target.gamma), 1.0e-14
@@ -637,25 +729,25 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
             _spin_characteristic_from_lifts(
                 "theta", q_values, (1, 1, 1)
             ),
-            ((0, 0), (1, 0)),
+            ((0, 0), (0, 0)),
         )
         self.assertEqual(
             _spin_characteristic_from_lifts(
                 "theta", q_values, (1, 1, -1)
             ),
-            ((0, 0), (0, 1)),
+            ((0, 0), (1, 1)),
         )
         self.assertEqual(
             _spin_characteristic_from_lifts(
                 "theta", q_values, (1, -1, -1)
             ),
-            ((0, 0), (0, 0)),
+            ((0, 0), (1, 0)),
         )
         self.assertEqual(
             _spin_characteristic_from_lifts(
                 "theta", q_values, (-1, 1, 1)
             ),
-            ((0, 0), (0, 0)),
+            ((0, 0), (1, 0)),
         )
 
         branch_composed = (
@@ -687,7 +779,7 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
                 }
             ],
             "physical_lifts": {
-                "theta": [-1, 1, 1],
+                "theta": [1, 1, 1],
                 "glasses": [1, 1, 1],
             },
             "expected_spin_characteristics": {
@@ -711,11 +803,11 @@ class GenusTwoNSPartitionTests(unittest.TestCase):
             ledger["spin-probe"]["theta"],
             {"alpha": [0, 0], "beta": [0, 0]},
         )
-        config["physical_lifts"]["theta"] = [1, 1, 1]
-        config["expected_spin_characteristics"]["theta"]["beta"] = [1, 0]
+        config["physical_lifts"]["theta"] = [1, -1, 1]
+        config["expected_spin_characteristics"]["theta"]["beta"] = [0, 1]
         with self.assertRaisesRegex(ValueError, "modular spin mismatch"):
             _validate_config_spin_characteristics(config)
-        config["physical_lifts"]["theta"] = [-1, 1, 1]
+        config["physical_lifts"]["theta"] = [1, 1, 1]
         config["expected_spin_characteristics"]["theta"]["beta"] = [0, 0]
         config["expected_spin_characteristics"]["theta"]["beta"] = [1, 1]
         with self.assertRaisesRegex(ValueError, "spin characteristic mismatch"):

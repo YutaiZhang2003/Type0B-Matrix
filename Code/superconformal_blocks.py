@@ -1,9 +1,10 @@
 """NS super-Virasoro blocks for a four-punctured sphere.
 
-This module implements the c-recursion convention of BRY, arXiv:2201.05621,
-section 3.2 and its ancillary Mathematica notebook.  Levels are represented
-internally by twice their value, so half-integer levels never become floating
-point dictionary keys.
+This module implements the BRY c-recursion of arXiv:2201.05621, section 3.2,
+converted to the fixed-parity three-point convention in
+``Human Notes/SCblock.tex``.  Levels are represented internally by twice
+their value, so half-integer levels never become floating-point dictionary
+keys.
 
 Only the Neveu--Schwarz sphere block is in scope here.  Structure constants,
 the modulus integral, analytic continuation of the amplitude, Ramond blocks,
@@ -211,7 +212,9 @@ class NSSphereFourPointBlock:
             right = _rising(h + self.h2 - self.h1, integer_part + 1)
         else:
             right = _rising(h + self.h2 - self.h1 + 0.5, integer_part)
-        sign = -1.0 if self.star3 else 1.0
+        # In the human-note convention the internal odd state occurs in the
+        # third slot of the left trinion, so every odd seed carries a minus.
+        sign = -1.0
         return sign * left * right / (
             math.factorial(integer_part) * _rising(2.0 * h, integer_part + 1)
         )
@@ -281,7 +284,10 @@ class NSSphereFourPointBlock:
         p43 = self._fusion_polynomial(
             r, s, b_pole, self.h4, self.h3, use_star3
         )
-        sigma = (-1.0) ** (r * s) if self.star3 else 1.0
+        # Converting the BRY/component residue to the human-note three-form
+        # leaves the level-transport phase (-1)^(rs), independently of which
+        # external field is starred.
+        sigma = (-1.0) ** (r * s)
         return sigma * (-derivative_c) * a_factor * p12 * p43, c_pole
 
     def _coefficient(self, twice_level: int, h: complex, c: complex) -> complex:
@@ -370,7 +376,7 @@ class NSSphereFourPointBlock:
         right_prefactor = right if self.star2 else 1
         left_parameter = left + (1 if self.star3 else mpmath.mpf("0.5"))
         right_parameter = right + (1 if self.star2 else mpmath.mpf("0.5"))
-        sign = -1 if self.star3 else 1
+        sign = -1
         return (
             sign
             * mpmath.sqrt(z)
@@ -676,7 +682,7 @@ class HighPrecisionNSSphereFourPointBlock(NSSphereFourPointBlock):
         return ns_fusion_polynomial_mp(
             r=r,
             s=s,
-            alpha=1 if second_is_starred else 0,
+            a=1 if second_is_starred else 0,
             first_weight=first_weight,
             second_weight=second_weight,
             b=b_pole,
@@ -692,10 +698,9 @@ class HighPrecisionNSSphereFourPointBlock(NSSphereFourPointBlock):
         """Standard-frame sphere specialization of the graph NS recipe.
 
         ``twice_level mod 2`` is the current block sector.  The external top
-        components shift the two endpoint three-form labels.  The final
-        ``star3`` phase is the standard bra-incidence reordering used by the
-        sphere convention and is deliberately supplied outside the shared
-        weight-only scalar kernel.  This method uses the principal pole sheet
+        components shift the two endpoint three-form labels.  The final phase
+        converts the component-ordered BRY residue to the human-note
+        fixed-parity three-form.  This method uses the principal pole sheet
         and is not an analytic-continuation driver.
         """
 
@@ -718,8 +723,8 @@ class HighPrecisionNSSphereFourPointBlock(NSSphereFourPointBlock):
         )
         if child_sectors != expected_children:  # pragma: no cover
             raise AssertionError("ordinary-edge incidence transport changed")
-        bra_phase = (-1) ** (int(self.star3) * r * s)
-        return bra_phase * residue, pole.c
+        human_phase = (-1) ** (r * s)
+        return human_phase * residue, pole.c
 
     def coefficient(self, twice_level: int):
         with mpmath.workdps(self.working_precision):

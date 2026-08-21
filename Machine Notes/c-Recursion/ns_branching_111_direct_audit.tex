@@ -1,0 +1,527 @@
+\documentclass[11pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=0.9in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,longtable,array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\setlength{\parskip}{0.45em}
+\setlength{\parindent}{0pt}
+\setlength{\emergencystretch}{2em}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue!55!black,
+  urlcolor=blue!55!black,
+  pdftitle={Direct audit of the NS branching 111 coefficient},
+  pdfauthor={Machine working note}
+}
+
+\newcommand{\SCA}{\mathsf{SCA}}
+\newcommand{\Vir}{\mathsf{Vir}}
+\newcommand{\Ff}{\mathsf F}
+\newcommand{\hatrho}{\widehat\rho}
+\newcommand{\rhof}{\rho^{\Ff}}
+\newcommand{\half}{\tfrac12}
+
+\title{Direct Audit of the NS Branching Coefficient in the \(111\) Channel}
+\author{Machine working note}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We audit the case \(n_1=n_2=n_3=1\) without using the blow-up product to
+construct the states or to evaluate their matrix element.  First we solve for
+the level-two \(\Vir\oplus\Vir\) primary \(v_1(P)\) in the auxiliary-fermion
+times NS-SCA PBW basis.  Its five defining highest-weight equations and its
+ungraded norm are then checked symbolically for generic \(b,P\).  We next
+expand the ordered three-point coefficient into the 25 nonzero
+auxiliary-fermion contractions, including the full crossing sign printed in
+the human note, and evaluate every SCA descendant coefficient by Ward
+identities at \((\infty,1,0)\).  Only after this direct calculation do we
+compare with the four-\(\ell\) formula.  The norm agrees identically, but the
+direct \(111\) three-point numerator does not agree with the printed
+\(\ell\)-product.  The discrepancy is not an overall sign and survives in the
+normalized square.  This note does not change the \(B^2\) used in the
+double-Virasoro block.
+\end{abstract}
+
+\tableofcontents
+
+\section{Conventions and scope}
+
+We use exactly the parameters of the human note,
+\begin{equation}
+ Q=b+b^{-1},\qquad
+ c=\frac32+3Q^2,\qquad
+ h(P)=\frac{Q^2}{8}-\frac{P^2}{2}.
+ \label{eq:parameters}
+\end{equation}
+The auxiliary fermion is denoted by \(f_r\) here (it is denoted by
+\(\psi_r\) in the human note), and
+\begin{equation}
+ f_r^\dagger=-f_{-r},\qquad G_r^\dagger=G_{-r}.
+ \label{eq:dagger}
+\end{equation}
+The tensor-product pairing is the ungraded one,
+\begin{equation}
+ B_{\mathrm{ug}}(u\otimes x,v\otimes y)
+ =B_{\Ff}(u,v)B_{\SCA}(x,y).
+ \label{eq:ungraded-pairing}
+\end{equation}
+The ordered holomorphic three-point form is nevertheless factorized with the
+full crossing sign written in the current human note:
+\begin{equation}
+ \hatrho_a(u_1\otimes x_1,u_2\otimes x_2,u_3\otimes x_3)
+ =(-1)^{|x_1|(|u_2|+|u_3|)+|x_2||u_3|}
+ \rhof(u_1,u_2,u_3)\rho_a(x_1,x_2,x_3).
+ \label{eq:full-crossing}
+\end{equation}
+Thus the pairing convention and the factorization convention are kept
+distinct throughout the audit.
+
+The notation ``\(111\)'' means \(n_1=n_2=n_3=1\), not the lower case
+\(n_i=\half\).  The total parity is even, so the relevant form is
+\(\hatrho_0\).
+
+\section{The level-two primary \(v_1(P)\)}
+
+\subsection{Seven-component ansatz}
+
+At total level two and even total parity, the relevant tensor-product PBW
+basis contains the following seven states:
+\begin{align}
+ &L_{-2}\phi,\quad L_{-1}^2\phi,\quad
+ G_{-\half}G_{-\frac32}\phi,\notag\\
+ &f_{-\half}G_{-\frac32}\phi,\quad
+ f_{-\half}G_{-\half}L_{-1}\phi,\quad
+ f_{-\frac32}G_{-\half}\phi,\quad
+ f_{-\half}f_{-\frac32}\phi.
+ \label{eq:seven-basis}
+\end{align}
+Define the abbreviations
+\begin{equation}
+ a=\frac Q2+P,\qquad
+ d=(a+b)(a+b^{-1}),\qquad
+ R=Q+P.
+ \label{eq:adr}
+\end{equation}
+Solving
+\begin{equation}
+ L_m^{(j)}v_1=0\quad(j=1,2;\ m=1,2),\qquad
+ (L_0^{(1)}-h_1^{(1)})v_1=0
+ \label{eq:five-primary-equations}
+\end{equation}
+gives one direction.  Fixing its scale by the human-note Fermi-sea
+normalization gives
+\begin{equation}
+\boxed{
+\begin{aligned}
+v_1(P)=\big[{}
+ &4dL_{-2}-2L_{-1}^2
+ -2(a^2+d)G_{-\half}G_{-\frac32}\\
+ &-4R f_{-\half}G_{-\half}L_{-1}
+ -4a^2R f_{-\half}G_{-\frac32}\\
+ &+4dR f_{-\frac32}G_{-\half}
+ -4adR f_{-\half}f_{-\frac32}
+ \big]\phi(P).
+\end{aligned}}
+\label{eq:v1-explicit}
+\end{equation}
+
+The overall sign can be fixed without a three-point formula.  The human note
+orders
+\begin{equation}
+ w_1=\chi_{-\frac32}\chi_{-\half}\phi,
+ \qquad \chi_r=f_r-i\eta_r.
+\end{equation}
+In the canonical auxiliary basis \(f_{-\half}f_{-\frac32}\phi\), the
+pure-\(f\) coefficient of \(w_1\) is therefore \(-1\).  Moreover,
+\begin{equation}
+ \ell(Q+2P,4)=16adR.
+\end{equation}
+Hence \(v_1=\frac14\ell(Q+2P,4)w_1\) has pure-\(f\) coefficient
+\(-4adR\), exactly as in \eqref{eq:v1-explicit}.  This removes a possible
+overall-sign ambiguity before the \(111\) matrix element is considered.
+
+As an independent source check, equation (B.3a) of
+\href{https://arxiv.org/pdf/1111.2803}{arXiv:1111.2803} gives the same
+seven-component vector after (i) converting to auxiliary-first order,
+(ii) using \(G_{-\half}^2=L_{-1}\) and
+\(G_{-\frac32}G_{-\half}=2L_{-2}-G_{-\half}G_{-\frac32}\), and
+(iii) multiplying their vector by \(-2\) to obtain the human-note
+normalization.
+
+\subsection{Direct primary check}
+
+The code acts on \eqref{eq:v1-explicit} with the two commuting Virasoro
+generators written in the human note.  No \(\ell\)-factor is used in these
+actions.  For symbolic nonzero \(b,P\), the four positive-mode residuals and
+the \(L_0^{(1)}\) residual all simplify identically to zero:
+\begin{equation}
+ \#\{\hbox{vanishing defining residuals}\}=5/5.
+ \label{eq:primary-result}
+\end{equation}
+
+\section{Direct ungraded norm}
+
+It is useful to split the vector according to its auxiliary state:
+\begin{equation}
+ v_i=Y_i^{(0)}+f_{-\half}Y_i^{(1)}
+       +f_{-\frac32}Y_i^{(3)}
+       +f_{-\half}f_{-\frac32}Y_i^{(13)},
+ \label{eq:block-split}
+\end{equation}
+where, for leg \(i\), \(a,d,R\) are evaluated at \(P=P_i\), and
+\begin{align}
+Y^{(0)}={}&
+ \big[4dL_{-2}-2L_{-1}^2
+ -2(a^2+d)G_{-\half}G_{-\frac32}\big]\phi,
+ \label{eq:Y0}\\
+Y^{(1)}={}&
+ \big[-4R G_{-\half}L_{-1}-4a^2R G_{-\frac32}\big]\phi,
+ \label{eq:Y1}\\
+Y^{(3)}={}&4dR G_{-\half}\phi,
+\qquad
+Y^{(13)}=-4adR\phi.
+ \label{eq:Y313}
+\end{align}
+Since \(f_r^\dagger=-f_{-r}\), the four auxiliary norms have signs
+\(+,-,-,+\).  The ungraded norm is therefore
+\begin{equation}
+ \lVert v_1\rVert_{\rm ug}^2
+ =\langle Y^{(0)},Y^{(0)}\rangle
+ -\langle Y^{(1)},Y^{(1)}\rangle
+ -\langle Y^{(3)},Y^{(3)}\rangle
+ +\langle Y^{(13)},Y^{(13)}\rangle.
+ \label{eq:norm-sector-sum}
+\end{equation}
+The SCA Gram matrix follows only from
+\begin{equation}
+ [L_m,L_n]=(m-n)L_{m+n}+\frac{c}{12}(m^3-m)\delta_{m+n,0},
+\end{equation}
+\begin{equation}
+ [L_m,G_r]=(\tfrac m2-r)G_{m+r},\qquad
+ \{G_r,G_s\}=2L_{r+s}+\frac c3(r^2-\tfrac14)\delta_{r+s,0}.
+\end{equation}
+Exact symbolic contraction of \eqref{eq:norm-sector-sum} gives
+\begin{align}
+\lVert v_1(P)\rVert_{\rm ug}^2
+={}&\frac{4}{b^6}P(P+b)(Pb+1)(Pb+b^2+1)
+ (2Pb+b^2+1)^2\notag\\
+&\hspace{1.1cm}\times
+ (2Pb+b^2+3)(2Pb+3b^2+1).
+ \label{eq:direct-norm-factorized}
+\end{align}
+On the other hand,
+\begin{align}
+ \ell(2P,4)&=16P(P+b)(P+b^{-1})a,\\
+ \ell(Q+2P,4)&=16adR.
+\end{align}
+Consequently \eqref{eq:direct-norm-factorized} is exactly
+\begin{equation}
+ \boxed{
+ \lVert v_1(P)\rVert_{\rm ug}^2
+ =\frac14\ell(2P,4)\ell(Q+2P,4),}
+ \label{eq:norm-agreement}
+\end{equation}
+which is the \(n=1\) specialization of the human-note norm formula.  This is
+a generic symbolic identity, not a numerical sample.
+
+\section{Direct \(111\) three-point coefficient}
+
+\subsection{Fixed-parity SCA three-form}
+
+The ordered SCA form is at \((\infty,1,0)\) and is normalized by
+\begin{equation}
+ \rho_0(\phi_1,\phi_2,\phi_3)=1,
+ \qquad
+ \rho_1(\phi_1,G_{-\half}\phi_2,\phi_3)=1.
+\end{equation}
+The eight global values used to terminate the Ward recursion are exactly the
+two tables of the human note:
+\begin{center}
+\begin{tabular}{c|cccc}
+\toprule
+\((a_1a_2a_3)\)&000&110&101&011\\
+\midrule
+\(\rho_0\)&1&\(h_1+h_2-h_3\)&\(h_1-h_2+h_3\)&\(h_1-h_2-h_3\)\\
+\bottomrule
+\end{tabular}
+
+\vspace{0.5em}
+\begin{tabular}{c|cccc}
+\toprule
+\((a_1a_2a_3)\)&100&010&001&111\\
+\midrule
+\(\rho_1\)&1&1&\(-1\)&\(-(h_1+h_2+h_3-\half)\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Here \(a_i\) is the power of \(G_{-\half}\) on leg \(i\).  In the code this
+fixed-parity table is obtained from the internal Ward-engine component by the
+conversion
+\begin{equation}
+ \rho_a^{\rm fixed}(x_1,x_2,x_3)
+ =(-1)^{a|x_3|}\rho^{\rm engine}(x_1,x_2,x_3),
+ \qquad a=|x_1|+|x_2|+|x_3|\pmod2.
+ \label{eq:fixed-conversion}
+\end{equation}
+This conversion is tested against all eight entries above before any level-two
+coefficient is evaluated.
+
+All remaining SCA descendants in \eqref{eq:Y0}--\eqref{eq:Y313} are reduced
+recursively by the NS Ward identities.  For example, if \(B,M,K\) denote the
+three states, then
+\begin{equation}
+ \rho(B,L_{-1}M,K)
+ =(\Delta_B-\Delta_M-\Delta_K)\rho(B,M,K),
+ \label{eq:ward-L1}
+\end{equation}
+and, for \(n\ge2\),
+\begin{align}
+\rho(B,L_{-n}M,K)
+={}&\sum_{j\ge0}\binom{n-2+j}{n-2}
+ \rho(L_{n+j}B,M,K)\notag\\
+&+(-1)^n\sum_{j\ge0}\binom{n-2+j}{n-2}
+ \rho(B,M,L_{j-1}K).
+ \label{eq:ward-Ln}
+\end{align}
+For an NS mode \(r\in\mathbb Z+\half\), \(r>0\), the middle-leg recursion is
+\begin{align}
+\rho(B,G_{-r}M,K)
+={}&\sum_{j\ge0}\binom{r-\frac32+j}{j}
+ \rho(G_{r+j}B,M,K)\notag\\
+&-(-1)^{|B|+|K|+r+\half}
+ \sum_{j\ge0}\binom{r-\frac32+j}{j}
+ \rho(B,M,G_{j-\half}K).
+ \label{eq:ward-Gr}
+\end{align}
+The sums terminate because the external modules are highest-weight modules.
+Bra modes are moved to the middle and ket legs with the corresponding contour
+identity; ket modes are reduced by endpoint reflection.  Thus every term in
+the calculation is obtained from the displayed algebra and the eight base
+values, with no input from the \(\ell\)-product.
+
+\subsection{Auxiliary-fermion contractions and crossing signs}
+
+Use the labels
+\begin{equation}
+ 0=\mathbf1_{\Ff},\qquad
+ 1=f_{-\half},\qquad
+ 3=f_{-\frac32},\qquad
+ 13=f_{-\half}f_{-\frac32}.
+\end{equation}
+Every summand of \(v_1\) is even in total, so its SCA parity equals its
+auxiliary parity.  Therefore the exponent in \eqref{eq:full-crossing} reduces
+for the \(111\) expansion to
+\begin{equation}
+ E=p_1p_2+p_1p_3+p_2p_3,
+ \qquad p_i=|u_i|.
+ \label{eq:reduced-crossing}
+\end{equation}
+The auxiliary three-form is evaluated directly as the Pfaffian of the sphere
+fermion two-point function.  The bra word is reversed, and the rule
+\(f_r^\dagger=-f_{-r}\) supplies one minus sign per bra fermion.  Exactly 25
+triples survive:
+
+\begingroup\small
+\begin{longtable}{ccc|rrr@{\qquad}ccc|rrr}
+\toprule
+\(A\)&\(B\)&\(C\)&\(\rhof\)&\(E\)&\((-1)^E\rhof\)&
+\(A\)&\(B\)&\(C\)&\(\rhof\)&\(E\)&\((-1)^E\rhof\)\\
+\midrule
+\endhead
+0&0&0&1&0&1 & 0&1&1&1&1&-1\\
+0&1&3&1&1&-1 & 0&3&1&-1&1&1\\
+0&3&3&-2&1&2 & 0&13&13&1&0&1\\
+1&0&1&-1&1&1 & 1&1&0&-1&1&1\\
+1&1&13&1&1&-1 & 1&3&13&-2&1&2\\
+1&13&1&1&1&-1 & 1&13&3&2&1&-2\\
+3&0&3&-1&1&1 & 3&1&0&-1&1&1\\
+3&1&13&-1&1&1 & 3&3&0&-1&1&1\\
+3&3&13&1&1&-1 & 3&13&1&2&1&-2\\
+3&13&3&3&1&-3 & 13&0&13&1&0&1\\
+13&1&1&-1&1&1 & 13&1&3&1&1&-1\\
+13&3&1&-1&1&1 & 13&13&0&1&0&1\\
+13&13&13&-4&0&-4 & & & & & \\
+\bottomrule
+\end{longtable}
+\endgroup
+
+Writing \(Y_{i}^{(A)}\) for the SCA state multiplying auxiliary state \(A\)
+on leg \(i\), the direct result is therefore the finite sum
+\begin{equation}
+ \boxed{
+ T_{111}^{\rm dir}
+ =\sum_{(A,B,C)\ \text{in the table}}
+ (-1)^{E_{ABC}}\rhof(A,B,C)
+ \rho_0(Y_1^{(A)},Y_2^{(B)},Y_3^{(C)}).}
+ \label{eq:direct-25-sum}
+\end{equation}
+The implementation also evaluates the seven-by-seven-by-seven expansion
+without using this table.  The unsplit expansion and the 25-block sum agree
+exactly; this is an internal check on the bookkeeping in
+\eqref{eq:direct-25-sum}.
+
+\section{Comparison with the human-note \(\ell\)-product}
+
+For \(n_1=n_2=n_3=1\), the printed numerator specializes to
+\begin{align}
+T_{111}^{\ell}
+={}&-\frac18
+ \ell\left(\frac Q2+P_1+P_2+P_3,6\right)
+ \ell\left(\frac Q2-P_1+P_2+P_3,2\right)\notag\\
+&\quad\times
+ \ell\left(\frac Q2+P_1+P_2-P_3,2\right)
+ \ell\left(\frac Q2-P_1+P_2-P_3,-2\right).
+ \label{eq:ell-111-raw}
+\end{align}
+Since
+\begin{equation}
+ \ell(x,2)=x,\qquad \ell(x,-2)=-\ell(Q-x,2)=-(Q-x),
+\end{equation}
+this becomes
+\begin{equation}
+\boxed{
+T_{111}^{\ell}=\frac18\ell(S,6)ABC,}
+\label{eq:ell-111-reduced}
+\end{equation}
+where
+\begin{align}
+S&=\frac Q2+P_1+P_2+P_3,&
+A&=\frac Q2-P_1+P_2+P_3,\\
+B&=\frac Q2+P_1+P_2-P_3,&
+C&=\frac Q2+P_1-P_2+P_3.
+\end{align}
+
+\subsection{Exact one-parameter comparison}
+
+To keep the symbolic output readable, take the nonsingular line
+\begin{equation}
+ b=3,\qquad (P_1,P_2,P_3)=(-\tfrac32,t,-\tfrac32).
+ \label{eq:compact-line}
+\end{equation}
+The direct Ward calculation gives
+\begin{equation}
+T_{111}^{\rm dir}
+=-\frac{(3t+5)}{4251528}\,
+\begin{aligned}[t]
+\big(&177147t^{11}+885735t^{10}-27359370t^9-347601780t^8\\
+&-1767367188t^7-4991980590t^6-7102586493t^5\\
+&+1135874745t^4+12286758429t^3+1003438035t^2\\
+&+6876067671t+31288240715\big).
+\end{aligned}
+\label{eq:direct-line}
+\end{equation}
+The human-note product instead gives the completely split polynomial
+\begin{align}
+T_{111}^{\ell}
+={}&-\frac{1}{157464}
+t(t+2)(t+8)(3t-4)(3t-2)(3t+4)\notag\\
+&\qquad\times(3t+5)^2(3t+8)(3t+14)(3t+16)(3t+32).
+\label{eq:ell-line}
+\end{align}
+Equations \eqref{eq:direct-line} and \eqref{eq:ell-line} are different
+polynomials.  In particular, their difference is not removed by an overall
+sign or phase.
+
+At the exact rational point \(t=\frac13\), all three norms are nonzero and
+the comparison is
+\begin{align}
+T_{111}^{\rm dir}&=-\frac{315962090}{6561},&
+T_{111}^{\ell}&=-\frac{818125}{486},\\
+T_{111}^{\rm dir}-T_{111}^{\ell}
+&=-\frac{609834805}{13122},&
+\frac{T_{111}^{\rm dir}}{T_{111}^{\ell}}
+&=\frac{126384836}{4417875}.
+\label{eq:sample-rho}
+\end{align}
+The three independently verified norms are
+\begin{equation}
+ N_1=N_3=\frac{1463}{108},\qquad
+ N_2=\frac{1971200}{243}.
+\end{equation}
+Thus the normalized squares also differ:
+\begin{align}
+\frac{(T_{111}^{\rm dir})^2}{N_1N_2N_3}
+&=\frac{998320423171681}{640775109744},\\
+\frac{(T_{111}^{\ell})^2}{N_1N_2N_3}
+&=\frac{13546875}{7116032}.
+ \label{eq:sample-B2}
+\end{align}
+The second value in \eqref{eq:sample-B2} is the existing blow-up \(B^2\)
+used by the double-Virasoro block.  It has not been modified by this audit.
+
+As a second generic exact sample, with
+\begin{equation}
+ b=\frac54,\qquad(P_1,P_2,P_3)=\left(\frac16,\frac27,-\frac38\right),
+\end{equation}
+the ratio is
+\begin{equation}
+ \frac{T_{111}^{\rm dir}}{T_{111}^{\ell}}
+ =\frac{40988240919614376360207863310856861}
+ {3383638222509524104324824472946800}\ne1.
+\end{equation}
+All arithmetic in both samples is exact rational arithmetic.
+
+\section{Conclusion and interpretation}
+
+The extent of the check is:
+\begin{enumerate}
+\item The explicit seven-component \(v_1(P)\) satisfies all five defining
+  primary/eigenvalue equations symbolically for generic \(b,P\).
+\item Its ungraded norm agrees symbolically with the \(n=1\) specialization
+  of the human-note norm formula.
+\item All 25 nonzero auxiliary-fermion triples are included with
+  \(f_r^\dagger=-f_{-r}\) and the full crossing exponent in
+  \eqref{eq:full-crossing}.
+\item Every SCA coefficient is reduced to the fixed-parity base table by
+  exact Ward identities.  The split 25-term sum agrees with a separate
+  unsplit expansion.
+\item The direct result disagrees with the printed four-\(\ell\) numerator on
+  an exact one-parameter family and at two explicit rational samples.  The
+  disagreement survives in \(B^2\).
+\end{enumerate}
+
+Therefore the following set of statements is not simultaneously consistent:
+the ungraded tensor pairing, \(f_r^\dagger=-f_{-r}\), the full signed
+factorization \eqref{eq:full-crossing}, the fixed-parity SCA base table, the
+normalization \eqref{eq:v1-explicit}, and the identification of the resulting
+ordered three-point form with the printed \(\ell\)-product.  The primary and
+norm checks isolate the remaining issue to the dictionary between the
+ordered \(\hatrho\) in \eqref{eq:full-crossing} and the convention in which
+the blow-up product was derived.  A single additional overall sign cannot
+repair the \(111\) result.
+
+This conclusion is deliberately narrower than changing the production
+branching coefficient.  The existing \(B^2\) used in the double-Virasoro
+block is left intact because it is separately constrained by the block-level
+comparison with NS \(c\)-recursion.  What must be repaired is the convention
+transport that claims that this \(B^2\) is obtained by directly squaring the
+specific ordered \(\hatrho\) defined by the simultaneous conventions above.
+
+\section{Reproduction}
+
+The exact calculation is implemented in
+\begin{center}
+\texttt{Code/audit\_ns\_branching\_111.py}.
+\end{center}
+Run from the repository root:
+\begin{verbatim}
+python3 Code/audit_ns_branching_111.py --compact-line
+\end{verbatim}
+The script constructs \eqref{eq:v1-explicit} directly, performs the generic
+primary and norm checks, prints the complete auxiliary table, evaluates the
+two rational samples, and factors the one-parameter polynomials
+\eqref{eq:direct-line} and \eqref{eq:ell-line}.  It imports the existing Ward
+and Gram engines but does not write to, replace, or patch the production
+double-Virasoro branching coefficient.
+
+\end{document}

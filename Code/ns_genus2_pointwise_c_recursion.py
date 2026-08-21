@@ -21,6 +21,10 @@ from typing import Sequence
 
 from ns_genus12_finite_c_check import theta_residue_prefactor
 from ns_genus2_partition import resummed_theta_global_component
+from ns_human_convention import (
+    normalize_parity_triple,
+    theta_primary_parity_rephasing,
+)
 from ns_regular_block import THETA_ORIENTATION
 from ns_vacuum_schottky import (
     ccy_theta_generators,
@@ -41,7 +45,7 @@ def _unit(edge: int) -> Parity:
     return tuple(int(index == int(edge)) for index in range(3))  # type: ignore[return-value]
 
 
-def _transport_frame_lifts(
+def _transport_human_lifts(
     lifts: Sequence[int], edge: int
 ) -> tuple[int, int, int]:
     basis = _unit(edge)
@@ -55,7 +59,12 @@ def _transport_frame_lifts(
 
 
 class PointwiseHumanThetaCRecursion:
-    """Functional NS c-recursion with the literal human theta sign."""
+    """Functional NS c-recursion with the literal human theta convention.
+
+    ``sector`` is always the note's relative label ``a=A+C+E mod 2``.
+    Intrinsic primary parities are independent metadata and enter through
+    ``eta_i^(A_i+p_i)`` and ``Q(A+p_1,C+p_2,E+p_3)``.
+    """
 
     def __init__(
         self,
@@ -81,17 +90,12 @@ class PointwiseHumanThetaCRecursion:
 
     @lru_cache(maxsize=None)
     def _vacuum(self, human_lifts: tuple[int, int, int]) -> complex:
-        # The stored vacuum seed carries the frame-linear infinity bit.  The
-        # final minus converts it to the literal quadratic sign of the human
-        # note before the Schottky lift map is applied.
-        frame_lifts = (
-            human_lifts[0],
-            human_lifts[1],
-            -human_lifts[2],
-        )
+        # The vacuum table and this API both use literal human-note lifts;
+        # ``theta_lift_signs`` performs the documented conversion to the raw
+        # determinant-one Schottky representatives at the backend boundary.
         return ns_schottky_vacuum_block(
             ccy_theta_generators(*self.q_values),
-            theta_lift_signs(frame_lifts),
+            theta_lift_signs(human_lifts),
             max_word_length=self.vacuum_word_length,
             max_mode=self.vacuum_max_mode,
         ).value
@@ -105,13 +109,13 @@ class PointwiseHumanThetaCRecursion:
         # The production resummation accepts geometric (zero,one,infinity)
         # labels and internally reverses them into CCY trinion slots.  Reverse
         # here so its trinion order is the human-note order used by the exact
-        # coefficient audit.  The fixed infinity lift cancels its frame-linear
-        # bit, leaving the literal quadratic theta sign.
+        # coefficient audit.  Its lifts already are the literal human-note
+        # lifts, so the unit lift tuple is passed unchanged.
         diagnostics = resummed_theta_global_component(
             weights=weights[::-1],
             q_values=self.q_values[::-1],
             fermions=parity[::-1],
-            lifts=(1, 1, -1),
+            lifts=(1, 1, 1),
             tolerance=self.global_tolerance,
             max_total_endpoint_occupation=self.global_max_total_occupation,
         )
@@ -140,6 +144,7 @@ class PointwiseHumanThetaCRecursion:
         weights: Sequence[complex],
         sector: int,
         lifts: Sequence[int],
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> complex:
         """Evaluate the resummed vacuum ``star`` global regular block."""
 
@@ -151,6 +156,19 @@ class PointwiseHumanThetaCRecursion:
             raise ValueError("three weights and three lifts are required")
         if any(value not in (-1, 1) for value in lift_tuple):
             raise ValueError("lifts must be +/-1")
+        primaries = normalize_parity_triple(
+            primary_parities, name="primary_parities"
+        )
+        if any(primaries):
+            prefactor, effective_lifts = theta_primary_parity_rephasing(
+                lift_tuple, primaries
+            )
+            return prefactor * self.regular_block(
+                weights=weight_tuple,
+                sector=sector,
+                lifts=effective_lifts,
+                primary_parities=(0, 0, 0),
+            )
 
         total = 0.0 + 0.0j
         for parity in PARITIES:
@@ -172,13 +190,23 @@ class PointwiseHumanThetaCRecursion:
         return total
 
     def precompute_vacuum_for(
-        self, *, sector: int, lifts: Sequence[int]
+        self,
+        *,
+        sector: int,
+        lifts: Sequence[int],
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> None:
         """Cache the geometry-only vacuum factors needed by one block."""
 
         lift_tuple = tuple(int(value) for value in lifts)
         if sector not in (0, 1) or len(lift_tuple) != 3:
             raise ValueError("invalid sector or lift tuple")
+        _prefactor, lift_tuple = theta_primary_parity_rephasing(
+            lift_tuple,
+            normalize_parity_triple(
+                primary_parities, name="primary_parities"
+            ),
+        )
         for parity in PARITIES:
             if sum(parity) % 2 != sector:
                 continue
@@ -201,6 +229,7 @@ class PointwiseHumanThetaCRecursion:
         sector: int,
         recursion_order: int,
         lifts: Sequence[int],
+        primary_parities: Sequence[int] = (0, 0, 0),
     ) -> complex:
         """Insert all numerical data and evaluate the functional recursion."""
 
@@ -213,11 +242,12 @@ class PointwiseHumanThetaCRecursion:
             raise ValueError("three weights and three lifts are required")
         if sector not in (0, 1) or any(value not in (-1, 1) for value in human_lifts):
             raise ValueError("invalid sector or lift")
-
-        # The residue ledger is stored with the frame-linear infinity bit.
-        # This is only an internal frame conversion; public lifts remain the
-        # literal human-note lifts.
-        frame_lifts = (human_lifts[0], human_lifts[1], -human_lifts[2])
+        primaries = normalize_parity_triple(
+            primary_parities, name="primary_parities"
+        )
+        primary_prefactor, effective_lifts = theta_primary_parity_rephasing(
+            human_lifts, primaries
+        )
 
         @lru_cache(maxsize=None)
         def recurse(
@@ -225,18 +255,13 @@ class PointwiseHumanThetaCRecursion:
             current_c: complex,
             current_weights: tuple[complex, complex, complex],
             current_sector: int,
-            current_frame_lifts: tuple[int, int, int],
+            current_lifts: tuple[int, int, int],
         ) -> complex:
             self.block_calls += 1
-            current_human_lifts = (
-                current_frame_lifts[0],
-                current_frame_lifts[1],
-                -current_frame_lifts[2],
-            )
             total = self.regular_block(
                 weights=current_weights,
                 sector=current_sector,
-                lifts=current_human_lifts,
+                lifts=current_lifts,
             )
             for edge in range(3):
                 for r in range(2, remaining + 1):
@@ -260,35 +285,35 @@ class PointwiseHumanThetaCRecursion:
                         shifted[edge] += rs / 2.0
                         child_sector = current_sector ^ (rs % 2)
                         if rs % 2:
-                            child_frame_lifts = _transport_frame_lifts(
-                                current_frame_lifts, edge
+                            child_lifts = _transport_human_lifts(
+                                current_lifts, edge
                             )
                             orientation_constant = (-1) ** THETA_ORIENTATION.exponent(
                                 _unit(edge)
                             )
                         else:
-                            child_frame_lifts = current_frame_lifts
+                            child_lifts = current_lifts
                             orientation_constant = 1
                         total += (
                             residue
                             / denominator
                             * self.q_values[edge] ** (rs / 2.0)
-                            * current_frame_lifts[edge] ** (rs % 2)
+                            * current_lifts[edge] ** (rs % 2)
                             * orientation_constant
                             * recurse(
                                 remaining - rs,
                                 complex(pole_c),
                                 tuple(shifted),
                                 child_sector,
-                                tuple(child_frame_lifts),
+                                tuple(child_lifts),
                             )
                         )
             return total
 
-        return recurse(
+        return primary_prefactor * recurse(
             order,
             complex(central_charge),
             weight_tuple,
             int(sector),
-            frame_lifts,
+            effective_lifts,
         )

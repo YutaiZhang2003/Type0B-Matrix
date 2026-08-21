@@ -1,5 +1,6 @@
 """Regression tests for the all-NS two-Virasoro fusion coefficient."""
 
+import itertools
 import unittest
 
 import mpmath
@@ -11,6 +12,10 @@ from two_virasoro_fusion import (
     ns_fusion_data,
     s_even,
     s_odd,
+)
+from ns_human_convention import (
+    enlarged_ns_three_form_crossing_sign,
+    primary_parity_ward_sign,
 )
 
 
@@ -174,7 +179,7 @@ class TwoVirasoroFusionTests(unittest.TestCase):
                 precision=self.precision,
             )
             self.assertEqual(one_slot3_branch.parity, 1)
-            self.assert_mp_close(one_slot3_branch.numerator, 1)
+            self.assert_mp_close(one_slot3_branch.numerator, -1)
             self.assert_mp_close(
                 one_slot3_branch.coefficient_squared,
                 1 / branch_norm(p3, 1, b, precision=self.precision),
@@ -240,11 +245,8 @@ class TwoVirasoroFusionTests(unittest.TestCase):
                 precision=self.precision,
             )
             expected_human = (
-                h1
-                + h2
-                + h3
-                - mpmath.mpf("0.5")
-                - gamma1 * gamma2
+                -(h1 + h2 + h3 - mpmath.mpf("0.5"))
+                + gamma1 * gamma2
                 + gamma1 * gamma3
                 + gamma2 * gamma3
             )
@@ -278,8 +280,105 @@ class TwoVirasoroFusionTests(unittest.TestCase):
                 b,
                 precision=self.precision,
             )
-            self.assertGreater(abs(three_slots.numerator - paper_ratio), 0.1)
-            self.assertGreater(abs(three_slots.numerator + paper_ratio), 0.1)
+            self.assert_mp_close(three_slots.numerator, paper_ratio)
+
+    def test_all_first_primary_numerators_from_ungraded_components(self):
+        """Check all 27 labels and all primary parities directly."""
+
+        with mpmath.workdps(self.precision):
+            b = mpmath.mpf("1.23")
+            q = b + 1 / b
+            momenta = (
+                mpmath.mpf("0.19"),
+                mpmath.mpf("-0.31"),
+                mpmath.mpf("0.43"),
+            )
+            weights = tuple(
+                (q**2 / 4 - momentum**2) / 2
+                for momentum in momenta
+            )
+
+            fermion_rho = {
+                (0, 0, 0): 1,
+                (1, 1, 0): -1,
+                (1, 0, 1): -1,
+                (0, 1, 1): 1,
+            }
+            h1, h2, h3 = weights
+            sca_rho = {
+                (0, 0, 0): 1,
+                (1, 1, 0): h1 + h2 - h3,
+                (1, 0, 1): h1 - h2 + h3,
+                (0, 1, 1): h1 - h2 - h3,
+                (1, 0, 0): 1,
+                (0, 1, 0): 1,
+                (0, 0, 1): -1,
+                (1, 1, 1): -(h1 + h2 + h3 - mpmath.mpf("0.5")),
+            }
+
+            changed_squares = 0
+            for primary_parities in itertools.product((0, 1), repeat=3):
+                for labels in itertools.product((-1, 0, 1), repeat=3):
+                    gammas = tuple(
+                        q / 2 + label * momentum if label else 0
+                        for label, momentum in zip(labels, momenta)
+                    )
+                    components = tuple(
+                        (((0, 0, 1),) if label == 0 else
+                         ((0, 1, 1), (1, 0, gamma)))
+                        for label, gamma in zip(labels, gammas)
+                    )
+                    direct = mpmath.mpf("0")
+                    for terms in itertools.product(*components):
+                        fermion_parities = tuple(term[0] for term in terms)
+                        sca_parities = tuple(term[1] for term in terms)
+                        direct += (
+                            terms[0][2]
+                            * terms[1][2]
+                            * terms[2][2]
+                            * enlarged_ns_three_form_crossing_sign(
+                                sca_parities,
+                                fermion_parities,
+                                primary_parities,
+                            )
+                            * fermion_rho.get(fermion_parities, 0)
+                            * primary_parity_ward_sign(
+                                sca_parities, primary_parities
+                            )
+                            * sca_rho[sca_parities]
+                        )
+
+                    data = ns_fusion_data(
+                        b=b,
+                        p1=momenta[0],
+                        p2=momenta[1],
+                        p3=momenta[2],
+                        k1=labels[0],
+                        k2=labels[1],
+                        k3=labels[2],
+                        primary_parities=primary_parities,
+                        precision=self.precision,
+                    )
+                    even_data = ns_fusion_data(
+                        b=b,
+                        p1=momenta[0],
+                        p2=momenta[1],
+                        p3=momenta[2],
+                        k1=labels[0],
+                        k2=labels[1],
+                        k3=labels[2],
+                        precision=self.precision,
+                    )
+                    self.assert_mp_close(data.numerator, direct)
+                    square_difference = abs(
+                        data.coefficient_squared
+                        - even_data.coefficient_squared
+                    )
+                    if primary_parities[0] == 0:
+                        self.assertLess(square_difference, mpmath.mpf("1e-60"))
+                    elif square_difference > mpmath.mpf("1e-60"):
+                        changed_squares += 1
+            self.assertEqual(changed_squares, 64)
 
     def test_higher_human_branch_labels_are_not_silently_imported(self):
         with self.assertRaises(NotImplementedError):

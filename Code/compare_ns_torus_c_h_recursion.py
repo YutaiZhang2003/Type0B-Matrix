@@ -116,7 +116,7 @@ def _c_pole(weight, r: int, s: int):
 
 
 def _recipe_torus_residue(internal_weight, external_weight, r: int, s: int):
-    """Standard-frame alpha=0 principal-sheet self-loop specialization."""
+    """Standard-frame ``a=0`` principal-sheet self-loop specialization."""
 
     pole, residue, child_sector = ns_self_loop_scalar_kernel_mp(
         r=r,

@@ -23,6 +23,11 @@ from typing import Sequence
 import sympy as sp
 
 from ns_global_osp_block import osp_three_point
+from ns_human_convention import (
+    human_note_rho_sign,
+    normalize_parity_triple,
+    primary_parity_ward_sign,
+)
 
 
 u, v, w = sp.symbols("u v w")
@@ -115,11 +120,18 @@ def _validate_bits(bits: Sequence[int]) -> tuple[int, int, int]:
 
 
 def component_prefactor(
-    bits: Sequence[int], d1: sp.Expr, d2: sp.Expr, d3: sp.Expr
+    bits: Sequence[int],
+    d1: sp.Expr,
+    d2: sp.Expr,
+    d3: sp.Expr,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> sp.Expr:
-    """Primary coefficient kappa_(abc) in the fixed-parity convention."""
+    """Primary coefficient kappa_(abc) in the graded human convention."""
 
     a, b, c = _validate_bits(bits)
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
     A = d2 + d3 - d1
     B = d1 + d2 - d3
     C = d1 - d2 + d3
@@ -128,17 +140,23 @@ def component_prefactor(
         (0, 0, 0): sp.S.One,
         (1, 0, 0): sp.S.One,
         (0, 1, 0): sp.S.One,
-        (0, 0, 1): sp.S.One,
+        (0, 0, 1): -sp.S.One,
         (1, 1, 0): B,
         (1, 0, 1): C,
         (0, 1, 1): -A,
-        (1, 1, 1): S - sp.Rational(1, 2),
+        (1, 1, 1): -(S - sp.Rational(1, 2)),
     }
-    return table[(a, b, c)]
+    # The table itself already contains the even-primary fixed-parity sign.
+    parity_sign = primary_parity_ward_sign((a, b, c), primaries)
+    return parity_sign * table[(a, b, c)]
 
 
 def superspace_component_kernel(
-    bits: Sequence[int], d1: sp.Expr, d2: sp.Expr, d3: sp.Expr
+    bits: Sequence[int],
+    d1: sp.Expr,
+    d2: sp.Expr,
+    d3: sp.Expr,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> sp.Expr:
     r"""Return the local coefficient function T^{abc}(u,v,w).
 
@@ -161,7 +179,9 @@ def superspace_component_kernel(
     Y = 1 + u * w
     Z = 1 + v - w
     return (
-        component_prefactor((a, b, c), d1, d2, d3)
+        component_prefactor(
+            (a, b, c), d1, d2, d3, primary_parities
+        )
         * X ** (-B - delta_x)
         * Y ** (-C - delta_y)
         * Z ** (-A - delta_z)
@@ -169,7 +189,10 @@ def superspace_component_kernel(
 
 
 def localized_correlator_from_invariant(
-    d1: sp.Expr, d2: sp.Expr, d3: sp.Expr
+    d1: sp.Expr,
+    d2: sp.Expr,
+    d3: sp.Expr,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> _GrassmannPolynomial:
     r"""Expand the standard superspace three-point invariant locally.
 
@@ -179,6 +202,9 @@ def localized_correlator_from_invariant(
     the even and odd primary structures both normalized to one.
     """
 
+    primaries = normalize_parity_triple(
+        primary_parities, name="primary_parities"
+    )
     d1, d2, d3 = map(sp.sympify, (d1, d2, d3))
     A = d2 + d3 - d1
     B = d1 + d2 - d3
@@ -218,13 +244,17 @@ def localized_correlator_from_invariant(
     )
     superfield_components = even_structure + odd_structure
 
-    # Convert component-labelled vertex maps to the fixed-parity trilinear
-    # convention: (-1)^(b(1-a)).
+    # First convert superfield component maps to the component-ordered Ward
+    # tensor by (-1)^(b(1-a)), then apply the canonical human-note
+    # fixed-parity sign (-1)^(sector*c).
     converted: dict[int, sp.Expr] = {}
     for mask, coefficient in superfield_components.terms.items():
         a = mask & 1
         b = (mask >> 1) & 1
-        sign = -1 if b * (1 - a) else 1
+        c = (mask >> 2) & 1
+        sign = (-1 if b * (1 - a) else 1) * human_note_rho_sign(
+            (a, b, c), primaries
+        )
         converted[mask] = sign * coefficient
     return _GrassmannPolynomial(converted)
 
@@ -240,6 +270,7 @@ def superspace_three_point(
     d1: sp.Expr,
     d2: sp.Expr,
     d3: sp.Expr,
+    primary_parities: Sequence[int] = (0, 0, 0),
 ) -> sp.Expr:
     r"""Extract a global trinion coefficient from the superspace kernel.
 
@@ -252,7 +283,9 @@ def superspace_three_point(
     if min(n1, n2, n3) < 0:
         raise ValueError("descendant occupations must be non-negative")
     bits = _validate_bits((epsilon1, epsilon2, epsilon3))
-    kernel = superspace_component_kernel(bits, d1, d2, d3)
+    kernel = superspace_component_kernel(
+        bits, d1, d2, d3, primary_parities
+    )
     differentiated = sp.diff(kernel, u, n1, v, n2, w, n3)
     return sp.simplify((-1) ** n1 * differentiated.subs({u: 0, v: 0, w: 0}))
 

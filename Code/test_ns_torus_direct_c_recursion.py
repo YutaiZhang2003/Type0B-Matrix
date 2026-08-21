@@ -28,7 +28,7 @@ class DirectNSTorusCRecursionTests(unittest.TestCase):
         Sector one is represented by a top-component insertion at the middle
         puncture.  A symmetric Laurent extraction, Richardson-improved in the
         detuning, is compared with the scalar self-loop kernel for both the
-        first odd and first even NS nulls.  This checks the local alpha=1
+        first odd and first even NS nulls.  This checks the local ``a=1``
         rule; it does not construct a complete top-component torus block.
         """
 
