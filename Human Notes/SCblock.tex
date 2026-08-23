@@ -1414,6 +1414,87 @@ where the R-sector branching coefficients are defined as
 \mathbb{B}^{(\eta)}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) = \frac{\hat{\rho}_f^{(\eta)}(v_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})}{\|v_{1,n_1}\|\|v_{2,n_2}^{\alpha_2}\|\|v_{3,n_3}^{\alpha_3}\|}.
 \fe
 
+\subsubsection*{Ramond branching coefficients}
+
+Unlike the NS branching coefficient $\mathbb{B}_a$, the Ramond branching coefficient $\mathbb{B}_f^{(\eta)}$ is not computed in the literature. There are conjectures in \cite{1312.4520} about its structure, but the numerical prefactor remains unknown. In the rest of this section, we develop a recursion relation between $\mathbb{B}^{(\eta)}_f(n_1, n_2, n_3, \alpha_2, \alpha_3)$'s, which can be used to solve them numerically.
+
+Let's first define the Virasoro primaries $v_n^\alpha$ unambiguously. Similar to the NS algebra, one can also introduce free bosons $c_n$ and free fermions $\eta_r$ with $n, r\in \mathbb{Z}$ to realize the $\mathsf{SCA}_0$ algebra. The SCA generators are given by the same formula \eqref{freefieldrep}. Denoting $\eta_r(P)$ as the operator $\eta_r$ expressed using $G_r, L_n, P$. Using $\chi_r(P) = \psi_r - i\eta_r(P)$, we define $v_n^\alpha$ with $n>0$ as
+\ie
+v_n^{2n+\frac{1}{2}\text{ mod } 2}(P) &= \chi_0(P)\chi_{-1}(P)\cdots \chi_{-(2n-\frac{1}{2})}(P)(u^0\otimes w_\beta^+),\\
+v_n^{2n+\frac{1}{2}\text{ mod } 2}(P) &= \chi_0(P)\chi_{-1}(P)\cdots \chi_{-(2n-\frac{1}{2})}(P)\chi_0(-P)(u^0\otimes w_\beta^+),
+\fe
+where $\chi_0(-P)=\psi_0 + i\eta_0(P)$. The states with $n<0$ are defined using
+\ie
+(v^\alpha_{n}(P))_+ = (v_{-n}^\alpha(-P))_+,\quad (v^\alpha_{n}(P))_- = -(v_{-n}^\alpha(-P))_-,
+\fe
+where the subscripts $\pm$ denote the components ending in \(w_\beta^+\) and \(w_\beta^-\), respectively. The BPZ norms of the Virasoro primaries can be computed by
+\ie
+\left\|v_n^0(P)\right\|^2 & =2^{2\lfloor M/2 \rfloor+1} \frac{\ell(2 P, 4 n)}{\ell(Q+2 P, 4 n)}, \\
+\left\|v_n^1(P)\right\|^2 & =-2^{2\lceil M/2 \rceil} \frac{\ell(2 P, 4 n)}{\ell(Q+2 P, 4 n)},
+\fe
+where $M=2n-\frac{1}{2}$.
+
+The key observation that leads to the recursion relation is the following:
+\begin{proposition}
+For Ramond $\mathsf{Vir\oplus Vir}$ primaries with $n\geq \frac{3}{4}$, $L_{1} v_n^\alpha$ only contains level-$(4n-3)$ $\mathsf{Vir\oplus Vir}$ descendants of $v_{n-1}^\alpha$, and $L_{-1} v_n^\alpha$ only contains level-1 $\mathsf{Vir\oplus Vir}$ descendants of $v_n^\alpha$ and level-$(4n-1)$ $\mathsf{Vir\oplus Vir}$ descendants of $v_{n-1}^\alpha$. Namely,
+\ie
+L_1 v_n^\alpha &= \sum_{|A|+|B|=4n-3} \mathbb{V}_{1,n,\alpha}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}^\alpha,\\
+L_{-1} v_n^\alpha &= \mathbb{V}_{n,\alpha}^{(1)} L_{-1}^{(1)}v_n^\alpha + \mathbb{V}_{n,\alpha}^{(2)} L_{-1}^{(2)}v_n^\alpha + \sum_{|A|+|B|=4n-1} \mathbb{V}_{-1,n,\alpha}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}^\alpha,
+\fe
+for some $\mathbb{V}_{\pm 1,n,\alpha}^{AB}$ and $\mathbb{V}_{n,\alpha}^{(1,2)}$. 
+\end{proposition}
+
+This has been checked directly on $n=\frac{3}{4}, \frac{5}{4}, \frac{7}{4}$ and $\frac{9}{4}$ by directly acting $L_{\pm 1}$ on the states and project onto the subspace on the RHS. For NS sector, one have a similar relation:
+\begin{proposition}
+For NS $\mathsf{Vir\oplus Vir}$ primaries with $n\geq 1$, $L_{1} v_n$ only contains level-$(4n-3)$ $\mathsf{Vir\oplus Vir}$ descendants of $v_{n-1}$, and $L_{-1} v_n$ only contains level-1 $\mathsf{Vir\oplus Vir}$ descendants of $v_n$ and level-$(4n-1)$ $\mathsf{Vir\oplus Vir}$ descendants of $v_{n-1}$. Namely,
+\ie
+L_1 v_n &= \sum_{|A|+|B|=4n-3} \mathbf{V}_{1,n}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1},\\
+L_{-1} v_n &= \mathbf{V}_{n}^{(1)} L_{-1}^{(1)}v_n + \mathbf{V}_{n}^{(2)} L_{-1}^{(2)}v_n + \sum_{|A|+|B|=4n-1} \mathbf{V}_{-1,n}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}.
+\fe
+\end{proposition}
+
+We have checked this for $n=1,\frac{3}{2}, 2, \frac{5}{2}$. Note that these coefficients $\mathbb{V}$ and $\mathbf{V}$'s will depend on $P$ and $c$ in general. These coefficients can be solved efficiently. For a generic point of $(P, c)$ and on a laptop, solving all coefficients for R-sector $n=\frac{9}{4}$ takes around 3 seconds, and NS-sector $n=\frac{5}{2}$ takes around 8 seconds.
+
+After solving the coefficients $\mathbb{V}$ and $\mathbf{V}$'s, one can use the $L_1$ conformal Ward identities:
+\ie
+\hat{\rho}_f^{(\eta)}(L_1v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})&=\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})+\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},L_{-1}v_{3,n_3}^{\alpha_3}),\\
+\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_1v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})&=\hat{\rho}_f^{(\eta)}(L_{-1}v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
+&\quad -2\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_0v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},L_1v_{3,n_3}^{\alpha_3}). 
+\fe
+Plugging in the decomposition above, the first equation then reads
+\ie
+&\sum_{|A|+|B|=4n_1-3}\mathbf{V}_{1,n_1}^{AB}\rho(L_{-A}\nu_{h_{1,n_1-1}^{(1)}}, \nu_{h_{2,n_2}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1-1}^{(2)}}, \nu_{h_{2,n_2}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\hat{\rho}_f^{(\eta)}(v_{1,n_1-1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
+&\qquad = \left[\sum_{i=1}^2 (\mathbb{V}_{n_2,\alpha_2}^{(i)}-\mathbb{V}_{n_3,\alpha_3}^{(i)})(h_{1,n_1}^{(i)}-h_{2,n_2}^{(i)}-h_{3,n_3}^{(i)})\right]\hat{\rho}_f^{(\eta)}(v_{1,n_1}, v_{2, n_2}^{\alpha_2}, v_{3, n_3}^{\alpha_3})\\
+&\qquad + \sum_{|C|+|D|=4n_2-1} \mathbb{V}_{-1,n_2, \alpha_2}^{CD}\rho(\nu_{h_{1,n_1}^{(1)}},L_{-C}\nu_{h_{2,n_2-1}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},L_{-D}\nu_{h_{2,n_2-1}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2-1}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
+&\qquad + \sum_{|E|+|F|=4n_3-1} \mathbb{V}_{-1,n_3, \alpha_3}^{EF}\rho(\nu_{h_{1,n_1}^{(1)}},\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3-1}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3-1}^{(2)}})\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3-1}^{\alpha_3}),
+\fe
+where we have used the fact that $\rho(\nu_1,L_{-1}\nu_2,\nu_3)=h_1-h_2-h_3,\rho(\nu_1,\nu_2,L_{-1}\nu_3)=-h_1+h_2+h_3$ and the factorization of 3-point functions. Therefore,
+{\footnotesize
+\ie
+&\left[\sum_{i=1}^2 (\mathbb{V}_{n_2,\alpha_2}^{(i)}-\mathbb{V}_{n_3,\alpha_3}^{(i)})(h_{2,n_2}^{(i)}+h_{3,n_3}^{(i)}-h_{1,n_1}^{(i)})\right]\mathbb{B}_f^{(\eta)}(n_1,n_2,n_3,\alpha_2,\alpha_3)=\\
+& - \sum_{|A|+|B|=4n_1-3}\mathbf{V}_{1,n_1}^{AB}\rho(L_{-A}\nu_{h_{1,n_1-1}^{(1)}}, \nu_{h_{2,n_2}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1-1}^{(2)}}, \nu_{h_{2,n_2}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\mathbb{B}_f^{(\eta)}(n_1-1,n_2,n_3,\alpha_2,\alpha_3)\frac{\|v_{n_1-1}\|}{\|v_{n_1}\|}\\
+& + \sum_{|C|+|D|=4n_2-1} \mathbb{V}_{-1,n_2, \alpha_2}^{CD}\rho(\nu_{h_{1,n_1}^{(1)}},L_{-C}\nu_{h_{2,n_2-1}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},L_{-D}\nu_{h_{2,n_2-1}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\mathbb{B}_f^{(\eta)}(n_1,n_2-1,n_3,\alpha_2,\alpha_3)\frac{\|v_{n_2-1}^{\alpha_2}\|}{\|v_{n_2}^{\alpha_2}\|}\\
+& + \sum_{|E|+|F|=4n_3-1} \mathbb{V}_{-1,n_3, \alpha_3}^{EF}\rho(\nu_{h_{1,n_1}^{(1)}},\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3-1}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3-1}^{(2)}})\mathbb{B}_f^{(\eta)}(n_1,n_2,n_3-1,\alpha_2,\alpha_3)\frac{\|v_{n_3-1}^{\alpha_3}\|}{\|v_{n_3}^{\alpha_3}\|},
+\fe
+}
+and the ratios can be computed by
+\ie
+\frac{\left\|v_{n_1-1}\right\|}{\left\|v_{n_1}\right\|}=2 \sqrt{\frac{\ell\left(2 P_1, 4 n_1-4\right) \ell\left(Q+2 P_1, 4 n_1-4\right)}{\ell\left(2 P_1, 4 n_1\right) \ell\left(Q+2 P_1, 4 n_1\right)}},\quad \frac{\left\|v_{n_2-1}^{a_2}\right\|}{\left\|v_{n_2}^{a_2}\right\|}=\frac{1}{2} \sqrt{\frac{\ell\left(2 P_2, 4 n_2-4\right) \ell\left(Q+2 P_2, 4 n_2\right)}{\ell\left(Q+2 P_2, 4 n_2-4\right) \ell\left(2 P_2, 4 n_2\right)}}.
+\fe
+Using this recursion relation, one can solve for the Ramond branching coefficient $\mathbb{B}_f^{(\eta)}(n_1,n_2,n_3,\alpha_2,\alpha_3)$ recursively. One should note that this form only works for $n_1\geq 1$ and $n_2,n_3\geq \frac{3}{4}$. At the boundary values, $L_1$ annihilates $v_{0,\pm \frac{1}{2}}$ and $v_{\pm \frac{1}{4}}^{\alpha}$. For $L_{-1}$, one can use 
+\ie
+L_{-1}v_0 &= L_{-1}^{(1)}v_0 + L_{-1}^{(2)}v_0\\
+L_{-1} v_{1 / 2}= & -\frac{(2 P+b)\left(-2 P b+b^2+1\right)}{2 P\left(2 P b+b^2-1\right)} L_{-1}^{(1)} v_{1 / 2}+\frac{(2 P b+1)\left(-2 P b+b^2+1\right)}{2 P b\left(-2 P b+b^2-1\right)} L_{-1}^{(2)} v_{1 / 2} \\
+& +\frac{b\left(2 P b+b^2+1\right)}{2 P\left(-2 P b+b^2-1\right)} L_{-1}^{(1)} v_{-1 / 2}-\frac{2 P b+b^2+1}{2 P b\left(2 P b+b^2-1\right)} L_{-1}^{(2)} v_{-1 / 2}, \\
+L_{-1} v_{-1 / 2}= & -\frac{b\left(-2 P b+b^2+1\right)}{2 P\left(2 P b+b^2-1\right)} L_{-1}^{(1)} v_{1 / 2}+\frac{-2 P b+b^2+1}{2 P b\left(-2 P b+b^2-1\right)} L_{-1}^{(2)} v_{1 / 2} \\
+& +\frac{(-2 P+b)\left(2 P b+b^2+1\right)}{2 P\left(-2 P b+b^2-1\right)} L_{-1}^{(1)} v_{-1 / 2}+\frac{(2 P b-1)\left(2 P b+b^2+1\right)}{2 P b\left(2 P b+b^2-1\right)} L_{-1}^{(2)} v_{-1 / 2}.\\
+L_{-1} v_{1 / 4}^\alpha= & -\frac{-4 P b+b^2+2}{2(2 P b-1)} L_{-1}^{(1)} v_{1 / 4}^\alpha+\frac{-4 P b+2 b^2+1}{2 b(-2 P+b)} L_{-1}^{(2)} v_{1 / 4}^\alpha \\
+& -\frac{\left(-2 P b+b^2+2\right)\left(-2 P b+2 b^2+1\right)}{2 a+2 b(-2 P+b)(2 P b-1)} v_{-3 / 4}^\alpha \\
+L_{-1} v_{-1 / 4}^\alpha= & \frac{4 P b+b^2+2}{2(2 P b+1)} L_{-1}^{(1)} v_{-1 / 4}^\alpha+\frac{4 P b+2 b^2+1}{2 b(2 P+b)} L_{-1}^{(2)} v_{-1 / 4}^\alpha \\
+& +\frac{\left(2 P b+b^2+2\right)\left(2 P b+2 b^2+1\right)}{2^{\alpha+2} b(2 P+b)(2 P b+1)} v_{3 / 4}^\alpha .
+\fe
+Note that the $L_{-1}$ action on $v_{1/4}$ involves $v_{-3/4}$. One can use the similar reduction relation for $L_{\pm 1}$ acting on negative $n$ to deal with it. In the end, one only needs to compute a few low-level branching coefficients directly, and every other branching coefficient can be obtained using the recursion relation.
+
 \newpage
 \begin{appendix}
 \section{Fusion polynomials and factorization formulae}
