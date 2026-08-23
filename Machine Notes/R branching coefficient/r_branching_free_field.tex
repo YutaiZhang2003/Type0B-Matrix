@@ -1,0 +1,977 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,array}
+\usepackage[hidelinks]{hyperref}
+\newcommand{\NS}{\mathrm{NS}}
+\newcommand{\R}{\mathrm{R}}
+\newcommand{\Vir}{\mathrm{Vir}}
+\newcommand{\SCA}{\mathrm{SCA}}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cR}{\mathcal R}
+\newcommand{\eps}{\epsilon}
+\newcommand{\ii}{\mathrm i}
+
+\title{The Ramond $\Vir\oplus\Vir$ Branching Coefficient:\\
+Direct Screening Matrix Elements and PBW Checks}
+\author{Machine note}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We formulate the Ramond analogue of the Hadasz--Jaskolski blow-up factor as
+the matrix element of an explicit double-Virasoro primary in the free field.
+The two Ramond spin fields turn its fermionic part into a zero-mode-resolved
+Pfaffian.  For the first crossed state $(0,\frac34,\frac34)$ we evaluate this
+matrix element directly on the two- and three-screening neutrality planes.
+The two-screening Selberg integral produces the irreducible crossed
+polynomial $H$, while the natural three-screening determinant produces the
+factorized polynomial $K$.  We also retain a generic-momentum PBW/Ward path
+sum as an independent finite-level oracle.  It is not itself a screening
+derivation.  A generic-momentum, all-level Ramond screening formula remains
+open.  The presently proved endpoint residues are rank-one maps on a
+vector-valued contour problem; completion requires finite contour-orbit
+closure, a full-rank set of collision and inversion/connection maps, base
+vectors, and only then same-parity momentum interpolation.
+\end{abstract}
+
+\paragraph{Correction of scope.}
+An earlier version called the PBW/Ward path sum below the final free-field
+formula.  That was too strong: it is an exact basis reconstruction of the
+three-form, hence an oracle and check, but not an evaluation of the Coulomb
+matrix element.  The genuinely screened results of this version are stated
+in Section~\ref{sec:direct-trial}.
+
+\section{Conventions and statement of the problem}
+
+We use the conventions of \texttt{Human Notes/SCblock.tex}.  Put
+\begin{equation}
+ Q=b+b^{-1},\qquad
+ h_1=\frac18Q^2-\frac12P_1^2,\qquad
+ h_j=\frac1{16}+\frac18Q^2-\frac12P_j^2\quad(j=2,3).
+ \label{eq:weights}
+\end{equation}
+The ordered trinion is $(\NS,\R,\R)$, with the NS state in slot 1.  Its
+branch labels obey
+\begin{equation}
+ n_1\in\tfrac12\mathbb Z,\qquad
+ n_2,n_3\in\tfrac12\mathbb Z+\tfrac14.
+ \label{eq:labels}
+\end{equation}
+It is useful to put $j_i=2n_i$.  Thus $j_1$ is integral and $j_2,j_3$ are
+half-integral.  A Ramond summand occurs twice; we denote its copy by
+$\eps_i\in\{0,1\}$.  The two chiral $(\NS,\R,\R)$ forms are
+$\eta=\pm1$, and $f\in\{0,1\}$ denotes the parity of the complete
+three-form.  In the human-note ground basis,
+\begin{equation}
+ \rho_0^{(\eta)}=\rho^{++}+\eta\rho^{--},\qquad
+ \rho_1^{(\eta)}=\rho^{+-}+\ii\eta\rho^{-+}.
+ \label{eq:human-forms}
+\end{equation}
+The normalized coefficient is
+\begin{equation}
+ \mathbb B_f^{(\eta)}
+ =\frac{\widehat\rho_f^{(\eta)}
+ (v_{1,n_1},v^{\eps_2}_{2,n_2},v^{\eps_3}_{3,n_3})}
+ {\|v_{1,n_1}\|\,\|v^{\eps_2}_{2,n_2}\|\,
+  \|v^{\eps_3}_{3,n_3}\|}.
+ \label{eq:Bdef}
+\end{equation}
+
+\paragraph{Claim (the matrix element and its Selberg realization).}
+Write $\boldsymbol n=(n_1,n_2,n_3)$ and
+$\boldsymbol\eps=(\eps_2,\eps_3)$.  The quantity which the free-field
+calculation has to produce is the raw double-Virasoro-primary matrix
+element
+\begin{equation}
+ \mathsf M_{\boldsymbol\eps;f}^{(\eta)}(\boldsymbol P;\boldsymbol n)
+ :=\left\langle v_{1,n_1}(P_1)\right|
+ V_f^{(\eta)}\!\left[v_{2,n_2}^{\eps_2}(P_2)\right](1)
+ \left|v_{3,n_3}^{\eps_3}(P_3)\right\rangle
+ =\widehat\rho_f^{(\eta)}
+ (v_{1,n_1},v_{2,n_2}^{\eps_2},v_{3,n_3}^{\eps_3}).
+ \label{eq:matrix-element-claim}
+\end{equation}
+This is not a matrix element of the bare exponential alone: the three
+states in \eqref{eq:matrix-element-claim} are the explicit simultaneous
+$\Vir\oplus\Vir$ primaries, including their consecutive $\chi=f-\ii\psi$
+strings and, on the Ramond legs, the chosen zero-mode components.
+
+Let $\mathsf g_{\eps_2\eps_3;f}^{(\eta)}$ be the raw ground-spin matrix
+in that component.  On a charge-neutral free-field representative with
+$N$ insertions of the $b$-screening current, the claim is
+\begin{equation}
+ \left.\mathsf M_{\boldsymbol\eps;f}^{(\eta)}\right|_N
+ =\mathsf g_{\eps_2\eps_3;f}^{(\eta)}
+ \frac{\mathfrak S_N[
+ F^{(\eta)}_{\boldsymbol n,\boldsymbol\eps};
+ -b\alpha_1-u,-b\alpha_2-v,g]}
+ {\mathfrak S_N[
+ F_0^{(\eta,f)};
+ -b\alpha_1-u_0,-b\alpha_2-v_0,g]},
+ \qquad g=-\frac{bQ}{2}.
+ \label{eq:matrix-element-Selberg-claim}
+\end{equation}
+Here $\mathfrak S_N$ is the Selberg functional
+\eqref{eq:Selberg-functional}; $F_{\boldsymbol n,\boldsymbol\eps}$ is the
+symmetric polynomial obtained by inserting the three branch-state strings
+in the two-spin Pfaffian, while $F_0$ is obtained by removing those strings
+but keeping the same Ramond ground component.  Equivalently, after the
+ground-spin matrix is stripped off, the descendant-to-primary matrix-element
+ratio is precisely the ratio of the two Selberg integrals in
+\eqref{eq:matrix-element-Selberg-claim}.  Common ordered-contour phases and
+factorials cancel in this ratio.
+
+Combining \eqref{eq:Bdef} and
+\eqref{eq:matrix-element-Selberg-claim} gives, on that neutrality plane,
+\begin{equation}
+ \left.\mathbb B_f^{(\eta)}\right|_N
+ =\frac{\mathsf g_{\eps_2\eps_3;f}^{(\eta)}}
+ {\|v_{1,n_1}\|\,\|v_{2,n_2}^{\eps_2}\|\,
+  \|v_{3,n_3}^{\eps_3}\|}
+ \frac{\mathfrak S_N[F_{\boldsymbol n,\boldsymbol\eps}^{(\eta)};
+ -b\alpha_1-u,-b\alpha_2-v,g]}
+ {\mathfrak S_N[F_0^{(\eta,f)};
+ -b\alpha_1-u_0,-b\alpha_2-v_0,g]}.
+ \label{eq:branching-Selberg-claim}
+\end{equation}
+The pole-cleared quantity used later is merely
+$\cR|_N=(\prod_i\delta_{n_i}(P_i))\,\mathsf M|_N$; the $\delta$ factors
+are not part of the physical three-point matrix element.  Also, $N$ here
+is the number of screening currents, hence the dimension of the integral,
+not a branch level.  A vector of contour-orbit integrals and its projectors
+may be useful for evaluating the scalar ratio in
+\eqref{eq:matrix-element-Selberg-claim}, but that vector is computational
+auxiliary data rather than an additional branching coefficient.  An
+efficient evaluation algorithm is deferred to the later contour-recursion
+analysis.
+
+Consequently a function of only $(b,P_i,n_i)$ is not defined in the R
+sector: one must also say which $(\eps_2,\eps_3;f,\eta)$ component is meant.
+Moreover, an unsquared coefficient changes under independent sign choices
+for the branch highest vectors.  We therefore report the root-independent
+quantity $(\mathbb B_f^{(\eta)})^2$; an unsquared representative is
+fixed by the charge-basis convention below.
+
+One Ramond summand starts at relative conformal weight
+$2n^2-1/16$.  The exponent $2n^2-1/8$ in the theta-channel sewing formula
+also subtracts the auxiliary Ramond vacuum weight.  These two numbers should
+not be confused in a level count.
+
+\section{The \texorpdfstring{$\ell$}{ell} products and the NS result}
+
+For an integer $m>0$ define
+\begin{equation}
+ \ell(x,m)=
+ \begin{cases}
+ \displaystyle\prod_{\substack{r,s\geq0,\ r+s<m\\r+s\equiv0\ (2)}}
+ (x+rb+sb^{-1}),&m\text{ even},\\[8pt]
+ \displaystyle2^{1/8}\prod_{\substack{r,s\geq0,\ r+s<m\\r+s\equiv1\ (2)}}
+ (x+rb+sb^{-1}),&m\text{ odd},
+ \end{cases}
+ \label{eq:ell-positive}
+\end{equation}
+and
+\begin{equation}
+ \ell(x,0)=1,\qquad
+ \ell(x,m)=
+ \begin{cases}
+ (-1)^{-m/2}\ell(Q-x,-m),&m<0\text{ even},\\
+ \ell(Q-x,-m),&m<0\text{ odd}.
+ \end{cases}
+ \label{eq:ell-negative}
+\end{equation}
+For later use set
+\begin{equation}
+ D_n(P)=\ell(2P,4n)\ell(Q+2P,4n),\qquad
+ \delta_n(P)=2^{-\mathbf1_{4n\ {\rm odd}}/8}\ell(Q+2P,4n).
+ \label{eq:leg-factors}
+\end{equation}
+
+We first reconstruct the part of the Hadasz--Jaskolski proof~\cite{HJ} that
+has to be modified.  Let $f$ be the auxiliary Majorana fermion and $\psi$ the
+super-Liouville fermion.  With their normalization,
+\begin{equation}
+ \chi=f-\ii\psi,\qquad
+ |P,j\rangle=\chi_{-(2j-1)/2}\cdots\chi_{-1/2}|P,0\rangle
+ \quad(j\in\mathbb Z_{>0}).
+ \label{eq:NS-sea}
+\end{equation}
+Multiplication by the pole-clearing factor $\Omega(P,j)$ makes every PBW
+coefficient polynomial in momentum.  A degree estimate gives degree at most
+$j_1^2+j_2^2+j_3^2$ (one less for the odd three-form).
+
+The two commuting screening charges are
+\begin{equation}
+ Q_b=\oint dz\,\psi(z)E^b(z),\qquad
+ Q_{1/b}=\oint dz\,\psi(z)E^{1/b}(z).
+ \label{eq:screenings}
+\end{equation}
+Reflection of any of the three Fock representations gives eight free-field
+representatives of the same polynomial.  In the unreflected NS vacuum,
+\begin{equation}
+ \langle\chi(z)\chi(w)\rangle=0,
+ \qquad \langle\chi(z)\psi(w)\rangle=-\frac{\ii}{z-w}.
+ \label{eq:NS-zero}
+\end{equation}
+If there are fewer screenings than sea fermions, the numerator therefore
+vanishes.  The eight representatives generate four complete families of
+linear zeros; the degree bound shows that no momentum-dependent factor is
+left over.
+
+To determine the remaining constant, choose $N=j_1+j_2+j_3$ $b$-screenings.
+Every sea fermion must end on a screening, and the fermionic numerator is
+uniquely
+\begin{equation}
+ (-\ii)^N\prod_{a=1}^Nt_a^{-j_1}(1-t_a)^{-j_2}
+ \prod_{a<c}(t_a-t_c).
+ \label{eq:NS-vandermonde}
+\end{equation}
+The numerator is now an ordinary Selberg integral.  The denominator is the
+Pfaffian Selberg integral evaluated in Appendix B of the paper.  Their ratio
+fixes
+\begin{equation}
+ C^{j_3}_{j_2j_1}(b)=
+ (-1)^{(j_1+j_2-j_3)/2}2^{(j_1+j_2+j_3)/2}.
+ \label{eq:HJconstant}
+\end{equation}
+Translating to the human-note momentum and normalization convention gives,
+for positive $n_i$,
+\begin{align}
+ B_a^{\NS}(P_i;n_i)
+ &=\frac{(-1)^{2n_3}(-\ii)^a}{\prod_{i=1}^3\sqrt{D_{n_i}(P_i)}}
+ \ell\left(\tfrac Q2+P_1+P_2+P_3,2(n_1+n_2+n_3)\right)\notag\\
+ &\quad\times
+ \ell\left(\tfrac Q2-P_1+P_2+P_3,2(-n_1+n_2+n_3)\right)\notag\\
+ &\quad\times
+ \ell\left(\tfrac Q2+P_1+P_2-P_3,2(n_1+n_2-n_3)\right)\notag\\
+ &\quad\times
+ \ell\left(\tfrac Q2-P_1+P_2-P_3,2(-n_1+n_2-n_3)\right).
+ \label{eq:NS-result}
+\end{align}
+Negative labels are defined by $v_n(P)=v_{-n}(-P)$.  This derivation, rather
+than merely the final product, is what we now generalize.
+
+\section{Ramond branch vectors in the free field}
+
+The R-sector decomposition proved by Bershtein--Shchechkin~\cite{BS} supplies the
+missing highest vectors.  For $n>0$ put
+\begin{equation}
+ M(n)=2n-\frac12\in\mathbb Z_{\geq0}.
+ \label{eq:Mdef}
+\end{equation}
+The following literal recurrence fixes the two copies and all zero-mode
+phases.  It is the convention used by the code.  Start with the tensor
+ground $|0,0\rangle$ and the ordered list
+\begin{equation}
+ \mathbf o_n=(0,-1,\ldots,-M).
+ \label{eq:R-operator-list}
+\end{equation}
+If $\eps\ne M+1\pmod2$, append a tagged zero $0^\star$ to this list.  Read
+the resulting list from right to left.  At each entry $r$, replace every
+current tensor state by the two terms
+\begin{equation}
+ |A\rangle_F\otimes|X\rangle_R\longmapsto
+ f_r|A\rangle_F\otimes|X\rangle_R
+ -\ii(-1)^{|A|}|A\rangle_F\otimes\psi_r|X\rangle_R.
+ \label{eq:R-binary-update}
+\end{equation}
+For the tagged entry only, use $\psi_{0^\star}=-\psi_0$ in the second
+term.  The Clifford action is
+$f_0|a\rangle=2^{-1/2}|1-a\rangle$ and
+$\psi_0|g\rangle=2^{-1/2}|1-g\rangle$, with the usual signs from moving a
+zero mode through existing creators.  The final finite sum is, by
+definition, $W_n^{(\eps)}$.  For example,
+\begin{align}
+ W_{1/4}^{(0)}&=|0,0\rangle+\ii|1,1\rangle,\notag\\
+ W_{1/4}^{(1)}&=2^{-1/2}(|1,0\rangle-\ii|0,1\rangle).
+ \label{eq:R-ground-branches}
+\end{align}
+Thus the one-zero-mode string is the $\eps=1$ copy at $n=1/4$; the
+$\eps=0$ copy contains the tagged opposite zero mode.  This corrects the
+potentially ambiguous shorthand ``one copy plus the other zero mode.''
+The states produced by \eqref{eq:R-binary-update} are simultaneous highest
+vectors of the two Virasoro algebras.
+
+There is an exact finite definition of their norms that does not rely on an
+all-level product conjecture.  Expand the finite string in an auxiliary
+fermion basis and a Ramond PBW basis,
+\begin{equation}
+ W_n^{(\eps)}=\sum_{(A,B,\mu)\in\mathcal I_n^{(\eps)}}
+ C_{A,B,\mu}^{(\eps)}(P,Q)\,|A\rangle_F\otimes|B,\mu\rangle_R.
+ \label{eq:R-PBW-expansion}
+\end{equation}
+The coefficients are fixed uniquely by the triangular free-field formulas
+for $L_m,G_r$ and the chosen $G_0$ action \eqref{eq:G0}.  If $G^F$ and $G^R$
+are the finite auxiliary and Ramond Gram matrices at the required level, put
+\begin{equation}
+ \mathcal N_R^{(\eps)}(n,P)=
+ \sum C_{A,B,\mu}^{(\eps)}C_{A',B',\nu}^{(\eps)}
+ G^F_{AA'}G^R_{B\mu,B'\nu}.
+ \label{eq:R-exact-norm}
+\end{equation}
+This is a finite rational formula for every fixed $n$.
+
+The factorized all-level norm suggested by the reflection zeros and the
+Ramond Whittaker coefficient is
+\begin{align}
+ \|W_n^{(0)}\|^2&=c_R^{(0)}(n)
+ \frac{\ell(2P,4n)}{\ell(Q+2P,4n)},&
+ c_R^{(0)}(n)&=2^{2\lfloor M/2\rfloor+1},\notag\\
+ \|W_n^{(1)}\|^2&=c_R^{(1)}(n)
+ \frac{\ell(2P,4n)}{\ell(Q+2P,4n)},&
+ c_R^{(1)}(n)&=-2^{2\lfloor(M+1)/2\rfloor}.
+ \label{eq:R-product-norm}
+\end{align}
+The same oscillator argument that proves the NS pole-clearing statement
+gives the common leg denominator $\delta_n(P)$ in \eqref{eq:leg-factors}.
+Equation \eqref{eq:R-product-norm} is verified directly for the states needed
+below, $n=1/4,3/4,5/4$.  Its continuation is the natural all-level product
+conjecture; it is closely related to the still-conjectural Ramond Whittaker
+coefficient in Ref.~\cite{BS}.  The exact result below instead uses
+\eqref{eq:R-exact-norm}; the compact $\ell$-only corollary uses
+\eqref{eq:R-product-norm}.
+
+For the bosonization paragraph only, use canonically normalized complex
+fermions $\widehat\chi^\pm=(f\pm\ii\psi)/\sqrt2$.  Then
+\begin{equation}
+ \widehat\chi^\pm=\kappa_\pm:e^{\pm\ii H}:,\qquad
+ \psi=\frac{\widehat\chi^+-\widehat\chi^-}{\ii\sqrt2}
+ \label{eq:bosonization}
+\end{equation}
+which makes the
+new feature manifest.  A screening current is the sum of two $H$-charges.
+In the NS calculation \eqref{eq:NS-zero} forced a unique colour.  Between
+two Ramond spin fields, charge may also run through the Ramond ground
+doublet.  The screened numerator is consequently a sum over colours.  This
+is the precise sense in which the R problem is matrix-valued.
+
+\section{The finite Ramond screening kernel}
+\label{sec:kernel}
+
+We give a closed definition that involves only finite sums, Pfaffians and
+gamma functions.  It is also an algorithm for arbitrary fixed branch
+labels.
+
+\subsection{Free-fermion part}
+
+Move the two Ramond punctures to $0$ and $\infty$.  In either Majorana
+factor the even Ramond propagator is
+\begin{equation}
+ K_R(z,w)=\frac{z+w}{2\sqrt{zw}(z-w)}.
+ \label{eq:R-kernel}
+\end{equation}
+An even matrix element is the Pfaffian of $K_R(z_a,z_b)$.  An odd matrix
+element is the Pfaffian of the augmented antisymmetric matrix whose extra
+row is $2^{-1/2}z_a^{-1/2}$.  The signs of that row are fixed by
+\begin{equation}
+ G_0w^+=\ii\beta e^{-\ii\pi/4}w^-,\qquad
+ G_0w^-=\ii\beta e^{\ii\pi/4}w^+.
+ \label{eq:G0}
+\end{equation}
+
+Here is the mode-extraction convention, which removes another possible
+ambiguity.  Put the punctures at $(\infty,1,0)$ and choose local coordinates
+\begin{equation}
+ z_1(x)=x^{-1},\qquad z_2(x)=1+x,\qquad z_3(x)=x.
+ \label{eq:local-coordinates}
+\end{equation}
+For a weight-$1/2$ field $X$, let
+$X^{[i]}(x)=(dz_i/dx)^{1/2}X(z_i(x))$, with square-root lifts
+$(\varsigma_1,\varsigma_2,\varsigma_3)=(-1,\ii,1)$.  A creator $X_{-m}$ on
+leg $i$ means the literal coefficient extraction
+\begin{equation}
+ [X_{-m}]_i\Phi=\mathop{\rm Res}_{x=0}
+ x^{-m-1/2}\Phi(\ldots,X^{[i]}(x),\ldots).
+ \label{eq:mode-extraction}
+\end{equation}
+At infinity the string is BPZ reversed and $X_r^\dagger=-X_{-r}$.
+The auxiliary and physical ground matrices are, respectively,
+\begin{equation}
+ \Gamma_F^{0}=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\quad
+ \Gamma_F^{1}=\begin{pmatrix}0&1\\-1&0\end{pmatrix},\qquad
+ \Gamma_\psi^{\eta,0}=\begin{pmatrix}1&0\\0&\eta\end{pmatrix},\quad
+ \Gamma_\psi^{\eta,1}=\begin{pmatrix}0&1\\\ii\eta&0\end{pmatrix}.
+ \label{eq:ground-matrices}
+\end{equation}
+For any ordered list of Majorana fields, write
+$\mathcal W_\Gamma$ for Wick contraction using $K_R$, the augmented row
+above when the list is odd, and the relevant entry of $\Gamma$.  Thus no
+three-point constant is left inside $\mathcal W_\Gamma$.  For the master
+component $(\eps_3,f)=(0,0)$ use
+$\Gamma_F^{a_F}$ with $a_F=2n_1+\eps_2\pmod2$ and
+$\Gamma_\psi^{\eta,0}$.
+
+Expand every ordered string \eqref{eq:NS-sea}, \eqref{eq:R-binary-update} by choosing,
+for each $\chi=f-\ii\psi$, its auxiliary or physical colour.  Let
+$a_i$ denote such a finite binary path on leg $i$, $C_i(a_i)$ its sign and
+power of $\ii$, and $p_F(a_i),p_\psi(a_i)$ its two parities.  If
+$\mathbf f(a)$ and $\boldsymbol\psi(a)$ are the auxiliary and physical
+external mode lists, including their ground indices, define the Laurent
+polynomial by
+\begin{equation}
+ \mathsf P^{(\eta)}_{a_1a_2a_3}(\boldsymbol t)
+ =\operatorname{ME}_{a_1a_2a_3}\!\left[
+ \mathcal W_{\Gamma_F}(\mathbf f(a))\,
+ \mathcal W_{\Gamma_\psi^{\eta}}
+ (\boldsymbol\psi(a),\psi(t_1),\ldots,\psi(t_N))\right],
+ \label{eq:P-explicit}
+\end{equation}
+where $\operatorname{ME}$ is the ordered product of residues
+\eqref{eq:mode-extraction}.  The full fermionic
+numerator is
+\begin{equation}
+ \mathsf H^{(\eta)}_{\boldsymbol n,\boldsymbol\eps}(\boldsymbol t)
+ =\sum_{a_1,a_2,a_3}
+ (-1)^{p_\psi(a_1)[p_F(a_2)+p_F(a_3)]+p_\psi(a_2)p_F(a_3)}
+ \prod_{i=1}^3 C_i(a_i)\,
+ \mathsf P^{(\eta)}_{a_1a_2a_3}(\boldsymbol t).
+ \label{eq:fermion-path-sum}
+\end{equation}
+There are no fitted coefficients in \eqref{eq:fermion-path-sum}; its number
+of summands is finite, at most $2^{j_1+M(n_2)+M(n_3)+2}$ before zero terms
+are removed.  The displayed exponent is increased by one for each tagged
+opposite zero mode.  The $\eta$ projection is exactly
+\eqref{eq:human-forms}.
+
+After pulling out the endpoint powers required by the OPE, the only
+coincident-point singularity is the simple free-fermion pole.  Hence
+antisymmetry in the screening coordinates implies
+\begin{equation}
+ \mathsf H^{(\eta)}(\boldsymbol t)
+ =\prod_a t_a^{-u}(1-t_a)^{-v}\,\Delta(\boldsymbol t)^{-1}\,
+ F^{(\eta)}_{\boldsymbol n,\boldsymbol\eps}(\boldsymbol t),
+ \qquad \Delta(\boldsymbol t)=\prod_{a<c}(t_a-t_c),
+ \label{eq:symmetric-screening-polynomial}
+\end{equation}
+where $F^{(\eta)}$ is a symmetric polynomial.  In the one-colour NS
+numerator \eqref{eq:NS-vandermonde}, $F=\Delta^2$, so the effective
+Vandermonde exponent is shifted upward by two.  Direct contractions between
+the two Ramond strings supply the other terms of the Ramond $F$.
+
+There is no implicit choice in the endpoint exponents in
+\eqref{eq:symmetric-screening-polynomial}.  Given the explicitly extracted
+Laurent polynomial $\mathsf H$, define $u$ to be the negative of its least
+power in any $t_a$.  After removing $\prod_at_a^{-u}$ and replacing
+$t_a=1-s_a$, define $v$ in the same way at $s_a=0$.  Fermionic
+antisymmetry and the simple-pole bound then make
+$F=\Delta\prod_at_a^u(1-t_a)^v\mathsf H$ a polynomial.  This finite
+valuation prescription can therefore be implemented without making a
+factorization ansatz for $F$.
+
+\subsection{Evaluation by a finite Jack--Selberg sum}
+
+For a symmetric polynomial $F$ define
+\begin{equation}
+ \mathfrak S_N[F;A,B,g]
+ =\int_{[0,1]^N}\prod_{a=1}^Ndt_a\,
+ t_a^A(1-t_a)^B|\Delta(\boldsymbol t)|^{2g}F(\boldsymbol t).
+ \label{eq:Selberg-functional}
+\end{equation}
+Expand, finitely,
+\begin{equation}
+ F=\sum_\lambda f_\lambda P_\lambda^{(1/g)},\qquad
+ [x]_{\lambda}^{(g)}=
+ \prod_{r=1}^N\bigl(x+(1-r)g\bigr)_{\lambda_r}.
+ \label{eq:Jack-expansion}
+\end{equation}
+Kadell's Selberg average evaluates \eqref{eq:Selberg-functional} as
+\begin{equation}
+ \mathfrak S_N[F;A,B,g]
+ =S_N(A,B;g)\sum_\lambda f_\lambda
+ P_\lambda^{(1/g)}(1^N)
+ \frac{[A+1+(N-1)g]_{\lambda}^{(g)}}
+ {[A+B+2+2(N-1)g]_{\lambda}^{(g)}},
+ \label{eq:Jack-Selberg}
+\end{equation}
+where
+\begin{equation}
+ S_N(A,B;g)=\prod_{r=0}^{N-1}
+ \frac{\Gamma(A+1+rg)\Gamma(B+1+rg)
+ \Gamma(1+(r+1)g)}
+ {\Gamma(A+B+2+(N+r-1)g)\Gamma(1+g)}.
+ \label{eq:Selberg}
+\end{equation}
+Thus \eqref{eq:Jack-Selberg} is a finite sum of explicit gamma and
+Pochhammer products.  It is not an unevaluated contour integral.  As in the
+original Coulomb-gas calculation, the integral is first defined in its
+convergence chamber and the displayed gamma-function expression gives its
+meromorphic continuation to the physical value of $g$.
+
+At a pure $b$-screening neutrality point
+\begin{equation}
+ \alpha_3=\alpha_1+\alpha_2+Nb,\qquad
+ \alpha_i=\frac Q2+P_i,
+ \label{eq:neutrality}
+\end{equation}
+the bosonic contractions give $A=-b\alpha_1-u$ and
+$B=-b\alpha_2-v$.  A second, dual evaluation uses
+$\alpha_3=\alpha_1+\alpha_2+N/b$ and $b\mapsto b^{-1}$.  For the first
+chamber, the common Pfaffian-Selberg exponent is
+\begin{equation}
+ g=-\frac{bQ}{2}=-\frac{b^2+1}{2}.
+ \label{eq:g}
+\end{equation}
+For the one-colour insertion $F=\Delta^2$, this becomes the ordinary
+Selberg exponent $g+1=(1-b^2)/2$, reproducing the numerator integral used
+by Hadasz--Jaskolski.
+The numerator of the normalized screened matrix element is therefore
+\eqref{eq:Jack-Selberg} with the polynomial obtained from
+\eqref{eq:fermion-path-sum}.  Its denominator is the same expression with
+all three branch strings removed but with the same R ground component.
+More explicitly, let $\mathsf g_{\eps_2\eps_3;f}^{(\eta)}$ be the raw
+charge-basis ground amplitude for the selected component.  If
+$F_0^{(\eta,f)}$ and $(u_0,v_0)$ denote the corresponding ground polynomial
+and its endpoint valuations, then at the neutrality point
+\eqref{eq:neutrality} we define
+\begin{equation}
+ \cR_{\eps_2\eps_3;f}^{(\eta)}\big|_N
+ =\mathsf g_{\eps_2\eps_3;f}^{(\eta)}
+ \delta_{n_1}(P_1)\delta_{n_2}(P_2)\delta_{n_3}(P_3)
+ \frac{\mathfrak S_N[F^{(\eta)}_{\boldsymbol n,\boldsymbol\eps};
+ -b\alpha_1-u,-b\alpha_2-v,g]}
+ {\mathfrak S_N[F_0^{(\eta,f)};
+ -b\alpha_1-u_0,-b\alpha_2-v_0,g]}.
+ \label{eq:Rpoly-neutral}
+\end{equation}
+The ordered-contour factorial is common to numerator and denominator and
+cancels in this ratio.  The prefactor restores the ground normalization
+removed by forming the ratio; in particular
+$\mathsf g_{00;0}^{(\eta)}=1+\ii\eta$ and
+$\mathsf g_{10;0}^{(\eta)}=-e^{-\ii\eta\pi/4}$ in the convention
+\eqref{eq:G0}.  We use the shorter notation
+\begin{equation}
+ \cR_{\eps_2\eps_3;f}^{(\eta)}
+ (P_1,P_2,P_3;n_1,n_2,n_3).
+ \label{eq:Rpoly-def}
+\end{equation}
+Equations \eqref{eq:fermion-path-sum}--\eqref{eq:Rpoly-neutral} give a
+closed finite evaluation of the native ground-resolved Coulomb functional.
+It is a fixed SCA chiral form only when the screening holonomy selects that
+form.  Applying a constant ground-space rotation to the other excited
+component is not justified; the reflected vertex must be evaluated
+independently.
+
+For completeness, a conditional screening reconstruction away from a
+neutrality hyperplane follows if the pole-cleared matrix element is a
+polynomial with the following sharp degree.  For the even component put
+\begin{equation}
+ d=j_1^2+j_2^2+j_3^2-\frac12,
+ \label{eq:degree}
+\end{equation}
+and the odd component has degree at most $d-1$.  Define $N_0$ to be the
+smallest element of $\{0,1\}$ for which the ground denominator in
+\eqref{eq:Rpoly-neutral} is nonzero for the selected component.  Choose
+$d+1$ neutrality points of that parity,
+$N=N_0,N_0+2,\ldots,N_0+2d$.  If their third momenta are
+$P_3^{(a)}$, then
+\begin{equation}
+ \cR(P_3)=\sum_{a=0}^{d}\cR(P_3^{(a)})
+ \prod_{\substack{c=0\\c\ne a}}^d
+ \frac{P_3-P_3^{(c)}}{P_3^{(a)}-P_3^{(c)}}.
+ \label{eq:Lagrange}
+\end{equation}
+If every node in \eqref{eq:Lagrange} is independently evaluated as the same
+analytic SCA form, this would define it at generic
+$(P_1,P_2,P_3)$.  That premise is currently missing for the complementary
+Ramond charge chart: the reflected fermion contains bosonic-current modes.
+The degree bound is supported by clearing the reflection denominators in
+the finite PBW oracle---leg $i$ contributes $j_i^2$, while the two Ramond
+zero-mode seas remove one half in total---but a degree bound does not
+supply the absent screening nodes.
+
+The logical status should be stated precisely.  Polynomiality and this
+degree argument are the all-level step needed to promote the screened
+values \eqref{eq:Rpoly-neutral} to the generic value \eqref{eq:Lagrange}.
+They are proved in the NS case and verified for the R states used in
+Section~\ref{sec:low}; a general R proof is not supplied by the cited
+literature.  Hence the screening-only interpolation is a concrete
+all-level conjecture, not by itself the unconditional definition below.
+
+\subsection{Generic-momentum PBW/Ward oracle}
+
+For comparison we now give a finite evaluator with no screening number or
+interpolation nodes.  This is the object against which the contour
+calculation is tested; it is not used to derive a screened value.  At each
+physical level let $T_\sigma(P,Q)$ be the
+square matrix whose columns are SCA PBW words expanded in the free Fock
+basis using, for negative modes,
+\begin{align}
+ L_k^{(\sigma)}&=\frac12\sum_{m\ne0,k}:c_{k-m}c_m:
+ +\frac12\sum_r r:\psi_{k-r}\psi_r:
+ +\frac{\ii}{2}(kQ+2\sigma P)c_k,\notag\\
+ G_r^{(\sigma)}&=\sum_{m\ne0}c_m\psi_{r-m}
+ +\ii(rQ+\sigma P)\psi_r.
+ \label{eq:free-field-transition}
+\end{align}
+For positive branch labels $\sigma=-1$; reflection gives the other sheet.
+Expand the NS sea \eqref{eq:NS-sea} and the R recurrence
+\eqref{eq:R-binary-update}, and multiply every physical Fock endpoint by
+$T_{-}^{-1}$.  Denote the resulting finite component lists by
+$\mathcal C_i$.  An element $x_i\in\mathcal C_i$ consists of an auxiliary
+Fock state $A_i$, a physical PBW state $V_i$, and its rational coefficient
+$c_i(P_i,Q)$.
+
+Let $\rho_F^{a_F}$ be the auxiliary Majorana three-form fixed by
+\eqref{eq:R-kernel}, \eqref{eq:mode-extraction}, and
+$\Gamma_F^{a_F}$.  Let $\rho_{\SCA}^{\eta,0}$ be the unique NS--R--R SCA
+three-form obtained from the SCA commutators and the ground matrix
+$\Gamma_\psi^{\eta,0}$.  Put
+\begin{gather}
+ a_F=2n_1+\eps_2\pmod2,\qquad
+ \eta_{\rm eff}=(-1)^{2n_1}\eta,\notag\\
+ \mathcal A_{\eps_2}^{(\eta)}(b,\boldsymbol P;\boldsymbol n)
+ =\sum_{x_i\in\mathcal C_i}(-1)^{\kappa(x_1,x_2,x_3)}
+ c_1c_2c_3\,
+ \rho_F^{a_F}(A_1,A_2,A_3)\,
+ \rho_{\SCA}^{\eta_{\rm eff},0}(V_1,V_2,V_3),
+ \label{eq:literal-A}\\
+ \kappa=p_\psi(x_1)[p_F(x_2)+p_F(x_3)]
+ +p_\psi(x_2)p_F(x_3)\pmod2.
+ \notag
+\end{gather}
+All three sums in \eqref{eq:literal-A} are finite, so this is an unambiguous
+PBW/Ward evaluator for every fixed set of labels; it is implemented in
+\path{Code/screening_kernel.py}.  It is nevertheless tautological from the
+viewpoint of the desired free-field calculation, because
+$\rho_{\SCA}$ is left to the Ward recursion.  The pole-cleared notation used
+above is only the abbreviation
+\begin{equation}
+ \cR_{\eps_2 0;0}^{(\eta)}
+ =\delta_{n_1}(P_1)\delta_{n_2}(P_2)\delta_{n_3}(P_3)
+ \mathcal A_{\eps_2}^{(\eta)}.
+ \label{eq:R-is-A}
+\end{equation}
+Equation \eqref{eq:Rpoly-neutral} is the proposed screening-charge
+evaluation of this already-defined function on a neutrality hyperplane.
+
+\subsection{Normalized branching coefficient}
+
+It is convenient to present the master component with $\eps_3=f=0$ first.
+Let
+\begin{equation}
+ c_{\NS}(n)=(-1)^{2n}2^{2n},\qquad
+ \mathcal N_{\NS}(n,P)=c_{\NS}(n)
+ \frac{\ell(2P,4n)}{\ell(Q+2P,4n)},
+ \label{eq:cNS}
+\end{equation}
+and use the exact finite R norm \eqref{eq:R-exact-norm}.  In the raw
+charge-basis normalization of \eqref{eq:NS-sea} and
+\eqref{eq:R-binary-update}, the PBW/Ward oracle for the matrix element is
+\begin{equation}
+ \widehat\rho_0^{(\eta)}
+ =\mathcal A_{\eps_2}^{(\eta)}
+ =\frac{\cR_{\eps_2 0;0}^{(\eta)}}
+ {\delta_{n_1}(P_1)\delta_{n_2}(P_2)\delta_{n_3}(P_3)}.
+ \label{eq:raw-rho}
+\end{equation}
+Combining \eqref{eq:raw-rho} with the three raw norms gives the exact
+normalization identity
+\begin{equation}
+ \boxed{
+ \left(\mathbb B_f^{(\eta)}
+ [\boldsymbol n;\eps_2,\eps_3]\right)^2
+ =(-1)^{\eps_3}(-\ii)^f
+ \frac{\left(\mathcal A_{\eps_2}^{(\eta)}\right)^2}
+ {\mathcal N_{\NS}(n_1,P_1)
+  \mathcal N_R^{(\eps_2)}(n_2,P_2)
+  \mathcal N_R^{(0)}(n_3,P_3)}.}
+ \label{eq:master-B-exact}
+\end{equation}
+Here $\mathcal A$ is the PBW/Ward sum \eqref{eq:literal-A}.  Equation
+\eqref{eq:master-B-exact} becomes a free-field result only after the same
+raw matrix element has been obtained from the screening contour.
+
+If the factorized norm conjecture \eqref{eq:R-product-norm} is used,
+\eqref{eq:master-B-exact} reduces to the compact $\ell$-only expression
+\begin{equation}
+ \boxed{
+ \left(\mathbb B_f^{(\eta)}
+ [\boldsymbol n;\eps_2,\eps_3]\right)^2
+ =(-1)^{\eps_3}(-\ii)^f\,
+ \frac{2^{1/2}\left(\cR_{\eps_2 0;0}^{(\eta)}\right)^2}
+ {c_{\NS}(n_1)c_R^{(\eps_2)}(n_2)c_R^{(0)}(n_3)
+  \prod_{i=1}^3D_{n_i}(P_i)}.}
+ \label{eq:master-B}
+\end{equation}
+Under both conjectural replacements just stated---the factorized R norm and
+the generic-momentum screening interpolation---all the continuous dependence
+on $b,P_i,n_i$ in \eqref{eq:master-B} lies in the finite polynomial
+$\cR$ defined by \eqref{eq:fermion-path-sum}--\eqref{eq:Lagrange}.  The
+$\eps_3$ and $f$ dependence in \eqref{eq:master-B-exact} is universal.  The
+$\eps_2$ dependence is retained inside the screening polynomial; it is not
+legitimate to discard it before doing the zero-mode projection.
+Negative branch labels require no new formula.  Reflect one leg at a time,
+\begin{equation}
+ (n_i,P_i)\longmapsto(-n_i,-P_i),
+ \label{eq:R-reflection}
+\end{equation}
+use \eqref{eq:ell-negative}, and evaluate the positive representative.
+The possible sign of the reflected highest vector disappears from the
+squared coefficient \eqref{eq:master-B-exact}.
+
+\section{Relation to the four-\texorpdfstring{$\ell$}{ell} conjecture}
+
+Define the scalar Hadasz--Jaskolski continuation
+\begin{align}
+ \mathcal P(\boldsymbol n;\boldsymbol P)
+ &=\ell(\tfrac Q2+P_1+P_2+P_3,2(n_1+n_2+n_3))\notag\\
+ &\quad\times\ell(\tfrac Q2-P_1+P_2+P_3,2(-n_1+n_2+n_3))\notag\\
+ &\quad\times\ell(\tfrac Q2+P_1+P_2-P_3,2(n_1+n_2-n_3))\notag\\
+ &\quad\times\ell(\tfrac Q2-P_1+P_2-P_3,2(-n_1+n_2-n_3)).
+ \label{eq:Pcal}
+\end{align}
+The quantity that should be divided out, rather than subtracted, is
+\begin{equation}
+ U_{\eps_2}^{(\eta)}
+ =\frac{\cR_{\eps_2 0;0}^{(\eta)}}
+ {\cR_{\eps_2 0;0}^{(\eta)}\big|_{F=\Delta^2}}
+ =\frac{\cR_{\eps_2 0;0}^{(\eta)}}
+ {\hbox{the appropriate reflected-sheet version of }\mathcal P}.
+ \label{eq:Ufactor}
+\end{equation}
+Here $F=\Delta^2$ means retaining only the path in which every external sea
+fermion ends on a screening, as in \eqref{eq:NS-vandermonde}.  In the NS sector $U=1$
+identically.  In the R sector it remains one whenever the charge projection
+forces a single screening colour.  In general $U$ is a momentum-dependent
+finite Jack sum.  It is not the field normalization $\Omega_k(\alpha)$ of
+the double-Liouville dictionary~\cite{SS}, and it is not a
+momentum-independent normalization constant.
+
+\section{Low-level channels and direct screening restrictions}
+\label{sec:low}
+
+This section is placed after the derivation deliberately.
+
+\subsection{Two Ramond ground branches}
+
+For $(n_1,n_2,n_3)=(0,1/4,1/4)$ the symmetric screening polynomial is
+constant.  In the raw convention,
+\begin{equation}
+ \cR_{00;0}^{(\eta)}=1+\ii\eta,\qquad
+ \cR_{10;0}^{(\eta)}=-e^{-\ii\eta\pi/4}.
+ \label{eq:ground-R}
+\end{equation}
+Using $c_R^{(0)}(1/4)=2$ and $c_R^{(1)}(1/4)=-1$ in
+\eqref{eq:master-B} gives, for both $\eps_2$,
+\begin{equation}
+ \left(\mathbb B_f^{(\eta)}[0,\tfrac14,\tfrac14;
+ \eps_2,\eps_3]\right)^2
+ =(-1)^{\eps_3}(-\ii)^f\frac{\ii\eta}{2}.
+ \label{eq:ground-B}
+\end{equation}
+
+\subsection{First crossed kernel}
+
+The first nonconstant $F$ occurs when both Ramond strings contain a
+nonzero mode, at $(0,3/4,3/4)$.  Put
+\begin{gather}
+ x_{++}=\frac Q2+P_1+P_2+P_3,\qquad
+ x_{--}=\frac Q2+P_1-P_2-P_3,\\
+ x_2=\frac Q2-P_1+P_2+P_3,\qquad E_j=Q+2P_j,\\
+ a_j=(2P_j)^2+Q(2P_j)+1,\qquad
+ d_j=E_j^2+QE_j+1,\\
+ K=(x_{++}^2+Qx_{++}+1)(x_2^2+Qx_2+1),\qquad
+ L=x_{++}(x_{--}-Q),\\
+ H=L^2+2L(E_2E_3+1)+d_2d_3.
+ \label{eq:KH}
+\end{gather}
+The one-colour component gives $K$.  The remaining contraction paths in
+$F^{(-)}$ give the crossed result $H$, equivalently
+\begin{equation}
+ H=(1,L)
+ \begin{pmatrix}d_2d_3&1+E_2E_3\\1+E_2E_3&1\end{pmatrix}
+ \binom{1}{L}.
+ \label{eq:hard-kernel}
+\end{equation}
+For the $\eps_2=0$ master the normalized answer is
+\begin{equation}
+ \left(\mathbb B_f^{(\eta)}
+ [0,\tfrac34,\tfrac34;0,\eps_3]\right)^2
+ =(-1)^{\eps_3}(-\ii)^f\frac{\ii\eta}{2}
+ \frac{F_\eta^2}{a_2a_3d_2d_3},
+ \qquad F_+=K,\quad F_-=H.
+ \label{eq:hard-B}
+\end{equation}
+The $\eps_2=1$ component is obtained from the same literal sum
+\eqref{eq:literal-A}; it is not implicitly identified with
+\eqref{eq:hard-B}.
+Since $H$ is irreducible over the rational function field in
+$(Q,P_1,P_2,P_3)$, it cannot be a four-$\ell$ product on any reflected
+momentum sheet.  This is not an obstruction to free fields; it is the first
+place where the two-colour screening polynomial is nonconstant.  Relative
+to the literal four-$\ell$ factor, $U_+=1$ and $U_-=H/K$.
+
+\subsection{Direct screening matrix element on two hyperplanes}
+\label{sec:direct-trial}
+
+We now compute rather than reconstruct the first crossed three-form.  Keep
+the puncture order $(\infty,1,0)=(\NS_1,\R_2,\R_3)$ and define
+\begin{equation}
+ \mathfrak M_f^{(\eta)}=
+ \frac{
+ \langle v_{1,0}(P_1)|
+ V[v_{2,3/4}^{0}(P_2)](1)|v_{3,3/4}^{0}(P_3)\rangle_f^{(\eta)}
+ }{
+ \langle v_{1,0}(P_1)|V[w_2](1)|w_3\rangle_f^{(\eta)}}.
+ \label{eq:direct-matrix-element}
+\end{equation}
+The numerator uses the literal consecutive $\chi=f-\ii\psi$ strings on
+the two Ramond fields and $N$ insertions of
+$\psi(t)E^b(t)$.  The denominator is the primary two-spin BFL integral in
+the same ground channel.
+
+At $N=2$, charge neutrality is
+\begin{equation}
+ P_1=-\frac Q2-P_2-P_3-2b.
+ \label{eq:N2-plane}
+\end{equation}
+Writing $e_1=t_1+t_2$ and $e_2=t_1t_2$, direct mode extraction from the two
+$\chi$ strings and the two-spin Pfaffian gives, for $f=0$ and $\eta=-1$,
+\begin{equation}
+ F_2(t_1,t_2)=\frac{1-\ii}{2}(2e_2-e_1)
+ \bigl(e_2^2-e_1e_2+e_1^2-3e_2\bigr).
+ \label{eq:N2-integrand}
+\end{equation}
+Expanding only in products of elementary symmetric functions and applying
+their exact Selberg moments yields
+\begin{align}
+ \mathfrak M_0^{(-)}&=(-1+\ii)R_2,&
+ \mathfrak M_1^{(-)}&=-\sqrt2\,\ii R_2,\notag\\
+ R_2&=
+ \frac{13b^4+10b^3(P_2+P_3)+4b^2P_2P_3+8b^2
+       +4b(P_2+P_3)+4}
+ {(b^2+2bP_2+2)(b^2+2bP_3+2)}.
+ \label{eq:N2-result}
+\end{align}
+This computation imports no SCA three-form.  Symbolic reduction gives the
+nontrivial identity
+\begin{equation}
+ R_2=\left.\frac{H}{d_2d_3}\right|_{\eqref{eq:N2-plane}}.
+ \label{eq:N2-H}
+\end{equation}
+Thus the irreducible $H$ is directly visible in the screening integral, not
+only in the PBW calculation.
+
+At the natural $N=3$ node,
+$P_1=-Q/2-P_2-P_3-3b$, the physical form is $\eta=+1$.  The external--screen
+block reduces the Pfaffian to one determinant, followed by an ordinary
+Selberg product.  The answer is
+\begin{align}
+ \mathfrak M_0^{(+)}&=-4(1+\ii)R_3,&
+ \mathfrak M_1^{(+)}&=-4\sqrt2\,R_3,\notag\\
+ R_3&=
+ \frac{b^2(3b^2-1)
+ (2b^2+bP_2+bP_3+1)(5b^2+2bP_2+2bP_3+1)}
+ {(b^2+2bP_2+2)(b^2+2bP_3+2)
+  (2b^2+2bP_2+1)(2b^2+2bP_3+1)}.
+ \label{eq:N3-result}
+\end{align}
+Direct simplification gives
+\begin{equation}
+ 4R_3=\left.\frac{K}{d_2d_3}
+ \right|_{P_1=-Q/2-P_2-P_3-3b}.
+ \label{eq:N3-K}
+\end{equation}
+Equations \eqref{eq:N2-H} and \eqref{eq:N3-K} are genuine contour checks
+of the two channels.  They do not yet determine either generic degree-four
+polynomial from screening data alone.  The executable derivation is
+\path{Code/direct_matrix_element_trial.py}.
+
+\section{Independent PBW/Ward comparison through onset level
+\texorpdfstring{$7/2$}{7/2}}
+
+The comparison uses explicit simultaneous $\Vir\oplus\Vir$ primaries and
+the generalized $(\NS,\R,\R)$ Ward identities, not the screening contours.
+The intrinsic NS-primary parity is mandatory: the Ward sign uses
+\begin{equation}
+ \eta_{\rm eff}=(-1)^{p_\phi}\eta,
+ \qquad p_\phi=2n_1\pmod2.
+ \label{eq:eta-effective}
+\end{equation}
+The labels whose individual branch onset does not exceed $7/2$ are
+\begin{equation}
+ n_1\in\{0,\tfrac12,1\},\qquad
+ n_2,n_3\in\{\tfrac14,\tfrac34,\tfrac54\}.
+ \label{eq:grid}
+\end{equation}
+There are $27$ level triples, four independent continuous masters
+$(\eps_2,\eta)$ per triple, and sixteen discrete restrictions after
+$(\eps_3,f)$ are restored.  The audit checks the following separately:
+\begin{enumerate}
+ \item the raw R norms at $n=1/4,3/4,5/4$;
+ \item all four PBW/path master amplitudes at each of the 27 triples;
+ \item the universal reduction
+ $(\mathbb B_f^{(\eta)})^2=(-1)^{\eps_3}(-\ii)^f
+ (\mathbb B_0^{(\eta)}[\eps_2,0])^2$;
+ \item the scalar-product specialization and its first failure
+ \eqref{eq:hard-B}.
+\end{enumerate}
+The exact arithmetic report and the commands used to regenerate it are in
+\path{Code/verification_report.md}.  The continuous grid audit constructs
+the branch strings in two different ways (finite colour paths versus direct
+simultaneous-primary assembly); both use the same independently audited Ward
+functional.  It is therefore a check of the literal finite function,
+normalization and phase restoration, not a proof of the generic-momentum
+screening interpolation or of the Jack--Selberg identity.  The comparison
+confirms \eqref{eq:literal-A} throughout \eqref{eq:grid}.  The scalar
+four-$\ell$ specialization matches only the one-colour components; the
+crossed components are required already at $(0,3/4,3/4)$.
+
+\section{Conclusion}
+
+The correct primary object is the free-field matrix element
+\eqref{eq:direct-matrix-element}.  For the first crossed branch its
+two-screening evaluation gives the irreducible $H$ restriction
+\eqref{eq:N2-H}, and its natural three-screening evaluation gives the
+factorized $K$ restriction \eqref{eq:N3-K}.  These are genuine
+Pfaffian--Selberg calculations and show directly that the factor left after
+the four-$\ell$ term is removed can be momentum dependent.
+
+The finite function \eqref{eq:literal-A} remains useful as a PBW/Ward oracle
+and has passed the stated low-level comparisons, but it is not a derivation
+of the contour integral.
+
+The status of the residue method is more precise.  In an ordinary scalar
+Selberg family, endpoint support fixes the Gamma divisor and a collision
+residue fixes the remaining normalization from the $N=0,1$ base cases.  The
+Ramond descendant integral is vector-valued, and the two endpoint residues
+proved here contain complementary rank-one projectors.  Neither relation
+alone determines the full function.  A generic all-level answer requires a
+proof of finite contour-orbit closure, degree and pole bounds on that space,
+a full-rank collection of endpoint/cluster maps, and the inversion/crossing
+connection matrix.  These data must include the current--fermion terms of
+the reflected Ramond vertex and have no common invisible subspace.  Once
+the vector Selberg integral is fixed from its base vectors, enough
+same-parity screening nodes can separately reconstruct the pole-cleared
+generic-momentum function by finite interpolation.
+
+Consequently this note proposes the multi-channel screening organization
+and proves its first nontrivial restrictions; it does not claim a completed
+generic-momentum Ramond branching formula.  The projectors are auxiliary
+data in an evaluation algorithm, not additional physical branching
+coefficients.
+
+\begin{thebibliography}{9}
+\bibitem{HJ}
+L.~Hadasz and Z.~Jaskolski,
+\emph{Super-Liouville -- double Liouville correspondence},
+JHEP 05 (2014) 124,
+\href{https://arxiv.org/abs/1312.4520}{arXiv:1312.4520}.
+
+\bibitem{BS}
+M.~Bershtein and A.~Shchechkin,
+\emph{B\"acklund transformation of Painlev\'e III$(D_8)$ tau function},
+J.~Phys.~A 50 (2017) 115205,
+\href{https://arxiv.org/abs/1608.02568}{arXiv:1608.02568}.
+
+\bibitem{SS}
+V.~Schomerus and P.~Suchanek,
+\emph{Liouville's imaginary shadow},
+JHEP 12 (2012) 020,
+\href{https://arxiv.org/abs/1210.1856}{arXiv:1210.1856}.
+\end{thebibliography}
+
+\end{document}
