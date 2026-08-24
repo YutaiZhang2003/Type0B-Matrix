@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
-"""Implement the branching recursion for B(2,7/4,5/4) in SCblock.tex.
+"""Compute Ramond branching coefficients recursively for a requested target.
 
 The program is self-contained.  It constructs the branch states from the
 chi strings, constructs the two embedded Virasoro algebras from L, L^F, and
 U, solves the required L_{+/-1} branch decompositions, and recursively reduces
 the target to the boundary branching coefficients.  It does not import any
 old code, stored coefficient, or boundary relation not stated in SCblock.tex.
+
+The implemented recursion component has a nonnegative integral NS label and
+Ramond labels on the quarter lattice Z/2 + 1/4.  The connected Ramond
+reflection component containing each target label is generated automatically.
 """
 
 from __future__ import annotations
@@ -21,15 +25,83 @@ from functools import lru_cache
 from pathlib import Path
 
 import numpy as np
+import mpmath as mp
+from scipy import linalg as scipy_linalg
 
 
 HERE = Path(__file__).resolve().parent
 TOLERANCE = 1.0e-13
 RANK_TOLERANCE = 1.0e-11
+MP_DPS = 0
+
+
+def set_multiprecision(dps: int):
+    global MP_DPS
+    MP_DPS = int(dps)
+    if MP_DPS:
+        mp.mp.dps = MP_DPS
+
+
+def arithmetic_tolerance():
+    if not MP_DPS:
+        return TOLERANCE
+    return mp.power(10, -max(20, MP_DPS - 20))
+
+
+def real_number(value):
+    if not MP_DPS:
+        return float(value)
+    if isinstance(value, Fraction):
+        return mp.mpf(value.numerator) / value.denominator
+    return mp.mpf(value)
+
+
+def complex_number(value=0):
+    if not MP_DPS:
+        return complex(value)
+    if isinstance(value, mp.mpc):
+        return value
+    if isinstance(value, mp.mpf):
+        return mp.mpc(value)
+    converted = complex(value)
+    return mp.mpc(str(converted.real), str(converted.imag))
+
+
+def scalar_sqrt(value):
+    return mp.sqrt(value) if MP_DPS else cmath.sqrt(value)
+
+
+def scalar_power_of_two(exponent):
+    return mp.power(2, real_number(exponent)) if MP_DPS else 2 ** float(exponent)
 
 
 def parse_number(text: str) -> float:
-    return float(Fraction(text))
+    return real_number(Fraction(text))
+
+
+def parse_label(text: str) -> Fraction:
+    try:
+        return Fraction(text)
+    except (ValueError, ZeroDivisionError) as error:
+        raise argparse.ArgumentTypeError(f"invalid rational label: {text}") from error
+
+
+def validate_target(target):
+    n1, n2, n3 = (Fraction(value) for value in target)
+    if n1 < 0 or n1.denominator != 1:
+        raise ValueError("n1 must be a nonnegative integer for this recursion component.")
+    for name, value in (("n2", n2), ("n3", n3)):
+        four_times = 4 * value
+        if four_times.denominator != 1 or int(four_times) % 2 == 0:
+            raise ValueError(f"{name} must lie in (1/2) Z + 1/4.")
+    return n1, n2, n3
+
+
+def ns_label_closure(target: Fraction):
+    target = Fraction(target)
+    if target < 0 or target.denominator != 1:
+        raise ValueError("NS labels must be nonnegative integers.")
+    return tuple(Fraction(label) for label in range(int(target) + 1))
 
 
 @lru_cache(None)
@@ -68,8 +140,8 @@ def partition_pairs(level: int):
 
 
 def add_term(expression, state, coefficient):
-    value = expression.get(state, 0.0j) + complex(coefficient)
-    if abs(value) <= TOLERANCE:
+    value = expression.get(state, complex_number()) + coefficient
+    if abs(value) <= arithmetic_tolerance():
         expression.pop(state, None)
     else:
         expression[state] = value
@@ -99,17 +171,17 @@ def ell(x: complex, index: int, b: float) -> complex:
     index = int(index)
     q = b + 1 / b
     if index == 0:
-        return 1.0 + 0.0j
+        return complex_number(1)
     if index < 0:
         reflected = ell(q - x, -index, b)
         return ((-1) ** ((-index) // 2) * reflected) if index % 2 == 0 else reflected
-    answer = 2 ** (1 / 8) if index % 2 else 1.0
+    answer = scalar_power_of_two(Fraction(1, 8)) if index % 2 else real_number(1)
     wanted_parity = index % 2
     for r in range(index):
         for s in range(index - r):
             if (r + s) % 2 == wanted_parity:
                 answer *= x + r * b + s / b
-    return complex(answer)
+    return answer
 
 
 class FreeFieldModule:
@@ -119,9 +191,9 @@ class FreeFieldModule:
         if sector not in ("NS", "R"):
             raise ValueError("sector must be NS or R")
         self.sector = sector
-        self.b = float(b)
+        self.b = real_number(b)
         self.q = self.b + 1 / self.b
-        self.momentum = float(momentum)
+        self.momentum = real_number(momentum)
         self.realization = int(realization)
 
     @staticmethod
@@ -145,7 +217,7 @@ class FreeFieldModule:
             return (final, ground), float((-1) ** position)
         if ground is None:
             raise AssertionError("The NS fermion has no zero mode.")
-        coefficient = (-1) ** len(modes) * zero_sign / math.sqrt(2)
+        coefficient = (-1) ** len(modes) * zero_sign / scalar_sqrt(real_number(2))
         return (modes, 1 - ground), coefficient
 
     @staticmethod
@@ -470,7 +542,7 @@ class FreeFieldModule:
                         * physical_coefficient,
                     )
             expression = next_expression
-        scale = 2 ** (-2 * label) * ell(
+        scale = scalar_power_of_two(-2 * label) * ell(
             self.q + 2 * self.momentum, 4 * label, self.b
         )
         return {state: scale * value for state, value in expression.items()}
@@ -551,11 +623,18 @@ class FreeFieldModule:
                         columns.append(
                             [expression.get(row, 0.0j) for row in rows]
                         )
-        matrix = np.asarray(columns, dtype=np.complex128).T
-        if matrix.shape[0] != matrix.shape[1]:
+        row_count = len(rows)
+        column_count = len(columns)
+        if row_count != column_count:
             raise AssertionError("The Ramond free-field/SCA transition is not square.")
-        if np.linalg.matrix_rank(matrix, tol=RANK_TOLERANCE) != matrix.shape[0]:
-            raise AssertionError("The Ramond free-field/SCA transition is singular.")
+        if MP_DPS:
+            matrix = mp.matrix(
+                [[columns[column][row] for column in range(column_count)] for row in range(row_count)]
+            )
+        else:
+            matrix = np.asarray(columns, dtype=np.complex128).T
+            if np.linalg.matrix_rank(matrix, tol=RANK_TOLERANCE) != matrix.shape[0]:
+                raise AssertionError("The Ramond free-field/SCA transition is singular.")
         return rows, matrix
 
     def r_branch(self, label, parity: int):
@@ -575,21 +654,161 @@ class FreeFieldModule:
             else:
                 rows, native_matrix = self._level_transition(native, level)
                 _, target_matrix = self._level_transition(self.realization, level)
-                vector = np.asarray(
-                    [physical_expression.get(row, 0.0j) for row in rows],
-                    dtype=np.complex128,
-                )
-                abstract = np.linalg.solve(native_matrix, vector)
-                target = target_matrix @ abstract
+                values = [physical_expression.get(row, complex_number()) for row in rows]
+                if MP_DPS:
+                    vector = mp.matrix(values)
+                    abstract = mp.lu_solve(native_matrix, vector)
+                    target = target_matrix * abstract
+                    if not all(mp.isfinite(value) for value in target):
+                        raise FloatingPointError(
+                            f"Non-finite Ramond reflection conversion at n={label}."
+                        )
+                else:
+                    vector = np.asarray(values, dtype=np.complex128)
+                    abstract = np.linalg.solve(native_matrix, vector)
+                    with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+                        target = target_matrix @ abstract
+                    if not np.all(np.isfinite(target)):
+                        raise FloatingPointError(
+                            f"Non-finite Ramond reflection conversion at n={label}."
+                        )
                 converted = {
-                    row: value for row, value in zip(rows, target) if abs(value) > TOLERANCE
+                    row: value
+                    for row, value in zip(rows, target)
+                    if abs(value) > arithmetic_tolerance()
                 }
             for physical, coefficient in converted.items():
                 add_term(answer, self.join_state(auxiliary, physical), coefficient)
         return answer
 
 
+def sparse_inner(left, right):
+    if len(left) > len(right):
+        return mp.conj(sparse_inner(right, left))
+    return mp.fsum(
+        mp.conj(value) * right.get(state, 0)
+        for state, value in left.items()
+        if state in right
+    )
+
+
+def multiprecision_span_fit(target, columns):
+    """Fit an exact descendant span by certified mixed-precision refinement.
+
+    A pivoted QR of the double-precision shadow chooses a well-conditioned
+    square set of oscillator rows.  The coefficients and residuals are then
+    accumulated at ``MP_DPS`` digits while a cached double LU supplies only
+    the iterative corrections.  The returned residual is evaluated in
+    multiprecision on *all* oscillator rows, not merely on the selected set.
+    """
+
+    column_count = len(columns)
+    keys = sorted(set(target).union(*(set(column) for column in columns)), key=repr)
+    norms = [mp.sqrt(mp.re(sparse_inner(column, column))) for column in columns]
+    if any(norm == 0 for norm in norms):
+        raise AssertionError("A descendant column vanished at the sample point.")
+
+    shadow = np.empty((len(keys), column_count), dtype=np.complex128)
+    for column_index, (column, norm) in enumerate(zip(columns, norms)):
+        inverse_norm = 1 / norm
+        shadow[:, column_index] = [
+            complex(column.get(key, 0) * inverse_norm) for key in keys
+        ]
+
+    # Pivoting the columns of A^T selects independent rows of A.  Since the
+    # descendant identity is exact, a full-rank square row restriction fixes
+    # the unique coefficients; the all-row residual below certifies it.
+    _, _, pivots = scipy_linalg.qr(
+        shadow.T, mode="economic", pivoting=True, check_finite=False
+    )
+    selected_indices = np.asarray(pivots[:column_count], dtype=int)
+    selected = shadow[selected_indices, :]
+    singular_values = scipy_linalg.svdvals(selected, check_finite=False)
+    rank = int(np.count_nonzero(singular_values > RANK_TOLERANCE))
+    if rank != column_count:
+        raise np.linalg.LinAlgError(
+            f"Pivoted oscillator restriction has rank {rank}/{column_count}."
+        )
+    selected_keys = [keys[index] for index in selected_indices]
+    selected_vector = np.asarray(
+        [complex(target.get(key, 0)) for key in selected_keys],
+        dtype=np.complex128,
+    )
+    lu, lu_pivots = scipy_linalg.lu_factor(selected, check_finite=False)
+    initial = scipy_linalg.lu_solve(
+        (lu, lu_pivots), selected_vector, check_finite=False
+    )
+    scaled_coefficients = [complex_number(value) for value in initial]
+
+    selected_target_norm = mp.sqrt(
+        mp.fsum(abs(target.get(key, 0)) ** 2 for key in selected_keys)
+    )
+    selected_scale = max(selected_target_norm, mp.mpf(1))
+    refinement_tolerance = mp.power(10, -max(20, MP_DPS - 15))
+    selected_relative_residual = mp.inf
+    refinement_iterations = 0
+    for iteration in range(1, 31):
+        residual = [
+            target.get(key, 0)
+            - mp.fsum(
+                column.get(key, 0) * coefficient / norm
+                for column, coefficient, norm in zip(
+                    columns, scaled_coefficients, norms
+                )
+            )
+            for key in selected_keys
+        ]
+        selected_relative_residual = (
+            mp.sqrt(mp.fsum(abs(value) ** 2 for value in residual))
+            / selected_scale
+        )
+        if selected_relative_residual <= refinement_tolerance:
+            break
+        correction = scipy_linalg.lu_solve(
+            (lu, lu_pivots),
+            np.asarray([complex(value) for value in residual], dtype=np.complex128),
+            check_finite=False,
+        )
+        scaled_coefficients = [
+            coefficient + complex_number(delta)
+            for coefficient, delta in zip(scaled_coefficients, correction)
+        ]
+        refinement_iterations = iteration
+    else:
+        raise FloatingPointError(
+            "Mixed-precision descendant refinement did not reach the requested tolerance."
+        )
+
+    coefficients = [
+        scaled_coefficients[index] / norms[index]
+        for index in range(column_count)
+    ]
+    all_row_residual = {key: -target.get(key, 0) for key in keys}
+    for coefficient, column in zip(coefficients, columns):
+        for state, value in column.items():
+            all_row_residual[state] += coefficient * value
+    absolute = mp.sqrt(mp.fsum(abs(value) ** 2 for value in all_row_residual.values()))
+    target_norm = mp.sqrt(mp.re(sparse_inner(target, target)))
+    condition_number = float(singular_values[0] / singular_values[-1])
+    return {
+        "coefficients": coefficients,
+        "rows": len(keys),
+        "columns": column_count,
+        "rank": rank,
+        "absolute_residual": float(absolute),
+        "relative_residual": float(absolute / target_norm) if target_norm else float(absolute),
+        "smallest_singular_value": float(singular_values[-1]),
+        "scaled_condition_number": condition_number,
+        "selected_rows": column_count,
+        "refinement_iterations": refinement_iterations,
+        "selected_relative_residual": float(selected_relative_residual),
+        "solver": f"mixed-precision-pivoted-refinement-{MP_DPS}dps",
+    }
+
+
 def span_fit(target, columns):
+    if MP_DPS:
+        return multiprecision_span_fit(target, columns)
     keys = sorted(set(target).union(*(set(column) for column in columns)), key=repr)
     matrix = np.zeros((len(keys), len(columns)), dtype=np.complex128)
     vector = np.asarray([target.get(key, 0.0j) for key in keys], dtype=np.complex128)
@@ -602,7 +821,10 @@ def span_fit(target, columns):
     coefficients, _, rank, singular_values = np.linalg.lstsq(
         normalized, vector, rcond=RANK_TOLERANCE
     )
-    residual = normalized @ coefficients - vector
+    with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+        residual = normalized @ coefficients - vector
+    if not np.all(np.isfinite(residual)):
+        raise FloatingPointError("The scaled descendant fit produced a non-finite residual.")
     absolute = float(np.linalg.norm(residual))
     target_norm = float(np.linalg.norm(vector))
     relative = absolute / target_norm if target_norm else absolute
@@ -614,6 +836,7 @@ def span_fit(target, columns):
         "absolute_residual": absolute,
         "relative_residual": relative,
         "smallest_singular_value": float(singular_values[rank - 1]),
+        "solver": "numpy-lstsq-complex128",
     }
 
 
@@ -649,6 +872,23 @@ def ramond_lminus_structure(label: Fraction):
     if label <= Fraction(-3, 4):
         return label + 1, int(-4 * label - 1)
     raise ValueError(f"No Ramond L_-1 structure is stated for n={label}.")
+
+
+def ramond_label_closure(target: Fraction):
+    """Return the closed reflection component containing ``target``."""
+
+    target = Fraction(target)
+    four_times = 4 * target
+    if four_times.denominator != 1 or int(four_times) % 2 == 0:
+        raise ValueError("Ramond labels must lie in (1/2) Z + 1/4.")
+    labels = set()
+    current = target
+    while True:
+        if current in labels:
+            break
+        labels.add(current)
+        current, _ = ramond_lminus_structure(current)
+    return tuple(sorted(labels))
 
 
 def solve_ramond_lminus(module: FreeFieldModule, label: Fraction, parity: int):
@@ -705,8 +945,8 @@ class VirasoroThreePoint:
     """Stripped ordinary Virasoro form in the slot order of the notes."""
 
     def __init__(self, weights, central_charge):
-        self.weights = tuple(complex(value) for value in weights)
-        self.central_charge = complex(central_charge)
+        self.weights = tuple(complex_number(value) for value in weights)
+        self.central_charge = complex_number(central_charge)
         self._value_cache = {}
         self._act_cache = {}
 
@@ -798,12 +1038,13 @@ class VirasoroThreePoint:
 
 class BranchWeights:
     def __init__(self, b: float, momenta):
-        self.b = float(b)
-        self.momenta = tuple(float(value) for value in momenta)
-        self.b1 = cmath.sqrt(2 * b**2 / (1 - b**2))
-        self.b2_inverse = cmath.sqrt(2 / (b**2 - 1))
-        denominator1 = cmath.sqrt(2 - 2 * b**2)
-        denominator2 = cmath.sqrt(2 - 2 / b**2)
+        self.b = real_number(b)
+        self.momenta = tuple(real_number(value) for value in momenta)
+        b = self.b
+        self.b1 = scalar_sqrt(2 * b**2 / (1 - b**2))
+        self.b2_inverse = scalar_sqrt(2 / (b**2 - 1))
+        denominator1 = scalar_sqrt(2 - 2 * b**2)
+        denominator2 = scalar_sqrt(2 - 2 / b**2)
         if abs(self.b1 / denominator1 + self.b2_inverse / denominator2) > abs(
             self.b1 / denominator1 - self.b2_inverse / denominator2
         ):
@@ -822,10 +1063,11 @@ class BranchWeights:
 
     def weight(self, leg: int, label: Fraction, copy: int):
         momentum = self.momenta[leg]
+        label_value = real_number(label)
         if copy == 0:
-            branched = momentum / self.denominators[0] + float(label) * self.b1
+            branched = momentum / self.denominators[0] + label_value * self.b1
         else:
-            branched = momentum / self.denominators[1] + float(label) * self.b2_inverse
+            branched = momentum / self.denominators[1] + label_value * self.b2_inverse
         return self.q_copies[copy] ** 2 / 4 - branched**2
 
     def triple(self, labels, copy):
@@ -885,10 +1127,20 @@ def direct_ground_value(
     alpha3,
     eta,
 ):
-    """Evaluate the tensor-ground form using the normalization in SCblock.tex."""
+    """Evaluate the tensor-ground form in the literal Human-Note basis.
+
+    The free-field endpoint labelled ``physical=1`` is not itself ``w^-``.
+    Equation (5.1), applied to the realization used here, gives
+
+        |raw,1> = -exp(-i*pi/4) |w^->.
+
+    The tensor sign is the ground specialization of the defining hatted form
+    in Section 8, not the standard tensor-product Koszul convention.
+    """
     second = second_module.r_branch(second_label, alpha2)
     third = third_module.r_branch(third_label, alpha3)
     form_parity = (alpha2 + alpha3) % 2
+    raw_to_human_minus = -cmath.exp(-0.25j * math.pi)
     answer = 0.0j
     for state2, coefficient2 in second.items():
         for state3, coefficient3 in third.items():
@@ -899,7 +1151,9 @@ def direct_ground_value(
             if auxiliary2 != auxiliary3:
                 continue
             auxiliary_form = 1 if auxiliary2 == 0 else -1
-            tensor_sign = (-1) ** (physical2 * auxiliary3)
+            tensor_sign = (-1) ** (
+                (physical2 + form_parity) * auxiliary3
+            )
             if form_parity == 0:
                 if (physical2, physical3) == (0, 0):
                     physical_form = 1
@@ -917,6 +1171,8 @@ def direct_ground_value(
             answer += (
                 coefficient2
                 * coefficient3
+                * (raw_to_human_minus if physical2 else 1)
+                * (raw_to_human_minus if physical3 else 1)
                 * tensor_sign
                 * auxiliary_form
                 * physical_form
@@ -929,6 +1185,9 @@ def finite_ward_solution(
     ns_l1,
     second_lminus,
     third_lminus,
+    labels1,
+    labels2,
+    labels3,
     second_module,
     third_module,
     alpha2,
@@ -936,21 +1195,9 @@ def finite_ward_solution(
     eta,
 ):
     """Close the finite system using only the first Ward identity in the notes."""
-    labels1 = (Fraction(0), Fraction(1), Fraction(2))
-    labels2 = (
-        Fraction(-3, 4),
-        Fraction(-1, 4),
-        Fraction(1, 4),
-        Fraction(3, 4),
-        Fraction(7, 4),
-    )
-    labels3 = (
-        Fraction(-3, 4),
-        Fraction(-1, 4),
-        Fraction(1, 4),
-        Fraction(3, 4),
-        Fraction(5, 4),
-    )
+    labels1 = tuple(Fraction(value) for value in labels1)
+    labels2 = tuple(Fraction(value) for value in labels2)
+    labels3 = tuple(Fraction(value) for value in labels3)
     unknowns = tuple(
         (first, second, third)
         for first in labels1
@@ -962,27 +1209,43 @@ def finite_ward_solution(
     right_hand_sides = []
 
     def append_equation(equation):
-        norm = np.linalg.norm(equation)
-        if norm > TOLERANCE:
-            rows.append(equation / norm)
-            right_hand_sides.append(0.0j)
+        if MP_DPS:
+            norm = mp.sqrt(mp.fsum(abs(value) ** 2 for value in equation))
+            normalized = [value / norm for value in equation] if norm else None
+        else:
+            equation = np.asarray(equation, dtype=np.complex128)
+            norm = np.linalg.norm(equation)
+            normalized = equation / norm if norm else None
+        if norm > arithmetic_tolerance():
+            rows.append(normalized)
+            right_hand_sides.append(complex_number())
 
     for labels in unknowns:
-        first_slot = np.zeros(len(unknowns), dtype=np.complex128)
+        first_slot = [complex_number() for _ in unknowns]
         for term in ns_l1[labels[0]]:
             changed, coefficient = ordinary_factor(weights, labels, 0, term)
+            if changed not in index:
+                raise AssertionError(f"The NS label box is not closed at {changed}.")
             first_slot[index[changed]] += coefficient
         for term in second_lminus[labels[1]]:
             changed, coefficient = ordinary_factor(weights, labels, 1, term)
+            if changed not in index:
+                raise AssertionError(f"The second Ramond label box is not closed at {changed}.")
             first_slot[index[changed]] -= coefficient
         for term in third_lminus[labels[2]]:
             changed, coefficient = ordinary_factor(weights, labels, 2, term)
+            if changed not in index:
+                raise AssertionError(f"The third Ramond label box is not closed at {changed}.")
             first_slot[index[changed]] -= coefficient
         append_equation(first_slot)
 
+    ground_labels2 = tuple(label for label in labels2 if abs(label) == Fraction(1, 4))
+    ground_labels3 = tuple(label for label in labels3 if abs(label) == Fraction(1, 4))
+    if len(ground_labels2) != 1 or len(ground_labels3) != 1:
+        raise AssertionError("Each closed Ramond component must contain one ground label.")
     anchors = {}
-    for second_label in (Fraction(-1, 4), Fraction(1, 4)):
-        for third_label in (Fraction(-1, 4), Fraction(1, 4)):
+    for second_label in ground_labels2:
+        for third_label in ground_labels3:
             labels = (Fraction(0), second_label, third_label)
             value = direct_ground_value(
                 second_module,
@@ -994,33 +1257,150 @@ def finite_ward_solution(
                 eta,
             )
             anchors[labels] = value
-            row = np.zeros(len(unknowns), dtype=np.complex128)
+            row = [complex_number() for _ in unknowns]
             row[index[labels]] = 1
             rows.append(row)
             right_hand_sides.append(value)
 
-    matrix = np.asarray(rows, dtype=np.complex128)
-    vector = np.asarray(right_hand_sides, dtype=np.complex128)
-    column_norms = np.linalg.norm(matrix, axis=0)
-    if np.any(column_norms == 0):
-        raise AssertionError("A branching coefficient is absent from the Ward system.")
-    scaled_matrix = matrix / column_norms
-    scaled_solution, _, rank, singular_values = np.linalg.lstsq(
-        scaled_matrix, vector, rcond=1.0e-13
-    )
-    solution = scaled_solution / column_norms
-    residual = matrix @ solution - vector
+    if MP_DPS:
+        matrix = mp.matrix(rows)
+        vector = mp.matrix(right_hand_sides)
+        row_count, column_count = matrix.rows, matrix.cols
+        column_norms = [
+            mp.sqrt(mp.fsum(abs(matrix[row, column]) ** 2 for row in range(row_count)))
+            for column in range(column_count)
+        ]
+        if any(norm == 0 for norm in column_norms):
+            raise AssertionError("A branching coefficient is absent from the Ward system.")
+        scaled_matrix = mp.matrix(
+            [
+                [matrix[row, column] / column_norms[column] for column in range(column_count)]
+                for row in range(row_count)
+            ]
+        )
+        ward_gram = mp.matrix(column_count)
+        ward_rhs = mp.matrix(column_count, 1)
+        for first in range(column_count):
+            ward_rhs[first] = mp.fsum(
+                mp.conj(scaled_matrix[row, first]) * vector[row]
+                for row in range(row_count)
+            )
+            for second in range(first + 1):
+                value = mp.fsum(
+                    mp.conj(scaled_matrix[row, first])
+                    * scaled_matrix[row, second]
+                    for row in range(row_count)
+                )
+                ward_gram[first, second] = value
+                ward_gram[second, first] = mp.conj(value)
+        eigenvalues, eigenvectors = mp.eighe(ward_gram)
+        maximum_eigenvalue = max(abs(value) for value in eigenvalues)
+        eigenvalue_minimum = float(min(mp.re(value) for value in eigenvalues))
+        eigenvalue_maximum = float(max(mp.re(value) for value in eigenvalues))
+        rank_threshold = maximum_eigenvalue * mp.power(10, -(MP_DPS - 15))
+        active = [
+            position
+            for position, value in enumerate(eigenvalues)
+            if value > rank_threshold
+        ]
+        rank = len(active)
+        scaled_solution = mp.matrix(column_count, 1)
+        for position in active:
+            projection = mp.fsum(
+                mp.conj(eigenvectors[row, position]) * ward_rhs[row]
+                for row in range(column_count)
+            ) / eigenvalues[position]
+            for row in range(column_count):
+                scaled_solution[row] += eigenvectors[row, position] * projection
+        solution = [
+            scaled_solution[column] / column_norms[column]
+            for column in range(column_count)
+        ]
+        residual = matrix * mp.matrix(solution) - vector
+        residual_norm = mp.sqrt(mp.fsum(abs(value) ** 2 for value in residual))
+        vector_norm = mp.sqrt(mp.fsum(abs(value) ** 2 for value in vector))
+        singular_values = np.asarray(
+            [float(mp.sqrt(max(eigenvalues[position], 0))) for position in reversed(active)],
+            dtype=float,
+        )
+        if not len(singular_values):
+            singular_values = np.asarray([0.0])
+        smallest_singular_value = (
+            float(mp.sqrt(eigenvalues[active[0]])) if active else 0.0
+        )
+        scaled_condition_number = (
+            float(mp.sqrt(eigenvalues[active[-1]] / eigenvalues[active[0]]))
+            if active
+            else math.inf
+        )
+        solve_rcond = None
+        solver = f"mpmath-rank-revealing-normal-equations-{MP_DPS}dps"
+    else:
+        matrix = np.asarray(rows, dtype=np.complex128)
+        vector = np.asarray(right_hand_sides, dtype=np.complex128)
+        row_count, column_count = matrix.shape
+        column_norms = np.linalg.norm(matrix, axis=0)
+        if np.any(column_norms == 0):
+            raise AssertionError("A branching coefficient is absent from the Ward system.")
+        scaled_matrix = matrix / column_norms
+        candidates = []
+        for rcond in (1.0e-13, 1.0e-14, 1.0e-15, 1.0e-16):
+            scaled_solution, _, rank, singular_values = np.linalg.lstsq(
+                scaled_matrix, vector, rcond=rcond
+            )
+            solution = scaled_solution / column_norms
+            with np.errstate(over="ignore", divide="ignore", invalid="ignore"):
+                residual = matrix @ solution - vector
+            if not np.all(np.isfinite(residual)):
+                continue
+            residual_norm = float(np.linalg.norm(residual))
+            candidates.append(
+                {
+                    "solution": solution,
+                    "rank": int(rank),
+                    "singular_values": singular_values,
+                    "residual": residual,
+                    "residual_norm": residual_norm,
+                    "rcond": rcond,
+                }
+            )
+        if not candidates:
+            raise FloatingPointError("The finite Ward solve produced no finite solution.")
+        selected = max(
+            candidates,
+            key=lambda candidate: (
+                candidate["rank"] == matrix.shape[1],
+                candidate["rank"],
+                -candidate["residual_norm"],
+            ),
+        )
+        solution = selected["solution"]
+        rank = selected["rank"]
+        singular_values = selected["singular_values"]
+        residual = selected["residual"]
+        residual_norm = float(np.linalg.norm(residual))
+        vector_norm = float(np.linalg.norm(vector))
+        solve_rcond = selected["rcond"]
+        solver = "numpy-adaptive-lstsq-complex128"
+        smallest_singular_value = float(singular_values[rank - 1])
+        scaled_condition_number = float(singular_values[0] / singular_values[-1])
+        eigenvalue_minimum = None
+        eigenvalue_maximum = None
     return {
         "unknowns": unknowns,
         "values": solution,
         "anchors": anchors,
-        "rows": int(matrix.shape[0]),
-        "columns": int(matrix.shape[1]),
+        "rows": int(row_count),
+        "columns": int(column_count),
         "rank": int(rank),
-        "absolute_residual": float(np.linalg.norm(residual)),
-        "relative_residual": float(np.linalg.norm(residual))
-        / max(float(np.linalg.norm(vector)), 1.0),
-        "smallest_singular_value": float(singular_values[rank - 1]),
+        "absolute_residual": float(residual_norm),
+        "relative_residual": float(residual_norm / max(vector_norm, 1)),
+        "smallest_singular_value": smallest_singular_value,
+        "solve_rcond": solve_rcond,
+        "scaled_condition_number": scaled_condition_number,
+        "solver": solver,
+        "hermitian_eigenvalue_minimum": eigenvalue_minimum,
+        "hermitian_eigenvalue_maximum": eigenvalue_maximum,
     }
 
 
@@ -1047,7 +1427,7 @@ def ns_norm_ratio(label: Fraction, b: float, momentum: float):
     label = Fraction(label)
     q = b + 1 / b
     upper = int(4 * label)
-    return 2 * cmath.sqrt(
+    return 2 * scalar_sqrt(
         ell(2 * momentum, upper - 4, b)
         * ell(q + 2 * momentum, upper - 4, b)
         / (
@@ -1062,7 +1442,7 @@ def ramond_norm_ratio(label: Fraction, b: float, momentum: float):
     label = Fraction(label)
     q = b + 1 / b
     upper = int(4 * label)
-    return 0.5 * cmath.sqrt(
+    return real_number(Fraction(1, 2)) * scalar_sqrt(
         ell(2 * momentum, upper - 4, b)
         * ell(q + 2 * momentum, upper, b)
         / (
@@ -1075,7 +1455,7 @@ def ramond_norm_ratio(label: Fraction, b: float, momentum: float):
 def ns_norm_squared(label: Fraction, b: float, momentum: float):
     label = Fraction(label)
     q = b + 1 / b
-    return (-1) ** int(2 * label) * 2 ** (-2 * float(label)) * ell(
+    return (-1) ** int(2 * label) * scalar_power_of_two(-2 * label) * ell(
         2 * momentum, int(4 * label), b
     ) * ell(q + 2 * momentum, int(4 * label), b)
 
@@ -1085,10 +1465,10 @@ def ramond_norm_squared(label: Fraction, parity: int, b: float, momentum: float)
     mode_count = int(2 * label - Fraction(1, 2))
     if parity == 0:
         power = 2 * (mode_count // 2) + 1
-        discrete = 2.0**power
+        discrete = scalar_power_of_two(power)
     else:
         power = 2 * ((mode_count + 1) // 2)
-        discrete = -(2.0**power)
+        discrete = -scalar_power_of_two(power)
     q = b + 1 / b
     return discrete * ell(2 * momentum, int(4 * label), b) / ell(
         q + 2 * momentum, int(4 * label), b
@@ -1097,9 +1477,9 @@ def ramond_norm_squared(label: Fraction, parity: int, b: float, momentum: float)
 
 def norm_product(labels, alpha2, alpha3, b, momenta):
     return (
-        cmath.sqrt(ns_norm_squared(labels[0], b, momenta[0]))
-        * cmath.sqrt(ramond_norm_squared(labels[1], alpha2, b, momenta[1]))
-        * cmath.sqrt(ramond_norm_squared(labels[2], alpha3, b, momenta[2]))
+        scalar_sqrt(ns_norm_squared(labels[0], b, momenta[0]))
+        * scalar_sqrt(ramond_norm_squared(labels[1], alpha2, b, momenta[1]))
+        * scalar_sqrt(ramond_norm_squared(labels[2], alpha3, b, momenta[2]))
     )
 
 
@@ -1119,7 +1499,7 @@ def same_branch_coefficient(terms, label, copy):
 def add_scaled(target, source, scale):
     for key, value in source.items():
         combined = target.get(key, 0.0j) + scale * value
-        if abs(combined) <= TOLERANCE:
+        if abs(combined) <= arithmetic_tolerance():
             target.pop(key, None)
         else:
             target[key] = combined
@@ -1262,13 +1642,36 @@ def boundary_entry(alpha2, alpha3, eta, labels, value=None):
 
 
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description="Compute the Ramond branching recursion at arbitrary supported labels."
+    )
     parser.add_argument("--b", default="7/5")
     parser.add_argument("--p1", default="11/23")
     parser.add_argument("--p2", default="13/29")
     parser.add_argument("--p3", default="17/31")
+    parser.add_argument("--n1", type=parse_label, default=Fraction(2))
+    parser.add_argument("--n2", type=parse_label, default=Fraction(7, 4))
+    parser.add_argument("--n3", type=parse_label, default=Fraction(5, 4))
+    parser.add_argument(
+        "--mp-dps",
+        type=int,
+        default=0,
+        help="Use mpmath arithmetic at this many decimal digits (0 keeps complex128).",
+    )
     parser.add_argument("--json", type=Path, default=HERE / "results.json")
     arguments = parser.parse_args()
+
+    if arguments.mp_dps and arguments.mp_dps < 30:
+        parser.error("--mp-dps must be 0 or at least 30.")
+    set_multiprecision(arguments.mp_dps)
+
+    try:
+        target = validate_target((arguments.n1, arguments.n2, arguments.n3))
+    except ValueError as error:
+        parser.error(str(error))
+    labels1 = ns_label_closure(target[0])
+    labels2 = ramond_label_closure(target[1])
+    labels3 = ramond_label_closure(target[2])
 
     started = time.perf_counter()
     b = parse_number(arguments.b)
@@ -1284,38 +1687,24 @@ def main():
         "R2_Lminus1": {},
         "R3_Lminus1": {},
     }
-    for label in (1, 2):
-        terms, fit = solve_ns_l1(ns_module, label)
-        ns_l1[Fraction(label)] = terms
-        decomposition_checks["NS_L1"][str(label)] = fit_summary(fit)
+    for label in labels1[1:]:
+        terms, fit = solve_ns_l1(ns_module, int(label))
+        ns_l1[label] = terms
+        decomposition_checks["NS_L1"][format_fraction(label)] = fit_summary(fit)
 
-    ramond_labels2 = (
-        Fraction(-3, 4),
-        Fraction(-1, 4),
-        Fraction(1, 4),
-        Fraction(3, 4),
-        Fraction(7, 4),
-    )
     second_lminus_by_alpha = {}
     for alpha2 in (0, 1):
         lminus_actions = {}
-        for label in ramond_labels2:
+        for label in labels2:
             terms, fit = solve_ramond_lminus(second_module, label, alpha2)
             lminus_actions[label] = terms
             decomposition_checks["R2_Lminus1"][f"{label};alpha={alpha2}"] = fit_summary(fit)
         second_lminus_by_alpha[alpha2] = lminus_actions
 
-    ramond_labels3 = (
-        Fraction(-3, 4),
-        Fraction(-1, 4),
-        Fraction(1, 4),
-        Fraction(3, 4),
-        Fraction(5, 4),
-    )
     third_lminus_by_alpha = {}
     for alpha3 in (0, 1):
         lminus_actions = {}
-        for label in ramond_labels3:
+        for label in labels3:
             terms, fit = solve_ramond_lminus(third_module, label, alpha3)
             lminus_actions[label] = terms
             decomposition_checks["R3_Lminus1"][f"{label};alpha={alpha3}"] = fit_summary(fit)
@@ -1325,13 +1714,13 @@ def main():
     weights = BranchWeights(b, momenta)
     branch_weight_checks = {
         "NS": check_branch_weights(
-            ns_module, weights, 0, (Fraction(0), Fraction(1), Fraction(2)), "NS"
+            ns_module, weights, 0, labels1, "NS"
         ),
         "R2": check_branch_weights(
-            second_module, weights, 1, ramond_labels2, "R"
+            second_module, weights, 1, labels2, "R"
         ),
         "R3": check_branch_weights(
-            third_module, weights, 2, ramond_labels3, "R"
+            third_module, weights, 2, labels3, "R"
         ),
     }
     maximum_weight_difference = max(
@@ -1344,9 +1733,8 @@ def main():
         for checks in branch_weight_checks.values()
         for item in checks
     )
-    target = (Fraction(2), Fraction(7, 4), Fraction(5, 4))
     all_results = []
-    minimum_denominator = math.inf
+    minimum_denominator = None
     maximum_ward_residual = 0.0
     maximum_recursive_disagreement = 0.0
     recursion_started = time.perf_counter()
@@ -1361,10 +1749,16 @@ def main():
                 third_lminus_by_alpha[alpha3],
             )
             expansion = recursion.expansion(target)
-            minimum_denominator = min(
-                minimum_denominator,
-                *(abs(data["denominator"]) for data in recursion.node_data.values()),
-            )
+            if recursion.node_data:
+                candidate = min(
+                    abs(data["denominator"])
+                    for data in recursion.node_data.values()
+                )
+                minimum_denominator = (
+                    candidate
+                    if minimum_denominator is None
+                    else min(minimum_denominator, candidate)
+                )
             expansion_entries = [
                 {
                     "n1": format_fraction(labels[0]),
@@ -1381,6 +1775,9 @@ def main():
                     ns_l1,
                     second_lminus_by_alpha[alpha2],
                     third_lminus_by_alpha[alpha3],
+                    labels1,
+                    labels2,
+                    labels3,
                     second_module,
                     third_module,
                     alpha2,
@@ -1405,8 +1802,9 @@ def main():
                 direct_value = ward["values"][ward_index[target]] / norm_product(
                     target, alpha2, alpha3, b, momenta
                 )
-                disagreement = abs(recursive_value - direct_value) / max(
-                    abs(direct_value), 1.0
+                disagreement = float(
+                    abs(recursive_value - direct_value)
+                    / max(abs(direct_value), real_number(1))
                 )
                 maximum_recursive_disagreement = max(
                     maximum_recursive_disagreement, disagreement
@@ -1424,6 +1822,15 @@ def main():
                             "absolute_residual": ward["absolute_residual"],
                             "relative_residual": ward["relative_residual"],
                             "smallest_singular_value": ward["smallest_singular_value"],
+                            "solve_rcond": ward["solve_rcond"],
+                            "scaled_condition_number": ward["scaled_condition_number"],
+                            "solver": ward["solver"],
+                            "hermitian_eigenvalue_minimum": ward[
+                                "hermitian_eigenvalue_minimum"
+                            ],
+                            "hermitian_eigenvalue_maximum": ward[
+                                "hermitian_eigenvalue_maximum"
+                            ],
                             "ground_anchors": [
                                 {
                                     "n2": format_fraction(labels[1]),
@@ -1491,21 +1898,39 @@ def main():
         and maximum_recursive_disagreement < 1.0e-7
     )
     payload = {
-        "target": {"n1": "2", "n2": "7/4", "n3": "5/4"},
+        "convention": "Human Notes/SCblock.tex only",
+        "external_ramond_convention_conversion_used": False,
+        "pbw_double_virasoro_match_certified": False,
+        "target": {
+            "n1": format_fraction(target[0]),
+            "n2": format_fraction(target[1]),
+            "n3": format_fraction(target[2]),
+        },
+        "arithmetic": {
+            "backend": "mpmath" if MP_DPS else "complex128",
+            "decimal_digits": MP_DPS if MP_DPS else None,
+        },
+        "ward_label_sets": {
+            "n1": [format_fraction(value) for value in labels1],
+            "n2": [format_fraction(value) for value in labels2],
+            "n3": [format_fraction(value) for value in labels3],
+        },
         "point": {
             "b": arguments.b,
             "P1": arguments.p1,
             "P2": arguments.p2,
             "P3": arguments.p3,
-            "Q": b + 1 / b,
-            "c": 1.5 + 3 * (b + 1 / b) ** 2,
+            "Q": float(b + 1 / b),
+            "c": float(real_number(Fraction(3, 2)) + 3 * (b + 1 / b) ** 2),
         },
         "decomposition_checks": decomposition_checks,
         "maximum_decomposition_relative_residual": maximum_fit_residual,
         "branch_weight_checks": branch_weight_checks,
         "maximum_branch_weight_absolute_difference": maximum_weight_difference,
         "maximum_branch_weight_state_residual": maximum_weight_state_residual,
-        "minimum_recursion_denominator_absolute_value": minimum_denominator,
+        "minimum_recursion_denominator_absolute_value": (
+            None if minimum_denominator is None else float(minimum_denominator)
+        ),
         "maximum_finite_Ward_relative_residual": maximum_ward_residual,
         "maximum_recursion_vs_Ward_relative_disagreement": maximum_recursive_disagreement,
         "results": all_results,
@@ -1517,7 +1942,10 @@ def main():
     arguments.json.write_text(json.dumps(payload, indent=2) + "\n")
     print(f"maximum decomposition residual={maximum_fit_residual:.3e}")
     print(f"maximum branch-weight difference={maximum_weight_difference:.3e}")
-    print(f"minimum |recursion denominator|={minimum_denominator:.3e}")
+    if minimum_denominator is None:
+        print("minimum |recursion denominator|=not applicable (boundary target)")
+    else:
+        print(f"minimum |recursion denominator|={float(minimum_denominator):.3e}")
     print(f"maximum finite-Ward residual={maximum_ward_residual:.3e}")
     print(f"maximum recursion/Ward disagreement={maximum_recursive_disagreement:.3e}")
     print(f"total runtime={total_time:.3f} s")
