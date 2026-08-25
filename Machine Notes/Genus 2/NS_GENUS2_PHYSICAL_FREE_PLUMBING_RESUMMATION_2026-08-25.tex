@@ -1,0 +1,1252 @@
+% Standalone machine note.  The Human Note is a separate, authoritative file.
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,graphicx}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\hypersetup{
+  pdftitle={Physical X+psi denominator from the Human-Note plumbing sum},
+  pdfauthor={Machine Note}
+}
+\allowdisplaybreaks
+\setlist{nosep}
+\title{Physical \(X+\psi\) denominator from the Human-Note plumbing sum}
+\author{Machine Note}
+\date{25 August 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip
+
+Status: theta- and glasses-channel resummations derived and implemented.  The
+noncompact loop-momentum Gaussian is left as a direct plumbing Gaussian and
+is \textbf{not} replaced here by a canonical-frame spectral determinant.  This
+note concerns the physical free boson and physical Majorana in the denominator
+of \(Q_L\), not the auxiliary Majorana used in the double-Virasoro quotient.
+The Human Note is not modified.
+
+\section{Physical basis and the literal nonchiral sum}
+
+Use the theta edge order
+
+\[
+ e=(0,1,\infty).
+\]
+
+For one chiral physical free superfield, use the ordered Fock basis
+
+\[
+ |p;\lambda,S\rangle
+ =a_{-\lambda_1}\cdots a_{-\lambda_k}
+   \psi_{-r_1}\cdots\psi_{-r_s}|p\rangle,
+ \qquad
+ r_1>\cdots>r_s>0,
+\]
+
+where \(\lambda\) is an integer partition and
+\(S\subset\mathbb Z_{>0}-\tfrac12\).  Define
+
+\[
+ N(\lambda,S)=|\lambda|+\sum_{r\in S}r,
+ \qquad
+ \pi(\lambda,S)=|S|\pmod2,
+ \qquad h(p)=\frac{p^2}{2}.
+\]
+
+Write \(U_e=(\lambda_e,S_e)\), \(V_e=(\mu_e,T_e)\) for the two
+ends selected by the inverse Gram matrix, with tilded letters for the
+antiholomorphic copy.  After dividing by the connected target-space volume,
+the physical momentum measure is
+
+\[
+ [d\mathbf p]_{\Theta}
+ =\prod_{e=0,1,\infty}dp_e\;
+   \delta(p_0+p_1+p_\infty),
+\]
+
+up to the fixed convention-dependent powers of \(2\pi\).  The literal
+Human-Note theta prescription becomes
+
+\[
+\boxed{
+\begin{aligned}
+Z_{X+\psi}^{\Theta,\mathrm{pl}}
+={}&\int[d\mathbf p]_{\Theta}
+\sum_{\mathbf U,\mathbf V,
+      \widetilde{\mathbf U},\widetilde{\mathbf V}}
+\prod_e
+ q_e^{h(p_e)+N(U_e)}
+ \bar q_e^{h(p_e)+N(\widetilde U_e)}
+ \eta_e^{\pi(U_e)}
+ \widetilde\eta_e^{\pi(\widetilde U_e)}
+\\
+&\quad\times
+(-1)^{Q(\boldsymbol\pi(\mathbf U)
+          +\boldsymbol\pi(\widetilde{\mathbf U}))}
+\prod_e
+ \left(\mathbb B_e^{-1}\right)^{
+ U_e\widetilde U_e;V_e\widetilde V_e}
+\\
+&\quad\times
+\mathcal R_{\Theta}(\mathbf U,\widetilde{\mathbf U};\mathbf p)
+\mathcal R_{\Theta}(\mathbf V,\widetilde{\mathbf V};\mathbf p),
+\end{aligned}}
+\tag{1.1}
+\]
+
+where
+
+\[
+ Q(x_0,x_1,x_\infty)
+ =x_0x_1+x_0x_\infty+x_1x_\infty\pmod2.
+\tag{1.2}
+\]
+
+Here \(\mathbb B_e^{-1}\) is the inverse Gram matrix of the \textbf{full
+nonchiral physical} \(X+\psi\) state.  Equation (1.1), rather than a theta
+constant or a spectral determinant, is the definition of the denominator in
+the theta plumbing Weyl frame.
+
+The sign in (1.1) is not yet a product of a holomorphic and an
+antiholomorphic sign.  The inverse tensor-product Gram matrix and the two
+full pants correlators must be factorized before making such a statement.
+
+\section{What the analytic free-field three-point function implies}
+
+Normalize
+
+\[
+ X(Z_1)X(Z_2)\sim-\log Z_{12},\qquad
+ Z_{ij}=z_i-z_j-\theta_i\theta_j,
+\]
+
+and let
+
+\[
+ \mathcal V_p(Z)=:e^{ipX(Z)}:,
+ \qquad h(p)=\frac{p^2}{2}.
+\]
+
+The holomorphic primary three-point function is
+
+\[
+ \left\langle
+ \mathcal V_{p_\infty}(Z_\infty)
+ \mathcal V_{p_1}(Z_1)
+ \mathcal V_{p_0}(Z_0)
+ \right\rangle
+ =\delta(p_0+p_1+p_\infty)
+  \prod_{i<j}Z_{ij}^{p_ip_j}.
+\tag{2.1}
+\]
+
+It contains the even superconformal three-point structure and no term
+proportional to the odd invariant \(\Theta_{123}\).  Therefore
+
+\[
+ C^{(1)}_{p_0p_1p_\infty}=0.
+\tag{2.2}
+\]
+
+This fact is what makes the free-theory reduction simpler than the
+super-Liouville numerator.  It must be used only after the full Human-Note
+sign algebra.  Here is that factorization explicitly.
+
+Set
+
+\[
+ r_e=\pi(U_e)=\pi(V_e),
+ \qquad
+ \widetilde r_e=\pi(\widetilde U_e)=\pi(\widetilde V_e).
+\]
+
+The equalities follow because the inverse Gram matrix connects states at the
+same level and hence with the same fermion parity.  The physical exponential
+primaries are even.  Specializing the Human-Note tensor-product BPZ rule to
+these free primaries gives
+
+\[
+ \left(\mathbb B_e^{-1}\right)^{
+ U_e\widetilde U_e;V_e\widetilde V_e}
+ =(-1)^{r_e\widetilde r_e}
+  \left(B_e^{-1}\right)^{U_eV_e}
+  \left(\widetilde B_e^{-1}\right)^{
+    \widetilde U_e\widetilde V_e}.
+\tag{2.2a}
+\]
+
+Each full pants correlator separately has a Koszul sign from moving all
+antiholomorphic operators to the right.  The two pants correlators have the
+same edge parities, so these two signs square to one.  With the normalized
+free primary coefficient stripped off, their product is therefore
+
+\[
+\begin{aligned}
+&\mathcal R_\Theta(\mathbf U,\widetilde{\mathbf U};\mathbf p)
+ \mathcal R_\Theta(\mathbf V,\widetilde{\mathbf V};\mathbf p)
+\\
+&\qquad=
+ \rho(\mathbf U;\mathbf p)\rho(\mathbf V;\mathbf p)
+ \widetilde\rho(\widetilde{\mathbf U};\mathbf p)
+ \widetilde\rho(\widetilde{\mathbf V};\mathbf p).
+\end{aligned}
+\tag{2.2b}
+\]
+
+Consequently the exponent of the complete sign in (1.1) is
+
+\[
+ \epsilon_{\mathrm{tot}}
+ =Q(\mathbf r+\widetilde{\mathbf r})
+  +\mathbf r\mathbin{\cdot}\widetilde{\mathbf r}.
+\tag{2.2c}
+\]
+
+For three edges the elementary identity
+
+\[
+ Q(\mathbf r+\widetilde{\mathbf r})
+ +\mathbf r\mathbin{\cdot}\widetilde{\mathbf r}
+ =Q(\mathbf r)+Q(\widetilde{\mathbf r})
+  +(r_0+r_1+r_\infty)
+   (\widetilde r_0+\widetilde r_1+\widetilde r_\infty)
+ \pmod2
+\tag{2.2d}
+\]
+
+does all the remaining work.  The holomorphic and antiholomorphic pants
+selection rules require
+
+\[
+ a=r_0+r_1+r_\infty
+  =\widetilde r_0+\widetilde r_1+\widetilde r_\infty
+ \pmod2.
+\tag{2.2e}
+\]
+
+The last term of (2.2d) is therefore \(a^2=a\).  Thus the full nonchiral
+sign becomes
+
+\[
+ (-1)^{a+Q(\mathbf r)+Q(\widetilde{\mathbf r})}.
+\tag{2.3}
+\]
+
+Because (2.2) forces \(a=0\), the complete nonchiral sum is
+
+\[
+ Z_{X+\psi}^{\Theta,\mathrm{pl}}
+ =\int[d\mathbf p]_{\Theta}
+  \left|
+  \mathcal F_{X+\psi,0}^{\Theta,\mathrm{pl}}
+       (\mathbf p;\mathbf q,\boldsymbol\eta)
+  \right|^2.
+\tag{2.4}
+\]
+
+Thus holomorphic factorization is a result of (2.1)--(2.3), not an
+assumption made in (1.1).  In particular, the descendant sign inside the
+chiral block remains
+
+\[
+ (-1)^{Q(\pi_0,\pi_1,\pi_\infty)}.
+\tag{2.5}
+\]
+
+\section{Analytic physical-Majorana pants tensor}
+
+Let the positive integer \(m\) label the NS mode
+
+\[
+ \psi_{-(m-1/2)}|0\rangle.
+\]
+
+Use slot order \((\infty,1,0)\), and write a combined index as
+\(\alpha=(s,m)\).  The analytic sphere contraction matrix is the
+antisymmetric matrix \(K\) whose independent entries are
+
+\[
+\begin{aligned}
+K_{(\infty,m),(1,n)}
+ &=\begin{cases}
+   \binom{m-1}{n-1},&m\ge n,\\[2mm]0,&m<n,
+   \end{cases}\\
+K_{(\infty,m),(0,n)}&=\delta_{mn},\\
+K_{(1,m),(0,n)}
+ &=(-1)^{m-1}\binom{m+n-2}{m-1}.
+\end{aligned}
+\tag{3.1}
+\]
+
+For three Fock states \(S_\infty,S_1,S_0\), let
+\(I=S_\infty\sqcup S_1\sqcup S_0\) be the corresponding set of combined
+indices.  In the generating-function order where modes increase on all three
+slots, Wick's theorem gives
+
+\[
+ \widehat\rho_\psi(S_\infty,S_1,S_0)=\operatorname{Pf}K_I.
+\tag{3.2}
+\]
+
+The physical BPZ bra reverses its fermion fields.  Consequently the physical
+pants coefficient used in the literal state sum is
+
+\[
+ \rho_\psi(S_\infty,S_1,S_0)
+ =(-1)^{|S_\infty|(|S_\infty|-1)/2}
+  \widehat\rho_\psi(S_\infty,S_1,S_0).
+\tag{3.3}
+\]
+
+Both coefficients vanish when the total number of fermions is odd.  In the
+theta graph the two identical pants coefficients are multiplied, so the BPZ
+reversal sign in (3.3) squares to one.  In the glasses graph it is retained
+by the half-edge pairing ledger in Section 7.
+
+\section{Fredholm resummation of the Human-Note descendant sign}
+
+Introduce the plumbing half-variables
+
+\[
+ x_e=\eta_e\sqrt{q_e}.
+\tag{4.1}
+\]
+
+For \(\boldsymbol\sigma=(\sigma_\infty,\sigma_1,\sigma_0)\in
+\{\pm1\}^3\), define the diagonal mode-weight operator
+
+\[
+ (W_{\boldsymbol\sigma})_{(e,m),(e,m)}
+ =\sigma_e x_e^{2m-1},
+\tag{4.2}
+\]
+
+and the Fredholm determinant
+
+\[
+ D_{\boldsymbol\sigma}
+ =\det_{\mathrm F}(1+K W_{\boldsymbol\sigma}).
+\tag{4.3}
+\]
+
+The principal-minor identity and (3.2) give
+
+\[
+ D_{\boldsymbol\sigma}
+ =\sum_{S_\infty,S_1,S_0}
+   \widehat\rho_\psi(S_\infty,S_1,S_0)^2
+   \prod_e\sigma_e^{|S_e|}
+   x_e^{2N(S_e)}.
+\tag{4.4}
+\]
+
+Only parity patterns \((000,110,101,011)\) occur.  On these four patterns,
+the Human-Note sign (2.5) is respectively \((+,-,-,-)\).  Its exact
+all-level projection is consequently
+
+\[
+\boxed{
+ \mathcal F_{\psi}^{\Theta,\mathrm{pl}}
+ =\frac12\left[
+ -D_{(+,+,+)}
+ +D_{(-,+,+)}
+ +D_{(+,-,+)}
+ +D_{(+,+,-)}
+ \right].}
+\tag{4.5}
+\]
+
+This is the desired physical-fermion resummation.  It uses the plumbing
+coordinates, the physical lifts, and the analytic pants tensor only.  No
+period matrix occurs.
+
+At a mode cutoff \(M\), (4.5) requires four determinants of size \(3M\).
+The cost is \(O(M^3)\), instead of enumerating an exponentially growing
+collection of Fock states.  Numerically one should use
+
+\[
+ \det(1+KW)=\det(1+W^{1/2}KW^{1/2})
+\tag{4.6}
+\]
+
+to balance the growing binomial entries of \(K\) against the decaying
+plumbing weights.
+
+\section{Charged boson and complete one-superfield resummation}
+
+The bosonic oscillator pants sum exponentiates by Wick's theorem.  In the
+same theta plumbing marking its all-level resummation is
+
+\[
+ P_X^{\Theta,\mathrm{pl}}(\mathbf q)
+ =\prod_{[\gamma]\in\mathcal P_{\mathrm{prim}}}
+   \prod_{n=1}^{\infty}(1-k_\gamma^n)^{-1},
+\tag{5.1}
+\]
+
+where every multiplier \(k_\gamma\) is computed from the Schottky generators
+constructed from the same \((0,1,\infty)\) plumbing maps.  Equation (5.1) is a
+resummation of the Heisenberg pants state sum; it is not a canonical
+Laplacian determinant.
+
+The charged tensor is just as explicit.  In the bra convention
+
+\[
+ \langle\alpha_\infty|V_{\alpha_1}(1)|\alpha_0\rangle,
+ \qquad \alpha_\infty=\alpha_1+\alpha_0,
+\]
+
+divide every current mode by the square root of its mode number.  In slot
+order \((\infty,1,0)\), the symmetric normalized current-current kernel
+\(K_X\) is obtained from
+
+\[
+\begin{aligned}
+C_{\infty1}(m,n)&=
+ m\binom{m-1}{n-1}\mathbf1_{m\ge n},\\
+C_{\infty0}(m,n)&=m\delta_{mn},\\
+C_{10}(m,n)&=(-1)^{m-1}n\binom{n+m-1}{m-1}
+\end{aligned}
+\tag{5.2}
+\]
+
+by \((K_X)_{(e,m),(f,n)}=C_{ef}(m,n)/\sqrt{mn}\).  The normalized
+current-exponential contractions form the linear vector
+
+\[
+ \ell_{\infty,m}=\frac{\alpha_1}{\sqrt m},\qquad
+ \ell_{1,m}=\frac{(-1)^{m-1}\alpha_0}{\sqrt m},\qquad
+ \ell_{0,m}=-\frac{\alpha_1}{\sqrt m}.
+\tag{5.3}
+\]
+
+Thus the analytic charged pants generating function is
+
+\[
+ \exp\!\left(\frac12t^TK_Xt+\ell^Tt\right).
+\tag{5.4}
+\]
+
+This formula includes both pairwise current contractions and the singleton
+contractions of a current with one of the exponential primaries.  Expanding
+(5.4) gives the charged Fock-module tensor
+\(\rho_{\alpha_\infty,\alpha_1,\alpha_0}(\lambda,\mu,\nu)\).
+
+At mode cutoff \(M\), let
+
+\[
+ W_{(e,m),(e,m)}=q_e^m,\qquad D=W^{1/2},\qquad B=DK_XD.
+\tag{5.5}
+\]
+
+The inverse-BPZ sewing convention gives the same numerical charge labels to
+the two pants tensors.  Contracting the two Gaussian generating functions
+therefore gives
+
+\[
+ P_{X,M}^{\Theta,\mathrm{pl}}
+ =\det(1-B^2)^{-1/2},
+\qquad
+ E_M(\alpha_0,\alpha_1)
+ =(D\ell)^T(1-B)^{-1}(D\ell).
+\tag{5.6}
+\]
+
+The branch of the determinant is fixed by \(P_{X,M}\to1\) at the plumbing
+cusp.  The complete fixed-charge chiral boson block is
+
+\[
+ \mathcal F_{X,M}^{\Theta,\mathrm{pl}}
+ =P_{X,M}^{\Theta,\mathrm{pl}}
+  \prod_{e=0,1,\infty}q_e^{\alpha_e^2/2}
+  \exp E_M(\alpha_0,\alpha_1),
+ \qquad
+ \alpha_\infty=-(\alpha_0+\alpha_1)
+\tag{5.7}
+\]
+
+when all three propagating charges are written as outgoing charges.  The
+bra label in (5.3) is then \(-\alpha_\infty=\alpha_0+\alpha_1\).
+
+Equations (5.5)--(5.7) are the requested direct resummation of the charged
+free-boson state sum.  In particular, \(P_{X,M}\) converges to (5.1) without
+using a period matrix.
+
+The nonchiral charge dependence is a two-dimensional Gaussian.  Define its
+quadratic form directly by
+
+\[
+ \left|
+ \frac{\mathcal F_X^{\Theta,\mathrm{pl}}
+       (\alpha_0,\alpha_1;\mathbf q)}
+      {P_X^{\Theta,\mathrm{pl}}(\mathbf q)}
+ \right|^2
+ =\exp\!\left[-\pi
+ (\alpha_0,\alpha_1)A_\Theta^{\mathrm{pl}}(\mathbf q)
+ \binom{\alpha_0}{\alpha_1}\right].
+\tag{5.8}
+\]
+
+The entries of \(A_\Theta^{\mathrm{pl}}\) are read directly from (5.7), or
+equivalently from its values at charge vectors \((1,0),(0,1),(1,1)\).  With
+completeness measure \(d\alpha_0d\alpha_1\),
+
+\[
+ \mathcal G_X^{\Theta,\mathrm{pl}}
+ =\int_{\mathbb R^2}d^2\alpha\,
+   e^{-\pi\alpha^TA_\Theta^{\mathrm{pl}}\alpha}
+ =\det A_\Theta^{\mathrm{pl}}{}^{-1/2}.
+\tag{5.9}
+\]
+
+No period matrix is used in (5.2)--(5.9).  A rescaling of the momentum
+variable must rescale both \(A_\Theta^{\mathrm{pl}}\) and the completeness
+measure.  This makes visible the otherwise hidden factor-of-two distinction
+between a vertex charge with \(h=\alpha^2/2\) and a commonly used momentum
+variable \(p=\sqrt2\alpha\) with \(h=p^2/4\).
+
+Combining (4.5), (5.1), and (5.9) gives the period-matrix-free plumbing
+formula for one physical free superfield:
+
+\[
+\boxed{
+ Z_{X+\psi}^{\Theta,\mathrm{pl}}
+ =\mathcal G_X^{\Theta,\mathrm{pl}}
+  \left|P_X^{\Theta,\mathrm{pl}}\right|^2
+  \left|\mathcal F_{\psi}^{\Theta,\mathrm{pl}}\right|^2.}
+\tag{5.10}
+\]
+
+The \,\(\widehat c=9\) physical denominator is
+
+\[
+ Z_{\mathrm{free},\widehat c=9}^{\Theta,\mathrm{pl}}
+ =\left(Z_{X+\psi}^{\Theta,\mathrm{pl}}\right)^9.
+\tag{5.11}
+\]
+
+No auxiliary double-Virasoro fermion occurs in (1.1)--(5.11).
+
+\section{Relation to the theta-constant shortcut}
+
+If one separately proves, in precisely this plumbing trivialization and with
+the Human-Note lifts, that
+
+\[
+ \left(\mathcal F_\psi^{\Theta,\mathrm{pl}}\right)^2
+ =\vartheta[\delta](0|\Omega_{\mathrm{native}})
+  P_X^{\Theta,\mathrm{pl}},
+\tag{6.1}
+\]
+
+then (5.10) can be algebraically rewritten in the earlier theta-constant
+form.  Equation (6.1) is not assumed in the construction above.  It is now a
+cross-check between two resummations, so a possible determinant-line or
+marking mistake cannot silently define the physical denominator.
+
+\section{Glasses-channel resummation}
+
+For the glasses edge order \((L,R,B)\), direct chiral sewing gives
+
+\[
+\begin{aligned}
+\mathcal F_\psi^{\mathrm{Gl},\mathrm{pl}}
+={}&\sum_{S_L,S_R,S_B}
+ (-1)^{\pi_B(\pi_L+\pi_R)}
+ \prod_{e=L,R,B}x_e^{2N(S_e)}\\
+&\qquad\times
+ \rho_\psi(S_L,S_B,S_L)
+ \rho_\psi(S_R,S_B,S_R).
+\end{aligned}
+\tag{7.1}
+\]
+
+Each nonzero pants tensor requires an even total number of fermions.  Since
+the self-loop state occurs twice, this forces \(\pi_B=0\).  Thus the explicit
+Human-Note glasses sign in (7.1) is one on the support of the free-Majorana
+tensor.  It has not been discarded before this selection rule is applied.
+
+Let
+
+\[
+ K_{\psi,\Gamma}=K\oplus K,
+ \qquad
+ w_{e,m}=x_e^{2m-1},
+\tag{7.2}
+\]
+
+and put \(\sqrt{w_{e,m}}\) on each of the two half-edges incident on edge
+\(e\); their diagonal matrix is \(D_\psi\).  Let \(J_\psi\) be the
+antisymmetric half-edge pairing matrix.  In the half-edge order
+\((\infty_L,1_L,0_L,\infty_R,1_R,0_R)\), its nonzero edge orientations are
+
+\[
+ J_{\psi,L}=-1,
+ \qquad J_{\psi,R}=-1,
+ \qquad J_{\psi,B}=i.
+\tag{7.3}
+\]
+
+The two minus signs are the self-loop bends.  The bridge phase is the
+coefficient-basis correction: contracting two Grassmann generating functions
+gives \((-1)^{s(s-1)/2}\), while the surviving bridge occupations have even
+\(s\).  Therefore the factor \(i^s=(-1)^{s/2}\) in (7.3) cancels it.  The
+choice \(-i\) gives the same result because odd bridge occupation vanishes.
+The exact cutoff resummation is
+
+\[
+\boxed{
+ \mathcal F_{\psi,M}^{\mathrm{Gl},\mathrm{pl}}
+ =\det\!\left(
+  1+J_\psi D_\psi K_{\psi,\Gamma}D_\psi
+ \right)^{1/2}.}
+\tag{7.4}
+\]
+
+The square-root branch is the one approaching one at the plumbing cusp.
+Equation (7.4) was checked against the literal state sum (7.1), not inferred
+from a theta constant.
+
+For the boson, set \(K_{X,\Gamma}=K_X\oplus K_X\), put
+\(\sqrt{q_e^m}\) on each half-edge in \(D_X\), and let \(J_X\) be the
+symmetric pairing with entry one across all three edges.  Then
+
+\[
+ P_{X,M}^{\mathrm{Gl},\mathrm{pl}}
+ =\det\!\left(1-J_XD_XK_{X,\Gamma}D_X\right)^{-1/2}.
+\tag{7.5}
+\]
+
+For self-loop charges \((\alpha_L,\alpha_R)\), the concatenated source is
+\(\ell_\Gamma=(\ell(\alpha_L,0),\ell(\alpha_R,0))\).  With
+\(j=D_X\ell_\Gamma\), the charged exponent and primary propagation are
+
+\[
+ E_M^{\mathrm{Gl}}
+ =\frac12j^T
+ \left(1-J_XD_XK_{X,\Gamma}D_X\right)^{-1}J_Xj,
+ \qquad
+ q_L^{\alpha_L^2/2}q_R^{\alpha_R^2/2}.
+\tag{7.6}
+\]
+
+The bridge primary is neutral.  Reading the real quadratic form
+\(A_{\mathrm{Gl}}^{\mathrm{pl}}\) from the absolute square of (7.6) gives
+
+\[
+ \mathcal G_X^{\mathrm{Gl},\mathrm{pl}}
+ =\det A_{\mathrm{Gl}}^{\mathrm{pl}}{}^{-1/2},
+\tag{7.7}
+\]
+
+in the displayed \(d\alpha_Ld\alpha_R\) measure.  Hence
+
+\[
+\boxed{
+ Z_{X+\psi}^{\mathrm{Gl},\mathrm{pl}}
+ =\mathcal G_X^{\mathrm{Gl},\mathrm{pl}}
+  \left|P_X^{\mathrm{Gl},\mathrm{pl}}\right|^2
+  \left|\mathcal F_\psi^{\mathrm{Gl},\mathrm{pl}}\right|^2.}
+\tag{7.8}
+\]
+
+Both (5.10) and (7.8) are raw plumbing-frame quantities.  Their numerical
+values should not be equated without the channel-change/Weyl factors that
+belong to the full comparison.
+
+\section{Unpacking every factor in the physical denominator}
+
+The compact notation in (5.10) and (7.8) contains three logically different
+objects.  For one real physical superfield they are
+
+\[
+ \underbrace{\mathcal G_X^{\mathrm{pl}}}_{
+   \text{two physical loop-charge integrals}}
+ \quad\times\quad
+ \underbrace{|P_X^{\mathrm{pl}}|^2}_{
+   \text{nonzero bosonic oscillators}}
+ \quad\times\quad
+ \underbrace{|\mathcal F_\psi^{\mathrm{pl}}|^2}_{
+   \text{physical NS-Majorana oscillators}}.
+\tag{8.1}
+\]
+
+The last factor is the physical partner \(\psi\) of \(X\).  It is not the
+auxiliary Majorana introduced in the double-Virasoro branching identity.
+
+\subsection{Theta graph}
+
+At mode cutoff \(M\), define
+
+\[
+ \Delta_{\psi,\Theta,M}
+ =-D_{(+,+,+),M}+D_{(-,+,+),M}
+   +D_{(+,-,+),M}+D_{(+,+,-),M},
+\tag{8.2}
+\]
+
+where each \(D_{\boldsymbol\sigma,M}\) is the \(3M\)-dimensional determinant
+in (4.3), evaluated in its balanced form (4.6).  Then
+
+\[
+ |\mathcal F_{\psi,M}^{\Theta,\mathrm{pl}}|^2
+ =\frac14|\Delta_{\psi,\Theta,M}|^2.
+\tag{8.3}
+\]
+
+For the physical boson, let
+
+\[
+ B_M=D_MK_{X,M}D_M,
+ \qquad
+ D_M^2=\operatorname{diag}_{(e,m)}(q_e^m).
+\tag{8.4}
+\]
+
+The nonzero-mode factor is therefore
+
+\[
+ |P_{X,M}^{\Theta,\mathrm{pl}}|^2
+ =\left|\det(1-B_M^2)\right|^{-1}.
+\tag{8.5}
+\]
+
+It remains to unpack the zero-mode Gaussian.  Put
+\(u=(\alpha_0,\alpha_1)^T\), and introduce the charge-incidence matrix
+
+\[
+ R_\Theta=
+ \begin{pmatrix}
+  1&0\\0&1\\-1&-1
+ \end{pmatrix},
+ \qquad
+ R_\Theta u=(\alpha_0,\alpha_1,\alpha_\infty)^T.
+\tag{8.6}
+\]
+
+Let \(\Lambda_{\Theta,M}\) be the \(3M\)-by-2 matrix defined by
+\(\ell=\Lambda_{\Theta,M}u\).  Its rows in slot order
+\((\infty,1,0)\) are
+
+\[
+ (\Lambda_{\Theta,M})_{(\infty,m)}
+  =\frac1{\sqrt m}(0,1),\qquad
+ (\Lambda_{\Theta,M})_{(1,m)}
+  =\frac1{\sqrt m}((-1)^{m-1},0),\qquad
+ (\Lambda_{\Theta,M})_{(0,m)}
+  =\frac1{\sqrt m}(0,-1).
+\tag{8.7}
+\]
+
+Writing \(L_{\Theta,M}=D_M\Lambda_{\Theta,M}\), the charged oscillator
+exponent in (5.6) is
+
+\[
+ E_M(u)=u^TH_{\Theta,M}u,
+ \qquad
+ H_{\Theta,M}
+ =L_{\Theta,M}^T(1-B_M)^{-1}L_{\Theta,M}.
+\tag{8.8}
+\]
+
+Here and below only the symmetric part of \(H\) contributes to \(u^THu\).
+Taking the absolute square of the primary propagation and (8.8) gives the
+loop matrix explicitly:
+
+\[
+\boxed{
+ A_{\Theta,M}^{\mathrm{pl}}
+ =-\frac1\pi\left[
+ R_\Theta^T
+ \operatorname{diag}(\log|q_0|,\log|q_1|,\log|q_\infty|)
+ R_\Theta
+ +2\operatorname{Re}\operatorname{Sym}H_{\Theta,M}
+ \right].}
+\tag{8.9}
+\]
+
+Thus the charge integral is not an independent canonical-frame input:
+
+\[
+ \mathcal G_{X,M}^{\Theta,\mathrm{pl}}
+ =\det A_{\Theta,M}^{\mathrm{pl}}{}^{-1/2}.
+\tag{8.10}
+\]
+
+Substituting (8.3), (8.5), and (8.10) completely removes the shorthand from
+the one-superfield answer:
+
+\[
+\boxed{
+ Z_{X+\psi,M}^{\Theta,\mathrm{pl}}
+ =\frac{|\Delta_{\psi,\Theta,M}|^2}
+ {4\,\sqrt{\det A_{\Theta,M}^{\mathrm{pl}}}\,
+  |\det(1-B_M^2)|}.}
+\tag{8.11}
+\]
+
+For nine independent physical superfields,
+
+\[
+\boxed{
+ Z_{\mathrm{free},\widehat c=9,M}^{\Theta,\mathrm{pl}}
+ =2^{-18}
+  \bigl(\det A_{\Theta,M}^{\mathrm{pl}}\bigr)^{-9/2}
+  |\det(1-B_M^2)|^{-9}
+  |\Delta_{\psi,\Theta,M}|^{18}.}
+\tag{8.12}
+\]
+
+All determinants in (8.11)--(8.12) are constructed from the theta plumbing
+coordinates, lifts, and analytic pants kernels.
+
+\subsection{Glasses graph}
+
+Define the two cutoff matrices
+
+\[
+ \mathbb M_{\psi,\mathrm{Gl},M}
+ =1+J_\psi D_\psi K_{\psi,\Gamma,M}D_\psi,
+ \qquad
+ \mathbb M_{X,\mathrm{Gl},M}
+ =1-J_XD_XK_{X,\Gamma,M}D_X.
+\tag{8.13}
+\]
+
+Equations (7.4) and (7.5) then give
+
+\[
+ |\mathcal F_{\psi,M}^{\mathrm{Gl},\mathrm{pl}}|^2
+ =|\det\mathbb M_{\psi,\mathrm{Gl},M}|,
+ \qquad
+ |P_{X,M}^{\mathrm{Gl},\mathrm{pl}}|^2
+ =|\det\mathbb M_{X,\mathrm{Gl},M}|^{-1}.
+\tag{8.14}
+\]
+
+Put \(u=(\alpha_L,\alpha_R)^T\).  Let
+\(\Lambda_{\mathrm{Gl},M}\) be the \(6M\)-by-2 matrix determined by
+
+\[
+ \ell_\Gamma
+ =\bigl(\ell(\alpha_L,0),\ell(\alpha_R,0)\bigr)
+ =\Lambda_{\mathrm{Gl},M}u,
+ \qquad L_{\mathrm{Gl},M}=D_X\Lambda_{\mathrm{Gl},M}.
+\tag{8.15}
+\]
+
+The matrix representing the exponent (7.6) is
+
+\[
+ H_{\mathrm{Gl},M}
+ =\frac12L_{\mathrm{Gl},M}^T
+  \mathbb M_{X,\mathrm{Gl},M}^{-1}J_X
+  L_{\mathrm{Gl},M}.
+\tag{8.16}
+\]
+
+The bridge primary is neutral, so the glasses loop matrix is
+
+\[
+\boxed{
+ A_{\mathrm{Gl},M}^{\mathrm{pl}}
+ =-\frac1\pi\left[
+ \operatorname{diag}(\log|q_L|,\log|q_R|)
+ +2\operatorname{Re}\operatorname{Sym}H_{\mathrm{Gl},M}
+ \right].}
+\tag{8.17}
+\]
+
+Consequently the fully unpacked glasses expressions are
+
+\[
+\boxed{
+ Z_{X+\psi,M}^{\mathrm{Gl},\mathrm{pl}}
+ =\frac{|\det\mathbb M_{\psi,\mathrm{Gl},M}|}
+ {\sqrt{\det A_{\mathrm{Gl},M}^{\mathrm{pl}}}\,
+  |\det\mathbb M_{X,\mathrm{Gl},M}|},}
+\tag{8.18}
+\]
+
+and
+
+\[
+\boxed{
+ Z_{\mathrm{free},\widehat c=9,M}^{\mathrm{Gl},\mathrm{pl}}
+ =\bigl(\det A_{\mathrm{Gl},M}^{\mathrm{pl}}\bigr)^{-9/2}
+  |\det\mathbb M_{\psi,\mathrm{Gl},M}|^9
+  |\det\mathbb M_{X,\mathrm{Gl},M}|^{-9}.}
+\tag{8.19}
+\]
+
+\subsection{Normalization ledger}
+
+Equations (8.11)--(8.19) use the following precise normalization:
+
+\begin{enumerate}
+\item \(XX\sim-\log z\) and \(h(\alpha)=\alpha^2/2\).
+\item The two independent genus-two charges are integrated with
+\(d^2\alpha\), after dividing out the connected target-space volume.
+\item The normalized free-field pants coefficient is one.
+\item The plumbing propagator is \(q^{L_0}\); the common cylinder Casimir
+factor \(q^{-c/24}\) is stripped.
+\item No channel-change Weyl factor, determinant-line trivialization factor, or
+auxiliary double-Virasoro fermion is included.
+\end{enumerate}
+
+If the completeness convention is \(d\alpha/(2\pi)\) for every real charge,
+there are two independent charges for each of nine superfields, and the
+right-hand sides of (8.12) and (8.19) acquire the overall factor
+
+\[
+ (2\pi)^{-18}.
+\tag{8.20}
+\]
+
+If instead the propagator convention includes the cylinder vacuum energy,
+one real \(X+\psi\) superfield has \(c=3/2\).  Its nonchiral multiplier is
+
+\[
+ \prod_{e=1}^3|q_e|^{-c/12}
+ =\prod_{e=1}^3|q_e|^{-1/8},
+\tag{8.21}
+\]
+
+and the nine-superfield multiplier is
+
+\[
+ \prod_{e=1}^3|q_e|^{-9/8}.
+\tag{8.22}
+\]
+
+These optional constants must be applied consistently to both channels;
+they are not hidden inside \(A\), \(P_X\), or \(\mathcal F_\psi\).
+If the Human-Note definition of \(L_e\) already contains the Casimir shift,
+(8.21)--(8.22) must not be inserted a second time.
+
+At the \texttt{\detokenize{o0243-periodmatched}} point, the numerical multiplication of the
+three normalized factors is
+
+\begin{center}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrr}
+\toprule
+\textbf{channel} & \textbf{\(\mathcal G_X\)} & \textbf{\(|P_X|^2\)} & \textbf{\(|\mathcal F_\psi|^2\)} & \textbf{\(Z_{X+\psi}\)} & \textbf{\(Z_{X+\psi}^9\)} \\
+\midrule
+theta & 0.215006349267368 & 1.00000166309736 & 1.00258782998132 & 0.215563107646015 & \(1.00500893632052\,10^{-6}\) \\
+glasses & 1.16308106016403 & 1.33846154450516 & 2.69778130216318 & 4.19974210080833 & \(4.06446695711553\,10^5\) \\
+\bottomrule
+\end{tabular}%
+}
+\end{center}
+
+These are raw plumbing-frame values with the normalization ledger above.
+Their inequality is not a failure of the resummation: the channel-change and
+Weyl factors have deliberately not been applied.
+
+\section{Recomputed \texorpdfstring{\(Q_L\)}{Q L} with the plumbing denominator}
+
+The existing Human-Note-sign super-Liouville numerators at
+\texttt{\detokenize{o0243-periodmatched}} can be reused: changing the
+independent physical free-theory denominator does not change a conformal
+block, structure constant, or momentum-quadrature node.  Replacing the old
+period-matrix shortcut by (8.11) and (8.18), at the common cutoff \(M=24\),
+gives
+
+\begin{center}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{channel} & \textbf{direct \(Z_{X+\psi}^{\rm pl}\)} &
+\textbf{old shortcut} & \textbf{direct/old} &
+\textbf{\(Q_L\) multiplier} \\
+\midrule
+theta & 0.215563107646015 & 0.431128572561718 &
+0.499997266163927 & 512.025195722 \\
+glasses & 4.19974210080833 & 8.39948420161306 &
+0.500000000000214 & 511.999999998 \\
+\bottomrule
+\end{tabular}%
+}
+\end{center}
+
+The factor is fixed by the displayed charge convention.  If
+\(q=\exp(2\pi i\Omega)\), then for \(h(\alpha)=\alpha^2/2\),
+
+\[
+ \int_{\mathbb R^g}d^g\alpha\,
+ e^{-2\pi\alpha^T\operatorname{Im}\Omega\,\alpha}
+ =2^{-g/2}\det(\operatorname{Im}\Omega)^{-1/2}.
+\tag{9.1}
+\]
+
+At \(g=2\), this is the factor \(1/2\) that was absent from the old displayed
+shortcut.  Raising one physical superfield to the ninth power therefore
+multiplies the absolute \(Q_L\) by approximately \(2^9=512\).  The small
+theta displacement from exactly 512 is the previously observed difference
+between the finite plumbing resummation and the shortcut, not a failure of
+the cutoff convergence.
+
+The recomputed values are
+
+\begin{center}
+\small
+\begin{tabular}{rrrr}
+\toprule
+\(R\) & \(N\) & \(Q_L^\Theta/Q_L^{\rm Gl}\) &
+\(Q_L^\Theta/Q_L^{\rm Gl}-1\) \\
+\midrule
+0 & 4 & 1.08934489273 & 0.08934489273 \\
+3 & 4 & 1.08996087620 & 0.08996087620 \\
+4 & 4 & 1.09091076293 & 0.09091076293 \\
+4 & 6 & 1.04478367268 & 0.04478367268 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+For the best local setting \((R,N)=(4,6)\),
+
+\[
+ Q_L^\Theta=7.23725849554\times10^{-12},\qquad
+ Q_L^{\rm Gl}=6.92704019478\times10^{-12}.
+\tag{9.2}
+\]
+
+A subsequent full local rerun of all four \((R,N)\) settings with the direct
+denominator wired into the evaluator reproduced every numerator and every
+recombined \(Q_L\) exactly as stored in
+\texttt{\detokenize{Data Set/ns_genus2_theta_glasses_hatc9_human_note_plumbing_free_2026-08-25.json}}.
+
+Thus the new physical-Majorana and charged-boson plumbing computation
+changes the absolute normalization substantially but does not remove the
+channel discrepancy: the current ratio differs from one by \(4.478\%\).
+The free denominator itself is stable well beyond \(10^{-6}\): from
+\(M=20\) to \(M=24\), the relative changes are below \(3\times10^{-15}\) in
+theta and \(2\times10^{-13}\) in glasses.  The remaining visible movement is in
+the super-Liouville numerator, especially its momentum quadrature.
+
+\section{Audit and removal of the apparent four-percent discrepancy}
+
+The completed corrected-lift calculation at \((R,N)=(24,10)\) first appeared
+to give
+
+\[
+ \frac{Q_L^\Theta}{Q_L^{\rm Gl}}=1.04056522832
+ \tag{10.1}
+\]
+
+after replacing the old denominator by the direct plumbing denominator.
+This is not a free-denominator cutoff effect.  The changes from \(M=20\) to
+\(M=24\) are below \(2\times10^{-13}\), and replacing the direct denominator
+by the old period-matrix shortcut moves (10.1) by only
+\(4.9\times10^{-5}\) relatively.  The available cutoff axes likewise show
+that the \(R=24\) recursion is stable and that the remaining \(N=10\)
+quadrature movement is at the few-times-\(10^{-4}\) scale, not four percent.
+
+The origin is instead a coefficient-convention mismatch at the interface
+between the real BRY super-Liouville data and the graded factorization in the
+Human Note.  This is fixed by comparing definitions, not by fitting (10.1).
+For positive continuum momenta, the implementation
+\texttt{ns\_tilde\_structure\_constant} returns BRY's real coefficient of the
+locally normalized top component
+
+\[
+ W_{\rm BRY}=G_{-1/2}\widetilde G_{-1/2}V,
+ \qquad
+ \langle W_{\rm BRY},W_{\rm BRY}\rangle=+D(2h)^2,
+\]
+
+where $D$ is the matched primary two-point normalization.  The Human Note
+instead sews the ordered tensor state
+
+\[
+ w_{\rm HN}=(G_{-1/2}V)\otimes
+ (\widetilde G_{-1/2}\widetilde V).
+\]
+
+It declares left- and right-moving odd operators to anticommute and uses the
+graded tensor-product BPZ pairing.  Therefore its definition gives directly
+
+\[
+ \langle w_{\rm HN},w_{\rm HN}\rangle_{\rm HN}=-D(2h)^2.
+\]
+
+After matching the primary normalization and the chiral three-form
+normalization, the boundary dictionary is consequently
+
+\[
+ C_{\rm HN}^{(0)}=C_{\rm BRY},\qquad
+ C_{\rm HN}^{(1)}=\sigma i\,\widetilde C_{\rm BRY},
+ \qquad \sigma\in\{+1,-1\}.
+\tag{10.2}
+\]
+
+Thus the BPZ comparison fixes the squared map, but not its square-root branch.
+The implementation chooses \(\sigma=+1\); \(\sigma=-1\) gives the same
+genus-two result because every term contains two pants coefficients.  The odd
+coefficient product supplies
+
+\[
+ (C_{\rm HN}^{(1)})^2=-\widetilde C_{\rm BRY}^{2}
+\]
+
+in theta, and the same minus sign in
+\(C^{(1)}_{LBL}C^{(1)}_{RBR}\) in glasses.  This sign is \emph{not} a change
+to the Human Note.  Its explicit descendant/Koszul sign \((-1)^a\) remains
+exactly as written; (10.2) only converts the imported BRY coefficient into
+that convention before the Human-Note formula is applied.
+
+This scope distinction is essential.  BRY-native Type~0B sphere correlators,
+including the $G,H,J$ formulas and PCO amplitudes, retain the real
+\(\widetilde C_{\rm BRY}\) with no additional $i$.  Equation~(10.2) is
+applied exactly once only when BRY data enter a Human-Note graded sewing sum.
+It is also unrelated to both the physical free Majorana in the denominator
+of \(Q_L\) and the auxiliary Majorana in the double-Virasoro construction.
+The removal of the four-percent discrepancy corroborates this dictionary;
+it is not the argument that determines it.  Fixing \(\sigma\) in an amplitude
+with an odd number of odd pants would require one explicitly ordered
+component matrix element.
+
+The \((24,10)\) shard decomposition makes the diagnosis numerical and
+unambiguous:
+
+\begin{center}
+\small
+\begin{tabular}{lrr}
+\toprule
+channel & even contribution & signed odd contribution before (10.2) \\
+\midrule
+theta & \(7.27241679849612\times10^{-18}\) & \(-2.77708574019467\times10^{-20}\) \\
+glasses & \(2.88444939646816\times10^{-6}\) & \(-6.87808460834071\times10^{-8}\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Inserting (10.2) reverses the displayed odd contributions while retaining
+the Human-Note sewing sign.  With the direct plumbing denominator this gives
+
+\[
+ \begin{aligned}
+ Z_L^\Theta&=7.30018765589807\times10^{-18},&
+ Q_L^\Theta&=7.26380372559184\times10^{-12},\\
+ Z_L^{\rm Gl}&=2.95323024255156\times10^{-6},&
+ Q_L^{\rm Gl}&=7.26597183274289\times10^{-12},
+ \end{aligned}
+\]
+
+and therefore
+
+\[
+ \boxed{\frac{Q_L^\Theta}{Q_L^{\rm Gl}}
+ =0.999701608099,\qquad
+ \frac{Q_L^\Theta}{Q_L^{\rm Gl}}-1
+ =-2.98391901\times10^{-4}.}
+\tag{10.3}
+\]
+
+Thus the convention repair removes \(99.26\%\) of the previous residual.
+It also improves monotonically in the inexpensive local quadrature check:
+
+\begin{center}
+\small
+\begin{tabular}{rrr}
+\toprule
+\(R\) & \(N\) & corrected \(Q_L^\Theta/Q_L^{\rm Gl}-1\) \\
+\midrule
+4 & 4 & \(+4.84740320\times10^{-2}\) \\
+4 & 6 & \(+3.83177997\times10^{-3}\) \\
+4 & 8 & \(+1.40461919\times10^{-3}\) \\
+24 & 10 & \(-2.98391901\times10^{-4}\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The remaining \(2.98\times10^{-4}\) is consistent with the unresolved
+momentum-quadrature tail at \(N=10\); it is no longer evidence for a
+four-percent plumbing, free-theory, or recursion failure.  A fresh common
+\(R=24\), \(N=12\) or higher run is still required before claiming
+\(10^{-6}\) stabilization.
+
+\section{Executable implementation and checks}
+
+The theta and glasses fermion determinants, charged-boson Gaussians, and
+complete one- and nine-superfield expressions are implemented in
+
+\begin{verbatim}
+Code/genus_2/physical_free_plumbing_resummation.py
+\end{verbatim}
+
+The focused test compares (4.5) and (7.4) with direct physical-Majorana
+Fock/Pfaffian sums for three lift assignments.  It also compares (5.6) and
+(7.5) with the independent primitive-word boson products:
+
+\begin{verbatim}
+Code/genus_2/test_physical_free_plumbing_resummation.py
+\end{verbatim}
+
+All eleven focused checks pass.  The implementation reports separately the
+fermion determinant, Heisenberg determinant, charged-boson Schur complement,
+two-by-two loop matrix, one complete superfield, and its ninth power.
+
+The fast production entry point
+
+\begin{verbatim}
+physical_superfield_plumbing_partition
+\end{verbatim}
+
+uses the bosonic Gaussian vacuum determinant directly.  Primitive-word
+enumeration is retained only as an independent test oracle.
+
+At the \texttt{\detokenize{o0243-periodmatched}} plumbing point, using only the listed plumbing
+coordinates and Human-Note lifts, consecutive-cutoff stabilization below
+\(10^{-6}\) occurs at
+
+\begin{center}
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrr}
+\toprule
+\textbf{channel} & \textbf{common determinant cutoff} & \textbf{local time} \\
+\midrule
+theta & \(M=8\) & about 2 ms \\
+glasses & \(M=10\) & about 10 ms \\
+\bottomrule
+\end{tabular}%
+}
+\end{center}
+
+The converged raw ingredients in the \(h=\alpha^2/2\) charge convention are
+
+\paragraph{Theta.}
+\[
+\begin{aligned}
+\mathcal F_\psi&=1.00129307876105-2.01628153784\,10^{-5}i,\\
+P_X&=1.00000083154833-3.00494124702\,10^{-8}i,\\
+\mathcal G_X&=0.215006349267368,\\
+Z_{X+\psi}&=0.215563107646015.
+\end{aligned}
+\]
+
+\paragraph{Glasses.}
+\[
+\begin{aligned}
+\mathcal F_\psi&=1.64249239061865+2.21185456733\,10^{-4}i,\\
+P_X&=1.15691889842888-4.54930513585\,10^{-4}i,\\
+\mathcal G_X&=1.16308106016403,\\
+Z_{X+\psi}&=4.19974210080833.
+\end{aligned}
+\]
+
+The timings are single-process local timings after import and are meant only
+to show the computational order.  The production determinant computation
+scales as \(O(M^3)\); primitive-word enumeration is no longer part of the
+production denominator.
+\end{document}

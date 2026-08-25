@@ -1,0 +1,131 @@
+{
+  "accuracy": {
+    "gate": "maximum of production QMC standard error and two-sigma paired discretization bounds",
+    "maximum_imaginary_leakage": 1e-08,
+    "quantity": "absolute Q5 on omega=i t",
+    "require_every_point": true,
+    "target": 0.001
+  },
+  "blinding": {
+    "comparison_allowed_only_after_freeze_manifest": true,
+    "comparison_code_staged_with_workers": false,
+    "worldsheet_workers_receive_target_formula": false
+  },
+  "campaign": "sphere_six_point_1to5_cannon_blind50_v1",
+  "cluster": {
+    "array_cap": 450,
+    "assembly_wall_time": "00:30:00",
+    "campaign_target_wall_time": "12:00:00",
+    "cpus_per_worker": 1,
+    "launch_all_tasks_concurrently": true,
+    "memory_per_worker": "6G",
+    "partition": "serial_requeue",
+    "validation_wall_time": "00:20:00",
+    "worker_wall_time": "10:00:00"
+  },
+  "kinematics": {
+    "first_residue_wall": 0.3333333333333333,
+    "omega": "i t",
+    "t_max": 0.325,
+    "t_min": 0.18,
+    "t_points": [
+      0.18,
+      0.182959183673,
+      0.185918367347,
+      0.18887755102,
+      0.191836734694,
+      0.194795918367,
+      0.197755102041,
+      0.200714285714,
+      0.203673469388,
+      0.206632653061,
+      0.209591836735,
+      0.212551020408,
+      0.215510204082,
+      0.218469387755,
+      0.221428571429,
+      0.224387755102,
+      0.227346938776,
+      0.230306122449,
+      0.233265306122,
+      0.236224489796,
+      0.239183673469,
+      0.242142857143,
+      0.245102040816,
+      0.24806122449,
+      0.251020408163,
+      0.253979591837,
+      0.25693877551,
+      0.259897959184,
+      0.262857142857,
+      0.265816326531,
+      0.268775510204,
+      0.271734693878,
+      0.274693877551,
+      0.277653061224,
+      0.280612244898,
+      0.283571428571,
+      0.286530612245,
+      0.289489795918,
+      0.292448979592,
+      0.295408163265,
+      0.298367346939,
+      0.301326530612,
+      0.304285714286,
+      0.307244897959,
+      0.310204081633,
+      0.313163265306,
+      0.31612244898,
+      0.319081632653,
+      0.322040816327,
+      0.325
+    ]
+  },
+  "paired_systematics": {
+    "base_seed": 2026088300,
+    "configurations": [
+      {
+        "block_order": 6,
+        "momentum_base_order": 10,
+        "momentum_maximum": 5.0,
+        "name": "reference"
+      },
+      {
+        "block_order": 8,
+        "momentum_base_order": 10,
+        "momentum_maximum": 5.0,
+        "name": "block_order_plus_two"
+      },
+      {
+        "block_order": 6,
+        "momentum_base_order": 12,
+        "momentum_maximum": 5.0,
+        "name": "momentum_order_plus_two"
+      },
+      {
+        "block_order": 6,
+        "momentum_base_order": 12,
+        "momentum_maximum": 6.0,
+        "name": "momentum_cutoff_plus_one"
+      }
+    ],
+    "replicates": 4,
+    "sobol_power": 10
+  },
+  "production": {
+    "base_seed": 2026082300,
+    "block_order": 6,
+    "momentum_base_order": 10,
+    "momentum_edge_orders": [
+      10,
+      11,
+      12
+    ],
+    "momentum_maximum": 5.0,
+    "momentum_power": 1.25,
+    "radial_power": 0.2,
+    "replicates": 8,
+    "sobol_power": 15
+  },
+  "status": "worldsheet_only_matrix_formula_absent"
+}

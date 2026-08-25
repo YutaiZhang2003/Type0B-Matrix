@@ -22,7 +22,7 @@ export OPENBLAS_NUM_THREADS=1
 export MKL_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 export PYTHONUNBUFFERED=1
-export PYTHONPATH="${NS_G2_ROOT}/Code:${NS_G2_ROOT}/Code/python${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH="${NS_G2_ROOT}/Code:${NS_G2_ROOT}/Code/genus_2_cross_channel${PYTHONPATH:+:${PYTHONPATH}}"
 
 first=$((NS_G2_TASK_START + SLURM_ARRAY_TASK_ID * NS_G2_TASKS_PER_CHUNK))
 last=$((first + NS_G2_TASKS_PER_CHUNK - 1))
@@ -31,7 +31,7 @@ if ((last > NS_G2_TASK_END)); then
 fi
 
 for ((task_index = first; task_index <= last; task_index++)); do
-  "${NS_G2_PYTHON}" Code/ns_genus2_cannon.py \
+  "${NS_G2_PYTHON}" Code/c_Recursion/ns_genus2_cannon.py \
     --config "${NS_G2_CONFIG}" \
     worker \
     --output-dir "${NS_G2_SHARDS}" \

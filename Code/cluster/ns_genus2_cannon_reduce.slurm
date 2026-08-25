@@ -20,9 +20,9 @@ export OMP_NUM_THREADS=1
 export OPENBLAS_NUM_THREADS=1
 export MKL_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
-export PYTHONPATH="${NS_G2_ROOT}/Code:${NS_G2_ROOT}/Code/python${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH="${NS_G2_ROOT}/Code/c_Recursion:${NS_G2_ROOT}/Code/genus_2:${NS_G2_ROOT}/Code:${NS_G2_ROOT}/Code/genus_2_cross_channel${PYTHONPATH:+:${PYTHONPATH}}"
 
-"${NS_G2_PYTHON}" Code/ns_genus2_cannon.py \
+"${NS_G2_PYTHON}" Code/c_Recursion/ns_genus2_cannon.py \
   --config "${NS_G2_CONFIG}" \
   reduce \
   --shard-dir "${NS_G2_SHARDS}" \

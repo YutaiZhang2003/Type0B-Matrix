@@ -36,7 +36,8 @@ if [[ ${ARRAY_CAP} -le 0 || ${ARRAY_CAP} -gt ${SHARD_COUNT} ]]; then
   exit 2
 fi
 
-"${TYPE0B_PYTHON}" "${TYPE0B_ROOT}/super_liouville_torus_modular_cluster.py" \
+PYTHONPATH="${TYPE0B_ROOT}${PYTHONPATH:+:${PYTHONPATH}}" \
+  "${TYPE0B_PYTHON}" "${TYPE0B_ROOT}/h_recursion/super_liouville_torus_modular_cluster.py" \
   --config "${CONFIG_SNAPSHOT}" \
   plan \
   --shard-count "${SHARD_COUNT}"

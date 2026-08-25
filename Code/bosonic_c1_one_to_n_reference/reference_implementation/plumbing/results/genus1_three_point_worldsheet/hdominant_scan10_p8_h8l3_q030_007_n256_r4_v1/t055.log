@@ -1,0 +1,16 @@
+COMMAND nice -n 5 /Library/Developer/CommandLineTools/usr/bin/python3 plumbing/smoke_genus1_three_point_channel_atlas.py --t 0.55 --momentum-order 8 --necklace-order 8 --necklace-low-order 3 --necklace-backend regulated-h-recursion --c-regulator 0.025 --coefficient-workers 2 --necklace-qhat-threshold 0.30 --necklace-second-qhat-threshold 0.07 --ope-order 6 --ope-loop-order 4 --ope-low-loop-order 2 --sobol-power 8 --replicates 4 --seed 17051301 --alpha 0.3 --patch-epsilon 0.15 --triple-patch-epsilon 0.10 --tail-proposal-exponent 1.5 --dps 24 --bank-cache plumbing/results/genus1_three_point_worldsheet/hdominant_scan10_p8_h8l3_q030_007_n256_r4_v1/t055_ope_banks.npz --necklace-bank-cache plumbing/results/genus1_three_point_worldsheet/hdominant_scan10_p8_h8l3_q030_007_n256_r4_v1/t055_necklace_banks.npz --prepare-necklace-first --output plumbing/results/genus1_three_point_worldsheet/hdominant_scan10_p8_h8l3_q030_007_n256_r4_v1/t055.json
+nice: setpriority: Operation not permitted
+Traceback (most recent call last):
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/smoke_genus1_three_point_channel_atlas.py", line 344, in <module>
+    run(parser().parse_args())
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/smoke_genus1_three_point_channel_atlas.py", line 183, in run
+    necklace.prepare(checkpoint_path=args.necklace_bank_cache)
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/genus1_three_point_worldsheet.py", line 386, in prepare
+    self._banks[edge] = self._build_bank(edge)
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/genus1_three_point_worldsheet.py", line 321, in _build_bank
+    with concurrent.futures.ProcessPoolExecutor(
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/process.py", line 586, in __init__
+    _check_system_limits()
+  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/concurrent/futures/process.py", line 536, in _check_system_limits
+    nsems_max = os.sysconf("SC_SEM_NSEMS_MAX")
+PermissionError: [Errno 1] Operation not permitted

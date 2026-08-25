@@ -13,7 +13,15 @@ P_3=\frac{17}{31}.
 Run
 
 ```sh
-python3 python/ramond_torus_limit_check/check_torus_limit.py
+python3 Code/ramond_torus_limit_check/check_torus_limit.py
+```
+
+For the conditioning-independent certification run, use
+
+```sh
+python3 Code/ramond_torus_limit_check/check_torus_limit.py \
+  --mp-dps 50 \
+  --output /tmp/ramond_torus_limit_q6_mp50.json
 ```
 
 The code keeps the two spin parities on the surviving Ramond edges separate,
@@ -44,6 +52,11 @@ Ramond branch labels are
 \[
 n=\pm\frac14,\ \pm\frac34,\ \pm\frac54,\ \pm\frac74.
 \]
+
+Negative labels are normalized by the reflection rules in `SCblock.tex`, not
+by inserting a negative label into the positive-chart product formula. The
+Ward solve is split into the two disconnected Ramond reflection components;
+combining them into one matrix introduces artificial near-null directions.
 
 `results.json` contains the direct SCA series, the auxiliary-fermion series,
 the convolved enlarged series, the double-Virasoro series, every coefficient
@@ -76,6 +89,12 @@ The largest relative discrepancies are (4.21\times10^{-7}) and
 (4.55\times10^{-7}), respectively. They are consistent with the numerical
 conditioning of the finite Ward and Gram systems. The full run took 3.57
 seconds internally on the recorded machine.
+
+The 50-digit component-wise run sharpens this to maximum absolute errors
+\(1.97\times10^{-10}\) in both sectors and maximum relative errors
+\(5.20\times10^{-12}\) and \(5.21\times10^{-12}\). This confirms that the
+larger discrepancies in the recorded complex128 run are numerical rather
+than a residual NS--R--R sign mismatch.
 
 The phase that resolves the earlier apparent failure is
 

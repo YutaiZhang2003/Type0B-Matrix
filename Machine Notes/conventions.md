@@ -247,6 +247,72 @@ momentum is reflected; reflecting the NS momentum changes the sign of both
 \(C_{\rm even},C_{\rm odd}\); reflecting a Ramond momentum exchanges the
 even and odd coefficients.
 
+### 4.1 Global scope rule: BRY coefficients versus the Human-Note graded basis
+
+This distinction applies to every Type 0B computation in this repository.
+BRY define the real number \(\widetilde C_{\rm BRY}\) as the coefficient of
+their locally normalized nonchiral top component
+
+\[
+W_{\rm BRY}=G_{-1/2}\widetilde G_{-1/2}V,
+\qquad
+\langle W_{\rm BRY}W_{\rm BRY}\rangle
+=+D(2h)^2,
+\]
+
+where \(D\) is the matched primary two-point normalization.  The Human Note
+instead sews the ordered graded tensor state
+
+\[
+w_{\rm HN}=(G_{-1/2}V)\otimes
+            (\widetilde G_{-1/2}\widetilde V).
+\]
+
+Its declaration that left- and right-moving odd operators anticommute,
+together with its graded tensor-product BPZ rule, gives directly
+
+\[
+\langle w_{\rm HN},w_{\rm HN}\rangle_{\rm HN}
+=-D(2h)^2.
+\]
+
+Thus, after matching the primary and chiral three-form normalizations, the
+two odd pants coefficients obey
+
+\[
+\boxed{
+C_{\rm HN}^{(0)}=C_{\rm BRY},\qquad
+C_{\rm HN}^{(1)}=\sigma i\,\widetilde C_{\rm BRY},\qquad
+\sigma\in\{+1,-1\}.}
+\]
+
+The BPZ comparison fixes the invariant statement
+
+\[
+\bigl(C_{\rm HN}^{(1)}\bigr)^2=-\widetilde C_{\rm BRY}^{2}.
+\]
+
+It does **not** select \(\sigma\).  The implementation uses \(\sigma=+1\)
+as its square-root branch.  A process containing an odd number of odd pants
+coefficients would require one explicitly ordered component matrix element
+to fix that branch; a genus-two vacuum graph with two pants cannot do so.
+
+Apply this conversion exactly once, and only at a BRY-to-Human-Note sewing
+boundary:
+
+- BRY-native sphere formulas, including \(G,H,J\), PCO amplitudes, and their
+  real \(C,\widetilde C\) products, keep \(\widetilde C_{\rm BRY}\) with no
+  additional \(i\).
+- A Human-Note graded descendant sum first converts the imported odd pants
+  coefficient by the boxed formula and then applies the Human Note's own
+  descendant/Koszul signs unchanged.
+- The phase has nothing to do with either the physical free Majorana in a
+  Type 0B denominator or the auxiliary Majorana in the double-Virasoro
+  construction.
+
+The genus-two numerical agreement is a check of this dictionary, not its
+derivation; the derivation is the direct BPZ-normalization comparison above.
+
 ## 5. Matrix quantum mechanics and exact scattering dictionary
 
 BRY use

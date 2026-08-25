@@ -1,0 +1,78 @@
+{
+  "description": "Worldsheet-only sphere five-point scan on the convergent imaginary-energy ray; no matrix-model values were used.",
+  "conventions": {
+    "outgoing_energy": "omega = i t",
+    "incoming_energy": "4 omega",
+    "raw_integral": "I_5 = integral d^2z_1 d^2z_2 <five matter primaries>",
+    "xi_amplitude": "mu^3 A_{1->4}^{tree} = i I_5/(4 pi^2)",
+    "reduced_amplitude": "Q(omega)=I_5/(16 pi^2 omega^5)"
+  },
+  "common_numerics": {
+    "momentum_maximum": 6.0,
+    "momentum_order": 16,
+    "momentum_panels": 1,
+    "radial_power": 0.15,
+    "replicates": 4,
+    "block_scheme_dense_scan": "c recursion, independently checked against h recursion",
+    "sobol_seed": 3201
+  },
+  "dense_scans": {
+    "4": {
+      "sobol_power": 9,
+      "points": [
+        {"t": 0.18, "Q_real": 0.35791414554053713, "Q_standard_error": 0.0019472879482516604},
+        {"t": 0.22, "Q_real": 0.13384991674261548, "Q_standard_error": 0.0008456737102369499},
+        {"t": 0.26, "Q_real": -0.03822255279087424, "Q_standard_error": 0.00026114630268821555},
+        {"t": 0.30, "Q_real": -0.15939192616152434, "Q_standard_error": 0.0011948604017957853},
+        {"t": 0.34, "Q_real": -0.23019770566489065, "Q_standard_error": 0.0019207330022301735}
+      ]
+    },
+    "6": {
+      "sobol_power": 10,
+      "points": [
+        {"t": 0.14, "raw_integral_imag": 0.005454478596847999, "raw_standard_error_imag": 3.1760697428394635e-06, "Q_real": 0.6422340621472322, "Q_standard_error": 0.0003739642820828813},
+        {"t": 0.18, "raw_integral_imag": 0.01075534078846271, "raw_standard_error_imag": 1.1596362173004842e-05, "Q_real": 0.3604474207741387, "Q_standard_error": 0.00038863285858000443},
+        {"t": 0.22, "raw_integral_imag": 0.010953984971314478, "raw_standard_error_imag": 1.3947123621674108e-05, "Q_real": 0.13459812454764455, "Q_standard_error": 0.00017137659830897286},
+        {"t": 0.26, "raw_integral_imag": -0.00720323486359642, "raw_standard_error_imag": 9.732183079033525e-06, "Q_real": -0.03839203275115939, "Q_standard_error": 5.187090225237843e-05},
+        {"t": 0.30, "raw_integral_imag": -0.061366362330645005, "raw_standard_error_imag": 9.216260305783353e-05, "Q_real": -0.15992058814726137, "Q_standard_error": 0.0002401755151589155},
+        {"t": 0.34, "raw_integral_imag": -0.1655283031491781, "raw_standard_error_imag": 0.00028050679612072195, "Q_real": -0.23070550086346758, "Q_standard_error": 0.00039095707298053746}
+      ]
+    },
+    "8": {
+      "sobol_power": 9,
+      "points": [
+        {"t": 0.18, "Q_real": 0.3602977060816001, "Q_standard_error": 0.0015126748210774808},
+        {"t": 0.22, "Q_real": 0.1347406383355277, "Q_standard_error": 0.0006613857485869628},
+        {"t": 0.26, "Q_real": -0.03847587302126365, "Q_standard_error": 0.00020397886639758885},
+        {"t": 0.30, "Q_real": -0.16044213729695825, "Q_standard_error": 0.0009372769094442783},
+        {"t": 0.34, "Q_real": -0.231706842160936, "Q_standard_error": 0.0015111956426251175}
+      ]
+    }
+  },
+  "h_recursion_anchors": [
+    {
+      "t": 0.18,
+      "block_order": 6,
+      "momentum_order": 14,
+      "sobol_power": 8,
+      "h_raw_integral_imag": 0.010742817670495761,
+      "c_raw_integral_imag": 0.01074281767233658
+    },
+    {
+      "t": 0.26,
+      "block_order": 6,
+      "momentum_order": 16,
+      "sobol_power": 9,
+      "h_Q_real": -0.038319083394595575,
+      "c_Q_real": -0.038319083399522946
+    },
+    {
+      "t": 0.34,
+      "block_order": 6,
+      "momentum_order": 16,
+      "sobol_power": 9,
+      "h_Q_real": -0.2308109633980079,
+      "c_Q_real": -0.2308109634260145
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "status": "sphere_1to5_imaginary_ray_cubic_fit_frozen_for_separate_comparison",
+  "program": "sphere_six_point_imaginary_ray_fit.py",
+  "source_worldsheet_points": "worldsheet_imaginary_ray_points_frozen.json",
+  "source_worldsheet_points_sha256": "eeb8243db391dbae895b52823b25bf93ac8168b962e31e79ab062302cb054d6b",
+  "target_information_used": false,
+  "fit_ansatz": "Q_5(i*t)=a+b*t+c*t^2+d*t^3",
+  "fit_degree_assumption": "degree three is an explicit analytic ansatz and no target coefficient is present in this program",
+  "primary_fit": {
+    "number_of_points": 16,
+    "degree": 3,
+    "weighting": "generalized least squares: diagonal QMC covariance plus one fully correlated additive discretization nuisance",
+    "coefficients_in_t": [
+      6.331582504679437,
+      -58.91205388826323,
+      164.86491188609426,
+      -142.96916925625098
+    ],
+    "coefficient_standard_errors": [
+      0.37817456822162426,
+      4.886904902481722,
+      20.782877820934267,
+      28.967908160119784
+    ],
+    "coefficient_covariance": [
+      [
+        0.14301600404961193,
+        -1.8457625928515478,
+        7.8198506385329996,
+        -10.832478090674385
+      ],
+      [
+        -1.8457625928523675,
+        23.881839525899885,
+        -101.43476161005948,
+        140.85394329863416
+      ],
+      [
+        7.819850638539978,
+        -101.43476161010472,
+        431.9280105198815,
+        -601.2782529452379
+      ],
+      [
+        -10.83247809068879,
+        140.853943298758,
+        -601.2782529454972,
+        839.1397031731344
+      ]
+    ],
+    "residuals": [
+      0.059841130122586184,
+      0.023942570922997786,
+      0.006697542116167354,
+      0.0018417496926499688,
+      8.845155717113196e-05,
+      -9.474000755912287e-05,
+      -4.584106580121823e-05,
+      2.1851249798645125e-05,
+      0.000209557137266822,
+      0.0004828543199107138,
+      0.0008976805774377761,
+      0.00023444583297460575,
+      -0.002210137316933647,
+      -0.0037720311501902026,
+      -0.0005393977857263144,
+      0.002258596513800115
+    ],
+    "chi_squared": 1.134084212838876,
+    "degrees_of_freedom": 12,
+    "maximum_absolute_residual": 0.059841130122586184,
+    "rms_residual": 0.01625599704571278
+  },
+  "diagonal_combined_error_sensitivity_fit": {
+    "number_of_points": 16,
+    "degree": 3,
+    "weighting": "sensitivity: QMC and discretization combined independently at every t",
+    "coefficients_in_t": [
+      6.360152069406085,
+      -59.234326131831295,
+      166.04756971983838,
+      -144.38683015680334
+    ],
+    "coefficient_standard_errors": [
+      0.4054543011247286,
+      5.198803598273851,
+      21.94886662728831,
+      30.401761113373283
+    ],
+    "coefficient_covariance": [
+      [
+        0.16439319030054206,
+        -2.1046842447221787,
+        8.845453540102818,
+        -12.162983135912407
+      ],
+      [
+        -2.1046842447260037,
+        27.027558853425134,
+        -113.93434707502162,
+        157.11874928530057
+      ],
+      [
+        8.845453540135235,
+        -113.93434707523079,
+        481.7527462224906,
+        -666.3093262564207
+      ],
+      [
+        -12.162983135978944,
+        157.11874928586946,
+        -666.3093262576031,
+        924.2670787946158
+      ]
+    ],
+    "residuals": [
+      0.05709964746519802,
+      0.0221910414797436,
+      0.0057004154052998635,
+      0.0012308733669677274,
+      -0.0002195985728201122,
+      -0.000280002996572902,
+      -0.00014564512127282665,
+      -3.929313407918626e-05,
+      0.00021793274485031044,
+      0.0005642078744561296,
+      0.0010826235516298022,
+      0.00048687262823476907,
+      -0.002019780288876838,
+      -0.0037052497543955676,
+      -0.0005896501640062501,
+      0.002165899942837002
+    ],
+    "chi_squared": 1.0260802470021129,
+    "degrees_of_freedom": 12,
+    "maximum_absolute_residual": 0.05709964746519802,
+    "rms_residual": 0.015434525768671837
+  },
+  "unweighted_sensitivity_fit": {
+    "weighting": "unweighted ordinary least squares sensitivity",
+    "coefficients_in_t": [
+      7.05086257256816,
+      -67.66480204264542,
+      199.6547675530481,
+      -188.22656050792042
+    ],
+    "coefficient_standard_errors_from_residual_scatter": [
+      0.11201526040529673,
+      1.565566419087399,
+      7.098473590607341,
+      10.412344363159216
+    ],
+    "maximum_absolute_residual": 0.008250914369653306,
+    "rms_residual": 0.004597522724639377
+  }
+}

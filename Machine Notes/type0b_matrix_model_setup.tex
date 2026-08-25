@@ -353,13 +353,56 @@ Writing $z_{ij}=z_i-z_j$, the two independent NS three-point functions are
   |z_{13}|^{2(h_1+h_3-h_2)}
   |z_{23}|^{2(h_2+h_3-h_1)}},
  \label{eq:ns-primary-three-point}\\
- \left\langle W_{P_1}(z_1)V_{P_2}(z_2)V_{P_3}(z_3)\right\rangle
- &=\frac{\widetilde C(P_1,P_2,P_3)}
+\left\langle W_{P_1}(z_1)V_{P_2}(z_2)V_{P_3}(z_3)\right\rangle
+&=\frac{\widetilde C(P_1,P_2,P_3)}
  {|z_{12}|^{2(h_1+h_2-h_3+1/2)}
   |z_{13}|^{2(h_1+h_3-h_2+1/2)}
-  |z_{23}|^{2(h_2+h_3-h_1-1/2)}}.
+ |z_{23}|^{2(h_2+h_3-h_1-1/2)}}.
  \label{eq:ns-top-three-point}
 \end{align}
+\paragraph{Convention boundary for all Type~0B calculations.}
+Equations~\eqref{eq:top-ns-two-point} and
+\eqref{eq:ns-top-three-point} define the BRY-native coefficient
+$\widetilde C_{\rm BRY}$.  It is real for positive continuum momenta and is
+used directly, with no extra factor of $i$, in BRY-native sphere correlators,
+PCO formulas, and the $G,H,J$ decompositions below.  This is different from
+importing the same data into the graded sewing basis of the separate Human
+Note.  If $D$ denotes the matched primary two-point normalization, the raw
+ordered Human-Note state
+\begin{equation}
+ w_{\rm HN}=(G_{-1/2}V)\otimes
+ (\widetilde G_{-1/2}\widetilde V)
+ \label{eq:hn-raw-top-state}
+\end{equation}
+has
+\begin{equation}
+ \langle w_{\rm HN},w_{\rm HN}\rangle_{\rm HN}
+ =-D(2h)^2,
+ \qquad
+ \langle W_{\rm BRY},W_{\rm BRY}\rangle_{\rm BRY}
+ =+D(2h)^2.
+ \label{eq:bry-hn-top-bpz-comparison}
+\end{equation}
+The minus sign follows directly from the Human Note's mutually
+anticommuting left/right odd operators and its graded tensor-product BPZ
+rule.  Consequently the pants dictionary at that interface is
+\begin{equation}
+ C_{\rm HN}^{(0)}=C_{\rm BRY},\qquad
+ C_{\rm HN}^{(1)}=\sigma i\,\widetilde C_{\rm BRY},
+ \qquad \sigma=\pm1,
+ \label{eq:bry-hn-pants-dictionary}
+\end{equation}
+and the convention-independent content is
+$(C_{\rm HN}^{(1)})^2=-\widetilde C_{\rm BRY}^{2}$.  The code takes
+$\sigma=+1$ as a square-root branch.  A two-pants genus-two vacuum amplitude
+cannot distinguish it from $\sigma=-1$; fixing that sign for an odd number
+of odd pants requires an explicitly ordered component matrix element.  The
+conversion is made exactly once at a BRY-to-Human-Note sewing boundary.  It
+does not modify the Human Note's descendant signs and is unrelated to both
+the physical free Majorana denominator and the auxiliary double-Virasoro
+Majorana.  Numerical genus-two agreement checks this direct BPZ dictionary;
+it is not used to infer it.
+
 For two Ramond fields and one NS field, let $h_i^{\rm R}$ denote the
 Ramond weights.  The nonzero equal-family correlators are
 \begin{equation}

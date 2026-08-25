@@ -1,0 +1,106 @@
+{
+  "conventions": {
+    "block_method": "functional fixed-weight c-recursion with finite global osp(1|2) leaves",
+    "central_charge": 13.5,
+    "external_components": "five bottom NS primaries",
+    "hat_c": 9.0,
+    "spectral_measure": "prod_e dP_e/pi",
+    "vertex_sector_rule": "even total; C for 0 and tilde C for 1",
+    "weight": "h(P)=(1+P^2)/2"
+  },
+  "frames": {
+    "left": {
+      "covariance_factor": 0.12628968712068464,
+      "order": [0, 1, 2, 3, 4],
+      "q_values": [[0.48717948717948717, 0.0], [0.052631578947368425, 0.0]]
+    },
+    "right": {
+      "covariance_factor": 0.15362229438702713,
+      "order": [2, 1, 0, 3, 4],
+      "q_values": [[0.5128205128205129, 0.0], [-0.05555555555555556, 0.0]]
+    }
+  },
+  "four_point_control": {
+    "global_max_twice_levels": [20],
+    "left_physical": 0.07762053515262507,
+    "left_q": 0.49999999999999994,
+    "momenta": [0.5, 0.3333333333333333, 0.25, 0.6],
+    "p_max": 5.0,
+    "points": [0.0, 0.6666666666666666, 1.0, 2.0],
+    "quadrature_order": 20,
+    "recursion_max_twice_level": 8,
+    "relative_residual": 3.777061700237512e-05,
+    "right_physical": 0.0776176033771203,
+    "right_q": 0.5
+  },
+  "generated_utc": "2026-08-25T04:08:12+00:00",
+  "parameters": {
+    "block_working_precision": 65,
+    "momenta": [0.5, 0.3333333333333333, 0.25, 0.6, 0.4],
+    "p_max": 3.0,
+    "points": [0.0, 0.05, 0.1, 1.0, 2.0],
+    "quadrature_orders_by_edge": [8, 9],
+    "structure_precision": 30
+  },
+  "momentum_quadrature_check": {
+    "fixed_block_cutoffs": {
+      "global_max_twice_levels": [14, 6],
+      "recursion_max_twice_level": 6
+    },
+    "p_max": 3.0,
+    "rows": [
+      {
+        "left_physical": 1.7876015639190206,
+        "quadrature_orders_by_edge": [8, 9],
+        "relative_residual": 0.001823513776116591,
+        "right_physical": 1.7843418478410067
+      },
+      {
+        "left_physical": 1.7794394439155694,
+        "quadrature_orders_by_edge": [10, 11],
+        "relative_residual": 0.0014268756762623445,
+        "right_physical": 1.7769004050556645
+      },
+      {
+        "left_physical": 1.7787415068842989,
+        "quadrature_orders_by_edge": [12, 13],
+        "relative_residual": 0.0012331931104866728,
+        "right_physical": 1.7765479751126725
+      }
+    ]
+  },
+  "rows": [
+    {
+      "absolute_residual": 0.007322639006513754,
+      "global_max_twice_levels": [10, 4],
+      "left_physical": [1.7830171749966581, -5.45821873153094e-32],
+      "left_standard": [14.118470127277895, -4.32198293936303e-31],
+      "recursion_max_twice_level": 4,
+      "relative_residual": 0.004106880802495623,
+      "right_physical": [1.7756945359901444, -3.002015479287036e-32],
+      "right_standard": [11.558833586462146, -1.9541535239175194e-31]
+    },
+    {
+      "absolute_residual": 0.0032597160780138967,
+      "global_max_twice_levels": [14, 6],
+      "left_physical": [1.7876015639190206, -5.469801034668161e-32],
+      "left_standard": [14.154770707530197, -4.331154157853858e-31],
+      "recursion_max_twice_level": 6,
+      "relative_residual": 0.001823513776116591,
+      "right_physical": [1.7843418478410067, -3.0174905338704933e-32],
+      "right_standard": [11.615123019485955, -1.9642269671278326e-31]
+    },
+    {
+      "absolute_residual": 0.0014213325640790586,
+      "global_max_twice_levels": [18, 8],
+      "left_physical": [1.7897451056875013, -5.47583782743091e-32],
+      "left_standard": [14.171743920603664, -4.335934273238086e-31],
+      "recursion_max_twice_level": 8,
+      "relative_residual": 0.0007941536253192194,
+      "right_physical": [1.7883237731234223, -3.024792174852185e-32],
+      "right_standard": [11.641043249998745, -1.9689799497667302e-31]
+    }
+  ],
+  "scope": "Type-0B NS Liouville sphere five-point matter crossing",
+  "verdict": "The independently assembled channels converge toward one another as the recursion and global-series cutoffs increase. The final number is an observed finite-cutoff residual, not a certified infinite-order error bound."
+}

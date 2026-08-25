@@ -1,0 +1,251 @@
+exit_code=0
+python=/Library/Developer/CommandLineTools/usr/bin/python3
+
+RUN plumbing/audit_genus0_one_to_two_amplitude_checks.py
+genus-zero 1->2 amplitude checks passed
+RUN plumbing/liouville_torus_checks.py
+Upsilon_b identities
+  reflection error: 0.000000e+00
+  b-shift error:    9.860761e-32
+  integer-shift recurrence error: 2.822315e-29
+
+Upsilon_b strip-edge stability
+  dps=24 to dps=40 relative error: 3.161963e-25
+  centered continuity error:       5.981190e-10
+  canonical-boundary residual:    3.207872e-11
+
+b=1 Barnes-G Upsilon specialization
+  largest strip-integral relative error: 1.751623e-46
+  shift error:                         4.379058e-47
+  reflection error:                    0.000000e+00
+  normalization error:                 0.000000e+00
+  BRY vertex relative error:            0.000000e+00
+
+b=1 combined-log DOZZ evaluation
+  product-vs-log relative error through P=10000: 6.129463e-64
+  one-exponential relative error:             6.129463e-64
+  integer-shift recurrence error:             1.033281e-67
+  binary64 compatibility error:               0.000000e+00
+
+DOZZ convention conversion
+  relative error: 0.000000e+00
+
+BRY equation (2.9) at generic b=1 momenta
+  largest relative error: 1.600790e-16
+
+BRY equation (2.5) cosmological prefactor
+  relative error: 6.337860e-16
+
+Balthazar-Rodriguez-Yin b=1 normalization
+  C(P1+P2,P1,P2): (0.12512+0j)
+  expected:        0.12512
+
+resonant b guard
+  expected guard: the generic Zamolodchikov recursion is resonant at this b through order 2; p*b+ell/b vanishes for (p,ell)=(1,-1). Use a nearby b regulator and extrapolate, or implement the analytic collision limit.
+
+Liouville torus one-point sample
+  coarse: (0.008360846041268608+0j)
+  fine:   (0.008350694734147979+0j)
+  |fine-coarse|: 1.015131e-05
+
+torus plumbing S/T modular sample
+  tau plumbing error mod Z: 0.000000e+00
+  S tau error mod Z:       2.618456e-16
+  S relative error:        5.799351e-06
+  T lift difference:       np.complex128(-1+0j)
+  T relative error:        0.000000e+00
+
+raw q^h torus normalization guard
+  HJS stripped S relative error: 2.732508e-05
+  raw q^h S relative error:      8.771636e-01
+  threshold ratio:               (0.12283976498448397+0j)
+  predicted threshold ratio:     0.12283976498448397
+
+all Liouville torus checks passed
+RUN plumbing/ccy_sphere_four_point_checks.py
+sphere four-point CCY c-recursion vs direct descendant sum
+  case 1: max coefficient error=2.114e-15, pointwise error=2.475e-16
+    level 0: CCY=(1+0j), direct=(1+0j), error=0.000e+00
+    level 1: CCY=(0.43846153846153857+0j), direct=(0.43846153846153846+0j), error=2.532e-16
+    level 2: CCY=(0.28628904299928276+0j), direct=(0.28628904299928265+0j), error=3.878e-16
+    level 3: CCY=(0.21442886717422094+0j), direct=(0.2144288671742208+0j), error=6.472e-16
+    level 4: CCY=(0.1722713435752678+0j), direct=(0.1722713435752677+0j), error=6.445e-16
+    level 5: CCY=(0.14443294968255632+0j), direct=(0.14443294968255602+0j), error=2.114e-15
+  case 2: max coefficient error=7.360e-15, pointwise error=0.000e+00
+    level 0: CCY=(1+0j), direct=(1+0j), error=0.000e+00
+    level 1: CCY=(0.49869158878504677+0j), direct=(0.49869158878504677+0j), error=0.000e+00
+    level 2: CCY=(0.3561353637750499+0j), direct=(0.35613536377504995+0j), error=1.559e-16
+    level 3: CCY=(0.28495340164791577+0j), direct=(0.2849534016479157+0j), error=1.948e-16
+    level 4: CCY=(0.2412166735466304+0j), direct=(0.24121667354662898+0j), error=5.868e-15
+    level 5: CCY=(0.2111903504214055+0j), direct=(0.21119035042140705+0j), error=7.360e-15
+
+elliptic-nome re-expansion
+  q=(0.002211904981312237-0.0013598657257769694j), relative error=2.686e-11
+  stripped-H relative error=2.828e-10
+
+sphere four-point CCY checks passed
+RUN plumbing/ccy_sphere_five_point_checks.py
+global five-point block at level one
+  max relative error=1.756e-16 at (1, 0)
+
+five-point h/c recursions vs descendant definition
+  case 1: h/direct=2.114e-12 at (0, 4), c/direct=8.138e-16 at (0, 4), h/c=2.114e-12 at (0, 4)
+  case 2: h/direct=6.876e-13 at (4, 0), c/direct=3.556e-16 at (2, 2), h/c=6.879e-13 at (4, 0)
+
+c=25 resonant h-recursion regulator
+  max h/c relative error=3.519e-10 at (4, 0)
+  max absolute fit-shift estimate=4.308e-08
+
+all sphere five-point CCY checks passed
+RUN plumbing/ccy_sphere_six_point_checks.py
+global six-point block at level one
+  max relative error=1.756e-16 at (1, 0, 0)
+
+six-point h/c recursions vs descendant definition
+  case 1: h/direct=1.067e-12 at (0, 4, 0), c/direct=7.563e-16 at (0, 2, 2), h/c=1.067e-12 at (0, 4, 0)
+  case 2: h/direct=1.758e-12 at (0, 0, 4), c/direct=1.114e-15 at (1, 2, 0), h/c=1.757e-12 at (0, 0, 4)
+
+c=25 resonant six-point h-recursion regulator
+  max h/c relative error=3.519e-10 at (4, 0, 0)
+  max absolute fit-shift estimate=4.272e-08
+
+series and primary-factor conventions passed
+
+all sphere six-point CCY checks passed
+RUN plumbing/ccy_sphere_six_point_star_checks.py
+global star block at level one
+  max relative error=3.978e-16 at (0, 1, 1)
+
+star c-recursion vs descendant definition
+  case 1: max relative error=1.920e-15 at (0, 3, 1)
+  case 2: max relative error=1.648e-15 at (0, 2, 1)
+
+all sphere six-point star checks passed
+RUN plumbing/sphere_five_point_liouville_checks.py
+Mobius channel frames
+  max landmark error=9.825e-18
+  minimum local-coordinate scale=3.134e-01
+
+known CCY linear frame
+  q1=(0.38634146341463416-0.0029268292682926803j), q2=(0.31+0.08j), score=3.864e-01
+
+random five-point atlas coverage
+  worst best-channel score=0.784181
+
+linear-channel forward map
+  q roundtrip error=5.722e-17
+  Jacobian finite-difference error=2.162e-10
+
+arbitrary fixed-label gauge
+  Jacobian finite-difference error=1.389e-11
+
+all sphere five-point Liouville atlas checks passed
+RUN plumbing/sphere_six_point_atlas_checks.py
+six-point comb combinatorics
+  oriented frames per topology=720, comb trees=90, star trees=15
+
+comb round trip and Jacobian
+  q errors=(2.7755575615628914e-17, 0.0, 0.0), relative Jacobian error=1.405e-16
+
+random M_0,6 comb coverage
+  maximum best-channel radius=0.845442
+  median best-channel radius=0.719665
+
+triple-cherry degeneration
+  best comb radii=[0.8899999999999999, 0.9690999999999999, 0.9899, 0.9969909999999998]
+  best star radii=[0.1, 0.03, 0.01, 0.003]
+
+star round trip and Jacobian
+  q errors=(0.0, 2.7755575615628914e-17, 1.3877787807814457e-17), relative Jacobian error=1.467e-16
+
+exact deep-collar proposal channels
+  preserved radii=(2.2360679774997897e-80, 0.1726267650163207, 0.11704699910719625)
+
+tridisc mixture density
+  selected log density=2.97652462, reversed=5.62336686
+  reversed channel score=0.245153
+
+all sphere six-point atlas checks passed
+RUN plumbing/torus_two_point_blocks_checks.py
+level-zero checks
+  necklace[0,0]=np.complex128(1+0j)
+  ope[0,0]=np.complex128(1+0j)
+
+identity necklace check
+  diagonal=[(1+0j), (1+0j), (1.9999999999999996+0j), (3.0000000000000013+0j), (5.000000000000007+0j)]
+  max off diagonal=0.000000e+00
+
+OPE m=0 torus one-point check
+  max difference=0.000000e+00
+
+OPE CCY c-recursion check
+  max relative coefficient error=3.573739e-12
+
+regulated necklace h-recursion check
+  max relative coefficient error=2.376437e-09, audit=2.255251e-09, fallback=False
+  hard-node error=0.000000e+00, audit=1.893728e+00, fallback=True
+
+modular lambda check
+  head=[0j, (16+0j), (-128+0j), (704+0j), (-3072+0j)]
+  |E(lambda(q))-q|=2.375827e-16
+
+OPE z re-expansion check
+  difference=4.460365e-16
+
+all torus two-point block checks passed
+RUN plumbing/genus1_two_point_worldsheet_checks.py
+Liouville torus two-point channel overlap
+  omega=0.4j
+  tau=(0.17+1.08j)
+  z=(0.8+0.5j), |z|/(2*pi)=0.15014647
+  necklace=np.complex128(-0.0003958174372963166+2.298793659796219e-31j)
+  OPE original contour=np.complex128(-0.0003983247838771365+2.313355606491321e-31j)
+  OPE analytically continued=np.complex128(-0.0003983247838771365+2.313355606491321e-31j)
+  symmetric relative difference=6.294729e-03
+  cached Upsilon arguments=282
+
+hybrid recursion vs direct descendant backend
+  necklace relative difference=1.059604e-09
+  OPE relative difference=2.449714e-15
+
+prime-form collision normalization
+  E(z|tau)/|z|=1.000000000000e+00
+
+modular covariance
+  S-transform relative difference=1.296234e-03
+  T-transform relative difference=0.000000e+00
+RUN plumbing/genus1_three_point_worldsheet_checks.py
+two-axis elliptic composition compatibility: 0.000e+00
+regulated h-recursion versus exact c=25 sewing: 6.384e-07
+production exact sewing versus test baseline: 0.000e+00
+regulated h-recursion retained memoized states: 0
+necklace nome product error: 8.893e-20
+equal-split kinematics and adaptive orders: passed
+stable eta and prime-form cusp factors: passed
+three-point exact-c25-descendants bank progress 8/8 for high edge 0
+prepared three-point exact-c25-descendants bank for high edge 0 with orders (2, 2, 2)
+three-point exact-c25-descendants bank progress 8/8 for high edge 1
+prepared three-point exact-c25-descendants bank for high edge 1 with orders (2, 2, 2)
+three-point exact-c25-descendants bank progress 8/8 for high edge 2
+prepared three-point exact-c25-descendants bank for high edge 2 with orders (2, 2, 2)
+stable deep-cusp reduced integrand: passed
+vectorized Padé rows: passed
+three-point exact-c25-descendants bank progress 1/1 for high edge 0
+prepared three-point exact-c25-descendants bank for high edge 0 with orders (2, 2, 2)
+three-point exact-c25-descendants bank progress 1/1 for high edge 1
+prepared three-point exact-c25-descendants bank for high edge 1 with orders (2, 2, 2)
+three-point exact-c25-descendants bank progress 1/1 for high edge 2
+prepared three-point exact-c25-descendants bank for high edge 2 with orders (2, 2, 2)
+three-point exact-c25-descendants bank progress 1/1 for high edge 1
+restartable three-point bank cache: passed
+all genus-one three-point worldsheet checks passed
+RUN plumbing/genus1_three_point_channel_atlas_checks.py
+prepared torus three-point pair-OPE c-recursion bank for external indices (0, 2, 1) and orders (2, 2, 2)
+loaded channel-atlas banks from /var/folders/n4/_v7by47s29qdx61chfmwms140000gn/T/tmpiaj84tha/atlas_banks.npz
+all genus-one three-point channel-atlas checks passed
+RUN plumbing/genus1_three_point_matrix_comparison_checks.py
+equal-ray stripped polynomial: error=3.469e-18
+equal-ray F1 matrix normalization: error=4.337e-19
+I target: error=3.469e-18
+all genus-one three-point matrix comparison checks passed
+ALL CORE CHECKS PASSED

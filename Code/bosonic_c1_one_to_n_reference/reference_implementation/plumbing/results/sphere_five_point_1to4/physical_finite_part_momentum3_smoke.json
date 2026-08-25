@@ -1,0 +1,76 @@
+{
+  "status": "physical_i_epsilon_worldsheet_only_no_omega_fit",
+  "normalization": "mu^3 A_tree=i I5/(4 pi^2)",
+  "subtraction": "local finite part: excised bulk + 10 analytic faces + 15 double-primitive corners",
+  "settings": {
+    "block_order": 2,
+    "momentum_order_per_endpoint_panel": 3,
+    "momentum_maximum": 5.0,
+    "momentum_panels": 1,
+    "endpoint_refinement": 0,
+    "block_scheme": "h",
+    "collar_radii": [
+      0.1
+    ],
+    "bulk_sobol_power": 5,
+    "face_sobol_power": 6,
+    "replicates": 2,
+    "radial_power": 0.5,
+    "seed": 9107
+  },
+  "points": [
+    {
+      "omega": 0.35,
+      "epsilon": 0.08,
+      "collar_radius": 0.1,
+      "complex_outgoing_frequency": {
+        "real": 0.35,
+        "imag": 0.02
+      },
+      "complex_incoming_frequency": {
+        "real": 1.4,
+        "imag": 0.08
+      },
+      "I5": {
+        "real": -0.2585124960868498,
+        "imag": 1.5572760276148458
+      },
+      "I5_standard_error": {
+        "real": 0.2806040158063269,
+        "imag": 0.2269709054776112
+      },
+      "mu3_A_tree": {
+        "real": -0.039446262593943515,
+        "imag": -0.006548198022463709
+      },
+      "mu3_A_tree_standard_error": {
+        "real": 0.005749240198841183,
+        "imag": 0.007107782754072574
+      },
+      "replicate_I5": [
+        {
+          "real": 0.022091519719477093,
+          "imag": 1.3303051221372346
+        },
+        {
+          "real": -0.5391165118931767,
+          "imag": 1.784246933092457
+        }
+      ],
+      "strata": {
+        "bulk_mean": {
+          "real": 1.6367331058210923,
+          "imag": 0.820013754856686
+        },
+        "faces_mean": {
+          "real": -1.3351328071203807,
+          "imag": 1.9933351718121401
+        },
+        "corners": {
+          "real": -0.5601127947875615,
+          "imag": -1.2560728990539802
+        }
+      }
+    }
+  ]
+}

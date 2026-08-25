@@ -132,15 +132,17 @@ The physical map is
 
 ## Folder contents
 
-- `Code/`: the flat Type 0B Python project, its tests, executable configs,
-  cluster launchers, and the frozen genus-two `python/` snapshot.  The code
-  filenames listed below are relative to this directory.
+- `Code/`: the purpose-organized Type 0B Python project.  Central-charge
+  recursion, fixed-weight recursion, double-Virasoro code, independent PBW
+  cross-checks, and the frozen older SCFT genus-two snapshot have separate
+  subfolders; see `Code/README.md` for the map.  The code filenames described
+  below are basenames within those purpose folders.
 - `Data Set/`: generated JSON/SVG outputs, archived cluster results, and
   retained visual-QA artifacts.  The large genus-two production dataset is
   distributed through Google Drive rather than Git; follow
-  `Data Set/genus2/README.md` to download and verify it. `Code/python/data` is
-  a relative compatibility link so the frozen snapshot keeps its original
-  data paths after extraction.
+  `Data Set/genus2/README.md` to download and verify it.
+  `Code/genus_2_cross_channel/data` is a relative compatibility link so the
+  frozen snapshot keeps its original data paths after extraction.
 - `Machine Notes/conventions.md`: the authoritative BRY convention ledger, physical
   vertices, PCO, structure constants, and matrix dictionary.
 - `References/literature_genus1_genus2.md`: source-to-formula map for the genus-one and
@@ -326,57 +328,59 @@ The physical map is
 - requirements-sphere.txt: the sole third-party dependency of the sphere
   layer, pinned to the tested version.
 - `../References/references.bib`: primary literature.
-- python/: copied genus-two block, period-map, and Monte Carlo implementation,
-  together with the production data needed for later adaptation.  See
-  python/README.md and python/SNAPSHOT_MANIFEST.md before modifying it.
+- `Code/genus_2_cross_channel/`: copied genus-two block, period-map, and Monte
+  Carlo implementation, together with the production data needed for later
+  adaptation.  See its `README.md` and `SNAPSHOT_MANIFEST.md` before
+  modifying it.
 
-Run the code from the `Code/` directory.  From the workspace root:
+Run the code from the workspace root with `Code` on `PYTHONPATH` so imports
+can span the purpose folders:
 
-    cd Code
+    export PYTHONPATH="$PWD/Code${PYTHONPATH:+:$PYTHONPATH}"
 
 The genus-one checks are:
 
     python3 -m unittest test_benchmark_genus_one
-    python3 benchmark_genus_one.py
-    python3 -m unittest test_superconformal_torus_blocks
-    python3 compare_superconformal_torus_leading.py
+    python3 Code/benchmark_genus_one.py
+    python3 -m unittest h_recursion.test_superconformal_torus_blocks
+    python3 -m h_recursion.compare_superconformal_torus_leading
 
 Inspect the exact-\(c=27/2\) NS- and R-handle coefficient ledgers:
 
-    python3 evaluate_superconformal_torus_block.py --sector NS --internal-momentum 0.61 --external-momentum 0.33 --q 0.03 --order 2 --lift-sign -1
-    python3 evaluate_superconformal_torus_block.py --sector R --internal-momentum 0.60 --external-momentum 0.33 --q 0.03 --order 3 --r-sign 1 --cycle-insertion identity
+    python3 -m h_recursion.evaluate_superconformal_torus_block --sector NS --internal-momentum 0.61 --external-momentum 0.33 --q 0.03 --order 2 --lift-sign -1
+    python3 -m h_recursion.evaluate_superconformal_torus_block --sector R --internal-momentum 0.60 --external-momentum 0.33 --q 0.03 --order 3 --r-sign 1 --cycle-insertion identity
 
 Evaluate the self-dual NS torus two-point block through level two on both
 necklace edges:
 
-    python3 evaluate_superconformal_torus_two_point.py --block-method h-recursion --spin-structure NS --max-twice-level-1 4 --max-twice-level-2 4
+    python3 -m h_recursion.evaluate_superconformal_torus_two_point --block-method h-recursion --spin-structure NS --max-twice-level-1 4 --max-twice-level-2 4
 
 Flip the temporal fermion holonomy without changing the reduced plumbing
 parameters:
 
-    python3 evaluate_superconformal_torus_two_point.py --block-method h-recursion --spin-structure NS_tilde --max-twice-level-1 4 --max-twice-level-2 4
+    python3 -m h_recursion.evaluate_superconformal_torus_two_point --block-method h-recursion --spin-structure NS_tilde --max-twice-level-1 4 --max-twice-level-2 4
 
 Assemble it into the truncated Type-0B two-point correlator:
 
-    python3 evaluate_super_liouville_torus_two_point.py --internal-sector NS --max-twice-level-1 4 --max-twice-level-2 4 --quadrature-order 8
+    python3 -m h_recursion.evaluate_super_liouville_torus_two_point --internal-sector NS --max-twice-level-1 4 --max-twice-level-2 4 --quadrature-order 8
 
 Evaluate the self-dual R-handle block and its sign-summed spectral
 contribution through the currently validated level-one layer:
 
-    python3 evaluate_ramond_torus_two_point.py --block-method beta-recursion --spin-structure R --max-level-1 1 --max-level-2 1
-    python3 evaluate_super_liouville_torus_two_point.py --internal-sector R --max-level-1 1 --max-level-2 1 --quadrature-order 6
+    python3 -m h_recursion.evaluate_ramond_torus_two_point --block-method beta-recursion --spin-structure R --max-level-1 1 --max-level-2 1
+    python3 -m h_recursion.evaluate_super_liouville_torus_two_point --internal-sector R --max-level-1 1 --max-level-2 1 --quadrature-order 6
 
 Inspect the mixed NS--R ground-fiber normalization for the twice-R-punctured
 torus and any of its four spin assignments:
 
-    python3 evaluate_mixed_torus_two_point.py --ns-lift -1 --r-cycle parity
+    python3 -m h_recursion.evaluate_mixed_torus_two_point --ns-lift -1 --r-cycle parity
 
 Evaluate the complementary sphere--torus OPE block and its pilot even-form
 spectral contribution.  Here \(z\) is the annulus-plane insertion position
 and the bridge expansion parameter is \(x=1-z\):
 
-    python3 evaluate_superconformal_torus_two_point_ope.py --handle-sector NS --z 0.8 --q 0.004 --max-bridge-twice-level 2 --max-handle-twice-level 8
-    python3 evaluate_super_liouville_torus_two_point_ope.py --handle-sector NS --z 0.8 --q 0.004 --max-bridge-twice-level 2 --max-handle-twice-level 8 --quadrature-order 8
+    python3 -m h_recursion.evaluate_superconformal_torus_two_point_ope --handle-sector NS --z 0.8 --q 0.004 --max-bridge-twice-level 2 --max-handle-twice-level 8
+    python3 -m h_recursion.evaluate_super_liouville_torus_two_point_ope --handle-sector NS --z 0.8 --q 0.004 --max-bridge-twice-level 2 --max-handle-twice-level 8 --quadrature-order 8
 
 The handle recursion may be increased independently.  The bridge cutoff is
 currently restricted to level one; higher levels need torus one-point Ward
@@ -389,28 +393,28 @@ therefore retain the verified direct bridge cutoff for now.
 
 Run the sphere-block checks with:
 
-    python3 -m unittest test_superconformal_blocks test_ramond_sphere_blocks test_ramond_c_recursion test_mixed_ns_ramond_descendant_blocks test_ramond_descendant_blocks test_self_dual_superconformal_blocks
+    python3 -m unittest c_Recursion.test_superconformal_blocks h_recursion.test_ramond_sphere_blocks c_Recursion.test_ramond_c_recursion c_Recursion.test_mixed_ns_ramond_descendant_blocks h_recursion.test_ramond_descendant_blocks h_recursion.test_self_dual_superconformal_blocks
 
 Compare the generic long-R block coefficient by coefficient through \(q^3\):
 
-    python3 compare_ramond_q3.py
+    python3 -m h_recursion.compare_ramond_q3
 
 Evaluate the four-R sphere-block benchmark:
 
-    python3 evaluate_ramond_sphere_four_point.py
+    python3 -m h_recursion.evaluate_ramond_sphere_four_point
 
 Evaluate the BRY Figure 4 momentum assignment as a function of \(z\):
 
-    python3 evaluate_sphere_four_point.py --four-tachyon
+    python3 -m c_Recursion.evaluate_sphere_four_point --four-tachyon
 
 Reproduce BRY's Figure 4 crossing plot:
 
-    python3 plot_bry_figure4.py
+    python3 -m c_Recursion.plot_bry_figure4
 
 Evaluate the first nontrivial BRY \(1_R\to3_R\) benchmark at
 \(\omega=1/3+0.6i\), \(\omega_i=\omega/3\):
 
-    python3 bry_one_to_three.py --p-order 24 --angular-order 14 --radial-order 14 --cap-angular-order 14 --cap-radial-order 10 --block-q-order 8
+    python3 -m c_Recursion.bry_one_to_three --p-order 24 --angular-order 14 --radial-order 14 --cap-angular-order 14 --cap-radial-order 10 --block-q-order 8
 
 This product-quadrature implementation currently reproduces the complex
 matrix-model coefficient to about 1.8% at that setting.  The \(q^6\) cutoff is
@@ -423,7 +427,7 @@ the remaining numerical limitation.
 
 Run the complete sphere test suite with:
 
-    python3 -m unittest test_superconformal_blocks test_ramond_sphere_blocks test_ramond_c_recursion test_mixed_ns_ramond_descendant_blocks test_ramond_descendant_blocks test_self_dual_superconformal_blocks test_sphere_four_point test_bry_one_to_three
+    python3 -m unittest c_Recursion.test_superconformal_blocks h_recursion.test_ramond_sphere_blocks c_Recursion.test_ramond_c_recursion c_Recursion.test_mixed_ns_ramond_descendant_blocks h_recursion.test_ramond_descendant_blocks h_recursion.test_self_dual_superconformal_blocks c_Recursion.test_sphere_four_point c_Recursion.test_bry_one_to_three
 
 ## Scope boundary
 

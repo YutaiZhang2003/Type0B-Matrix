@@ -31,29 +31,33 @@ REMOTE_CONFIG="${REMOTE_ROOT}/Code/config/$(basename "${LOCAL_CONFIG}")"
 REMOTE_SHARDS="${REMOTE_RUN_ROOT}/shards"
 REMOTE_SUMMARY="${REMOTE_RUN_ROOT}/summary.json"
 
-ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/python' '${REMOTE_ROOT}/Code/config' '${REMOTE_ROOT}/Code/cluster' '${REMOTE_SHARDS}' '${REMOTE_RUN_ROOT}/logs'"
+ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/genus_2' '${REMOTE_ROOT}/Code/genus_2_cross_channel' '${REMOTE_ROOT}/Code/config' '${REMOTE_ROOT}/Code/cluster' '${REMOTE_SHARDS}' '${REMOTE_RUN_ROOT}/logs'"
 
 (
   cd "${LOCAL_ROOT}"
   rsync -azR \
-    ./Code/ns_genus2_cannon.py \
-    ./Code/ns_genus2_partition.py \
-    ./Code/test_ns_genus2_partition.py \
-    ./Code/test_free_majorana_pair_of_pants.py \
-    ./Code/compare_ns_torus_c_h_recursion.py \
-    ./Code/ns_genus_c_recursion_checks.py \
-    ./Code/ns_recursion_recipe.py \
-    ./Code/ns_global_osp_block.py \
-    ./Code/ns_regular_block.py \
-    ./Code/ns_vacuum_schottky.py \
-    ./Code/super_liouville_structure_constants.py \
-    ./Code/superconformal_blocks.py \
-    ./Code/python/ccy_genus2_block.py \
-    ./Code/python/free_boson_plumbing.py \
-    ./Code/python/free_majorana_pair_of_pants.py \
-    ./Code/python/genus2_vacuum_blocks.py \
-    ./Code/python/plumbing_algorithms.py \
-    ./Code/python/virasoro_blocks.py \
+    ./Code/genus_2/__init__.py \
+    ./Code/genus_2/glasses_partition.py \
+    ./Code/genus_2/theta_partition.py \
+    ./Code/c_Recursion/ns_genus2_cannon.py \
+    ./Code/c_Recursion/ns_genus2_partition.py \
+    ./Code/c_Recursion/test_ns_genus2_partition.py \
+    "./Code/PBW_c_recursion_double_virasoro crosscheck/test_free_majorana_pair_of_pants.py" \
+    ./Code/c_Recursion/compare_ns_torus_c_h_recursion.py \
+    ./Code/c_Recursion/ns_genus_c_recursion_checks.py \
+    ./Code/c_Recursion/ns_human_convention.py \
+    ./Code/c_Recursion/ns_recursion_recipe.py \
+    ./Code/c_Recursion/ns_global_osp_block.py \
+    ./Code/c_Recursion/ns_regular_block.py \
+    ./Code/c_Recursion/ns_vacuum_schottky.py \
+    ./Code/c_Recursion/super_liouville_structure_constants.py \
+    ./Code/c_Recursion/superconformal_blocks.py \
+    ./Code/genus_2_cross_channel/ccy_genus2_block.py \
+    ./Code/genus_2_cross_channel/free_boson_plumbing.py \
+    ./Code/genus_2_cross_channel/free_majorana_pair_of_pants.py \
+    ./Code/genus_2_cross_channel/genus2_vacuum_blocks.py \
+    ./Code/genus_2_cross_channel/plumbing_algorithms.py \
+    ./Code/genus_2_cross_channel/virasoro_blocks.py \
     ./Code/cluster/ns_genus2_cannon_array.slurm \
     ./Code/cluster/ns_genus2_cannon_reduce.slurm \
     "${SSH_HOST}:${REMOTE_ROOT}/"
@@ -61,12 +65,12 @@ ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/python' '${REMOTE_ROOT}/Code/co
 rsync -az "${LOCAL_CONFIG}" "${SSH_HOST}:${REMOTE_CONFIG}"
 
 if [[ ${NS_G2_SKIP_PREFLIGHT:-0} != 1 ]]; then
-  ssh "${SSH_HOST}" "set -e; '${REMOTE_PYTHON}' -c 'import numpy, scipy, mpmath; print(numpy.__version__, scipy.__version__, mpmath.__version__)'; cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' -m unittest Code/test_ns_genus2_partition.py Code/test_free_majorana_pair_of_pants.py; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' Code/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan"
+  ssh "${SSH_HOST}" "set -e; '${REMOTE_PYTHON}' -c 'import numpy, scipy, mpmath; print(numpy.__version__, scipy.__version__, mpmath.__version__)'; cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code/c_Recursion:${REMOTE_ROOT}/Code/genus_2:${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/genus_2_cross_channel' '${REMOTE_PYTHON}' -m unittest Code/c_Recursion/test_ns_genus2_partition.py 'Code/PBW_c_recursion_double_virasoro crosscheck/test_free_majorana_pair_of_pants.py'; PYTHONPATH='${REMOTE_ROOT}/Code/c_Recursion:${REMOTE_ROOT}/Code/genus_2:${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/genus_2_cross_channel' '${REMOTE_PYTHON}' Code/c_Recursion/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan"
 else
   echo "remote preflight skipped only because the identical staged snapshot was already verified"
 fi
 
-TASK_COUNT=$(ssh "${SSH_HOST}" "cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' Code/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan --task-count-only")
+TASK_COUNT=$(ssh "${SSH_HOST}" "cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code/c_Recursion:${REMOTE_ROOT}/Code/genus_2:${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/genus_2_cross_channel' '${REMOTE_PYTHON}' Code/c_Recursion/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan --task-count-only")
 if [[ ${TASK_COUNT} -le 0 || ${ARRAY_CAP} -le 0 || ${TASKS_PER_ARRAY} -le 0 ]]; then
   echo "invalid task count, array cap, or tasks-per-array" >&2
   exit 2

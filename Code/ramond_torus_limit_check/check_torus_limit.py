@@ -38,11 +38,11 @@ sys.path.insert(0, str(BRANCHING))
 from compute_target import (  # noqa: E402
     BranchWeights,
     FreeFieldModule,
-    TOLERANCE,
     VirasoroThreePoint,
+    finite_ward_solution,
     norm_product,
-    ordinary_factor,
     partitions,
+    set_multiprecision,
     solve_ns_l1,
     solve_ramond_lminus,
     strict_partitions,
@@ -473,11 +473,9 @@ class BranchingTorusLimit:
     def ward_values(self, cutoff, alpha2, alpha3, eta):
         """Solve the closed first-Ward system for all labels needed at q1=0.
 
-        The direct PBW evaluator is intentionally not used away from the four
-        tensor-ground anchors.  At mixed reflected labels its old free-field
-        implementation does not obey the embedded-Virasoro Ward identity;
-        the finite system is the branching-coefficient algorithm of the main
-        notes and fixes those values from the anchors.
+        The direct PBW evaluator is intentionally used only for the four
+        tensor-ground anchors.  The remaining values are reconstructed by the
+        independent branching-coefficient Ward algorithm of the Human Note.
         """
         cache_key = (cutoff, alpha2, alpha3, eta)
         if cache_key in self._ward_cache:
@@ -489,95 +487,102 @@ class BranchingTorusLimit:
         # symmetric window through |n|=7/4, which we also retain in lower-order
         # diagnostic runs.
         ramond_labels = tuple(sorted(self.labels(max(cutoff, 6))))
-        unknowns = tuple(
-            (first, second, third)
-            for first in labels1
-            for second in ramond_labels
-            for third in ramond_labels
-        )
-        index = {labels: position for position, labels in enumerate(unknowns)}
         ns_actions = self.ns_actions()
         second_actions = self.ramond_actions(1, alpha2, ramond_labels)
         third_actions = self.ramond_actions(2, alpha3, ramond_labels)
-        rows = []
-        right_hand_sides = []
 
-        def append_equation(equation):
-            norm = np.linalg.norm(equation)
-            if norm > TOLERANCE:
-                rows.append(equation / norm)
-                right_hand_sides.append(0.0j)
+        def connected_components(actions):
+            remaining = set(ramond_labels)
+            components = []
+            while remaining:
+                seed = min(remaining)
+                stack = [seed]
+                component = set()
+                while stack:
+                    label = stack.pop()
+                    if label in component:
+                        continue
+                    component.add(label)
+                    remaining.discard(label)
+                    neighbors = {
+                        term.label
+                        for term in actions[label]
+                        if term.label in ramond_labels
+                    }
+                    stack.extend(neighbors - component)
+                    # The decomposition is directed at the chart boundary;
+                    # include reverse edges when finding reflection chambers.
+                    stack.extend(
+                        source
+                        for source, terms in actions.items()
+                        if any(term.label == label for term in terms)
+                        and source not in component
+                    )
+                components.append(tuple(sorted(component)))
+            return tuple(components)
 
-        for labels in unknowns:
-            equation = np.zeros(len(unknowns), dtype=np.complex128)
-            for term in ns_actions[labels[0]]:
-                changed, coefficient = ordinary_factor(
-                    self.weights, labels, 0, term
-                )
-                equation[index[changed]] += coefficient
-            for term in second_actions[labels[1]]:
-                changed, coefficient = ordinary_factor(
-                    self.weights, labels, 1, term
-                )
-                equation[index[changed]] -= coefficient
-            for term in third_actions[labels[2]]:
-                changed, coefficient = ordinary_factor(
-                    self.weights, labels, 2, term
-                )
-                equation[index[changed]] -= coefficient
-            append_equation(equation)
-
-        for label2 in (Fraction(-1, 4), Fraction(1, 4)):
-            for label3 in (Fraction(-1, 4), Fraction(1, 4)):
-                labels = (Fraction(0), label2, label3)
-                row = np.zeros(len(unknowns), dtype=np.complex128)
-                row[index[labels]] = 1.0
-                rows.append(row)
-                right_hand_sides.append(
-                    self.ground_value(
+        second_components = connected_components(second_actions)
+        third_components = connected_components(third_actions)
+        values = {}
+        systems = []
+        for labels2 in second_components:
+            for labels3 in third_components:
+                ward = finite_ward_solution(
+                    self.weights,
+                    ns_actions,
+                    {label: second_actions[label] for label in labels2},
+                    {label: third_actions[label] for label in labels3},
+                    labels1,
+                    labels2,
+                    labels3,
+                    self.modules[1],
+                    self.modules[2],
+                    alpha2,
+                    alpha3,
+                    eta,
+                    ground_value_fn=lambda _module2, _module3, label2,
+                    label3, parity2, parity3, form_eta: self.ground_value(
                         label2,
                         label3,
-                        alpha2,
-                        alpha3,
-                        eta,
-                    )
+                        parity2,
+                        parity3,
+                        form_eta,
+                    ),
                 )
+                index = {
+                    labels: position
+                    for position, labels in enumerate(ward["unknowns"])
+                }
+                for label2 in labels2:
+                    for label3 in labels3:
+                        labels = (Fraction(0), label2, label3)
+                        values[labels] = ward["values"][index[labels]] / norm_product(
+                            labels,
+                            alpha2,
+                            alpha3,
+                            self.b,
+                            self.momenta,
+                        )
+                systems.append(ward)
 
-        matrix = np.asarray(rows, dtype=np.complex128)
-        vector = np.asarray(right_hand_sides, dtype=np.complex128)
-        column_norms = np.linalg.norm(matrix, axis=0)
-        if np.any(column_norms == 0):
-            raise AssertionError("The finite Ward system has an empty column.")
-        scaled = matrix / column_norms
-        scaled_solution, _, rank, singular_values = np.linalg.lstsq(
-            scaled, vector, rcond=1.0e-13
-        )
-        solution = scaled_solution / column_norms
-        residual = matrix @ solution - vector
-        if rank != len(unknowns):
+        expected_value_count = len(ramond_labels) ** 2
+        if len(values) != expected_value_count:
             raise AssertionError(
-                f"The finite Ward system has rank {rank}, expected {len(unknowns)}."
+                f"The component Ward solves produced {len(values)} values, "
+                f"expected {expected_value_count}."
             )
-        values = {
-            labels: solution[position]
-            / norm_product(
-                labels,
-                alpha2,
-                alpha3,
-                self.b,
-                self.momenta,
-            )
-            for position, labels in enumerate(unknowns)
-            if labels[0] == 0
-        }
         answer = {
             "values": values,
-            "rows": int(matrix.shape[0]),
-            "columns": int(matrix.shape[1]),
-            "rank": int(rank),
-            "relative_residual": float(np.linalg.norm(residual))
-            / max(float(np.linalg.norm(vector)), 1.0),
-            "smallest_singular_value": float(singular_values[rank - 1]),
+            "rows": sum(system["rows"] for system in systems),
+            "columns": sum(system["columns"] for system in systems),
+            "rank": sum(system["rank"] for system in systems),
+            "relative_residual": max(
+                system["relative_residual"] for system in systems
+            ),
+            "smallest_singular_value": min(
+                system["smallest_singular_value"] for system in systems
+            ),
+            "component_count": len(systems),
         }
         self._ward_cache[cache_key] = answer
         return answer
@@ -805,8 +810,19 @@ def main():
     parser.add_argument("--p1", default="11/23")
     parser.add_argument("--p2", default="13/29")
     parser.add_argument("--p3", default="17/31")
+    parser.add_argument(
+        "--mp-dps",
+        type=int,
+        default=0,
+        help=(
+            "Solve the double-Virasoro branching Ward systems with mpmath "
+            "at this precision (0 keeps the fast complex128 check)."
+        ),
+    )
     parser.add_argument("--output", type=Path, default=HERE / "results.json")
     arguments = parser.parse_args()
+    if arguments.mp_dps and arguments.mp_dps < 30:
+        parser.error("--mp-dps must be 0 or at least 30.")
     momenta = tuple(
         parse_fraction(value)
         for value in (arguments.p1, arguments.p2, arguments.p3)
@@ -822,8 +838,7 @@ def main():
     auxiliary = direct.auxiliary_series(cutoff)
     timing["auxiliary_fermion_seconds"] = time.perf_counter() - mark
 
-    branching = BranchingTorusLimit(b, momenta)
-    sectors = []
+    direct_sectors = []
     for form_parity, eta in ((0, 1), (1, -1)):
         mark = time.perf_counter()
         physical = direct.physical_series(cutoff, form_parity, eta)
@@ -833,24 +848,34 @@ def main():
         enlarged_direct = ramond_star(auxiliary, physical, cutoff)
         timing[f"convolution_f{form_parity}_seconds"] = time.perf_counter() - mark
 
-        mark = time.perf_counter()
-        enlarged_branching = branching.series(
-            cutoff, form_parity, eta
-        )
-        timing[f"branching_f{form_parity}_seconds"] = time.perf_counter() - mark
+        direct_sectors.append((form_parity, eta, physical, enlarged_direct))
 
-        sectors.append(
-            {
-                "form_parity": form_parity,
-                "eta": eta,
-                "physical_sca_torus_two_point": encode_series(physical),
-                "enlarged_direct": encode_series(enlarged_direct),
-                "enlarged_branching": encode_series(enlarged_branching),
-                "comparison": comparison(
-                    enlarged_direct, enlarged_branching, cutoff
-                ),
-            }
-        )
+    set_multiprecision(arguments.mp_dps)
+    branching = BranchingTorusLimit(b, momenta)
+    sectors = []
+    try:
+        for form_parity, eta, physical, enlarged_direct in direct_sectors:
+            mark = time.perf_counter()
+            enlarged_branching = branching.series(
+                cutoff, form_parity, eta
+            )
+            timing[f"branching_f{form_parity}_seconds"] = time.perf_counter() - mark
+
+            sectors.append(
+                {
+                    "form_parity": form_parity,
+                    "eta": eta,
+                    "physical_sca_torus_two_point": encode_series(physical),
+                    "enlarged_direct": encode_series(enlarged_direct),
+                    "enlarged_branching": encode_series(enlarged_branching),
+                    "comparison": comparison(
+                        enlarged_direct, enlarged_branching, cutoff
+                    ),
+                }
+            )
+    finally:
+        # The independent PBW diagnostic is intentionally kept in complex128.
+        set_multiprecision(0)
 
     mark = time.perf_counter()
     factorization_diagnostic = level_one_factorization_diagnostic(b, momenta)
@@ -864,6 +889,10 @@ def main():
             "P1": arguments.p1,
             "P2": arguments.p2,
             "P3": arguments.p3,
+        },
+        "branching_arithmetic": {
+            "backend": "mpmath" if arguments.mp_dps else "complex128",
+            "decimal_digits": arguments.mp_dps or None,
         },
         "central_charge": 1.5 + 3 * (b + 1 / b) ** 2,
         "auxiliary_fermion": encode_series(auxiliary),

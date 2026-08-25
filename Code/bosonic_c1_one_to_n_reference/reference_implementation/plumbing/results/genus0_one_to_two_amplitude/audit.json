@@ -1,0 +1,57 @@
+{
+  "scope": "coefficient of delta(omega-omega_1-omega_2) in the genus-zero 1->2 S-matrix element",
+  "notation": {
+    "state_metric": "<omega|omega'>=omega delta(omega-omega')",
+    "vertex": "V_omega^+-=g_s^Xi c_tilde c exp(+-i omega X^0/sqrt(alpha')) V_{P=omega/2}",
+    "s_matrix": "S(omega_1,omega_2;omega)=delta(omega-omega_1-omega_2) A_0(omega_1,omega_2)"
+  },
+  "kinematics": {
+    "omega_1": 0.73,
+    "omega_2": 1.11,
+    "omega": 1.84,
+    "P_1": 0.365,
+    "P_2": 0.555,
+    "P_in": 0.92
+  },
+  "factor_ledger": {
+    "three_vertex_factor": 5.065299999999999e-05,
+    "sphere_X0_dilaton_factor": 730.4601899196495,
+    "net_string_coupling": 0.037,
+    "X0_zero_mode_fourier_factor": "2*pi*i",
+    "delta_k0_to_delta_omega_jacobian": 1.0,
+    "K_tilde_S2": 2.0,
+    "zero_mode_coefficient_without_i": 12.566370614359172,
+    "zero_mode_identity": "2*pi*sqrt(alpha')*K_tilde_S2=4*pi",
+    "full_string_state_metric_not_used_here": "K_S2=8*pi/alpha'"
+  },
+  "liouville_resonance": {
+    "identity": "C(P_1,P_2,P_1+P_2)=8 P_1 P_2 (P_1+P_2)",
+    "numeric_real": 1.490952,
+    "numeric_imag": 0.0,
+    "resonance_polynomial": 1.490952,
+    "energy_polynomial": 1.490952,
+    "relative_error": 0.0
+  },
+  "worldsheet": {
+    "formula": "A_0^Xi=4*pi*i*g_s^Xi*omega_1*omega_2*(omega_1+omega_2)",
+    "reduced_amplitude_real": 0.0,
+    "reduced_amplitude_imag": 0.6932266498081414,
+    "closed_form_real": 0.0,
+    "closed_form_imag": 0.6932266498081413,
+    "relative_error": 2.220446049250313e-16
+  },
+  "mqm": {
+    "formula": "A_1->2^MQM=(i/mu)*omega*omega_1*omega_2",
+    "derived_dictionary": "mu^-1=4*pi*g_s^Xi",
+    "mu": 2.150742474214802,
+    "reduced_amplitude_real": 0.0,
+    "reduced_amplitude_imag": 0.6932266498081414,
+    "worldsheet_relative_error": 1.1102230246251565e-16
+  },
+  "bry_cross_check": {
+    "g_s_BRY": 0.074,
+    "g_s_BRY_over_g_s_Xi": 2.0,
+    "dictionary": "mu^-1=2*pi*g_s^BRY=4*pi*g_s^Xi"
+  },
+  "passed": true
+}

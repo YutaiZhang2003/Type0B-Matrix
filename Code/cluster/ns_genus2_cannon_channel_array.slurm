@@ -20,7 +20,7 @@ export OPENBLAS_NUM_THREADS=1
 export MKL_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 export PYTHONUNBUFFERED=1
-export PYTHONPATH="${NS_G2_ROOT}/Code:${NS_G2_ROOT}/Code/python${PYTHONPATH:+:${PYTHONPATH}}"
+export PYTHONPATH="${NS_G2_ROOT}/Code:${NS_G2_ROOT}/Code/genus_2_cross_channel${PYTHONPATH:+:${PYTHONPATH}}"
 
 line_number=$((SLURM_ARRAY_TASK_ID + 1))
 line=$(sed -n "${line_number}p" "${NS_G2_CHUNK_MANIFEST}")
@@ -35,7 +35,7 @@ if [[ ! ${first} =~ ^[0-9]+$ || ! ${last} =~ ^[0-9]+$ || ${first} -gt ${last} ]]
 fi
 
 for ((task_index = first; task_index <= last; task_index++)); do
-  "${NS_G2_PYTHON}" Code/ns_genus2_cannon.py \
+  "${NS_G2_PYTHON}" Code/c_Recursion/ns_genus2_cannon.py \
     --config "${NS_G2_CONFIG}" \
     worker \
     --output-dir "${NS_G2_SHARDS}" \

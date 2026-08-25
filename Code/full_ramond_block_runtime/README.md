@@ -46,6 +46,47 @@ generic PBW conformal-block sum is used. A representative ordinary Virasoro
 series was checked coefficientwise against its direct descendant sum through
 level 2; the maximum absolute error was `1.70e-15`.
 
+Passing `--direct-pbw-check` additionally builds the physical NS--R--R block
+from the Human-Note PBW Gram matrices and Ward identities, sews it with the
+auxiliary Majorana block, and compares it coefficientwise with this production
+series.  It leaves all three plumbing variables unrestricted.  Passing
+`--primary-parity 1` performs the same computation for an intrinsically odd NS
+primary.  The `L_{\pm1}` recursion matrices are unchanged; every direct
+boundary anchor is instead recomputed using the selected primary parity.
+
+The current Human Note defines the enlarged and auxiliary boxes with the
+first-tube signs
+
+\[
+\widehat{\mathbb F}:\ (-1)^{A+\mathsf A},
+\qquad
+\mathbb F_{\mathsf F}:\ (-1)^{\mathsf A}.
+\]
+
+On a double-Virasoro branch primary, `A+mathsf_A = 2*n_1 (mod 2)`.  The
+production branch sum therefore includes `(-1)^(2*n_1)`, and the auxiliary
+PBW sum includes `(-1)^mathsf_A` directly.  The comparison is now simply
+`Fhat = F_F star_R F_PBW`: there is no post-processing frame adapter and no
+extra sign in the physical PBW oracle.
+
+The level-six certification command is
+
+```sh
+python3 Code/full_ramond_block_runtime/compute_q_expansion.py \
+  --cutoff 6 \
+  --direct-pbw-check \
+  --json /tmp/type0b_full_q6_pbw_double_virasoro.json
+```
+
+It checks 1,120 parity-resolved entries through `e1+e2+e3 <= 12`: 280 are
+nonzero production coefficients, and the remaining required zero components
+are checked as well.  The maximum absolute and scaled relative discrepancy is
+`9.4132e-10`; the worst entry is `(e1,e2,e3)=(10,0,2)`, parity-component
+index `0`.  Adding `--primary-parity 1` checks the same 1,120 entries and gives
+a maximum discrepancy of `4.131e-10`.  These values are obtained using the
+current Human-note definitions directly, not by converting the output after
+the calculation.
+
 ## Adaptive Virasoro cutoffs
 
 There are 388 branch-label triples and 776 ordinary Virasoro blocks.
@@ -106,6 +147,10 @@ residual in the level-10 run is `7.83e-10`.
 ## Files
 
 - `compute_q_expansion.py`: formal q-series implementation.
+- `../double_virasoro/nsrr/nsrr_genus2_block.py`: independent PBW and
+  auxiliary-Majorana comparison oracle.
+- `../ramond_branching_recursion/`: Yuchen's production branching grid and
+  direct boundary code.
 - `level10_q_expansion.json`: all coefficients, parity labels, timings, and
   diagnostics.
 - `compute_full_block.py` and `level10_results.json`: the earlier fixed-q

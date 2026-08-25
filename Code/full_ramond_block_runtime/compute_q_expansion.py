@@ -25,11 +25,19 @@ import numpy as np
 
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-if str(HERE) not in sys.path:
-    sys.path.insert(0, str(HERE))
+CODE_ROOT = HERE.parent
+REPOSITORY = CODE_ROOT.parent
+BRANCHING = CODE_ROOT / "ramond_branching_recursion"
+DOUBLE_VIRASORO = CODE_ROOT / "double_virasoro" / "nsrr"
+STRING_MC_ROOT = Path(
+    os.environ.get(
+        "TYPE0B_STRINGMC_ROOT",
+        REPOSITORY.parent / "Project" / "StringMC",
+    )
+).expanduser()
+for directory in (REPOSITORY, STRING_MC_ROOT, BRANCHING, DOUBLE_VIRASORO, HERE):
+    if str(directory) not in sys.path:
+        sys.path.insert(0, str(directory))
 
 from compute_full_block import (  # noqa: E402
     BranchingGrid,
@@ -317,14 +325,122 @@ def low_level_virasoro_check(branching: BranchingGrid) -> dict[str, object]:
     }
 
 
-def run(cutoff: int, output: Path) -> dict[str, object]:
+def direct_pbw_comparison(
+    full_block: BlockSeries,
+    *,
+    b: float,
+    momenta: tuple[float, float, float],
+    cutoff: int,
+    primary_parity: int = 0,
+) -> dict[str, object]:
+    """Compare the unrestricted production series with direct NSRR PBW sewing."""
+
+    from nsrr_genus2_block import (  # noqa: PLC0415
+        ZERO_VECTOR,
+        auxiliary_majorana_nsrr_series,
+        direct_pbw_nsrr_series,
+        level_triples,
+        star_convolve_series,
+    )
+
+    twice_cutoff = 2 * int(cutoff)
+    auxiliary = auxiliary_majorana_nsrr_series(
+        maximum_total_twice_level=twice_cutoff
+    )
+    physical = direct_pbw_nsrr_series(
+        b=b,
+        momenta=momenta,
+        form_parity=0,
+        primary_parity=primary_parity,
+        etas=(1, 1),
+        maximum_total_twice_level=twice_cutoff,
+    )
+    # All three series now implement the current Human-note definitions
+    # directly: the enlarged block has (-1)^(A+mathsf A), the auxiliary box
+    # has (-1)^mathsf A, and the physical PBW block is unchanged.
+    factorized = star_convolve_series(
+        auxiliary,
+        physical,
+        maximum_total_twice_level=twice_cutoff,
+    )
+
+    production: dict[Exponent, tuple[complex, ...]] = {}
+    for key, coefficient in full_block.items():
+        exponent = key[:3]
+        parity = key[3:]
+        component = parity[0] | (parity[1] << 1) | (parity[2] << 2)
+        vector = list(production.get(exponent, ZERO_VECTOR))
+        vector[component] = complex(coefficient)
+        production[exponent] = tuple(vector)
+
+    def compare(left_series, right_series):
+        maximum_absolute = 0.0
+        maximum_relative = 0.0
+        worst = ((0, 0, 0), 0, 0.0j, 0.0j)
+        coefficient_count = 0
+        for levels in level_triples(twice_cutoff):
+            left = left_series.get(levels, ZERO_VECTOR)
+            right = right_series.get(levels, ZERO_VECTOR)
+            for component in range(8):
+                coefficient_count += 1
+                absolute = abs(left[component] - right[component])
+                relative = absolute / max(
+                    1.0, abs(left[component]), abs(right[component])
+                )
+                if relative > maximum_relative or (
+                    relative == maximum_relative
+                    and absolute > maximum_absolute
+                ):
+                    maximum_absolute = float(absolute)
+                    maximum_relative = float(relative)
+                    worst = (
+                        levels,
+                        component,
+                        complex(left[component]),
+                        complex(right[component]),
+                    )
+        return coefficient_count, maximum_absolute, maximum_relative, worst
+
+    (
+        coefficient_count,
+        maximum_absolute,
+        maximum_relative,
+        worst,
+    ) = compare(production, factorized)
+    return {
+        "maximum_total_twice_level": twice_cutoff,
+        "coefficient_count": coefficient_count,
+        "maximum_absolute_error": maximum_absolute,
+        "maximum_relative_error": maximum_relative,
+        "worst_twice_levels": list(worst[0]),
+        "worst_eta_component": worst[1],
+        "production_double_virasoro_value": encode(worst[2]),
+        "factorized_direct_pbw_value": encode(worst[3]),
+        "human_note_signs": {
+            "enlarged_first_tube": "(-1)^(A+mathsf_A)",
+            "auxiliary_first_tube": "(-1)^mathsf_A",
+            "double_virasoro_branch": "(-1)^(2*n_1)",
+            "pbw_extra_sign": "none",
+        },
+    }
+
+
+def run(
+    cutoff: int,
+    output: Path,
+    *,
+    check_direct_pbw: bool = False,
+    primary_parity: int = 0,
+) -> dict[str, object]:
     b = 7.0 / 5.0
     momenta = (11.0 / 23.0, 13.0 / 29.0, 17.0 / 31.0)
     evaluation_q = (0.019, 0.023, 0.029)
     cutoff_twice = 2 * int(cutoff)
     total_started = time.perf_counter()
 
-    branching = BranchingGrid(b, momenta, cutoff)
+    branching = BranchingGrid(
+        b, momenta, cutoff, primary_parity=primary_parity
+    )
     started = time.perf_counter()
     branching.build_actions()
     action_seconds = time.perf_counter() - started
@@ -412,12 +528,19 @@ def run(cutoff: int, output: Path) -> dict[str, object]:
                 labels, alpha2, alpha3, b, momenta
             )
             sign = (-1) ** (
-                int(2 * n1) * alpha2
-                + int(2 * n1) * alpha3
+                (int(2 * n1) + primary_parity) * alpha2
+                + (int(2 * n1) + primary_parity) * alpha3
                 + alpha2 * alpha3
             )
-            prefactor = sign * normalized * normalized
-            parity = (int(2 * n1) % 2, alpha2, alpha3)
+            human_enlarged_sign = (-1) ** int(2 * n1)
+            prefactor = (
+                human_enlarged_sign * sign * normalized * normalized
+            )
+            parity = (
+                (int(2 * n1) + primary_parity) % 2,
+                alpha2,
+                alpha3,
+            )
             for exponent, coefficient in reduced_products[labels].items():
                 twice_exponent = tuple(
                     base[index] + 2 * exponent[index] for index in range(3)
@@ -450,6 +573,25 @@ def run(cutoff: int, output: Path) -> dict[str, object]:
     started = time.perf_counter()
     validation = low_level_virasoro_check(branching)
     validation_seconds = time.perf_counter() - started
+    direct_pbw = None
+    direct_pbw_seconds = 0.0
+    if check_direct_pbw:
+        started = time.perf_counter()
+        direct_pbw = direct_pbw_comparison(
+            full_block,
+            b=b,
+            momenta=momenta,
+            cutoff=cutoff,
+            primary_parity=primary_parity,
+        )
+        direct_pbw_seconds = time.perf_counter() - started
+        print(
+            "direct PBW comparison: "
+            f"{direct_pbw['coefficient_count']} coefficients, "
+            f"max abs {direct_pbw['maximum_absolute_error']:.3e}, "
+            f"max rel {direct_pbw['maximum_relative_error']:.3e}",
+            flush=True,
+        )
     evaluated = evaluate_block(full_block, evaluation_q, (1, 1, 1))
     total_seconds = time.perf_counter() - total_started
 
@@ -474,6 +616,7 @@ def run(cutoff: int, output: Path) -> dict[str, object]:
             "P": list(momenta),
             "three_point_eta": [1, 1],
             "fermion_parity": 0,
+            "primary_parity": int(primary_parity),
         },
         "method": {
             "branching": "first L1 Ward identity with direct low-level anchors",
@@ -481,6 +624,12 @@ def run(cutoff: int, output: Path) -> dict[str, object]:
             "adaptive_virasoro_cutoff": True,
             "pbw_generic_block_sum_used": False,
             "vacuum_seed": "large-c vacuum-module limit, computed once",
+            "human_note_signs": {
+                "enlarged_first_tube": "(-1)^(A+mathsf_A)",
+                "auxiliary_first_tube": "(-1)^mathsf_A",
+                "double_virasoro_branch": "(-1)^(2*n_1)",
+                "pbw_extra_sign": "none",
+            },
         },
         "counts": {
             "branch_label_triples": len(triples),
@@ -499,6 +648,7 @@ def run(cutoff: int, output: Path) -> dict[str, object]:
             "formal_virasoro_c_recursions": virasoro_seconds,
             "formal_assembly": assembly_seconds,
             "low_level_validation": validation_seconds,
+            "direct_pbw_comparison": direct_pbw_seconds,
             "total": total_seconds,
             "q_expansion_with_branching_coefficients_available": (
                 vacuum_seconds + virasoro_seconds + assembly_seconds
@@ -511,6 +661,7 @@ def run(cutoff: int, output: Path) -> dict[str, object]:
             "ward_systems": ward_diagnostics,
             "vacuum_extrapolation": vacuum_diagnostic,
             "low_level_virasoro_check": validation,
+            "direct_pbw_comparison": direct_pbw,
         },
         "evaluation_check": {
             "q": list(evaluation_q),
@@ -544,10 +695,21 @@ def main() -> None:
     parser.add_argument(
         "--json", type=Path, default=HERE / "level10_q_expansion.json"
     )
+    parser.add_argument(
+        "--direct-pbw-check",
+        action="store_true",
+        help="also sew the unrestricted direct NSRR PBW block and compare",
+    )
+    parser.add_argument("--primary-parity", type=int, choices=(0, 1), default=0)
     arguments = parser.parse_args()
     if arguments.cutoff < 0:
         raise ValueError("cutoff must be nonnegative")
-    run(arguments.cutoff, arguments.json)
+    run(
+        arguments.cutoff,
+        arguments.json,
+        check_direct_pbw=arguments.direct_pbw_check,
+        primary_parity=arguments.primary_parity,
+    )
 
 
 if __name__ == "__main__":

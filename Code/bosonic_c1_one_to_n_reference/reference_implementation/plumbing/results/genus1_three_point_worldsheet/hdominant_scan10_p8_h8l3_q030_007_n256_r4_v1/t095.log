@@ -1,0 +1,36 @@
+COMMAND nice -n 5 /Library/Developer/CommandLineTools/usr/bin/python3 plumbing/smoke_genus1_three_point_channel_atlas.py --t 0.95 --momentum-order 8 --necklace-order 8 --necklace-low-order 3 --necklace-backend regulated-h-recursion --c-regulator 0.025 --coefficient-workers 2 --necklace-qhat-threshold 0.30 --necklace-second-qhat-threshold 0.07 --ope-order 6 --ope-loop-order 4 --ope-low-loop-order 2 --sobol-power 8 --replicates 4 --seed 17051301 --alpha 0.3 --patch-epsilon 0.15 --triple-patch-epsilon 0.10 --tail-proposal-exponent 1.5 --dps 24 --bank-cache plumbing/results/genus1_three_point_worldsheet/hdominant_scan10_p8_h8l3_q030_007_n256_r4_v1/t095_ope_banks.npz --necklace-bank-cache plumbing/results/genus1_three_point_worldsheet/hdominant_scan10_p8_h8l3_q030_007_n256_r4_v1/t095_necklace_banks.npz --prepare-necklace-first --output plumbing/results/genus1_three_point_worldsheet/hdominant_scan10_p8_h8l3_q030_007_n256_r4_v1/t095.json
+nice: setpriority: Operation not permitted
+Traceback (most recent call last):
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/smoke_genus1_three_point_channel_atlas.py", line 344, in <module>
+    run(parser().parse_args())
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/smoke_genus1_three_point_channel_atlas.py", line 183, in run
+    necklace.prepare(checkpoint_path=args.necklace_bank_cache)
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/genus1_three_point_worldsheet.py", line 386, in prepare
+    self._banks[edge] = self._build_bank(edge)
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/genus1_three_point_worldsheet.py", line 300, in _build_bank
+    structures = self._structure_matrices()
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/genus1_three_point_worldsheet.py", line 278, in _structure_matrices
+    matrix[first_index, second_index] = yin_structure_constant_momentum(
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/liouville_torus.py", line 636, in yin_structure_constant_momentum
+    yin_structure_constant_momentum_mp(
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/liouville_torus.py", line 604, in yin_structure_constant_momentum_mp
+    log_yin_structure_constant_momentum(
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/liouville_torus.py", line 560, in log_yin_structure_constant_momentum
+    special.log_upsilon(1 + 2j * momentum),
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/liouville_torus.py", line 283, in log_upsilon
+    result = self._log_upsilon_b_one_recursive(value)
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/liouville_torus.py", line 267, in _log_upsilon_b_one_recursive
+    self.log_upsilon_one_plus_i_real(mp.im(seed))
+  File "/Users/yutaizhang/Desktop/Project/StringMC/plumbing/liouville_torus.py", line 237, in log_upsilon_one_plus_i_real
+    result = 2 * mp.re(mp.log(mp.barnesg(value)))
+  File "/Users/yutaizhang/Library/Python/3.9/lib/python/site-packages/mpmath/ctx_mp_python.py", line 1023, in f_wrapped
+    retval = f(ctx, *args, **kwargs)
+  File "/Users/yutaizhang/Library/Python/3.9/lib/python/site-packages/mpmath/functions/factorials.py", line 116, in barnesg
+    G /= ctx.gamma(z)
+  File "/Users/yutaizhang/Library/Python/3.9/lib/python/site-packages/mpmath/ctx_mp_python.py", line 523, in __div__
+    v._mpc_ = mpc_div(s._mpc_, t._mpc_, prec, rounding)
+  File "/Users/yutaizhang/Library/Python/3.9/lib/python/site-packages/mpmath/libmp/libmpc.py", line 201, in mpc_div
+    t = mpf_add(mpf_mul(a,c), mpf_mul(b,d), wp)
+  File "/Users/yutaizhang/Library/Python/3.9/lib/python/site-packages/mpmath/libmp/libmpf.py", line 717, in mpf_add
+    if offset > 0:
+KeyboardInterrupt

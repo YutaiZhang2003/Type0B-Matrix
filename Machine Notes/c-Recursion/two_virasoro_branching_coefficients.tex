@@ -49,7 +49,7 @@ We use the free-field highest-vector prescription suggested by
 arXiv:1111.2803, but every norm and three-point coefficient is evaluated with
 the BPZ, tensor-product, and fixed-parity conventions of the human note.
 Writing \(k=2n\in\mathbb Z\), the vector is a finite Fermi-sea product of the
-modes \(\chi_r=f_r-i\vartheta_r\).  The factorized ratio \(l\) in the paper is
+modes \(\chi_r=\psi_r-i\eta_r\).  The factorized ratio \(l\) in the paper is
 recorded only as a comparison; it is not identified with the human-note
 three-point function.  The complete direct calculation at
 \(n_i\in\{0,\pm\frac12\}\) is given below.  No Whittaker vector is used.
@@ -72,32 +72,32 @@ All modes in this section are NS modes:
 
 \subsection{Oscillators and Fock vacuum}
 
-The auxiliary Majorana fermion has modes \(f_r\); this is the fermion denoted
-by \(\psi_r\) in the human note.  The free-field realization of the SCA uses
-a Heisenberg oscillator \(c_m^\epsilon\), an NS fermion
-\(\vartheta_r^\epsilon\), and a bosonic zero mode \(\mathcal P\).
+Following the human note, the auxiliary Majorana fermion has modes
+\(\psi_r\).  The free-field realization of the SCA uses a Heisenberg
+oscillator \(c_m^\epsilon\), a physical NS fermion \(\eta_r^\epsilon\), and
+a bosonic zero mode \(\mathcal P\).
 Here \(\epsilon\in\{+1,-1\}\) labels two \emph{alternative reflected
 realizations} of the same SCA module; the \(+\) and \(-\) oscillators are not
 two simultaneous free fields.  Their nonzero brackets are
 \begin{align}
  [c_m^\epsilon,c_n^\epsilon]&=m\delta_{m+n,0},
- &\{\vartheta_r^\epsilon,\vartheta_s^\epsilon\}&=\delta_{r+s,0},
- &\{f_r,f_s\}&=\delta_{r+s,0},
+ &\{\eta_r^\epsilon,\eta_s^\epsilon\}&=\delta_{r+s,0},
+ &\{\psi_r,\psi_s\}&=\delta_{r+s,0},
  \label{eq:free-field-algebra}\\
- [\mathcal P,c_m^\epsilon]&=[\mathcal P,\vartheta_r^\epsilon]=0,
- &[f_r,c_m^\epsilon]&=0,
- &\{f_r,\vartheta_s^\epsilon\}&=0.
+ [\mathcal P,c_m^\epsilon]&=[\mathcal P,\eta_r^\epsilon]=0,
+ &[\psi_r,c_m^\epsilon]&=0,
+ &\{\psi_r,\eta_s^\epsilon\}&=0.
  \notag
 \end{align}
 The auxiliary BPZ convention inherited from the human note is
 \begin{equation}
- f_r^\dagger=-f_{-r}.
- \label{eq:f-BPZ}
+ \psi_r^\dagger=-\psi_{-r}.
+ \label{eq:psi-BPZ}
 \end{equation}
 
-Let \(\one_{\Ff}\) be annihilated by \(f_r\) for \(r>0\), and let
+Let \(\one_{\Ff}\) be annihilated by \(\psi_r\) for \(r>0\), and let
 \(\lvert P\rangle_\epsilon\) be annihilated by \(c_m^\epsilon\) and
-\(\vartheta_r^\epsilon\) for \(m,r>0\), with
+\(\eta_r^\epsilon\) for \(m,r>0\), with
 \(\mathcal P\lvert P\rangle_\epsilon=P\lvert P\rangle_\epsilon\).  We write
 \begin{equation}
  \lvert\mathrm{vac};P\rangle
@@ -105,8 +105,8 @@ Let \(\one_{\Ff}\) be annihilated by \(f_r\) for \(r>0\), and let
  \label{eq:free-field-vacuum}
 \end{equation}
 Thus the tensor-product module is the span of arbitrary finite products of
-the negative modes \(f_{-r}\), \(c_{-m}^\epsilon\), and
-\(\vartheta_{-r}^\epsilon\) acting on
+the negative modes \(\psi_{-r}\), \(c_{-m}^\epsilon\), and
+\(\eta_{-r}^\epsilon\) acting on
 \(\lvert\mathrm{vac};P\rangle\).
 
 \subsection{SCA generators}
@@ -118,16 +118,16 @@ for \(m\ne0\) as
  &=\frac12\sum_{j\ne0,m}c_j^\epsilon c_{m-j}^\epsilon
   +\frac12\sum_{r\in\mathbb Z+\frac12}
        \left(r-\frac m2\right)
-       \vartheta_{m-r}^\epsilon\vartheta_r^\epsilon
+       \eta_{m-r}^\epsilon\eta_r^\epsilon
   +\frac i2(Qm+2\epsilon\mathcal P)c_m^\epsilon,
  \notag\\
  G_r
- &=\sum_{m\ne0}c_m^\epsilon\vartheta_{r-m}^\epsilon
-   +i(Qr+\epsilon\mathcal P)\vartheta_r^\epsilon,
+ &=\sum_{m\ne0}c_m^\epsilon\eta_{r-m}^\epsilon
+   +i(Qr+\epsilon\mathcal P)\eta_r^\epsilon,
  \label{eq:free-field-SCA}\\
  L_0
  &=\sum_{m>0}c_{-m}^\epsilon c_m^\epsilon
-   +\sum_{r>0}r\vartheta_{-r}^\epsilon\vartheta_r^\epsilon
+   +\sum_{r>0}r\eta_{-r}^\epsilon\eta_r^\epsilon
    +\frac12\left(\frac{Q^2}{4}-\mathcal P^2\right).
  \notag
 \end{align}
@@ -140,7 +140,7 @@ reflection operator.
 
 It is now meaningful to define the isotropic fermionic modes
 \begin{equation}
- \chi_r^\epsilon:=f_r-i\vartheta_r^\epsilon,
+ \chi_r^\epsilon:=\psi_r-i\eta_r^\epsilon,
  \qquad
  \{\chi_r^\epsilon,\chi_s^\epsilon\}=0.
  \label{eq:chi-definition}
@@ -154,9 +154,9 @@ For completeness, define the auxiliary-fermion stress tensor and the mixed
 bilinear
 \begin{equation}
  L_n^{\Ff}=\frac12\sum_{r\in\mathbb Z+\frac12}
- r:f_{n-r}f_r:,
+ r:\psi_{n-r}\psi_r:,
  \qquad
- U_n=\sum_{r\in\mathbb Z+\frac12}f_{n-r}G_r.
+ U_n=\sum_{r\in\mathbb Z+\frac12}\psi_{n-r}G_r.
  \label{eq:LF-U}
 \end{equation}
 The two commuting Virasoro generators used in the human note are
@@ -311,10 +311,10 @@ The first nontrivial vectors, already converted back to the human note's SCA
 and auxiliary-fermion modes, are
 \begin{align}
  |P,1\rangle
- &=\left[G_{-1/2}+\left(\frac Q2+P\right)f_{-1/2}\right]|P,0\rangle,
+ &=\left[G_{-1/2}+\left(\frac Q2+P\right)\psi_{-1/2}\right]|P,0\rangle,
  \notag\\
  |P,-1\rangle
- &=\left[G_{-1/2}+\left(\frac Q2-P\right)f_{-1/2}\right]|P,0\rangle.
+ &=\left[G_{-1/2}+\left(\frac Q2-P\right)\psi_{-1/2}\right]|P,0\rangle.
  \label{eq:k-one-vectors}
 \end{align}
 They are the human-note vectors \(v_{1/2}\) and \(v_{-1/2}\).
@@ -452,7 +452,7 @@ without this reflection sign.
 Already at \(n_i=0,\pm\tfrac12\), one must expand the explicit vectors
 \begin{equation}
  v_{i,\epsilon_i/2}
- =G_{-1/2}\phi_i+a_i f_{-1/2}\phi_i,
+ =G_{-1/2}\phi_i+a_i \psi_{-1/2}\phi_i,
  \qquad
  a_i:=\frac Q2+\epsilon_iP_i,
  \qquad \epsilon_i=\pm1,
@@ -461,11 +461,11 @@ Already at \(n_i=0,\pm\tfrac12\), one must expand the explicit vectors
 inside the tensor-product trilinear form of the human note.  Its auxiliary
 BPZ convention gives
 \begin{equation}
- \rho^{\Ff}(f\one,f\one,\one)=-1,
+ \rho^{\Ff}(\psi\one,\psi\one,\one)=-1,
  \qquad
- \rho^{\Ff}(f\one,\one,f\one)=-1,
+ \rho^{\Ff}(\psi\one,\one,\psi\one)=-1,
  \qquad
- \rho^{\Ff}(\one,f\one,f\one)=+1.
+ \rho^{\Ff}(\one,\psi\one,\psi\one)=+1.
  \label{eq:fermion-level-half-rhos}
 \end{equation}
 Using the human note's fixed-parity component table then gives
@@ -540,7 +540,7 @@ check.  Using
 \begin{equation}
  \langle G_{-1/2}\phi,G_{-1/2}\phi\rangle=2h,
  \qquad
- \langle f_{-1/2}\one,f_{-1/2}\one\rangle=-1,
+ \langle \psi_{-1/2}\one,\psi_{-1/2}\one\rangle=-1,
  \label{eq:level-half-inner-products}
 \end{equation}
 and vanishing mixed inner product, one finds
@@ -674,7 +674,7 @@ The free-field vector and its norm take the uniform form
 \begin{align}
  |P,\epsilon\rangle
  &=\left[
- G_{-1/2}+\left(\frac Q2+\epsilon P\right)f_{-1/2}
+ G_{-1/2}+\left(\frac Q2+\epsilon P\right)\psi_{-1/2}
  \right]|P,0\rangle,
  \notag\\
  \langle P,\epsilon|P,\epsilon\rangle
@@ -845,6 +845,658 @@ exhaust all \(27\) literature expressions
 \texttt{Code/two\_virasoro\_fusion.py}; its unsquared output should therefore
 be read as \(L_a^{\mathrm{lit}}\), not yet as \(T_a^{\mathrm H}\).
 
+\section{Constructive physical-\texorpdfstring{\(L_1\)}{L1} action:
+NS sector}
+\label{sec:constructive-physical-L1-NS}
+
+This section determines the action of the \emph{physical} NS Virasoro mode
+\(L_1\) on every \(\Vir^{(1)}\oplus\Vir^{(2)}\) branching primary.  The
+auxiliary Majorana fermion is denoted by \(\psi\), the physical free-field
+fermion by \(\eta\), and all fermionic modes are in
+\(\mathbb Z+\frac12\).
+
+\subsection{The embedded generators, with the \texorpdfstring{\(\psi G\)}{psi G}
+term displayed}
+
+Set
+\begin{equation}
+ \delta_b=b^{-1}-b,
+ \qquad
+ U_m=\sum_{r\in\mathbb Z+\frac12}\psi_{m-r}G_r.
+ \label{eq:NS-U-definition}
+\end{equation}
+For \(m\ne0\), Eq.~\eqref{eq:two-Vir-generators} can be written as
+\begin{align}
+ L_m^{(1)}
+ &=\frac{b^{-1}}{\delta_b}L_m
+   -\frac{b^{-1}+2b}{\delta_b}L_m^{\Ff}
+   +\frac1{\delta_b}U_m,
+ \notag\\
+ L_m^{(2)}
+ &=-\frac b{\delta_b}L_m
+   +\frac{b+2b^{-1}}{\delta_b}L_m^{\Ff}
+   -\frac1{\delta_b}U_m.
+ \label{eq:NS-two-Vir-U-explicit}
+\end{align}
+Thus neither embedded generator separately omits the \(\psi G\) term.  Two
+linear combinations that will be used below are the full operator
+identities
+\begin{align}
+ L_m^{(1)}+L_m^{(2)}
+ &=L_m+L_m^{\Ff},
+ \label{eq:NS-two-Vir-sum}\\
+ bL_m^{(1)}+b^{-1}L_m^{(2)}
+ &=2Q L_m^{\Ff}-U_m.
+ \label{eq:NS-two-Vir-weighted-sum}
+\end{align}
+In Eq.~\eqref{eq:NS-two-Vir-sum} the two \(U_m\) coefficients cancel;
+in Eq.~\eqref{eq:NS-two-Vir-weighted-sum} the \(U_m\) term remains.  This is
+the only cancellation used in the proof.
+
+Let \(v_n\), \(n\in\frac12\mathbb Z\), be an NS branching primary.  Since
+both positive embedded modes annihilate it, Eq.~\eqref{eq:NS-two-Vir-sum}
+gives
+\begin{equation}
+ (L_m+L_m^{\Ff})v_n=0,
+ \qquad
+ L_mv_n=-L_m^{\Ff}v_n,
+ \qquad m>0.
+ \label{eq:NS-physical-L-on-branch-primary}
+\end{equation}
+The \(\psi G\) term has not been discarded: it has canceled between the two
+embedded generators before Eq.~\eqref{eq:NS-physical-L-on-branch-primary}
+is applied.
+
+\subsection{Complex-fermion charge and the pair-field identity}
+
+Choose the reflected realization appropriate to the sign of \(n\), and set
+\begin{equation}
+ \chi_r=\psi_r-i\eta_r,
+ \qquad
+ \bar\chi_r=\psi_r+i\eta_r,
+ \qquad
+ \Psi_r=\frac{\chi_r}{\sqrt2},
+ \qquad
+ \Psi_r^*=\frac{\bar\chi_r}{\sqrt2}.
+ \label{eq:NS-complex-fermion}
+\end{equation}
+For \(n\ne0\), put \(\sigma=\operatorname{sgn}(n)\).  The current is
+oriented branchwise so that the fermion appearing in the finite sea has
+charge \(\sigma\):
+\begin{equation}
+ [J_m,J_k]=m\delta_{m+k,0},
+ \qquad
+ [J_0,\Psi_r]=\sigma\Psi_r,
+ \qquad
+ [J_0,\Psi_r^*]=-\sigma\Psi_r^*,
+ \qquad
+ J_0v_n=2n\,v_n.
+ \label{eq:NS-current-charge}
+\end{equation}
+For the positive branch this is
+\(J(z)=:\!\Psi(z)\Psi^*(z)\!:\).  For the negative reflected branch its
+negative is used.  This convention keeps the finite-sea fermion equal to
+\(\Psi\), while assigning the total charge \(q=2n\).
+
+The finite product in Eq.~\eqref{eq:free-field-vector}, equivalently
+Eq.~(4.22) of
+\href{https://arxiv.org/abs/1608.02568}{arXiv:1608.02568}, is exactly a
+charged complex-fermion vacuum:
+\begin{equation}
+ v_n={\cal N}_n|q=2n;P\rangle,
+ \qquad
+ J_m|q;P\rangle=0\quad(m>0).
+ \label{eq:NS-v-as-charged-vacuum}
+\end{equation}
+Its enlarged-module onset level is
+\begin{equation}
+ N_n=2n^2=\frac{q^2}{2}.
+ \label{eq:NS-branch-onset}
+\end{equation}
+
+Let \(L_m^\eta\) denote the physical-fermion stress tensor.  The vector
+\(v_n\) contains no physical-boson oscillator, so the bosonic terms in the
+positive physical mode annihilate it and
+\begin{equation}
+ L_1v_n=L_1^\eta v_n.
+\end{equation}
+Combining this with Eq.~\eqref{eq:NS-physical-L-on-branch-primary} gives
+\begin{equation}
+ L_1v_n=-\frac12(L_1^{\Ff}-L_1^\eta)v_n.
+ \label{eq:NS-L1-stress-difference}
+\end{equation}
+Direct substitution of Eq.~\eqref{eq:NS-complex-fermion} gives
+\begin{equation}
+ L_m^{\Ff}-L_m^\eta
+ =\frac14\sum_{r\in\mathbb Z+\frac12}r\left(
+ :\!\chi_{m-r}\chi_r\!:
+ +:\!\bar\chi_{m-r}\bar\chi_r\!:
+ \right).
+ \label{eq:NS-stress-difference-pairs}
+\end{equation}
+
+The finite sea is made from \(\Psi\), so its conjugate removes two sea
+fermions.  Define the opposite-charge spin-two field
+\begin{equation}
+ {\cal P}^{\mathrm{opp}}_\sigma(z)
+ =:\!\Psi^*(z)\partial\Psi^*(z)\!:
+ =\sum_m{\cal P}^{\mathrm{opp}}_{\sigma,m}z^{-m-2}.
+ \label{eq:NS-pair-fields}
+\end{equation}
+It has current charge \(-2\sigma\).  Antisymmetry implies
+\begin{equation}
+ {\cal P}^{\mathrm{opp}}_{\sigma,m}
+ =-\sum_r r:\!\Psi^*_{m-r}\Psi^*_r\!:.
+\end{equation}
+Equations~\eqref{eq:NS-L1-stress-difference} and
+\eqref{eq:NS-stress-difference-pairs} therefore give
+\begin{equation}
+ \boxed{
+ L_1v_n=\frac14{\cal P}^{\mathrm{opp}}_{\sigma,1}v_n,
+ \qquad \sigma=\operatorname{sgn}(n).}
+ \label{eq:NS-L1-pair-field}
+\end{equation}
+
+The \(\chi\chi\) term has charge \(+2\sigma\) and would send \(q\) to
+\(q+2\sigma\), increasing \(|q|\) by two.  Its lowest possible energy is
+larger than the available energy \(q^2/2-1\), so it annihilates \(v_n\).
+The \(\bar\chi\bar\chi\) term has charge \(-2\sigma\) and sends \(q\) to
+\(q-2\sigma\).  The excitation level above the new charged vacuum is
+\begin{equation}
+ d_n=\frac{q^2}{2}-1-\frac{(|q|-2)^2}{2}
+ =2|q|-3=4|n|-3.
+ \label{eq:NS-L1-relative-level}
+\end{equation}
+For \(n=0,\pm\frac12\), no nonnegative target level is available and
+\begin{equation}
+ L_1v_0=L_1v_{1/2}=L_1v_{-1/2}=0.
+ \label{eq:NS-L1-lowest-zero}
+\end{equation}
+For \(|n|\geq1\), the charge and level argument selects the adjacent charged
+vacuum and the relative level.  The triangular-filtration argument below
+upgrades this to the double-Virasoro support statement
+\begin{equation}
+ \boxed{
+ L_1v_n\in
+ \operatorname{span}\left\{
+ L_{-A}^{(1)}L_{-B}^{(2)}v_{n-\operatorname{sgn}(n)}:
+ |A|+|B|=4|n|-3
+ \right\}.}
+ \label{eq:NS-L1-selection}
+\end{equation}
+
+\subsection{Explicit Heisenberg descendant and normalization}
+
+Normalize a charge-\(\alpha\) Heisenberg vertex by
+\begin{equation}
+ V_\alpha(z)|q\rangle
+ =z^{\alpha q}
+ \exp\left(\alpha\sum_{m\geq1}\frac{J_{-m}}m z^m\right)
+ |q+\alpha\rangle
+\end{equation}
+and define
+\begin{equation}
+ \sum_{d\geq0}H_d^{(\alpha)}(J_-)z^d
+ =\exp\left(\alpha\sum_{m\geq1}\frac{J_{-m}}m z^m\right),
+ \qquad
+ dH_d^{(\alpha)}
+ =\alpha\sum_{m=1}^dJ_{-m}H_{d-m}^{(\alpha)}.
+ \label{eq:NS-Heisenberg-polynomials}
+\end{equation}
+The mode \({\cal P}^{\mathrm{opp}}_{\sigma,1}\) has vertex charge
+\(-2\sigma\) and selects the coefficient of \(z^{-3}\), so
+Eq.~\eqref{eq:NS-L1-pair-field} becomes
+\begin{equation}
+ \boxed{
+ L_1v_n=\kappa_n^{\mathrm{NS}}
+ H_{4|n|-3}^{(-2\operatorname{sgn}(n))}(J_-)
+ v_{n-\operatorname{sgn}(n)},
+ \qquad |n|\geq1.}
+ \label{eq:NS-L1-Heisenberg-construction}
+\end{equation}
+
+The scale can be fixed without a Ward-identity calculation.  For
+\(k=2n>0\), choose the canonical charged vacuum
+\begin{equation}
+ |q=k\rangle
+ =\Psi_{-k+1/2}\Psi_{-k+3/2}\cdots\Psi_{-1/2}|0\rangle.
+\end{equation}
+Reversing this order to the convention in
+Eq.~\eqref{eq:free-field-vector}, and using \(\chi=\sqrt2\Psi\), gives
+\begin{equation}
+ {\cal N}_{k/2}
+ =2^{k/2}(-1)^{k(k-1)/2}\Omega_k(P),
+ \qquad
+ \frac{{\cal N}_{k/2}}{{\cal N}_{(k-2)/2}}
+ =-2\frac{\Omega_k(P)}{\Omega_{k-2}(P)}.
+\end{equation}
+Choose the pair-field cocycle so that
+\({\cal P}^{\mathrm{opp}}_\sigma=V_{-2\sigma}\).  Then
+\begin{equation}
+ \boxed{
+ \kappa_n^{\mathrm{NS}}
+ =-\frac12
+ \frac{\Omega_{2n}(P)}
+      {\Omega_{2n-2\operatorname{sgn}(n)}(P)}.}
+ \label{eq:NS-kappa}
+\end{equation}
+The sign in Eq.~\eqref{eq:NS-kappa} is checked independently by the first
+nonzero example below.
+
+\subsection{Triangular \texorpdfstring{\(J_0\)}{J0} filtration and support
+theorem}
+
+The current zero mode does not commute with the two embedded Virasoro
+algebras.  What is useful is a weaker, one-sided statement.  Fix one
+transition \(n\to n-\sigma\), \(\sigma=\operatorname{sgn}(n)\), and keep
+the reflected realization selected by the source label.  Put
+\begin{equation}
+ \widehat J_0=\sigma J_0,
+ \qquad
+ [\widehat J_0,\chi_r]=\chi_r.
+ \label{eq:NS-outward-current}
+\end{equation}
+Thus \(\widehat J_0\) measures charge in the outward direction of the
+source Fermi sea.
+
+For \(m\ne0\), define
+\begin{equation}
+ S_m=L_m^{(1)}+L_m^{(2)},
+ \qquad
+ K_m=bL_m^{(1)}+b^{-1}L_m^{(2)}.
+\end{equation}
+The first combination is the total stress tensor
+\(S_m=L_m+L_m^{\Ff}\), so it preserves the complex-fermion charge.  Direct
+substitution of the free-field supercurrent into
+\(K_m=2QL_m^{\Ff}-U_m\) gives
+\begin{equation}
+ K_m=K_m^{(0)}+\frac Q2X_m^{(+2)},
+ \qquad
+ X_m^{(+2)}=\sum_{r\in\mathbb Z+\frac12}
+ r:\!\chi_{m-r}\chi_r\!:,
+ \label{eq:NS-triangular-K}
+\end{equation}
+where
+\begin{equation}
+ [\widehat J_0,S_m]=[\widehat J_0,K_m^{(0)}]=0,
+ \qquad
+ [\widehat J_0,X_m^{(+2)}]=2X_m^{(+2)}.
+ \label{eq:NS-triangular-charges}
+\end{equation}
+There is no charge-lowering term.  To see this directly, the
+\(c_j\)-dependent and momentum-dependent parts of \(U_m\) are modes of
+the neutral bilinear \(:\!\psi\eta\!:\).  The remaining part is
+\begin{align}
+ 2QL_m^{\Ff}-iQ\sum_r r:\!\psi_{m-r}\eta_r\!:
+ & =Q\sum_r r:\!\psi_{m-r}(\psi_r-i\eta_r)\!:
+ \notag\\
+ & =\frac Q2\sum_r r:\!
+ \bigl(\bar\chi_{m-r}\chi_r+\chi_{m-r}\chi_r\bigr)\!:.
+ \label{eq:NS-one-sided-charge-derivation}
+\end{align}
+The first term on the last line is neutral and the second is
+\(X_m^{(+2)}\).  Inverting the two linear combinations gives, for
+\(\delta_b=b^{-1}-b\),
+\begin{equation}
+ L_m^{(1)}=\ell_m^{(1)}-\frac{Q}{2\delta_b}X_m^{(+2)},
+ \qquad
+ L_m^{(2)}=\ell_m^{(2)}+\frac{Q}{2\delta_b}X_m^{(+2)},
+ \label{eq:NS-triangular-L12}
+\end{equation}
+with both \(\ell_m^{(i)}\) charge preserving.  Hence every negative
+double-Virasoro mode preserves \(\widehat J_0\)-charge or raises it by two.
+Equivalently,
+\begin{equation}
+ [\widehat J_0,L_m^{(1)}]
+ =-\frac{Q}{\delta_b}X_m^{(+2)},
+ \qquad
+ [\widehat J_0,L_m^{(2)}]
+ =+\frac{Q}{\delta_b}X_m^{(+2)}.
+ \label{eq:NS-actual-J0-commutators}
+\end{equation}
+In particular, \(\widehat J_0\) neither commutes with the individual
+Virasoro generators nor exchanges the two algebras.
+
+Let
+\begin{equation}
+ v_-=v_{n-\sigma},
+ \qquad
+ q_-=2|n|-2,
+ \qquad
+ d=4|n|-3=2q_-+1.
+\end{equation}
+Denote by \({\cal D}_{q_-}[d]\) the level-\(d\) double-Virasoro descendant
+space generated from \(v_-\), and by \({\cal F}_{q_-}[d]\) the
+charge-\(q_-\), level-\(d\) free-field space:
+\begin{align}
+ {\cal D}_{q_-}[d]
+ &={\rm span}\left\{
+ L_{-A}^{(1)}L_{-B}^{(2)}v_-:|A|+|B|=d\right\},
+ \notag\\
+ {\cal F}_{q_-}[d]
+ &={\rm span}\left\{
+ c_{-\lambda}J_{-\mu}v_-:|\lambda|+|\mu|=d\right\}.
+ \label{eq:NS-D-and-F-spaces}
+\end{align}
+By Eq.~\eqref{eq:NS-triangular-L12}, a component of a vector in
+\({\cal D}_{q_-}[d]\) can only have charge \(q_-+2p\), \(p\geq0\).
+The operator \(L_0^{(1)}+L_0^{(2)}\) is the ambient free-field grading, so
+every such component has relative energy \(d\).  The complex-fermion vacuum
+energy is \(E_{\rm F}(q)=q^2/2\).  A component with
+\(p\geq1\) therefore requires at least
+\begin{equation}
+ E_{\rm F}(q_-+2p)-E_{\rm F}(q_-)
+ =2pq_-+2p^2
+ \geq 2q_-+2=d+1.
+ \label{eq:NS-charge-raising-gap}
+\end{equation}
+Only level \(d\) is available, so every charge-raised component vanishes.
+Consequently
+\begin{equation}
+ {\cal D}_{q_-}[d]\subseteq {\cal F}_{q_-}[d].
+ \label{eq:NS-D-subset-F}
+\end{equation}
+
+For generic \(b,P\), the Fermi-sea construction and character proof of
+\href{https://arxiv.org/abs/1111.2803}{arXiv:1111.2803}, Sec.~3.2.1, give
+an injective tensor product of two Virasoro Verma modules generated by
+\(v_-\).  If \(p(a)\) denotes the partition number, then
+\begin{equation}
+ \dim {\cal D}_{q_-}[d]
+ =\sum_{a+b=d}p(a)p(b).
+\end{equation}
+Boson--fermion correspondence gives the explicit basis in the second line
+of Eq.~\eqref{eq:NS-D-and-F-spaces}, and hence
+\begin{equation}
+ \dim {\cal F}_{q_-}[d]
+ =\sum_{a+b=d}p(a)p(b).
+\end{equation}
+These are concrete finite-dimensional subspaces of the same ambient Fock
+space.  Thus Eq.~\eqref{eq:NS-D-subset-F} and equality of dimensions imply
+\begin{equation}
+ \boxed{{\cal D}_{q_-}[d]={\cal F}_{q_-}[d].}
+ \label{eq:NS-D-equals-F}
+\end{equation}
+In particular the current descendant in
+Eq.~\eqref{eq:NS-L1-Heisenberg-construction} belongs to
+\({\cal D}_{q_-}[d]\), proving Eq.~\eqref{eq:NS-L1-selection} for every
+\(|n|\geq1\) at generic parameters.  This proves existence of a
+double-Virasoro PBW expansion; it does not by itself give its coefficients.
+At \(|n|=1\) the target is the common uncharged vacuum \(v_0\), so no
+reflection convention is changed in this endpoint case.
+
+\subsection{Relative current--PBW reconstruction in the human-note
+conventions}
+\label{sec:NS-relative-current-PBW}
+
+We now turn the support statement into a finite algorithm for the
+two-Virasoro PBW coefficients.  It is important not to obtain these
+coefficients by first writing a Shapovalov projection
+\(\langle L_{-A}^{(1)}L_{-B}^{(2)}w_{n-1},L_1w_n\rangle\).
+Although that formula is formally correct, evaluating its left-hand side
+in this way requires either the unknown SCA-PBW expansion of \(w_n\) or an
+explicit reflected free-field bra.  It therefore does not give an
+independent constructive algorithm.
+
+This subsection uses exactly the notation and normalization of the human
+note.  Thus
+\begin{equation}
+ \chi_r=\psi_r-i\eta_r,
+ \qquad
+ w_n(P)=
+ \chi_{-(4n-1)/2}\chi_{-(4n-3)/2}\cdots\chi_{-1/2}|P\rangle,
+ \label{eq:NS-human-raw-w}
+\end{equation}
+with no factor of \(1/\sqrt2\) in \(\chi\), while
+\(\Psi=\chi/\sqrt2\) is used in the definition of the current \(J\).
+An undecorated \(L_m\) is the physical SCA Virasoro mode.  For \(n\geq0\),
+the normalized vector used elsewhere in this machine note and the raw
+human-note vector are related by
+\begin{equation}
+ v_n=\mathfrak s_n(P)w_n,
+ \qquad
+ \mathfrak s_n(P)=2^{-2n}\ell(Q+2P,4n),
+ \qquad
+ \mathfrak s_0(P)=1.
+ \label{eq:NS-human-v-w-scale}
+\end{equation}
+
+We first state the construction for \(n\geq1\).  Put
+\begin{equation}
+ w_-=w_{n-1},
+ \qquad
+ q=2n-2,
+ \qquad
+ d=4n-3=2q+1.
+ \label{eq:NS-relative-data}
+\end{equation}
+Equation~\eqref{eq:NS-L1-Heisenberg-construction}, translated with
+Eq.~\eqref{eq:NS-human-v-w-scale}, becomes
+\begin{equation}
+ \boxed{
+ X_n:=L_1w_n
+ =\kappa_n^{(w)}H_d^{(-2)}(J_-)w_-,
+ \qquad
+ \kappa_n^{(w)}
+ =\kappa_n^{\mathrm{NS}}
+   \frac{\mathfrak s_{n-1}(P)}{\mathfrak s_n(P)}.}
+ \label{eq:NS-human-L1-current-state}
+\end{equation}
+The scalar \(\kappa_n^{(w)}\) depends on the raw-state ordering and the
+pair-field cocycle; the displayed conversion fixes it from the conventions
+already adopted above.  The PBW direction below is independent of this
+overall scalar.
+
+If \(\mu=(1^{m_1}2^{m_2}\cdots)\) is a partition, set
+\begin{equation}
+ J_{-\mu}=\prod_{r\geq1}J_{-r}^{m_r},
+ \qquad
+ z_\mu=\prod_{r\geq1}r^{m_r}m_r!,
+ \qquad
+ \ell(\mu)=\sum_{r\geq1}m_r.
+\end{equation}
+The Heisenberg polynomial in Eq.~\eqref{eq:NS-human-L1-current-state} is
+then
+\begin{equation}
+ H_d^{(-2)}(J_-)
+ =\sum_{\mu\vdash d}
+   \frac{(-2)^{\ell(\mu)}}{z_\mu}J_{-\mu}.
+ \label{eq:NS-human-H-partition-expansion}
+\end{equation}
+
+The two relative level-\(d\) bases are
+\begin{align}
+ D_{A,B}
+ &=L_{-A}^{(1)}L_{-B}^{(2)}w_-,
+ &|A|+|B|&=d,
+ \label{eq:NS-relative-double-Vir-basis}\\
+ F_{\lambda,\mu}
+ &=c_{-\lambda}J_{-\mu}w_-,
+ &|\lambda|+|\mu|&=d.
+ \label{eq:NS-relative-current-basis}
+\end{align}
+Both have cardinality
+\begin{equation}
+ p_2(d)=\sum_{a=0}^dp(a)p(d-a).
+\end{equation}
+At generic \(b,P\), Eq.~\eqref{eq:NS-D-equals-F} says that they are bases
+of the same concrete subspace.
+
+For positive-mode partitions define
+\begin{equation}
+ c_\lambda=\prod_{r\geq1}c_r^{m_r(\lambda)},
+ \qquad
+ J_\mu=\prod_{r\geq1}J_r^{m_r(\mu)}.
+\end{equation}
+Let \(\operatorname{Coeff}_{w_-}[Y]\) denote the coefficient of \(w_-\)
+after a relative level-zero state \(Y\) has been fully reduced.  Define the
+terminal-reduction matrix
+\begin{equation}
+ \boxed{
+ K_{(\lambda,\mu),(A,B)}
+ :=\operatorname{Coeff}_{w_-}\!\left[
+ c_\lambda J_\mu
+ L_{-A}^{(1)}L_{-B}^{(2)}w_-
+ \right],
+ \qquad
+ |\lambda|+|\mu|=|A|+|B|=d.}
+ \label{eq:NS-terminal-reduction-matrix}
+\end{equation}
+This is an operator reduction, not a BPZ matrix element.  In particular,
+it introduces neither a reflected bra nor the norm of \(w_-\).
+
+The defining current properties of \(X_n\) give the complete right-hand
+side.  Since \(c_mw_-=J_mw_-=0\) for \(m>0\), the Heisenberg relations and
+Eq.~\eqref{eq:NS-human-H-partition-expansion} imply
+\begin{equation}
+ \boxed{
+ c_\lambda J_\mu X_n
+ =\begin{cases}
+   \kappa_n^{(w)}(-2)^{\ell(\mu)}w_-,
+    &\lambda=\varnothing,\quad |\mu|=d,\\
+   0,
+    &\lambda\ne\varnothing,\quad |\lambda|+|\mu|=d.
+  \end{cases}}
+ \label{eq:NS-terminal-current-conditions}
+\end{equation}
+Consequently the desired human-note expansion
+\begin{equation}
+ L_1w_n
+ =\sum_{|A|+|B|=d}C_{A,B}^{(n)}
+ L_{-A}^{(1)}L_{-B}^{(2)}w_{n-1}
+ \label{eq:NS-human-double-Vir-expansion}
+\end{equation}
+is determined by the square system
+\begin{equation}
+ \boxed{
+ \sum_{|A|+|B|=d}
+ K_{(\lambda,\mu),(A,B)}C_{A,B}^{(n)}
+ =\delta_{\lambda,\varnothing}\,
+  \kappa_n^{(w)}(-2)^{\ell(\mu)},
+ \qquad |\lambda|+|\mu|=d.}
+ \label{eq:NS-terminal-linear-system}
+\end{equation}
+Pure \(J\)-reductions alone give only \(p(d)\) equations and are not
+sufficient once \(d>1\).  The vanishing equations with
+\(\lambda\ne\varnothing\) supply the remaining conditions.
+
+The entries of \(K\) are computed recursively in the free-field
+realization of the embedded generators.  For example,
+\begin{align}
+ J_mD_{A,B}
+ &=[J_m,L_{-A}^{(1)}L_{-B}^{(2)}]w_-,
+ \notag\\
+ c_mD_{A,B}
+ &=[c_m,L_{-A}^{(1)}L_{-B}^{(2)}]w_-,
+ \label{eq:NS-relative-positive-mode-reduction}
+\end{align}
+because the final positive mode annihilates \(w_-\).  Apply the Leibniz
+rule to the mode word, substitute Eq.~\eqref{eq:NS-two-Vir-U-explicit}, and
+normal order after every step relative to the charged vacuum \(w_-\).  No
+expansion of either \(w_-\) or \(w_n\) over the original SCA vacuum is
+needed.
+
+The charge gap makes this reduction close on the basis
+\eqref{eq:NS-relative-current-basis}.  Indeed,
+Eq.~\eqref{eq:NS-triangular-L12} writes each embedded mode as a
+charge-preserving term plus a term that raises the outward current charge
+by two.  Starting at charge \(q\), the latter would require relative energy
+\begin{equation}
+ E_{\rm F}(q+2)-E_{\rm F}(q)=2q+2=d+1,
+ \end{equation}
+whereas every intermediate state in the level-\(d\) reduction has at most
+energy \(d\).  All charge-raised terms therefore vanish identically, not
+merely after the final projection.
+
+For completeness, one may instead construct the relative change-of-basis
+matrix \(T\) defined by
+\begin{equation}
+ D_{A,B}
+ =\sum_{|\lambda|+|\mu|=d}
+ T_{(\lambda,\mu),(A,B)}F_{\lambda,\mu}.
+ \label{eq:NS-relative-transition-matrix}
+\end{equation}
+Ordinary Heisenberg reduction gives
+\begin{equation}
+ K_{(\lambda,\mu),(A,B)}
+ =z_\lambda z_\mu
+  T_{(\lambda,\mu),(A,B)}.
+ \label{eq:NS-K-versus-T}
+\end{equation}
+Thus invertibility of \(K\) follows from
+Eq.~\eqref{eq:NS-D-equals-F}, and Eq.~\eqref{eq:NS-terminal-linear-system}
+is equivalent to coefficient matching against the known vector
+\begin{equation}
+ x_{\lambda,\mu}
+ =\delta_{\lambda,\varnothing}\,
+  \kappa_n^{(w)}\frac{(-2)^{\ell(\mu)}}{z_\mu}.
+\end{equation}
+At a Kac-degenerate value one performs the construction at generic \(b,P\)
+and then takes the limit, or works directly in the irreducible quotient.
+
+\subsection{First exact NS checks}
+
+The vanishing in Eq.~\eqref{eq:NS-L1-lowest-zero} follows immediately from
+the explicit vectors \(v_{\pm1/2}\):
+\([L_1,G_{-1/2}]=G_{1/2}\), and the resulting positive mode annihilates the
+NS highest state.
+
+For the first nonzero image, put \(\sigma=\pm1\) and
+\begin{equation}
+ D_\sigma=4P^2+8\sigma PQ+3Q^2+4.
+\end{equation}
+Applying physical \(L_1\) to the explicit level-two vector recorded earlier
+gives, after cancellation of all \(L_{-1}|P\rangle\) terms,
+\begin{equation}
+ L_1v_\sigma
+ =-(Q+\sigma P)D_\sigma
+ \psi_{-1/2}G_{-1/2}v_0.
+ \label{eq:NS-L1-one-raw}
+\end{equation}
+Equation \eqref{eq:NS-two-Vir-weighted-sum} is still a full operator
+identity.  Only after acting on the vacuum branch may it be specialized:
+\begin{equation}
+ L_{-1}^{\Ff}v_0=0,
+ \qquad
+ U_{-1}v_0=\psi_{-1/2}G_{-1/2}v_0,
+\end{equation}
+and hence
+\begin{equation}
+ \left(bL_{-1}^{(1)}+b^{-1}L_{-1}^{(2)}\right)v_0
+ =-\psi_{-1/2}G_{-1/2}v_0.
+ \label{eq:NS-weighted-sum-on-vacuum}
+\end{equation}
+Combining Eqs.~\eqref{eq:NS-L1-one-raw} and
+\eqref{eq:NS-weighted-sum-on-vacuum} gives
+\begin{equation}
+ \boxed{
+ L_1v_\sigma
+ =(Q+\sigma P)D_\sigma
+ \left(bL_{-1}^{(1)}+b^{-1}L_{-1}^{(2)}\right)v_0.}
+ \label{eq:NS-L1-one-double-Vir}
+\end{equation}
+This agrees with Eq.~\eqref{eq:NS-L1-Heisenberg-construction}, since
+\begin{equation}
+ \Omega_{2\sigma}(P)
+ =\frac12(Q+\sigma P)(Q+2\sigma P)D_\sigma,
+ \qquad
+ H_1^{(-2\sigma)}v_0
+ =-\frac4{Q+2\sigma P}
+ \left(bL_{-1}^{(1)}+b^{-1}L_{-1}^{(2)}\right)v_0.
+\end{equation}
+
+The next case is already a level-three descendant of \(v_{1/2}\):
+\begin{equation}
+ L_1v_{3/2}
+ =\kappa_{3/2}^{\mathrm{NS}}
+ \left(-\frac43J_{-1}^3+2J_{-1}J_{-2}-\frac23J_{-3}\right)v_{1/2}.
+ \label{eq:NS-L1-three-halves}
+\end{equation}
+Its two-Virasoro PBW expansion has ten candidate basis vectors, all inside
+the \(v_{1/2}\) module.  Producing their closed coefficients requires the
+same explicit Feigin--Fuchs oscillator rotation identified below in the
+Ramond analysis; it is not assumed in the support proof.
+
 \section{Ramond extension: status of the literature}
 \label{sec:ramond-literature-status}
 
@@ -936,7 +1588,7 @@ rule
  \label{eq:ramond-literature-branching}
 \end{equation}
 and give explicit highest vectors as finite products of integer modes
-\(\chi_r^\pm=f_r-i\vartheta_r^\pm\), including the zero-mode factors that
+\(\chi_r^\pm=\psi_r-i\eta_r^\pm\), including the zero-mode factors that
 distinguish the two parity copies.  Thus the vectorial input for a direct
 free-field calculation is available.
 
@@ -948,6 +1600,593 @@ reported series test through relative order ten), while its sign remains
 undetermined.  This supplies a valuable norm/irregular limit check, but not
 the coefficient in Eq.~\eqref{eq:ramond-target-B}.
 
+\section{Constructive physical-\texorpdfstring{\(L_1\)}{L1} action:
+Ramond sector}
+\label{sec:constructive-physical-L1-R}
+
+This section gives the corresponding construction for the Ramond branching
+primaries.  Here all fermionic modes are integers,
+\(\delta_b=b^{-1}-b\), and
+\(U_m=\sum_{r\in\mathbb Z}\psi_{m-r}G_r\).  An undecorated \(L_m\) denotes the
+\emph{physical} SCA mode, not either embedded Virasoro generator.
+
+For \(m\ne0\), the complete embedded generators are
+\begin{align}
+ L_m^{(1)}
+ &=\frac{b^{-1}}{\delta_b}L_m
+   -\frac{b^{-1}+2b}{\delta_b}L_m^{\Ff}
+   +\frac1{\delta_b}U_m,
+ \notag\\
+ L_m^{(2)}
+ &=-\frac b{\delta_b}L_m
+   +\frac{b+2b^{-1}}{\delta_b}L_m^{\Ff}
+   -\frac1{\delta_b}U_m.
+ \label{eq:R-two-Vir-U-explicit}
+\end{align}
+Consequently
+\begin{align}
+ L_m^{(1)}+L_m^{(2)}&=L_m+L_m^{\Ff},
+ \label{eq:R-two-Vir-sum}\\
+ bL_m^{(1)}+b^{-1}L_m^{(2)}&=2Q L_m^{\Ff}-U_m.
+ \label{eq:R-two-Vir-weighted-sum}
+\end{align}
+The \(\psi G\) term is present in each generator.  It cancels only in the first
+combination and remains explicitly in the second.  No \(\psi G\) term is omitted
+in what follows.  The restriction to \(m\ne0\) avoids the Ramond
+normal-ordering constant, which is irrelevant for the \(L_{\pm1}\) argument.
+
+If \(W_n^\epsilon\) is a
+\(\Vir^{(1)}\oplus\Vir^{(2)}\) highest vector, then
+\begin{equation}
+ L_m^{(1)}W_n^\epsilon=L_m^{(2)}W_n^\epsilon=0,
+ \qquad m>0.
+\end{equation}
+Equation \eqref{eq:R-two-Vir-sum}, with its canceled \(U_m\) terms, then
+gives
+\begin{equation}
+ L_mW_n^\epsilon=-L_m^{\Ff}W_n^\epsilon.
+ \label{eq:physical-L-on-branch-primary}
+\end{equation}
+
+\subsection{Selection rule and exact low-level reductions}
+
+The onset level of the branch is
+\begin{equation}
+ N_n=2n^2-\frac18.
+\end{equation}
+Thus the a priori expansion of \(L_1W_n^\epsilon\) may involve every
+\(L_{-A}^{(1)}L_{-B}^{(2)}W_{n'}^\epsilon\) satisfying
+\(N_{n'}+|A|+|B|=N_n-1\).  Direct free-field reduction instead gives the
+much sharper pattern
+\begin{equation}
+ \boxed{
+ L_1W_n^\epsilon\ \in\
+ \operatorname{span}\left\{
+ L_{-A}^{(1)}L_{-B}^{(2)}W_{n-\operatorname{sgn}(n)}^\epsilon:
+ |A|+|B|=4|n|-3
+ \right\}.}
+ \label{eq:ramond-L1-selection}
+\end{equation}
+The two parity copies do not mix.  This pattern was first found by exact
+symbolic calculation through \(|n|=5/4\), and was checked at two generic
+rational points for \(|n|=7/4\).  The free-field argument below first proves
+the all-label current-descendant formula and then proves the displayed
+double-Virasoro containment by a triangular \(J_0\)-filtration.
+
+At branch onset, \(L_1W_{\pm1/4}^\epsilon=0\).  The first nonzero images are
+\begin{equation}
+ L_1W_{3\sigma/4}^{0}=\frac14W_{-\sigma/4}^{0},
+ \qquad
+ L_1W_{3\sigma/4}^{1}=\frac12W_{-\sigma/4}^{1},
+ \qquad \sigma=\pm1.
+ \label{eq:ramond-L1-three-quarter}
+\end{equation}
+In the PBW calculation it is essential to retain
+\([L_1,G_{-1}]=\frac32G_0\).  The result in
+Eq.~\eqref{eq:ramond-L1-three-quarter} was also obtained independently by
+acting on the finite free-field \(\chi\)-string.
+
+The first genuine descendant example is the one at \(n=5/4\).  Put
+\(x=2bP\).  For either \(\epsilon=0,1\),
+\begin{align}
+ L_1W_{5/4}^{\epsilon}
+ ={}&A\,L_{-2}^{(2)}W_{1/4}^{\epsilon}
+ +B\,(L_{-1}^{(2)})^2W_{1/4}^{\epsilon}
+ +C\,L_{-1}^{(1)}L_{-1}^{(2)}W_{1/4}^{\epsilon}
+ \notag\\
+ &+D\,L_{-2}^{(1)}W_{1/4}^{\epsilon}
+ +E\,(L_{-1}^{(1)})^2W_{1/4}^{\epsilon},
+ \label{eq:ramond-L1-five-quarter}
+\end{align}
+where
+\begin{align}
+ A&=-\frac{x+b^2+6}{(x+b^2+4)(x+2b^2+1)},
+ &
+ B&=\frac{2(2x+3b^2+7)}
+ {(x+b^2+2)(x+b^2+4)(x+2b^2+1)},
+ \notag\\
+ C&=\frac{8b^2}{(x+b^2+2)(x+2b^2+1)},
+ &
+ D&=-\frac{b^2(x+6b^2+1)}
+ {(x+b^2+2)(x+4b^2+1)},
+ \notag\\
+ E&=\frac{2b^4(2x+7b^2+3)}
+ {(x+b^2+2)(x+2b^2+1)(x+4b^2+1)}.
+ \label{eq:ramond-L1-five-quarter-coefficients}
+\end{align}
+The complete target space also contains level-two descendants of
+\(W_{-1/4}^{\epsilon}\) and level-one descendants of
+\(W_{\pm3/4}^{\epsilon}\).  Every one of those coefficients vanishes in the
+exact symbolic solve.  Reflection gives the \(n=-5/4\) result by
+\(P\mapsto-P\) and \(W_{1/4}\mapsto W_{-1/4}\).
+
+For \(n=7/4\), Eq.~\eqref{eq:ramond-L1-selection} predicts twenty
+level-four descendants of \(W_{3/4}^{\epsilon}\).  All twenty occur.  To
+record one fully exact benchmark, write
+\begin{equation}
+ L_1W_{7/4}^{\epsilon}
+ =\sum_{|A|+|B|=4}{\cal C}_{A,B}
+ L_{-A}^{(1)}L_{-B}^{(2)}W_{3/4}^{\epsilon}.
+ \label{eq:ramond-L1-seven-quarter-benchmark}
+\end{equation}
+At \(b=3/2\), \(P=2/5\), the coefficient table is the same for both parity
+copies:
+\begin{center}
+\scriptsize
+\begin{tabular}{c c c@{\qquad}c c c}
+\(A\)&\(B\)&\({\cal C}_{A,B}\)&\(A\)&\(B\)&\({\cal C}_{A,B}\)\\[2pt]
+\hline
+\(\varnothing\)&\((4)\)&\(-2134586495/39213529488\)&
+\((1,1)\)&\((2)\)&\(-17260875/355170424\)\\
+\(\varnothing\)&\((3,1)\)&\(12777856925/365175993357\)&
+\((1,1)\)&\((1,1)\)&\(151880625/6615049147\)\\
+\(\varnothing\)&\((2,2)\)&\(177475/10947384\)&
+\((3)\)&\((1)\)&\(13289200/135001003\)\\
+\(\varnothing\)&\((2,1,1)\)&\(-5338340750/365175993357\)&
+\((2,1)\)&\((1)\)&\(-135049500/945007021\)\\
+\(\varnothing\)&\((1,1,1,1)\)&\(379765000/365175993357\)&
+\((1,1,1)\)&\((1)\)&\(3999375/135001003\)\\
+\((1)\)&\((3)\)&\(148525/2545011\)&
+\((4)\)&\(\varnothing\)&\(-15271586235/78030579734\)\\
+\((1)\)&\((2,1)\)&\(-20210500/379206639\)&
+\((3,1)\)&\(\varnothing\)&\(1484874717075/8739424930208\)\\
+\((1)\)&\((1,1,1)\)&\(3020000/379206639\)&
+\((2,2)\)&\(\varnothing\)&\(144803700/1345354823\)\\
+\((2)\)&\((2)\)&\(4625800/57080961\)&
+\((2,1,1)\)&\(\varnothing\)&\(-83962078875/624244637872\)\\
+\((2)\)&\((1,1)\)&\(-325624000/8505063189\)&
+\((1,1,1,1)\)&\(\varnothing\)&\(18105170625/1248489275744\)
+\end{tabular}
+\end{center}
+The exact residual vanishes in the full auxiliary-fermion times physical
+Fock basis.  The same closure was checked independently at
+\((b,P)=(5/3,7/10)\).  At total target level five there are also 102 basis
+vectors belonging to the other lower branch modules; none is needed to
+represent the image.  This is the first check for which the sparsity is not
+a low-dimensional accident.
+
+The reproducible implementation is the script
+\texttt{decompose\_physical\_l1.py} in the Ramond branching-check directory.
+For example, the benchmark above is generated by
+\begin{verbatim}
+python3 "python 2/ramond_branching_coefficient_check/decompose_physical_l1.py" \
+  --higher-label 7/4 --b 3/2 --momentum 2/5
+\end{verbatim}
+
+\subsection{Constructive free-field proof of the current-descendant formula}
+
+We now isolate which part of the preceding observation can be proved for
+all labels.  All fermionic modes in this argument are Ramond integer modes.
+Choose the reflected free-field realization adapted to the sign of the
+branch label, suppress that sign from the notation, and introduce the second
+isotropic fermion
+\begin{equation}
+ \chi_r=\psi_r-i\eta_r,
+ \qquad
+ \bar\chi_r=\psi_r+i\eta_r,
+ \qquad
+ \Psi_r=\frac{\chi_r}{\sqrt2},
+ \qquad
+ \Psi_r^*=\frac{\bar\chi_r}{\sqrt2}.
+ \label{eq:ramond-complex-fermion}
+\end{equation}
+Then
+\begin{equation}
+ \{\Psi_r,\Psi_s\}=\{\Psi_r^*,\Psi_s^*\}=0,
+ \qquad
+ \{\Psi_r,\Psi_s^*\}=\delta_{r+s,0}.
+\end{equation}
+Put \(\sigma=\operatorname{sgn}(n)\).  As in the NS construction, orient
+the current so that the finite-sea fermion has charge \(\sigma\):
+\begin{equation}
+ [J_m,J_k]=m\delta_{m+k,0},
+ \qquad
+ [J_0,\Psi_r]=\sigma\Psi_r,
+ \qquad
+ [J_0,\Psi_r^*]=-\sigma\Psi_r^*.
+ \label{eq:ramond-current-convention}
+\end{equation}
+For \(n>0\), this current is
+\(J(z)=:\!\Psi(z)\Psi^*(z)\!:\); for \(n<0\), the negative of the
+reflected current is used.
+
+There is an important convention at a sign-crossing transition.  For each
+fixed transition \(n\to n-\sigma\), the free-field realization and the
+orientation of \(J\) are chosen from the source label \(n\) and are then
+held fixed on both the source and target states.  In particular, for
+\(n=3/4\) the target \(W_{-1/4}^\epsilon\) is represented in the same
+current orientation as \(W_{3/4}^\epsilon\).  The reflected realization
+used to write a negative-label vector as a source of a different
+transition must not be introduced halfway through the argument: charges
+defined with two oppositely oriented currents cannot be compared.
+
+The finite products in Eqs.~(4.24)--(4.26) of
+\href{https://arxiv.org/abs/1608.02568}{arXiv:1608.02568} say precisely that,
+in either parity copy, the branching vector is a charged complex-fermion
+vacuum:
+\begin{equation}
+ W_n^\epsilon={\cal N}_n^\epsilon
+ |q=2n;\epsilon,P\rangle,
+ \qquad
+ J_m|q;\epsilon,P\rangle=0\quad(m>0).
+ \label{eq:ramond-W-as-charged-vacuum}
+\end{equation}
+The two values of \(\epsilon\) are two independent copies of the same
+charged Fock construction.  The auxiliary and physical Ramond zero modes
+fix the normalization factors \({\cal N}_n^\epsilon\); they do not change the
+charge \(q=2n\).
+
+Let \(L_m^\eta\) denote the physical-fermion part of \(L_m\).  Since
+\(W_n^\epsilon\) contains no physical-boson oscillator, the positive
+physical mode satisfies
+\begin{equation}
+ L_1W_n^\epsilon=L_1^\eta W_n^\epsilon.
+\end{equation}
+On the other hand, Eq.~\eqref{eq:physical-L-on-branch-primary} gives
+\((L_1^{\Ff}+L_1^\eta)W_n^\epsilon=0\).  Therefore
+\begin{equation}
+ L_1W_n^\epsilon
+ =-\frac12(L_1^{\Ff}-L_1^\eta)W_n^\epsilon.
+ \label{eq:ramond-L1-stress-difference}
+\end{equation}
+Direct substitution of Eq.~\eqref{eq:ramond-complex-fermion} into the two
+Majorana stress tensors gives the operator identity
+\begin{equation}
+ L_m^{\Ff}-L_m^\eta
+ =\frac14\sum_{r\in\mathbb Z}r\left(
+ :\!\chi_{m-r}\chi_r\!:
+ +:\!\bar\chi_{m-r}\bar\chi_r\!:
+ \right).
+ \label{eq:ramond-stress-difference-pairs}
+\end{equation}
+Thus the physical \(L_1\) is reduced, on a branching highest vector, to a
+sum of two charge-changing fermion-pair modes.
+
+This identity proves the triangular selection among charged free-fermion
+vacua.  A charge
+\(q\) complex-fermion vacuum has diagonal fermion energy \(q^2/2\).
+After applying a mode of index one, the energy is \(q^2/2-1\).  The
+\(\chi\chi\) term has charge \(+2\sigma\), so it would increase \(|q|\) by
+two.  Its lowest possible energy is too large, and it annihilates the
+state.  The conjugate \(\bar\chi\bar\chi\) pair has charge
+\(-2\sigma\) and sends
+\(q\) to \(q-2\sigma=2(n-\operatorname{sgn}(n))\).  The excitation level
+over the new charged vacuum is
+\begin{equation}
+ d=\frac{q^2}{2}-1-\frac{(|q|-2)^2}{2}
+  =2|q|-3=4|n|-3.
+ \label{eq:ramond-pair-descendant-level}
+\end{equation}
+For \(|n|=1/4\), this number is negative and the image vanishes.  The pair
+operator is even, so it cannot mix the two parity copies.
+
+The same argument gives an explicit current descendant rather than only its
+charge.  Its conversion into the double-Virasoro descendant space is proved
+by the triangular filtration below.
+Define the opposite-charge spin-two field
+\begin{equation}
+ {\cal P}^{\mathrm{opp}}_\sigma(z)
+ =:\!\Psi^*(z)\partial\Psi^*(z)\!:
+ =\sum_m{\cal P}^{\mathrm{opp}}_{\sigma,m}z^{-m-2}.
+\end{equation}
+It has current charge \(-2\sigma\), and antisymmetry gives
+\begin{equation}
+ {\cal P}^{\mathrm{opp}}_{\sigma,m}
+ =-\sum_r r:\!\Psi^*_{m-r}\Psi^*_r\!:.
+\end{equation}
+Combining this with Eqs.~\eqref{eq:ramond-L1-stress-difference} and
+\eqref{eq:ramond-stress-difference-pairs} yields the exact branchwise
+operator formula
+\begin{equation}
+ \boxed{
+ L_1W_n^\epsilon
+ =\frac14{\cal P}^{\mathrm{opp}}_{\sigma,1}W_n^\epsilon,
+ \qquad \sigma=\operatorname{sgn}(n).}
+ \label{eq:ramond-L1-pair-field}
+\end{equation}
+
+We next derive the conversion of the pair state into a current descendant
+directly from free-fermion commutators.  This step is more than the
+particle--hole description and does not assume a bosonized vertex formula.
+Put
+\begin{equation}
+ \alpha=-2\sigma,
+ \qquad q=2n.
+ \label{eq:ramond-pair-alpha-q}
+\end{equation}
+The current convention in Eq.~\eqref{eq:ramond-current-convention} gives
+\begin{equation}
+ [J_m,\Psi^*(z)]=-\sigma z^m\Psi^*(z).
+\end{equation}
+When the commutator is differentiated, one apparently obtains an extra
+term proportional to
+\(m z^{m-1}:\!\Psi^*(z)\Psi^*(z)\!:\).  This term vanishes by fermionic
+antisymmetry.  The direct free-fermion commutator is therefore
+\begin{equation}
+ \boxed{
+ [J_m,{\cal P}^{\mathrm{opp}}_\sigma(z)]
+ =\alpha z^m{\cal P}^{\mathrm{opp}}_\sigma(z).}
+ \label{eq:ramond-current-pair-commutator}
+\end{equation}
+
+Let
+\begin{equation}
+ F_q(z):={\cal P}^{\mathrm{opp}}_\sigma(z)
+ |q;\epsilon,P\rangle.
+\end{equation}
+For every \(m>0\), Eqs.~\eqref{eq:ramond-W-as-charged-vacuum} and
+\eqref{eq:ramond-current-pair-commutator} imply
+\begin{equation}
+ J_mF_q(z)=\alpha z^mF_q(z).
+ \label{eq:ramond-current-eigenvector-equations}
+\end{equation}
+On the other hand,
+\begin{equation}
+ \left[J_m,
+ \alpha\sum_{k\geq1}\frac{J_{-k}}{k}z^k\right]
+ =\alpha z^m.
+\end{equation}
+It follows that
+\begin{equation}
+ \exp\left(-\alpha\sum_{k\geq1}\frac{J_{-k}}{k}z^k\right)
+ F_q(z)
+\end{equation}
+is killed by every positive current mode.  It has charge \(q+\alpha\),
+fixed physical momentum \(P\), and the same Ramond copy \(\epsilon\).  The
+Heisenberg Fock module has a unique highest vector with these data, hence
+\begin{equation}
+ F_q(z)=\nu_\alpha z^s
+ \exp\left(\alpha\sum_{m\geq1}\frac{J_{-m}}{m}z^m\right)
+ |q+\alpha;\epsilon,P\rangle
+ \label{eq:ramond-pair-current-solution}
+\end{equation}
+for a convention-dependent constant \(\nu_\alpha\).
+
+The power \(s\) is fixed without a vertex-operator assumption.  The pair
+field has weight two, while a charge-\(q\) complex-fermion vacuum has weight
+\(q^2/2\), up to the common Ramond normal-ordering constant.  Therefore
+\begin{equation}
+ s=\frac{(q+\alpha)^2}{2}-\frac{q^2}{2}-2
+ =\alpha q,
+ \qquad \alpha^2=4.
+ \label{eq:ramond-pair-current-power}
+\end{equation}
+Equations \eqref{eq:ramond-pair-current-solution} and
+\eqref{eq:ramond-pair-current-power} are the usual charge-two
+boson--fermion formula, but here they have been obtained directly by solving
+the current commutator equations.
+
+Introduce the universal polynomials
+\begin{equation}
+ \sum_{d\geq0}H_d^{(\alpha)}(J_-)z^d
+ =\exp\left(\alpha\sum_{m\geq1}\frac{J_{-m}}{m}z^m\right),
+ \qquad
+ dH_d^{(\alpha)}
+ =\alpha\sum_{m=1}^dJ_{-m}H_{d-m}^{(\alpha)}.
+ \label{eq:ramond-Heisenberg-descendants}
+\end{equation}
+Since
+\({\cal P}^{\mathrm{opp}}_\sigma(z)=\sum_m
+{\cal P}^{\mathrm{opp}}_{\sigma,m}z^{-m-2}\), the mode
+\({\cal P}^{\mathrm{opp}}_{\sigma,1}\) is the coefficient of \(z^{-3}\).
+The term \(H_d^{(\alpha)}\) in
+Eq.~\eqref{eq:ramond-pair-current-solution} has power
+\(z^{\alpha q+d}\).  Consequently
+\begin{equation}
+ \alpha q+d=-3,
+ \qquad
+ d=-3-\alpha q=4|n|-3.
+ \label{eq:ramond-pair-mode-selection}
+\end{equation}
+This gives the exact current-descendant formula
+\begin{equation}
+ \boxed{
+ L_1W_n^\epsilon
+ =\kappa_n^\epsilon
+ H_{4|n|-3}^{(-2\operatorname{sgn}(n))}(J_-)
+ W_{n-\operatorname{sgn}(n)}^\epsilon,
+ \qquad |n|\geq\frac34.}
+ \label{eq:ramond-L1-Heisenberg-construction}
+\end{equation}
+Using the constant \(\nu_{-2\sigma}\) defined directly by
+Eq.~\eqref{eq:ramond-pair-current-solution}, together with the normalization
+in Eq.~\eqref{eq:ramond-W-as-charged-vacuum}, gives
+\begin{equation}
+ \kappa_n^\epsilon
+ =\frac{\nu_{-2\operatorname{sgn}(n)}}4
+  \frac{{\cal N}_n^\epsilon}
+       {{\cal N}_{n-\operatorname{sgn}(n)}^\epsilon}.
+ \label{eq:ramond-kappa-normalization}
+\end{equation}
+Consequently the remaining overall factor is a finite-sea and zero-mode
+normalization, not an undetermined dynamical coefficient.
+
+For the positive branch the first three polynomials needed here are
+\begin{align}
+ H_0^{(-2)}={}&1,
+ &
+ H_2^{(-2)}={}&2J_{-1}^2-J_{-2},
+ \notag\\
+ H_4^{(-2)}={}&\frac23J_{-1}^4-2J_{-1}^2J_{-2}
+ +\frac12J_{-2}^2+\frac43J_{-1}J_{-3}-\frac12J_{-4}.
+ \label{eq:ramond-first-Heisenberg-polynomials}
+\end{align}
+They correspond respectively to \(n=3/4,5/4,7/4\).  In particular,
+\(H_0=1\) explains why the first image is itself a lower branch primary,
+whereas \(H_2\) and \(H_4\) give the first genuine descendants.
+
+\paragraph{Independent low-level check in the real-fermion basis.}
+The script
+\path{check_ramond_l1_heisenberg.py} evaluates the two sides without
+using Eq.~\eqref{eq:ramond-pair-current-solution}.  On the positive branch it
+implements
+\begin{equation}
+ J_m=i\sum_{r\in\mathbb Z}:\!\psi_{m-r}\eta_r\!:
+ \label{eq:ramond-current-real-fermions}
+\end{equation}
+directly in the auxiliary-fermion times physical-fermion Fock basis.  It
+constructs \(L_1W_n^\epsilon\) by commuting the physical \(L_1\) through the
+finite \(\chi\)-string, constructs the polynomial
+\(H_{4n-3}^{(-2)}(J_-)W_{n-1}^\epsilon\) independently, extracts the one
+overall proportionality coefficient, and checks every Fock coefficient in
+the residual.  The exact results in the present finite-sea normalization
+are
+\begin{center}
+\begin{tabular}{c|c|c|c|c}
+\(n\)&\(\epsilon\)&\(d\)&\(\kappa_n^\epsilon\)&residual\\
+\hline
+\(3/4\)&0&0&\(1/4\)&zero \((2/2)\)\\
+\(3/4\)&1&0&\(1/2\)&zero \((2/2)\)\\
+\(5/4\)&0&2&\(1/2\)&zero \((6/6)\)\\
+\(5/4\)&1&2&\(1/2\)&zero \((6/6)\)\\
+\(7/4\)&0&4&\(1/2\)&zero \((16/16)\)\\
+\(7/4\)&1&4&\(1/2\)&zero \((16/16)\)
+\end{tabular}
+\end{center}
+Here \((a/a)\) records the number of nonzero Fock coefficients on the two
+sides.  The \(n=3/4\) test places both \(W_{3/4}^\epsilon\) and the lower
+\(W_{-1/4}^\epsilon\) in the same fixed current orientation; the current is
+not redefined when the branch label crosses zero.  The check is run by
+\begin{verbatim}
+python3 "python 2/ramond_branching_coefficient_check/"\
+"check_ramond_l1_heisenberg.py"
+\end{verbatim}
+
+\subsection{Triangular \texorpdfstring{\(J_0\)}{J0} filtration and support
+theorem}
+
+The NS decomposition
+Eqs.~\eqref{eq:NS-triangular-K}--\eqref{eq:NS-triangular-L12} uses only
+the free-field formulas at nonzero mode number.  It therefore carries over
+to Ramond integer modes.  In the reflected realization selected by the
+source label, put \(\widehat J_0=\sigma J_0\).  Then, for every \(m\ne0\),
+\begin{align}
+ L_m^{(1)}&=\ell_m^{(1)}-\frac{Q}{2\delta_b}X_m^{(+2)},
+ &
+ L_m^{(2)}&=\ell_m^{(2)}+\frac{Q}{2\delta_b}X_m^{(+2)},
+ \notag\\
+ [\widehat J_0,\ell_m^{(i)}]&=0,
+ &
+ [\widehat J_0,X_m^{(+2)}]&=2X_m^{(+2)},
+ \label{eq:R-triangular-L12}
+\end{align}
+where now
+\begin{equation}
+ X_m^{(+2)}=\sum_{r\in\mathbb Z}r:\!\chi_{m-r}\chi_r\!:.
+\end{equation}
+The Ramond normal-ordering constant affects only mode zero and hence does
+not enter the descendant argument.
+
+For \(|n|\geq5/4\), source and adjacent target use the same reflected
+realization.  Set
+\begin{equation}
+ W_-^\epsilon=W_{n-\sigma}^\epsilon,
+ \qquad
+ q_-=2|n|-2,
+ \qquad
+ d=4|n|-3=2q_-+1.
+\end{equation}
+Within a fixed parity copy define
+\begin{align}
+ {\cal D}_{q_-,\epsilon}[d]
+ &={\rm span}\left\{
+ L_{-A}^{(1)}L_{-B}^{(2)}W_-^\epsilon:
+ |A|+|B|=d\right\},
+ \notag\\
+ {\cal F}_{q_-,\epsilon}[d]
+ &={\rm span}\left\{
+ c_{-\lambda}J_{-\mu}W_-^\epsilon:
+ |\lambda|+|\mu|=d\right\}.
+ \label{eq:R-D-and-F-spaces}
+\end{align}
+Equation~\eqref{eq:R-triangular-L12} allows only charges
+\(q_-+2p\), \(p\geq0\), in the first space.  The common Ramond vacuum
+constant cancels from energy differences, and
+\begin{equation}
+ E_{\rm F}(q_-+2p)-E_{\rm F}(q_-)
+ =2pq_-+2p^2
+ \geq 2q_-+2=d+1
+ \qquad(p\geq1).
+ \label{eq:R-charge-raising-gap}
+\end{equation}
+Thus no charge-raised component fits at level \(d\), and
+\begin{equation}
+ {\cal D}_{q_-,\epsilon}[d]
+ \subseteq {\cal F}_{q_-,\epsilon}[d].
+\end{equation}
+
+Theorem~4.2 of
+\href{https://arxiv.org/abs/1608.02568}{arXiv:1608.02568} proves that, for
+generic momentum, each \(W_-^\epsilon\) generates an irreducible and
+linearly independent tensor product of two Virasoro Verma modules.  With
+the same partition-number notation as above, this gives
+\begin{equation}
+ \dim {\cal D}_{q_-,\epsilon}[d]
+ =\sum_{a+b=d}p(a)p(b)
+ =\dim {\cal F}_{q_-,\epsilon}[d].
+\end{equation}
+The second equality follows from the two independent oscillator sets
+\(c_{-m}\) and \(J_{-m}\); fixing \(\epsilon\) removes the Ramond ground-space
+multiplicity.  The preceding inclusion is therefore an equality:
+\begin{equation}
+ \boxed{
+ {\cal D}_{q_-,\epsilon}[d]
+ ={\cal F}_{q_-,\epsilon}[d].}
+ \label{eq:R-D-equals-F}
+\end{equation}
+Equation~\eqref{eq:ramond-L1-Heisenberg-construction} then proves the
+all-label support rule \eqref{eq:ramond-L1-selection} for
+\(|n|\geq5/4\).
+
+The sign-crossing case \(|n|=3/4\) is a separate zero-mode base case:
+\(d=0\), and Eq.~\eqref{eq:ramond-L1-three-quarter} identifies the image
+directly with the opposite \(\mp1/4\) primary in the same parity copy.
+Together with \(L_1W_{\pm1/4}^\epsilon=0\), this proves the Ramond support
+rule for every branch label at generic parameters.  No assertion that
+\(J_0\) is constant on a double-Virasoro module is used.
+
+\paragraph{What remains constructive.}
+The argument proves existence and uniqueness of the PBW expansion but does
+not give its coefficients.  At level \(d\), a direct algorithm is now
+well-defined:
+\begin{enumerate}
+ \item expand the \(p_2(d)=\sum_{a+b=d}p(a)p(b)\) ordered
+ double-Virasoro PBW descendants in the fixed-charge basis
+ \(c_{-\lambda}J_{-\mu}W_-^\epsilon\);
+ \item invert this square generic matrix on the coefficient vector of
+ \(H_d^{(-2\sigma)}(J_-)W_-^\epsilon\);
+ \item multiply by the normalization \(\kappa_n^\epsilon\) from
+ Eq.~\eqref{eq:ramond-kappa-normalization}.
+\end{enumerate}
+Equation~\eqref{eq:R-D-equals-F} proves that the matrix in the first step is
+invertible at generic parameters.  A factorization into two Virasoro chain
+vectors could simplify this inversion, but is not needed for the support
+theorem.  The remaining normalization problem is to evaluate the cocycle
+and Ramond zero-mode ratio in Eq.~\eqref{eq:ramond-kappa-normalization} for
+both parity copies.
+
+\section{Ramond literature verdict and remaining problem}
+
 \paragraph{The recent screening algebra does not close the gap.}
 Ohkubo, arXiv:2505.02926, constructs a \(q\)-deformation of
 \(\Ff\oplus\SCA\), two commuting \(q\)-Virasoro algebras, and screening
@@ -956,7 +2195,7 @@ representation theory in that paper is NS.  Its conclusion says that a
 modified Fock module and half-integer highest-weight charge should allow the
 Ramond sector; no Ramond branching coefficient is computed.
 
-\subsection{Literature verdict and the remaining problem}
+\subsection{Verdict}
 
 No source found in the literature through the date above derives the generic
 chiral coefficient \(\mathbb B_f^{(\eta)}\) for all branching labels while

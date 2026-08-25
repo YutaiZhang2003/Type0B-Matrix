@@ -16,8 +16,9 @@ set -euo pipefail
 : "${TYPE0B_MODULAR_SHARD_COUNT:?set TYPE0B_MODULAR_SHARD_COUNT}"
 
 cd "${TYPE0B_ROOT}"
+export PYTHONPATH="${TYPE0B_ROOT}${PYTHONPATH:+:${PYTHONPATH}}"
 
-"${TYPE0B_PYTHON}" super_liouville_torus_modular_cluster.py \
+"${TYPE0B_PYTHON}" h_recursion/super_liouville_torus_modular_cluster.py \
   --config "${TYPE0B_MODULAR_CONFIG}" \
   reduce \
   --input-dir "${TYPE0B_MODULAR_SHARDS}" \

@@ -10,6 +10,23 @@ maps.
 The files are copied into the archive with their repository-relative paths,
 so the TeX bibliography and Python imports continue to work after extraction.
 
+## Type 0B application convention
+
+The conformal-block recursion itself is independent of Liouville pants data.
+When a Type 0B correlator is assembled, use the global convention boundary in
+**Machine Notes/conventions.md**, section 4.1.  In particular, a BRY-native
+sphere formula keeps the real \(\widetilde C_{\rm BRY}\) directly.  Only an
+import into the separate Human-Note graded sewing basis uses
+
+\[
+C_{\rm HN}^{(1)}=\sigma i\,\widetilde C_{\rm BRY},\qquad
+(C_{\rm HN}^{(1)})^2=-\widetilde C_{\rm BRY}^{2}.
+\]
+
+Apply this map once at that interface, not inside the recursion and not to a
+BRY-native \(G,H,J\) or PCO amplitude.  The branch \(\sigma=\pm1\) is not
+fixed by a two-pants genus-two vacuum graph.
+
 ## Main document
 
 - **Machine Notes/c-Recursion/ns_genus_c_recursion.tex** is the source.
@@ -67,7 +84,7 @@ The numerical ledgers are:
 
 - **Machine Notes/c-Recursion/ns_sphere_c_h_order10.json**;
 - **Machine Notes/c-Recursion/ns_torus_c_h_order10.json**; and
-- **Machine Notes/c-Recursion/ns_genus2_order8_stress_test.md**.
+- **Machine Notes/Genus 2/ns_genus2_order8_stress_test.md**.
 
 ## Reproduction
 

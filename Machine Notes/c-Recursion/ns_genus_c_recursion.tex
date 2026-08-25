@@ -32,6 +32,8 @@
 \newcommand{\U}{\mathcal U}
 \newcommand{\Rcal}{\mathcal R}
 \newcommand{\Mcal}{\mathcal M}
+\newcommand{\Hcal}{\mathcal H}
+\newcommand{\Bcal}{\mathcal B}
 \newcommand{\ve}{\bm e}
 \newcommand{\half}{\tfrac12}
 \DeclareMathOperator{\Res}{Res}
@@ -1015,10 +1017,20 @@ Eq.~\eqref{eq:graph-orientation-quadratic} gives the explicit bilinear form
    (a_i b_j+b_i a_j)\pmod2.
  \label{eq:graph-orientation-polarization}
 \end{equation}
-The linear BPZ terms cancel.  Functoriality of the Koszul braiding in
-Eqs.~\eqref{eq:metric-factorization}--\eqref{eq:vertex-factorization} says
-precisely that one vacuum/global splitting carries
-\((-1)^{B_\Gamma(a,b)}\).
+The linear BPZ terms cancel.  There is one further local issue when an edge is
+a self-loop.  Factoring a self-loop state into vacuum and global pieces before
+taking the graded trace can itself require a Koszul permutation.  Denote the
+sum of these local trace-factorization exponents by
+\(B_\Gamma^{\rm loop}(a,b)\), and define
+\begin{equation}
+ B_\Gamma^{\rm eff}(a,b)
+ :=B_\Gamma(a,b)+B_\Gamma^{\rm loop}(a,b)\pmod2.
+ \label{eq:effective-regular-polarization}
+\end{equation}
+For a graph without self-loops, in particular the theta graph,
+\(B_\Gamma^{\rm loop}=0\).  For the glasses graph it is nonzero and is fixed
+below by doing the two handle supertraces before the bridge contraction.  This
+term was absent in the earlier version of the regular-block formula.
 
 Expand the separately oriented scalar graph series as
 \begin{equation}
@@ -1037,7 +1049,7 @@ coefficient formula
 \boxed{
  U_{\Gamma,\bm\ell}^{\bm\alpha,\bm\eta}
  =\sum_{\bm v+\bm r=\bm\ell}
- (-1)^{B_\Gamma(a(\bm v),b(\bm r,\bm\eta))}
+ (-1)^{B_\Gamma^{\rm eff}(a(\bm v),b(\bm r,\bm\eta))}
  V_{\Gamma,\bm v}^{(\infty)}
  G_{\Gamma,\bm r}^{\bm\alpha,\bm\eta},
  \qquad
@@ -1059,7 +1071,7 @@ regular block itself is the unrestricted all-level sum.  Removing the fixed
 \boxed{
  \U_\Gamma^{\bm\alpha,\bm\eta}(\bm x)
  =\sum_{\bm v,\bm r\in\mathbb Z_{\ge0}^{E}}
- (-1)^{B_\Gamma(a(\bm v),b(\bm r,\bm\eta))}
+ (-1)^{B_\Gamma^{\rm eff}(a(\bm v),b(\bm r,\bm\eta))}
  V_{\Gamma,\bm v}^{(\infty)}
  G_{\Gamma,\bm r}^{\bm\alpha,\bm\eta}
  \bm x^{\bm v+\bm r}.}
@@ -1080,10 +1092,10 @@ vacuum product coefficient by coefficient.  For
  \label{eq:edge-parity-projector}
 \end{equation}
 It keeps precisely the monomials whose edge-level parity is
-\(\bm\sigma\).  Since \(B_\Gamma\) is bilinear, set
+\(\bm\sigma\).  Since \(B_\Gamma^{\rm eff}\) is bilinear, set
 \begin{equation}
  \lambda_{\Gamma,e}(\bm\sigma,\bm\eta)
- :=B_\Gamma\bigl(a(\bm e_e),b(\bm\sigma,\bm\eta)\bigr)
+ :=B_\Gamma^{\rm eff}\bigl(a(\bm e_e),b(\bm\sigma,\bm\eta)\bigr)
  \pmod2,
  \label{eq:regular-sign-flip-vector}
 \end{equation}
@@ -1109,7 +1121,8 @@ flips, and the second is the explicit global graph sum
 block; the parity projectors merely implement the displayed finite Fourier
 sum and introduce no new product operation.
 
-Equivalently, remove the individual orientation signs by setting
+When \(B_\Gamma^{\rm loop}=0\), one may equivalently remove the individual
+orientation signs by setting
 \(\widehat V_{\bm v}=\Omega_\Gamma(a(\bm v))V_{\bm v}\) and
 \(\widehat G_{\bm r}=\Omega_\Gamma(b(\bm r,\bm\eta))G_{\bm r}\).  Then
 \begin{equation}
@@ -1122,7 +1135,7 @@ Equivalently, remove the individual orientation signs by setting
 which is ordinary coefficient convolution followed by the single full-block
 orientation sign.
 
-For the theta graph,
+For the theta graph, \(B_\Theta^{\rm loop}=0\), and hence
 \begin{equation}
  B_\Theta(\bar{\bm v},\bar{\bm r})
  =\bar v_0\bar r_1+\bar r_0\bar v_1
@@ -2594,6 +2607,247 @@ The reproducible implementation, raw ledger, and plot are
  \path{Data Set/ns_liouville_crossing_direct_c_recursion.svg}.
 \end{center}
 
+\subsection{Sphere five-point crossing from the multipoint
+\texorpdfstring{\(c\)}{c}-recursion}
+\label{sec:ns-sphere-fivepoint-crossing}
+
+The four-point test above has only one internal edge.  The first genuinely
+multipoint test is the sphere five-point function, which has two internal
+momenta, three trivalent vertices, and nontrivial odd-null parity transport
+between adjacent vertices.  This subsection assembles the bottom-component
+NS Liouville matter correlator relevant to Type~0B.  It is not by itself a
+complete string amplitude: the timelike matter, ghosts, picture-changing
+insertions, and supermoduli measure are not included.
+
+For a standard comb frame
+\begin{equation}
+ (z_1,z_2,z_3,z_4,z_5)=(0,z_2,z_3,1,\infty),
+ \qquad
+ q_1=\frac{z_2}{z_3},\qquad q_2=z_3,
+ \label{eq:fivepoint-standard-comb-coordinates}
+\end{equation}
+the full chiral block reconstructed from the reduced coefficient recursion is
+\begin{equation}
+ \F_{\bm\alpha}(q_1,q_2)
+ =q_1^{h_a-h_1-h_2}
+  q_2^{h_b-h_1-h_2-h_3}
+  \sum_{\ell_1,\ell_2\geq0}
+  B^{\bm\alpha}_{\ell_1,\ell_2}
+  q_1^{\ell_1}q_2^{\ell_2}.
+ \label{eq:fivepoint-full-comb-block}
+\end{equation}
+The numerical evaluator uses the functional form of
+Eq.~\eqref{eq:master-result}: its recursion budget bounds the accumulated
+null twice-level, while every leaf is a finite two-variable global
+\(\osp\) series.  This avoids constructing the entire finite-\(c\)
+coefficient rectangle when only a numerical block value is required.
+
+Write \(C^{(0)}=C\) and \(C^{(1)}=\widetilde C\) for the two self-dual
+super-Liouville NS structure constants.  The standard-frame nonchiral
+correlator is
+\begin{align}
+ G_5={}&
+ \int_0^\infty\frac{dP_a}{\pi}
+ \int_0^\infty\frac{dP_b}{\pi}
+ \sum_{\substack{\alpha_0,\alpha_1,\alpha_2\in\{0,1\}\\
+                  \alpha_0+\alpha_1+\alpha_2\in2\mathbb Z}}
+ C^{(\alpha_0)}(P_1,P_2,P_a)
+ C^{(\alpha_1)}(P_a,P_3,P_b)
+ \nonumber\\[-0.2em]
+ &\hspace{10em}\times
+ C^{(\alpha_2)}(P_b,P_4,P_5)
+ \left|\F_{\bm\alpha}(q_1,q_2)\right|^2.
+ \label{eq:fivepoint-nonchiral-sewing}
+\end{align}
+Thus all four allowed assignments
+\((000),(011),(101),(110)\) are retained.  The graph recursion supplies the
+odd-null sector toggles and the structure-constant layer supplies \(C\) or
+\(\widetilde C\) at each trinion.
+
+\paragraph{BRY versus Human-Note pants convention.}
+Equation~\eqref{eq:fivepoint-nonchiral-sewing} is BRY-native and uses the real
+$\widetilde C_{\rm BRY}$ directly, without an additional factor of $i$ at an
+odd trinion.  This differs from importing BRY data into the separate Human
+Note's ordered graded basis.  If $D$ is the matched primary two-point
+normalization, BRY's local top has norm $+D(2h)^2$, whereas the raw
+Human-Note tensor state
+$(G_{-1/2}V)\otimes(\widetilde G_{-1/2}\widetilde V)$ has norm
+$-D(2h)^2$.  Direct BPZ comparison therefore gives the one-time interface
+map
+\begin{equation}
+ C_{\rm HN}^{(1)}=\sigma i\,\widetilde C_{\rm BRY},
+ \qquad \sigma=\pm1,
+ \qquad
+ (C_{\rm HN}^{(1)})^2=-\widetilde C_{\rm BRY}^{2}.
+ \label{eq:bry-hn-odd-pants-interface}
+\end{equation}
+Only the squared relation is branch independent; an explicitly ordered
+component matrix element is needed to select $\sigma$ in a process with an
+odd number of odd pants.  The map is not inserted into BRY-native sphere
+$G,H,J$ or PCO formulas, and it is unrelated to either the physical free
+Majorana denominator or the auxiliary double-Virasoro Majorana.
+
+All five physical punctures are kept finite.  For each ordered channel, let
+\(a,b,c\) be its first, penultimate, and last punctures and use
+\begin{equation}
+ f(z)=\frac{b-c}{b-a}\frac{z-a}{z-c}.
+ \label{eq:fivepoint-channel-mobius-map}
+\end{equation}
+This maps them to \((0,1,\infty)\).  The comparison restores the complete
+primary-field covariance factor.  In particular, if
+\(f(z)=K/(z-c)+O(1)\) near the puncture sent to infinity, that puncture
+contributes \(|K|^{-2h_c}\).  Raw standard-frame correlators are therefore
+not compared across channels.
+
+At the exact self-dual central charge, take
+\begin{equation}
+ (P_1,P_2,P_3,P_4,P_5)
+ =\left(\frac12,\frac13,\frac14,\frac35,\frac25\right),
+ \qquad
+ (z_1,z_2,z_3,z_4,z_5)
+ =\left(0,\frac1{20},\frac1{10},1,2\right).
+ \label{eq:fivepoint-crossing-numerical-point}
+\end{equation}
+The left and right comb orders are \((0,1,2,3,4)\) and
+\((2,1,0,3,4)\), which reassociate the clustered first three punctures
+while leaving the last pair fixed.  Their numerical frames are
+\begin{center}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+channel & \(q_1\) & \(q_2\) & covariance factor\\
+\midrule
+left  & \(19/39\) & \(1/19\)  & \(0.12628968712068464\)\\
+right & \(20/39\) & \(-1/18\) & \(0.15362229438702713\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+Both local series are well inside their convergence domains.  Distinct
+Gauss--Legendre orders are used on the two internal edges.  This avoids
+sampling the measure-zero diagonal \(P_a=P_b\), where equal internal weights
+would produce an artificial coincident fixed-\(c\) pole in a tensor-product
+rule.
+
+The first convergence scan truncates both internal momenta at \(P=3\) and
+uses edge quadrature orders \((8,9)\).  Let \(R\) denote the maximum
+accumulated recursion twice-level and let \((L_1,L_2)\) denote the two
+global-leaf twice-level cutoffs.  The independently evaluated physical-frame
+values are
+\begin{center}
+\small
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+\(R\) & \((L_1,L_2)\) & left & right & relative residual\\
+\midrule
+4 & \((10,4)\) & \(1.783017174996658\) & \(1.775694535990144\)
+  & \(4.1069\times10^{-3}\)\\
+6 & \((14,6)\) & \(1.787601563919021\) & \(1.784341847841007\)
+  & \(1.8235\times10^{-3}\)\\
+8 & \((18,8)\) & \(1.789745105687501\) & \(1.788323773123422\)
+  & \(7.9415\times10^{-4}\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+The channel difference decreases by a factor of approximately (2.3) at
+each step.  No crossing equality is imposed and the channel values are not
+averaged.
+
+At fixed \((R;L_1,L_2)=(6;14,6)\), increasing the two momentum quadrature
+orders gives
+\begin{center}
+\small
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+edge orders & left & right & relative residual\\
+\midrule
+\((8,9)\)   & \(1.787601563919021\) & \(1.784341847841007\)
+             & \(1.8235\times10^{-3}\)\\
+\((10,11)\) & \(1.779439443915569\) & \(1.776900405055665\)
+             & \(1.4269\times10^{-3}\)\\
+\((12,13)\) & \(1.778741506884299\) & \(1.776547975112673\)
+             & \(1.2332\times10^{-3}\)\\
+\bottomrule
+\end{tabular}
+\end{center}
+The individual channels still move at the few-\(10^{-4}\) level in the last
+quadrature step, and the \(P>3\) tail has not been enclosed.  Consequently
+the \(7.94\times10^{-4}\) number is an observed finite-cutoff residual, not
+a certified infinite-order answer.
+
+As a control, the same general assembly was reduced to four points with
+momenta \((1/2,1/3,1/4,3/5)\), finite punctures
+\((0,2/3,1,2)\), and the two orders \((0,1,2,3)\) and
+\((2,1,0,3)\).  Both standard frames have \(q=1/2\).  With recursion
+twice-level \(8\), global twice-level \(20\), \(P\leq5\), and quadrature
+order \(20\), the physical values are \(0.07762053515262507\) and
+\(0.07761760337712030\), a relative residual of
+\(3.7771\times10^{-5}\).  This independently checks the M\"obius covariance
+and spectral-sewing layer against the established four-point setup.
+
+\subsubsection{Order required for a certified result}
+\label{sec:fivepoint-certification-order}
+
+No recursion order by itself certifies the correlator.  A certificate must
+bound four independent errors: the Kac-recursion tail, the finite global-leaf
+series, the finite momentum quadrature, and the \(P>P_{\max}\) continuum
+tail.  It must also control roundoff and any coincident-pole detuning.  Define
+the maximum relative channel drift
+\begin{equation}
+ D_R=\max_{X\in\{L,R\}}
+ \frac{|G_X(R)-G_X(R-2)|}
+      {\max(|G_X(R)|,|G_X(R-2)|)}.
+ \label{eq:fivepoint-channel-drift}
+\end{equation}
+The present scan gives
+\begin{equation}
+ D_6=4.8462\times10^{-3},\qquad
+ D_8=2.2266\times10^{-3},
+ \qquad D_8/D_6=0.4595.
+ \label{eq:fivepoint-observed-contraction}
+\end{equation}
+If this contraction persists, the geometric estimate for the recursion
+remainder after twice-level \(R\) is
+\begin{equation}
+ E_R^{\rm rec}
+ \lesssim \frac{\rho D_R}{1-\rho},
+ \qquad \rho\simeq0.46.
+ \label{eq:fivepoint-geometric-tail-estimate}
+\end{equation}
+It predicts a block-tail scale of approximately \(8.7\times10^{-4}\) after
+twice-level \(10\), \(4.0\times10^{-4}\) after twice-level \(12\), and
+\(8.5\times10^{-5}\) after twice-level \(16\).  Therefore the minimum
+practical production target for a relative \(10^{-3}\) numerical certificate
+is
+\begin{equation}
+ \boxed{R_{\rm twice}=12\quad
+        \text{(physical null level }6\text{)}.}
+ \label{eq:fivepoint-minimum-certification-order}
+\end{equation}
+followed by an \(R_{\rm twice}=14\) validation run.  For a relative
+\(10^{-4}\) target, the corresponding extrapolated requirement is
+\(R_{\rm twice}=16\), validated at \(18\).  These are resource estimates,
+not achieved certificates.
+
+For the \(10^{-3}\) target, recursion order \(12\) must be accompanied by at
+least three further checks: raise the global leaves beyond roughly
+\((L_1,L_2)=(26,12)\) until their change is below the allocated error
+budget; compare momentum rules at least through approximately \((16,17)\);
+and increase \(P_{\max}\) until the omitted tail is either analytically
+bounded or enclosed by positive/interval quadrature.  A proof-level
+certificate additionally requires interval arithmetic and a rigorous
+version of Eq.~\eqref{eq:fivepoint-geometric-tail-estimate}; the currently
+observed ratio alone is not such a proof.  Thus \(R_{\rm twice}=12\) is the
+recommended minimum order for a \(10^{-3}\) certification campaign, but no
+finite order in the present non-interval implementation is by itself
+certifying.
+
+The implementation and machine-readable ledger are
+\begin{center}
+ \path{Code/c_Recursion/sphere_multipoint.py},\\
+ \path{Code/c_Recursion/stress_ns_multipoint_crossing.py},\\
+ \path{Data Set/ns_sphere_fivepoint_crossing_c_recursion.json}.
+\end{center}
+
 \subsection{\texorpdfstring{Torus one-point block}
 {Torus one-point block}}
 \label{sec:torus-one-point-c-h-check}
@@ -2987,6 +3241,222 @@ formula for the odd \((3,1)\) and even \((2,2)\) nulls.  At
 \((h_L,h_B,\alpha)=(0.73,0.62,1)\), the corrected \((3,1)\) residue is
 \(+0.059809637121\); omitting Eq.~\eqref{eq:glasses-toric-sector-sign} gives
 the negative of this value, while the even-null residue is unchanged.
+\subsubsection{Glasses recursion from the fixed-parity sewing formula}
+\label{sec:glasses-c-recursion-derived}
+
+We now derive the complete all-NS glasses recursion in the convention of the
+human note.  This derivation supersedes the earlier practice of importing the
+theta regular-block polarization unchanged.  Use edge order
+\begin{equation}
+ (L,R,B)=(\hbox{left handle},\hbox{right handle},
+                 \hbox{separating bridge})
+\end{equation}
+and write the corresponding data as
+\((h_L,h_R,h_B)\), \((q_L,q_R,q_B)\), and
+\((\eta_L,\eta_R,\eta_B)\).  For even internal primaries the chiral block is
+\begin{align}
+ \F_{{\rm Gl},a}
+ ={}&\sum_{\substack{|A|=|B|,\ |C|=|D|,\ |E|=|F|\\
+                     E\equiv a\ ({\rm mod}\ 2)}}
+ q_L^{|A|}\eta_L^A q_R^{|C|}\eta_R^C
+ q_B^{|E|}\eta_B^E
+ (-1)^{a(A+C)}
+ \nonumber\\
+ &\quad\times
+ G_L^{AB}G_R^{CD}G_B^{EF}
+ \rho_a(A,E,B)\rho_a(C,F,D).
+ \label{eq:glasses-fixed-parity-block}
+\end{align}
+The abbreviated arguments in the two three-forms are in canonical
+\((\infty,1,0)\) order.  Thus the bridge parity fixes the relative label,
+\begin{equation}
+ a=E\pmod2,
+ \qquad
+ \Omega_{\rm Gl}(A,C,E)=(-1)^{E(A+C)}.
+ \label{eq:glasses-sector-orientation}
+\end{equation}
+
+There is an immediate nonchiral consequence which is independent of the
+recursion.  At the left trinion the absolute parity is
+\((A+p_L)+(E+p_B)+(B+p_L)=a+p_B\); the right trinion gives the same answer.
+Therefore locality and the sewing sign are
+\begin{equation}
+ a+p_B=\widetilde a+\widetilde p_B\pmod2,
+ \qquad
+ \boxed{s_{\rm sew}^{\rm Gl}=(-1)^{a+p_B}.}
+ \label{eq:glasses-nonchiral-sewing-sign}
+\end{equation}
+The final glasses formula in the current human-note draft contains \(p_1\) in
+this position; Eq.~\eqref{eq:glasses-nonchiral-sewing-sign} shows that it must
+be the bridge parity \(p_B=p_3\), in agreement with the preceding line of that
+derivation.  For the Type-0B even NS continuum, the diagonal contribution is
+always the even-minus-odd combination, exactly as in the theta channel.
+
+We next determine the regular block.  Split a level vector into vacuum and
+global pieces, \(\bm\ell=\bm v+\bm r\).  The even vacuum three-form forces
+\(v_B=0\pmod2\).  Polarizing Eq.~\eqref{eq:glasses-sector-orientation} would
+give the graph-reordering exponent
+\begin{equation}
+ B_{\rm Gl}(\bm v,\bm r)=r_B(v_L+v_R)\pmod2.
+ \label{eq:glasses-graph-polarization}
+\end{equation}
+However, each handle occurs twice in one trinion.  Factoring its graded
+supertrace into vacuum and global traces produces the local exponent
+\begin{equation}
+ B_{\rm Gl}^{\rm loop}(\bm v,\bm r)
+ =r_B(v_L+v_R)=B_{\rm Gl}(\bm v,\bm r)\pmod2.
+ \label{eq:glasses-loop-polarization}
+\end{equation}
+The two signs cancel.  Hence
+\begin{equation}
+ B_{\rm Gl}^{\rm eff}=0,
+ \qquad
+ \boxed{
+ U_{{\rm Gl},a;\bm\ell}
+ =\sum_{\bm v+\bm r=\bm\ell}
+ V_{{\rm Gl},\bm v}^{(\infty)}
+ G_{{\rm Gl},a;\bm r}^{\osp},
+ \qquad
+ \U_{{\rm Gl},a}=\V_{\rm Gl}^{(\infty)}\G_{{\rm Gl},a}^{\osp}.}
+ \label{eq:glasses-ordinary-regular-product}
+\end{equation}
+Inserting \((-1)^{B_{\rm Gl}}\) once more double-counts the self-loop Koszul
+permutation.  This is the sign error in the old glasses large-\(c\) seed.
+
+It remains to determine the polar terms.  Set
+\begin{equation}
+ N=\frac{rs}{2},\qquad \delta=rs\pmod2,
+ \qquad c_e=c_{r,s}(h_e).
+\end{equation}
+For the left and right self-loops, incidence-ordered factorization gives
+\begin{align}
+ \Hcal_{L;r,s}^{a}
+ :={}&J_{r,s}(h_L)A_{r,s}(h_L)
+ P_{r,s}^{a}(h_B,h_L;h_L)
+ P_{r,s}^{a\oplus\delta}(h_B,h_L+N;h_L),
+ \label{eq:glasses-left-handle-residue}\\
+ \Hcal_{R;r,s}^{a}
+ :={}&J_{r,s}(h_R)A_{r,s}(h_R)
+ P_{r,s}^{a}(h_B,h_R;h_R)
+ P_{r,s}^{a\oplus\delta}(h_B,h_R+N;h_R).
+ \label{eq:glasses-right-handle-residue}
+\end{align}
+The first incidence toggles the intermediate three-form when \(\delta=1\),
+and the second toggles it back.  Consequently the child sector remains \(a\),
+but an odd handle null leaves the toric character
+\((-1)^a\).  The safest functional implementation is not to insert this as a
+second scalar sign: flip the bridge lift in the child block,
+\begin{equation}
+ \eta_B\longmapsto(-1)^\delta\eta_B.
+ \label{eq:glasses-handle-lift-transport}
+\end{equation}
+For generic primary parity this produces
+\((-1)^{\delta(a+p_B)}\), as required by the absolute parity.  The null level
+itself supplies \(\eta_L^\delta\) or \(\eta_R^\delta\).
+
+The bridge has distinct endpoints.  Its scalar residue is
+\begin{equation}
+ \Bcal_{B;r,s}^{a}
+ :=J_{r,s}(h_B)A_{r,s}(h_B)
+ P_{r,s}^{a}(h_L,h_L;h_B)
+ P_{r,s}^{a}(h_R,h_R;h_B).
+ \label{eq:glasses-bridge-residue}
+\end{equation}
+An odd bridge null toggles both endpoint three-forms, so the child label is
+\(a\oplus\delta\).  The two endpoint Koszul factors cancel the apparent
+ratio of graph-orientation characters.  Therefore no handle lift is flipped;
+only the bridge null character \(\eta_B^\delta\) remains.
+
+The local PBW residue ratios isolate these signs before any regular seed is
+used.  Dividing the direct Gram/Ward residue by the displayed
+\(J_{r,s}A_{r,s}P_1P_2\) and the shifted child coefficient gives
+\begin{center}
+\begin{tabular}{c c c c c}
+\toprule
+pole edge & null & child label & child-lift transport & PBW ratio \\
+\midrule
+\(L\) or \(R\) & odd \((3,1)\) & \(a\) &
+  \(\eta_B\mapsto-\eta_B\) & \((-1)^a\) \\
+\(B\) & odd \((5,1)\) & \(a\oplus1\) & none & \(+1\) \\
+any edge & even \((2,2)\) & \(a\) & none & \(+1\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+The handle result is independent of the lower handle-state parity, while the
+bridge result holds for every tested pair of handle-state parities.
+
+Combining these results gives the tentative glasses-channel recursion
+\begin{align}
+ \F_{{\rm Gl},a}(c;\bm h;\bm\eta)
+ ={}&\U_{{\rm Gl},a}(\bm h;\bm\eta)
+ \nonumber\\
+ &+\sum_{\substack{r\ge2,\ s\ge1\\r+s\in2\mathbb Z}}
+ \frac{q_L^N\eta_L^\delta\Hcal_{L;r,s}^{a}}
+      {c-c_{r,s}(h_L)}
+ \F_{{\rm Gl},a}
+ \left(c_L;h_L+N,h_R,h_B;
+       \eta_L,\eta_R,(-1)^\delta\eta_B\right)
+ \nonumber\\
+ &+\sum_{\substack{r\ge2,\ s\ge1\\r+s\in2\mathbb Z}}
+ \frac{q_R^N\eta_R^\delta\Hcal_{R;r,s}^{a}}
+      {c-c_{r,s}(h_R)}
+ \F_{{\rm Gl},a}
+ \left(c_R;h_L,h_R+N,h_B;
+       \eta_L,\eta_R,(-1)^\delta\eta_B\right)
+ \nonumber\\
+ &+\sum_{\substack{r\ge2,\ s\ge1\\r+s\in2\mathbb Z}}
+ \frac{q_B^N\eta_B^\delta\Bcal_{B;r,s}^{a}}
+      {c-c_{r,s}(h_B)}
+ \F_{{\rm Gl},a\oplus\delta}
+ \left(c_B;h_L,h_R,h_B+N;\bm\eta\right).
+ \label{eq:glasses-complete-c-recursion}
+\end{align}
+As usual, each sum is triangular coefficientwise and includes only
+\(rs\le2\ell_e\) at fixed edge level.  Equation
+\eqref{eq:glasses-complete-c-recursion} uses the original three-form label in
+the first fusion polynomial, the toggled intermediate label only in the
+second self-loop polynomial, and no independently appended toric sign.
+
+\paragraph{Direct PBW check through total level four.}
+The independent oracle generates the NS PBW bases and Gram matrices on all
+three edges, evaluates both descendant three-forms by Ward identities, traces
+each handle, and finally contracts the bridge.  Its finite-\(c\) coefficient is
+compared with Eq.~\eqref{eq:glasses-complete-c-recursion}, whose regular input
+uses the independently extracted vacuum quotient and analytic global
+\(\osp(1|2)\) network.  At
+\begin{equation}
+ c=37.25,\qquad (h_L,h_R,h_B)=(0.73,0.91,1.17),
+\end{equation}
+all \(165\) triples
+\(n_L+n_R+n_B\le8\), \(n_e=2\ell_e\), agree in each of all eight lift
+sectors.  Thus \(1320\) coefficient comparisons through total physical level
+four pass, with
+\begin{equation}
+ \max|D_{\bm n}-F^{\rm rec}_{\bm n}|
+ =7.9048\times10^{-14},\qquad
+ \max\frac{|D_{\bm n}-F^{\rm rec}_{\bm n}|}
+              {\max(1,|D_{\bm n}|,|F^{\rm rec}_{\bm n}|)}
+ =1.0707\times10^{-14}.
+ \label{eq:glasses-level-four-pbw-result}
+\end{equation}
+The earliest discriminating coefficient is the odd-sector level
+\(\bm n=(0,3,1)\).  Direct PBW sewing gives
+\begin{equation}
+ D_{031}=1.236910813730204\ldots.
+\end{equation}
+The corrected ordinary regular product gives
+\(U_{031}=1.244004154601536\ldots\), and the odd right-handle residue gives
+\(-0.007093340871331\ldots\), reproducing \(D_{031}\).  The old polarized
+regular seed instead gives \(0.389303299900681\ldots\), and hence fails before
+level four.  This coefficient fixes the sign without appealing to
+theta/glasses crossing.
+
+The reproducible audit and its machine-readable ledger are
+\begin{center}
+ \path{Code/genus_2/glasses_c_recursion_pbw.py},\\
+ \texttt{Data Set/}\path{ns_genus2_glasses_c_recursion_pbw_level4.json}.
+\end{center}
+
 Writing twice-levels as \(\bm\ell,\bm v,\bm r\), the regular term is
 \begin{equation}
  \boxed{
@@ -3980,6 +4450,9 @@ Script & Role\\
 \path{Code/ns_vacuum_schottky.py} & lifted primitive Schottky product\\
 \path{Code/compare_ns_sphere_c_h_recursion.py} & order-ten sphere \(c\)- versus \(h\)-recursion comparison at \(\widehat c=9\)\\
 \path{Code/stress_ns_crossing.py} & direct-recursion nonchiral sphere crossing test at \(\widehat c=9\)\\
+\path{Code/c_Recursion/ns_multipoint_c_recursion.py} & sphere \(N\)-point and torus-necklace coefficient and functional \(c\)-recursions\\
+\path{Code/c_Recursion/sphere_multipoint.py} & Type~0B NS Liouville sphere \(N\)-point continuum assembly and channel covariance\\
+\path{Code/c_Recursion/stress_ns_multipoint_crossing.py} & sphere five-point cross-channel convergence driver\\
 \path{Code/compare_ns_torus_c_h_recursion.py} & order-ten torus one-point \(c\)- versus \(h\)-recursion comparison at \(\widehat c=9\)\\
 \path{Code/stress_ns_torus_modularity_c_recursion.py} & direct functional-\(c\) NS--NS torus modularity test\\
 \path{Code/ns_genus12_finite_c_check.py} & direct genus-one and genus-two finite-\(c\) sewing\\

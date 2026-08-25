@@ -33,7 +33,6 @@ from compute_target import (
     FreeFieldModule,
     VirasoroThreePoint,
     add_term,
-    branch_norm_ratio,
     encode_complex,
     format_fraction,
     norm_product,
@@ -229,12 +228,28 @@ def add_acted_triples(target, coefficient, slot, acted, states):
 
 
 class PhysicalThreePoint:
-    """The canonical eta=(-1)^f NS-R-R SCA trilinear form."""
+    """The canonical eta=(-1)^f NS-R-R SCA trilinear form.
 
-    def __init__(self, modules, form_parity: int, eta: int):
+    ``form_parity`` is the relative Human-Note label ``f``: it does not
+    include the intrinsic parity of the NS primary.  ``primary_parity`` is
+    included whenever an actual NS state crosses a supercurrent contour.
+    Thus changing the primary parity changes the odd-NS Ward boundary but
+    leaves the Virasoro Ward recursion and the ground component table fixed.
+    """
+
+    def __init__(
+        self,
+        modules,
+        form_parity: int,
+        eta: int,
+        primary_parity: int = 0,
+    ):
         self.modules = tuple(modules)
         self.form_parity = int(form_parity)
+        self.primary_parity = int(primary_parity)
         self.eta = int(eta)
+        if self.primary_parity not in (0, 1):
+            raise ValueError("primary_parity must be 0 or 1")
         if self.eta != (-1) ** self.form_parity:
             raise ValueError("This evaluator implements the canonical eta=(-1)^f pair.")
         self.infinity_phase = -1j
@@ -278,6 +293,20 @@ class PhysicalThreePoint:
         )
         koszul = (1, (-1) ** source_parities[0],
                   (-1) ** (source_parities[0] + source_parities[1]))
+        primary_sign = (-1) ** self.primary_parity
+        if target_slot in (0, 1):
+            # In the first two generalized NS--R--R Ward identities the
+            # intrinsic NS-primary parity occurs only in epsilon, multiplying
+            # the contour contribution from the third puncture.
+            koszul = (koszul[0], koszul[1], primary_sign * koszul[2])
+        else:
+            # Solving the third identity for its target moves that epsilon to
+            # the other two punctures.
+            koszul = (
+                primary_sign * koszul[0],
+                primary_sign * koszul[1],
+                koszul[2],
+            )
         equation = {}
         cutoff = 16
 
@@ -364,10 +393,17 @@ class PhysicalThreePoint:
         states = tuple(states)
         if states in self._cache:
             return self._cache[states]
-        total_parity = sum(
-            module.parity(state) for module, state in zip(self.modules, states)
+        absolute_parity = (
+            self.primary_parity
+            + sum(
+                module.parity(state)
+                for module, state in zip(self.modules, states)
+            )
         ) % 2
-        if total_parity != self.form_parity:
+        absolute_form_parity = (
+            self.primary_parity + self.form_parity
+        ) % 2
+        if absolute_parity != absolute_form_parity:
             return 0.0j
         if states in self._active:
             raise RuntimeError(f"Cyclic SCA Ward reduction at {states!r}")
@@ -717,9 +753,12 @@ class AuxiliaryVirasoroThreePoint(AuxiliaryThreePoint):
 
 
 class DirectBranchingCoefficient:
-    def __init__(self, b, momenta):
+    def __init__(self, b, momenta, primary_parity: int = 0):
         self.b = float(b)
         self.momenta = tuple(float(value) for value in momenta)
+        self.primary_parity = int(primary_parity)
+        if self.primary_parity not in (0, 1):
+            raise ValueError("primary_parity must be 0 or 1")
         self.free_modules = (
             FreeFieldModule("NS", b, momenta[0]),
             FreeFieldModule("R", b, momenta[1]),
@@ -727,20 +766,36 @@ class DirectBranchingCoefficient:
         )
         self.pbw_modules = tuple(PBWModule(module) for module in self.free_modules)
         self.auxiliary_form = AuxiliaryThreePoint(self.free_modules)
+        self._reflected_ns_module = None
+        self._reflected_ns_pbw = None
         self._branch_cache = {}
         self._physical_forms = {}
 
     def branch(self, slot, label, parity=0):
-        key = (slot, Fraction(label), int(parity))
+        label = Fraction(label)
+        key = (slot, label, int(parity))
         if key in self._branch_cache:
             return self._branch_cache[key]
         module = self.free_modules[slot]
-        expression = (
-            module.ns_branch(label)
-            if slot == 0
-            else module.r_branch(label, parity)
-        )
-        answer = branch_in_pbw(module, self.pbw_modules[slot], expression)
+        pbw_module = self.pbw_modules[slot]
+        if slot == 0 and label < 0:
+            # Human Notes/SCblock.tex: v_n(P)=v_{-n}(-P).  The reflected
+            # free-field realization has the same abstract NS PBW basis.
+            if self._reflected_ns_module is None:
+                self._reflected_ns_module = FreeFieldModule(
+                    "NS", self.b, -self.momenta[0]
+                )
+                self._reflected_ns_pbw = PBWModule(self._reflected_ns_module)
+            module = self._reflected_ns_module
+            pbw_module = self._reflected_ns_pbw
+            expression = module.ns_branch(-label)
+        else:
+            expression = (
+                module.ns_branch(label)
+                if slot == 0
+                else module.r_branch(label, parity)
+            )
+        answer = branch_in_pbw(module, pbw_module, expression)
         self._branch_cache[key] = answer
         return answer
 
@@ -750,7 +805,10 @@ class DirectBranchingCoefficient:
         key = (form_parity, int(eta))
         if key not in self._physical_forms:
             self._physical_forms[key] = PhysicalThreePoint(
-                self.pbw_modules, form_parity, eta
+                self.pbw_modules,
+                form_parity,
+                eta,
+                primary_parity=self.primary_parity,
             )
         physical_form = self._physical_forms[key]
         branches = (
@@ -761,7 +819,9 @@ class DirectBranchingCoefficient:
         answer = 0.0j
         for (auxiliary1, physical1), coefficient1 in branches[0].items():
             parity_physical1 = self.pbw_modules[0].parity(physical1)
-            parity_auxiliary1 = self.free_modules[0].auxiliary_parity(auxiliary1)
+            parity_auxiliary1 = self.free_modules[0].auxiliary_parity(
+                auxiliary1
+            )
             for (auxiliary2, physical2), coefficient2 in branches[1].items():
                 parity_physical2 = self.pbw_modules[1].parity(physical2)
                 for (auxiliary3, physical3), coefficient3 in branches[2].items():
@@ -773,9 +833,16 @@ class DirectBranchingCoefficient:
                     parity_auxiliary3 = self.free_modules[2].auxiliary_parity(
                         auxiliary3
                     )
-                    tensor_sign = (-1) ** (
+                    # Complete Human-Note Section 8 sign:
+                    #
+                    #   (-1)^[ A A_aux
+                    #            + (B+|alpha|+p_1)(C_aux+c) ].
+                    #
+                    # There is no independent f(C_aux+c) factor.
+                    hatted_form_sign = (-1) ** (
                         parity_physical1 * parity_auxiliary1
-                        + parity_physical2 * parity_auxiliary3
+                        + (parity_physical2 + self.primary_parity)
+                        * parity_auxiliary3
                     )
                     physical = physical_form.value(
                         (physical1, physical2, physical3)
@@ -784,7 +851,7 @@ class DirectBranchingCoefficient:
                         coefficient1
                         * coefficient2
                         * coefficient3
-                        * tensor_sign
+                        * hatted_form_sign
                         * auxiliary
                         * physical
                     )
@@ -827,6 +894,7 @@ def main():
     parser.add_argument("--p1", default="11/23")
     parser.add_argument("--p2", default="13/29")
     parser.add_argument("--p3", default="17/31")
+    parser.add_argument("--primary-parity", type=int, choices=(0, 1), default=0)
     parser.add_argument("--json", type=Path, default=HERE / "direct_state_results.json")
     arguments = parser.parse_args()
     b = float(Fraction(arguments.b))
@@ -834,7 +902,9 @@ def main():
         float(Fraction(value))
         for value in (arguments.p1, arguments.p2, arguments.p3)
     )
-    evaluator = DirectBranchingCoefficient(b, momenta)
+    evaluator = DirectBranchingCoefficient(
+        b, momenta, primary_parity=arguments.primary_parity
+    )
     started = time.perf_counter()
 
     ns_labels = tuple(

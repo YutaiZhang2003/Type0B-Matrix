@@ -1,0 +1,116 @@
+{
+  "accuracy": {
+    "gate": "maximum of order-10 production QMC standard error, two-sigma paired order-8-to-10 block bound, and order-10 momentum-order and cutoff bounds",
+    "maximum_imaginary_leakage": 1e-08,
+    "quantity": "absolute Q5 on omega=i t",
+    "require_every_point": true,
+    "target": 0.0005
+  },
+  "blinding": {
+    "comparison_allowed_only_after_freeze_manifest": true,
+    "comparison_code_staged_with_workers": false,
+    "worldsheet_workers_receive_target_formula": false
+  },
+  "campaign": "sphere_six_point_1to5_cannon_block10_upgrade_v1",
+  "cluster": {
+    "array_cap": 450,
+    "assembly_wall_time": "00:30:00",
+    "benchmark_wall_time": "10:00:00",
+    "cpus_per_worker": 1,
+    "launch_all_tasks_concurrently": true,
+    "memory_per_worker": "6G",
+    "partition": "serial_requeue",
+    "queue_time_guaranteed": false,
+    "requeue_on_preemption": true,
+    "validation_wall_time": "00:20:00",
+    "worker_wall_time": "14:00:00"
+  },
+  "kinematics": {
+    "first_residue_wall": 0.3333333333333333,
+    "omega": "i t",
+    "point_count": 30,
+    "t_max": 0.3255,
+    "t_min": 0.1805,
+    "t_points": [
+      0.1805,
+      0.1855,
+      0.1905,
+      0.1955,
+      0.2005,
+      0.2055,
+      0.2105,
+      0.2155,
+      0.2205,
+      0.2255,
+      0.2305,
+      0.2355,
+      0.2405,
+      0.2455,
+      0.2505,
+      0.2555,
+      0.2605,
+      0.2655,
+      0.2705,
+      0.2755,
+      0.2805,
+      0.2855,
+      0.2905,
+      0.2955,
+      0.3005,
+      0.3055,
+      0.3105,
+      0.3155,
+      0.3205,
+      0.3255
+    ]
+  },
+  "paired_systematics": {
+    "base_seed": 2026088400,
+    "configurations": [
+      {
+        "block_order": 10,
+        "momentum_base_order": 10,
+        "momentum_maximum": 5.0,
+        "name": "reference"
+      },
+      {
+        "block_order": 10,
+        "momentum_base_order": 12,
+        "momentum_maximum": 5.0,
+        "name": "momentum_order_plus_two"
+      },
+      {
+        "block_order": 10,
+        "momentum_base_order": 12,
+        "momentum_maximum": 6.0,
+        "name": "momentum_cutoff_plus_one"
+      }
+    ],
+    "replicates": 6,
+    "sobol_power": 11
+  },
+  "production": {
+    "base_seed": 2026082400,
+    "block_order": 10,
+    "momentum_base_order": 10,
+    "momentum_edge_orders": [
+      10,
+      11,
+      12
+    ],
+    "momentum_maximum": 5.0,
+    "momentum_power": 1.25,
+    "radial_power": 0.2,
+    "replicates": 14,
+    "sobol_power": 15
+  },
+  "reuse": {
+    "prior_campaign": "sphere_six_point_1to5_blind30_3h_20260824_v2",
+    "prior_code_version": "sphere_six_point_cannon_blind_v2_source_chart_recovery",
+    "production_source": "stored block-order-6 values at the same 14 Sobol seeds and 2^15 points",
+    "require_exact_task_seed_and_sobol_power_match": true,
+    "rerun_prior_orders": false,
+    "systematics_source": "stored block-order-8 values at the same six Sobol seeds and 2^11 points"
+  },
+  "status": "blind_worldsheet_block10_upgrade_reusing_completed_order6_and_order8_shards"
+}

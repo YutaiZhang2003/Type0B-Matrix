@@ -1,0 +1,75 @@
+{
+  "status": "worldsheet_continuation_exploratory_unfrozen_no_matrix_model",
+  "domain": "omega=i*t, 2/5<t<1/2",
+  "normalization": "Q(omega)=I5/(16*pi^2*omega^5)",
+  "continuation": {
+    "crossed_pole": "P=(5/2)*omega-i",
+    "coefficient": "-2i times the DOZZ residue",
+    "applies_to": "an internal edge whose external cherry contains the incoming state",
+    "next_wall": "t=1/2"
+  },
+  "central_settings": {
+    "block_order": 8,
+    "momentum_order": 20,
+    "momentum_maximum": 6.0,
+    "momentum_power": 1.25,
+    "momentum_rule": "Gauss-Jacobi for the mapped threshold weight",
+    "sobol_power": 9,
+    "replicates": 4,
+    "radial_power": 0.15,
+    "seed": 3201
+  },
+  "points": [
+    {
+      "t": 0.42,
+      "Q_central_level8": -0.21886868664846323,
+      "Q_qmc_standard_error": 0.0017434458348224964,
+      "Q_block_order_4_6_8": [
+        -0.21742576252607054,
+        -0.21799285441228228,
+        -0.21886868664846323
+      ],
+      "level6_momentum_order_16_to_20_change": 0.00034373175543428
+    },
+    {
+      "t": 0.46,
+      "Q_central_level8": -0.13560362100275114,
+      "Q_qmc_standard_error": 0.001168190149935313,
+      "Q_block_order_4_6_8": [
+        -0.13468899662021713,
+        -0.13502997269324093,
+        -0.13560362100275114
+      ],
+      "level6_momentum_order_16_to_20_change": 0.00008181830333083
+    },
+    {
+      "t": 0.48,
+      "Q_central_level8": -0.07346764425301294,
+      "Q_qmc_standard_error": 0.0006598154879610914,
+      "Q_block_order_4_6_8": [
+        -0.07296077488817886,
+        -0.07314101124468168,
+        -0.07346764425301294
+      ],
+      "level6_momentum_order_16_to_20_change": 0.00090620045939744
+    },
+    {
+      "t": 0.49,
+      "Q_central_level8": -0.0363526619893615,
+      "Q_qmc_standard_error": 0.00041910618963973266,
+      "Q_block_order_4_6_8": [
+        -0.036089167943532056,
+        -0.03617844803497433,
+        -0.0363526619893615
+      ],
+      "level6_momentum_order_16_to_20_change": 0.000907047415003414
+    }
+  ],
+  "validated_range": "2/5<t<=0.48",
+  "diagnostic_only": "t=0.49 is retained to probe the approach to the t=1/2 wall",
+  "source_files": [
+    "worldsheet_continued_level4.json",
+    "worldsheet_continued_level6.json",
+    "worldsheet_continued_level8.json"
+  ]
+}

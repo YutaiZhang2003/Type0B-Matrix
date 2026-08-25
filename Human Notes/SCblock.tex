@@ -166,7 +166,7 @@ Similar to the notation $L_{-A}\nu$, we will denote a NS superconformal primary 
 \ie
 \mathbf{L}_{-A}\phi \equiv L_{-n_1}\cdots L_{-n_\ell} G_{-r_1}\cdots G_{-r_p} \phi,\quad |A|\equiv \sum_{i=1}^\ell n_i + \sum_{j=1}^{p} r_j,\quad (-1)^A \equiv (-1)^{p}
 \fe
-where $n_1 \geq ... \geq n_\ell, r_1>...>r_p$. We will also take $\phi$ to be Grassmann even. \todo[inline]{Yutai: I do not know why we can choose the parity of phi in general. I would assume it to be generic.} 
+where $n_1 \geq ... \geq n_\ell, r_1>...>r_p$. $\phi$ could be either Grassmann even or Grassmann odd.
 
 In the language of 2D $\mathcal{N}=1$ superspace, one can pack $\phi$ and its level-$\frac{1}{2}$ descendent $\chi \equiv G_{-1/2}\phi$ in the primary superfield $\Phi(z,\theta)$, defined by
 \ie
@@ -204,7 +204,7 @@ The standard BPZ bilinear pairing in a superconformal field theory would factori
 \fe
 
 
-\subsection{Conformal Block Decomposition in NS Plumbing}
+\subsection{Conformal Block Decomposition in All-NS Plumbing}
 
 For illustration, we consider a 2d \(\mathcal N=(1,1)\) superconformal field theory and derive the conformal-block decomposition of its genus-2 partition function. The final result present a nice holomorphic factorialization structure after keeping track of the signs in the computation.
 
@@ -643,6 +643,8 @@ q_i^{h_i}\widetilde q_i^{\widetilde h_i} F^{\mathrm{Gl}}_a(h_1, h_2, h_3, c) \wi
 \fe
 where $a+p_1= \tilde{a}+\tilde{p}_1 \pmod 2$.
 
+\subsection{Conformal Block Decomposition in mixed NS/R Plumbing}
+
 
 \section{NS superconformal blocks}
 
@@ -849,7 +851,7 @@ Similar logic can be applied to compute the residue at $c=c_{r,s}(h_2)$ and $c=c
 \mathbf L_{-E}\phi_3
 \right)
 \\
-&\quad=
+&\quad= 
 \begin{cases}
 \mathbf P_{rs}^{a}(h_3,h_1;c_{rs})\rho_a\!\left(
 \mathbf L_{-A}\phi_1,
@@ -939,8 +941,8 @@ for $\eta = \pm$. The subscript $0,1$ indicates the total fermion parity, as $\r
 
 The Ramond block in the glasses channel, with spin structure specified by the three signs $(\eta_1, \eta_2, \eta_3)$ and the edge 1 being NS, is defined by
 \ie \label{Rblock}
-\mathbb{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{|A|=|B|, |C|=|D|, |E|=|F|\\ (-1)^{A+C+E+|\alpha|+|\gamma|}=(-1)^f\\(-1)^{B+D+F+|\alpha'|+|\gamma'|}=(-1)^f}} q_1^{|A|} \eta_1^A q_2^{|C|} \eta_2^{C+|\alpha|} q_3^{|E|} \eta_3^{E+|\gamma|} \mathbf{G}^{AB}_{h_1} \mathbb{G}^{C\alpha, D\alpha'}_{\beta_2} \mathbb{G}^{E\gamma, F\gamma'}_{\beta_3}\\
-&\quad\quad \times (-1)^{A(C+|\alpha|)+A(E+|\gamma|)+(C+|\alpha|)(E+|\gamma|)}\\
+\mathbb{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{|A|=|B|, |C|=|D|, |E|=|F|\\ (-1)^{A+C+E+|\alpha|+|\gamma|}=(-1)^f\\(-1)^{B+D+F+|\alpha'|+|\gamma'|}=(-1)^f}} q_1^{|A|} \eta_1^{A+p_1} q_2^{|C|} \eta_2^{C+|\alpha|} q_3^{|E|} \eta_3^{E+|\gamma|} \mathbf{G}^{AB}_{h_1} \mathbb{G}^{C\alpha, D\alpha'}_{\beta_2} \mathbb{G}^{E\gamma, F\gamma'}_{\beta_3}\\
+&\quad\quad \times (-1)^{(A+p_1)(C+|\alpha|)+(A+p_1)(E+|\gamma|)+(C+|\alpha|)(E+|\gamma|)}\\
 &\quad\quad \times \rho_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-C}w^\alpha_2, \mathbb{L}_{-E}w^\gamma_3)\rho_f^{(\eta')}(\mathbf{L}_{-B}\phi_1, \mathbb{L}_{-D}w^{\alpha'}_2, \mathbb{L}_{-F}w^{\gamma'}_3)
 \
 \fe
@@ -997,8 +999,8 @@ The factorization relations are summarized in appendix A. Using the relation
 \fe
 one can read off the polar value of $\mathbb{F}_f^{(\eta, \eta')}$ at $c=c_{rs}^{\R}(\beta_2)$:
 \ie
-\operatorname{Res}_{c=c_{rs}^{\R}(\beta_2)} \mathbb{F}_f^{(\eta, \eta')} &= \frac{\partial c_{rs}(\beta_2)}{\partial \beta^2_2}\mathbb{A}_{rs}^c\sum_{\substack{|A|=|B|, |C|=|D|, |E|=|F|\\ (-1)^{A+C+E+|\alpha|+|\gamma|}=(-1)^f\\(-1)^{B+D+F+|\alpha'|+|\gamma'|}=(-1)^f}} q_1^{|A|}\eta_1^{A} q_2^{|C|}\eta_2^{C+|\alpha|} q_3^{|E|} \eta_3^{E+|\gamma|} \\
-&\quad\quad \times (-1)^{A(C+|\alpha|)+A(E+|\gamma|)+(C+|\alpha|)(E+|\gamma|)}\mathbf{G}^{AB}_{h_1} \mathbb{G}^{C\alpha, D\alpha'}_{\beta'_{rs}} \mathbb{G}^{E\gamma, F\gamma'}_{\beta_3}\\
+\operatorname{Res}_{c=c_{rs}^{\R}(\beta_2)} \mathbb{F}_f^{(\eta, \eta')} &= \frac{\partial c_{rs}(\beta_2)}{\partial \beta^2_2}\mathbb{A}_{rs}^c\sum_{\substack{|A|=|B|, |C|=|D|, |E|=|F|\\ (-1)^{A+C+E+|\alpha|+|\gamma|}=(-1)^f\\(-1)^{B+D+F+|\alpha'|+|\gamma'|}=(-1)^f}} q_1^{|A|}\eta_1^{A+p_1} q_2^{|C|}\eta_2^{C+|\alpha|} q_3^{|E|} \eta_3^{E+|\gamma|} \\
+&\quad\quad \times (-1)^{(A+p_1)(C+|\alpha|)+(A+p_1)(E+|\gamma|)+(C+|\alpha|)(E+|\gamma|)}\mathbf{G}^{AB}_{h_1} \mathbb{G}^{C\alpha, D\alpha'}_{\beta'_{rs}} \mathbb{G}^{E\gamma, F\gamma'}_{\beta_3}\\
 &\quad\quad \times \rho_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-C}\chi^\alpha_{rs}, \mathbb{L}_{-E}w^\gamma_3)\rho_f^{(\eta')}(\mathbf{L}_{-B}\phi_1, \mathbb{L}_{-D}\chi^\alpha_{rs}, \mathbb{L}_{-F}w^{\gamma'}_3),
 \fe
 and hence
@@ -1027,13 +1029,13 @@ and the factorization relation is given by
  (\mathbf{L}_{-A}\chi_{rs},
   \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
   \mathbb{L}_{-E}w_{\beta_3}^{\gamma})\\
-&\quad=\mathbb{P}_{rs}^{\NS,\eta}(\beta_2,\beta_3;c_{rs})
-\begin{cases}
+&\quad=
+\mathbb{P}_{rs}^{\NS,(-1)^{p_1}\eta}(\beta_2,\beta_3;c_{rs})\begin{cases}
 \rho_f^{(\eta)}
  (\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
   \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
   \mathbb{L}_{-E}w_{\beta_3}^{\gamma}),&rs\in2\mathbb Z,\\[0.4em]
-e^{i(-1)^f\pi/4}\rho_{1-f}^{(-\eta)}
+(-1)^{p_1+|\gamma|+E}e^{i(-1)^f\pi/4}\rho_{1-f}^{(-\eta)}
  (\mathbf{L}_{-A}\phi_{h_{rs}+rs/2},
   \mathbb{L}_{-C}w_{\beta_2}^{\alpha},
   \mathbb{L}_{-E}w_{\beta_3}^{\gamma}),&rs\in2\mathbb Z+1.
@@ -1041,7 +1043,7 @@ e^{i(-1)^f\pi/4}\rho_{1-f}^{(-\eta)}
 \fe
 From these, one can derive the residue at $c=c_{rs}(h_1)$:
 \ie
-&\operatorname{Res}_{c=c_{r s}\left(h_1\right)} \mathbb{F}_f^{\left(\eta, \eta^{\prime}\right)} = -\frac{\partial c_{r s}\left(h_1\right)}{\partial h_1} \mathbf{A}_{r s}^c(h_1) q_1^{r s / 2} \mathbb{P}_{r s}^{\mathrm{NS}, \eta}\left(\beta_2, \beta_3 ; c_{r s}(h_1)\right) \mathbb{P}_{r s}^{\mathrm{NS}, \eta^{\prime}}\left(\beta_2, \beta_3 ; c_{r s}(h_1)\right) \\
+&\operatorname{Res}_{c=c_{r s}\left(h_1\right)} \mathbb{F}_f^{\left(\eta, \eta^{\prime}\right)} = -\frac{\partial c_{r s}\left(h_1\right)}{\partial h_1} \mathbf{A}_{r s}^c(h_1) q_1^{r s / 2} \mathbb{P}_{r s}^{\mathrm{NS}, (-1)^{p_1}\eta}\left(\beta_2, \beta_3 ; c_{r s}(h_1)\right) \mathbb{P}_{r s}^{\mathrm{NS}, (-1)^{p_1}\eta^{\prime}}\left(\beta_2, \beta_3 ; c_{r s}(h_1)\right) \\
 &\qquad \times \begin{cases}
 \mathbb{F}_f^{\left(\eta, \eta^{\prime}\right)}\left(h_1\rightarrow h_1+ \tfrac{rs}{2}, c\rightarrow c_{r s}(h_1)\right),  & rs\in 2\mathbb{Z}, \\
 i(-1)^f \eta_1 \mathbb{F}_{1-f}^{\left(-\eta, -\eta^{\prime}\right)}\left(h_1\rightarrow h_1+ \tfrac{rs}{2}, c\rightarrow c_{r s}(h_1),\eta_2\rightarrow -\eta_2, \eta_3\rightarrow -\eta_3\right), & rs\in 2\mathbb{Z}+1.
@@ -1195,18 +1197,34 @@ Let's inspect on how the superconformal blocks $\mathbf{F}_a(h_1, h_2, h_3, c)$,
   |A|=|A'|,|B|=|B'|,|C|=|C'|,\mathsf{A}, \mathsf{B}, \mathsf{C}\\
   (-1)^{A+B+C}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}=(-1)^a\\
   }
-} q_1^{|A|}\eta_1^A q_2^{|B|} \eta_2^B  q_3^{|C|} \eta_3^C \mathbf{G}_{h_1}^{AA'} \mathbf{G}_{h_2}^{BB'} \mathbf{G}_{h_3}^{CC'} \\
-& \times (-1)^{(A+\mathsf{A})(B+\mathsf{B})+(A+\mathsf{A})(C+\mathsf{C})+(B+\mathsf{B})(C+\mathsf{C})}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\\
+} q_1^{|A|}\eta_1^{A+p_1} q_2^{|B|} \eta_2^{B+p_2} q_3^{|C|} \eta_3^{C+p_3} \mathbf{G}_{h_1}^{AA'} \mathbf{G}_{h_2}^{BB'} \mathbf{G}_{h_3}^{CC'} \\
+& \times (-1)^{(A+\mathsf{A}+p_1)(B+\mathsf{B}+p_2)+(A+\mathsf{A}+p_1)(C+\mathsf{C}+p_3)+(B+\mathsf{B}+p_2)(C+\mathsf{C}+p_3)}(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\\
 & \times \hat{\rho}_a(\Psi_{-\mathsf{A}}\mathbf{L}_{-A} \phi_1, \Psi_{-\mathsf{B}}\mathbf{L}_{-B} \phi_2, \Psi_{-\mathsf{C}}\mathbf{L}_{-C} \phi_3) \hat{\rho}_a(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'} \phi_1, \Psi_{-\mathsf{B}}\mathbf{L}_{-B'} \phi_2, \Psi_{-\mathsf{C}}\mathbf{L}_{-C'} \phi_3) ,
 \fe
 where ${\Psi}_{-\mathsf{A}}v$ stands for $\Psi_{-\mathsf{A}}v \equiv \psi_{-r_1}\cdots \psi_{-r_m} v$, $|\mathsf{A}|$ stands for the total level of fermion lowering operators, and $(-1)^{\mathsf{A}}$ is the total $\psi$ parity. We have used the fact that $\bpzbraket{\mathbf{L}_{-A}v}{\Psi_{-\mathsf{A}}^\dagger \Psi_{-\mathsf{B}}\big | \mathbf{L}_{-B}v}$ is the matrix $(-1)^{\mathsf{A}}\delta_{\mathsf{A},\mathsf{B}}\mathbf{G}_{AB}$, which give rises to the sign $(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}$. The 3-point function $\hat{\rho}^{L/R}$ is labeled by the total parity, including the fermionic one.
 
-
-For states $u\otimes x$, the 3-point function can be factorized into
+The three point function could factorize into(this should be viewed as the definition of $\widehat{\rho}_a$, so that the latter double virasoro factorization works)
 \ie
-& \hat{\rho}_a\left(u_1 \otimes x_1, u_2 \otimes x_2, u_3 \otimes x_3\right)=(-1)^{\left|x_2\right|\left|u_3\right|} \rho^{\mathsf{F}}(u_1, u_2, u_3) \rho_a(x_1, x_2, x_3),
+&\widehat{\rho}_a\!\left(
+\Psi_{-\mathsf A}\mathbf L_{-A}\phi_1,\,
+\Psi_{-\mathsf B}\mathbf L_{-B}\phi_2,\,
+\Psi_{-\mathsf C}\mathbf L_{-C}\phi_3
+\right)
+\\
+&\qquad =
+(-1)^{\,B\mathsf C+p_1A+p_2C}\,
+\rho_{\mathsf F}\!\left(
+\Psi_{-\mathsf A}\mathbf1,\,
+\Psi_{-\mathsf B}\mathbf1,\,
+\Psi_{-\mathsf C}\mathbf1
+\right)
+\rho_a\!\left(
+\mathbf L_{-A}\phi_1,\,
+\mathbf L_{-B}\phi_2,\,
+\mathbf L_{-C}\phi_3
+\right).
 \fe
-where $\rho^{\mathsf{F}}(u_1, u_2, u_3)$ is the normalized 3-point function in the free fermion theory.  The sign $(-1)^{\left|x_2\right|\left|u_3\right|}$ comes from moving operator order. Importantly, $\rho^{\mathsf{F}}$ is only nonzero if $\mathsf{A}+\mathsf{B}+\mathsf{C}\equiv 0$ mod 2. If we define the free fermion block as
+where $\rho^{\mathsf{F}}(u_1, u_2, u_3)$ is the normalized 3-point function in the free fermion theory. Importantly, $\rho^{\mathsf{F}}$ is only nonzero if $\mathsf{A}+\mathsf{B}+\mathsf{C}\equiv 0$ mod 2. If we define the free fermion block as
 \ie
 \mathbf{F}^{\mathsf{F}}(q_i, \eta_i) =& \sum_{\substack{\mathsf{A}, \mathsf{B}, \mathsf{C}\\(-1)^{\mathsf{A}+\mathsf{B}+\mathsf{C}}=1}}(-1)^{\mathsf{AB}+\mathsf{AC}+\mathsf{BC}}q_1^{|\mathsf{A}|}\eta_1^{\mathsf{A}}q_2^{|\mathsf{B}|}\eta_2^{\mathsf{B}}q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}}\left[{\rho}^{\mathsf{F}}(\Psi_{-\mathsf{A}}\mathbf{1}_\mathsf{F}, \Psi_{-\mathsf{B}}\mathbf{1}_\mathsf{F}, \Psi_{-\mathsf{C}}\mathbf{1}_\mathsf{F})\right]^2,
 \fe
@@ -1217,34 +1235,50 @@ then the all-NS $\mathsf{SCA}_\nu \otimes \mathsf{F}$ block can be factorized in
 where the symbol $\star$ stands for convolution: Denote the coefficient of $q_1^{n_1/2}q_2^{n_2/2}q_3^{n_3/2}$ in the $q$-series $\mathbf{F}_a$ by $\mathbf{F}_a[q_1^{n_1/2}q_2^{n_2/2}q_3^{n_3/2}]$, this equation can be written as
 \ie
 \widehat{\mathbf{F}}_a(h_1, h_2, h_3, c)&[q_1^{n_1/2}q_2^{n_2/2}q_3^{n_3/2}]\\
-&=\sum_{r_i+s_i=n_i}(-1)^{\sum_{i<j} (r_is_j+s_ir_j)}\mathbf{F}_{\mathsf{F}}[q_1^{r_1/2}q_2^{r_2/2}q_3^{r_3/2}] {\mathbf{F}}_a(h_1, h_2, h_3, c)[q_1^{s_1/2}q_2^{s_2/2}q_3^{s_3/2}]
+&=\sum_{r_i+s_i=n_i}(-1)^{\sum_{i<j} (r_i(s_j+p_j)+(s_i+p_i)r_j)}\mathbf{F}_{\mathsf{F}}[q_1^{r_1/2}q_2^{r_2/2}q_3^{r_3/2}] {\mathbf{F}}_a(h_1, h_2, h_3, c)[q_1^{s_1/2}q_2^{s_2/2}q_3^{s_3/2}]
 \fe
 
-Using the decomposition of the representation $\mathcal{M}_{\text{NS}}$ under $\mathsf{Vir}\oplus \mathsf{Vir}\subset \mathsf{SCA}_\nu \otimes \mathsf{F}$, we can also express $\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c)$ in terms of Virasoro blocks. Using the fact that a basis of state of a $\mathsf{SCA}_{1/2}\otimes \mathsf{F}$ module is given by $\{L_{-A}^{(1)}L_{-B}^{(2)}v_n\}$, one have
+Using the decomposition of the representation $\mathcal{M}_{\text{NS}}$ under $\mathsf{Vir}\oplus \mathsf{Vir}\subset \mathsf{SCA}_\nu \otimes \mathsf{F}$, we can also express $\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c)$ in terms of Virasoro blocks. The three point function will factorize into  three point function of double virasoro as
 \ie
-&\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c) = \sum_{\substack{|A|=|A'|, |B|=|B'|, |C|=|C'| \\ |D|=|D'|, |E|=|E'|, |F|=|F'| \\ n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2+|A|+|B|}q_2^{2n_2^2+|C|+|D|}q_3^{2n_3^2+|E|+|F|}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}\\
-&\quad \times (-1)^{4n_1n_2+4n_1n_3+4n_2n_3} \frac{(G_{h_{1,n_1}^{(1)}})^{AA'}(G_{h_{1,n_1}^{(2)}})^{BB'}(G_{h_{2,n_2}^{(1)}})^{CC'}(G_{h_{2,n_2}^{(2)}})^{DD'}(G_{h_{3,n_3}^{(1)}})^{EE'}(G_{h_{3,n_3}^{(2)}})^{FF'}}{\|v_{1,n_1}\|^2\|v_{2,n_2}\|^2\|v_{3,n_3}\|^2}\\
-&\quad \times \hat{\rho}_a(L_{-A}^{(1)}L_{-B}^{(2)}v_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3})\hat{\rho}_a(L_{-A'}^{(1)}L_{-B'}^{(2)}v_{1,n_1},L_{-C'}^{(1)}L_{-D'}^{(2)}v_{2,n_2},L_{-E'}^{(1)}L_{-F'}^{(2)}v_{3,n_3}),
+&\widehat\rho_a\!\left(
+L_{-M_1}^{(1)}L_{-N_1}^{(2)}v_1^{p_1},
+L_{-M_2}^{(1)}L_{-N_2}^{(2)}v_2^{p_2},
+L_{-M_3}^{(1)}L_{-N_3}^{(2)}v_3^{p_3}
+\right)
+\\
+&\quad =
+\widehat\rho_a(v_1^{p_1},v_2^{p_2},v_3^{p_3})\,
+\rho^{(1)}(L_{-M_1}\nu_1,L_{-M_2}\nu_2,L_{-M_3}\nu_3)\,
+\rho^{(2)}(L_{-N_1}\nu_1,L_{-N_2}\nu_2,L_{-N_3}\nu_3).
+\fe
+The all-NS $\mathsf{SCA}_\nu \otimes \mathsf{F}$ block can be expressed as
+\ie
+&\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c) = \sum_{\substack{|A|=|A'|, |B|=|B'|, |C|=|C'| \\ |D|=|D'|, |E|=|E'|, |F|=|F'| \\ n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2+|A|+|B|}q_2^{2n_2^2+|C|+|D|}q_3^{2n_3^2+|E|+|F|}\eta_1^{2n_1+p_1}\eta_2^{2n_2+p_2}\eta_3^{2n_3+p_3}\\
+&\quad \times (-1)^{(2n_1+p_1)(2n_2+p_2)+(2n_1+p_1)(2n_3+p_3)+(2n_2+p_2)(2n_3+p_3)} \\
+&\quad \frac{(G_{h_{1,n_1}^{(1)}})^{AA'}(G_{h_{1,n_1}^{(2)}})^{BB'}(G_{h_{2,n_2}^{(1)}})^{CC'}(G_{h_{2,n_2}^{(2)}})^{DD'}(G_{h_{3,n_3}^{(1)}})^{EE'}(G_{h_{3,n_3}^{(2)}})^{FF'}}{\|v^{p_1}_{1,n_1}\|^2\|v^{p_2}_{2,n_2}\|^2\|v^{p_3}_{3,n_3}\|^2}\\
+&\quad \times \hat{\rho}_a(L_{-A}^{(1)}L_{-B}^{(2)}v^{p_1}_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v^{p_2}_{2,n_2},L_{-E}^{(1)}L_{-F}^{(2)}v^{p_3}_{3,n_3})\hat{\rho}_a(L_{-A'}^{(1)}L_{-B'}^{(2)}v^{p_1}_{1,n_1},L_{-C'}^{(1)}L_{-D'}^{(2)}v^{p_2}_{2,n_2},L_{-E'}^{(1)}L_{-F'}^{(2)}v^{p_3}_{3,n_3}),
 \fe
 where we have used the fact that $h_{n}^{(1)}+h_{n}^{(2)}-h = 2n^2$ and that $v_n$ has Grassmann parity $2n$. $G_h^{AB}$ is the Virasoro inverse Gram matrix. The resolution of $(-1)^{p_{\mathsf{SCA}}\cdot p_{\mathsf{F}}}$ leads to the factorialization of the Gram matrix.
 
-The 3-point function $\hat{\rho}_a(L_{-A}^{(1)}L_{-B}^{(2)}v_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3})$ can be reduced to those of Virasoro primaries $\hat{\rho}_a(v_{1,n_1}, v_{2,n_2}, v_{3,n_3})$ by conformal Ward identity. The two copies of Virasoro can be reduced independently, which leads to the factorization formula
+The 3-point function $\hat{\rho}_a(L_{-A}^{(1)}L_{-B}^{(2)}v^{p_1}_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v^{p_2}_{2,n_2},L_{-E}^{(1)}L_{-F}^{(2)}v^{p_3}_{3,n_3})$ can be reduced to those of Virasoro primaries $\hat{\rho}_a(v^{p_1}_{1,n_1}, v^{p_2}_{2,n_2}, v^{p_3}_{3,n_3})$ by conformal Ward identity. The two copies of Virasoro can be reduced independently, which leads to the factorization formula
 \ie
-\hat{\rho}_a&(L_{-A}^{(1)}L_{-B}^{(2)}v_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3})\\
-&\quad =\hat{\rho}_a(v_{1,n_1}, v_{2,n_2}, v_{3,n_3})\rho(L_{-A}\nu_{h_{1,n_1}^{(1)}}, L_{-C}\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1}^{(2)}}, L_{-D}\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3}^{(2)}}),
+\hat{\rho}_a&(L_{-A}^{(1)}L_{-B}^{(2)}v^{p_1}_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v^{p_2}_{2,n_2},L_{-E}^{(1)}L_{-F}^{(2)}v^{p_3}_{3,n_3})\\
+&\quad =\hat{\rho}_a(v^{p_1}_{1,n_1}, v^{p_2}_{2,n_2}, v^{p_3}_{3,n_3})\rho(L_{-A}\nu_{h_{1,n_1}^{(1)}}, L_{-C}\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1}^{(2)}}, L_{-D}\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3}^{(2)}}),
 \fe
 where $\rho(L_{-A}\nu_1, L_{-B}\nu_2, L_{-C}\nu_3)$ is defined in section 1. If we define the branching coefficient
 \ie
-B_a(h_1, h_2, h_3;n_1, n_2, n_3) = \frac{\hat{\rho}_a(v_{1,n_1}, v_{2,n_2}, v_{3,n_3})}{\|v_{1,n_1}\|\|v_{2,n_2}\|\|v_{3,n_3}\|},
+B_a(h_1, h_2, h_3;n_1, n_2, n_3) = \frac{\hat{\rho}_a(v^{p_1}_{1,n_1}, v^{p_2}_{2,n_2}, v^{p_3}_{3,n_3})}{\|v^{p_1}_{1,n_1}\|\|v^{p_2}_{2,n_2}\|\|v^{p_3}_{3,n_3}\|},
 \fe
 the $\mathsf{SCA}_\nu \otimes \mathsf{F}$ block can be decomposed into
 \ie
-&\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c) = \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2}q_2^{2n_2^2}q_3^{2n_3^2}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}(-1)^{4n_1n_2+4n_1n_3+4n_2n_3}\\
+&\widehat{\mathbf{F}}_a(h_1, h_2, h_3, c) = \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2}q_2^{2n_2^2}q_3^{2n_3^2}\eta_1^{2n_1+p_1}\eta_2^{2n_2+p_2}\eta_3^{2n_3+p_3}\\
+&\qquad\times (-1)^{(2n_1+p_1)(2n_2+p_2)+(2n_1+p_1)(2n_3+p_3)+(2n_2+p_2)(2n_3+p_3)}\\
 &\qquad \times [B_a(h_1,h_2,h_3;n_1,n_2,n_3)]^2 F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}),
 \fe
 where $F(h_1, h_2, h_3, c)$ is the Virasoro conformal block, which can be computed efficiently using the $c$-relation relation in section 1. Since the fermion block $\mathbf{F}_{\mathsf{F}}$ will always have the identity term $1$, one can find $\mathbf{F}_{\mathsf{F}}^{-1}$ as a formal power series in $q$, such that $\mathbf{F}_{\mathsf{F}}\star \mathbf{F}_{\mathsf{F}}^{-1}=1$. The all-NS superconformal block $\mathbf{F}_a$ can then be computed as
 \ie
-&\mathbf{F}_a(h_1, h_2, h_3, c) = (\mathbf{F}_{\mathsf{F}})^{-1}\star \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2}q_2^{2n_2^2}q_3^{2n_3^2}\eta_1^{2n_1}\eta_2^{2n_2}\eta_3^{2n_3}(-1)^{4n_1n_2+4n_1n_3+4n_2n_3}\\
+&\mathbf{F}_a(h_1, h_2, h_3, c) = (\mathbf{F}_{\mathsf{F}})^{-1}\star \sum_{\substack{n_1, n_2, n_3\in \frac{1}{2}\mathbb{Z} \\ (-1)^{2(n_1+n_2+n_3)}=(-1)^a}} q_1^{2n_1^2}q_2^{2n_2^2}q_3^{2n_3^2}\eta_1^{2n_1+p_1}\eta_2^{2n_2+p_2}\eta_3^{2n_3+p_3}\\
+&\qquad\times (-1)^{(2n_1+p_1)(2n_2+p_2)+(2n_1+p_1)(2n_3+p_3)+(2n_2+p_2)(2n_3+p_3)}\\
 &\qquad \times [B_a(h_1,h_2,h_3;n_1,n_2,n_3)]^2 F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}).
 \fe
 
@@ -1344,6 +1378,83 @@ B_a&(h_1, h_2, h_3;n_1, n_2, n_3) = \frac{(-1)^{2n_3}(-i)^a}{\prod_{i=1}^3\sqrt{
 &\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2-P_3, 2(n_1+n_2-n_3)\right) \ell\left(\tfrac{Q}{2}-P_1+P_2-P_3, 2(-n_1+n_2-n_3)\right).
 \fe
 
+\subsubsection*{A Recursion Algorithm For Branching Coefficient}
+
+
+In this subsection, we explore a recursive algorithm for constructing the double Virasoro primary in the PBW basis. The idea is to study the state $L_1 \ket{w_n}$. In the following, we will prove that $L_1 w_n$ is the double Virasoro descendant of $w_{n-1}$. Namely, it admits an expansion as
+\ie
+L_1\ket{w_n} =\sum_{|A|+|B|=4n-3} C_{AB} L_{-A}^{(1)} L_{-B}^{(2)}  \ket{w_{n-1}} .
+\fe
+Meanwhile, following from the free field representation, we can show that the following linear equations uniquely determines $L_1 \ket{w_n}$ up to a constant:
+\ie
+J_{-\mu} L_1 \ket{w_n}= 2^{\ell(\mu)} \ket{w_{n-1}},\quad  c_m L_1 \ket{w_n}= 0.
+\fe
+It allows us to pin down the coefficient $C_{AB}$.
+
+To prove the relations above, introduce
+\ie
+\chi(z)= \frac{1}{\sqrt{2}}\left(\psi(z)-i\eta(z)\right),~ \chi(z)^*= \frac{1}{\sqrt{2}}\left(\psi(z)+i\eta(z)\right).
+\fe
+The $U(1)$ current for the complex fermion is given by
+\ie
+J(z) =\frac{1}{2} : \chi(z)\chi^*{z}:
+\fe
+with mode expansion
+\ie
+J(z)=\sum_{n} J_{n} z^{-n-1}, \quad J_{n}=\frac{1}{2}\sum_{r\in \mathbb{Z}+\frac{1}{2}} :\chi_{n-r}\chi^*_{r}:.
+\fe
+It satisfy
+\ie
+[J_m,J_n] = m\delta_{m+n,0}, \quad [J_m,\chi_r] = \chi_r,\quad [J_m,\chi^*_r] = -\chi^*_r.
+\fe
+
+
+
+As $w_n$ is constructed by filling the fermi sea, we have 
+\ie
+c_m \ket{w_n}=0, 
+\fe
+
+
+
+Using the free field representation, we can show that
+\ie
+J_{-\mu}L_1 \ket{w_n}= .
+\fe\
+where $J_n$ is the $U(1)$ current generators
+\ie
+J_n= :\chi_{r}\chi^*_{n-r}:
+\fe
+
+
+
+The coefficient $C_{AB}$ can be extracted from the matrix element
+\ie
+\braket{ L_{-A'}^{(1)} L_{-B'}^{(2)}  w_{n-1}}{L_1 w_n} = \braket{L_{-1} L_{-A'}^{(1)} L_{-B'}^{(2)}  w_{n-1}}{w_n}
+\fe
+We compute this matrix element by expressing both side as PBW basis acting on $w_{n-1}$
+
+
+
+
+\ie
+\braket{ L_{-A'}^{(1)} L_{-B'}^{(2)}  w_{n-1}}{L_1 w_n} =\sum_{|A|+|B|=4n-3} C_{AB} ||w_{n-1}||^2 \mathbb{G}_{AA'} \mathbb{G}_{BB'}
+\fe
+
+
+Combine the fermion $\psi, \eta$ into one complex fermion $ \chi$, with
+\ie
+ \chi_{r} =\frac{1}{\sqrt{2}}( \psi_r - i\eta_r), \quad  \chi^*_{r} =\frac{1}{\sqrt{2}}( \psi_r +i\eta_r).
+\fe
+They will satisfy the commutation relation
+\ie
+\left\{ \chi_{r},\chi^*_{s}\right\} = \delta_{r+s,0}.
+\fe
+In the free field representation, the double virasoro primary can be represented by
+\ie
+w_n(P)=\chi_{-\frac{4n-1}{2}}(P)\chi_{-\frac{4n-3}{2}}(P)\cdots \chi_{-\frac{1}{2}}(P)\phi(P).
+\fe
+
 
 \subsubsection*{Checks against $c$-recursion}
 
@@ -1362,21 +1473,21 @@ the ramond $\mathsf{SCA}_0\otimes \mathsf{F}_0$ block is defined as
 (-1)^{A+B+C+|\alpha|+|\gamma|}=(-1)^f\\
 (-1)^{A'+B'+C'+|\alpha'|+|\gamma'|}=(-1)^f\\
 (-1)^{\mathsf{A+B+C+b+c}}=1}
-} q_1^{|A|} \eta_1^A q_2^{|B|} \eta_2^{B+|\alpha|} q_3^{|C|} \eta_3^{C+|\gamma|} \mathbf{G}^{AA'}_{h_1} \mathbb{G}^{B\alpha, B'\alpha'}_{\beta_2} \mathbb{G}^{C\gamma, C'\gamma'}_{\beta_3}\\
-&\quad\quad \times (-1)^{\text{sgn}(A)\text{sgn}(B)+\text{sgn}(A)\text{sgn}(C)+\text{sgn}(B)\text{sgn}(C)} q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}}\\
+} q_1^{|A|} \eta_1^{A+p_1} q_2^{|B|} \eta_2^{B+|\alpha|} q_3^{|C|} \eta_3^{C+|\gamma|} \mathbf{G}^{AA'}_{h_1} \mathbb{G}^{B\alpha, B'\alpha'}_{\beta_2} \mathbb{G}^{C\gamma, C'\gamma'}_{\beta_3}\\
+&\quad\quad \times (-1)^{\text{sgn}(A)\text{sgn}(B)+\text{sgn}(A)\text{sgn}(C)+\text{sgn}(B)\text{sgn}(C)+A+\mathsf{A}} q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}}\\
 &\quad\quad \times \hat{\rho}_f^{(\eta)}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
 &\quad\quad \times \hat{\rho}_f^{(\eta')}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B'}w^{\alpha'}_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}} \otimes\mathbb{L}_{-C'}w^{\gamma'}_3)
 \fe
-where $\boldsymbol{\Psi}_{-\mathsf{B}}$ denotes a chain of R-sector fermion lowering operators (there are no \texttt{mathbb} version of $\Psi$, sadly). Note that $\boldsymbol\Psi_{-\mathsf{A}}$ does not contain the fermion zero mode $\psi_0$. We have used $\langle u^\mathsf{a}|\boldsymbol\Psi_{-\mathsf{A}}^\dagger \boldsymbol\Psi_{-\mathsf{B}}|u^{\mathsf{b}}\rangle=(-1)^{\mathsf{A}+\mathsf{a}}\delta_{\mathsf{AB}}\delta^{\mathsf{a}\mathsf{b}}$, as well as $\langle u_1\otimes x_1| u_2\otimes x_2 \rangle=\langle u_1|u_2\rangle \langle x_1|x_2\rangle$ without the additional operator exchanging sign. The shorthand $\text{sgn}$ is defined such that ${\text{sgn}(A)}=A+\mathsf{A} \mod 2$ for NS sector and ${\text{sgn}(B)}=B+\mathsf{B}+\mathsf{b}+|\alpha| \mod 2$ for R sector. We have also used the fact that the fermion correlator is 0 unless $(-1)^{\mathsf{A+B+C+b+c}}=1$.
+where $\boldsymbol{\Psi}_{-\mathsf{B}}$ denotes a chain of R-sector fermion lowering operators (there are no \texttt{mathbb} version of $\Psi$, sadly). Note that $\boldsymbol\Psi_{-\mathsf{A}}$ does not contain the fermion zero mode $\psi_0$. We have used $\langle u^\mathsf{a}|\boldsymbol\Psi_{-\mathsf{A}}^\dagger \boldsymbol\Psi_{-\mathsf{B}}|u^{\mathsf{b}}\rangle=(-1)^{\mathsf{A}+\mathsf{a}}\delta_{\mathsf{AB}}\delta^{\mathsf{a}\mathsf{b}}$, as well as $\langle u_1\otimes x_1| u_2\otimes x_2 \rangle=\langle u_1|u_2\rangle \langle x_1|x_2\rangle$ without the additional operator exchanging sign. The shorthand $\text{sgn}$ is defined such that ${\text{sgn}(A)}=p_1+A+\mathsf{A} \mod 2$ for NS sector and ${\text{sgn}(B)}=B+\mathsf{B}+\mathsf{b}+|\alpha| \mod 2$ for R sector. We have also used the fact that the fermion correlator is 0 unless $(-1)^{\mathsf{A+B+C+b+c}}=1$.
 
 The 3-point function can be factorized as (we treat this formula as the definition of $\hat{\rho}^{(\eta)}_f$)
 \ie
 \hat{\rho}_f^{(\eta)}&(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
-&=(-1)^{A\mathsf{A}+(B+|\alpha|)(\mathsf{C+c})+f(\mathsf{C+c})}\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}) {\rho}_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3),
+&=(-1)^{A\mathsf{A}+(B+|\alpha|)(\mathsf{C+c})+p_1(\mathsf{C+c})}\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}}) {\rho}_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3),
 \fe
 where the fermionic 3-point function is normalized such that $\rho(\mathbf{1}_{\mathsf{F}}, u^0, u^0)=1,\rho(\mathbf{1}_{\mathsf{F}}, u^1, u^1)=i$. Therefore, if we define the fermion Ramond block as
 \ie
-\mathbb{F}_{\mathsf{F}} = \sum_{\mathsf{A+B+C+b+c}\equiv 0 \mod 2} &q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}} (-1)^{\mathsf{A(B+b)+A(C+c)+(B+b)(C+c)}}\\
+\mathbb{F}_{\mathsf{F}} = \sum_{\mathsf{A+B+C+b+c}\equiv 0 \mod 2} &(-1)^{\mathsf{A}}q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}} (-1)^{\mathsf{A(B+b)+A(C+c)+(B+b)(C+c)}}\\
 & \times [\rho(\Psi_{-\mathsf{A}}\mathbf{1}_{\mathsf{F}}, \boldsymbol\Psi_{-\mathsf{B}}u^{\mathsf{b}},\boldsymbol\Psi_{-\mathsf{C}}u^{\mathsf{c}})]^2,
 \fe
 one then have the decomposition
@@ -1394,29 +1505,31 @@ Using the decomposition \eqref{Rbranching}, one can see that every state in $\ma
   |D|=|D'|, |E|=|E'|, |F|=|F'|\\
   n_1\in \frac{1}{2}\mathbb{Z},~ n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\
   (-1)^{2n_1 + \alpha_2 + \alpha_3}=(-1)^f
-  }} q_1^{2n_1^2+|A|+|B|}q_2^{2n_2^2-\frac{1}{8}+|C|+|D|}q_3^{2n_3^2-\frac{1}{8}+|E|+|F|}\eta_1^{2n_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
-&\times (-1)^{2n_1\alpha_2+2n_1\alpha_3+\alpha_2\alpha_3} \frac{(G_{h_{1,n_1}^{(1)}})^{AA'}(G_{h_{1,n_1}^{(2)}})^{BB'}(G_{h_{2,n_2}^{(1)}})^{CC'}(G_{h_{2,n_2}^{(2)}})^{DD'}(G_{h_{3,n_3}^{(1)}})^{EE'}(G_{h_{3,n_3}^{(2)}})^{FF'}}{\|v_{1,n_1}\|^2\|v_{2,n_2}^{\alpha_2}\|^2\|v_{3,n_3}^{\alpha_3}\|^2}\\
-&\times \hat{\rho}_f^{(\eta)}(L_{-A}^{(1)}L_{-B}^{(2)}v_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3}^{\alpha_3})\hat{\rho}_f^{(\eta')}(L_{-A'}^{(1)}L_{-B'}^{(2)}v_{1,n_1},L_{-C'}^{(1)}L_{-D'}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E'}^{(1)}L_{-F'}^{(2)}v_{3,n_3}^{\alpha_3}),
+  }} q_1^{2n_1^2+|A|+|B|}q_2^{2n_2^2-\frac{1}{8}+|C|+|D|}q_3^{2n_3^2-\frac{1}{8}+|E|+|F|}\eta_1^{2n_1+p_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
+&\times (-1)^{(2n_1+p_1)\alpha_2+(2n_1+p_1)\alpha_3+\alpha_2\alpha_3} \frac{(G_{h_{1,n_1}^{(1)}})^{AA'}(G_{h_{1,n_1}^{(2)}})^{BB'}(G_{h_{2,n_2}^{(1)}})^{CC'}(G_{h_{2,n_2}^{(2)}})^{DD'}(G_{h_{3,n_3}^{(1)}})^{EE'}(G_{h_{3,n_3}^{(2)}})^{FF'}}{\|v^{p_1}_{1,n_1}\|^2\|v_{2,n_2}^{\alpha_2}\|^2\|v_{3,n_3}^{\alpha_3}\|^2}\\
+&\times \hat{\rho}_f^{(\eta)}(L_{-A}^{(1)}L_{-B}^{(2)}v^{p_1}_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3}^{\alpha_3})\hat{\rho}_f^{(\eta')}(L_{-A'}^{(1)}L_{-B'}^{(2)}v^{p_1}_{1,n_1},L_{-C'}^{(1)}L_{-D'}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E'}^{(1)}L_{-F'}^{(2)}v_{3,n_3}^{\alpha_3}),
 \fe
 where we used the fact that $u^{\mathsf{a}}$ has conformal weight $\frac{1}{16}$ and the fact that $\langle v_n^0|v_n^1\rangle = 0$. The factorization relation of the 3-point function reads
 \ie
-\hat{\rho}_f^{(\eta)}&(L_{-A}^{(1)}L_{-B}^{(2)}v_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3}^{\alpha_3})\\
-&\quad =\hat{\rho}_f^{(\eta)}(v_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})\rho(L_{-A}\nu_{h_{1,n_1}^{(1)}}, L_{-C}\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1}^{(2)}}, L_{-D}\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3}^{(2)}}),
+\hat{\rho}_f^{(\eta)}&(L_{-A}^{(1)}L_{-B}^{(2)}v^{p_1}_{1,n_1},L_{-C}^{(1)}L_{-D}^{(2)}v_{2,n_2}^{\alpha_2},L_{-E}^{(1)}L_{-F}^{(2)}v_{3,n_3}^{\alpha_3})\\
+&\quad =\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})\rho(L_{-A}\nu_{h_{1,n_1}^{(1)}}, L_{-C}\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1}^{(2)}}, L_{-D}\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3}^{(2)}}),
 \fe
 and therefore,
 \ie
-\widehat{\mathbb{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{n_1 \in \frac{1}{2} \mathbb{Z}, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
-&\quad \times (-1)^{2n_1\alpha_2+2n_1\alpha_3+\alpha_2\alpha_3} \mathbb{B}^{(\eta)}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) \mathbb{B}^{(\eta')}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3)\\
+\widehat{\mathbb{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3, c) &= \sum_{\substack{n_1 \in \frac{1}{2} \mathbb{Z}, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1+p_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
+&\quad \times (-1)^{2n_1+(2n_1+p_1)\alpha_2+(2n_1+p_1) \alpha_3+\alpha_2\alpha_3} \\
+&\quad \times\mathbb{B}^{(\eta);p_1}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) \mathbb{B}^{(\eta');p_1}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3)\\
 &\quad \times F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}),
 \fe
 where the R-sector branching coefficients are defined as
 \ie
-\mathbb{B}^{(\eta)}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) = \frac{\hat{\rho}_f^{(\eta)}(v_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})}{\|v_{1,n_1}\|\|v_{2,n_2}^{\alpha_2}\|\|v_{3,n_3}^{\alpha_3}\|}.
+\mathbb{B}^{(\eta);p_1}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) = \frac{\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})}{\|v^{p_1}_{1,n_1}\|\|v_{2,n_2}^{\alpha_2}\|\|v_{3,n_3}^{\alpha_3}\|}.
 \fe
+where $v^{p_1}_{1,n_1}$ has parity $2n_1+p_1$.
 
 \subsubsection*{Ramond branching coefficients}
 
-Unlike the NS branching coefficient $\mathbb{B}_a$, the Ramond branching coefficient $\mathbb{B}_f^{(\eta)}$ is not computed in the literature. There are conjectures in \cite{1312.4520} about its structure, but the numerical prefactor remains unknown. In the rest of this section, we develop a recursion relation between $\mathbb{B}^{(\eta)}_f(n_1, n_2, n_3, \alpha_2, \alpha_3)$'s, which can be used to solve them numerically.
+Unlike the NS branching coefficient $\mathbb{B}_a$, the Ramond branching coefficient $\mathbb{B}_f^{(\eta);p_1}$ is not computed in the literature. There are conjectures in \cite{1312.4520} about its structure, but the numerical prefactor remains unknown. In the rest of this section, we develop a recursion relation between $\mathbb{B}^{(\eta);p_1}_f(n_1, n_2, n_3, \alpha_2, \alpha_3)$'s, which can be used to solve them numerically.
 
 Let's first define the Virasoro primaries $v_n^\alpha$ unambiguously. Similar to the NS algebra, one can also introduce free bosons $c_n$ and free fermions $\eta_r$ with $n, r\in \mathbb{Z}$ to realize the $\mathsf{SCA}_0$ algebra. The SCA generators are given by the same formula \eqref{freefieldrep}. Denoting $\eta_r(P)$ as the operator $\eta_r$ expressed using $G_r, L_n, P$. Using $\chi_r(P) = \psi_r - i\eta_r(P)$, we define $v_n^\alpha$ with $n>0$ as
 \ie
@@ -1457,31 +1570,32 @@ We have checked this for $n=1,\frac{3}{2}, 2, \frac{5}{2}$. Note that these coef
 
 After solving the coefficients $\mathbb{V}$ and $\mathbf{V}$'s, one can use the $L_1$ conformal Ward identities:
 \ie
-\hat{\rho}_f^{(\eta)}(L_1v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})&=\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})+\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},L_{-1}v_{3,n_3}^{\alpha_3}),\\
-\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_1v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})&=\hat{\rho}_f^{(\eta)}(L_{-1}v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
-&\quad -2\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_0v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},L_1v_{3,n_3}^{\alpha_3}). 
+\hat{\rho}_f^{(\eta)}(L_1v^{p_1}_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})&=\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})+\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1},v_{2,n_2}^{\alpha_2},L_{-1}v_{3,n_3}^{\alpha_3}),\\
+\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1},L_1v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})&=\hat{\rho}_f^{(\eta)}(L_{-1}v^{p_1}_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
+&\quad -2\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1},L_0v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1},v_{2,n_2}^{\alpha_2},L_1v_{3,n_3}^{\alpha_3}). 
 \fe
 Plugging in the decomposition above, the first equation then reads
 \ie
 &\sum_{|A|+|B|=4n_1-3}\mathbf{V}_{1,n_1}^{AB}\rho(L_{-A}\nu_{h_{1,n_1-1}^{(1)}}, \nu_{h_{2,n_2}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1-1}^{(2)}}, \nu_{h_{2,n_2}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\hat{\rho}_f^{(\eta)}(v_{1,n_1-1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
-&\qquad = \left[\sum_{i=1}^2 (\mathbb{V}_{n_2,\alpha_2}^{(i)}-\mathbb{V}_{n_3,\alpha_3}^{(i)})(h_{1,n_1}^{(i)}-h_{2,n_2}^{(i)}-h_{3,n_3}^{(i)})\right]\hat{\rho}_f^{(\eta)}(v_{1,n_1}, v_{2, n_2}^{\alpha_2}, v_{3, n_3}^{\alpha_3})\\
-&\qquad + \sum_{|C|+|D|=4n_2-1} \mathbb{V}_{-1,n_2, \alpha_2}^{CD}\rho(\nu_{h_{1,n_1}^{(1)}},L_{-C}\nu_{h_{2,n_2-1}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},L_{-D}\nu_{h_{2,n_2-1}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2-1}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
-&\qquad + \sum_{|E|+|F|=4n_3-1} \mathbb{V}_{-1,n_3, \alpha_3}^{EF}\rho(\nu_{h_{1,n_1}^{(1)}},\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3-1}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3-1}^{(2)}})\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3-1}^{\alpha_3}),
+&\qquad = \left[\sum_{i=1}^2 (\mathbb{V}_{n_2,\alpha_2}^{(i)}-\mathbb{V}_{n_3,\alpha_3}^{(i)})(h_{1,n_1}^{(i)}-h_{2,n_2}^{(i)}-h_{3,n_3}^{(i)})\right]\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1}, v_{2, n_2}^{\alpha_2}, v_{3, n_3}^{\alpha_3})\\
+&\qquad + \sum_{|C|+|D|=4n_2-1} \mathbb{V}_{-1,n_2, \alpha_2}^{CD}\rho(\nu_{h_{1,n_1}^{(1)}},L_{-C}\nu_{h_{2,n_2-1}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},L_{-D}\nu_{h_{2,n_2-1}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1},v_{2,n_2-1}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
+&\qquad + \sum_{|E|+|F|=4n_3-1} \mathbb{V}_{-1,n_3, \alpha_3}^{EF}\rho(\nu_{h_{1,n_1}^{(1)}},\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3-1}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3-1}^{(2)}})\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3-1}^{\alpha_3}),
 \fe
 where we have used the fact that $\rho(\nu_1,L_{-1}\nu_2,\nu_3)=h_1-h_2-h_3,\rho(\nu_1,\nu_2,L_{-1}\nu_3)=-h_1+h_2+h_3$ and the factorization of 3-point functions. Therefore,
 {\footnotesize
 \ie
-&\left[\sum_{i=1}^2 (\mathbb{V}_{n_2,\alpha_2}^{(i)}-\mathbb{V}_{n_3,\alpha_3}^{(i)})(h_{2,n_2}^{(i)}+h_{3,n_3}^{(i)}-h_{1,n_1}^{(i)})\right]\mathbb{B}_f^{(\eta)}(n_1,n_2,n_3,\alpha_2,\alpha_3)=\\
-& - \sum_{|A|+|B|=4n_1-3}\mathbf{V}_{1,n_1}^{AB}\rho(L_{-A}\nu_{h_{1,n_1-1}^{(1)}}, \nu_{h_{2,n_2}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1-1}^{(2)}}, \nu_{h_{2,n_2}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\mathbb{B}_f^{(\eta)}(n_1-1,n_2,n_3,\alpha_2,\alpha_3)\frac{\|v_{n_1-1}\|}{\|v_{n_1}\|}\\
-& + \sum_{|C|+|D|=4n_2-1} \mathbb{V}_{-1,n_2, \alpha_2}^{CD}\rho(\nu_{h_{1,n_1}^{(1)}},L_{-C}\nu_{h_{2,n_2-1}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},L_{-D}\nu_{h_{2,n_2-1}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\mathbb{B}_f^{(\eta)}(n_1,n_2-1,n_3,\alpha_2,\alpha_3)\frac{\|v_{n_2-1}^{\alpha_2}\|}{\|v_{n_2}^{\alpha_2}\|}\\
-& + \sum_{|E|+|F|=4n_3-1} \mathbb{V}_{-1,n_3, \alpha_3}^{EF}\rho(\nu_{h_{1,n_1}^{(1)}},\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3-1}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3-1}^{(2)}})\mathbb{B}_f^{(\eta)}(n_1,n_2,n_3-1,\alpha_2,\alpha_3)\frac{\|v_{n_3-1}^{\alpha_3}\|}{\|v_{n_3}^{\alpha_3}\|},
+&\left[\sum_{i=1}^2 (\mathbb{V}_{n_2,\alpha_2}^{(i)}-\mathbb{V}_{n_3,\alpha_3}^{(i)})(h_{2,n_2}^{(i)}+h_{3,n_3}^{(i)}-h_{1,n_1}^{(i)})\right]\mathbb{B}_f^{(\eta);p_1}(n_1,n_2,n_3,\alpha_2,\alpha_3)=\\
+& - \sum_{|A|+|B|=4n_1-3}\mathbf{V}_{1,n_1}^{AB}\rho(L_{-A}\nu_{h_{1,n_1-1}^{(1)}}, \nu_{h_{2,n_2}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(L_{-B}\nu_{h_{1,n_1-1}^{(2)}}, \nu_{h_{2,n_2}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\mathbb{B}_f^{(\eta);p_1}(n_1-1,n_2,n_3,\alpha_2,\alpha_3)\frac{\|v_{n_1-1}\|}{\|v_{n_1}\|}\\
+& + \sum_{|C|+|D|=4n_2-1} \mathbb{V}_{-1,n_2, \alpha_2}^{CD}\rho(\nu_{h_{1,n_1}^{(1)}},L_{-C}\nu_{h_{2,n_2-1}^{(1)}}, \nu_{h_{3,n_3}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},L_{-D}\nu_{h_{2,n_2-1}^{(2)}}, \nu_{h_{3,n_3}^{(2)}})\mathbb{B}_f^{(\eta);p_1}(n_1,n_2-1,n_3,\alpha_2,\alpha_3)\frac{\|v_{n_2-1}^{\alpha_2}\|}{\|v_{n_2}^{\alpha_2}\|}\\
+& + \sum_{|E|+|F|=4n_3-1} \mathbb{V}_{-1,n_3, \alpha_3}^{EF}\rho(\nu_{h_{1,n_1}^{(1)}},\nu_{h_{2,n_2}^{(1)}}, L_{-E}\nu_{h_{3,n_3-1}^{(1)}})\rho(\nu_{h_{1,n_1}^{(2)}},\nu_{h_{2,n_2}^{(2)}}, L_{-F}\nu_{h_{3,n_3-1}^{(2)}})\mathbb{B}_f^{(\eta);p_1}(n_1,n_2,n_3-1,\alpha_2,\alpha_3)\frac{\|v_{n_3-1}^{\alpha_3}\|}{\|v_{n_3}^{\alpha_3}\|},
 \fe
 }
 and the ratios can be computed by
 \ie
 \frac{\left\|v_{n_1-1}\right\|}{\left\|v_{n_1}\right\|}=2 \sqrt{\frac{\ell\left(2 P_1, 4 n_1-4\right) \ell\left(Q+2 P_1, 4 n_1-4\right)}{\ell\left(2 P_1, 4 n_1\right) \ell\left(Q+2 P_1, 4 n_1\right)}},\quad \frac{\left\|v_{n_2-1}^{a_2}\right\|}{\left\|v_{n_2}^{a_2}\right\|}=\frac{1}{2} \sqrt{\frac{\ell\left(2 P_2, 4 n_2-4\right) \ell\left(Q+2 P_2, 4 n_2\right)}{\ell\left(Q+2 P_2, 4 n_2-4\right) \ell\left(2 P_2, 4 n_2\right)}}.
 \fe
-Using this recursion relation, one can solve for the Ramond branching coefficient $\mathbb{B}_f^{(\eta)}(n_1,n_2,n_3,\alpha_2,\alpha_3)$ recursively. One should note that this form only works for $n_1\geq 1$ and $n_2,n_3\geq \frac{3}{4}$. At the boundary values, $L_1$ annihilates $v_{0,\pm \frac{1}{2}}$ and $v_{\pm \frac{1}{4}}^{\alpha}$. For $L_{-1}$, one can use 
+Using this recursion relation, one can solve for the Ramond branching coefficient $\mathbb{B}_f^{(\eta);p_1}(n_1,n_2,n_3,\alpha_2,\alpha_3)$ recursively. 
+One should note that this form only works for $n_1\geq 1$ and $n_2,n_3\geq \frac{3}{4}$. At the boundary values, $L_1$ annihilates $v_{0,\pm \frac{1}{2}}$ and $v_{\pm \frac{1}{4}}^{\alpha}$. For $L_{-1}$, one can use 
 \ie
 L_{-1}v_0 &= L_{-1}^{(1)}v_0 + L_{-1}^{(2)}v_0\\
 L_{-1} v_{1 / 2}= & -\frac{(2 P+b)\left(-2 P b+b^2+1\right)}{2 P\left(2 P b+b^2-1\right)} L_{-1}^{(1)} v_{1 / 2}+\frac{(2 P b+1)\left(-2 P b+b^2+1\right)}{2 P b\left(-2 P b+b^2-1\right)} L_{-1}^{(2)} v_{1 / 2} \\
@@ -1494,6 +1608,9 @@ L_{-1} v_{-1 / 4}^\alpha= & \frac{4 P b+b^2+2}{2(2 P b+1)} L_{-1}^{(1)} v_{-1 / 
 & +\frac{\left(2 P b+b^2+2\right)\left(2 P b+2 b^2+1\right)}{2^{\alpha+2} b(2 P+b)(2 P b+1)} v_{3 / 4}^\alpha .
 \fe
 Note that the $L_{-1}$ action on $v_{1/4}$ involves $v_{-3/4}$. One can use the similar reduction relation for $L_{\pm 1}$ acting on negative $n$ to deal with it. It will turns out that $L_{-1} v_{-3/4}$ only contains level-1 descendant of $v_{-3/4}$ and level-2 descendants of $v_{1/4}$, while $L_{1}v^{\alpha}_{-3/4}$ is proportional to $v_{1/4}$. In the end, one only needs to compute a few low-level branching coefficients directly for $n_{\NS} = 0,\pm \frac{1}{2}$ and $n_{\R} = \pm \frac{1}{4}, \pm \frac{3}{4}$, and every other branching coefficient can be obtained using the recursion relation. Using this method, branching coefficients $\mathbb{B}_f^{(\eta')}(2,\frac{7}{4}, \frac{5}{4},\alpha_2, \alpha_3)$ with all 8 sign configurations takes around 1 second in total on a laptop. The results are also checked against low-level direct calculations for NS $|n|\leq \frac{3}{2}$ and Ramond $|n|\leq \frac{5}{4}$.
+
+One thing worth noticing is that the recursion relation does not depend on the choice of NS primary parity $p_1$, because all the Virasoro generators is parity even. However, the boundary value of fusion coefficients do depend on the parity, as parity will be present in the conformal ward identity. 
+
 
 Using the branching coefficients, one can compute the full $\mathsf{SCA}_0\otimes \mathsf{F}_0$ block using \eqref{rextendedblock}. We have computed this quantity in two different ways: First by the double Virasoro decomposition, and then by directly computing the blocks $\mathbb{F}_\mathsf{F}$ and $\mathbb{F}_f^{(\eta, \eta')}$ by summing over descendants. We have checked that the two blocks agrees up to order $q^6$. Computing the block $\hat{\mathbb{F}}^{(+,+)}_0$ as a $q$-expansion takes 83 seconds on a laptop, in which 75 seconds are used to compute the branching coefficients.
 

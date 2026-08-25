@@ -31,32 +31,35 @@ TARGET_ARRAY=${6:-"512,519,575,583,731,960,967,1023,1536,1543,1599,1607,1755,198
 IFS=',' read -r -a TARGET_TASKS <<< "${TARGET_ARRAY}"
 TARGET_TASK_COUNT=${#TARGET_TASKS[@]}
 
-ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/python' '${REMOTE_ROOT}/Code/config' '${REMOTE_ROOT}/Code/cluster' '${REMOTE_SHARDS}' '${REMOTE_RUN_ROOT}/logs'"
+ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/genus_2' '${REMOTE_ROOT}/Code/genus_2_cross_channel' '${REMOTE_ROOT}/Code/config' '${REMOTE_ROOT}/Code/cluster' '${REMOTE_SHARDS}' '${REMOTE_RUN_ROOT}/logs'"
 
 (
   cd "${LOCAL_ROOT}"
   rsync -azR \
-    ./Code/ns_genus2_cannon.py \
-    ./Code/ns_genus2_partition.py \
-    ./Code/test_ns_genus2_partition.py \
-    ./Code/compare_ns_torus_c_h_recursion.py \
-    ./Code/ns_genus_c_recursion_checks.py \
-    ./Code/ns_recursion_recipe.py \
-    ./Code/ns_global_osp_block.py \
-    ./Code/ns_regular_block.py \
-    ./Code/ns_vacuum_schottky.py \
-    ./Code/super_liouville_structure_constants.py \
-    ./Code/superconformal_blocks.py \
-    ./Code/python/ccy_genus2_block.py \
-    ./Code/python/genus2_vacuum_blocks.py \
-    ./Code/python/plumbing_algorithms.py \
-    ./Code/python/virasoro_blocks.py \
+    ./Code/sitecustomize.py \
+    ./Code/genus_2/__init__.py \
+    ./Code/genus_2/theta_partition.py \
+    ./Code/c_Recursion/ns_genus2_cannon.py \
+    ./Code/c_Recursion/ns_genus2_partition.py \
+    ./Code/c_Recursion/test_ns_genus2_partition.py \
+    ./Code/c_Recursion/compare_ns_torus_c_h_recursion.py \
+    ./Code/c_Recursion/ns_genus_c_recursion_checks.py \
+    ./Code/c_Recursion/ns_recursion_recipe.py \
+    ./Code/c_Recursion/ns_global_osp_block.py \
+    ./Code/c_Recursion/ns_regular_block.py \
+    ./Code/c_Recursion/ns_vacuum_schottky.py \
+    ./Code/c_Recursion/super_liouville_structure_constants.py \
+    ./Code/c_Recursion/superconformal_blocks.py \
+    ./Code/genus_2_cross_channel/ccy_genus2_block.py \
+    ./Code/genus_2_cross_channel/genus2_vacuum_blocks.py \
+    ./Code/genus_2_cross_channel/plumbing_algorithms.py \
+    ./Code/genus_2_cross_channel/virasoro_blocks.py \
     ./Code/cluster/ns_genus2_cannon_array.slurm \
     "${SSH_HOST}:${REMOTE_ROOT}/"
 )
 rsync -az "${LOCAL_CONFIG}" "${SSH_HOST}:${REMOTE_CONFIG}"
 
-ssh "${SSH_HOST}" "set -e; cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' -m unittest Code/test_ns_genus2_partition.py; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/python' '${REMOTE_PYTHON}' Code/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan"
+ssh "${SSH_HOST}" "set -e; cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/genus_2_cross_channel' '${REMOTE_PYTHON}' -m unittest Code/c_Recursion/test_ns_genus2_partition.py; PYTHONPATH='${REMOTE_ROOT}/Code:${REMOTE_ROOT}/Code/genus_2_cross_channel' '${REMOTE_PYTHON}' Code/c_Recursion/ns_genus2_cannon.py --config '${REMOTE_CONFIG}' plan"
 
 COMMON_EXPORT="ALL,NS_G2_ROOT=${REMOTE_ROOT},NS_G2_PYTHON=${REMOTE_PYTHON},NS_G2_CONFIG=${REMOTE_CONFIG},NS_G2_SHARDS=${REMOTE_SHARDS}"
 ARRAY_JOB=$(ssh "${SSH_HOST}" "cd '${REMOTE_RUN_ROOT}'; sbatch --parsable --partition='${PARTITION}' --job-name='${JOB_TAG}' --output='logs/${JOB_TAG}-%A_%a.out' --error='logs/${JOB_TAG}-%A_%a.err' --array='${TARGET_ARRAY}%${ARRAY_CAP}' --export='${COMMON_EXPORT}' '${REMOTE_ROOT}/Code/cluster/ns_genus2_cannon_array.slurm'")

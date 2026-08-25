@@ -1,0 +1,93 @@
+{
+  "status": "physical_i_epsilon_worldsheet_unfrozen_requires_convergence",
+  "normalization": "mu^3 A_tree=i I5/(4 pi^2)",
+  "subtraction": "local finite part: excised bulk + 10 analytic faces + 15 double-primitive corners",
+  "settings": {
+    "block_order": 2,
+    "momentum_order_per_endpoint_panel": 12,
+    "momentum_maximum": 5.0,
+    "momentum_panels": 1,
+    "endpoint_refinement": 0,
+    "block_scheme": "c",
+    "collar_radii": [
+      0.1
+    ],
+    "bulk_sobol_power": 4,
+    "face_sobol_power": 5,
+    "replicates": 2,
+    "radial_power": 0.5,
+    "seed": 9107
+  },
+  "collar_audits": [
+    {
+      "omega": 0.35,
+      "epsilon": 0.08,
+      "real_spread": 0.0,
+      "imag_spread": 0.0,
+      "two_sigma_stable": true
+    }
+  ],
+  "promotion_ready": false,
+  "remaining_promotion_gates": [
+    "block-order convergence",
+    "Liouville momentum-grid convergence at every power endpoint",
+    "moduli-grid convergence",
+    "three-radius collar stability",
+    "epsilon-to-zero sequence at fixed real omega"
+  ],
+  "points": [
+    {
+      "omega": 0.35,
+      "epsilon": 0.08,
+      "collar_radius": 0.1,
+      "complex_outgoing_frequency": {
+        "real": 0.35,
+        "imag": 0.02
+      },
+      "complex_incoming_frequency": {
+        "real": 1.4,
+        "imag": 0.08
+      },
+      "I5": {
+        "real": -0.7909026251206953,
+        "imag": 3.0499838886317043
+      },
+      "I5_standard_error": {
+        "real": 0.1928528397766683,
+        "imag": 0.53295255729956
+      },
+      "mu3_A_tree": {
+        "real": -0.0772569944215561,
+        "imag": -0.02003379753076525
+      },
+      "mu3_A_tree_standard_error": {
+        "real": 0.013499845982700567,
+        "imag": 0.004885019498739538
+      },
+      "replicate_I5": [
+        {
+          "real": -0.598049785344027,
+          "imag": 3.5829364459312645
+        },
+        {
+          "real": -0.9837554648973637,
+          "imag": 2.517031331332144
+        }
+      ],
+      "strata": {
+        "bulk_mean": {
+          "real": 1.5450931533277796,
+          "imag": 0.7064223909576084
+        },
+        "faces_mean": {
+          "real": -0.63219895824088,
+          "imag": 2.6557171346776505
+        },
+        "corners": {
+          "real": -1.703796820207595,
+          "imag": -0.31215563700355464
+        }
+      }
+    }
+  ]
+}

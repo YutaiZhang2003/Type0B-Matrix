@@ -1,0 +1,74 @@
+{
+  "schema": "ns-genus2-human-note-bry-phase-audit-v1",
+  "status": "convention_mismatch_identified_and_corrected",
+  "point_id": "o0243-periodmatched",
+  "quantity": "Q_L = Z_L / Z_(X+psi)^9",
+  "human_note_edited": false,
+  "human_note_sewing_signs_retained": {
+    "theta": "(-1)^(a+p1+p2+p3)",
+    "glasses": "(-1)^(a+p_bridge)"
+  },
+  "coefficient_dictionary": {
+    "even": "C_HN^(0) = C_BRY",
+    "odd": "C_HN^(1) = i * tilde_C_BRY",
+    "odd_two_pants_phase": -1,
+    "phase_branch_note": "The choice -i gives the same two-pants product."
+  },
+  "direct_free_superfield": {
+    "theta": 0.21556310764601513,
+    "glasses": 4.1997421008083275,
+    "mode_cutoff": 24
+  },
+  "high_order_sector_audit": {
+    "recursion_order": 24,
+    "quadrature_order": 10,
+    "theta": {
+      "even": 7.272416798496118e-18,
+      "odd_with_human_note_sign_before_bry_phase_conversion": -2.777085740194667e-20,
+      "corrected_total": 7.300187655898065e-18,
+      "corrected_q_l": 7.263803725591835e-12
+    },
+    "glasses": {
+      "even": 2.8844493964681567e-06,
+      "odd_with_human_note_sign_before_bry_phase_conversion": -6.878084608340708e-08,
+      "corrected_total": 2.953230242551564e-06,
+      "corrected_q_l": 7.265971832742894e-12
+    },
+    "before_conversion_theta_over_glasses": 1.0405652283220652,
+    "after_conversion_theta_over_glasses": 0.9997016080985494,
+    "after_conversion_relative_difference": -0.0002983919014506453,
+    "absolute_residual_reduction_fraction": 0.9926441458906238
+  },
+  "local_quadrature_check": [
+    {
+      "recursion_order": 4,
+      "quadrature_order": 4,
+      "theta_over_glasses": 1.0484740320004,
+      "relative_difference": 0.048474032000400014
+    },
+    {
+      "recursion_order": 4,
+      "quadrature_order": 6,
+      "theta_over_glasses": 1.0038317799713135,
+      "relative_difference": 0.0038317799713134537
+    },
+    {
+      "recursion_order": 4,
+      "quadrature_order": 8,
+      "theta_over_glasses": 1.0014046191889092,
+      "relative_difference": 0.0014046191889092174
+    }
+  ],
+  "numerical_error_budget": {
+    "free_denominator_M20_to_M24": "below 2e-13 in either channel",
+    "direct_vs_legacy_denominator_effect_on_channel_ratio": "4.9e-5 relative",
+    "recursion_R22_to_R24_axis": "about 1e-7 in the previously completed common-cutoff audit",
+    "dominant_remaining_source": "common momentum quadrature above N=10",
+    "next_required_check": "fresh common R=24, N>=12 run"
+  },
+  "sources": {
+    "current_theta_shards": "/n/home09/yutaizhang/Type0B-Matrix-runs/ns-genus2-cross-sewing-r24-n10-human-note-spin00-20260825-v1/theta-shards",
+    "current_glasses_shards": "/n/home09/yutaizhang/Type0B-Matrix-runs/ns-genus2-cross-sewing-r24-n10-glasses-parity-20260823-v1/shards",
+    "local_r4_n4_n6_n8_verification": "Data Set/ns_genus2_theta_glasses_hatc9_human_note_plumbing_free_2026-08-25.json"
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "calculation": "direct c=1 genus-one two-point worldsheet integral",
+  "blind_freeze": true,
+  "blind_freeze_statement": "The estimator, cutoff treatment, and reported native amplitude do not evaluate a matrix-model or literature target.",
+  "native_convention": true,
+  "native_normalization": "A_1^ws(omega)=8*pi^2*i*g_s^2*I_1(omega)",
+  "omega": {
+    "real": 0.0,
+    "imag": 0.3
+  },
+  "x": 0.3,
+  "domain": "omega=i*x, 0<x<1; no DOZZ pole crosses the real P contours",
+  "patch_epsilon": 0.15,
+  "collision_disc": {
+    "radius": 0.1,
+    "treatment": "leading OPE term integrated analytically"
+  },
+  "momentum_rule": {
+    "kind": "Gauss-Legendre after P=p_max*u^power",
+    "p_max": 6.0,
+    "order": 16,
+    "power": 2.0
+  },
+  "block_orders": {
+    "necklace_hat_q1": 6,
+    "necklace_hat_q2": 3,
+    "ope_q": 3,
+    "ope_z": 8
+  },
+  "block_backends": {
+    "necklace": "regulated-h-recursion",
+    "ope": "c-recursion",
+    "h_recursion_c_regulator": 0.04,
+    "h_recursion_weight_regulator": 0.001,
+    "h_recursion_audit_tolerance": 1e-07,
+    "h_recursion_audit_max_relative_error": 1.8960872863735823,
+    "h_recursion_node_count": 256,
+    "h_recursion_direct_fallback_count": 223,
+    "frame_conversion": "primary powers, q^(-c/24), and the OPE (2*sin(z/2))^(-2*d) factor are applied outside both recursions"
+  },
+  "rqmc": {
+    "sobol_power": 8,
+    "points_per_replicate": 256,
+    "replicates": 4,
+    "seed": 170507151,
+    "seed_scheme": "bulk replicate r uses seed+r"
+  },
+  "tail_rqmc": {
+    "sobol_power": 7,
+    "points_per_slice_replicate": 128,
+    "replicates": 4,
+    "seed_scheme": "tail replicate r and slice j use seed+10000+97*r+j"
+  },
+  "special_dps": 28,
+  "cutoffs": [
+    3.0,
+    4.0,
+    6.0,
+    8.0
+  ],
+  "cutoff_means": [
+    {
+      "real": -0.004689594744977857,
+      "imag": -1.1758680678453903e-31
+    },
+    {
+      "real": -0.005238484171538166,
+      "imag": -1.3134964951548977e-31
+    },
+    {
+      "real": -0.005753204568974464,
+      "imag": -1.4425573867942434e-31
+    },
+    {
+      "real": -0.005984922100314632,
+      "imag": -1.5006581952179686e-31
+    }
+  ],
+  "cutoff_standard_errors": [
+    {
+      "real": 0.00015710132893293635,
+      "imag": 0.0
+    },
+    {
+      "real": 0.0001586057666260967,
+      "imag": 0.0
+    },
+    {
+      "real": 0.00017039596752400625,
+      "imag": 0.0
+    },
+    {
+      "real": 0.00019564649226040646,
+      "imag": 0.0
+    }
+  ],
+  "replicate_values": [
+    [
+      {
+        "real": -0.004451977418408595,
+        "imag": -1.1162879459214637e-31
+      },
+      {
+        "real": -0.004988571003167348,
+        "imag": -1.2508333162659294e-31
+      },
+      {
+        "real": -0.005514595792912097,
+        "imag": -1.3827286690186024e-31
+      },
+      {
+        "real": -0.005780898943146852,
+        "imag": -1.4495014687499707e-31
+      }
+    ],
+    [
+      {
+        "real": -0.005048468092991866,
+        "imag": -1.2658519008370044e-31
+      },
+      {
+        "real": -0.005502063493210727,
+        "imag": -1.3795863226460738e-31
+      },
+      {
+        "real": -0.005785392861731499,
+        "imag": -1.4506282730157e-31
+      },
+      {
+        "real": -0.005817038717604505,
+        "imag": -1.4585631487190976e-31
+      }
+    ],
+    [
+      {
+        "real": -0.004401407571112221,
+        "imag": -1.1036080723150497e-31
+      },
+      {
+        "real": -0.004940236066042623,
+        "imag": -1.2387138235982222e-31
+      },
+      {
+        "real": -0.005489575277034642,
+        "imag": -1.3764550297680413e-31
+      },
+      {
+        "real": -0.005770648507616448,
+        "imag": -1.446931276552741e-31
+      }
+    ],
+    [
+      {
+        "real": -0.004856525897398747,
+        "imag": -1.2177243523080432e-31
+      },
+      {
+        "real": -0.005523066123731965,
+        "imag": -1.3848525181093656e-31
+      },
+      {
+        "real": -0.006223254344219619,
+        "imag": -1.5604175753746297e-31
+      },
+      {
+        "real": -0.006571102232890724,
+        "imag": -1.6476368868500656e-31
+      }
+    ]
+  ],
+  "replicate_diagnostics": [
+    {
+      "maximum_absolute_sample": 0.14533775040766714,
+      "ope_fraction_all_cutoffs": 0.0302734375
+    },
+    {
+      "maximum_absolute_sample": 0.27214444933905546,
+      "ope_fraction_all_cutoffs": 0.0283203125
+    },
+    {
+      "maximum_absolute_sample": 0.13473691197577203,
+      "ope_fraction_all_cutoffs": 0.037109375
+    },
+    {
+      "maximum_absolute_sample": 0.23263899844984215,
+      "ope_fraction_all_cutoffs": 0.02734375
+    }
+  ],
+  "cusp_fit": {
+    "legacy_cumulative_ansatz": "I(T)=I_infinity+a/T+b/T^2",
+    "I_infinity": {
+      "real": -0.0066339786507321275,
+      "imag": -1.6634025075445613e-31
+    },
+    "a": {
+      "real": 0.004780233889538809,
+      "imag": 1.1985949091999132e-31
+    },
+    "b": {
+      "real": 0.0031657161082840318,
+      "imag": 7.937710369496744e-32
+    },
+    "rqmc_standard_error": {
+      "real": 0.0004082821530588216,
+      "imag": 0.0
+    },
+    "replicate_limits": [
+      {
+        "real": -0.006561038998921019,
+        "imag": -1.6451136335355008e-31
+      },
+      {
+        "real": -0.005675137666420353,
+        "imag": -1.4229829069381162e-31
+      },
+      {
+        "real": -0.006628644481871304,
+        "imag": -1.6620650190891538e-31
+      },
+      {
+        "real": -0.0076710934557158526,
+        "imag": -1.923448470615473e-31
+      }
+    ],
+    "tau_integrand_ansatz": "f(t)=a0*t^-2+a1*t^-5/3+a2*t^-3",
+    "tail_start": 8.0,
+    "tau2_slices": [
+      8.0,
+      10.0,
+      12.0,
+      16.0,
+      20.0
+    ],
+    "slice_means": [
+      {
+        "real": -7.959354385726364e-05,
+        "imag": -1.995726959747133e-33
+      },
+      {
+        "real": -5.394198094629309e-05,
+        "imag": -1.3525401737324318e-33
+      },
+      {
+        "real": -4.892201988630429e-05,
+        "imag": -1.226669768435908e-33
+      },
+      {
+        "real": -2.1281503470778657e-05,
+        "imag": -5.3361200120390404e-34
+      },
+      {
+        "real": -1.4562772280599693e-05,
+        "imag": -3.6514666693533284e-34
+      }
+    ],
+    "mean_coefficients": {
+      "a0": {
+        "real": -0.027490080426742686,
+        "imag": -6.8928573819572e-31
+      },
+      "a1": {
+        "real": 0.00665295551192567,
+        "imag": 1.6681607620033951e-31
+      },
+      "a2": {
+        "real": 0.07314099562990148,
+        "imag": 1.8339358918747366e-30
+      }
+    },
+    "mean_integrated_tail": {
+      "real": -0.0003699877080121046,
+      "imag": -9.277064544066304e-33
+    },
+    "final_I": {
+      "real": -0.006354909808326737,
+      "imag": -1.593428840658632e-31
+    },
+    "final_rqmc_standard_error": {
+      "real": 0.00033391844199546025,
+      "imag": 8.372664474422495e-33
+    },
+    "replicate_finals": [
+      {
+        "real": -0.006551771376486735,
+        "imag": -1.6427898717014973e-31
+      },
+      {
+        "real": -0.006360834015968193,
+        "imag": -1.5949142753223275e-31
+      },
+      {
+        "real": -0.005453933371893458,
+        "imag": -1.3675181854538122e-31
+      },
+      {
+        "real": -0.007053100468958562,
+        "imag": -1.76849303015689e-31
+      }
+    ]
+  },
+  "native_amplitude": {
+    "A_over_i_gs2": {
+      "real": -0.5017635665022999,
+      "imag": -1.2581209838869718e-29
+    },
+    "rqmc_standard_error": {
+      "real": 0.026365143397786367,
+      "imag": 6.610790891648381e-31
+    }
+  },
+  "upsilon_cache_size": 1074
+}

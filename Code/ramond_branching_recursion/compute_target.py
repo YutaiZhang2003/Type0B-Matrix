@@ -130,6 +130,31 @@ def strict_partitions(total: int, largest: int | None = None):
     return tuple(answer)
 
 
+@lru_cache(None)
+def strict_odd_partitions(total: int, largest: int | None = None):
+    """Partitions into distinct positive odd integers.
+
+    NS supercurrent modes are stored in doubled units, so a part ``k``
+    denotes ``G_{-k/2}``.  This is the PBW ordering used by the Human Note.
+    """
+
+    total = int(total)
+    if total < 0:
+        return ()
+    if total == 0:
+        return ((),)
+    if largest is None or largest > total:
+        largest = total
+    largest = int(largest)
+    if largest % 2 == 0:
+        largest -= 1
+    answer = []
+    for first in range(largest, 0, -2):
+        for rest in strict_odd_partitions(total - first, first - 2):
+            answer.append((first,) + rest)
+    return tuple(answer)
+
+
 def partition_pairs(level: int):
     return tuple(
         (first, second)
@@ -509,13 +534,23 @@ class FreeFieldModule:
             answer = self.apply_embedded(1, -mode, answer)
         return answer
 
-    def ns_branch(self, label: int):
-        if self.sector != "NS" or label < 0:
-            raise ValueError("This calculation needs nonnegative integral NS labels.")
+    def ns_branch(self, label: Fraction):
+        """Construct the positive-chart Human-Note NS chi-string state."""
+
+        label = Fraction(label)
+        if (
+            self.sector != "NS"
+            or label < 0
+            or (2 * label).denominator != 1
+        ):
+            raise ValueError(
+                "The positive NS chart requires a nonnegative half-integral label."
+            )
         expression = {((), (), ()): 1.0 + 0.0j}
         if label == 0:
             return expression
-        operators = tuple(-mode2 for mode2 in range(1, 4 * label, 2))
+        four_label = int(4 * label)
+        operators = tuple(-mode2 for mode2 in range(1, four_label, 2))
         for mode2 in reversed(operators):
             next_expression = {}
             for state, outer in expression.items():
@@ -543,9 +578,72 @@ class FreeFieldModule:
                     )
             expression = next_expression
         scale = scalar_power_of_two(-2 * label) * ell(
-            self.q + 2 * self.momentum, 4 * label, self.b
+            self.q + 2 * self.momentum, four_label, self.b
         )
         return {state: scale * value for state, value in expression.items()}
+
+    @lru_cache(None)
+    def _ns_level_transition(self, realization: int, level_units: int):
+        """Map NS SCA PBW columns to free-field oscillator rows.
+
+        ``level_units`` is twice the physical NS level.  This is the NS
+        analogue of :meth:`_level_transition` below and is built directly
+        from the same Human-Note free-field generators used everywhere else
+        in this module.
+        """
+
+        temporary = FreeFieldModule(
+            "NS", self.b, self.momentum, int(realization)
+        )
+        rows = tuple(
+            (bosons, fermions)
+            for fermion_level in range(level_units + 1)
+            if (level_units - fermion_level) % 2 == 0
+            for bosons in partitions((level_units - fermion_level) // 2)
+            for fermions in strict_odd_partitions(fermion_level)
+        )
+        columns = []
+        for virasoro_level in range(level_units // 2 + 1):
+            for virasoro_modes in partitions(virasoro_level):
+                for supercurrent_modes in strict_odd_partitions(
+                    level_units - 2 * virasoro_level
+                ):
+                    expression = {((), ()): complex_number(1)}
+                    for mode2 in reversed(supercurrent_modes):
+                        expression = apply_expression(
+                            expression,
+                            lambda state, mode2=mode2: dict(
+                                temporary.physical_g_on_state(-mode2, state)
+                            ),
+                        )
+                    for mode in reversed(virasoro_modes):
+                        expression = apply_expression(
+                            expression,
+                            lambda state, mode=mode: dict(
+                                temporary.physical_l_on_state(-mode, state)
+                            ),
+                        )
+                    columns.append(
+                        [expression.get(row, complex_number()) for row in rows]
+                    )
+        row_count = len(rows)
+        column_count = len(columns)
+        if row_count != column_count:
+            raise AssertionError("The NS free-field/SCA transition is not square.")
+        if MP_DPS:
+            matrix = mp.matrix(
+                [
+                    [columns[column][row] for column in range(column_count)]
+                    for row in range(row_count)
+                ]
+            )
+        else:
+            matrix = np.asarray(columns, dtype=np.complex128).T
+            if np.linalg.matrix_rank(matrix, tol=RANK_TOLERANCE) != row_count:
+                raise AssertionError(
+                    "The NS free-field/SCA transition is singular."
+                )
+        return rows, matrix
 
     def _raw_r_branch(self, label: Fraction, parity: int):
         if self.sector != "R":
@@ -848,10 +946,23 @@ class ActionTerm:
     coefficient: complex
 
 
-def solve_ns_l1(module: FreeFieldModule, label: int):
+def solve_ns_l1(module: FreeFieldModule, label: Fraction):
+    label = Fraction(label)
+    if label <= -1 and (2 * label).denominator == 1:
+        # Reflect v_n(P)=v_{-n}(-P), solve on the positive chart, and map the
+        # lower branch label back.  Virasoro descendants and coefficients are
+        # unchanged by this identification.
+        reflected = FreeFieldModule("NS", module.b, -module.momentum)
+        positive_terms, fit = solve_ns_l1(reflected, -label)
+        return [
+            ActionTerm(-term.label, term.first, term.second, term.coefficient)
+            for term in positive_terms
+        ], fit
+    if label < 1 or (2 * label).denominator != 1:
+        raise ValueError("The NS L1 reduction requires n >= 1 in Z/2.")
     high = module.ns_branch(label)
     low = module.ns_branch(label - 1)
-    level = 4 * label - 3
+    level = int(4 * label - 3)
     pairs = partition_pairs(level)
     columns = [module.descendant(low, first, second) for first, second in pairs]
     fit = span_fit(module.apply_l(1, high), columns)
@@ -1193,6 +1304,7 @@ def finite_ward_solution(
     alpha2,
     alpha3,
     eta,
+    ground_value_fn=None,
 ):
     """Close the finite system using only the first Ward identity in the notes."""
     labels1 = tuple(Fraction(value) for value in labels1)
@@ -1247,7 +1359,7 @@ def finite_ward_solution(
     for second_label in ground_labels2:
         for third_label in ground_labels3:
             labels = (Fraction(0), second_label, third_label)
-            value = direct_ground_value(
+            value = (ground_value_fn or direct_ground_value)(
                 second_module,
                 third_module,
                 second_label,
@@ -1437,9 +1549,25 @@ def ns_norm_ratio(label: Fraction, b: float, momentum: float):
     )
 
 
-def ramond_norm_ratio(label: Fraction, b: float, momentum: float):
-    """The ratio ||v_{n-1}^alpha||/||v_n^alpha|| in SCblock.tex."""
+def ramond_norm_ratio(
+    label: Fraction,
+    b: float,
+    momentum: float,
+    parity: int | None = None,
+):
+    """The ratio ||v_{n-1}^alpha||/||v_n^alpha|| in SCblock.tex.
+
+    Supplying ``parity`` evaluates the ratio from the Human-Note norms.  This
+    matters at the chart crossing 3/4 -> -1/4, where the reflected alpha=0
+    norm contributes an additional factor of two.  The closed product below
+    is retained as the parity-independent positive-chart formula.
+    """
     label = Fraction(label)
+    if parity is not None:
+        return scalar_sqrt(
+            ramond_norm_squared(label - 1, parity, b, momentum)
+            / ramond_norm_squared(label, parity, b, momentum)
+        )
     q = b + 1 / b
     upper = int(4 * label)
     return real_number(Fraction(1, 2)) * scalar_sqrt(
@@ -1453,7 +1581,12 @@ def ramond_norm_ratio(label: Fraction, b: float, momentum: float):
 
 
 def ns_norm_squared(label: Fraction, b: float, momentum: float):
+    """Human-Note NS branch norm, including its reflection prescription."""
+
     label = Fraction(label)
+    if label < 0:
+        # Human Notes/SCblock.tex: v_n(P)=v_{-n}(-P).
+        return ns_norm_squared(-label, b, -momentum)
     q = b + 1 / b
     return (-1) ** int(2 * label) * scalar_power_of_two(-2 * label) * ell(
         2 * momentum, int(4 * label), b
@@ -1461,7 +1594,14 @@ def ns_norm_squared(label: Fraction, b: float, momentum: float):
 
 
 def ramond_norm_squared(label: Fraction, parity: int, b: float, momentum: float):
+    """Human-Note Ramond branch norm, including the reflected chart."""
+
     label = Fraction(label)
+    if label < 0:
+        # Human Notes/SCblock.tex (5.1): the two components reflect with
+        # opposite signs.  That relative sign drops out of the BPZ norm, so
+        # both parities use the positive-label norm at reflected momentum.
+        return ramond_norm_squared(-label, parity, b, -momentum)
     mode_count = int(2 * label - Fraction(1, 2))
     if parity == 0:
         power = 2 * (mode_count // 2) + 1
@@ -1516,6 +1656,8 @@ class BranchingRecursion:
         ns_actions,
         second_actions,
         third_actions,
+        second_parity=None,
+        third_parity=None,
     ):
         self.b = b
         self.momenta = momenta
@@ -1523,6 +1665,8 @@ class BranchingRecursion:
         self.ns_actions = ns_actions
         self.second_actions = second_actions
         self.third_actions = third_actions
+        self.second_parity = second_parity
+        self.third_parity = third_parity
         self.expansion_cache = {}
         self.node_data = {}
 
@@ -1592,10 +1736,14 @@ class BranchingRecursion:
             * ns_norm_ratio(labels[0], self.b, self.momenta[0])
             / denominator,
             second_sum
-            * ramond_norm_ratio(labels[1], self.b, self.momenta[1])
+            * ramond_norm_ratio(
+                labels[1], self.b, self.momenta[1], self.second_parity
+            )
             / denominator,
             third_sum
-            * ramond_norm_ratio(labels[2], self.b, self.momenta[2])
+            * ramond_norm_ratio(
+                labels[2], self.b, self.momenta[2], self.third_parity
+            )
             / denominator,
         )
         self.node_data[labels] = {
@@ -1747,6 +1895,8 @@ def main():
                 ns_l1,
                 second_lminus_by_alpha[alpha2],
                 third_lminus_by_alpha[alpha3],
+                second_parity=alpha2,
+                third_parity=alpha3,
             )
             expansion = recursion.expansion(target)
             if recursion.node_data:

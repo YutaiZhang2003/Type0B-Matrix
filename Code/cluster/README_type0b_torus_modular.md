@@ -33,18 +33,18 @@ ordinary HJS \(+\) Ramond block with the BRY spectral coefficient
 Inspect the frozen plan without doing numerical work:
 
 ```bash
-python3 super_liouville_torus_modular_cluster.py plan
+PYTHONPATH=Code python3 Code/h_recursion/super_liouville_torus_modular_cluster.py plan
 ```
 
 ## Local parallel validation
 
 ```bash
-python3 super_liouville_torus_modular_cluster.py local \
+PYTHONPATH=Code python3 Code/h_recursion/super_liouville_torus_modular_cluster.py local \
   --output-dir /path/to/run/shards \
   --workers 8 \
   --execute
 
-python3 super_liouville_torus_modular_cluster.py reduce \
+PYTHONPATH=Code python3 Code/h_recursion/super_liouville_torus_modular_cluster.py reduce \
   --input-dir /path/to/run/shards \
   --output /path/to/run/summary.json
 ```

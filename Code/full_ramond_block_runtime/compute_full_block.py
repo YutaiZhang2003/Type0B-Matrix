@@ -35,12 +35,22 @@ from scipy import sparse
 
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
-BRANCHING = ROOT / "python" / "ramond_branching_recursion"
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
-if str(BRANCHING) not in sys.path:
-    sys.path.insert(0, str(BRANCHING))
+CODE_ROOT = HERE.parent
+REPOSITORY = CODE_ROOT.parent
+BRANCHING = CODE_ROOT / "ramond_branching_recursion"
+
+# Yuchen's runtime keeps the Ramond modules beside this folder and imports the
+# CCY plumbing package from the StringMC checkout.  Keep that dependency route
+# intact; do not fall back to the provisional local PBW/anchor implementation.
+STRING_MC_ROOT = Path(
+    os.environ.get(
+        "TYPE0B_STRINGMC_ROOT",
+        REPOSITORY.parent / "Project" / "StringMC",
+    )
+).expanduser()
+for directory in (REPOSITORY, STRING_MC_ROOT, BRANCHING):
+    if str(directory) not in sys.path:
+        sys.path.insert(0, str(directory))
 
 from compute_target import (  # noqa: E402
     BranchWeights,
@@ -136,10 +146,19 @@ def base_twice_level(labels: tuple[Fraction, Fraction, Fraction]) -> int:
 class BranchingGrid:
     """Close the first Ward identity on the finite level-cutoff lattice."""
 
-    def __init__(self, b: float, momenta: tuple[float, float, float], cutoff: int):
+    def __init__(
+        self,
+        b: float,
+        momenta: tuple[float, float, float],
+        cutoff: int,
+        primary_parity: int = 0,
+    ):
         self.b = float(b)
         self.momenta = tuple(float(value) for value in momenta)
         self.cutoff = int(cutoff)
+        self.primary_parity = int(primary_parity)
+        if self.primary_parity not in (0, 1):
+            raise ValueError("primary_parity must be 0 or 1")
         self.weights = BranchWeights(self.b, self.momenta)
         self.modules = (
             FreeFieldModule("NS", self.b, self.momenta[0]),
@@ -151,7 +170,11 @@ class BranchingGrid:
         self.ns_actions: dict[Fraction, tuple] = {}
         self.r_actions: dict[tuple[int, int, Fraction], tuple] = {}
         self.action_diagnostics: list[dict[str, object]] = []
-        self.direct = DirectBranchingCoefficient(self.b, self.momenta)
+        self.direct = DirectBranchingCoefficient(
+            self.b,
+            self.momenta,
+            primary_parity=self.primary_parity,
+        )
         self.direct.auxiliary_form = RamondAuxiliaryThreePoint(
             self.direct.free_modules
         )
@@ -252,7 +275,9 @@ class BranchingGrid:
                     labels = (first, second, third)
                     if labels not in index:
                         continue
-                    value = self.direct.raw(labels, alpha2, alpha3, eta=1)
+                    value = self.direct.raw(
+                        labels, alpha2, alpha3, eta=1
+                    )
                     anchors[labels] = value
                     append({labels: 1.0 + 0.0j}, value)
 
@@ -315,13 +340,21 @@ def ordinary_pair_task(task: tuple) -> tuple[tuple[Fraction, Fraction, Fraction]
     return labels, remaining, values[0], values[1], time.perf_counter() - started
 
 
-def run(cutoff: int, workers: int, output: Path) -> dict[str, object]:
+def run(
+    cutoff: int,
+    workers: int,
+    output: Path,
+    *,
+    primary_parity: int = 0,
+) -> dict[str, object]:
     b = 7.0 / 5.0
     momenta = (11.0 / 23.0, 13.0 / 29.0, 17.0 / 31.0)
     q_values = (0.019, 0.023, 0.029)
     started_total = time.perf_counter()
 
-    branching = BranchingGrid(b, momenta, cutoff)
+    branching = BranchingGrid(
+        b, momenta, cutoff, primary_parity=primary_parity
+    )
     started = time.perf_counter()
     branching.build_actions()
     action_seconds = time.perf_counter() - started
@@ -403,12 +436,15 @@ def run(cutoff: int, workers: int, output: Path) -> dict[str, object]:
                 labels, alpha2, alpha3, b, momenta
             )
             exponent = (
-                int(2 * n1) * alpha2
-                + int(2 * n1) * alpha3
+                (int(2 * n1) + primary_parity) * alpha2
+                + (int(2 * n1) + primary_parity) * alpha3
                 + alpha2 * alpha3
             )
             sign = (-1) ** exponent
-            term = sign * normalized * normalized
+            human_enlarged_sign = (-1) ** int(2 * n1)
+            term = (
+                human_enlarged_sign * sign * normalized * normalized
+            )
             branching_sum += term
             branch_rows.append(
                 {
@@ -461,6 +497,7 @@ def run(cutoff: int, workers: int, output: Path) -> dict[str, object]:
             "eta_tubes": [1, 1, 1],
             "three_point_eta": [1, 1],
             "fermion_parity": 0,
+            "primary_parity": int(primary_parity),
         },
         "method": {
             "branching": "first L1 Ward identity with direct low-level boundary anchors",
@@ -469,6 +506,10 @@ def run(cutoff: int, workers: int, output: Path) -> dict[str, object]:
             "virasoro_workers": workers,
             "vacuum_word_length": 7,
             "vacuum_oscillator_level": cutoff,
+            "human_note_signs": {
+                "enlarged_first_tube": "(-1)^(A+mathsf_A)",
+                "double_virasoro_branch": "(-1)^(2*n_1)",
+            },
         },
         "counts": {
             "branch_label_triples": len(triples),
@@ -520,13 +561,19 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cutoff", type=int, default=10)
     parser.add_argument("--workers", type=int, default=1)
+    parser.add_argument("--primary-parity", type=int, choices=(0, 1), default=0)
     parser.add_argument("--json", type=Path, default=HERE / "level10_results.json")
     arguments = parser.parse_args()
     if arguments.cutoff < 0:
         raise ValueError("cutoff must be nonnegative")
     if arguments.workers < 1:
         raise ValueError("workers must be positive")
-    run(arguments.cutoff, arguments.workers, arguments.json)
+    run(
+        arguments.cutoff,
+        arguments.workers,
+        arguments.json,
+        primary_parity=arguments.primary_parity,
+    )
 
 
 if __name__ == "__main__":

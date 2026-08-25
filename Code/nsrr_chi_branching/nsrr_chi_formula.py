@@ -9,9 +9,14 @@ The resulting finite sum is contracted with the auxiliary Ising form and
 the physical NS--R--R Ward form.
 
 All arithmetic used by the public functions is exact SymPy arithmetic.
-The function ``raw_three_point`` returns the form with the raw NS chi state
-``w_n`` in the first slot.  ``v_three_point`` applies the normalization of
-``v_n`` used in SCblock.tex.
+The physical Ramond ground labels are, throughout, the Human-Note states
+``w^+`` and ``w^-``.  In particular, the physical fermion zero mode and the
+free-field-to-PBW transition are constructed directly in that basis; no
+second Ramond ground basis or endpoint rephasing is used.
+
+The function ``raw_three_point`` returns the form with the unnormalised NS
+chi state ``w_n`` in the first slot.  ``v_three_point`` applies the
+normalization of ``v_n`` used in SCblock.tex.
 """
 
 from __future__ import annotations
@@ -38,6 +43,8 @@ import compute_grid as stored  # noqa: E402
 I = sp.I
 SQRT2 = sp.sqrt(2)
 EIGHTH_MINUS = (1 - I) / SQRT2
+EIGHTH_THREE = (-1 + I) / SQRT2
+EIGHTH_NEG_THREE = (-1 - I) / SQRT2
 
 
 def _add_term(expression, state, coefficient):
@@ -84,7 +91,7 @@ def ramond_chi_chain(branch_label, parity):
 
 
 def _fermion_action(mode, modes, ground, zero_sign=1):
-    """Act on a canonical free-fermion Fock endpoint."""
+    """Act on an auxiliary free-fermion Fock endpoint."""
 
     mode = int(mode)
     if mode < 0:
@@ -103,6 +110,49 @@ def _fermion_action(mode, modes, ground, zero_sign=1):
     return (modes[:position] + modes[position + 1 :], ground), sp.Integer(
         (-1) ** position
     )
+
+
+def _physical_ramond_fermion_action(
+    mode, modes, ground, realization
+):
+    """Act with the physical Ramond fermion directly on ``w^+``/``w^-``.
+
+    Ground labels ``0`` and ``1`` mean ``w^+`` and ``w^-``.  The zero-mode
+    phases are fixed by the Human-Note convention
+
+        G_0 w^+ = i beta exp(-i*pi/4) w^-,
+        G_0 w^- = i beta exp(+i*pi/4) w^+.
+
+    The nonzero modes preserve the ground label and need no phase choice.
+    """
+
+    mode = int(mode)
+    realization = int(realization)
+    if realization not in (-1, 1):
+        raise ValueError("realization must be +1 or -1")
+    if mode < 0:
+        created = -mode
+        if created in modes:
+            return None, sp.S.Zero
+        crossings = sum(existing > created for existing in modes)
+        final = tuple(sorted(modes + (created,), reverse=True))
+        return (final, ground), sp.Integer((-1) ** crossings)
+    if mode > 0:
+        if mode not in modes:
+            return None, sp.S.Zero
+        position = modes.index(mode)
+        return (
+            (modes[:position] + modes[position + 1 :], ground),
+            sp.Integer((-1) ** position),
+        )
+    phase = EIGHTH_THREE if ground == 0 else EIGHTH_NEG_THREE
+    coefficient = (
+        (-1) ** len(modes)
+        * (-realization)
+        * phase
+        / SQRT2
+    )
+    return (modes, 1 - ground), sp.cancel(coefficient)
 
 
 @lru_cache(None)
@@ -131,12 +181,11 @@ def ramond_fock_paths(branch_label, parity):
                     outer * aux_coefficient,
                 )
 
-            zero_sign = 1 if realization == -1 else -1
-            physical_final, physical_coefficient = _fermion_action(
+            physical_final, physical_coefficient = _physical_ramond_fermion_action(
                 mode,
                 physical_modes,
                 physical_ground,
-                zero_sign=zero_sign,
+                realization,
             )
             if physical_coefficient:
                 auxiliary_parity = (len(aux_modes) + aux_ground) % 2
@@ -158,6 +207,221 @@ def ramond_fock_paths(branch_label, parity):
 
 
 @lru_cache(None)
+def _partitions(total, largest=None):
+    if total == 0:
+        return ((),)
+    if largest is None or largest > total:
+        largest = total
+    answer = []
+    for first in range(largest, 0, -1):
+        for rest in _partitions(total - first, first):
+            answer.append((first,) + rest)
+    return tuple(answer)
+
+
+@lru_cache(None)
+def _strict_partitions(total, largest=None):
+    if total == 0:
+        return ((),)
+    if largest is None or largest > total:
+        largest = total
+    answer = []
+    for first in range(largest, 0, -1):
+        for rest in _strict_partitions(total - first, first - 1):
+            answer.append((first,) + rest)
+    return tuple(answer)
+
+
+@lru_cache(None)
+def _ramond_w_basis(level):
+    """Common Fock/PBW labels with ground 0/1 equal to ``w^+``/``w^-``."""
+
+    return tuple(
+        (bosons, fermions, ground)
+        for boson_level in range(level + 1)
+        for bosons in _partitions(boson_level)
+        for fermions in _strict_partitions(level - boson_level)
+        for ground in (0, 1)
+    )
+
+
+def _physical_c_action(mode, state):
+    bosons, fermions, ground = state
+    mode = int(mode)
+    if mode < 0:
+        created = -mode
+        return (
+            (tuple(sorted(bosons + (created,), reverse=True)), fermions, ground),
+            sp.S.One,
+        )
+    if mode == 0:
+        raise AssertionError("the bosonic zero mode is already evaluated")
+    count = bosons.count(mode)
+    if count == 0:
+        return None, sp.S.Zero
+    remaining = list(bosons)
+    remaining.remove(mode)
+    return (tuple(remaining), fermions, ground), sp.Integer(mode * count)
+
+
+def _physical_fermion_action(mode, state, realization):
+    bosons, fermions, ground = state
+    final, coefficient = _physical_ramond_fermion_action(
+        mode, fermions, ground, realization
+    )
+    if coefficient == 0:
+        return None, sp.S.Zero
+    return (bosons, final[0], final[1]), coefficient
+
+
+def _apply_two(first, second, state):
+    middle, coefficient_second = second(state)
+    if coefficient_second == 0:
+        return None, sp.S.Zero
+    final, coefficient_first = first(middle)
+    if coefficient_first == 0:
+        return None, sp.S.Zero
+    return final, sp.cancel(coefficient_second * coefficient_first)
+
+
+def _physical_l_action(mode, state, realization, q_value, momentum):
+    """Negative physical Virasoro mode in the direct ``w^\pm`` Fock basis."""
+
+    mode = int(mode)
+    if mode >= 0:
+        raise ValueError("the PBW transition only applies negative L modes")
+    bosons, fermions, _ = state
+    answer = {}
+    bosonic_indices = set(range(mode + 1, 0))
+    bosonic_indices.update(bosons)
+    bosonic_indices.update(mode - occupied for occupied in bosons)
+    for summation_mode in bosonic_indices:
+        if summation_mode in (0, mode):
+            continue
+        final, coefficient = _apply_two(
+            lambda current, k=mode - summation_mode: _physical_c_action(k, current),
+            lambda current, k=summation_mode: _physical_c_action(k, current),
+            state,
+        )
+        if coefficient:
+            _add_term(answer, final, coefficient / 2)
+
+    fermionic_indices = set(range(mode, 1))
+    fermionic_indices.update(fermions)
+    fermionic_indices.update(mode - occupied for occupied in fermions)
+    for summation_mode in fermionic_indices:
+        final, coefficient = _apply_two(
+            lambda current, r=mode - summation_mode: _physical_fermion_action(
+                r, current, realization
+            ),
+            lambda current, r=summation_mode: _physical_fermion_action(
+                r, current, realization
+            ),
+            state,
+        )
+        if coefficient:
+            _add_term(
+                answer,
+                final,
+                sp.Rational(summation_mode, 2) * coefficient,
+            )
+
+    final, coefficient = _physical_c_action(mode, state)
+    if coefficient:
+        _add_term(
+            answer,
+            final,
+            I
+            * (q_value * mode + 2 * realization * momentum)
+            * coefficient
+            / 2,
+        )
+    return answer
+
+
+def _physical_g_action(mode, state, realization, q_value, momentum):
+    """Negative physical supercurrent mode in the direct ``w^\pm`` basis."""
+
+    mode = int(mode)
+    if mode >= 0:
+        raise ValueError("the PBW transition only applies negative G modes")
+    bosons, fermions, _ = state
+    answer = {}
+    bosonic_indices = set(range(mode, 0))
+    bosonic_indices.update(bosons)
+    bosonic_indices.update(mode - occupied for occupied in fermions)
+    for summation_mode in bosonic_indices:
+        if summation_mode == 0:
+            continue
+        final, coefficient = _apply_two(
+            lambda current, k=summation_mode: _physical_c_action(k, current),
+            lambda current, r=mode - summation_mode: _physical_fermion_action(
+                r, current, realization
+            ),
+            state,
+        )
+        if coefficient:
+            _add_term(answer, final, coefficient)
+
+    final, coefficient = _physical_fermion_action(mode, state, realization)
+    if coefficient:
+        _add_term(
+            answer,
+            final,
+            I
+            * (q_value * mode + realization * momentum)
+            * coefficient,
+        )
+    return answer
+
+
+def _apply_expression(expression, action):
+    answer = {}
+    for state, outer in expression.items():
+        for final, inner in action(state).items():
+            _add_term(answer, final, outer * inner)
+    return answer
+
+
+@lru_cache(None)
+def _ramond_w_transition(level, realization, q_value, momentum):
+    """Free-field-to-SCA PBW transition entirely in ``w^+``/``w^-``."""
+
+    level = int(level)
+    realization = int(realization)
+    q_value = sp.sympify(q_value)
+    momentum = sp.sympify(momentum)
+    ordered_basis = _ramond_w_basis(level)
+    row = {state: index for index, state in enumerate(ordered_basis)}
+    matrix = sp.zeros(len(ordered_basis), len(ordered_basis))
+    for column, (virasoro_modes, supercurrent_modes, ground) in enumerate(
+        ordered_basis
+    ):
+        expression = {((), (), ground): sp.S.One}
+        for mode in reversed(supercurrent_modes):
+            expression = _apply_expression(
+                expression,
+                lambda state, mode=mode: _physical_g_action(
+                    -mode, state, realization, q_value, momentum
+                ),
+            )
+        for mode in reversed(virasoro_modes):
+            expression = _apply_expression(
+                expression,
+                lambda state, mode=mode: _physical_l_action(
+                    -mode, state, realization, q_value, momentum
+                ),
+            )
+        for state, coefficient in expression.items():
+            matrix[row[state], column] = coefficient
+    if matrix.det() == 0:
+        raise ZeroDivisionError(
+            f"singular direct w-basis Ramond transition at level {level}"
+        )
+    return ordered_basis, matrix
+
+
+@lru_cache(None)
 def ramond_path_components(branch_label, parity, q_value, momentum):
     """Map every physical endpoint of a Ramond path to the SCA PBW basis."""
 
@@ -170,18 +434,13 @@ def ramond_path_components(branch_label, parity, q_value, momentum):
             ((), physical_modes, physical_ground)
         ] += coefficient
 
-    substitutions = {
-        stored.ramond_branch.Q: q_value,
-        stored.ramond_branch.P: momentum,
-    }
     answer = []
     for auxiliary_state, physical_expression in grouped.items():
         one_state = next(iter(physical_expression))
         level = sum(one_state[0]) + sum(one_state[1])
-        ordered_basis, transition = stored.ramond_branch.transition(
-            level, realization
+        ordered_basis, transition = _ramond_w_transition(
+            level, realization, q_value, momentum
         )
-        transition = transition.subs(substitutions, simultaneous=True)
         row = {state: index for index, state in enumerate(ordered_basis)}
         vector = sp.zeros(len(ordered_basis), 1)
         for state, coefficient in physical_expression.items():
@@ -191,9 +450,6 @@ def ramond_path_components(branch_label, parity, q_value, momentum):
             ordered_basis
         ):
             coefficient = sp.cancel(coefficients[index])
-            # The transition module uses |Delta,->=-exp(-i*pi/4) w^-.
-            if ground == 1:
-                coefficient *= -EIGHTH_MINUS
             coefficient = sp.cancel(coefficient)
             if coefficient == 0:
                 continue

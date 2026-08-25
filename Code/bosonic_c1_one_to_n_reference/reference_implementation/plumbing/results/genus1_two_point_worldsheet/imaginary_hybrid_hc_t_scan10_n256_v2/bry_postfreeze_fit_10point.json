@@ -1,0 +1,253 @@
+{
+  "calculation": "post-freeze BRY fit of genus-one two-point worldsheet data",
+  "ordering_statement": "Every input was serialized in native convention with blind_freeze=true before this module introduced the BRY basis or analytic comparison.",
+  "input_count": 10,
+  "notation": {
+    "native": "A_1^ws=8*pi^2*i*g_s^2*I_1",
+    "post_freeze_transform": "-i*A_BRY^(1)=I_1/2",
+    "fit_form": "-i*A_BRY^(1)(i*t)=(-a*t^2+2*b*t^4-c*t^5)/24"
+  },
+  "weighted_fit": {
+    "coefficients": {
+      "a": 1.0048160859888964,
+      "b": 1.0212061836732944,
+      "c": 1.0391507359305143
+    },
+    "shared_scramble_rqmc_standard_errors": {
+      "a": 0.050549582934894574,
+      "b": 0.03676061241448876,
+      "c": 0.023496771373498922
+    },
+    "shared_scramble_covariance": [
+      [
+        0.002555260334891785,
+        0.0018257874754084521,
+        0.0009474619026172771
+      ],
+      [
+        0.0018257874754084521,
+        0.0013513426250882652,
+        0.0007738976775610004
+      ],
+      [
+        0.0009474619026172771,
+        0.0007738976775610004,
+        0.0005520982649784784
+      ]
+    ],
+    "replicate_coefficients": [
+      [
+        1.0355643686207483,
+        1.050540482701842,
+        1.0657984278500943
+      ],
+      [
+        1.003106537721539,
+        0.999476903541034,
+        0.9960286987597776
+      ],
+      [
+        0.8692737446821651,
+        0.931222090837816,
+        1.0031167690878897
+      ],
+      [
+        1.111319692931123,
+        1.103585257612449,
+        1.0916590480242307
+      ]
+    ],
+    "independent_error_approximation": {
+      "standard_errors": [
+        0.02623314270412933,
+        0.07517420671705093,
+        0.13336461808082625
+      ],
+      "correlation": [
+        [
+          1.0,
+          0.850671393564681,
+          0.7804086628143679
+        ],
+        [
+          0.850671393564578,
+          1.0000000000000002,
+          0.9925077486940176
+        ],
+        [
+          0.7804086628142446,
+          0.9925077486939936,
+          1.0
+        ]
+      ],
+      "chi_squared": 0.021254333851495874,
+      "degrees_of_freedom": 7
+    },
+    "weighted_design_condition_number": 240.560220132269
+  },
+  "unweighted_fit": {
+    "a": 0.9997594041298844,
+    "b": 1.0100161718306813,
+    "c": 1.0215788911466033
+  },
+  "common_shape_fit": {
+    "definition": "a=b=c=kappa",
+    "kappa": 0.9999963810053611,
+    "shared_scramble_rqmc_standard_error": 0.04634985773764928,
+    "replicate_kappa": [
+      1.02499712185308,
+      1.0070195613114057,
+      0.873095773849971,
+      1.0948730670069877
+    ],
+    "independent_error_chi_squared": 0.11422366310748641,
+    "degrees_of_freedom": 9
+  },
+  "analytic_comparison": {
+    "coefficients": {
+      "a": 1.0,
+      "b": 1.0,
+      "c": 1.0
+    },
+    "common_kappa": 1.0,
+    "native_I1": "(-t^2+2*t^4-t^5)/12",
+    "bry_minus_i_amplitude": "(-t^2+2*t^4-t^5)/24",
+    "resonance_t_2": {
+      "native_I1": -0.3333333333333333,
+      "bry_minus_i_amplitude": -0.16666666666666666
+    },
+    "bry_reported_fit": {
+      "a": 1.018,
+      "b": 1.028,
+      "c": 1.0344,
+      "source": "Balthazar--Rodriguez--Yin, arXiv:1705.07151"
+    }
+  },
+  "rows": [
+    {
+      "t": 0.05,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t005/worldsheet_blind.json",
+      "input_sha256": "6dcc1366101fdb731cc38499c1e13dbad03af5e2b1f1ce87219b37624f5ae7d9",
+      "native_I1": -0.00020909178649986966,
+      "native_rqmc_standard_error": 1.0108485161225419e-05,
+      "bry_minus_i_amplitude": -0.00010454589324993483,
+      "bry_rqmc_standard_error": 5.0542425806127095e-06,
+      "analytic_bry_minus_i_amplitude": -0.0001036588541666667,
+      "analytic_native_I1": -0.0002073177083333334,
+      "worldsheet_over_analytic": 1.0085572919978636
+    },
+    {
+      "t": 0.15,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t015/worldsheet_blind.json",
+      "input_sha256": "e39bd88bc883d7a0f1124f4ff65cc5a4ad39779db34e215acb38df56fc517b85",
+      "native_I1": -0.0018083320549236383,
+      "native_rqmc_standard_error": 8.931141613615112e-05,
+      "bry_minus_i_amplitude": -0.0009041660274618191,
+      "bry_rqmc_standard_error": 4.465570806807556e-05,
+      "analytic_bry_minus_i_amplitude": -0.0008984765625,
+      "analytic_native_I1": -0.001796953125,
+      "worldsheet_over_analytic": 1.0063323465511314
+    },
+    {
+      "t": 0.25,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t025/worldsheet_blind.json",
+      "input_sha256": "24d3befe909ae8fecbbf07e675891e19da96e73b3a49ab84d16ed68f0c70839c",
+      "native_I1": -0.004649479744250278,
+      "native_rqmc_standard_error": 0.0002385990321996785,
+      "bry_minus_i_amplitude": -0.002324739872125139,
+      "bry_rqmc_standard_error": 0.00011929951609983925,
+      "analytic_bry_minus_i_amplitude": -0.0023193359374999996,
+      "analytic_native_I1": -0.004638671874999999,
+      "worldsheet_over_analytic": 1.0023299490762707
+    },
+    {
+      "t": 0.35,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t035/worldsheet_blind.json",
+      "input_sha256": "cea77503d678fb5905aaf132cae4d085754d219d6df489b5e5c552df8b010cb1",
+      "native_I1": -0.008134610847366629,
+      "native_rqmc_standard_error": 0.00043856132448705974,
+      "bry_minus_i_amplitude": -0.004067305423683314,
+      "bry_rqmc_standard_error": 0.00021928066224352987,
+      "analytic_bry_minus_i_amplitude": -0.004072486979166666,
+      "analytic_native_I1": -0.008144973958333333,
+      "worldsheet_over_analytic": 0.998727668004868
+    },
+    {
+      "t": 0.45,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t045/worldsheet_blind.json",
+      "input_sha256": "b965c9c494d36cb07cd049059ad66689c578c7448fcd455aef41f4427739cb6e",
+      "native_I1": -0.011536290535253046,
+      "native_rqmc_standard_error": 0.0006570990016470176,
+      "bry_minus_i_amplitude": -0.005768145267626523,
+      "bry_rqmc_standard_error": 0.0003285495008235088,
+      "analytic_bry_minus_i_amplitude": -0.005789179687500001,
+      "analytic_native_I1": -0.011578359375000001,
+      "worldsheet_over_analytic": 0.9963665975131338
+    },
+    {
+      "t": 0.55,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t055/worldsheet_blind.json",
+      "input_sha256": "7bcb0f771ac7a222f2532443c9de7fade0f1ad2cbb9ef46b5a22ac93bae98291",
+      "native_I1": -0.014075622802065507,
+      "native_rqmc_standard_error": 0.0008461642501265881,
+      "bry_minus_i_amplitude": -0.007037811401032754,
+      "bry_rqmc_standard_error": 0.00042308212506329406,
+      "analytic_bry_minus_i_amplitude": -0.0070756640625,
+      "analytic_native_I1": -0.014151328125,
+      "worldsheet_over_analytic": 0.9946503026241933
+    },
+    {
+      "t": 0.65,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t065/worldsheet_blind.json",
+      "input_sha256": "9ab953413b726bf1d0a1f954321a33fc8bf3ea8363436a008845fbd53c48916f",
+      "native_I1": -0.015020258962928605,
+      "native_rqmc_standard_error": 0.0009397869414946646,
+      "bry_minus_i_amplitude": -0.007510129481464302,
+      "bry_rqmc_standard_error": 0.0004698934707473323,
+      "analytic_bry_minus_i_amplitude": -0.007563190104166665,
+      "analytic_native_I1": -0.01512638020833333,
+      "worldsheet_over_analytic": 0.9929843595134372
+    },
+    {
+      "t": 0.75,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t075/worldsheet_blind.json",
+      "input_sha256": "cd5c8cce9babd1d882a550d78f9374f037d8544ecfd8a373eee85a565bf99510",
+      "native_I1": -0.013800895663387179,
+      "native_rqmc_standard_error": 0.0008602555797914071,
+      "bry_minus_i_amplitude": -0.0069004478316935895,
+      "bry_rqmc_standard_error": 0.00043012778989570357,
+      "analytic_bry_minus_i_amplitude": -0.0069580078125,
+      "analytic_native_I1": -0.013916015625,
+      "worldsheet_over_analytic": 0.9917275199514717
+    },
+    {
+      "t": 0.85,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t085/worldsheet_blind.json",
+      "input_sha256": "2cdc10872d965d553ed348018aff4dd32b0f3e42b835e07e17d7743a29049a73",
+      "native_I1": -0.01011007021405606,
+      "native_rqmc_standard_error": 0.0005517351026974326,
+      "bry_minus_i_amplitude": -0.00505503510702803,
+      "bry_rqmc_standard_error": 0.0002758675513487163,
+      "analytic_bry_minus_i_amplitude": -0.005091367187500001,
+      "analytic_native_I1": -0.010182734375000002,
+      "worldsheet_over_analytic": 0.9928639834578871
+    },
+    {
+      "t": 0.95,
+      "input": "plumbing/results/genus1_two_point_worldsheet/imaginary_hybrid_hc_t_scan10_n256_v2/t095/worldsheet_blind.json",
+      "input_sha256": "33c01ef0c2d09f7cce1d4baba14b6208c910c020b3b52f8263ac066c8002ef7e",
+      "native_I1": -0.003946323731819015,
+      "native_rqmc_standard_error": 0.0001089770440481649,
+      "bry_minus_i_amplitude": -0.0019731618659095075,
+      "bry_rqmc_standard_error": 5.448852202408245e-05,
+      "analytic_bry_minus_i_amplitude": -0.0019695182291666613,
+      "analytic_native_I1": -0.003939036458333323,
+      "worldsheet_over_analytic": 1.0018500142262647
+    }
+  ],
+  "limitations": [
+    "RQMC errors are based on only four shared scrambles.",
+    "The shared-scramble errors exclude block, momentum, and tail-model systematics.",
+    "The t^4 and t^5 basis columns are strongly correlated on 0<t<1."
+  ]
+}

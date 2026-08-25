@@ -1,0 +1,194 @@
+{
+  "description": "Human-Note genus-two o0243 certification axis with BRY-to-HN odd coefficient phase, transported [00|00] spin, and direct plumbing-frame physical free denominator",
+  "finite_part_radii": [
+    0.035,
+    0.045
+  ],
+  "points": [
+    {
+      "id": "o0243-periodmatched",
+      "secondary_finite_part_radius": false,
+      "q_values": {
+        "theta": [
+          "+8.3779418824375960e-07+3.8481528162173945e-07j",
+          "+2.4390748833975282e-01-4.1494286403549262e-02j",
+          "+1.8079611259743697e-06-6.3253327557829044e-08j"
+        ],
+        "glasses": [
+          "+6.6299699277131127e-02-2.4360505212797862e-03j",
+          "+6.4859818573200306e-02+1.9379925254964868e-03j",
+          "+2.2761694756779835e-01+2.3664989173787555e-02j"
+        ]
+      },
+      "omega": {
+        "theta": [
+          [
+            "+4.5511211429924390e-02+4.2276810765462290e+00j",
+            "-5.5659731302850900e-03+2.1044578868718530e+00j"
+          ],
+          [
+            "-5.5659731302850900e-03+2.1044578868718530e+00j",
+            "-3.2384982121304716e-02+2.3267489266488780e+00j"
+          ]
+        ],
+        "glasses": [
+          [
+            "-5.3828854556222550e-03+4.3012915499893795e-01j",
+            "-4.9000554704823620e-03+4.1099484591244434e-02j"
+          ],
+          [
+            "-4.9000554704823620e-03+4.1099484591244434e-02j",
+            "+5.0929880956387390e-03+4.3358339382880380e-01j"
+          ]
+        ]
+      },
+      "provenance": {
+        "source_overlap": "StringMC q06_search_N256:o0243",
+        "theta_word": "T12^-1 T22 gl-shear-12 T11 full-s I",
+        "theta_integer_branch": [
+          [
+            -1,
+            1
+          ],
+          [
+            1,
+            -1
+          ]
+        ],
+        "period_algorithm": "glasses collocation basis 40 with 240 samples per seam, followed by theta Schottky inversion at word length 9",
+        "glasses_seam_residual": 9.278E-13,
+        "theta_period_max_residual": 3.998E-10,
+        "theta_word8_word9_max_difference": 2.665E-10,
+        "matching_assumed": false
+      }
+    }
+  ],
+  "physical_lifts": {
+    "theta": [
+      1,
+      -1,
+      1
+    ],
+    "glasses": [
+      1,
+      1,
+      1
+    ]
+  },
+  "expected_spin_characteristics": {
+    "theta": {
+      "alpha": [
+        0,
+        0
+      ],
+      "beta": [
+        0,
+        0
+      ]
+    },
+    "glasses": {
+      "alpha": [
+        0,
+        0
+      ],
+      "beta": [
+        0,
+        0
+      ]
+    }
+  },
+  "numerics": {
+    "block_method": "collision_aware_mp",
+    "block_working_precision": 70,
+    "finite_part_samples": 24,
+    "structure_precision": 40,
+    "global_method": "resummed",
+    "global_tolerance": 2E-8,
+    "global_max_total_occupation": 22,
+    "vacuum_word_length": 8,
+    "vacuum_max_mode": 50,
+    "free_word_length": 14,
+    "free_max_mode": 70
+  },
+  "provenance": {
+    "period_source": "StringMC overlap_samples.csv",
+    "selection": "Five points selected before Liouville evaluation for theta endpoints at least 1.7e-7 and max plumbing modulus below 0.248",
+    "symplectic_matrix_glasses_to_theta_after_branch": [
+      [
+        0,
+        0,
+        -1,
+        -1
+      ],
+      [
+        0,
+        0,
+        0,
+        -1
+      ],
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        -1,
+        1,
+        0,
+        0
+      ]
+    ],
+    "spin_transport": "full affine genus-two characteristic action; both marked sewings select [00|00]",
+    "pole_treatment": "analytic collision-aware partial-fraction combination before c=27/2 evaluation at 70-digit working precision",
+    "matching_assumed": false,
+    "convergence_scope": "fresh common-code o0243 axis: R=22 at N=10 and R=24 at N=12,14,16; R=24,N=10 baseline is the completed five-point Human-Note run",
+    "spin_transport_source_channel": "glasses",
+    "spin_transport_target_channel": "theta",
+    "spin_transport_period_tolerance": 5E-10,
+    "glasses_recursion_revision": "ordinary vacuum/global product; self-loop Koszul sign included once; parity-correct odd-null transport",
+    "cross_sewing_baseline": "Data Set/ns_genus2_fivepoint_r24_n10_theta_parity_corrected.json"
+  },
+  "convergence_designs": [
+    {
+      "recursion_order": 22,
+      "quadrature_order": 10
+    },
+    {
+      "recursion_order": 24,
+      "quadrature_order": 12
+    },
+    {
+      "recursion_order": 24,
+      "quadrature_order": 14
+    },
+    {
+      "recursion_order": 24,
+      "quadrature_order": 16
+    }
+  ],
+  "spin_transport_ledger": {
+    "o0243-periodmatched": {
+      "theta": {
+        "alpha": [
+          0,
+          0
+        ],
+        "beta": [
+          0,
+          0
+        ]
+      },
+      "glasses": {
+        "alpha": [
+          0,
+          0
+        ],
+        "beta": [
+          0,
+          0
+        ]
+      }
+    }
+  }
+}
