@@ -1,0 +1,1121 @@
+{
+  "description": "q1=0 enlarged Ramond theta block: Ramond h-recursion versus double Virasoro",
+  "cutoff": 10,
+  "parameters": {
+    "b": 1.4,
+    "momenta": [
+      0.4782608695652174,
+      0.4482758620689655,
+      0.5483870967741935
+    ],
+    "central_charge": 14.910612244897958,
+    "external_weight": 0.4444087805254427,
+    "beta2": 0.316978901911211,
+    "beta3": 0.3877682348442357,
+    "mpmath_decimal_digits": 40
+  },
+  "method": {
+    "pbw_used": false,
+    "ramond_momentum_uniformizer": "t=beta2+beta3 at fixed beta2^2-beta3^2",
+    "negative_pole_rule": "eta -> -eta and beta_prime -> -beta_prime",
+    "null_norm_lattice": "p+q even",
+    "necklace_regular_seed": "4 prod_n (1+Q^n)^2/(1-Q^n)",
+    "theta_frame_map": "q2_tilde=q2 X/Y, q3_tilde=q3 Y, prefactor=X^(H+1/16)Y^aD^h1"
+  },
+  "seed_diagnostic": {
+    "seconds": 1.2600818340433761,
+    "mpmath_decimal_digits": 100,
+    "large_H_scale": 100000.0,
+    "extrapolation_degree": 10,
+    "maximum_discarded_spurious_coefficient": 3.468776651929806e-49,
+    "maximum_error_in_Q_equals_q2_q3_X": 7.945761240366428e-35
+  },
+  "recursion_diagnostic": {
+    "coefficient_calls": 108674,
+    "coefficient_cache": {
+      "hits": 2392976,
+      "misses": 108674,
+      "maxsize": null,
+      "currsize": 108674
+    },
+    "maximum_inverse_pole_separation": 24605.51054628142
+  },
+  "comparison": {
+    "coefficient_count": 66,
+    "maximum_absolute_difference": 0.003816290598566697,
+    "maximum_relative_difference": 5.490883296226275e-07,
+    "worst_levels": [
+      9,
+      1
+    ],
+    "passed_at_2e-6": true
+  },
+  "timing_seconds": {
+    "seed_extraction": 1.2600818340433761,
+    "h_recursion": 85.30644341604784,
+    "necklace_to_theta": 0.03395275003276765,
+    "total": 86.61003225005697
+  },
+  "coefficients": [
+    {
+      "levels": [
+        0,
+        0
+      ],
+      "h_recursion": {
+        "real": 4.0,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 3.999999999484399,
+        "imag": -9.894403158917865e-16
+      },
+      "absolute_difference": 5.156008953131676e-10,
+      "relative_difference": 1.289002238282919e-10
+    },
+    {
+      "levels": [
+        0,
+        1
+      ],
+      "h_recursion": {
+        "real": 1.7484035051199756,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 1.748403504884779,
+        "imag": -2.684121589390607e-15
+      },
+      "absolute_difference": 2.35196444351634e-10,
+      "relative_difference": 1.345206891103177e-10
+    },
+    {
+      "levels": [
+        1,
+        0
+      ],
+      "h_recursion": {
+        "real": 1.5798194429631,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 1.5798194420474763,
+        "imag": 1.171311382924791e-15
+      },
+      "absolute_difference": 9.156237234059816e-10,
+      "relative_difference": 5.795749175542764e-10
+    },
+    {
+      "levels": [
+        0,
+        2
+      ],
+      "h_recursion": {
+        "real": 1.2967258496369838,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 1.296725849459317,
+        "imag": -3.1344612199332235e-15
+      },
+      "absolute_difference": 1.7766671218861262e-10,
+      "relative_difference": 1.370117764200892e-10
+    },
+    {
+      "levels": [
+        1,
+        1
+      ],
+      "h_recursion": {
+        "real": 10.845209293264636,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 10.845209289398852,
+        "imag": -1.5356351935030685e-14
+      },
+      "absolute_difference": 3.865785009172031e-09,
+      "relative_difference": 3.564509365045502e-10
+    },
+    {
+      "levels": [
+        2,
+        0
+      ],
+      "h_recursion": {
+        "real": 1.1190381491066512,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 1.1190381479565783,
+        "imag": 1.934920897681906e-15
+      },
+      "absolute_difference": 1.1500728164732885e-09,
+      "relative_difference": 1.0277333417019009e-09
+    },
+    {
+      "levels": [
+        0,
+        3
+      ],
+      "h_recursion": {
+        "real": 1.0790054488790317,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 1.0790054487731018,
+        "imag": -3.6672856818290644e-15
+      },
+      "absolute_difference": 1.05929962599136e-10,
+      "relative_difference": 9.817370496987351e-11
+    },
+    {
+      "levels": [
+        1,
+        2
+      ],
+      "h_recursion": {
+        "real": 24.28489747175851,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 24.284897463881542,
+        "imag": -6.581960849489559e-14
+      },
+      "absolute_difference": 7.876968273108826e-09,
+      "relative_difference": 3.2435666167704196e-10
+    },
+    {
+      "levels": [
+        2,
+        1
+      ],
+      "h_recursion": {
+        "real": 23.65774434973974,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 23.65774433481542,
+        "imag": -2.3152220007161114e-14
+      },
+      "absolute_difference": 1.4924322322496074e-08,
+      "relative_difference": 6.308429959283188e-10
+    },
+    {
+      "levels": [
+        3,
+        0
+      ],
+      "h_recursion": {
+        "real": 0.9041729816232961,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.9041729802714317,
+        "imag": 3.2112293881261556e-15
+      },
+      "absolute_difference": 1.3518644483190837e-09,
+      "relative_difference": 1.3518644483190837e-09
+    },
+    {
+      "levels": [
+        0,
+        4
+      ],
+      "h_recursion": {
+        "real": 0.9449307134004593,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.9449307133511389,
+        "imag": -4.0628544275279136e-15
+      },
+      "absolute_difference": 4.9320408253756245e-11,
+      "relative_difference": 4.9320408253756245e-11
+    },
+    {
+      "levels": [
+        1,
+        3
+      ],
+      "h_recursion": {
+        "real": 40.75917356731491,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 40.75917355387176,
+        "imag": -1.332327952310368e-13
+      },
+      "absolute_difference": 1.3443151390173689e-08,
+      "relative_difference": 3.2981903737503287e-10
+    },
+    {
+      "levels": [
+        2,
+        2
+      ],
+      "h_recursion": {
+        "real": 112.89180086411221,
+        "imag": -1.9873440740440673e-41
+      },
+      "double_virasoro": {
+        "real": 112.89180080456381,
+        "imag": -2.457306964680833e-13
+      },
+      "absolute_difference": 5.954839749271007e-08,
+      "relative_difference": 5.274820406522564e-10
+    },
+    {
+      "levels": [
+        3,
+        1
+      ],
+      "h_recursion": {
+        "real": 39.0165476120633,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 39.01654759717159,
+        "imag": -4.657059791572939e-14
+      },
+      "absolute_difference": 1.4891708255313744e-08,
+      "relative_difference": 3.816767286378117e-10
+    },
+    {
+      "levels": [
+        4,
+        0
+      ],
+      "h_recursion": {
+        "real": 0.7748542233509363,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.7748542218410489,
+        "imag": 4.248129060818901e-15
+      },
+      "absolute_difference": 1.5098873890626863e-09,
+      "relative_difference": 1.5098873890626863e-09
+    },
+    {
+      "levels": [
+        0,
+        5
+      ],
+      "h_recursion": {
+        "real": 0.8518001205812421,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.8518001205754199,
+        "imag": -4.354841690961617e-15
+      },
+      "absolute_difference": 5.822222858613574e-12,
+      "relative_difference": 5.822222858613574e-12
+    },
+    {
+      "levels": [
+        1,
+        4
+      ],
+      "h_recursion": {
+        "real": 59.772533333494785,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 59.77253334152148,
+        "imag": -1.434326945295808e-13
+      },
+      "absolute_difference": 8.026695031332578e-09,
+      "relative_difference": 1.342873487638639e-10
+    },
+    {
+      "levels": [
+        2,
+        3
+      ],
+      "h_recursion": {
+        "real": 328.21167184736277,
+        "imag": -9.358986349297403e-40
+      },
+      "double_virasoro": {
+        "real": 328.2116716934778,
+        "imag": -9.693877260868799e-13
+      },
+      "absolute_difference": 1.5388497938540656e-07,
+      "relative_difference": 4.688589486146364e-10
+    },
+    {
+      "levels": [
+        3,
+        2
+      ],
+      "h_recursion": {
+        "real": 323.1462445277594,
+        "imag": -2.6898132801099677e-39
+      },
+      "double_virasoro": {
+        "real": 323.14624438286387,
+        "imag": -5.39014902333683e-13
+      },
+      "absolute_difference": 1.4489552558165845e-07,
+      "relative_difference": 4.483899411964586e-10
+    },
+    {
+      "levels": [
+        4,
+        1
+      ],
+      "h_recursion": {
+        "real": 56.439243022789974,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 56.439243155880014,
+        "imag": 2.1013381820236374e-13
+      },
+      "absolute_difference": 1.3309004189403912e-07,
+      "relative_difference": 2.358111740202763e-09
+    },
+    {
+      "levels": [
+        5,
+        0
+      ],
+      "h_recursion": {
+        "real": 0.6865916040896956,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.6865916024529467,
+        "imag": 5.061384145616716e-15
+      },
+      "absolute_difference": 1.6367488975920506e-09,
+      "relative_difference": 1.6367488975920506e-09
+    },
+    {
+      "levels": [
+        0,
+        6
+      ],
+      "h_recursion": {
+        "real": 0.7822681282176923,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.782268128246403,
+        "imag": -4.550602498491572e-15
+      },
+      "absolute_difference": 2.8710665687477274e-11,
+      "relative_difference": 2.8710665687477274e-11
+    },
+    {
+      "levels": [
+        1,
+        5
+      ],
+      "h_recursion": {
+        "real": 81.02014613924395,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 81.02014636546659,
+        "imag": 1.1290328818669252e-13
+      },
+      "absolute_difference": 2.2622263438647175e-07,
+      "relative_difference": 2.792177557493221e-09
+    },
+    {
+      "levels": [
+        2,
+        4
+      ],
+      "h_recursion": {
+        "real": 740.4222645192556,
+        "imag": -5.799851945450116e-37
+      },
+      "double_virasoro": {
+        "real": 740.4222644163009,
+        "imag": -2.0804287245237713e-12
+      },
+      "absolute_difference": 1.0295464516865687e-07,
+      "relative_difference": 1.390485539160599e-10
+    },
+    {
+      "levels": [
+        3,
+        3
+      ],
+      "h_recursion": {
+        "real": 1457.0016091639416,
+        "imag": -2.3402053065375023e-38
+      },
+      "double_virasoro": {
+        "real": 1457.001609888383,
+        "imag": -4.144712562207633e-11
+      },
+      "absolute_difference": 7.244414812548726e-07,
+      "relative_difference": 4.972139195579681e-10
+    },
+    {
+      "levels": [
+        4,
+        2
+      ],
+      "h_recursion": {
+        "real": 720.5638070228832,
+        "imag": -1.6734792328733332e-37
+      },
+      "double_virasoro": {
+        "real": 720.5638077436802,
+        "imag": 1.2080918841073424e-12
+      },
+      "absolute_difference": 7.207969553395949e-07,
+      "relative_difference": 1.0003235627343605e-09
+    },
+    {
+      "levels": [
+        5,
+        1
+      ],
+      "h_recursion": {
+        "real": 75.63741683314335,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 75.63741783371745,
+        "imag": 4.4472409606984334e-12
+      },
+      "absolute_difference": 1.0005741026403138e-06,
+      "relative_difference": 1.3228559769715995e-08
+    },
+    {
+      "levels": [
+        6,
+        0
+      ],
+      "h_recursion": {
+        "real": 0.6216283063357336,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.6216283045932656,
+        "imag": 5.456855569235953e-15
+      },
+      "absolute_difference": 1.7424680213568235e-09,
+      "relative_difference": 1.7424680213568235e-09
+    },
+    {
+      "levels": [
+        0,
+        7
+      ],
+      "h_recursion": {
+        "real": 0.7277907103497848,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.7277907104069352,
+        "imag": -4.6624412646693464e-15
+      },
+      "absolute_difference": 5.715042278394631e-11,
+      "relative_difference": 5.715042278394631e-11
+    },
+    {
+      "levels": [
+        1,
+        6
+      ],
+      "h_recursion": {
+        "real": 104.28920118713066,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 104.28920232436622,
+        "imag": 1.085728235542142e-12
+      },
+      "absolute_difference": 1.1372355535828125e-06,
+      "relative_difference": 1.0904633732317923e-08
+    },
+    {
+      "levels": [
+        2,
+        5
+      ],
+      "h_recursion": {
+        "real": 1429.9872825351,
+        "imag": -4.804545122354753e-35
+      },
+      "double_virasoro": {
+        "real": 1429.9872845145485,
+        "imag": -1.5206552788250958e-12
+      },
+      "absolute_difference": 1.979448622201803e-06,
+      "relative_difference": 1.3842421143442443e-09
+    },
+    {
+      "levels": [
+        3,
+        4
+      ],
+      "h_recursion": {
+        "real": 4719.375535424289,
+        "imag": -1.2168991711336478e-35
+      },
+      "double_virasoro": {
+        "real": 4719.375544050979,
+        "imag": -3.1478948698062875e-10
+      },
+      "absolute_difference": 8.626689991141983e-06,
+      "relative_difference": 1.8279303926165354e-09
+    },
+    {
+      "levels": [
+        4,
+        3
+      ],
+      "h_recursion": {
+        "real": 4667.358868399477,
+        "imag": -2.228021827327502e-37
+      },
+      "double_virasoro": {
+        "real": 4667.358880252571,
+        "imag": -2.0373762083744655e-10
+      },
+      "absolute_difference": 1.1853094671021048e-05,
+      "relative_difference": 2.5395721595721014e-09
+    },
+    {
+      "levels": [
+        5,
+        2
+      ],
+      "h_recursion": {
+        "real": 1378.4404524499043,
+        "imag": 1.369672436338415e-35
+      },
+      "double_virasoro": {
+        "real": 1378.440461362336,
+        "imag": 4.290402189605766e-11
+      },
+      "absolute_difference": 8.912431682824143e-06,
+      "relative_difference": 6.465590595052496e-09
+    },
+    {
+      "levels": [
+        6,
+        1
+      ],
+      "h_recursion": {
+        "real": 96.41373359581053,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 96.41373787605902,
+        "imag": 2.753775360357529e-11
+      },
+      "absolute_difference": 4.2802484846177575e-06,
+      "relative_difference": 4.439459125752459e-08
+    },
+    {
+      "levels": [
+        7,
+        0
+      ],
+      "h_recursion": {
+        "real": 0.5713397282221733,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.5713397263888731,
+        "imag": 5.391083411695633e-15
+      },
+      "absolute_difference": 1.833300182281197e-09,
+      "relative_difference": 1.833300182281197e-09
+    },
+    {
+      "levels": [
+        0,
+        8
+      ],
+      "h_recursion": {
+        "real": 0.6836090395850766,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.6836090396662573,
+        "imag": -4.705593953900916e-15
+      },
+      "absolute_difference": 8.118068633166509e-11,
+      "relative_difference": 8.118068633166509e-11
+    },
+    {
+      "levels": [
+        1,
+        7
+      ],
+      "h_recursion": {
+        "real": 129.4199886644148,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 129.41999248577815,
+        "imag": 3.5957785730130502e-12
+      },
+      "absolute_difference": 3.821363337219955e-06,
+      "relative_difference": 2.9526839430468065e-08
+    },
+    {
+      "levels": [
+        2,
+        6
+      ],
+      "h_recursion": {
+        "real": 2485.962015731764,
+        "imag": 8.935107265594173e-33
+      },
+      "double_virasoro": {
+        "real": 2485.9620298174714,
+        "imag": 8.025518678899506e-12
+      },
+      "absolute_difference": 1.4085707179709502e-05,
+      "relative_difference": 5.6660990838801055e-09
+    },
+    {
+      "levels": [
+        3,
+        5
+      ],
+      "h_recursion": {
+        "real": 12389.836109753693,
+        "imag": 2.802482955834838e-34
+      },
+      "double_virasoro": {
+        "real": 12389.836160260398,
+        "imag": -1.4377356436304838e-09
+      },
+      "absolute_difference": 5.0506704937823806e-05,
+      "relative_difference": 4.07646269769255e-09
+    },
+    {
+      "levels": [
+        4,
+        4
+      ],
+      "h_recursion": {
+        "real": 20585.142272571,
+        "imag": -7.938904913743774e-35
+      },
+      "double_virasoro": {
+        "real": 20585.142370393678,
+        "imag": -2.2353199604977046e-09
+      },
+      "absolute_difference": 9.782267928088912e-05,
+      "relative_difference": 4.752101176700208e-09
+    },
+    {
+      "levels": [
+        5,
+        3
+      ],
+      "h_recursion": {
+        "real": 12145.579531325524,
+        "imag": 4.456022752441207e-34
+      },
+      "double_virasoro": {
+        "real": 12145.579616340885,
+        "imag": -8.931145726575522e-11
+      },
+      "absolute_difference": 8.501536025349645e-05,
+      "relative_difference": 6.999695604408639e-09
+    },
+    {
+      "levels": [
+        6,
+        2
+      ],
+      "h_recursion": {
+        "real": 2376.8502588658616,
+        "imag": 4.579010281751359e-34
+      },
+      "double_virasoro": {
+        "real": 2376.850309242418,
+        "imag": 3.378301529796647e-10
+      },
+      "absolute_difference": 5.037655644347114e-05,
+      "relative_difference": 2.1194669368778147e-08
+    },
+    {
+      "levels": [
+        7,
+        1
+      ],
+      "h_recursion": {
+        "real": 118.62241603215664,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 118.62243000418566,
+        "imag": 1.0978674964745235e-10
+      },
+      "absolute_difference": 1.3972029021655336e-05,
+      "relative_difference": 1.1778572586282649e-07
+    },
+    {
+      "levels": [
+        8,
+        0
+      ],
+      "h_recursion": {
+        "real": 0.5309781845309417,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.5309781826178249,
+        "imag": 4.910720951882177e-15
+      },
+      "absolute_difference": 1.913116774335747e-09,
+      "relative_difference": 1.913116774335747e-09
+    },
+    {
+      "levels": [
+        0,
+        9
+      ],
+      "h_recursion": {
+        "real": 0.6468351655701129,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.6468351656722621,
+        "imag": -4.694744567681631e-15
+      },
+      "absolute_difference": 1.021491744401398e-10,
+      "relative_difference": 1.021491744401398e-10
+    },
+    {
+      "levels": [
+        1,
+        8
+      ],
+      "h_recursion": {
+        "real": 156.28681145848807,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 156.28682173123056,
+        "imag": 8.994196898107316e-12
+      },
+      "absolute_difference": 1.0272742495923232e-05,
+      "relative_difference": 6.573006208795687e-08
+    },
+    {
+      "levels": [
+        2,
+        7
+      ],
+      "h_recursion": {
+        "real": 4005.231688594726,
+        "imag": 9.996571739608496e-31
+      },
+      "double_virasoro": {
+        "real": 4005.2317485122558,
+        "imag": 4.540529666055162e-11
+      },
+      "absolute_difference": 5.99175296875659e-05,
+      "relative_difference": 1.4959815923216497e-08
+    },
+    {
+      "levels": [
+        3,
+        6
+      ],
+      "h_recursion": {
+        "real": 28114.463803494,
+        "imag": 3.0579131305711163e-31
+      },
+      "double_virasoro": {
+        "real": 28114.464042374188,
+        "imag": -5.116425920310142e-09
+      },
+      "absolute_difference": 0.00023888018842634144,
+      "relative_difference": 8.496700775312688e-09
+    },
+    {
+      "levels": [
+        4,
+        5
+      ],
+      "h_recursion": {
+        "real": 70662.0309780016,
+        "imag": 8.424362931548986e-33
+      },
+      "double_virasoro": {
+        "real": 70662.03155489406,
+        "imag": -1.3534648627033679e-08
+      },
+      "absolute_difference": 0.0005768924613247976,
+      "relative_difference": 8.16410805959685e-09
+    },
+    {
+      "levels": [
+        5,
+        4
+      ],
+      "h_recursion": {
+        "real": 70056.21862044216,
+        "imag": 3.286882009016422e-33
+      },
+      "double_virasoro": {
+        "real": 70056.21924193531,
+        "imag": -5.166167239638683e-09
+      },
+      "absolute_difference": 0.0006214931491407179,
+      "relative_difference": 8.871348694887821e-09
+    },
+    {
+      "levels": [
+        6,
+        3
+      ],
+      "h_recursion": {
+        "real": 27355.456271030856,
+        "imag": 2.836819523681553e-33
+      },
+      "double_virasoro": {
+        "real": 27355.45674330525,
+        "imag": 3.625364711218483e-09
+      },
+      "absolute_difference": 0.0004722743953670568,
+      "relative_difference": 1.726435788657184e-08
+    },
+    {
+      "levels": [
+        7,
+        2
+      ],
+      "h_recursion": {
+        "real": 3801.9438337558813,
+        "imag": 4.315083536015461e-31
+      },
+      "double_virasoro": {
+        "real": 3801.944039312326,
+        "imag": 1.6566460224571476e-09
+      },
+      "absolute_difference": 0.00020555644471694846,
+      "relative_difference": 5.406614158217024e-08
+    },
+    {
+      "levels": [
+        8,
+        1
+      ],
+      "h_recursion": {
+        "real": 142.15021983811369,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 142.15025802096227,
+        "imag": 3.3924112582281585e-10
+      },
+      "absolute_difference": 3.8182848578719514e-05,
+      "relative_difference": 2.6860906979914777e-07
+    },
+    {
+      "levels": [
+        9,
+        0
+      ],
+      "h_recursion": {
+        "real": 0.4976914203780083,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.4976914183937612,
+        "imag": 4.091084611113102e-15
+      },
+      "absolute_difference": 1.9842471132735923e-09,
+      "relative_difference": 1.9842471132735923e-09
+    },
+    {
+      "levels": [
+        0,
+        10
+      ],
+      "h_recursion": {
+        "real": 0.6156016008022407,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.6156016008892213,
+        "imag": -4.642437821126052e-15
+      },
+      "absolute_difference": 8.698064544734957e-11,
+      "relative_difference": 8.698064544734957e-11
+    },
+    {
+      "levels": [
+        1,
+        9
+      ],
+      "h_recursion": {
+        "real": 184.78733585994755,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 184.78735965907885,
+        "imag": 1.9359412352521444e-11
+      },
+      "absolute_difference": 2.379913131065914e-05,
+      "relative_difference": 1.2879198747450612e-07
+    },
+    {
+      "levels": [
+        2,
+        8
+      ],
+      "h_recursion": {
+        "real": 6091.93002088148,
+        "imag": -1.4900790386005896e-28
+      },
+      "double_virasoro": {
+        "real": 6091.930217447698,
+        "imag": 1.5156452708420525e-10
+      },
+      "absolute_difference": 0.00019656621786719072,
+      "relative_difference": 3.2266656191203874e-08
+    },
+    {
+      "levels": [
+        3,
+        7
+      ],
+      "h_recursion": {
+        "real": 57307.513909071975,
+        "imag": 3.40858657172658e-29
+      },
+      "double_virasoro": {
+        "real": 57307.514854745175,
+        "imag": -1.6142323719672233e-08
+      },
+      "absolute_difference": 0.0009456731980918446,
+      "relative_difference": 1.6501731064220822e-08
+    },
+    {
+      "levels": [
+        4,
+        6
+      ],
+      "h_recursion": {
+        "real": 203175.5778591757,
+        "imag": 3.0699557605665943e-30
+      },
+      "double_virasoro": {
+        "real": 203175.58080210886,
+        "imag": -6.047041482909463e-08
+      },
+      "absolute_difference": 0.002942933160605957,
+      "relative_difference": 1.4484679453050741e-08
+    },
+    {
+      "levels": [
+        5,
+        5
+      ],
+      "h_recursion": {
+        "real": 304878.8856431264,
+        "imag": 8.438330476387596e-32
+      },
+      "double_virasoro": {
+        "real": 304878.88945941697,
+        "imag": -5.094040265650155e-08
+      },
+      "absolute_difference": 0.003816290598566697,
+      "relative_difference": 1.2517398647487172e-08
+    },
+    {
+      "levels": [
+        6,
+        4
+      ],
+      "h_recursion": {
+        "real": 199998.10437571706,
+        "imag": 3.789757990732894e-31
+      },
+      "double_virasoro": {
+        "real": 199998.10766850453,
+        "imag": 1.7988265835496974e-08
+      },
+      "absolute_difference": 0.0032927874705774925,
+      "relative_difference": 1.6464093130497338e-08
+    },
+    {
+      "levels": [
+        7,
+        3
+      ],
+      "h_recursion": {
+        "real": 55397.88132519558,
+        "imag": 8.069274373415533e-30
+      },
+      "double_virasoro": {
+        "real": 55397.88361932608,
+        "imag": 2.4526902751653107e-08
+      },
+      "absolute_difference": 0.002294130498096424,
+      "relative_difference": 4.1411879808637584e-08
+    },
+    {
+      "levels": [
+        8,
+        2
+      ],
+      "h_recursion": {
+        "real": 5745.420614076502,
+        "imag": -1.469562317486803e-28
+      },
+      "double_virasoro": {
+        "real": 5745.42129575816,
+        "imag": 6.161875509648987e-09
+      },
+      "absolute_difference": 0.0006816816588762844,
+      "relative_difference": 1.1864781080189359e-07
+    },
+    {
+      "levels": [
+        9,
+        1
+      ],
+      "h_recursion": {
+        "real": 166.90597253722387,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 166.90606418339587,
+        "imag": 8.835241045425752e-10
+      },
+      "absolute_difference": 9.16461719863479e-05,
+      "relative_difference": 5.490883296226275e-07
+    },
+    {
+      "levels": [
+        10,
+        0
+      ],
+      "h_recursion": {
+        "real": 0.4696513181760605,
+        "imag": 0.0
+      },
+      "double_virasoro": {
+        "real": 0.4696513161560898,
+        "imag": 3.006388914699962e-15
+      },
+      "absolute_difference": 2.0199707128036047e-09,
+      "relative_difference": 2.0199707128036047e-09
+    }
+  ],
+  "environment": {
+    "python": "3.14.3",
+    "platform": "macOS-26.3.1-arm64-arm-64bit-Mach-O"
+  }
+}
