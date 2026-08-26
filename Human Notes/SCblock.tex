@@ -41,6 +41,8 @@ This is a working notes focusing on deriving the $c$-recursion relation for 2D $
 
 \section{Virasoro conformal blocks}
 
+\subsection{c-recursion}
+
 We first review the recipe for Virasoro conformal blocks, following \cite{Cho-Collier-Yin}, with the genus-2 conformal block in the theta channel as an example. The derivation can be generalized to arbitrary genus and arbitrary plumbing channel. In this case, the Virasoro conformal block is defined as
 \ie
 F\left(h_1, h_2, h_3, c\right)= & \sum_{|A|=|B|,|C|=|D|,|E|=|F|} q_1^{|A|} q_2^{|C|} q_3^{|E|} G_{h_1}^{A B} G_{h_2}^{C D} G_{h_3}^{E F} \\
@@ -97,7 +99,7 @@ F(h_1, h_2, h_3, c) = \sum_{A, B, C} q_1^{|A|}q_2^{|B|}q_3^{|C|} \frac{\rho(\mat
 where $\|\mathcal{L}_{-A}\nu_1\|^2$ is of order $c^{\langle A\rangle}$.
 
 Now let's consider the scaling behavior of $\rho(\mathcal{L}_{-A}\nu_1, \mathcal{L}_{-B}\nu_2, \mathcal{L}_{-C}\nu_3)$ in the $c\rightarrow \infty$ limit. In this limit, only the term of order $c^{(\langle A\rangle+\langle B\rangle+\langle C\rangle)/2}$ survives in the conformal block. For a general 3-point function $\rho(L_{-A}\nu_1, L_{-B}\nu_2, L_{-C}\nu_3)$, the leading term must come from pairwise contractions $[L_m, L_{-m}]$ of non-$L_{-1}$ Virasoro generators, and the maximum number of such contractions is precisely $(\langle A\rangle+\langle B\rangle+\langle C\rangle)/2$, which gives a scaling behavior of $c^{(\langle A\rangle+\langle B\rangle+\langle C\rangle)/2}$. In each term of $\mathcal{L}_{-A}\nu$, only the $L_{-A}\nu$ term can give this scaling, since $g_{AB}(c,h)$ is subleading for $\langle B\rangle = \langle A\rangle$ and the correlator is subleading for $\langle B\rangle<\langle A\rangle $. Moreover, since only the central term in the commutator contributes to this limit, we have
-\ie
+\ie\label{eq:gram-smith}
 \rho(\mathcal{L}_{-A}\nu_1, \mathcal{L}_{-B}\nu_2, \mathcal{L}_{-C}\nu_3)\rightarrow \rho(L_{-A'}\mathbf{1}, L_{-B'}\mathbf{1}, L_{-C'}\mathbf{1})\rho(L_{-1}^{k_A}\nu_1, L_{-1}^{k_B}\nu_2, L_{-1}^{k_C}\nu_3),
 \fe
 where $\mathbf{1}$ is the identity operator, and we have written $A= A'\cup \{1\}^{k_A}$. Similarly, the 2-point function also admits a similar factorization relation at large $c$, namely
@@ -117,6 +119,74 @@ F(h_1, h_2, h_3, c) &= F(0, 0, 0,c\rightarrow \infty)\times F_{\mathfrak{sl}(2)}
 &+ 2\text{ permutation in }h_1, h_2, h_3.
 \fe
 Using this relation, one can recursively evalute the conformal block $F(h_1, h_2, h_3, c)$ as a $q$-expansion, as the polar terms are all higher-order in $q$ due to the factor $q^{rs}$.
+
+
+\subsection{h-recursion}
+
+We now review the derivation of h recursion relation, using tours n point block in the necklace channel as the example. The analogous relation for sphere n-point block can be obtained by the standard map from Riemann sphere to pillow geometry $T^2/Z^2$ and do the analogous analysis.
+
+Consider the tours with complex structrue $\tau$, and the flat coordinate on the torus has $z\sim z+2\pi\sim z+2\pi \tau$. The torus n point block in the necklace channel is given by
+\ie
+....
+\fe
+where $h_i$ denotes the weight of the intermediate primaries $\nu_i$ and $d_i$ denote the conformal weight of external primaries $\mu_i$.
+The gram matrix would be degenerate at $h_i=h_{r_i,s_i}(c)$. For a generic $c$, the matrix element of the inverse gram matrix will develop a simple pole. Therefore, one can make the following ansatz on the virasoro block
+\ie
+F(q_i,h_i,d_i;c)= F^{\text{reg}}(q_i,h_i,d_i;c)+ \sum_{i=1}^N \sum_{r_i\geq 1, s_i\geq 1}\frac{B^{(i)}_{r,s}}{h_i- h_{r,s}(c)}.
+\fe
+where $F^{\text{reg}}$ has no pole on the entire $h_i$ plane.
+
+The factor $B^{(i)}_{r,s}$ can be extracted by considering the limit 
+\ie
+\lim_{h_i\rightarrow h_{r,s}} \left(h_i-h_{r,s}(c)\right) F
+\fe
+Under this limit, only the singular vector inside the Verma module of $\nu_i$,  as well as the descendant of $\chi_{r,s}$ will contribute to the Virasoro block. Following from the same derivation in the c-recursion, we have 
+\ie
+B^{(i)}_{r,s}(h_1,\dots \hat{h}_i, h_N) =A_{r,s}^c q_i^{rs} P_{c}^{r,s}  P_c^{rs}(h_{i-1}, d_{i-1}) P_c^{rs}(h_{i+1}, d_{i}) F(h_i\rightarrow h_{r,s}+rs, c),
+\fe 
+Now let us try to extract the regular part $F_{\text{reg}}$. The key step is to change the variable from $\{h_i |i=1,\dots N \}$ to $\{h_1,a_i=h_i-h_1 |i=2,\dots N \}$, with $a_1=0$ as the bookkeeping notation. Then we have
+\ie
+F(q_i,h_i,d_i;c)= F_{\text{reg}} (h_1,a_2\dots ,a_N)+ \sum_{i=1}^N \sum_{r_i\geq 1, s_i\geq 1}\frac{B^{(i)}_{r,s}}{h_1+a_i- h_{r,s}(c)}.
+\fe
+In this new variable, $B^{(i)}_{r,s}(h_1,\dots \hat{h}_i, h_N)$ can be viewed as the limit
+\ie
+B^{(i)}_{r,s}=\lim_{h_1\rightarrow -a_i+h_{r,s}} \left(h_1+a_i-h_{r,s}(c)\right) F.
+\fe
+It can thus be treated as a function of $a_2\dots a_N$ and independent of $h_1$. It allows us to extract $F^{\text{reg}}$ by analyzing the large $h_1$ limit with $a_i$ keep fixed, where the singular term all get surpressed. A prior, the large $h_1$ limit alone is not sufficient to pin down $F^{\text{reg}} (h_1,a_2\dots ,a_N)$ as a function of $h_1$. The last recipe comes from analyzing the large $h_1$ behavior of the virasoro block, which shows that $F^{\text{reg}} (h_1,a_2\dots ,a_N)$ has no pole at $h_1\rightarrow \infty$. By the Liouville theorem of analytic function, the regular part must be independent of $h_1$. Therefore, the regular part can be fully determined by the limit
+\ie
+F_{\text{reg}} (q_i, a_i,d_i ; c) =\lim_{h_1\rightarrow \infty} F(q_i,h_i,d_i;c).
+\fe
+Now we will present the analysis for the large $h$ behavior of the Virasoro block, and compute the regular part $F^{\text{reg}} $ explicitly. To do that, it is convenient to work in the orthogonal basis for the internal states. Let us use $[A]$ to denote the length of the partition and use $|A|$ to denote the number of boxes in a partition. We would assign the following complete order on the set of all the partitions.
+A<B if [A]<[B] or  [A]=[B] \text{and} $a_i <b_ i$ for the first distinct $a_i$ and $b_i$. Using that order, we can conduct the gram smith algorithm and obtain a orthogonal basis for the Verma module
+\ie 
+\ell_{-A}\ket{h} = L_{-A}\ket{h} + \sum_{|B|=n, B<A} k_{AB}(c,h) L_{-B}\ket{h}.
+\fe
+
+\todo[inline]{CCY's prove can be further simplified. The only point that one need to prove is that at large $h_1$ limit with $a_i$ keep fixed, the three point function $\rho(L_{-A}\nu_i,\mu_i,L_{-B}\nu_{i+1})$ satisfy the same ward identity as $\rho(L_{-A}\nu_i,\mu_i,L_{-B}\nu_{i+1})$. Therefore, the large $h$ limit can be identified with the vacuum block. }
+
+This orthogonal basis is different from \ref{eq:gram-smith} used in c-recursion analysis, because we choose a different order of doing the orthogonalization. Under this basis, the Virasoro block can be expressed as
+\ie
+123
+\fe
+At large $h_1$ limit with $a_i$ fixed, all the weight of the intermediate primary grows as $h_1$. The conformal Ward identity for the three point function get simplified because the external weight does not scale with $h_1$.
+\ie
+\rho(\ell_{-A} \nu_{i},  \mu_{i}, \ell_{-B} \nu_{i+1}) \sim \rho(\ell_{-A} \nu_{i},  \mathbb{1}, \ell_{-B} \nu_{i+1})
+\fe
+Therefore, the large $h_1$ regular block can be identified with the vacuum torus block. We have
+\ie
+F_{\text{reg}} (q_i, a_i,d_i ; c) = \prod_{n=1}^{\infty} \frac{1}{1-(q_1\dots q_N)^n}.
+\fe
+
+Using the property that $\bra{h}L_A^{\dagger}L_B\ket{h}$ scales as $h^{[A]}$ for $A=B$, and no faster than $h^{[A]-1}$ for $[A]=[B],\quad A\neq B$ and no faster thatn $h^{\min{[A],[B]}}$ for $[A]\neq[B]$, we conclude the scaling of $k_{AB}(c,h)$ to be
+\ie
+k_{AB}(c,h) \sim \mathcal{O}(h^{-1}) \\
+&k_{AB}(c,h) \sim \mathcal{O}(h^{0}).
+\fe
+Therefore, the norm of the state $\ell_{-A}\ket{h}$ will scale as
+\ie
+\bra{h}\ell_{-A}^{\dagger} \ell_{-A}\ket{h} \sim \mathcal{O}(h^{[A]})
+\fe
+
 
 \section{$\mathcal{N}=1$ superconformal algebra}
 

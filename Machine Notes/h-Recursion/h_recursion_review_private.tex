@@ -348,29 +348,483 @@ level-zero term survives, so
 The price is that the recursion shifts some external weights as well as the
 internal weights \cite{ChoCollierYin2017Recursive}.
 
-\subsection{Superconformal large-weight boundaries}
+\subsection{Neveu--Schwarz necklace boundary at fixed weight differences}
+\label{sec:ns-necklace-large-h}
 
-For NS and R modules the same Gram--Schmidt argument includes fermionic
-PBW modes.  In a channel where the large-weight vertex becomes diagonal,
-the surviving-state sum is a super-Virasoro character:
+We now repeat the Cho--Collier--Yin simultaneous-weight argument for the
+\(\mathcal N=1\) NS algebra, using the notation and BPZ conventions of the
+human note.  This subsection treats only NS internal edges and bottom
+components of fixed NS external superprimaries.  The Ramond ground doublet
+requires a separate argument and is not used below.
+
+\paragraph{Block and spin-sign conventions.}
+Write an NS descendant as
 \begin{equation}
- \sum_{A,K}Q^{|A|+|K|}
- =
- \prod_{n\ge1}\frac1{1-Q^n}
- \prod_{r\in\mathcal I_s}(1+\epsilon Q^r).
- \label{eq:super-character-boundary}
+ \mathbf L_{-\mathsf A}\phi_h
+ =L_{-n_1}\cdots L_{-n_\ell}
+  G_{-r_1}\cdots G_{-r_p}\phi_h,
+ \qquad
+ r_j\in\mathbb Z_{>0}+\frac12,
+ \label{eq:ns-necklace-pbw-state}
 \end{equation}
-Here \(\mathcal I_s\) is the appropriate NS or R mode lattice and
-\(\epsilon\) records a possible \((-1)^F\) insertion.
+where repeated bosonic modes are allowed and the fermionic modes are
+strictly ordered.  Set
+\begin{equation}
+ |\mathsf A|=\sum_j n_j+\sum_k r_k,
+ \qquad
+ p(\mathsf A)=p\pmod2,
+ \qquad
+ \#\mathsf A=\ell+p.
+\end{equation}
+For even internal ground states and normalized even three-point forms
+\(\rho_0(\phi_{h_i},\phi_{d_i},\phi_{h_{i+1}})=1\), the descendant part of
+the NS necklace block is
+\begin{equation}
+ \begin{split}
+ \F^{\NS}_{\boldsymbol\eta}
+ (\boldsymbol q;\boldsymbol h,\boldsymbol d)
+ ={}&
+ \sum_{\{\mathsf A_i,\mathsf B_i\}}
+ \prod_{i=1}^{N}
+ \left[
+ q_i^{|\mathsf A_i|}\eta_i^{p(\mathsf A_i)}
+ (\mathbf G_{h_i})^{\mathsf A_i\mathsf B_i}
+ \right]
+ \\
+ &\quad\times
+ \prod_{i=1}^{N}
+ \rho_0\!\left(
+ \mathbf L_{-\mathsf B_i}\phi_{h_i},
+ \phi_{d_i},
+ \mathbf L_{-\mathsf A_{i+1}}\phi_{h_{i+1}}
+ \right),
+ \end{split}
+ \label{eq:ns-necklace-block-definition}
+\end{equation}
+with cyclic indices and
+\(|\mathsf A_i|=|\mathsf B_i|\).  Because every displayed vertex uses
+\(\rho_0\), its two descendant levels are restricted to have integral sum,
+or equivalently
+\(p(\mathsf B_i)=p(\mathsf A_{i+1})\).  The factors
+\(q_i^{h_i-c/24}\), which carry the primary propagation, are not included
+in Eq.~\eqref{eq:ns-necklace-block-definition}.  The plumbing signs
+\(\eta_i=\pm1\) act on a descendant precisely as in the human note.  Define
+\begin{equation}
+ H=h_1,\qquad h_i=H+a_i,\qquad a_1=0,\qquad
+ Q=\prod_{i=1}^{N}q_i,\qquad
+ \varepsilon=\prod_{i=1}^{N}\eta_i .
+ \label{eq:ns-necklace-fixed-difference-data}
+\end{equation}
+The large-weight limit below keeps \(c,d_i,a_i,q_i,\eta_i\) fixed and sends
+\(H\to\infty\).  It is understood coefficientwise in the plumbing series.
 
-In the Ramond case the power counting is naturally performed at
-\(|\beta|\to\infty\).  The special parity basis makes the leading Gram
-matrix diagonal.  Unstarred components approach a character, while a
-component with an effective \(G_0\) insertion has an additional leading
-factor proportional to \(\beta\).  Removing both the character and this
-\(\beta\) factor produces the seed used in
-Eq.~\eqref{eq:r-h-recursion}
-\cite{HadaszJaskolskiSuchanek2012Toric}.
+\paragraph{Large-\(H\) NS Gram matrix and orthogonal basis.}
+The two diagonal brackets responsible for the leading norm are
+\begin{align}
+ [L_n,L_{-n}]&=2nL_0+\order(H^0),
+ &
+ \{G_r,G_{-r}\}&=2L_0+\order(H^0).
+ \label{eq:ns-large-h-elementary-brackets}
+\end{align}
+Fix a level and a fermion-parity block of the NS Verma module.  If the mode
+\(L_{-n}\) occurs \(m_n\) times, define
+\begin{equation}
+ C_{\mathsf A}
+ =
+ 2^{\#\mathsf A}
+ \prod_{n\geq1}n^{m_n}m_n! .
+ \label{eq:ns-large-h-leading-norm-constant}
+\end{equation}
+The leading fermionic contraction contributes \(2H\), with no additional
+power of its half-integral mode number.  Repeated use of
+Eq.~\eqref{eq:ns-large-h-elementary-brackets} gives the super-Gram power
+counting
+\begin{equation}
+ (\mathbf G_{H+a})_{\mathsf A\mathsf B}
+ =
+ \begin{cases}
+ C_{\mathsf A}H^{\#\mathsf A}
+ \bigl(1+\order(H^{-1})\bigr),
+ &\mathsf A=\mathsf B,\\[2pt]
+ \order(H^{\#\mathsf A-1}),
+ &\mathsf A\neq\mathsf B,\quad
+   \#\mathsf A=\#\mathsf B,\\[2pt]
+ \order\!\left(H^{\min(\#\mathsf A,\#\mathsf B)}\right),
+ &\#\mathsf A\neq\#\mathsf B .
+ \end{cases}
+ \label{eq:ns-large-h-gram-power-counting}
+\end{equation}
+This statement is within a fixed level and parity block.  In particular,
+the second line says that two distinct PBW strings with the same oscillator
+number cannot contract every mode pair diagonally.
+
+Order the PBW strings first by \(\#\mathsf A\), and apply Gram--Schmidt
+within each fixed level and parity block.  The resulting orthogonal state
+can be chosen in the form
+\begin{equation}
+ \boldsymbol\ell_{-\mathsf A}\phi_h
+ =
+ \mathbf L_{-\mathsf A}\phi_h
+ +
+ \sum_{\substack{
+ |\mathsf B|=|\mathsf A|,\;
+ p(\mathsf B)=p(\mathsf A)\\
+ \#\mathsf B\leq\#\mathsf A,\;
+ \mathsf B\neq\mathsf A}}
+ f^{\mathsf A}_{\mathsf B}(c,h)\,
+ \mathbf L_{-\mathsf B}\phi_h .
+ \label{eq:ns-large-h-gram-schmidt}
+\end{equation}
+This is the NS analogue of CCY (3.10).  Equation
+\eqref{eq:ns-large-h-gram-power-counting} fixes the coefficient scaling,
+\begin{equation}
+ f^{\mathsf A}_{\mathsf B}(c,H+a)
+ =
+ \begin{cases}
+ \order(H^{-1}),
+ &\#\mathsf B=\#\mathsf A,\quad
+   \mathsf B\neq\mathsf A,\\[2pt]
+ \order(H^0),
+ &\#\mathsf B<\#\mathsf A ,
+ \end{cases}
+ \label{eq:ns-large-h-gram-schmidt-coefficients}
+\end{equation}
+which is the analogue of CCY (3.11).  Its diagonal norm is
+\begin{equation}
+ \mathcal N_{\mathsf A}(H+a)
+ :=
+ \left\|
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+a}
+ \right\|^2
+ =
+ C_{\mathsf A}H^{\#\mathsf A}
+ \left(1+\order(H^{-1})\right).
+ \label{eq:ns-large-h-pbw-norm}
+\end{equation}
+This is the NS version of CCY (3.12).
+
+\paragraph{The sewn block in the orthogonal basis.}
+Since \(a_i\) is fixed, replacing \(H+a_i\) by \(H\) in the leading Gram
+matrices and vertices changes only subleading terms.  The inverse Gram
+matrices are diagonal in the orthogonal basis, so
+\begin{equation}
+ \begin{split}
+ \F^{\NS}_{\boldsymbol\eta}
+ \longrightarrow{}&
+ \sum_{\mathsf A_1,\ldots,\mathsf A_N}
+ \prod_{i=1}^{N}
+ q_i^{|\mathsf A_i|}
+ \eta_i^{p(\mathsf A_i)}
+ \\
+ &\quad\times
+ \prod_{i=1}^{N}
+ \frac{
+ \rho_0\!\left(
+ \boldsymbol\ell_{-\mathsf A_i}\phi_H,
+ \phi_{d_i},
+ \boldsymbol\ell_{-\mathsf A_{i+1}}\phi_H
+ \right)}
+ {\mathcal N_{\mathsf A_i}(H)} ,
+ \qquad
+ \mathsf A_{N+1}=\mathsf A_1 .
+ \end{split}
+ \label{eq:ns-large-h-block-orthogonal-basis}
+\end{equation}
+This is the direct NS analogue of CCY (3.13), including the plumbing signs.
+
+\paragraph{Power counting of the NS three-point tensor.}
+Extend the definition in Eq.~\eqref{eq:ns-large-h-gram-schmidt} by setting
+\(f^{\mathsf A}_{\mathsf A}=1\) and
+\(f^{\mathsf A}_{\mathsf C}=0\) for
+\(\#\mathsf C>\#\mathsf A\).  Then
+\begin{equation}
+ \begin{split}
+ &\rho_0\!\left(
+ \boldsymbol\ell_{-\mathsf A}\phi_H,
+ \phi_d,
+ \boldsymbol\ell_{-\mathsf B}\phi_H
+ \right)
+ \\
+ &\qquad=
+ \sum_{\substack{
+ |\mathsf C|=|\mathsf A|,\;p(\mathsf C)=p(\mathsf A)\\
+ |\mathsf D|=|\mathsf B|,\;p(\mathsf D)=p(\mathsf B)}}
+ f^{\mathsf A}_{\mathsf C}
+ f^{\mathsf B}_{\mathsf D}
+ \rho_0\!\left(
+ \mathbf L_{-\mathsf C}\phi_H,
+ \phi_d,
+ \mathbf L_{-\mathsf D}\phi_H
+ \right).
+ \end{split}
+ \label{eq:ns-large-h-three-point-expansion}
+\end{equation}
+This is the NS counterpart of CCY (3.14).
+
+Move the BPZ-conjugate positive modes on the first leg through the fixed
+external primary.  A commutator with \(\phi_d\) contains no factor of \(H\);
+only a direct positive-negative mode contraction produces a factor of \(H\).
+Consequently
+\begin{equation}
+ \begin{split}
+ &\rho_0\!\left(
+ \mathbf L_{-\mathsf C}\phi_H,
+ \phi_d,
+ \mathbf L_{-\mathsf D}\phi_H
+ \right)
+ \\
+ &\quad=
+ \rho_0\!\left(
+ \phi_H,\phi_d,
+ (\mathbf L_{-\mathsf C})^\dagger
+ \mathbf L_{-\mathsf D}\phi_H
+ \right)
+ +\text{terms with at least one external-field commutator}
+ \\
+ &\quad=
+ \order\!\left(
+ H^{\min(\#\mathsf C,\#\mathsf D)}
+ \right).
+ \end{split}
+ \label{eq:ns-large-h-ward-power-counting}
+\end{equation}
+This is precisely the superconformal analogue of CCY (3.15): the
+anticommutator \(\{G_r,G_{-r}\}\) supplies the same one power of \(H\) as a
+bosonic contraction.  If the two oscillator numbers are equal but the PBW
+labels differ, the leading term is an off-diagonal Gram element and is one
+power lower, as in the second line of
+Eq.~\eqref{eq:ns-large-h-gram-power-counting}.
+
+Combining Eqs.~\eqref{eq:ns-large-h-gram-schmidt-coefficients},
+\eqref{eq:ns-large-h-pbw-norm},
+\eqref{eq:ns-large-h-three-point-expansion}, and
+\eqref{eq:ns-large-h-ward-power-counting} gives
+\begin{equation}
+ \rho_0\!\left(
+ \boldsymbol\ell_{-\mathsf A}\phi_H,
+ \phi_d,
+ \boldsymbol\ell_{-\mathsf B}\phi_H
+ \right)
+ =
+ \begin{cases}
+ \mathcal N_{\mathsf A}(H)
+ \bigl(1+\order(H^{-1})\bigr),
+ &\mathsf A=\mathsf B,\\[2pt]
+ \order(H^{\#\mathsf A-1}),
+ &\mathsf A\neq\mathsf B,\quad
+  \#\mathsf A=\#\mathsf B,\\[2pt]
+ \order\!\left(H^{\min(\#\mathsf A,\#\mathsf B)}\right),
+ &\#\mathsf A\neq\#\mathsf B .
+ \end{cases}
+ \label{eq:ns-large-h-orthogonal-vertex-power-counting}
+\end{equation}
+In particular,
+\begin{equation}
+ \frac{
+ \rho_0\!\left(
+ \boldsymbol\ell_{-\mathsf A}\phi_H,
+ \phi_d,
+ \boldsymbol\ell_{-\mathsf A}\phi_H
+ \right)}
+ {\mathcal N_{\mathsf A}(H)}
+ \longrightarrow1 .
+ \label{eq:ns-large-h-diagonal-vertex}
+\end{equation}
+Equation~\eqref{eq:ns-large-h-diagonal-vertex} is the exact NS analogue of
+CCY (3.16).  For \(\mathsf A\neq\mathsf B\), division by
+\(\sqrt{\mathcal N_{\mathsf A}\mathcal N_{\mathsf B}}\) tends to zero.
+Therefore every surviving term in
+Eq.~\eqref{eq:ns-large-h-block-orthogonal-basis} obeys
+\(\mathsf A_1=\cdots=\mathsf A_N\).
+
+\paragraph{Sum over the surviving NS states.}
+A common bosonic oscillator of mode \(n\) contributes \(Q^n\), while an
+occupied common fermionic oscillator of mode \(n-\frac12\) contributes
+\(\varepsilon Q^{n-1/2}\).  Hence
+\begin{equation}
+ \boxed{
+ \lim_{\substack{H\to\infty\\a_i\;\mathrm{fixed}}}
+ \F^{\NS}_{\boldsymbol\eta}
+ =
+ \chi^{(\varepsilon)}_{\NS}(Q)
+ :=
+ \prod_{n=1}^{\infty}
+ \frac{1+\varepsilon Q^{n-1/2}}{1-Q^n}.}
+ \label{eq:ns-necklace-large-h-character}
+\end{equation}
+Thus \(\varepsilon=+1\) gives the ordinary NS descendant character and
+\(\varepsilon=-1\) gives the \((-1)^F\)-twined character.  Dividing the
+block by \(\chi^{(\varepsilon)}_{\NS}(Q)\) produces a reduced block with
+unit large-\(H\) seed.
+
+\paragraph{No pole at \(H=\infty\).}
+The power-counting limit must also exclude a polynomial ambiguity in the
+partial-fraction expansion.  Fix a plumbing multi-level
+\(\boldsymbol\nu=(\nu_1,\ldots,\nu_N)\) and define
+\begin{equation}
+ F_{\boldsymbol\nu}(H;\boldsymbol a)
+ :=
+ \left[
+ q_1^{\nu_1}\cdots q_N^{\nu_N}
+ \right]
+ \F^{\NS}_{\boldsymbol\eta}(H;\boldsymbol a).
+ \label{eq:ns-fixed-level-coefficient}
+\end{equation}
+At fixed \(\boldsymbol\nu\), every descendant space is finite-dimensional.
+The Gram entries and three-point matrix elements are polynomial in the
+weights, while the inverse Gram entries are rational.  Therefore
+\(F_{\boldsymbol\nu}(H;\boldsymbol a)\) is a rational function of \(H\).
+For generic fixed \(a_i\), its finite poles are the Kac poles
+\begin{equation}
+ H=h^{\NS}_{r,s}-a_i,
+ \qquad
+ \frac{rs}{2}\leq\nu_i ,
+ \label{eq:ns-fixed-level-finite-poles}
+\end{equation}
+with \(r+s\) even.
+
+Equations
+\eqref{eq:ns-large-h-block-orthogonal-basis}--%
+\eqref{eq:ns-necklace-large-h-character} prove coefficientwise that
+\begin{equation}
+ F_{\boldsymbol\nu}(H;\boldsymbol a)
+ =
+ \chi^{(\varepsilon)}_{\boldsymbol\nu}
+ + o(1),
+ \qquad |H|\longrightarrow\infty ,
+ \label{eq:ns-fixed-level-bounded-at-infinity}
+\end{equation}
+where
+\(\chi^{(\varepsilon)}_{\boldsymbol\nu}\) is the corresponding coefficient
+of \(\chi^{(\varepsilon)}_{\NS}(Q)\).  Explicitly it vanishes unless
+\(\nu_1=\cdots=\nu_N\).  In the local coordinate \(z=H^{-1}\),
+Eq.~\eqref{eq:ns-fixed-level-bounded-at-infinity} says that the rational
+function \(F_{\boldsymbol\nu}(z^{-1};\boldsymbol a)\) is bounded at \(z=0\).
+Hence \(z=0\), equivalently \(H=\infty\), is a removable singularity and
+not a pole.
+
+To see directly what this implies for the recursion, subtract all finite
+principal parts at this fixed plumbing level:
+\begin{equation}
+ R_{\boldsymbol\nu}(H)
+ =
+ F_{\boldsymbol\nu}(H;\boldsymbol a)
+ -
+ \sum_{p}
+ \frac{\operatorname{Res}_{H=H_p}
+ F_{\boldsymbol\nu}(H;\boldsymbol a)}
+ {H-H_p}.
+ \label{eq:ns-fixed-level-pole-subtraction}
+\end{equation}
+The function \(R_{\boldsymbol\nu}\) has no finite poles.  Every subtracted
+principal part is \(\order(H^{-1})\) at infinity, while
+Eq.~\eqref{eq:ns-fixed-level-bounded-at-infinity} shows that
+\(R_{\boldsymbol\nu}\) has no pole there either.  Thus
+\(R_{\boldsymbol\nu}\) is holomorphic on the Riemann sphere and must be the
+constant
+\begin{equation}
+ R_{\boldsymbol\nu}(H)
+ =
+ \chi^{(\varepsilon)}_{\boldsymbol\nu}.
+ \label{eq:ns-fixed-level-regular-constant}
+\end{equation}
+This proves, rather than assumes, that there is no positive-power
+polynomial in \(H\) hidden in the regular part.  The statement needed for
+the \(h\)-recursion is coefficientwise; a limit of the fully summed
+plumbing series would additionally require a uniform-convergence estimate.
+
+\paragraph{What is the regular part?}
+It is essential to make the partial-fraction decomposition only after the
+change of variables in
+Eq.~\eqref{eq:ns-necklace-fixed-difference-data}.  For generic fixed
+\(a_i\), the block is a meromorphic function of the single variable \(H\),
+with poles
+\begin{equation}
+ H=h^{\NS}_{r,s}-a_i,\qquad
+ r+s\in2\mathbb Z,\qquad
+ \ell_{r,s}=\frac{rs}{2}.
+\end{equation}
+Coefficientwise in \(\boldsymbol q\), its decomposition is
+\begin{equation}
+ \F^{\NS}_{\boldsymbol\eta}(H;\boldsymbol a)
+ =
+ \chi^{(\varepsilon)}_{\NS}(Q)
+ +
+ \sum_{i=1}^{N}
+ \sum_{\substack{r,s\geq1\\r+s\in2\mathbb Z}}
+ \frac{B^{\NS}_{i;r,s}(\boldsymbol a)}
+ {H+a_i-h^{\NS}_{r,s}}.
+ \label{eq:ns-necklace-fixed-a-partial-fraction}
+\end{equation}
+The residues \(B^{\NS}_{i;r,s}\) are independent of \(H\) because all
+neighboring weights and the shifted block are evaluated at
+\(H=h^{\NS}_{r,s}-a_i\).  For \(i\neq1\), the null-submodule shift becomes
+\begin{equation}
+ H\longrightarrow h^{\NS}_{r,s}-a_i,\qquad
+ a_i\longrightarrow a_i+\ell_{r,s},
+ \label{eq:ns-necklace-shift-nonbase-edge}
+\end{equation}
+whereas a pole on the base edge gives
+\begin{equation}
+ H\longrightarrow h^{\NS}_{r,s}+\ell_{r,s},\qquad
+ a_j\longrightarrow a_j-\ell_{r,s}\quad(j=2,\ldots,N).
+ \label{eq:ns-necklace-shift-base-edge}
+\end{equation}
+When \(rs\) is odd, the null vector is odd and the residue changes the
+fermion-parity routing of the component block.  The recursion should
+therefore be regarded as a finite vector recursion in parity-routing space:
+the trivial closed routing has the character in
+Eq.~\eqref{eq:ns-necklace-large-h-character} as its regular entry, while
+non-diagonal routings have zero boundary value in the normalization above.
+
+Equation~\eqref{eq:ns-necklace-fixed-a-partial-fraction} is not the
+single-edge decomposition at fixed \(h_{j\neq i}\).  If an old residue
+coefficient is first restricted to \(h_j=H+a_j\), its apparent
+\(H\)-dependence splits into its value at the pole plus a term regular in
+\(H\); the latter belongs to the new regular part.  The character is the
+regular part of the fixed-\(\boldsymbol a\) problem, not the separate
+function \(U_i(\{h_{j\neq i}\})\).
+
+\paragraph{Two-edge low-level check.}
+For \(N=2\), the human-note Ward identities and
+\(\|G_{-1/2}\phi_h\|^2=2h\) give
+\begin{equation}
+ [q_1^{1/2}q_2^{1/2}]\F^{\NS}_{\boldsymbol\eta}
+ =
+ \eta_1\eta_2
+ \frac{(h_1+h_2-d_1)(h_1+h_2-d_2)}{4h_1h_2}
+ \longrightarrow\varepsilon.
+ \label{eq:ns-necklace-half-level-check}
+\end{equation}
+An excitation on only one edge instead gives
+\begin{align}
+ [q_1]\F^{\NS}_{\boldsymbol\eta}
+ &=
+ \frac{(h_1+d_1-h_2)(h_1+d_2-h_2)}{2h_1}
+ \longrightarrow0,
+ \\
+ [q_2]\F^{\NS}_{\boldsymbol\eta}
+ &=
+ \frac{(h_2+d_1-h_1)(h_2+d_2-h_1)}{2h_2}
+ \longrightarrow0.
+ \label{eq:ns-necklace-single-edge-check}
+\end{align}
+These are the first nontrivial consequences of the diagonal selection rule:
+the character begins
+\(1+\varepsilon Q^{1/2}+Q+\cdots\), with no isolated
+\(q_i^{1/2}\) or \(q_i\) term.
+
+The argument assumes generic \(a_i\), so that distinct Kac hyperplanes do
+not collapse to the same \(H\)-pole, and is a statement about every fixed
+plumbing coefficient rather than a uniform large-\(H\) limit of the summed
+series.
+
+\paragraph{Ramond sector deferred.}
+For R internal edges the positive modes obey analogous power counting, but
+the two-dimensional ground space and unsuppressed \(G_0\) action remain in
+the leading vertex.  One must keep those ground indices open before deciding
+which scalar components reduce to an R character.  That matrix-valued
+problem will be treated separately rather than inferred from the NS result.
 
 \subsection{Why the theta graph is different}
 
