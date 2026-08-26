@@ -1,17 +1,11 @@
-\documentclass[12pt]{article}
-\usepackage{amsmath,amssymb,bm,epsf,epsfig,graphicx,hyperref,physics, cleveref, subfig, slashed, stmaryrd, tensor, float}
-\usepackage[backend=bibtex,natbib,style=numeric-comp,sorting=none, doi=false, isbn=false,url=false]{biblatex}
-\addbibresource{ref}
-\input epsf.sty
-\topmargin -.5cm \textheight 21cm \oddsidemargin -.125cm
-\textwidth 17cm
-\setlength{\parskip}{0.7em}
+\documentclass[aps,prl,10pt,twocolumn]{revtex4-2}
+\usepackage{amsmath,amssymb,bm,epsf,epsfig,graphicx,hyperref}
 
+\setlength{\marginparwidth}{2cm}
 \usepackage[]{todonotes}
 \usepackage{tikz}
+\usepackage{CJKutf8}
 \usetikzlibrary{arrows.meta, decorations.markings}
-
-\usepackage[weather, alpine]{ifsym}
 
 \definecolor{bisque}{rgb}{1.0, 0.89, 0.77}
 \definecolor{forestgreen(web)}{rgb}{0.13, 0.55, 0.13}
@@ -25,11 +19,6 @@
 \numberwithin{equation}{section}
 \def\mt{\bar}
 
-\renewcommand{\title}[1]{\vbox{\center\LARGE{#1}}\vspace{5mm}}
-\renewcommand{\author}[1]{\vbox{\center#1}\vspace{5mm}}
-\newcommand{\address}[1]{\vbox{\center\em#1}}
-\newcommand{\email}[1]{\vbox{\center\tt#1}\vspace{5mm}}
-
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
@@ -37,51 +26,34 @@
 
 \begin{document}
 
-\unitlength = .8mm
+\title{All-Genus 2D \texorpdfstring{$\mathcal{N}=1$}{N=1} Superconformal Blocks}
 
-\begin{titlepage}
+\author{Sam Christian}
+\email{samchristian@fas.harvard.edu}
+\author{Yuchen Wang}
+\email{yuchen\_wang@fas.harvard.edu}
+\author{Xi Yin}
+\email{xiyin@fas.harvard.edu}
+\author{Yutai Zhang}
+\email{yutaizhang@fas.harvard.edu}
 
-\begin{center}
+\affiliation{Jefferson Physical Laboratory, Harvard University,
+Cambridge, MA 02138 USA}
 
-\hfill \\
-\hfill \\
-\vskip 1cm
+\date{\today}
 
-\title{Numerical Methods for Arbitrary 2D $\mathcal{N}=1$ Superconformal Blocks}
+\begin{abstract}
+We do something that is extremely conformal and very block. Based on the
+work of LaTeX, we build this PDF file successfully.
+\end{abstract}
 
-\author{Sam Christian, Yuchen Wang, Xi Yin, Yutai Zhang}
-
-\address{Jefferson Physical Laboratory, Harvard University,
-Cambridge, MA 02138 USA
-}
-
-\email{
-    samchristian@fas.harvard.edu, yuchen\_wang@fas.harvard.edu, xiyin@fas.harvard.edu, yutaizhang@fas.harvard.edu}
-
-\end{center}
-
-\abstract{We do something that is extremely conformal and very block. Based on the work of LaTeX, we build this pdf file successfully. }
-
-\vfill
-
-\end{titlepage}
-
-\eject
-
-\begingroup
-\hypersetup{linkcolor=black}
-
-\tableofcontents
-
-\endgroup
+\maketitle
 
 \section{Introduction}
 
-\section{Null states and fusion polynomials}
+Introducing what should be introduced
 
-\section{$h$-recursion for genus 1 blocks}
-
-\section{$c$-recursion for arbitrary NS blocks}
+\section{\texorpdfstring{$c$}{c}-recursion for NS blocks}
 
 \section{Ramond blocks from double Virasoro}
 
@@ -89,7 +61,7 @@ Cambridge, MA 02138 USA
 
 \section*{Acknowledgements}
 
+We are grateful to Ben Mazel, Victor A. Rodriguez, and Jaroslav Scheinpflug for discussions. This work is supported by DOE grant DE-SC0007870.
 
-
-\printbibliography
 \end{document}
+
