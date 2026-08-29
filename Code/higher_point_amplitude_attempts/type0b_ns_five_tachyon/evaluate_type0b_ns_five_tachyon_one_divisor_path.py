@@ -15,7 +15,7 @@ from type0b_ns_five_tachyon import (
     integrate_complex_energy_one_divisor_qmc,
 )
 from type0b_ns_five_tachyon_domain import (
-    all_c_atlas_orderings,
+    hybrid_atlas_orderings,
     general_complex_energy_convergence_audit,
     is_one_divisor_subtraction_record,
     one_divisor_ray_certificate,
@@ -51,7 +51,7 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Evaluate the matrix-blind all-NS Type-0B sphere five-point "
-            "integral on the certified one-divisor all-c ray."
+            "integral on the certified one-divisor hybrid-recursion ray."
         )
     )
     parser.add_argument(
@@ -60,7 +60,21 @@ def _parser() -> argparse.ArgumentParser:
         nargs="+",
         default=certificate["ten_sampling_parameters"],
     )
-    parser.add_argument("--recursion-max-twice-level", type=int, default=2)
+    parser.add_argument(
+        "--recursion-max-twice-level",
+        type=int,
+        default=-1,
+        help=(
+            "use -1 for the matched finite plumbing-series truncation required "
+            "by the hybrid production run"
+        ),
+    )
+    parser.add_argument(
+        "--block-backend",
+        choices=("hybrid", "h", "c"),
+        default="c",
+    )
+    parser.add_argument("--hybrid-q-threshold", type=float, default=0.3)
     parser.add_argument(
         "--global-max-twice-levels", type=int, nargs=2, default=(4, 4)
     )
@@ -69,7 +83,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--momentum-maximum", type=float, default=2.0)
     parser.add_argument("--structure-precision", type=int, default=20)
     parser.add_argument("--block-working-precision", type=int, default=40)
-    parser.add_argument("--central-charge-shift", type=float, default=0.0)
+    parser.add_argument("--central-charge-shift", type=float, default=1.0e-5)
     parser.add_argument("--collar-radius", type=float, default=0.05)
     parser.add_argument("--bulk-sobol-power", type=int, default=2)
     parser.add_argument("--face-sobol-power", type=int, default=2)
@@ -127,6 +141,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.recursion_max_twice_level < 0
         else args.recursion_max_twice_level
     )
+    if args.block_backend == "hybrid" and recursion_cutoff is not None:
+        raise ValueError(
+            "hybrid production requires --recursion-max-twice-level -1 so "
+            "the h- and c-recursive regions use the same finite plumbing-series cutoff"
+        )
     cap = float(args.radial_power_cap)
     margin_factor = float(args.radial_power_margin_factor)
     if not 0.0 < cap <= 2.0:
@@ -148,13 +167,15 @@ def main(argv: Sequence[str] | None = None) -> int:
             "stable_divisor": "D_12",
             "scheme": (
                 "omit the continuum endpoint primary coefficient-by-coefficient "
-                "in the selected all-c block; restore its asymptotic coefficient "
+                "in the selected recursive boundary block; restore its asymptotic coefficient "
                 "by the complex radial finite part and restore the integrable "
                 "fixture difference by symmetric angular quadrature"
             ),
             "corner_subtractions": 0,
         },
         "settings": {
+            "block_backend": args.block_backend,
+            "hybrid_q_threshold": args.hybrid_q_threshold,
             "recursion_max_twice_level": recursion_cutoff,
             "global_max_twice_levels": list(args.global_max_twice_levels),
             "global_max_total_twice_level": args.global_max_total_twice_level,
@@ -175,7 +196,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             "radial_power_margin_factor": margin_factor,
             "seed": args.seed,
             "boundary_split": (
-                "symmetric 120-chart all-c Voronoi atlas; ten stable divisors "
+                "symmetric 120-chart Voronoi atlas; after minimizing "
+                "max(|q1|,|q2|), use c-recursion in the selected chart; ten stable divisors "
                 "and fifteen compatible corners are the analytic ledger; the "
                 "incoming-leg residue orientation is normalized only after the "
                 "geometric chart is selected"
@@ -194,6 +216,7 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "type0b_ns_five_tachyon.py",
                 "type0b_ns_five_tachyon_domain.py",
                 "ns_multipoint_c_recursion.py",
+                "ns_multipoint_h_recursion.py",
                 "super_liouville_structure_constants.py",
                 Path(__file__).name,
             )
@@ -225,6 +248,8 @@ def main(argv: Sequence[str] | None = None) -> int:
 
         kernel = BRYNSFiveTachyonIntegrand(
             outgoing_energies=outgoing,
+            block_backend=args.block_backend,
+            hybrid_q_threshold=args.hybrid_q_threshold,
             recursion_max_twice_level=recursion_cutoff,
             global_max_twice_levels=args.global_max_twice_levels,
             global_max_total_twice_level=args.global_max_total_twice_level,
@@ -236,7 +261,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         )
         result = integrate_complex_energy_one_divisor_qmc(
             kernel,
-            orderings=all_c_atlas_orderings(outgoing),
+            orderings=hybrid_atlas_orderings(outgoing),
             collar_radius=args.collar_radius,
             bulk_sobol_power=args.bulk_sobol_power,
             face_sobol_power=args.face_sobol_power,
@@ -280,6 +305,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 "imag": result.standard_error_real / 64.0,
             },
             "extreme_bulk_weights": list(result.extreme_bulk_weights),
+            "block_backend_evaluation_counts": dict(
+                kernel._block_backend_evaluation_counts
+            ),
         }
         points.append(point)
         payload["points"] = points

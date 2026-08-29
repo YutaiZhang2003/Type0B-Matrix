@@ -36,6 +36,16 @@ def _parser() -> argparse.ArgumentParser:
         )
     )
     parser.add_argument("--t", type=float, default=0.10)
+    parser.add_argument(
+        "--block-backend",
+        choices=("hybrid", "h", "c"),
+        default="c",
+        help=(
+            "production uses c-recursion in the best chart; h and hybrid "
+            "are recursion-overlap audits"
+        ),
+    )
+    parser.add_argument("--hybrid-q-threshold", type=float, default=0.3)
     parser.add_argument("--recursion-max-twice-level", type=int, default=-1)
     parser.add_argument("--global-max-twice-levels", type=int, nargs=2, default=(6, 6))
     parser.add_argument("--global-max-total-twice-level", type=int, default=8)
@@ -68,6 +78,8 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     kernel = BRYNSFiveTachyonIntegrand(
         outgoing_energies=(1.0j * args.t,) * 4,
+        block_backend=args.block_backend,
+        hybrid_q_threshold=args.hybrid_q_threshold,
         recursion_max_twice_level=recursion_cutoff,
         global_max_twice_levels=args.global_max_twice_levels,
         global_max_total_twice_level=args.global_max_total_twice_level,
@@ -91,11 +103,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             "kinematics": "omega_1=...=omega_4=i*t, omega_in=4*i*t",
             "equal_imaginary_t": args.t,
             "chamber_audit": audit,
-            "block_evaluation": (
-                "finite-c coefficient c-recursion"
-                if recursion_cutoff is None
-                else "functional c-recursion with global osp leaves"
-            ),
+            "block_evaluation": args.block_backend,
             "global_max_total_twice_level": args.global_max_total_twice_level,
             "structure_precision": args.structure_precision,
             "block_working_precision": args.block_working_precision,
@@ -115,6 +123,9 @@ def main(argv: Sequence[str] | None = None) -> int:
                 ),
                 "ns_multipoint_c_recursion.py": _sha256(
                     C_RECURSION_DIR / "ns_multipoint_c_recursion.py"
+                ),
+                "ns_multipoint_h_recursion.py": _sha256(
+                    C_RECURSION_DIR / "ns_multipoint_h_recursion.py"
                 ),
                 "evaluate_type0b_ns_five_tachyon.py": _sha256(Path(__file__)),
             },

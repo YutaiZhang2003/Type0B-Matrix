@@ -18,9 +18,14 @@ holomorphic matter insertion is
 
 where ``k=(omega_in,-omega_1,...,-omega_4)`` is the signed timelike momentum.
 Only zero or two free-fermion selections survive in each chiral half.  The
-remaining Liouville components are evaluated by the multipoint fixed-weight
-``c``-recursion, including independent holomorphic and antiholomorphic
-``G_-1/2`` markings.
+remaining Liouville components use the 120-chart CCY block atlas, including
+independent holomorphic and antiholomorphic ``G_-1/2`` markings.  The proper
+linear channel is selected geometrically by minimizing
+``max(|q1|,|q2|)``.  Following the attached five-point review, production
+uses fixed-difference ``h``-recursion at ``b=exp(eta)`` and extrapolates in
+``eta**2`` to the self-dual point.  Fixed-weight ``c``-recursion is retained
+as a low-order descendant-validated overlap check; the former hybrid gate is
+diagnostic only.
 
 The returned density is the PCO component sum ``I_NS(z,w)`` normalized so
 that the BRY-style inference from the all-tachyon diagram to the full RHS
@@ -41,9 +46,11 @@ from dataclasses import dataclass
 from functools import lru_cache
 from itertools import combinations, permutations, product
 import math
+import os
 from pathlib import Path
 import sys
-from typing import Iterable, Mapping, Sequence, Union
+import time
+from typing import Iterable, Literal, Mapping, Sequence, Union
 
 import mpmath
 import numpy as np
@@ -64,6 +71,8 @@ for dependency in (SCRIPT_DIR, C_RECURSION, REFERENCE_PLUMBING):
         sys.path.insert(0, str(dependency))
 
 from ns_multipoint_c_recursion import NSSphereLinearCRecursion  # noqa: E402
+from ns_multipoint_h_recursion import NSSphereLinearHRecursion  # noqa: E402
+from ns_global_osp_block import osp_norm, osp_sector_vertex  # noqa: E402
 from sphere_five_point_liouville import (  # noqa: E402
     INFINITY,
     LinearChannel,
@@ -98,6 +107,18 @@ PICTURE_ZERO_LABELS = (0, 1, 2)
 MINUS_ONE_LABELS = (3, 4)
 MINIMAL_SUBTRACTION_T_MAX = (25.0 + math.sqrt(545.0)) / 80.0
 MINIMAL_SUBTRACTION_OPTIMAL_T = (1.0 + math.sqrt(2.0)) / 4.0
+
+
+def _boundary_picture_threshold(pair: Sequence[int]) -> int:
+    """Return the normal integrability threshold for one boundary pair."""
+
+    selected = frozenset(int(label) for label in pair)
+    if len(selected) != 2 or not selected <= set(range(5)):
+        raise ValueError("a boundary pair must contain two distinct labels 0,...,4")
+    if selected == frozenset(MINUS_ONE_LABELS):
+        # The nonchiral superghost correlator contributes |z_3-z_4|^-2.
+        return 1
+    return sum(int(label in PICTURE_ZERO_LABELS) for label in selected) - 1
 
 # Channel-to-channel proposal-density ratios may use any common affine
 # reference chart.  This reference keeps a non-degenerate determinant in the
@@ -890,6 +911,8 @@ class NSFivePointQMCResult:
     replicates: int
     radial_power: float
     seed: int
+    block_backend: str
+    hybrid_q_threshold: float
     recursion_max_twice_level: int | None
     global_max_twice_levels: tuple[int, int]
     momentum_orders: tuple[int, int]
@@ -922,10 +945,109 @@ class NSFivePointQMCResult:
             "replicates": self.replicates,
             "radial_power": self.radial_power,
             "seed": self.seed,
+            "block_backend": self.block_backend,
+            "hybrid_q_threshold": self.hybrid_q_threshold,
             "recursion_max_twice_level": self.recursion_max_twice_level,
             "global_max_twice_levels": list(self.global_max_twice_levels),
             "momentum_orders": list(self.momentum_orders),
             "momentum_maximum": self.momentum_maximum,
+            "matrix_model_used": False,
+        }
+
+
+@dataclass(frozen=True)
+class FaceCollarCertificate:
+    """CFT-versus-c-recursion validation of a finite-part face collar."""
+
+    passed: bool
+    collar_radius: float
+    check_radii: tuple[float, ...]
+    relative_tolerance: float
+    absolute_tolerance: float
+    samples_per_orbit: int
+    normal_angle_count: int
+    representative_orbit_count: int
+    covered_face_sector_count: int
+    comparison_count: int
+    reference_backend: str
+    reference_global_max_twice_levels: tuple[int, int]
+    reference_global_max_total_twice_level: int
+    previous_reference_global_max_twice_levels: tuple[int, int]
+    previous_reference_global_max_total_twice_level: int
+    reference_convergence_relative_tolerance: float
+    polynomial_agreement_passed: bool
+    reference_convergence_passed: bool
+    maximum_relative_error: float
+    maximum_polynomial_tolerance_ratio: float
+    maximum_reference_full_relative_change: float
+    maximum_reference_primary_relative_change: float
+    maximum_reference_convergence_tolerance_ratio: float
+    maximum_tolerance_ratio: float
+    maximum_relative_error_by_radius: tuple[tuple[float, float], ...]
+    worst_samples: tuple[dict[str, object], ...]
+    seed: int
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "schema": "type0b-ns-fivepoint-face-collar-certificate-v1",
+            "passed": self.passed,
+            "collar_radius": self.collar_radius,
+            "check_radii": list(self.check_radii),
+            "relative_tolerance": self.relative_tolerance,
+            "absolute_tolerance": self.absolute_tolerance,
+            "samples_per_orbit": self.samples_per_orbit,
+            "normal_angle_count": self.normal_angle_count,
+            "representative_orbit_count": self.representative_orbit_count,
+            "covered_face_sector_count": self.covered_face_sector_count,
+            "comparison_count": self.comparison_count,
+            "reference_backend": self.reference_backend,
+            "reference_global_max_twice_levels": list(
+                self.reference_global_max_twice_levels
+            ),
+            "reference_global_max_total_twice_level": (
+                self.reference_global_max_total_twice_level
+            ),
+            "previous_reference_global_max_twice_levels": list(
+                self.previous_reference_global_max_twice_levels
+            ),
+            "previous_reference_global_max_total_twice_level": (
+                self.previous_reference_global_max_total_twice_level
+            ),
+            "reference_convergence_relative_tolerance": (
+                self.reference_convergence_relative_tolerance
+            ),
+            "truncated_cft_object": (
+                "algebraic degree-zero normal boundary-primary polynomial, "
+                "with the surviving four-point block kept to the reference "
+                "c-recursion order"
+            ),
+            "comparison_object": (
+                "full five-point fixed-momentum density from "
+                f"{self.reference_backend}-recursion at the same q_normal, "
+                "q_tangent, P_normal, and P_tangent"
+            ),
+            "maximum_relative_error": self.maximum_relative_error,
+            "polynomial_agreement_passed": self.polynomial_agreement_passed,
+            "reference_convergence_passed": self.reference_convergence_passed,
+            "maximum_polynomial_tolerance_ratio": (
+                self.maximum_polynomial_tolerance_ratio
+            ),
+            "maximum_reference_full_relative_change": (
+                self.maximum_reference_full_relative_change
+            ),
+            "maximum_reference_primary_relative_change": (
+                self.maximum_reference_primary_relative_change
+            ),
+            "maximum_reference_convergence_tolerance_ratio": (
+                self.maximum_reference_convergence_tolerance_ratio
+            ),
+            "maximum_tolerance_ratio": self.maximum_tolerance_ratio,
+            "maximum_relative_error_by_radius": [
+                {"radius": radius, "maximum_relative_error": error}
+                for radius, error in self.maximum_relative_error_by_radius
+            ],
+            "worst_samples": list(self.worst_samples),
+            "seed": self.seed,
             "matrix_model_used": False,
         }
 
@@ -949,15 +1071,22 @@ class NSFivePointFinitePartQMCResult:
     replicates: int
     radial_power: float
     seed: int
+    block_backend: str
+    hybrid_q_threshold: float
     recursion_max_twice_level: int | None
     global_max_twice_levels: tuple[int, int]
     momentum_orders: tuple[int, int]
     momentum_maximum: float
+    face_collar_certificate: FaceCollarCertificate | None = None
+    momentum_refinement_shells: int = 0
+    momentum_singularity_subtraction: bool = False
     extreme_bulk_weights: tuple[dict[str, object], ...] = ()
     subtraction_scheme: str = (
         "leading local radial finite-part forest on all 10 faces and "
         "15 compatible corners"
     )
+    corner_contribution_computed: bool = True
+    h_regulator_eta: float | None = None
 
     def to_json(self) -> dict[str, object]:
         return {
@@ -995,6 +1124,7 @@ class NSFivePointFinitePartQMCResult:
                 "real": self.corner_contribution.real,
                 "imag": self.corner_contribution.imag,
             },
+            "corner_contribution_computed": self.corner_contribution_computed,
             "collar_radius": self.collar_radius,
             "projection_radius": self.projection_radius,
             "bulk_samples_per_replicate": self.bulk_samples_per_replicate,
@@ -1002,10 +1132,20 @@ class NSFivePointFinitePartQMCResult:
             "replicates": self.replicates,
             "radial_power": self.radial_power,
             "seed": self.seed,
+            "block_backend": self.block_backend,
+            "hybrid_q_threshold": self.hybrid_q_threshold,
             "recursion_max_twice_level": self.recursion_max_twice_level,
             "global_max_twice_levels": list(self.global_max_twice_levels),
+            "h_regulator_eta": self.h_regulator_eta,
             "momentum_orders": list(self.momentum_orders),
             "momentum_maximum": self.momentum_maximum,
+            "face_collar_certificate": (
+                None
+                if self.face_collar_certificate is None
+                else self.face_collar_certificate.to_json()
+            ),
+            "momentum_refinement_shells": self.momentum_refinement_shells,
+            "momentum_singularity_subtraction": self.momentum_singularity_subtraction,
             "extreme_bulk_weights": list(self.extreme_bulk_weights),
             "matrix_model_used": False,
         }
@@ -1028,6 +1168,8 @@ class NSFivePointContinuedQMCResult:
     replicates: int
     radial_power: float
     seed: int
+    block_backend: str
+    hybrid_q_threshold: float
     recursion_max_twice_level: int | None
     global_max_twice_levels: tuple[int, int]
     momentum_orders: tuple[int, int]
@@ -1068,6 +1210,8 @@ class NSFivePointContinuedQMCResult:
             "replicates": self.replicates,
             "radial_power": self.radial_power,
             "seed": self.seed,
+            "block_backend": self.block_backend,
+            "hybrid_q_threshold": self.hybrid_q_threshold,
             "recursion_max_twice_level": self.recursion_max_twice_level,
             "global_max_twice_levels": list(self.global_max_twice_levels),
             "momentum_orders": list(self.momentum_orders),
@@ -1260,6 +1404,189 @@ def _legendre_interval(order: int, upper: float) -> tuple[tuple[float, float], .
     )
 
 
+def _legendre_partitioned_interval(
+    order: int,
+    upper: float,
+    breakpoints: Sequence[float],
+) -> tuple[tuple[float, float], ...]:
+    """Return a composite Gauss rule on an explicitly partitioned interval."""
+
+    endpoint = float(upper)
+    points = [0.0]
+    points.extend(
+        sorted(
+            {
+                float(value)
+                for value in breakpoints
+                if math.isfinite(float(value)) and 0.0 < float(value) < endpoint
+            }
+        )
+    )
+    points.append(endpoint)
+    nodes, weights = np.polynomial.legendre.leggauss(int(order))
+    result: list[tuple[float, float]] = []
+    for left, right in zip(points, points[1:]):
+        half_width = 0.5 * (right - left)
+        midpoint = 0.5 * (right + left)
+        result.extend(
+            (
+                float(midpoint + half_width * node),
+                float(half_width * weight),
+            )
+            for node, weight in zip(nodes, weights)
+        )
+    return tuple(result)
+
+
+@lru_cache(maxsize=None)
+def _smooth_momentum_nodes(
+    order: int, upper: float, panel_width: float = 1.0
+) -> tuple[tuple[float, float], ...]:
+    r"""Return a cutoff-stable composite rule for a smooth continuum.
+
+    A single low-order Gauss rule becomes coarser everywhere when
+    ``P_max`` is increased and can imitate a nonconvergent Liouville tail.
+    Unit-width panels keep all previously covered momentum intervals fixed;
+    increasing ``P_max`` only appends new tail panels.  ``order`` is the
+    polynomial order on each panel.
+    """
+
+    endpoint = float(upper)
+    width = float(panel_width)
+    if not math.isfinite(width) or width <= 0.0:
+        raise ValueError("panel_width must be positive and finite")
+    breakpoints = tuple(
+        width * index for index in range(1, int(math.ceil(endpoint / width)))
+    )
+    return _legendre_partitioned_interval(order, endpoint, breakpoints)
+
+
+def _threshold_centered_momentum_nodes(
+    order: int,
+    upper: float,
+    beta_at_zero: Number,
+    refinement_shells: int,
+) -> tuple[tuple[float, float], ...]:
+    r"""Resolve a finite-part pole on a fixed geometric panel layout.
+
+    For a fixed ``refinement_shells`` the breakpoints depend only on the
+    physical denominator and never on the Gauss order.  Consequently the
+    order can be increased as a genuine polynomial-convergence test.  A
+    factor four between successive shoulders covers the narrow Feynman core
+    and the long divided-difference tails without proliferating panels in
+    both momentum directions.
+    """
+
+    shells = int(refinement_shells)
+    if shells < -1:
+        raise ValueError("refinement_shells must be -1 or non-negative")
+    if shells == 0:
+        return _legendre_interval(order, upper)
+    shifted = complex(beta_at_zero) + 2.0
+    root_squared = -shifted.real
+    if root_squared <= 0.0:
+        return _legendre_interval(order, upper)
+    root = math.sqrt(root_squared)
+    endpoint = float(upper)
+    if not 0.0 < root < endpoint:
+        return _legendre_interval(order, upper)
+    damping = abs(shifted.imag)
+    if damping <= 1.0e-15:
+        raise ValueError(
+            "threshold-centered finite-epsilon quadrature requires a nonzero "
+            "imaginary radial denominator"
+        )
+    # Linearize P^2-P_*^2 around the real center.  Geometric shells resolve
+    # both the O(Gamma) core and its logarithmic shoulders as epsilon
+    # decreases.  The panel layout is held fixed while ``order`` is varied.
+    width = damping / max(2.0 * root, math.sqrt(damping))
+    breakpoints = [root]
+    if shells == -1:
+        distance = width
+        maximum_distance = max(root, endpoint - root)
+        for _ in range(32):
+            breakpoints.extend((root - distance, root + distance))
+            if distance >= maximum_distance:
+                break
+            distance *= 4.0
+        else:  # pragma: no cover - excludes absurd subnormal regulators
+            raise ArithmeticError("automatic threshold panels did not reach an endpoint")
+    else:
+        for shell in range(shells):
+            distance = width * 4.0**shell
+            breakpoints.extend((root - distance, root + distance))
+    return _legendre_partitioned_interval(order, endpoint, breakpoints)
+
+
+def _finite_part_momentum_root(beta_at_zero: Number, upper: float) -> float | None:
+    """Return the real center of a radial finite-part denominator, if present."""
+
+    shifted = complex(beta_at_zero) + 2.0
+    root_squared = -shifted.real
+    if root_squared <= 0.0:
+        return None
+    root = math.sqrt(root_squared)
+    return root if 0.0 < root < float(upper) else None
+
+
+@lru_cache(maxsize=None)
+def _radial_momentum_constant_finite_part(
+    beta_at_zero: complex,
+    collar_radius: float,
+    momentum_maximum: float,
+    refinement_shells: int,
+    working_precision: int,
+) -> complex:
+    r"""Integrate the universal radial factor over one internal momentum.
+
+    This scalar integral is used in a local subtraction
+    ``f(P)=f(P_*)+[f(P)-f(P_*)]``.  The second term is regular uniformly as
+    ``epsilon->0+``; only this inexpensive constant-coefficient integral must
+    resolve the Feynman core itself.
+    """
+
+    beta0 = complex(beta_at_zero)
+    radius = float(collar_radius)
+    endpoint = float(momentum_maximum)
+    precision = max(30, int(working_precision))
+    if abs((beta0 + 2.0).imag) <= 1.0e-15:
+        raise ValueError(
+            "the direct physical finite-part integral requires nonzero epsilon"
+        )
+    breakpoints: list[float] = []
+    root = _finite_part_momentum_root(beta0, endpoint)
+    if root is not None:
+        damping = abs((beta0 + 2.0).imag)
+        width = damping / max(2.0 * root, math.sqrt(damping))
+        breakpoints.append(root)
+        distance = width
+        maximum_distance = max(root, endpoint - root)
+        for _ in range(32):
+            breakpoints.extend((root - distance, root + distance))
+            if distance >= maximum_distance:
+                break
+            distance *= 4.0
+        else:  # pragma: no cover - excludes absurd subnormal regulators
+            raise ArithmeticError("automatic scalar panels did not reach an endpoint")
+    points = [0.0]
+    points.extend(
+        sorted({value for value in breakpoints if 0.0 < value < endpoint})
+    )
+    points.append(endpoint)
+    with mpmath.workdps(precision):
+        beta_mp = mpmath.mpc(beta0)
+        log_radius = mpmath.log(radius)
+
+        def integrand(momentum):
+            shifted = beta_mp + 2 + momentum * momentum
+            return 2 * mpmath.pi * mpmath.exp(shifted * log_radius) / shifted
+
+        total = mpmath.mpc(0)
+        for left, right in zip(points, points[1:]):
+            total += mpmath.quad(integrand, [left, right])
+    return complex(total)
+
+
 class BRYNSFiveTachyonIntegrand:
     r"""Evaluate the BRY-normalized all-NS five-point PCO density.
 
@@ -1273,6 +1600,8 @@ class BRYNSFiveTachyonIntegrand:
         self,
         *,
         outgoing_energies: Sequence[Number],
+        block_backend: Literal["hybrid", "h", "c"] = "h",
+        hybrid_q_threshold: float = 0.3,
         recursion_max_twice_level: int | None = None,
         global_max_twice_levels: Sequence[int] = (8, 4),
         global_max_total_twice_level: int | None = 8,
@@ -1280,8 +1609,15 @@ class BRYNSFiveTachyonIntegrand:
         momentum_maximum: float = 4.0,
         structure_precision: int = 24,
         central_charge_shift: float = 1.0e-5,
+        h_regulator_eta: float | None = None,
+        h_regulator_etas: Sequence[float] = (0.16, 0.13, 0.10, 0.075, 0.055),
+        h_regulator_polynomial_degree: int = 3,
+        h_regulator_comparison_degree: int = 2,
+        h_fit_variant: Literal["production", "comparison"] = "production",
+        h_coefficient_cache_directory: str | os.PathLike[str] | None = None,
         block_working_precision: int = 50,
         pole_tolerance: float = 1.0e-28,
+        factorize_single_primary: bool = True,
     ) -> None:
         if len(outgoing_energies) != 4:
             raise ValueError("outgoing_energies must contain four values")
@@ -1305,6 +1641,10 @@ class BRYNSFiveTachyonIntegrand:
             raise ValueError(
                 "recursion_max_twice_level must be non-negative or None"
             )
+        if block_backend not in ("hybrid", "h", "c"):
+            raise ValueError("block_backend must be 'hybrid', 'h', or 'c'")
+        if not 0.0 < float(hybrid_q_threshold) < 1.0:
+            raise ValueError("hybrid_q_threshold must lie in (0,1)")
         maxima = tuple(int(value) for value in global_max_twice_levels)
         if len(maxima) != 2 or any(value < 0 for value in maxima):
             raise ValueError("global_max_twice_levels must contain two non-negative values")
@@ -1324,9 +1664,36 @@ class BRYNSFiveTachyonIntegrand:
             raise ValueError("insufficient structure or block working precision")
         if central_charge_shift < 0.0 or not math.isfinite(central_charge_shift):
             raise ValueError("central_charge_shift must be finite and non-negative")
+        if h_regulator_eta is not None and (
+            not math.isfinite(h_regulator_eta) or h_regulator_eta <= 0.0
+        ):
+            raise ValueError("h_regulator_eta must be positive and finite or None")
+        regulator_etas = tuple(float(value) for value in h_regulator_etas)
+        if len(regulator_etas) < 3 or any(
+            not math.isfinite(value) or value <= 0.0 for value in regulator_etas
+        ):
+            raise ValueError(
+                "h_regulator_etas must contain at least three positive finite values"
+            )
+        if len(set(regulator_etas)) != len(regulator_etas):
+            raise ValueError("h_regulator_etas must be distinct")
+        production_degree = int(h_regulator_polynomial_degree)
+        comparison_degree = int(h_regulator_comparison_degree)
+        if not 1 <= production_degree < len(regulator_etas):
+            raise ValueError(
+                "h_regulator_polynomial_degree must lie in [1,len(etas)-1]"
+            )
+        if not 0 <= comparison_degree < production_degree:
+            raise ValueError(
+                "h_regulator_comparison_degree must be below the production degree"
+            )
+        if h_fit_variant not in ("production", "comparison"):
+            raise ValueError("h_fit_variant must be 'production' or 'comparison'")
         if pole_tolerance <= 0.0 or not math.isfinite(pole_tolerance):
             raise ValueError("pole_tolerance must be finite and positive")
 
+        self.block_backend = block_backend
+        self.hybrid_q_threshold = float(hybrid_q_threshold)
         self.recursion_max_twice_level = recursion_max_twice_level
         self.global_max_twice_levels = maxima
         self.global_max_total_twice_level = global_max_total_twice_level
@@ -1334,21 +1701,47 @@ class BRYNSFiveTachyonIntegrand:
         self.momentum_maximum = float(momentum_maximum)
         self.structure_precision = int(structure_precision)
         self.central_charge_shift = float(central_charge_shift)
+        self.h_regulator_eta = (
+            None if h_regulator_eta is None else float(h_regulator_eta)
+        )
+        self.h_regulator_etas = regulator_etas
+        self.h_regulator_polynomial_degree = production_degree
+        self.h_regulator_comparison_degree = comparison_degree
+        self.h_fit_variant = h_fit_variant
+        selected_cache_directory = (
+            os.environ.get("TYPE0B_5PT_COEFFICIENT_CACHE")
+            if h_coefficient_cache_directory is None
+            else h_coefficient_cache_directory
+        )
+        self.h_coefficient_cache_directory = (
+            None
+            if selected_cache_directory is None
+            else os.fspath(selected_cache_directory)
+        )
         self.block_working_precision = int(block_working_precision)
         self.pole_tolerance = float(pole_tolerance)
+        self.factorize_single_primary = bool(factorize_single_primary)
         self._structure_cache: dict[tuple[object, ...], complex] = {}
         self._structure_residue_cache: dict[tuple[object, ...], complex] = {}
         self._structure_laurent_cache: dict[
             tuple[object, ...], tuple[complex, ...]
         ] = {}
         self._block_cache: dict[
-            tuple[object, ...], NSSphereLinearCRecursion
+            tuple[object, ...],
+            NSSphereLinearHRecursion | NSSphereLinearCRecursion,
         ] = {}
+        self._block_backend_evaluation_counts = {"h": 0, "c": 0}
         self._middle_corner_projection_cache: dict[
             tuple[object, ...], tuple[MovingMiddleCornerTerm, ...]
         ] = {}
         self._middle_face_projection_cache: dict[
             tuple[object, ...], tuple[MovingMiddleFaceTerm, ...]
+        ] = {}
+        self._boundary_face_coefficient_cache: dict[
+            tuple[object, ...], complex
+        ] = {}
+        self._boundary_corner_coefficient_cache: dict[
+            tuple[object, ...], complex
         ] = {}
 
     @property
@@ -1359,6 +1752,137 @@ class BRYNSFiveTachyonIntegrand:
         value = _finite_complex("momentum", momentum)
         q_squared = self.block_central_charge / 3.0 - 0.5
         return complex(0.5 * (q_squared / 4.0 + value * value))
+
+    def _recursion_charge_arguments(
+        self, backend: Literal["h", "c"]
+    ) -> dict[str, object]:
+        """Return the physical-c or explicit self-dual regulator argument."""
+
+        if backend == "h" and self.h_regulator_eta is not None:
+            with mpmath.workdps(self.block_working_precision):
+                return {"b": mpmath.exp(self.h_regulator_eta)}
+        if backend == "h":
+            return {
+                "central_charge": self.block_central_charge,
+                "self_dual_log_b_nodes": self.h_regulator_etas,
+                "self_dual_polynomial_degree": (
+                    self.h_regulator_polynomial_degree
+                ),
+                "self_dual_comparison_degree": (
+                    self.h_regulator_comparison_degree
+                ),
+                "coefficient_cache_directory": (
+                    self.h_coefficient_cache_directory
+                ),
+            }
+        return {"central_charge": self.block_central_charge}
+
+    def set_h_fit_variant(
+        self, variant: Literal["production", "comparison"]
+    ) -> None:
+        """Select one coefficient fit while retaining regulated block tables."""
+
+        if variant not in ("production", "comparison"):
+            raise ValueError("h fit variant must be 'production' or 'comparison'")
+        if variant == self.h_fit_variant:
+            return
+        self.h_fit_variant = variant
+        self._middle_corner_projection_cache.clear()
+        self._middle_face_projection_cache.clear()
+        self._boundary_face_coefficient_cache.clear()
+        self._boundary_corner_coefficient_cache.clear()
+
+    def h_self_dual_fit_diagnostics(self) -> dict[str, object]:
+        """Aggregate coefficient-fit diagnostics over materialized h blocks."""
+
+        diagnostics = [
+            block.self_dual_fit_diagnostics()
+            for block in self._block_cache.values()
+            if isinstance(block, NSSphereLinearHRecursion) and block.is_self_dual
+        ]
+        return {
+            "schema": "type0b-ns-h-self-dual-coefficient-fit-v1",
+            "regulator_etas": list(self.h_regulator_etas),
+            "fit_variable": "eta^2",
+            "polynomial_degree": self.h_regulator_polynomial_degree,
+            "comparison_degree": self.h_regulator_comparison_degree,
+            "active_fit_variant": self.h_fit_variant,
+            "block_count": len(diagnostics),
+            "coefficient_count": sum(
+                int(item["coefficient_count"]) for item in diagnostics
+            ),
+            "coefficient_cache_artifact_count": sum(
+                int(item["coefficient_cache_artifact_count"])
+                for item in diagnostics
+            ),
+            "maximum_absolute_fit_shift": max(
+                (
+                    float(item["maximum_absolute_fit_shift"])
+                    for item in diagnostics
+                ),
+                default=0.0,
+            ),
+            "maximum_scaled_fit_shift": max(
+                (
+                    float(item["maximum_scaled_fit_shift"])
+                    for item in diagnostics
+                ),
+                default=0.0,
+            ),
+        }
+
+    def _selected_block_backend(
+        self, q_values: Sequence[Number]
+    ) -> Literal["h", "c"]:
+        r"""Select the requested recursion backend.
+
+        Production uses regulated h-recursion in the best of the 120 oriented
+        CCY charts and extrapolates the completed integral to the self-dual
+        point.  Fixed-weight c-recursion remains a low-order overlap audit.
+        In legacy ``hybrid`` mode,
+        h-recursion is selected iff every active plumbing parameter satisfies
+        ``|q_e| < hybrid_q_threshold``; this gate is not a convergence
+        acceleration and is not used by the production cluster bundle.
+        """
+
+        plumbing_parameters = tuple(
+            _finite_complex(f"q_values[{index}]", value)
+            for index, value in enumerate(q_values)
+        )
+        if not plumbing_parameters:
+            raise ValueError("q_values must contain at least one plumbing parameter")
+        if self.block_backend == "hybrid":
+            return (
+                "h"
+                if max(abs(value) for value in plumbing_parameters)
+                < self.hybrid_q_threshold
+                else "c"
+            )
+        return self.block_backend
+
+    def _resolved_block_region(
+        self,
+        channel: LinearChannel,
+        block_region: Literal["auto", "bulk", "corner"],
+    ) -> Literal["bulk", "corner"]:
+        """Return the legacy hybrid-region diagnostic label.
+
+        These labels do not determine the production backend.  They remain
+        for historical continuation code and explicit hybrid regression
+        tests; the physical chart-plus-subtraction path uses one explicitly
+        selected regulated-h backend in both labels.
+        """
+
+        if block_region == "auto":
+            return (
+                "bulk"
+                if max(abs(channel.q1), abs(channel.q2))
+                < self.hybrid_q_threshold
+                else "corner"
+            )
+        if block_region not in ("bulk", "corner"):
+            raise ValueError("block_region must be 'auto', 'bulk', or 'corner'")
+        return block_region
 
     @property
     def external_weights(self) -> tuple[complex, ...]:
@@ -1652,6 +2176,8 @@ class BRYNSFiveTachyonIntegrand:
         antiholomorphic: bool,
         omit_leading_edge: int | None = None,
         only_leading_edge: int | None = None,
+        only_leading_edges: Sequence[int] | None = None,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> complex:
         ordered_weights = tuple(
             self.external_weights[label] for label in channel.ordering
@@ -1662,15 +2188,42 @@ class BRYNSFiveTachyonIntegrand:
         internal_weights = tuple(
             self.block_weight(momentum) for momentum in internal_momenta
         )
+        selected_leading_edges = set(
+            () if only_leading_edges is None else (int(x) for x in only_leading_edges)
+        )
+        if only_leading_edge is not None:
+            selected_leading_edges.add(int(only_leading_edge))
+        if any(edge not in (0, 1) for edge in selected_leading_edges):
+            raise ValueError("leading edge indices must be zero or one")
+        if omit_leading_edge is not None and selected_leading_edges:
+            raise ValueError("cannot omit and select leading edge states together")
+        if (
+            omit_leading_edge is not None
+            or only_leading_edge is not None
+            or only_leading_edges is not None
+        ):
+            block_region = "corner"
+        block_region = self._resolved_block_region(channel, block_region)
+        backend = self._selected_block_backend((channel.q1, channel.q2))
+        self._block_backend_evaluation_counts[backend] += 1
         block_key = (
+            "primary-seed" if selected_leading_edges == {0, 1} else backend,
             ordered_weights,
             internal_momenta,
             sectors,
             ordered_descendants,
         )
         if block_key not in self._block_cache:
-            self._block_cache[block_key] = NSSphereLinearCRecursion(
-                central_charge=self.block_central_charge,
+            constructor_backend: Literal["h", "c"] = (
+                "c" if selected_leading_edges == {0, 1} else backend
+            )
+            block_type = (
+                NSSphereLinearCRecursion
+                if constructor_backend == "c"
+                else NSSphereLinearHRecursion
+            )
+            self._block_cache[block_key] = block_type(
+                **self._recursion_charge_arguments(constructor_backend),
                 external_weights=ordered_weights,
                 external_descendants=ordered_descendants,
                 internal_weights=internal_weights,
@@ -1685,17 +2238,12 @@ class BRYNSFiveTachyonIntegrand:
         minimum_levels = [0, 0]
         accumulated_maxima: list[int | None] = [None, None]
         evaluation_maxima = list(self.global_max_twice_levels)
-        if omit_leading_edge is not None and only_leading_edge is not None:
-            raise ValueError("cannot omit and select the same leading edge state")
         if omit_leading_edge is not None:
             selected_edge = int(omit_leading_edge)
             if selected_edge not in (0, 1):
                 raise ValueError("omit_leading_edge must be zero, one, or None")
             minimum_levels[selected_edge] = parities[selected_edge] + 2
-        if only_leading_edge is not None:
-            selected_edge = int(only_leading_edge)
-            if selected_edge not in (0, 1):
-                raise ValueError("only_leading_edge must be zero, one, or None")
+        for selected_edge in selected_leading_edges:
             accumulated_maxima[selected_edge] = parities[selected_edge]
             evaluation_maxima[selected_edge] = parities[selected_edge]
         holomorphic_logs = tuple(
@@ -1709,7 +2257,194 @@ class BRYNSFiveTachyonIntegrand:
             channel.q2.conjugate(),
         ) if antiholomorphic else (channel.q1, channel.q2)
         with mpmath.workdps(self.block_working_precision):
-            if self.recursion_max_twice_level is None:
+            if selected_leading_edges == {0, 1}:
+                # Both propagators are fixed to their lowest compatible
+                # states.  This coefficient is the common osp(1|2) primary
+                # seed of h- and c-recursion, so evaluate it directly.  In
+                # particular this remains regular when the two internal
+                # weights coincide, where the correlated fixed-difference
+                # h representation has confluent denominators despite the
+                # physical block being finite.
+                reduced = block.global_coefficient(parities)
+                for q_log, parity in zip(q_logs, parities):
+                    reduced *= mpmath.exp(mpmath.mpc(q_log) * parity / 2)
+            elif (
+                len(selected_leading_edges) == 1
+                and self.recursion_max_twice_level is None
+                and self.factorize_single_primary
+                # The algebraic projection is exact for the direct c-series.
+                # The reduced four-point h object has a different recursion
+                # normalization, so retain the verified five-point h block.
+                and backend == "c"
+            ):
+                selected_edge = next(iter(selected_leading_edges))
+                remaining_edge = 1 - selected_edge
+                selected_parity = parities[selected_edge]
+                if selected_edge == 0:
+                    endpoint_vertex = osp_sector_vertex(
+                        sector=sectors[0],
+                        n1=0,
+                        n2=0,
+                        n3=0,
+                        epsilon1=selected_parity,
+                        epsilon2=ordered_descendants[1],
+                        epsilon3=ordered_descendants[0],
+                        d1=internal_weights[0],
+                        d2=ordered_weights[1],
+                        d3=ordered_weights[0],
+                    )
+                    endpoint_norm = osp_norm(
+                        internal_weights[0], 0, selected_parity
+                    )
+                    face_external_weights = (
+                        internal_weights[0],
+                        ordered_weights[2],
+                        ordered_weights[3],
+                        ordered_weights[4],
+                    )
+                    face_external_descendants = (
+                        selected_parity,
+                        ordered_descendants[2],
+                        ordered_descendants[3],
+                        ordered_descendants[4],
+                    )
+                    face_sectors = sectors[1:]
+                    face_internal_weights = (internal_weights[1],)
+                else:
+                    endpoint_vertex = osp_sector_vertex(
+                        sector=sectors[2],
+                        n1=0,
+                        n2=0,
+                        n3=0,
+                        epsilon1=ordered_descendants[4],
+                        epsilon2=ordered_descendants[3],
+                        epsilon3=selected_parity,
+                        d1=ordered_weights[4],
+                        d2=ordered_weights[3],
+                        d3=internal_weights[1],
+                    )
+                    endpoint_norm = osp_norm(
+                        internal_weights[1], 0, selected_parity
+                    )
+                    face_external_weights = (
+                        ordered_weights[0],
+                        ordered_weights[1],
+                        ordered_weights[2],
+                        internal_weights[1],
+                    )
+                    face_external_descendants = (
+                        ordered_descendants[0],
+                        ordered_descendants[1],
+                        ordered_descendants[2],
+                        selected_parity,
+                    )
+                    face_sectors = sectors[:2]
+                    face_internal_weights = (internal_weights[0],)
+
+                face_key = (
+                    "factorized-face",
+                    backend,
+                    face_external_weights,
+                    face_internal_weights,
+                    face_sectors,
+                    face_external_descendants,
+                )
+                if face_key not in self._block_cache:
+                    face_block_type = (
+                        NSSphereLinearHRecursion
+                        if backend == "h"
+                        else NSSphereLinearCRecursion
+                    )
+                    self._block_cache[face_key] = face_block_type(
+                        **self._recursion_charge_arguments(backend),
+                        external_weights=face_external_weights,
+                        external_descendants=face_external_descendants,
+                        internal_weights=face_internal_weights,
+                        vertex_sectors=face_sectors,
+                        working_precision=self.block_working_precision,
+                        pole_tolerance=self.pole_tolerance,
+                    )
+                face_block = self._block_cache[face_key]
+                face_parities = face_block.compatible_level_parities()
+                if face_parities != (parities[remaining_edge],):
+                    raise ArithmeticError(
+                        "factorized face block changed the surviving edge parity"
+                    )
+                face_q_values = (q_values[remaining_edge],)
+                face_q_logs = (q_logs[remaining_edge],)
+                face_maximum = self.global_max_twice_levels[remaining_edge]
+                if backend == "h":
+                    face_budget = (
+                        self.recursion_max_twice_level
+                        if self.recursion_max_twice_level is not None
+                        else (
+                            self.global_max_total_twice_level
+                            if self.global_max_total_twice_level is not None
+                            else face_maximum
+                        )
+                    )
+                    face_reduced = face_block.recursive_series_value(
+                        face_q_values,
+                        face_budget,
+                        q_log_values=face_q_logs,
+                        minimum_twice_levels=(0,),
+                        maximum_accumulated_twice_levels=(face_maximum,),
+                    )
+                elif self.recursion_max_twice_level is None:
+                    face_reduced = face_block.series_value(
+                        face_q_values,
+                        (face_maximum,),
+                        max_total_twice_level=self.global_max_total_twice_level,
+                        q_log_values=face_q_logs,
+                        minimum_twice_levels=(0,),
+                    )
+                else:
+                    face_reduced = face_block.recursive_series_value(
+                        face_q_values,
+                        self.recursion_max_twice_level,
+                        (face_maximum,),
+                        global_max_total_twice_level=self.global_max_total_twice_level,
+                        q_log_values=face_q_logs,
+                        minimum_twice_levels=(0,),
+                        maximum_accumulated_twice_levels=(face_maximum,),
+                    )
+                reduced = (
+                    endpoint_vertex
+                    / endpoint_norm
+                    * mpmath.exp(
+                        mpmath.mpc(q_logs[selected_edge])
+                        * selected_parity
+                        / 2
+                    )
+                    * face_reduced
+                )
+            elif backend == "h":
+                h_budget = (
+                    self.recursion_max_twice_level
+                    if self.recursion_max_twice_level is not None
+                    else (
+                        self.global_max_total_twice_level
+                        if self.global_max_total_twice_level is not None
+                        else sum(evaluation_maxima)
+                    )
+                )
+                h_maxima = tuple(
+                    maximum
+                    if accumulated is None
+                    else min(maximum, accumulated)
+                    for maximum, accumulated in zip(
+                        evaluation_maxima, accumulated_maxima
+                    )
+                )
+                reduced = block.series_value(
+                    q_values,
+                    h_maxima,
+                    max_total_twice_level=h_budget,
+                    q_log_values=q_logs,
+                    minimum_twice_levels=minimum_levels,
+                    fit_variant=self.h_fit_variant,
+                )
+            elif self.recursion_max_twice_level is None:
                 reduced = block.series_value(
                     q_values,
                     evaluation_maxima,
@@ -1828,14 +2563,21 @@ class BRYNSFiveTachyonIntegrand:
         internal_weight = self.block_weight(internal)
         block_key = (
             "face-fourpoint",
+            self._selected_block_backend((z,)),
             weights,
             internal,
             sectors,
             descendants,
         )
         if block_key not in self._block_cache:
-            self._block_cache[block_key] = NSSphereLinearCRecursion(
-                central_charge=self.block_central_charge,
+            backend = self._selected_block_backend((z,))
+            block_type = (
+                NSSphereLinearHRecursion
+                if backend == "h"
+                else NSSphereLinearCRecursion
+            )
+            self._block_cache[block_key] = block_type(
+                **self._recursion_charge_arguments(backend),
                 external_weights=weights,
                 external_descendants=descendants,
                 internal_weights=(internal_weight,),
@@ -1844,6 +2586,8 @@ class BRYNSFiveTachyonIntegrand:
                 pole_tolerance=self.pole_tolerance,
             )
         block = self._block_cache[block_key]
+        backend = self._selected_block_backend((z,))
+        self._block_backend_evaluation_counts[backend] += 1
         holomorphic_log = cmath.log(z)
         argument_log = (
             holomorphic_log.conjugate()
@@ -1852,7 +2596,25 @@ class BRYNSFiveTachyonIntegrand:
         )
         argument = z.conjugate() if antiholomorphic else z
         with mpmath.workdps(self.block_working_precision):
-            if self.recursion_max_twice_level is None:
+            if backend == "h":
+                maximum = self.global_max_twice_levels[1]
+                h_budget = (
+                    self.recursion_max_twice_level
+                    if self.recursion_max_twice_level is not None
+                    else (
+                        self.global_max_total_twice_level
+                        if self.global_max_total_twice_level is not None
+                        else maximum
+                    )
+                )
+                reduced = block.series_value(
+                    (argument,),
+                    (maximum,),
+                    max_total_twice_level=h_budget,
+                    q_log_values=(argument_log,),
+                    fit_variant=self.h_fit_variant,
+                )
+            elif self.recursion_max_twice_level is None:
                 reduced = block.series_value(
                     (argument,),
                     (self.global_max_twice_levels[1],),
@@ -2416,12 +3178,16 @@ class BRYNSFiveTachyonIntegrand:
         *,
         side: str = "left",
     ) -> complex:
-        r"""Return the universal NS tachyon face power ``|q|^beta``.
+        r"""Return the picture-correct NS tachyon face power ``|q|^beta``.
 
         ``side='left'`` uses the first cherry and the first internal
         momentum.  ``side='right'`` uses the final cherry and the second
         internal momentum.  The channel energy is the sum of *signed*
         timelike momenta, which is essential for an incoming--outgoing face.
+        The threshold is ``r-1`` for ``r`` picture-zero fields, except that
+        the ``{3,4}`` picture-minus-one pair has threshold one because of its
+        nonchiral superghost singularity.  ``central_charge_shift/12`` keeps
+        the numerical regulator explicit.
         """
 
         selected = tuple(int(label) for label in ordering)
@@ -2437,10 +3203,12 @@ class BRYNSFiveTachyonIntegrand:
         else:
             raise ValueError("side must be 'left' or 'right'")
         channel_energy = sum(self.signed_energies[label] for label in pair)
-        q_squared_over_four = (self.block_central_charge / 3.0 - 0.5) / 4.0
+        threshold = _boundary_picture_threshold(pair)
+        charge_correction = self.central_charge_shift / 12.0
         return complex(
             -2.0
-            - q_squared_over_four
+            - threshold
+            - charge_correction
             + momentum * momentum
             - channel_energy * channel_energy
         )
@@ -2484,8 +3252,16 @@ class BRYNSFiveTachyonIntegrand:
         q1: Number,
         q2: Number,
         internal_momenta: Sequence[float],
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> complex:
-        r"""Return the fixed-momentum density multiplying ``d2q1 d2q2``."""
+        r"""Return the full fixed-momentum density multiplying ``d2q1 d2q2``.
+
+        The nonchiral superghost factor is essential here.  Its valuation
+        changes by two powers between different boundary charts and is what
+        makes the picture threshold intrinsic: omitting it corrupts both the
+        face projection and, more dramatically, the double projection at a
+        stable corner.
+        """
 
         selected = tuple(int(label) for label in ordering)
         first = _finite_complex("q1", q1)
@@ -2504,11 +3280,118 @@ class BRYNSFiveTachyonIntegrand:
             moving_labels=MOVING_LABELS,
         )
         return complex(
-            self.momentum_integrand(
-                positions, internal_momenta, channel=channel
+            _superghost_pair_factor(positions)
+            * (
+                self.momentum_integrand(
+                    positions,
+                    internal_momenta,
+                    channel=channel,
+                    block_region=block_region,
+                )
+                * abs(jacobian) ** 2
             )
+        )
+
+    def linear_q_momentum_primary_density(
+        self,
+        *,
+        ordering: Sequence[int],
+        q1: Number,
+        q2: Number,
+        internal_momenta: Sequence[float],
+        boundary_edges: Sequence[int],
+    ) -> complex:
+        """Return the fixed-momentum density with selected edge states leading.
+
+        This is the algebraic BRY polynomial coefficient, not a subtraction
+        of two close numerical values.  Selecting both edges gives the
+        codimension-two forest overlap at a stable corner.
+        """
+
+        selected = tuple(int(label) for label in ordering)
+        first = _finite_complex("q1", q1)
+        second = _finite_complex("q2", q2)
+        momenta = tuple(
+            _finite_complex(f"internal_momenta[{index}]", value)
+            for index, value in enumerate(internal_momenta)
+        )
+        edges = tuple(sorted(set(int(edge) for edge in boundary_edges)))
+        if len(selected) != 5 or set(selected) != set(range(5)):
+            raise ValueError("ordering must permute labels 0,...,4")
+        if len(momenta) != 2 or not edges or any(edge not in (0, 1) for edge in edges):
+            raise ValueError("select two momenta and endpoint edge zero and/or one")
+        if not 0.0 < abs(first) < 1.0 or not 0.0 < abs(second) < 1.0:
+            raise ValueError("linear plumbing coordinates must lie in the punctured bidisc")
+        positions = _to_fixed_gauge(first, second, selected)
+        channel = linear_channel_from_ordering(positions, selected)
+        ordered_external = tuple(
+            self.external_momenta[label] for label in selected
+        )
+        matter = 0.0 + 0.0j
+        for sectors in ODD_SECTOR_ASSIGNMENTS:
+            matter += (
+                self._structure_product(ordered_external, momenta, sectors)
+                * self._sector_component_kernel_boundary_primary(
+                    positions,
+                    momenta,  # type: ignore[arg-type]
+                    sectors,
+                    channel,
+                    boundary_edge=edges,
+                )
+            )
+        jacobian = linear_channel_complex_jacobian_to_chart(
+            first,
+            second,
+            selected,
+            fixed_zero=FIXED_ZERO_LABEL,
+            fixed_one=FIXED_ONE_LABEL,
+            fixed_infinity=FIXED_INFINITY_LABEL,
+            moving_labels=MOVING_LABELS,
+        )
+        return complex(
+            _superghost_pair_factor(positions)
+            * matter
+            / math.pi**2
             * abs(jacobian) ** 2
         )
+
+    def linear_q_primary_density(
+        self,
+        *,
+        ordering: Sequence[int],
+        q1: Number,
+        q2: Number,
+        boundary_edges: Sequence[int],
+    ) -> complex:
+        """Integrate one algebraic boundary-primary forest term over momenta.
+
+        The returned quantity multiplies ``d2q1 d2q2`` and uses exactly the
+        same smooth momentum nodes as :meth:`fixed_gauge_integrand_positions`.
+        Consequently it can be subtracted pointwise from the raw density
+        without introducing a quadrature mismatch.  Selecting both endpoint
+        edges returns the codimension-two forest overlap.
+        """
+
+        node_sets = tuple(
+            _smooth_momentum_nodes(order, self.momentum_maximum)
+            for order in self.momentum_orders
+        )
+        total = 0.0 + 0.0j
+        for first, second in product(*node_sets):
+            p1, weight1 = first
+            p2, weight2 = second
+            total += (
+                weight1
+                * weight2
+                * self.linear_q_momentum_primary_density(
+                    ordering=ordering,
+                    q1=q1,
+                    q2=q2,
+                    internal_momenta=(p1, p2),
+                    boundary_edges=boundary_edges,
+                )
+            )
+        return complex(total)
 
     def boundary_face_leading_momentum_coefficient(
         self,
@@ -2539,15 +3422,26 @@ class BRYNSFiveTachyonIntegrand:
         beta = self.boundary_radial_beta(
             ordering, normal_momentum, side="left"
         )
-        if abs(beta.imag) > 2.0e-12:
-            raise ValueError("the boundary projection requires a real radial power")
-        density = self.linear_q_momentum_density(
+        cache_key = (
+            tuple(int(label) for label in ordering),
+            float(normal_momentum),
+            float(remaining_momentum),
+            modulus,
+            radius,
+        )
+        cached = self._boundary_face_coefficient_cache.get(cache_key)
+        if cached is not None:
+            return cached
+        density = self.linear_q_momentum_primary_density(
             ordering=ordering,
             q1=radius,
             q2=modulus,
             internal_momenta=(normal_momentum, remaining_momentum),
+            boundary_edges=(0,),
         )
-        return complex(density / radius**beta.real)
+        result = complex(density / cmath.exp(beta * math.log(radius)))
+        self._boundary_face_coefficient_cache[cache_key] = result
+        return result
 
     def boundary_face_finite_part_density(
         self,
@@ -2556,35 +3450,74 @@ class BRYNSFiveTachyonIntegrand:
         remaining_modulus: Number,
         collar_radius: float,
         projection_radius: float = 1.0e-5,
+        momentum_refinement_shells: int = 0,
+        momentum_singularity_subtraction: bool = False,
     ) -> complex:
         """Return the leading normal finite part multiplying ``d2q_remaining``."""
 
-        node_sets = tuple(
-            _legendre_interval(order, self.momentum_maximum)
-            for order in self.momentum_orders
+        beta_zero = self.boundary_radial_beta(ordering, 0.0, side="left")
+        normal_root = _finite_part_momentum_root(
+            beta_zero, self.momentum_maximum
+        )
+        use_singularity_subtraction = bool(
+            momentum_singularity_subtraction and normal_root is not None
+        )
+        normal_nodes = _threshold_centered_momentum_nodes(
+            self.momentum_orders[0],
+            self.momentum_maximum,
+            beta_zero,
+            momentum_refinement_shells,
+        )
+        remaining_nodes = _smooth_momentum_nodes(
+            self.momentum_orders[1], self.momentum_maximum
         )
         total = 0.0 + 0.0j
-        for first, second in product(*node_sets):
-            p_normal, weight_normal = first
+        universal_integral = (
+            _radial_momentum_constant_finite_part(
+                beta_zero,
+                collar_radius,
+                self.momentum_maximum,
+                momentum_refinement_shells,
+                self.block_working_precision,
+            )
+            if use_singularity_subtraction
+            else None
+        )
+        for second in remaining_nodes:
             p_remaining, weight_remaining = second
-            beta = self.boundary_radial_beta(
-                ordering, p_normal, side="left"
+            root_coefficient = (
+                self.boundary_face_leading_momentum_coefficient(
+                    ordering=ordering,
+                    normal_momentum=normal_root,
+                    remaining_momentum=p_remaining,
+                    remaining_modulus=remaining_modulus,
+                    projection_radius=projection_radius,
+                )
+                if use_singularity_subtraction
+                else 0.0j
             )
-            if abs(beta.imag) > 2.0e-12:
-                raise ValueError("the face finite part requires a real radial power")
-            coefficient = self.boundary_face_leading_momentum_coefficient(
-                ordering=ordering,
-                normal_momentum=p_normal,
-                remaining_momentum=p_remaining,
-                remaining_modulus=remaining_modulus,
-                projection_radius=projection_radius,
+            normal_integral = (
+                root_coefficient * universal_integral
+                if use_singularity_subtraction
+                else 0.0j
             )
-            total += (
-                weight_normal
-                * weight_remaining
-                * _radial_finite_part(beta.real, collar_radius)
-                * coefficient
-            )
+            for p_normal, weight_normal in normal_nodes:
+                beta = self.boundary_radial_beta(
+                    ordering, p_normal, side="left"
+                )
+                coefficient = self.boundary_face_leading_momentum_coefficient(
+                    ordering=ordering,
+                    normal_momentum=p_normal,
+                    remaining_momentum=p_remaining,
+                    remaining_modulus=remaining_modulus,
+                    projection_radius=projection_radius,
+                )
+                normal_integral += (
+                    weight_normal
+                    * _complex_radial_finite_part(beta, collar_radius)
+                    * (coefficient - root_coefficient)
+                )
+            total += weight_remaining * normal_integral
         return complex(total)
 
     def boundary_corner_leading_momentum_coefficient(
@@ -2606,17 +3539,28 @@ class BRYNSFiveTachyonIntegrand:
         right_beta = self.boundary_radial_beta(
             ordering, right_momentum, side="right"
         )
-        if abs(left_beta.imag) > 2.0e-12 or abs(right_beta.imag) > 2.0e-12:
-            raise ValueError("the corner projection requires real radial powers")
-        density = self.linear_q_momentum_density(
+        cache_key = (
+            tuple(int(label) for label in ordering),
+            float(left_momentum),
+            float(right_momentum),
+            radius,
+        )
+        cached = self._boundary_corner_coefficient_cache.get(cache_key)
+        if cached is not None:
+            return cached
+        density = self.linear_q_momentum_primary_density(
             ordering=ordering,
             q1=radius,
             q2=radius,
             internal_momenta=(left_momentum, right_momentum),
+            boundary_edges=(0, 1),
         )
-        return complex(
-            density / radius ** (left_beta.real + right_beta.real)
+        result = complex(
+            density
+            / cmath.exp((left_beta + right_beta) * math.log(radius))
         )
+        self._boundary_corner_coefficient_cache[cache_key] = result
+        return result
 
     def boundary_corner_finite_part(
         self,
@@ -2624,35 +3568,193 @@ class BRYNSFiveTachyonIntegrand:
         ordering: Sequence[int],
         collar_radius: float,
         projection_radius: float = 1.0e-5,
+        momentum_refinement_shells: int = 0,
+        momentum_singularity_subtraction: bool = False,
     ) -> complex:
         """Apply both commuting radial finite parts at one boundary corner."""
 
-        node_sets = tuple(
-            _legendre_interval(order, self.momentum_maximum)
-            for order in self.momentum_orders
+        beta_zeros = (
+            self.boundary_radial_beta(ordering, 0.0, side="left"),
+            self.boundary_radial_beta(ordering, 0.0, side="right"),
         )
-        total = 0.0 + 0.0j
-        for first, second in product(*node_sets):
-            left_momentum, left_weight = first
-            right_momentum, right_weight = second
-            left_beta = self.boundary_radial_beta(
-                ordering, left_momentum, side="left"
+        roots = tuple(
+            _finite_part_momentum_root(beta, self.momentum_maximum)
+            for beta in beta_zeros
+        )
+        use_subtractions = tuple(
+            bool(momentum_singularity_subtraction and root is not None)
+            for root in roots
+        )
+        node_sets = tuple(
+            _threshold_centered_momentum_nodes(
+                order,
+                self.momentum_maximum,
+                beta_zero,
+                momentum_refinement_shells,
             )
+            for order, beta_zero, use_subtraction in zip(
+                self.momentum_orders, beta_zeros, use_subtractions
+            )
+        )
+        universal_integrals = tuple(
+            _radial_momentum_constant_finite_part(
+                beta_zero,
+                collar_radius,
+                self.momentum_maximum,
+                momentum_refinement_shells,
+                self.block_working_precision,
+            )
+            if use_subtraction
+            else None
+            for beta_zero, use_subtraction in zip(beta_zeros, use_subtractions)
+        )
+
+        def left_integral(right_momentum: float) -> complex:
+            root_coefficient = (
+                self.boundary_corner_leading_momentum_coefficient(
+                    ordering=ordering,
+                    left_momentum=roots[0],
+                    right_momentum=right_momentum,
+                    projection_radius=projection_radius,
+                )
+                if use_subtractions[0]
+                else 0.0j
+            )
+            result = (
+                root_coefficient * universal_integrals[0]
+                if use_subtractions[0]
+                else 0.0j
+            )
+            for left_momentum, left_weight in node_sets[0]:
+                coefficient = self.boundary_corner_leading_momentum_coefficient(
+                    ordering=ordering,
+                    left_momentum=left_momentum,
+                    right_momentum=right_momentum,
+                    projection_radius=projection_radius,
+                )
+                left_beta = self.boundary_radial_beta(
+                    ordering, left_momentum, side="left"
+                )
+                result += (
+                    left_weight
+                    * _complex_radial_finite_part(left_beta, collar_radius)
+                    * (coefficient - root_coefficient)
+                )
+            return complex(result)
+
+        root_left_integral = (
+            left_integral(roots[1])
+            if use_subtractions[1]
+            else 0.0j
+        )
+        total = (
+            root_left_integral * universal_integrals[1]
+            if use_subtractions[1]
+            else 0.0j
+        )
+        for right_momentum, right_weight in node_sets[1]:
             right_beta = self.boundary_radial_beta(
                 ordering, right_momentum, side="right"
             )
-            coefficient = self.boundary_corner_leading_momentum_coefficient(
-                ordering=ordering,
-                left_momentum=left_momentum,
-                right_momentum=right_momentum,
-                projection_radius=projection_radius,
+            total += (
+                right_weight
+                * _complex_radial_finite_part(right_beta, collar_radius)
+                * (left_integral(right_momentum) - root_left_integral)
+            )
+        return complex(total)
+
+    def boundary_corner_face_counterterm_density(
+        self,
+        *,
+        ordering: Sequence[int],
+        remaining_modulus: Number,
+        collar_radius: float,
+        projection_radius: float = 1.0e-5,
+        momentum_refinement_shells: int = 0,
+        momentum_singularity_subtraction: bool = False,
+    ) -> complex:
+        r"""Return ``T_right`` of the left-face finite-part density.
+
+        The left normal coordinate has already been integrated by analytic
+        finite part.  The right coordinate remains pointwise, so this is the
+        corner polynomial subtracted from the face integrand inside its
+        tangential collar.  Adding :meth:`boundary_corner_finite_part` then
+        completes the nested face/corner forest without discarding higher
+        powers of the surviving four-point block.
+        """
+
+        modulus = _finite_complex("remaining_modulus", remaining_modulus)
+        if modulus == 0.0:
+            raise ValueError("remaining_modulus must be nonzero")
+        left_beta_zero = self.boundary_radial_beta(
+            ordering, 0.0, side="left"
+        )
+        left_root = _finite_part_momentum_root(
+            left_beta_zero, self.momentum_maximum
+        )
+        use_subtraction = bool(
+            momentum_singularity_subtraction and left_root is not None
+        )
+        left_nodes = _threshold_centered_momentum_nodes(
+            self.momentum_orders[0],
+            self.momentum_maximum,
+            left_beta_zero,
+            momentum_refinement_shells,
+        )
+        right_nodes = _smooth_momentum_nodes(
+            self.momentum_orders[1], self.momentum_maximum
+        )
+        universal_left = (
+            _radial_momentum_constant_finite_part(
+                left_beta_zero,
+                collar_radius,
+                self.momentum_maximum,
+                momentum_refinement_shells,
+                self.block_working_precision,
+            )
+            if use_subtraction
+            else None
+        )
+        log_modulus = math.log(abs(modulus))
+        total = 0.0 + 0.0j
+        for right_momentum, right_weight in right_nodes:
+            root_coefficient = (
+                self.boundary_corner_leading_momentum_coefficient(
+                    ordering=ordering,
+                    left_momentum=left_root,
+                    right_momentum=right_momentum,
+                    projection_radius=projection_radius,
+                )
+                if use_subtraction
+                else 0.0j
+            )
+            left_integral = (
+                root_coefficient * universal_left
+                if use_subtraction
+                else 0.0j
+            )
+            for left_momentum, left_weight in left_nodes:
+                coefficient = self.boundary_corner_leading_momentum_coefficient(
+                    ordering=ordering,
+                    left_momentum=left_momentum,
+                    right_momentum=right_momentum,
+                    projection_radius=projection_radius,
+                )
+                left_beta = self.boundary_radial_beta(
+                    ordering, left_momentum, side="left"
+                )
+                left_integral += (
+                    left_weight
+                    * _complex_radial_finite_part(left_beta, collar_radius)
+                    * (coefficient - root_coefficient)
+                )
+            right_beta = self.boundary_radial_beta(
+                ordering, right_momentum, side="right"
             )
             total += (
-                left_weight
-                * right_weight
-                * _radial_finite_part(left_beta.real, collar_radius)
-                * _radial_finite_part(right_beta.real, collar_radius)
-                * coefficient
+                right_weight
+                * left_integral
+                * cmath.exp(right_beta * log_modulus)
             )
         return complex(total)
 
@@ -2662,6 +3764,8 @@ class BRYNSFiveTachyonIntegrand:
         internal_momenta: tuple[complex, complex],
         sectors: SectorAssignment,
         channel: LinearChannel,
+        *,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> complex:
         """Return timelike times chiral blocks, with no structures or measure."""
 
@@ -2688,6 +3792,7 @@ class BRYNSFiveTachyonIntegrand:
                 sectors,
                 term.liouville_descendants,
                 antiholomorphic=False,
+                block_region=block_region,
             )
             for term in holomorphic_terms
         )
@@ -2700,6 +3805,7 @@ class BRYNSFiveTachyonIntegrand:
                 sectors,
                 term.liouville_descendants,
                 antiholomorphic=True,
+                block_region=block_region,
             )
             for term in antiholomorphic_terms
         )
@@ -2747,8 +3853,8 @@ class BRYNSFiveTachyonIntegrand:
     ) -> complex:
         r"""Return the block with one endpoint primary state removed.
 
-        This evaluates the descendant remainder directly from the all-c
-        coefficient series.  It is therefore stable arbitrarily deep in a
+        This evaluates the descendant remainder directly from the selected
+        recursive series.  It is therefore stable arbitrarily deep in a
         collar, where evaluating the full primary and subtracting its
         factorized face coefficient would lose the remainder to catastrophic
         cancellation.  ``boundary_edge`` is zero for the left cherry and one
@@ -2784,6 +3890,7 @@ class BRYNSFiveTachyonIntegrand:
                     term.liouville_descendants,
                     antiholomorphic=antiholomorphic,
                     omit_leading_edge=(selected_edge if remainder else None),
+                    block_region="corner",
                 )
                 for term in terms
             )
@@ -2839,13 +3946,17 @@ class BRYNSFiveTachyonIntegrand:
         sectors: SectorAssignment,
         channel: LinearChannel,
         *,
-        boundary_edge: int,
+        boundary_edge: int | Sequence[int],
     ) -> complex:
-        """Return only the leading continuum state on one endpoint edge."""
+        """Return only the leading continuum states on selected endpoint edges."""
 
-        selected_edge = int(boundary_edge)
-        if selected_edge not in (0, 1):
-            raise ValueError("boundary_edge must be zero or one")
+        selected_edges = (
+            (int(boundary_edge),)
+            if isinstance(boundary_edge, int)
+            else tuple(int(edge) for edge in boundary_edge)
+        )
+        if not selected_edges or any(edge not in (0, 1) for edge in selected_edges):
+            raise ValueError("boundary_edge must select endpoint edge zero and/or one")
         normalized_positions = _validate_positions(positions)
         holomorphic_terms = pco_chiral_terms(
             positions=normalized_positions,
@@ -2871,7 +3982,7 @@ class BRYNSFiveTachyonIntegrand:
                     sectors,
                     term.liouville_descendants,
                     antiholomorphic=antiholomorphic,
-                    only_leading_edge=selected_edge,
+                    only_leading_edges=selected_edges,
                 )
                 for term in terms
             )
@@ -2913,6 +4024,7 @@ class BRYNSFiveTachyonIntegrand:
         internal_momenta: Sequence[Number],
         *,
         channel: LinearChannel | None = None,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> complex:
         """Return the complete PCO density at fixed ``(P1,P2)``.
 
@@ -2949,6 +4061,7 @@ class BRYNSFiveTachyonIntegrand:
                     momenta,  # type: ignore[arg-type]
                     sectors,
                     active_channel,
+                    block_region=block_region,
                 )
             )
         return complex(total / math.pi**2)
@@ -2958,6 +4071,7 @@ class BRYNSFiveTachyonIntegrand:
         positions: Sequence[ProjectivePoint],
         *,
         channel: LinearChannel | None = None,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> complex:
         """Integrate the two momenta in the matter density at fixed punctures.
 
@@ -2975,7 +4089,7 @@ class BRYNSFiveTachyonIntegrand:
         if active_channel.score >= 1.0:
             raise ValueError("the supplied channel is outside |q_i|<1")
         node_sets = tuple(
-            _legendre_interval(order, self.momentum_maximum)
+            _smooth_momentum_nodes(order, self.momentum_maximum)
             for order in self.momentum_orders
         )
         total = 0.0 + 0.0j
@@ -2986,6 +4100,7 @@ class BRYNSFiveTachyonIntegrand:
                 normalized_positions,
                 (p1, p2),
                 channel=active_channel,
+                block_region=block_region,
             )
         return complex(total)
 
@@ -2994,6 +4109,7 @@ class BRYNSFiveTachyonIntegrand:
         positions: Sequence[ProjectivePoint],
         *,
         channel: LinearChannel | None = None,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> complex:
         """Return the full ``(infinity,1,0,z,w)`` density."""
 
@@ -3006,7 +4122,11 @@ class BRYNSFiveTachyonIntegrand:
             raise ValueError("positions are not in the (infinity,1,0,z,w) gauge")
         return complex(
             _superghost_pair_factor(normalized)
-            * self.integrand_positions(normalized, channel=channel)
+            * self.integrand_positions(
+                normalized,
+                channel=channel,
+                block_region=block_region,
+            )
         )
 
     def continued_middle_line_terms_positions(
@@ -3014,6 +4134,7 @@ class BRYNSFiveTachyonIntegrand:
         positions: Sequence[ProjectivePoint],
         *,
         channel: LinearChannel,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> tuple[MovingMiddleResidueTerm, ...]:
         r"""Return the individual moving-middle residue-line contributions.
 
@@ -3087,6 +4208,7 @@ class BRYNSFiveTachyonIntegrand:
                                 (p1_value, p2_value),
                                 sectors,
                                 active_channel,
+                                block_region=block_region,
                             )
                         )
 
@@ -3494,10 +4616,10 @@ class BRYNSFiveTachyonIntegrand:
                     candidates.append(candidate)
             if not candidates:
                 raise ArithmeticError(
-                    "the all-c-recursion split found no convergent certified channel"
+                    "the hybrid-recursion split found no convergent certified channel"
                 )
             # The Voronoi decision is purely geometric and therefore sees
-            # the complete 120-chart all-c atlas.  Only *after* that decision
+            # the complete 120-chart geometric atlas.  Only *after* that decision
             # do we reverse a right-incoming comb for the endpoint-residue
             # convention.  A comb and its reversal have the same rho, so
             # this normalization changes neither the cell nor the block
@@ -3555,6 +4677,8 @@ class BRYNSFiveTachyonIntegrand:
         q1: Number,
         q2: Number,
         ordering: Sequence[int],
+        *,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> tuple[MovingMiddleResidueTerm, ...]:
         """Return moving-middle terms with respect to ``d2q1 d2q2``."""
 
@@ -3566,7 +4690,9 @@ class BRYNSFiveTachyonIntegrand:
         positions = linear_channel_positions_by_label(first, second, selected)
         active_channel = linear_channel_from_ordering(positions, selected)
         raw_terms = self.continued_middle_line_terms_positions(
-            positions, channel=active_channel
+            positions,
+            channel=active_channel,
+            block_region=block_region,
         )
         factor = _superghost_pair_factor(positions) * abs(second) ** 2
         return tuple(
@@ -3602,7 +4728,10 @@ class BRYNSFiveTachyonIntegrand:
         if cached is not None:
             return cached
         terms = self.continued_linear_q_middle_line_terms(
-            first, radius, selected
+            first,
+            radius,
+            selected,
+            block_region="corner",
         )
         projected: list[MovingMiddleFaceTerm] = []
         for term in terms:
@@ -3682,7 +4811,10 @@ class BRYNSFiveTachyonIntegrand:
         if cached is not None:
             return cached
         terms = self.continued_linear_q_middle_line_terms(
-            radius, radius, selected
+            radius,
+            radius,
+            selected,
+            block_region="corner",
         )
         projected: list[MovingMiddleCornerTerm] = []
         for term in terms:
@@ -3800,8 +4932,20 @@ def _oriented_bidisc_mixture_density(
 ) -> float:
     """Return the 120-chart proposal density in the supplied fixed gauge."""
 
+    _channel, density = _best_channel_and_oriented_bidisc_mixture_density(
+        positions, radial_power=radial_power
+    )
+    return density
+
+
+def _best_channel_and_oriented_bidisc_mixture_density(
+    positions: Sequence[ProjectivePoint], *, radial_power: float
+) -> tuple[LinearChannel, float]:
+    """Select the best block channel while accumulating the atlas density."""
+
     total = 0.0
     orderings = oriented_tree_orderings()
+    best_channel: LinearChannel | None = None
     for ordering in orderings:
         try:
             channel = linear_channel_from_ordering(positions, ordering)
@@ -3811,6 +4955,8 @@ def _oriented_bidisc_mixture_density(
         radius2 = abs(channel.q2)
         if not (0.0 < radius1 < 1.0 and 0.0 < radius2 < 1.0):
             continue
+        if best_channel is None or channel.score < best_channel.score:
+            best_channel = channel
         jacobian = linear_channel_complex_jacobian_to_chart(
             channel.q1,
             channel.q2,
@@ -3833,7 +4979,9 @@ def _oriented_bidisc_mixture_density(
     density = total / len(orderings)
     if density <= 0.0 or not math.isfinite(density):
         raise ArithmeticError("the five-point atlas mixture density is non-positive")
-    return float(density)
+    if best_channel is None:
+        raise ArithmeticError("the five-point atlas contains no convergent channel")
+    return best_channel, float(density)
 
 
 def _projective_channel_coordinates(
@@ -4144,6 +5292,23 @@ def _boundary_corner_orderings() -> tuple[tuple[int, ...], ...]:
 BOUNDARY_CORNER_ORDERINGS = _boundary_corner_orderings()
 
 
+def _boundary_corner_raised_orbits(
+) -> tuple[tuple[tuple[int, ...], int], ...]:
+    """Compress equal-energy corners under the picture-preserving S2 x S2."""
+
+    groups: dict[tuple[int, ...], list[tuple[int, ...]]] = {}
+    for ordering in BOUNDARY_CORNER_ORDERINGS:
+        signature = tuple(
+            5 if label in (1, 2) else 6 if label in (3, 4) else label
+            for label in ordering
+        )
+        groups.setdefault(signature, []).append(ordering)
+    return tuple((members[0], len(members)) for members in groups.values())
+
+
+BOUNDARY_CORNER_RAISED_ORBITS = _boundary_corner_raised_orbits()
+
+
 def _incoming_outgoing_face_orderings() -> tuple[tuple[int, ...], ...]:
     """Return six lower crossing cells on each incoming--outgoing face."""
 
@@ -4202,6 +5367,370 @@ def _four_point_fundamental_cell_sample(
     return modulus, height
 
 
+def certify_face_collar_truncation(
+    kernel: BRYNSFiveTachyonIntegrand,
+    *,
+    collar_radius: float,
+    relative_tolerance: float = 5.0e-2,
+    absolute_tolerance: float = 1.0e-10,
+    samples_per_orbit: int = 3,
+    normal_angle_count: int = 2,
+    reference_backend: Literal["h", "c"] = "c",
+    reference_global_max_twice_levels: Sequence[int] = (6, 6),
+    reference_global_max_total_twice_level: int = 10,
+    previous_reference_global_max_twice_levels: Sequence[int] = (4, 4),
+    previous_reference_global_max_total_twice_level: int = 6,
+    reference_convergence_relative_tolerance: float = 1.0e-2,
+    seed: int = 20260830,
+) -> FaceCollarCertificate:
+    r"""Certify that the degree-zero face polynomial is valid at its collar.
+
+    For every boundary-face crossing sector (compressed only by exact
+    equal-energy picture-preserving symmetry), this compares the algebraic
+    boundary-primary CFT density with a full recursive
+    five-point density at ``|q_normal|=rho``.  The same comparison is repeated
+    at ``rho/2`` so that agreement at one accidental radius cannot certify a
+    collar.  Tangential moduli and both internal momenta are sampled by a
+    deterministic scrambled Sobol design; the first normal-momentum sample
+    on each face is placed at its finite-part threshold whenever that
+    threshold lies on the integration contour.
+
+    The certificate is deliberately independent of the production backend.
+    The default uses c-recursion as the nearby full-CFT reference, at an order
+    where that implementation has an independent descendant check, and
+    compares it with the preceding c-series order at the same points.  It
+    fails closed when either comparison violates
+    ``abs_error <= absolute_tolerance + relative_tolerance * scale``.
+    """
+
+    radius = float(collar_radius)
+    rtol = float(relative_tolerance)
+    atol = float(absolute_tolerance)
+    convergence_rtol = float(reference_convergence_relative_tolerance)
+    sample_count = int(samples_per_orbit)
+    angle_count = int(normal_angle_count)
+    if reference_backend not in ("h", "c"):
+        raise ValueError("reference_backend must be 'h' or 'c'")
+    if not math.isfinite(radius) or not 0.0 < radius < 0.2:
+        raise ValueError("collar_radius must lie in (0,0.2)")
+    if not math.isfinite(rtol) or not 0.0 < rtol < 1.0:
+        raise ValueError("relative_tolerance must lie in (0,1)")
+    if not math.isfinite(atol) or atol <= 0.0:
+        raise ValueError("absolute_tolerance must be finite and positive")
+    if not math.isfinite(convergence_rtol) or not 0.0 < convergence_rtol < 1.0:
+        raise ValueError(
+            "reference_convergence_relative_tolerance must lie in (0,1)"
+        )
+    if sample_count < 1 or angle_count < 1:
+        raise ValueError("certificate sample and angle counts must be positive")
+
+    requested_maxima = tuple(
+        int(value) for value in reference_global_max_twice_levels
+    )
+    if len(requested_maxima) != 2 or any(value < 0 for value in requested_maxima):
+        raise ValueError(
+            "reference_global_max_twice_levels must contain two non-negative values"
+        )
+    reference_maxima = requested_maxima
+    if reference_maxima[0] < 2:
+        raise ValueError(
+            "the c-recursion reference must retain a non-leading normal level"
+        )
+    reference_total = max(
+        int(reference_global_max_total_twice_level),
+        max(reference_maxima),
+    )
+    previous_maxima = tuple(
+        int(value) for value in previous_reference_global_max_twice_levels
+    )
+    if len(previous_maxima) != 2 or any(value < 0 for value in previous_maxima):
+        raise ValueError(
+            "previous_reference_global_max_twice_levels must contain two "
+            "non-negative values"
+        )
+    if (
+        any(
+            previous > current
+            for previous, current in zip(previous_maxima, reference_maxima)
+        )
+        or previous_maxima == reference_maxima
+    ):
+        raise ValueError(
+            "the previous c reference must be a strictly lower componentwise order"
+        )
+    previous_total = max(
+        int(previous_reference_global_max_total_twice_level),
+        max(previous_maxima),
+    )
+    if previous_total >= reference_total:
+        raise ValueError("the previous c reference must have a lower total cutoff")
+
+    reference = BRYNSFiveTachyonIntegrand(
+        outgoing_energies=kernel.outgoing_energies,
+        block_backend=reference_backend,
+        hybrid_q_threshold=kernel.hybrid_q_threshold,
+        recursion_max_twice_level=None,
+        global_max_twice_levels=reference_maxima,
+        global_max_total_twice_level=reference_total,
+        momentum_orders=kernel.momentum_orders,
+        momentum_maximum=kernel.momentum_maximum,
+        structure_precision=kernel.structure_precision,
+        central_charge_shift=kernel.central_charge_shift,
+        block_working_precision=kernel.block_working_precision,
+        h_regulator_eta=kernel.h_regulator_eta,
+        pole_tolerance=kernel.pole_tolerance,
+        factorize_single_primary=True,
+    )
+    previous_reference = BRYNSFiveTachyonIntegrand(
+        outgoing_energies=kernel.outgoing_energies,
+        block_backend=reference_backend,
+        hybrid_q_threshold=kernel.hybrid_q_threshold,
+        recursion_max_twice_level=None,
+        global_max_twice_levels=previous_maxima,
+        global_max_total_twice_level=previous_total,
+        momentum_orders=kernel.momentum_orders,
+        momentum_maximum=kernel.momentum_maximum,
+        structure_precision=kernel.structure_precision,
+        central_charge_shift=kernel.central_charge_shift,
+        block_working_precision=kernel.block_working_precision,
+        h_regulator_eta=kernel.h_regulator_eta,
+        pole_tolerance=kernel.pole_tolerance,
+        factorize_single_primary=True,
+    )
+
+    equal_outgoing = max(
+        abs(value - kernel.outgoing_energies[0])
+        for value in kernel.outgoing_energies
+    ) < 1.0e-13
+    face_orbits = (
+        BOUNDARY_FACE_RAISED_ORBITS
+        if equal_outgoing
+        else tuple((ordering, 1) for ordering in BOUNDARY_FACE_SECTOR_ORDERINGS)
+    )
+
+    # Generate more candidates than needed because the tangential corner
+    # |q_tangent|<rho is excised from a face and must not enter this check.
+    candidate_power = max(
+        4, int(math.ceil(math.log2(max(2, 8 * sample_count))))
+    )
+    sampler = qmc.Sobol(d=4, scramble=True, seed=int(seed))
+    candidates: list[tuple[complex, float, float]] = []
+    for sample in sampler.random_base2(candidate_power):
+        modulus, _jacobian = _four_point_fundamental_cell_sample(
+            sample[0], sample[1]
+        )
+        if abs(modulus) <= radius:
+            continue
+        p_normal = kernel.momentum_maximum * (0.05 + 0.90 * float(sample[2]))
+        p_tangent = kernel.momentum_maximum * (0.05 + 0.90 * float(sample[3]))
+        candidates.append((modulus, p_normal, p_tangent))
+        if len(candidates) == sample_count:
+            break
+    if len(candidates) != sample_count:
+        raise ArithmeticError("could not populate the face-collar certificate grid")
+
+    check_radii = (radius, 0.5 * radius)
+    normal_angles = tuple(
+        2.0 * math.pi * index / (angle_count + 1)
+        for index in range(angle_count)
+    )
+    records: list[dict[str, object]] = []
+    maximum_by_radius = {value: 0.0 for value in check_radii}
+
+    def encoded(value: complex) -> dict[str, float]:
+        number = complex(value)
+        return {"real": number.real, "imag": number.imag}
+
+    for ordering, multiplicity in face_orbits:
+        beta_zero = reference.boundary_radial_beta(
+            ordering, 0.0, side="left"
+        )
+        threshold = _finite_part_momentum_root(
+            beta_zero, reference.momentum_maximum
+        )
+        for sample_index, (modulus, sampled_normal, p_tangent) in enumerate(
+            candidates
+        ):
+            p_normal = (
+                float(threshold)
+                if sample_index == 0 and threshold is not None
+                else sampled_normal
+            )
+            for check_radius in check_radii:
+                for angle in normal_angles:
+                    q_normal = check_radius * cmath.exp(1.0j * angle)
+                    full = reference.linear_q_momentum_density(
+                        ordering=ordering,
+                        q1=q_normal,
+                        q2=modulus,
+                        internal_momenta=(p_normal, p_tangent),
+                        block_region="corner",
+                    )
+                    truncated = reference.linear_q_momentum_primary_density(
+                        ordering=ordering,
+                        q1=q_normal,
+                        q2=modulus,
+                        internal_momenta=(p_normal, p_tangent),
+                        boundary_edges=(0,),
+                    )
+                    previous_full = previous_reference.linear_q_momentum_density(
+                        ordering=ordering,
+                        q1=q_normal,
+                        q2=modulus,
+                        internal_momenta=(p_normal, p_tangent),
+                        block_region="corner",
+                    )
+                    previous_truncated = (
+                        previous_reference.linear_q_momentum_primary_density(
+                            ordering=ordering,
+                            q1=q_normal,
+                            q2=modulus,
+                            internal_momenta=(p_normal, p_tangent),
+                            boundary_edges=(0,),
+                        )
+                    )
+                    absolute_error = abs(full - truncated)
+                    scale = max(abs(full), abs(truncated))
+                    relative_error = absolute_error / max(scale, atol)
+                    tolerance = atol + rtol * scale
+                    tolerance_ratio = absolute_error / tolerance
+                    reference_full_absolute_change = abs(full - previous_full)
+                    reference_full_scale = max(abs(full), abs(previous_full))
+                    reference_full_relative_change = (
+                        reference_full_absolute_change
+                        / max(reference_full_scale, atol)
+                    )
+                    reference_full_tolerance_ratio = (
+                        reference_full_absolute_change
+                        / (atol + convergence_rtol * reference_full_scale)
+                    )
+                    reference_primary_absolute_change = abs(
+                        truncated - previous_truncated
+                    )
+                    reference_primary_scale = max(
+                        abs(truncated), abs(previous_truncated)
+                    )
+                    reference_primary_relative_change = (
+                        reference_primary_absolute_change
+                        / max(reference_primary_scale, atol)
+                    )
+                    reference_primary_tolerance_ratio = (
+                        reference_primary_absolute_change
+                        / (atol + convergence_rtol * reference_primary_scale)
+                    )
+                    overall_tolerance_ratio = max(
+                        tolerance_ratio,
+                        reference_full_tolerance_ratio,
+                        reference_primary_tolerance_ratio,
+                    )
+                    maximum_by_radius[check_radius] = max(
+                        maximum_by_radius[check_radius], relative_error
+                    )
+                    records.append(
+                        {
+                            "ordering": list(ordering),
+                            "orbit_multiplicity": int(multiplicity),
+                            "sample_index": sample_index,
+                            "check_radius": check_radius,
+                            "normal_angle": angle,
+                            "normal_coordinate": encoded(q_normal),
+                            "remaining_modulus": encoded(modulus),
+                            "normal_momentum": p_normal,
+                            "remaining_momentum": p_tangent,
+                            "truncated_cft_density": encoded(truncated),
+                            "full_c_recursion_density": encoded(full),
+                            "previous_truncated_cft_density": encoded(
+                                previous_truncated
+                            ),
+                            "previous_full_c_recursion_density": encoded(
+                                previous_full
+                            ),
+                            "absolute_error": absolute_error,
+                            "relative_error": relative_error,
+                            "tolerance_ratio": tolerance_ratio,
+                            "reference_full_relative_change": (
+                                reference_full_relative_change
+                            ),
+                            "reference_primary_relative_change": (
+                                reference_primary_relative_change
+                            ),
+                            "reference_full_tolerance_ratio": (
+                                reference_full_tolerance_ratio
+                            ),
+                            "reference_primary_tolerance_ratio": (
+                                reference_primary_tolerance_ratio
+                            ),
+                            "overall_tolerance_ratio": overall_tolerance_ratio,
+                            "passed": overall_tolerance_ratio <= 1.0,
+                        }
+                    )
+
+    records.sort(
+        key=lambda value: float(value["overall_tolerance_ratio"]), reverse=True
+    )
+    maximum_relative = max(float(value["relative_error"]) for value in records)
+    maximum_polynomial_tolerance_ratio = max(
+        float(value["tolerance_ratio"]) for value in records
+    )
+    maximum_reference_full_relative_change = max(
+        float(value["reference_full_relative_change"]) for value in records
+    )
+    maximum_reference_primary_relative_change = max(
+        float(value["reference_primary_relative_change"]) for value in records
+    )
+    maximum_reference_convergence_tolerance_ratio = max(
+        max(
+            float(value["reference_full_tolerance_ratio"]),
+            float(value["reference_primary_tolerance_ratio"]),
+        )
+        for value in records
+    )
+    maximum_tolerance_ratio = float(records[0]["overall_tolerance_ratio"])
+    polynomial_agreement_passed = maximum_polynomial_tolerance_ratio <= 1.0
+    reference_convergence_passed = (
+        maximum_reference_convergence_tolerance_ratio <= 1.0
+    )
+    return FaceCollarCertificate(
+        passed=polynomial_agreement_passed and reference_convergence_passed,
+        collar_radius=radius,
+        check_radii=check_radii,
+        relative_tolerance=rtol,
+        absolute_tolerance=atol,
+        samples_per_orbit=sample_count,
+        normal_angle_count=angle_count,
+        representative_orbit_count=len(face_orbits),
+        covered_face_sector_count=sum(
+            int(multiplicity) for _ordering, multiplicity in face_orbits
+        ),
+        comparison_count=len(records),
+        reference_backend=reference_backend,
+        reference_global_max_twice_levels=reference_maxima,
+        reference_global_max_total_twice_level=reference_total,
+        previous_reference_global_max_twice_levels=previous_maxima,
+        previous_reference_global_max_total_twice_level=previous_total,
+        reference_convergence_relative_tolerance=convergence_rtol,
+        polynomial_agreement_passed=polynomial_agreement_passed,
+        reference_convergence_passed=reference_convergence_passed,
+        maximum_relative_error=maximum_relative,
+        maximum_polynomial_tolerance_ratio=maximum_polynomial_tolerance_ratio,
+        maximum_reference_full_relative_change=(
+            maximum_reference_full_relative_change
+        ),
+        maximum_reference_primary_relative_change=(
+            maximum_reference_primary_relative_change
+        ),
+        maximum_reference_convergence_tolerance_ratio=(
+            maximum_reference_convergence_tolerance_ratio
+        ),
+        maximum_tolerance_ratio=maximum_tolerance_ratio,
+        maximum_relative_error_by_radius=tuple(
+            (value, maximum_by_radius[value]) for value in check_radii
+        ),
+        worst_samples=tuple(records[:8]),
+        seed=int(seed),
+    )
+
+
 ONE_DIVISOR_FACE_ORDERINGS = tuple(
     ordering
     for ordering in PCO_FACE_SECTOR_ORDERINGS
@@ -4215,7 +5744,7 @@ def _one_divisor_face_channel_in_sampled_chart(
     sampled_ordering: Sequence[int],
     collar_radius: float,
 ) -> tuple[tuple[int, ...], complex, complex, float] | None:
-    """Locate the unique ``D_12`` collar cell from a sampled all-c chart."""
+    """Locate the unique ``D_12`` collar cell from a sampled hybrid chart."""
 
     matches: list[tuple[tuple[int, ...], complex, complex, float]] = []
     for ordering in ONE_DIVISOR_FACE_ORDERINGS:
@@ -4344,6 +5873,78 @@ def _finite_part_remainder_integrand(
     )
 
 
+def _leading_local_forest_remainder_integrand(
+    kernel: BRYNSFiveTachyonIntegrand,
+    positions: Sequence[ProjectivePoint],
+    collar_radius: float,
+    *,
+    channel: LinearChannel | None = None,
+) -> complex:
+    r"""Return the consistent local forest remainder in fixed-gauge measure.
+
+    In the best linear channel this implements
+
+    ``F - chi1 P1 - chi2 P2 + chi1 chi2 P12``.
+
+    Here ``Pe`` is the algebraic degree-zero boundary-primary density on edge
+    ``e`` and ``P12`` is their common corner overlap.  Unlike the historical
+    collar excision, this retains every higher normal power supplied by the
+    recursive CFT block inside the collar.  The separately integrated face
+    and corner finite parts therefore restore exactly the terms subtracted
+    here, with the same forest signs.
+    """
+
+    normalized = _validate_positions(positions)
+    radius = float(collar_radius)
+    if not math.isfinite(radius) or not 0.0 < radius < 0.2:
+        raise ValueError("collar_radius must lie in (0,0.2)")
+    channel = (
+        best_linear_channels(normalized, limit=1)[0]
+        if channel is None
+        else channel
+    )
+    active_edges = tuple(
+        edge
+        for edge, coordinate in enumerate((channel.q1, channel.q2))
+        if abs(coordinate) < radius
+    )
+    raw = kernel.fixed_gauge_integrand_positions(
+        normalized, channel=channel
+    )
+    if not active_edges:
+        return raw
+
+    jacobian = linear_channel_complex_jacobian_to_chart(
+        channel.q1,
+        channel.q2,
+        channel.ordering,
+        fixed_zero=FIXED_ZERO_LABEL,
+        fixed_one=FIXED_ONE_LABEL,
+        fixed_infinity=FIXED_INFINITY_LABEL,
+        moving_labels=MOVING_LABELS,
+    )
+    area_jacobian = abs(jacobian) ** 2
+    if not math.isfinite(area_jacobian) or area_jacobian <= 0.0:
+        raise ArithmeticError("forest channel has a non-positive Jacobian")
+
+    remainder_q = raw * area_jacobian
+    for edge in active_edges:
+        remainder_q -= kernel.linear_q_primary_density(
+            ordering=channel.ordering,
+            q1=channel.q1,
+            q2=channel.q2,
+            boundary_edges=(edge,),
+        )
+    if len(active_edges) == 2:
+        remainder_q += kernel.linear_q_primary_density(
+            ordering=channel.ordering,
+            q1=channel.q1,
+            q2=channel.q2,
+            boundary_edges=(0, 1),
+        )
+    return complex(remainder_q / area_jacobian)
+
+
 def integrate_imaginary_energy_atlas_qmc(
     kernel: BRYNSFiveTachyonIntegrand,
     *,
@@ -4413,6 +6014,8 @@ def integrate_imaginary_energy_atlas_qmc(
         replicates=replicates,
         radial_power=radial_power,
         seed=int(seed),
+        block_backend=kernel.block_backend,
+        hybrid_q_threshold=kernel.hybrid_q_threshold,
         recursion_max_twice_level=kernel.recursion_max_twice_level,
         global_max_twice_levels=kernel.global_max_twice_levels,
         momentum_orders=kernel.momentum_orders,
@@ -4552,6 +6155,8 @@ def integrate_equal_complex_energy_continued_atlas_qmc(
         replicates=replicates,
         radial_power=radial_power,
         seed=int(seed),
+        block_backend=kernel.block_backend,
+        hybrid_q_threshold=kernel.hybrid_q_threshold,
         recursion_max_twice_level=kernel.recursion_max_twice_level,
         global_max_twice_levels=kernel.global_max_twice_levels,
         momentum_orders=kernel.momentum_orders,
@@ -4822,6 +6427,8 @@ def integrate_complex_energy_continued_atlas_qmc(
         replicates=replicates,
         radial_power=radial_power,
         seed=int(seed),
+        block_backend=kernel.block_backend,
+        hybrid_q_threshold=kernel.hybrid_q_threshold,
         recursion_max_twice_level=kernel.recursion_max_twice_level,
         global_max_twice_levels=kernel.global_max_twice_levels,
         momentum_orders=kernel.momentum_orders,
@@ -4865,13 +6472,14 @@ def integrate_complex_energy_one_divisor_qmc(
 ) -> NSFivePointFinitePartQMCResult:
     r"""Integrate the corrected chamber with one ``D_12`` finite part.
 
-    The full 120-chart mixture is used for sampling and the smallest all-c
-    channel for ordinary evaluation.  Inside the unique ``D_12`` collar the
+    The full 120-chart mixture is used for sampling and the channel minimizing
+    ``max(|q1|,|q2|)`` is used for ordinary evaluation.  Production uses
+    c-recursion in that chart.  Inside the unique ``D_12`` collar the
     complete continued five-point density is evaluated in one of its six
     lower four-point crossing cells and its factorized primary normal term is
     subtracted pointwise.  The same term, including the continued lower
     four-point residue contour, is restored by the complex radial finite
-    part.  No h-recursive face block is used.
+    part.
     """
 
     atlas_orderings = tuple(
@@ -4972,7 +6580,7 @@ def integrate_complex_energy_one_divisor_qmc(
                         subtracted_continuum_boundary_pair=(1, 2),
                     ).total
                     # The primary is omitted coefficient-by-coefficient in
-                    # the all-c block series.  This is algebraically the same
+                    # the selected boundary block series.  This is algebraically the same
                     # face subtraction as raw-counterterm, but remains stable
                     # when |q_normal| is hundreds of decades below one.
                     value = raw * transition
@@ -5036,7 +6644,7 @@ def integrate_complex_energy_one_divisor_qmc(
                     )
                 )
                 # The bulk collar omits the exact leading state of the
-                # selected all-c block.  Its asymptotic q-primary is restored
+                # selected boundary block.  Its asymptotic q-primary is restored
                 # by the finite part above.  Add back their integrable fixture
                 # difference.  The symmetric angular rule cancels the O(q)
                 # and O(qbar) modes; the angular average starts at |q|^2.
@@ -5111,6 +6719,8 @@ def integrate_complex_energy_one_divisor_qmc(
         replicates=replicate_count,
         radial_power=float(radial_power),
         seed=int(seed),
+        block_backend=kernel.block_backend,
+        hybrid_q_threshold=kernel.hybrid_q_threshold,
         recursion_max_twice_level=kernel.recursion_max_twice_level,
         global_max_twice_levels=kernel.global_max_twice_levels,
         momentum_orders=kernel.momentum_orders,
@@ -5118,7 +6728,7 @@ def integrate_complex_energy_one_divisor_qmc(
         extreme_bulk_weights=tuple(extreme_bulk_weights),
         subtraction_scheme=(
             "one D_12 continuum-primary finite part plus the ordinary "
-            "all-c leading-fixture correction; no corner subtraction"
+            "strict-nome-gated leading-fixture correction; no corner subtraction"
         ),
     )
 
@@ -5137,7 +6747,7 @@ def integrate_complex_energy_minimal_subtraction_qmc(
     pair_radial_powers: Mapping[tuple[int, int], float] | None = None,
     seed: int = 20260825,
 ) -> NSFivePointFinitePartQMCResult:
-    r"""Legacy one-line finite-part experiment in a supplied all-c atlas.
+    r"""Legacy one-line finite-part experiment in a supplied hybrid atlas.
 
     In the target four-point crossing cell, the complete wall-one moving
     middle contribution is omitted for ``|q2|<collar_radius``.  Its leading
@@ -5147,7 +6757,7 @@ def integrate_complex_energy_minimal_subtraction_qmc(
     explicit collar/projection-radius scan.  This routine is retained for
     local counterterm tests only: the historical ray used with it has been
     rejected by the complete reflected-pole ledger.  Production must use a
-    stable-divisor/corner forest over the symmetric all-c Voronoi split.
+    stable-divisor/corner forest over the symmetric hybrid Voronoi split.
     """
 
     atlas_orderings = tuple(
@@ -5160,7 +6770,7 @@ def integrate_complex_energy_minimal_subtraction_qmc(
     face_power = int(face_sobol_power)
     replicate_count = int(replicates)
     if not atlas_orderings:
-        raise ValueError("the all-c atlas must be nonempty")
+        raise ValueError("the hybrid atlas must be nonempty")
     if len(target) != 5 or set(target) != set(range(5)) or target[2] != 0:
         raise ValueError("target_ordering must be a middle-incoming comb")
     if not 0.0 < collar < 0.2:
@@ -5330,6 +6940,8 @@ def integrate_complex_energy_minimal_subtraction_qmc(
         replicates=replicate_count,
         radial_power=float(radial_power),
         seed=int(seed),
+        block_backend=kernel.block_backend,
+        hybrid_q_threshold=kernel.hybrid_q_threshold,
         recursion_max_twice_level=kernel.recursion_max_twice_level,
         global_max_twice_levels=kernel.global_max_twice_levels,
         momentum_orders=kernel.momentum_orders,
@@ -5338,7 +6950,7 @@ def integrate_complex_energy_minimal_subtraction_qmc(
     )
 
 
-def integrate_imaginary_energy_finite_part_qmc(
+def _integrate_leading_local_finite_part_qmc(
     kernel: BRYNSFiveTachyonIntegrand,
     *,
     collar_radius: float = 0.08,
@@ -5347,25 +6959,48 @@ def integrate_imaginary_energy_finite_part_qmc(
     replicates: int = 2,
     radial_power: float = 0.5,
     projection_radius: float = 1.0e-5,
+    momentum_refinement_shells: int = 0,
+    momentum_singularity_subtraction: bool = False,
+    face_collar_certificate: FaceCollarCertificate | None = None,
+    compute_corner_contribution: bool = True,
     seed: int = 20260825,
+    subtraction_scheme: str = (
+        "pointwise full-minus-faces-plus-corner local forest remainder, with "
+        "analytic radial finite parts on all 10 faces and 15 corners"
+    ),
 ) -> NSFivePointFinitePartQMCResult:
-    r"""Integrate the imaginary-energy worldsheet density by local finite part.
+    r"""Integrate a degree-zero worldsheet density by local finite part.
 
-    This is the leading local forest on ``Mbar_0,5``.  The bulk excludes a
-    circular collar around every one of the ten boundary divisors.  The
-    leading spin-zero normal coefficient on each face is integrated by BRY's
-    radial finite part over six four-point crossing cells, with the remaining
-    collar excised.  Finally both commuting radial finite parts are applied
-    at all fifteen compatible corners.  The finite collar and projection
-    radii are explicit certification parameters.
+    This is the leading local forest on ``Mbar_0,5``.  Inside every circular
+    collar the bulk integrand is replaced pointwise by
+    ``F-P1-P2+P12`` (with only the active terms present), so all higher normal
+    powers of the recursive block remain in the numerical remainder.  The
+    leading spin-zero normal coefficient on each face is then restored by
+    BRY's analytic radial finite part over six four-point crossing cells, and
+    both commuting radial finite parts are applied at all fifteen compatible
+    corners.  The finite collar and projection radii remain explicit
+    stability parameters, but no equality with the untruncated block at the
+    collar boundary is assumed.
     """
 
     collar_radius = float(collar_radius)
+    timing_started = time.perf_counter()
+    progress_enabled = os.environ.get("TYPE0B_5PT_PROGRESS") == "1"
+
+    def progress(stage: str) -> None:
+        if progress_enabled:
+            print(
+                f"type0b_5pt_progress stage={stage} "
+                f"elapsed_seconds={time.perf_counter() - timing_started:.3f}",
+                flush=True,
+            )
+
     bulk_sobol_power = int(bulk_sobol_power)
     face_sobol_power = int(face_sobol_power)
     replicates = int(replicates)
     radial_power = float(radial_power)
     projection_radius = float(projection_radius)
+    momentum_refinement_shells = int(momentum_refinement_shells)
     if not math.isfinite(collar_radius) or not 0.0 < collar_radius < 0.2:
         raise ValueError("collar_radius must lie in (0,0.2)")
     if bulk_sobol_power < 1 or face_sobol_power < 1 or replicates < 2:
@@ -5376,13 +7011,10 @@ def integrate_imaginary_energy_finite_part_qmc(
         raise ValueError(
             "projection_radius must lie in [1e-7,min(1e-3,0.1*collar))"
         )
-    audit = imaginary_energy_chamber_audit(kernel.outgoing_energies)
-    if not audit["undeformed_positive_real_liouville_contour_valid"]:
+    if momentum_refinement_shells < -1:
         raise ValueError(
-            "super-Liouville poles have crossed the positive-real momentum "
-            "contour; this residue-free finite-part driver is not valid"
+            "momentum_refinement_shells must be -1 (automatic) or non-negative"
         )
-
     orderings = oriented_tree_orderings()
     equal_outgoing = max(
         abs(value - kernel.outgoing_energies[0])
@@ -5393,16 +7025,29 @@ def integrate_imaginary_energy_finite_part_qmc(
         if equal_outgoing
         else tuple((ordering, 1) for ordering in BOUNDARY_FACE_SECTOR_ORDERINGS)
     )
-    corner_contribution = complex(
-        sum(
-            kernel.boundary_corner_finite_part(
-                ordering=ordering,
-                collar_radius=collar_radius,
-                projection_radius=projection_radius,
-            )
-            for ordering in BOUNDARY_CORNER_ORDERINGS
-        )
+    corner_orbits = (
+        BOUNDARY_CORNER_RAISED_ORBITS
+        if equal_outgoing
+        else tuple((ordering, 1) for ordering in BOUNDARY_CORNER_ORDERINGS)
     )
+    corner_contribution = (
+        complex(
+            sum(
+                multiplicity
+                * kernel.boundary_corner_finite_part(
+                    ordering=ordering,
+                    collar_radius=collar_radius,
+                    projection_radius=projection_radius,
+                    momentum_refinement_shells=momentum_refinement_shells,
+                    momentum_singularity_subtraction=momentum_singularity_subtraction,
+                )
+                for ordering, multiplicity in corner_orbits
+            )
+        )
+        if bool(compute_corner_contribution)
+        else 0.0j
+    )
+    progress("corner_complete")
     bulk_estimates: list[complex] = []
     face_estimates: list[complex] = []
     estimates: list[complex] = []
@@ -5411,27 +7056,27 @@ def integrate_imaginary_energy_finite_part_qmc(
             d=5, scramble=True, seed=int(seed) + replicate
         )
         bulk_values: list[complex] = []
-        for sample in bulk_sampler.random_base2(bulk_sobol_power):
+        for sample_index, sample in enumerate(
+            bulk_sampler.random_base2(bulk_sobol_power)
+        ):
             q1 = _power_disk_sample(sample[0], sample[1], radial_power)
             q2 = _power_disk_sample(sample[2], sample[3], radial_power)
             ordering_index = min(
                 int(sample[4] * len(orderings)), len(orderings) - 1
             )
             positions = _to_fixed_gauge(q1, q2, orderings[ordering_index])
-            best = best_linear_channels(positions, limit=1)[0]
-            if (
-                abs(best.q1) < collar_radius
-                or abs(best.q2) < collar_radius
-            ):
-                bulk_values.append(0.0 + 0.0j)
-                continue
-            proposal_density = _oriented_bidisc_mixture_density(
-                positions, radial_power=radial_power
+            channel, proposal_density = (
+                _best_channel_and_oriented_bidisc_mixture_density(
+                    positions, radial_power=radial_power
+                )
             )
             bulk_values.append(
-                kernel.fixed_gauge_integrand_positions(positions)
+                _leading_local_forest_remainder_integrand(
+                    kernel, positions, collar_radius, channel=channel
+                )
                 / proposal_density
             )
+            progress(f"replicate_{replicate}_bulk_sample_{sample_index + 1}")
         bulk_estimate = complex(
             np.mean(np.asarray(bulk_values, dtype=complex))
         )
@@ -5442,25 +7087,39 @@ def integrate_imaginary_energy_finite_part_qmc(
             seed=int(seed) + 10000 + replicate,
         )
         face_values: list[complex] = []
-        for sample in face_sampler.random_base2(face_sobol_power):
-            modulus, area_jacobian = _plane_map(sample[0], sample[1])
-            if (
-                not _four_point_fundamental_cell(modulus)
-                or abs(modulus) < collar_radius
-            ):
-                face_values.append(0.0 + 0.0j)
-                continue
-            density = sum(
-                multiplicity
-                * kernel.boundary_face_finite_part_density(
+        for sample_index, sample in enumerate(
+            face_sampler.random_base2(face_sobol_power)
+        ):
+            modulus, area_jacobian = _four_point_fundamental_cell_sample(
+                sample[0], sample[1]
+            )
+            in_corner_collar = abs(modulus) < collar_radius
+            density = 0.0 + 0.0j
+            for ordering, multiplicity in face_orbits:
+                face_density = kernel.boundary_face_finite_part_density(
                     ordering=ordering,
                     remaining_modulus=modulus,
                     collar_radius=collar_radius,
                     projection_radius=projection_radius,
+                    momentum_refinement_shells=momentum_refinement_shells,
+                    momentum_singularity_subtraction=momentum_singularity_subtraction,
                 )
-                for ordering, multiplicity in face_orbits
-            )
+                if in_corner_collar:
+                    face_density -= (
+                        kernel.boundary_corner_face_counterterm_density(
+                            ordering=ordering,
+                            remaining_modulus=modulus,
+                            collar_radius=collar_radius,
+                            projection_radius=projection_radius,
+                            momentum_refinement_shells=momentum_refinement_shells,
+                            momentum_singularity_subtraction=(
+                                momentum_singularity_subtraction
+                            ),
+                        )
+                    )
+                density += multiplicity * face_density
             face_values.append(complex(area_jacobian * density))
+            progress(f"replicate_{replicate}_face_sample_{sample_index + 1}")
         face_estimate = complex(
             np.mean(np.asarray(face_values, dtype=complex))
         )
@@ -5490,10 +7149,178 @@ def integrate_imaginary_energy_finite_part_qmc(
         replicates=replicates,
         radial_power=radial_power,
         seed=int(seed),
+        block_backend=kernel.block_backend,
+        hybrid_q_threshold=kernel.hybrid_q_threshold,
         recursion_max_twice_level=kernel.recursion_max_twice_level,
         global_max_twice_levels=kernel.global_max_twice_levels,
         momentum_orders=kernel.momentum_orders,
         momentum_maximum=kernel.momentum_maximum,
+        face_collar_certificate=face_collar_certificate,
+        momentum_refinement_shells=momentum_refinement_shells,
+        momentum_singularity_subtraction=bool(momentum_singularity_subtraction),
+        subtraction_scheme=subtraction_scheme,
+        corner_contribution_computed=bool(compute_corner_contribution),
+        h_regulator_eta=kernel.h_regulator_eta,
+    )
+
+
+def integrate_imaginary_energy_finite_part_qmc(
+    kernel: BRYNSFiveTachyonIntegrand,
+    **kwargs,
+) -> NSFivePointFinitePartQMCResult:
+    """Backward-compatible imaginary-energy degree-zero finite-part driver."""
+
+    audit = imaginary_energy_chamber_audit(kernel.outgoing_energies)
+    if not audit["undeformed_positive_real_liouville_contour_valid"]:
+        raise ValueError(
+            "super-Liouville poles have crossed the positive-real momentum "
+            "contour; this residue-free finite-part driver is not valid"
+        )
+    return _integrate_leading_local_finite_part_qmc(
+        kernel,
+        subtraction_scheme=(
+            "leading diagonal imaginary-energy local radial finite-part forest "
+            "on all 10 faces and 15 compatible corners"
+        ),
+        **kwargs,
+    )
+
+
+def integrate_physical_i_epsilon_finite_part_qmc(
+    kernel: BRYNSFiveTachyonIntegrand,
+    *,
+    real_outgoing_energies: Sequence[float],
+    epsilon: float,
+    epsilon_weights: Sequence[float] | None = None,
+    face_collar_relative_tolerance: float = 5.0e-2,
+    face_collar_absolute_tolerance: float = 1.0e-10,
+    face_collar_samples_per_orbit: int = 3,
+    face_collar_normal_angle_count: int = 2,
+    face_collar_reference_backend: Literal["h", "c"] = "c",
+    face_collar_reference_max_twice_levels: Sequence[int] = (6, 6),
+    face_collar_reference_max_total_twice_level: int = 10,
+    face_collar_previous_reference_max_twice_levels: Sequence[int] = (4, 4),
+    face_collar_previous_reference_max_total_twice_level: int = 6,
+    face_collar_reference_convergence_relative_tolerance: float = 1.0e-2,
+    face_collar_certificate_seed: int = 20260830,
+    face_collar_certificate: FaceCollarCertificate | None = None,
+    run_face_collar_diagnostic: bool = True,
+    enforce_face_collar_certificate: bool = False,
+    **kwargs,
+) -> NSFivePointFinitePartQMCResult:
+    r"""Apply direct BRY subtraction at physical energies plus ``+i epsilon``.
+
+    This routine deliberately performs no remote analytic continuation and
+    adds no Liouville residue forest.  It verifies that the supplied kernel
+    is exactly on the requested infinitesimal physical ray, that the
+    positive-real internal contours have crossed no structure-constant
+    walls, and that the complete ten-divisor polynomial ledger requires
+    only its diagonal degree-zero term.  Higher-degree physical kinematics
+    fail closed until their additional coefficients are implemented.
+    """
+
+    from type0b_ns_five_tachyon_domain import (  # local: avoids import cycle
+        physical_i_epsilon_frequencies,
+        physical_i_epsilon_subtraction_audit,
+    )
+
+    expected = physical_i_epsilon_frequencies(
+        real_outgoing_energies,
+        epsilon,
+        epsilon_weights=epsilon_weights,
+    )
+    if max(
+        abs(actual - target)
+        for actual, target in zip(kernel.outgoing_energies, expected)
+    ) > 2.0e-13:
+        raise ValueError(
+            "kernel outgoing energies do not match the declared physical "
+            "+i-epsilon prescription"
+        )
+    audit = physical_i_epsilon_subtraction_audit(
+        real_outgoing_energies,
+        epsilon,
+        epsilon_weights=epsilon_weights,
+        central_charge_shift=kernel.central_charge_shift,
+    )
+    if not audit["undeformed_positive_real_liouville_contours"]:
+        raise ValueError(
+            "the requested epsilon crosses a super-Liouville wall; reduce "
+            "epsilon instead of deforming the internal contours"
+        )
+    if not audit["all_required_modes_degree_zero"]:
+        raise NotImplementedError(
+            "these physical energies require positive-degree diagonal BRY "
+            "counterterms; the degree-zero driver refuses to omit them"
+        )
+    collar_radius = float(kwargs.get("collar_radius", 0.08))
+    certificate = (
+        None
+        if face_collar_certificate is None and not bool(run_face_collar_diagnostic)
+        else (
+            certify_face_collar_truncation(
+            kernel,
+            collar_radius=collar_radius,
+            relative_tolerance=face_collar_relative_tolerance,
+            absolute_tolerance=face_collar_absolute_tolerance,
+            samples_per_orbit=face_collar_samples_per_orbit,
+            normal_angle_count=face_collar_normal_angle_count,
+            reference_backend=face_collar_reference_backend,
+            reference_global_max_twice_levels=(
+                face_collar_reference_max_twice_levels
+            ),
+            reference_global_max_total_twice_level=(
+                face_collar_reference_max_total_twice_level
+            ),
+            previous_reference_global_max_twice_levels=(
+                face_collar_previous_reference_max_twice_levels
+            ),
+            previous_reference_global_max_total_twice_level=(
+                face_collar_previous_reference_max_total_twice_level
+            ),
+            reference_convergence_relative_tolerance=(
+                face_collar_reference_convergence_relative_tolerance
+            ),
+            seed=face_collar_certificate_seed,
+            )
+            if face_collar_certificate is None
+            else face_collar_certificate
+        )
+    )
+    if certificate is not None and (
+        abs(float(certificate.collar_radius) - collar_radius) > 1.0e-15
+    ):
+        raise ValueError(
+            "the face-collar certificate radius does not match the integration collar"
+        )
+    if bool(enforce_face_collar_certificate) and certificate is None:
+        raise ValueError("cannot enforce a skipped face-collar diagnostic")
+    if (
+        certificate is not None
+        and not certificate.passed
+        and bool(enforce_face_collar_certificate)
+    ):
+        failure = (
+            f"{certificate.reference_backend}-recursion reference did not "
+            "converge between the two stored orders; increase the reference "
+            "levels or choose a better channel"
+            if not certificate.reference_convergence_passed
+            else "reduce the collar or increase the local polynomial order"
+        )
+        raise ValueError(
+            "face collar failed the truncated-CFT versus full c-recursion "
+            f"certificate: rho={collar_radius:.8g}, maximum tolerance ratio="
+            f"{certificate.maximum_tolerance_ratio:.6g}; {failure}"
+        )
+    return _integrate_leading_local_finite_part_qmc(
+        kernel,
+        face_collar_certificate=certificate,
+        subtraction_scheme=(
+            "direct physical-domain +i-epsilon pointwise F-P1-P2+P12 "
+            "degree-zero forest remainder, plus analytic finite parts on all "
+            "10 faces and all 15 compatible corner overlaps"
+        ),
+        **kwargs,
     )
 
 
@@ -5501,6 +7328,7 @@ __all__ = [
     "BOUNDARY_CORNER_ORDERINGS",
     "BOUNDARY_FACE_SECTOR_ORDERINGS",
     "BRYNSFiveTachyonIntegrand",
+    "FaceCollarCertificate",
     "ContinuedMomentumDensity",
     "CrossedNSStructurePole",
     "MovingMiddleCornerTerm",
@@ -5514,9 +7342,11 @@ __all__ = [
     "PCO_FACE_SECTOR_ORDERINGS",
     "PCOChiralTerm",
     "balanced_equal_energy",
+    "certify_face_collar_truncation",
     "crossed_ns_structure_poles_complex",
     "equal_complex_energy_convergence_audit",
     "integrate_imaginary_energy_finite_part_qmc",
+    "integrate_physical_i_epsilon_finite_part_qmc",
     "integrate_imaginary_energy_continued_atlas_qmc",
     "integrate_equal_complex_energy_continued_atlas_qmc",
     "integrate_complex_energy_continued_atlas_qmc",

@@ -93,13 +93,19 @@ def _parser() -> argparse.ArgumentParser:
         ),
     )
     parser.add_argument("--recursion-max-twice-level", type=int, default=0)
+    parser.add_argument(
+        "--block-backend",
+        choices=("hybrid", "h", "c"),
+        default="c",
+    )
+    parser.add_argument("--hybrid-q-threshold", type=float, default=0.3)
     parser.add_argument("--global-max-twice-levels", type=int, nargs=2, default=(2, 2))
     parser.add_argument("--global-max-total-twice-level", type=int, default=4)
     parser.add_argument("--momentum-orders", type=int, nargs=2, default=(2, 3))
     parser.add_argument("--momentum-maximum", type=float, default=2.0)
     parser.add_argument("--structure-precision", type=int, default=20)
     parser.add_argument("--block-working-precision", type=int, default=35)
-    parser.add_argument("--central-charge-shift", type=float, default=0.0)
+    parser.add_argument("--central-charge-shift", type=float, default=1.0e-5)
     parser.add_argument("--sobol-power", type=int, default=4)
     parser.add_argument("--replicates", type=int, default=4)
     parser.add_argument(
@@ -185,6 +191,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             "A_R5=16*A_T5, if the sixteen even-axion diagrams are equal"
         ),
         "settings": {
+            "block_backend": args.block_backend,
+            "hybrid_q_threshold": args.hybrid_q_threshold,
             "recursion_max_twice_level": recursion_cutoff,
             "global_max_twice_levels": list(args.global_max_twice_levels),
             "global_max_total_twice_level": args.global_max_total_twice_level,
@@ -197,8 +205,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             "replicates": args.replicates,
             "atlas_ordering_stratification": True,
             "boundary_split": (
-                "all-c-recursion Voronoi cells: evaluate each proposal sample "
-                "in the certified channel minimizing max(|q1|,|q2|)"
+                "choose the certified Voronoi channel minimizing "
+                "max(|q1|,|q2|); production uses c-recursion in that chart"
             ),
             "requested_radial_power": args.radial_power,
             "minimum_radial_power": args.minimum_radial_power,
@@ -210,6 +218,9 @@ def main(argv: Sequence[str] | None = None) -> int:
             ),
             "ns_multipoint_c_recursion.py": _sha256(
                 C_RECURSION_DIR / "ns_multipoint_c_recursion.py"
+            ),
+            "ns_multipoint_h_recursion.py": _sha256(
+                C_RECURSION_DIR / "ns_multipoint_h_recursion.py"
             ),
             "super_liouville_structure_constants.py": _sha256(
                 C_RECURSION_DIR / "super_liouville_structure_constants.py"
@@ -270,6 +281,8 @@ def main(argv: Sequence[str] | None = None) -> int:
 
         kernel = BRYNSFiveTachyonIntegrand(
             outgoing_energies=outgoing,
+            block_backend=args.block_backend,
+            hybrid_q_threshold=args.hybrid_q_threshold,
             recursion_max_twice_level=recursion_cutoff,
             global_max_twice_levels=args.global_max_twice_levels,
             global_max_total_twice_level=args.global_max_total_twice_level,

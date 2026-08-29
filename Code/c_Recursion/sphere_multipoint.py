@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Type-0B NS Liouville sphere multipoint correlators from c-recursion.
+"""Type-0B NS Liouville sphere multipoint correlators from a hybrid recursion.
 
-This module contracts :class:`NSSphereLinearCRecursion` blocks with the
-self-dual super-Liouville structure constants and integrates every internal
-NS momentum with the BRY ``dP/pi`` measure.  It computes the Euclidean
-bottom-component matter correlator.  It is not by itself a complete Type-0B
-string amplitude: the timelike matter, ghosts, picture-changing insertions,
-and supermoduli measure are deliberately outside this layer.
+The production prescription uses :class:`NSSphereLinearHRecursion` for bulk
+moduli points and :class:`NSSphereLinearCRecursion` for local degeneration
+charts.  This mirrors the supplied c=1 computation, where the necklace block
+is h-recursive and OPE discs are c-recursive.  Both pure backends remain
+available for validation.  The blocks are contracted with the self-dual
+super-Liouville structure constants and every internal NS momentum is
+integrated with the BRY ``dP/pi`` measure.
 
 All punctures supplied to :class:`BRYNSSphereMultipointCorrelator` are finite.
 A channel is a permutation of their labels.  The first, penultimate, and
@@ -30,11 +31,12 @@ from dataclasses import dataclass
 from functools import lru_cache
 from itertools import product
 import math
-from typing import Iterable, Sequence, Union
+from typing import Iterable, Literal, Sequence, Union
 
 import mpmath
 
 from ns_multipoint_c_recursion import NSSphereLinearCRecursion
+from ns_multipoint_h_recursion import NSSphereLinearHRecursion
 from super_liouville_structure_constants import (
     ns_structure_constant,
     ns_tilde_structure_constant,
@@ -220,7 +222,10 @@ class BRYNSSphereMultipointCorrelator:
 
     where ``C_v(0)=C`` and ``C_v(1)=tilde C``.  Only even-total vertex
     sectors occur for bottom external components.  The chiral block is the
-    finite local-plumbing series produced by the multipoint c-recursion.
+    finite local-plumbing series produced by the selected block recursion.
+    The default hybrid atlas uses fixed-difference h-recursion in the bulk
+    and central-charge recursion in local degeneration charts.  The pure
+    backends remain available as independent checks.
     """
 
     def __init__(
@@ -231,6 +236,8 @@ class BRYNSSphereMultipointCorrelator:
         max_twice_levels: Sequence[int] | None = None,
         max_total_twice_level: int | None = None,
         recursion_max_twice_level: int | None = None,
+        block_backend: Literal["hybrid", "h", "c"] = "hybrid",
+        hybrid_corner_radius: float = 0.15,
         structure_precision: int = 30,
         central_charge_shift: float = 1.0e-5,
         block_working_precision: int = 60,
@@ -280,6 +287,10 @@ class BRYNSSphereMultipointCorrelator:
             raise ValueError(
                 "recursion_max_twice_level must be a non-negative integer or None"
             )
+        if block_backend not in ("hybrid", "h", "c"):
+            raise ValueError("block_backend must be 'hybrid', 'h', or 'c'")
+        if not 0.0 < float(hybrid_corner_radius) < 1.0:
+            raise ValueError("hybrid_corner_radius must lie in (0,1)")
         if structure_precision < 15:
             raise ValueError("structure_precision must be at least 15 digits")
         if central_charge_shift < 0 or not math.isfinite(central_charge_shift):
@@ -292,11 +303,16 @@ class BRYNSSphereMultipointCorrelator:
         self.max_twice_levels = maxima
         self.max_total_twice_level = max_total_twice_level
         self.recursion_max_twice_level = recursion_max_twice_level
+        self.block_backend = block_backend
+        self.hybrid_corner_radius = float(hybrid_corner_radius)
         self.structure_precision = int(structure_precision)
         self.central_charge_shift = float(central_charge_shift)
         self.block_working_precision = int(block_working_precision)
         self.pole_tolerance = float(pole_tolerance)
-        self._block_cache: dict[tuple[object, ...], NSSphereLinearCRecursion] = {}
+        self._block_cache: dict[
+            tuple[object, ...],
+            NSSphereLinearHRecursion | NSSphereLinearCRecursion,
+        ] = {}
         self._structure_cache: dict[tuple[object, ...], complex] = {}
 
     @property
@@ -366,13 +382,21 @@ class BRYNSSphereMultipointCorrelator:
         frame: SphereCombFrame,
         internal_momenta: tuple[float, ...],
         sectors: tuple[int, ...],
-    ) -> NSSphereLinearCRecursion:
-        key = (frame.order, internal_momenta, sectors)
+        *,
+        block_region: Literal["bulk", "corner"] = "bulk",
+    ) -> NSSphereLinearHRecursion | NSSphereLinearCRecursion:
+        backend = self._selected_block_backend(block_region)
+        key = (backend, frame.order, internal_momenta, sectors)
         if key not in self._block_cache:
             ordered_weights = tuple(
                 self.external_weights[index] for index in frame.order
             )
-            self._block_cache[key] = NSSphereLinearCRecursion(
+            block_type = (
+                NSSphereLinearHRecursion
+                if backend == "h"
+                else NSSphereLinearCRecursion
+            )
+            self._block_cache[key] = block_type(
                 central_charge=self.block_central_charge,
                 external_weights=ordered_weights,
                 internal_weights=tuple(
@@ -384,6 +408,32 @@ class BRYNSSphereMultipointCorrelator:
             )
         return self._block_cache[key]
 
+    def _selected_block_backend(
+        self, block_region: Literal["bulk", "corner"]
+    ) -> Literal["h", "c"]:
+        """Resolve the hybrid atlas at a bulk point or degeneration chart."""
+
+        if block_region not in ("bulk", "corner"):
+            raise ValueError("block_region must be 'bulk' or 'corner'")
+        if self.block_backend == "hybrid":
+            return "h" if block_region == "bulk" else "c"
+        return self.block_backend
+
+    def _resolved_block_region(
+        self,
+        frame: SphereCombFrame,
+        block_region: Literal["auto", "bulk", "corner"],
+    ) -> Literal["bulk", "corner"]:
+        if block_region == "auto":
+            return (
+                "corner"
+                if min(map(abs, frame.q_values)) < self.hybrid_corner_radius
+                else "bulk"
+            )
+        if block_region not in ("bulk", "corner"):
+            raise ValueError("block_region must be 'auto', 'bulk', or 'corner'")
+        return block_region
+
     def chiral_block(
         self,
         frame: SphereCombFrame,
@@ -393,8 +443,15 @@ class BRYNSSphereMultipointCorrelator:
         max_twice_levels: Sequence[int] | None = None,
         max_total_twice_level: int | None = None,
         recursion_max_twice_level: int | None = None,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> complex:
-        """Return one full chiral comb block, including leading powers."""
+        """Return one full chiral comb block, including leading powers.
+
+        ``block_region`` only affects the default hybrid backend: bulk blocks
+        use h-recursion, while local degeneration blocks use c-recursion.
+        The default ``"auto"`` enters a corner chart when any active plumbing
+        modulus has magnitude below ``hybrid_corner_radius``.
+        """
 
         momenta = tuple(
             _real_nonnegative(f"internal_momenta[{index}]", value)
@@ -427,9 +484,35 @@ class BRYNSSphereMultipointCorrelator:
             if recursion_max_twice_level is None
             else recursion_max_twice_level
         )
-        block = self._block(frame, momenta, sector_tuple)
+        resolved_region = self._resolved_block_region(frame, block_region)
+        backend = self._selected_block_backend(resolved_region)
+        block = self._block(
+            frame,
+            momenta,
+            sector_tuple,
+            block_region=resolved_region,
+        )
         with mpmath.workdps(self.block_working_precision):
-            if recursion_cutoff is None:
+            if backend == "h":
+                # The h-recursion has a constant correlated large-weight
+                # seed, so its functional form is the fastest way to obtain
+                # a numerical block.  With the budget chosen below it is
+                # exactly the same finite domain as the coefficient sum.
+                h_budget = (
+                    recursion_cutoff
+                    if recursion_cutoff is not None
+                    else (
+                        total_cutoff
+                        if total_cutoff is not None
+                        else sum(maxima)
+                    )
+                )
+                reduced = block.recursive_series_value(
+                    frame.q_values,
+                    h_budget,
+                    maximum_accumulated_twice_levels=maxima,
+                )
+            elif recursion_cutoff is None:
                 reduced = block.series_value(
                     frame.q_values,
                     maxima,
@@ -466,6 +549,7 @@ class BRYNSSphereMultipointCorrelator:
         *,
         max_twice_levels: Sequence[int] | None = None,
         max_total_twice_level: int | None = None,
+        block_region: Literal["auto", "bulk", "corner"] = "auto",
     ) -> complex:
         """Return the complete ``prod_e dP_e`` integrand in one channel."""
 
@@ -488,6 +572,7 @@ class BRYNSSphereMultipointCorrelator:
                 sectors,
                 max_twice_levels=max_twice_levels,
                 max_total_twice_level=max_total_twice_level,
+                block_region=block_region,
             )
             total += self._structure_product(
                 ordered_external_momenta, momenta, sectors

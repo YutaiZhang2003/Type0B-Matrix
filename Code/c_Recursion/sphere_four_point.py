@@ -25,10 +25,42 @@ from super_liouville_structure_constants import (
     ns_tilde_structure_constant,
 )
 from superconformal_blocks import HighPrecisionNSSphereFourPointBlock
+from ns_multipoint_h_recursion import NSSphereLinearHRecursion
 
 
 Number = Union[complex, float]
 CorrelatorKind = Literal["G", "H", "J"]
+BlockBackend = Literal["hybrid", "h", "c"]
+
+
+class HRecursiveNSSphereFourPointBlock(HighPrecisionNSSphereFourPointBlock):
+    """Elliptic NS block whose plane coefficients come from h-recursion."""
+
+    def __init__(self, **kwargs) -> None:
+        super().__init__(**kwargs)
+        self._h_backends: Dict[int, NSSphereLinearHRecursion] = {}
+
+    def coefficient(self, twice_level: int):
+        if not isinstance(twice_level, int) or twice_level < 0:
+            raise ValueError("twice_level must be a nonnegative integer")
+        parity = twice_level % 2
+        descendants = (0, int(self.star2), int(self.star3), 0)
+        sectors = (
+            parity ^ descendants[1],
+            parity ^ descendants[2],
+        )
+        if parity not in self._h_backends:
+            self._h_backends[parity] = NSSphereLinearHRecursion(
+                central_charge=self.c,
+                external_weights=(self.h1, self.h2, self.h3, self.h4),
+                external_descendants=descendants,
+                internal_weights=(self.internal_weight,),
+                vertex_sectors=sectors,
+                working_precision=self.working_precision,
+                pole_tolerance=self.pole_tolerance,
+            )
+        with mpmath.workdps(self.working_precision):
+            return self._h_backends[parity].coefficient((twice_level,))
 
 
 @dataclass(frozen=True)
@@ -122,6 +154,8 @@ class BRYNSFourPointCorrelator:
         structure_precision: int = 30,
         central_charge_shift: float = 1.0e-5,
         block_working_precision: int = 60,
+        block_backend: BlockBackend = "c",
+        hybrid_corner_radius: float = 0.15,
     ) -> None:
         if block_order < 1:
             raise ValueError("block_order must be positive")
@@ -143,6 +177,10 @@ class BRYNSFourPointCorrelator:
             raise ValueError("central_charge_shift must be finite and nonnegative")
         if block_working_precision < 30:
             raise ValueError("block_working_precision must be at least 30 digits")
+        if block_backend not in ("hybrid", "h", "c"):
+            raise ValueError("block_backend must be 'hybrid', 'h', or 'c'")
+        if not 0.0 < hybrid_corner_radius < 1.0:
+            raise ValueError("hybrid_corner_radius must lie in (0,1)")
         self.p1 = _finite_complex("p1", p1)
         self.p2 = _finite_complex("p2", p2)
         self.p3 = _finite_complex("p3", p3)
@@ -155,9 +193,11 @@ class BRYNSFourPointCorrelator:
         self.structure_precision = int(structure_precision)
         self.central_charge_shift = float(central_charge_shift)
         self.block_working_precision = int(block_working_precision)
+        self.block_backend = block_backend
+        self.hybrid_corner_radius = float(hybrid_corner_radius)
         self._structure_cache: Dict[float, Tuple[complex, complex]] = {}
         self._block_cache: Dict[
-            float,
+            Tuple[str, float],
             Tuple[
                 HighPrecisionNSSphereFourPointBlock,
                 HighPrecisionNSSphereFourPointBlock,
@@ -177,6 +217,15 @@ class BRYNSFourPointCorrelator:
         q_squared = self.block_central_charge / 3.0 - 0.5
         weight = 0.5 * (q_squared / 4.0 + momentum * momentum)
         return weight.real if abs(weight.imag) <= 1.0e-15 else weight
+
+    def _resolved_block_backend(self, z: Number) -> Literal["h", "c"]:
+        if self.block_backend != "hybrid":
+            return self.block_backend
+        value = self._validate_z(z)
+        corner_distance = min(
+            abs(value), abs(1.0 - value), 1.0 / abs(value)
+        )
+        return "c" if corner_distance < self.hybrid_corner_radius else "h"
 
     def _block_value(
         self,
@@ -222,9 +271,11 @@ class BRYNSFourPointCorrelator:
         return self._structure_cache[internal_momentum]
 
     def _blocks(
-        self, internal_momentum: float
+        self, internal_momentum: float, z: Number
     ) -> Tuple[HighPrecisionNSSphereFourPointBlock, HighPrecisionNSSphereFourPointBlock]:
-        if internal_momentum not in self._block_cache:
+        backend = self._resolved_block_backend(z)
+        key = (backend, internal_momentum)
+        if key not in self._block_cache:
             # BRY's b -> 1 crossing benchmark evaluates the recursion at
             # c=27/2+10^-5.  The displacement avoids coincident-pole
             # cancellations that are ill-conditioned in floating arithmetic.
@@ -239,12 +290,17 @@ class BRYNSFourPointCorrelator:
                 internal_weight=self.block_weight(internal_momentum),
                 working_precision=self.block_working_precision,
             )
-            primary = HighPrecisionNSSphereFourPointBlock(**common)
-            double_descendant = HighPrecisionNSSphereFourPointBlock(
+            block_type = (
+                HRecursiveNSSphereFourPointBlock
+                if backend == "h"
+                else HighPrecisionNSSphereFourPointBlock
+            )
+            primary = block_type(**common)
+            double_descendant = block_type(
                 **common, star2=True, star3=True
             )
-            self._block_cache[internal_momentum] = (primary, double_descendant)
-        return self._block_cache[internal_momentum]
+            self._block_cache[key] = (primary, double_descendant)
+        return self._block_cache[key]
 
     @staticmethod
     def _validate_z(z: Number) -> complex:
@@ -264,7 +320,7 @@ class BRYNSFourPointCorrelator:
             return FourPointCorrelators(0.0j, 0.0j, 0.0j)
 
         c_product, ct_product = self._structure_products(internal_momentum)
-        primary, starred = self._blocks(internal_momentum)
+        primary, starred = self._blocks(internal_momentum, z)
         zbar = z.conjugate()
 
         pe = self._block_value(primary, z, "even")
@@ -319,7 +375,7 @@ class BRYNSFourPointCorrelator:
             return 0.0j
 
         c_product, ct_product = self._structure_products(internal_momentum)
-        _, starred = self._blocks(internal_momentum)
+        _, starred = self._blocks(internal_momentum, z)
         zbar = z.conjugate()
         se = self._block_value(starred, z, "even")
         so = -self._block_value(starred, z, "odd")
@@ -343,7 +399,7 @@ class BRYNSFourPointCorrelator:
             return 0.0j
 
         c_product, ct_product = self._structure_products(internal_momentum)
-        primary, _ = self._blocks(internal_momentum)
+        primary, _ = self._blocks(internal_momentum, z)
         zbar = z.conjugate()
         pe = self._block_value(primary, z, "even")
         po = -self._block_value(primary, z, "odd")
@@ -384,7 +440,13 @@ class BRYNSFourPointCorrelator:
             )
 
         c_product, ct_product = self._structure_products(internal_momentum)
-        primary, _ = self._blocks(internal_momentum)
+        if self.block_backend == "hybrid" and len(
+            {self._resolved_block_backend(point) for point in points}
+        ) > 1:
+            raise ValueError(
+                "a hybrid z grid must not straddle the bulk/corner interface"
+            )
+        primary, _ = self._blocks(internal_momentum, points[0])
         pe = self._block_values(primary, points, "even")
         po = tuple(
             -value for value in self._block_values(primary, points, "odd")
@@ -549,6 +611,8 @@ class BRYFourTachyonSphere:
         structure_precision: int = 30,
         central_charge_shift: float = 1.0e-5,
         block_working_precision: int = 60,
+        block_backend: BlockBackend = "c",
+        hybrid_corner_radius: float = 0.15,
     ) -> None:
         self.omega = _finite_complex("omega", omega)
         self.omega1 = _finite_complex("omega1", omega1)
@@ -565,6 +629,8 @@ class BRYFourTachyonSphere:
             structure_precision=structure_precision,
             central_charge_shift=central_charge_shift,
             block_working_precision=block_working_precision,
+            block_backend=block_backend,
+            hybrid_corner_radius=hybrid_corner_radius,
         )
 
     def reduced_integrand(
@@ -603,4 +669,5 @@ __all__ = [
     "BRYFourTachyonSphere",
     "BRYNSFourPointCorrelator",
     "FourPointCorrelators",
+    "HRecursiveNSSphereFourPointBlock",
 ]
