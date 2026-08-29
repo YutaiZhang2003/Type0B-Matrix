@@ -111,6 +111,30 @@ class Type0BNSFiveTachyonTests(unittest.TestCase):
         self.assertEqual(cutoff_two, cutoff_three[: len(cutoff_two)])
         self.assertAlmostEqual(sum(weight for _, weight in cutoff_three), 3.0)
 
+    def test_coincident_composite_momentum_nodes_are_rejected(self):
+        with self.assertRaisesRegex(ValueError, "nonoverlapping composite nodes"):
+            BRYNSFiveTachyonIntegrand(
+                outgoing_energies=(0.25 + 0.02j,) * 4,
+                recursion_max_twice_level=None,
+                global_max_twice_levels=(0, 0),
+                global_max_total_twice_level=0,
+                momentum_orders=(5, 7),
+                momentum_maximum=2.0,
+                structure_precision=15,
+                block_working_precision=30,
+            )
+
+        BRYNSFiveTachyonIntegrand(
+            outgoing_energies=(0.25 + 0.02j,) * 4,
+            recursion_max_twice_level=None,
+            global_max_twice_levels=(0, 0),
+            global_max_total_twice_level=0,
+            momentum_orders=(6, 7),
+            momentum_maximum=2.0,
+            structure_precision=15,
+            block_working_precision=30,
+        )
+
     def test_threshold_centered_momentum_rule_resolves_feynman_core(self):
         root = 0.75
         damping = 0.005

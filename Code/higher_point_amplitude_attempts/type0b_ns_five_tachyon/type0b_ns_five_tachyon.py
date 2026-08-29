@@ -1660,6 +1660,18 @@ class BRYNSFiveTachyonIntegrand:
             raise ValueError("global_max_total_twice_level must be non-negative or None")
         if not math.isfinite(momentum_maximum) or momentum_maximum <= 0.0:
             raise ValueError("momentum_maximum must be positive and finite")
+        left_momentum_nodes = _smooth_momentum_nodes(orders[0], momentum_maximum)
+        right_momentum_nodes = _smooth_momentum_nodes(orders[1], momentum_maximum)
+        node_tolerance = 64.0 * math.ulp(max(1.0, float(momentum_maximum)))
+        if any(
+            abs(left_momentum - right_momentum) <= node_tolerance
+            for left_momentum, _ in left_momentum_nodes
+            for right_momentum, _ in right_momentum_nodes
+        ):
+            raise ValueError(
+                "choose momentum orders with nonoverlapping composite nodes to "
+                "avoid confluent c-recursion poles on the P1=P2 diagonal"
+            )
         if structure_precision < 15 or block_working_precision < 30:
             raise ValueError("insufficient structure or block working precision")
         if central_charge_shift < 0.0 or not math.isfinite(central_charge_shift):
