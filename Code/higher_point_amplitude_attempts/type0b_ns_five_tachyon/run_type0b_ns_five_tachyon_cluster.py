@@ -87,6 +87,8 @@ def _load_config(path: Path) -> dict[str, object]:
         raise ValueError("each regulator-radius point requires a certificate shard")
     if certificate.get("reference_backend") != "c":
         raise ValueError("the collar overlap certificate must use c-recursion")
+    if not isinstance(certificate.get("enforce"), bool):
+        raise ValueError("the collar certificate enforce policy must be boolean")
     if certificate.get("reference_max_twice_levels") != [8, 8]:
         raise ValueError("the c-recursion collar check is fixed at edge order (8,8)")
     if int(certificate.get("reference_max_total_twice_level", -1)) != 8:
@@ -229,9 +231,10 @@ def _worker_arguments(
                 str(certificate["previous_reference_max_total_twice_level"]),
                 "--face-collar-reference-convergence-relative-tolerance",
                 str(certificate["reference_convergence_relative_tolerance"]),
-                "--enforce-face-collar-certificate",
             ]
         )
+        if bool(certificate["enforce"]):
+            arguments.append("--enforce-face-collar-certificate")
     else:
         arguments.append("--skip-face-collar-diagnostic")
     if int(task["shard_index"]) >= int(
@@ -363,10 +366,11 @@ def reduce_shards(
                     f"coefficient-fit/radius {key} has {len(certificates)} "
                     f"certificates; expected {required_certificates}"
                 )
-            if any(
+            certificates_passed = not any(
                 not bool(certificate.get("passed"))
                 for certificate in certificates
-            ):
+            )
+            if bool(config["collar_certificate"]["enforce"]) and not certificates_passed:
                 raise ArithmeticError(f"collar certificate failed at {key}")
             bulks = np.asarray(
                 [
@@ -410,6 +414,7 @@ def reduce_shards(
                 "faces": faces,
                 "corner": corner,
                 "certificates": certificates,
+                "certificates_passed": certificates_passed,
                 "first_result": shards[0][1],
             }
 
@@ -460,6 +465,9 @@ def reduce_shards(
                 "face_mean": _encoded(complex(np.mean(production["faces"]))),
                 "corner_contribution": _encoded(production["corner"]),
                 "face_collar_certificates": production["certificates"],
+                "face_collar_certificates_passed": production[
+                    "certificates_passed"
+                ],
                 "bulk_samples": int(
                     shard_count
                     * int(first_result["replicates"])

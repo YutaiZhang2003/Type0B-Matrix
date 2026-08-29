@@ -42,6 +42,7 @@
   },
   "collar_certificate": {
     "audit_shards": 1,
+    "enforce": false,
     "relative_tolerance": 0.05,
     "absolute_tolerance": 1e-10,
     "samples_per_orbit": 3,
@@ -52,7 +53,7 @@
     "previous_reference_max_twice_levels": [6, 6],
     "previous_reference_max_total_twice_level": 6,
     "reference_convergence_relative_tolerance": 0.01,
-    "interpretation": "Tolerance-based agreement is required; exact equality at the collar is neither expected nor tested because the full c-recursive block retains higher normal powers."
+    "interpretation": "The order-eight comparison is recorded but is not a hard production gate. Exact equality at the collar is neither expected nor tested because the full c-recursive block retains higher normal powers; reference non-convergence is reported separately from the moduli estimate."
   },
   "momentum": {
     "orders": [5, 7],

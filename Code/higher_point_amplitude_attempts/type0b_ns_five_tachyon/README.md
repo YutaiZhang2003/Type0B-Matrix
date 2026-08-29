@@ -76,9 +76,11 @@ every recursion coefficient in `eta^2` before moduli integration.  Degree
 three is the production table and degree two is integrated on the same Sobol
 points as its regulator systematic.  The three collars
 `rho=(0.01,0.005,0.0025)` share the same fitted CFT tables and Sobol points.
-One shard also enforces the configured tolerance-based face-CFT versus
-c-recursion certificate at total level eight against the preceding total-level-six
-series at every collar;
+One shard also records the configured tolerance-based face-CFT versus
+c-recursion diagnostic at total level eight against the preceding total-level-six
+series at every collar.  It is deliberately non-fatal so that reference-series
+non-convergence is reported alongside, rather than substituted for, the first
+moduli estimate;
 exact boundary equality is not required because the full block contains the
 higher normal powers left in the numerical remainder:
 

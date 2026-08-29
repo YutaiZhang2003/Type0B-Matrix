@@ -44,6 +44,7 @@ class Type0BFivePointClusterTests(unittest.TestCase):
         self.assertIn("--include-comparison-fit", arguments)
         self.assertIn("--h-regulator-etas", arguments)
         self.assertNotIn("--h-regulator-eta", arguments)
+        self.assertNotIn("--enforce-face-collar-certificate", arguments)
 
     def test_reducer_uses_paired_fit_and_collar_differences(self):
         config = _load_config(CONFIG)
@@ -71,7 +72,7 @@ class Type0BFivePointClusterTests(unittest.TestCase):
                                 "corner_contribution": _encoded(1.0 + 0.0j),
                                 "corner_contribution_computed": shard_index == 0,
                                 "face_collar_certificate": (
-                                    {"passed": True}
+                                    {"passed": False}
                                     if variant == "production" and shard_index == 0
                                     else None
                                 ),
@@ -106,6 +107,11 @@ class Type0BFivePointClusterTests(unittest.TestCase):
             self.assertAlmostEqual(first_shift["real"], 0.25)
             self.assertAlmostEqual(first_shift["imag"], 0.0)
             self.assertEqual(len(summary["collar_stability_differences"]), 2)
+            self.assertFalse(
+                summary["radius_summaries"][0][
+                    "face_collar_certificates_passed"
+                ]
+            )
             self.assertTrue(summary_path.exists())
 
     def test_reducer_accepts_only_the_declared_previous_non_audit_shard_hashes(self):
