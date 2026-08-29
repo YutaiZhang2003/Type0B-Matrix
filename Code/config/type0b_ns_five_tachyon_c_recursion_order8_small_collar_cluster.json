@@ -1,0 +1,87 @@
+{
+  "schema": "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5",
+  "status": "ready_for_c_recursion_production",
+  "run_label": "Ea_equal_quarter_plus_0p02i_all_c_recursion",
+  "physics": {
+    "real_outgoing_energies": [0.25, 0.25, 0.25, 0.25],
+    "epsilon": 0.02,
+    "epsilon_weights": [1.0, 1.0, 1.0, 1.0],
+    "prescription": "direct physical-domain +i-epsilon",
+    "outgoing_point": "omega_a=1/4+0.02i",
+    "incoming_point": "omega_in=1+0.08i"
+  },
+  "recursion": {
+    "block_backend": "c",
+    "global_max_twice_levels": [8, 8],
+    "global_max_total_twice_level": 16,
+    "h_recursion_role": "disabled",
+    "c_recursion_role": "production_in_every_selected_chart",
+    "comment": "Fixed-weight c-recursion is used for the full moduli integrand; no b regulator or coefficient extrapolation is present."
+  },
+  "atlas": {
+    "oriented_linear_charts": 120,
+    "unoriented_trivalent_trees": 15,
+    "selection_score": "minimize max(|q1|,|q2|)",
+    "series_domain": "|q1|<1 and |q2|<1"
+  },
+  "subtraction": {
+    "scheme": "pointwise_F-P1-P2+P12_plus_analytic_forest",
+    "collar_radii": [0.01, 0.005, 0.0025],
+    "projection_radius": 1e-05,
+    "strict_boundary_matching_required": false,
+    "comment": "All three radii use identical Sobol points. Higher normal powers remain in the numerical remainder."
+  },
+  "collar_certificate": {
+    "audit_shards": 1,
+    "enforce": false,
+    "relative_tolerance": 0.05,
+    "absolute_tolerance": 1e-10,
+    "samples_per_orbit": 3,
+    "normal_angle_count": 2,
+    "reference_backend": "c",
+    "reference_max_twice_levels": [8, 8],
+    "reference_max_total_twice_level": 16,
+    "previous_reference_max_twice_levels": [6, 6],
+    "previous_reference_max_total_twice_level": 12,
+    "reference_convergence_relative_tolerance": 0.01,
+    "interpretation": "The order-eight versus order-six c-series comparison is recorded but is not a hard gate on the first moduli estimate."
+  },
+  "momentum": {
+    "orders": [5, 7],
+    "maximum": 2.0,
+    "refinement_shells": 4,
+    "constant_singularity_subtraction": true
+  },
+  "precision": {
+    "structure_digits": 22,
+    "block_digits": 45
+  },
+  "qmc": {
+    "bulk_sobol_power": 3,
+    "face_sobol_power": 4,
+    "replicates_per_shard": 16,
+    "radial_power": 0.5,
+    "effective_bulk_samples_per_radius": 512,
+    "effective_face_samples_per_radius": 1024
+  },
+  "array": {
+    "shards": 4,
+    "deterministic_corner_shards": 1,
+    "base_seed": 20260901,
+    "seed_stride": 100000,
+    "task_count": 4,
+    "recommended_array_cap": 4
+  },
+  "merge": {
+    "compatible_shard_config_sha256": {},
+    "justification": "Fresh c-recursion production run; no h-recursion shard data are compatible."
+  },
+  "resources": {
+    "partition": "yin",
+    "cpus_per_task": 1,
+    "memory": "12G",
+    "wall_time": "12:00:00",
+    "requeue": false
+  },
+  "matrix_model_used": false
+}

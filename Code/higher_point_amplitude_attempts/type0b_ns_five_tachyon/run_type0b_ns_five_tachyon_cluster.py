@@ -23,8 +23,10 @@ from evaluate_type0b_ns_five_tachyon_physical_i_epsilon import (
 
 def _load_config(path: Path) -> dict[str, object]:
     config = json.loads(path.read_text())
-    if config.get("schema") != (
-        "type0b-ns-fivepoint-order8-coefficient-table-subtraction-v4"
+    schema = config.get("schema")
+    if schema not in (
+        "type0b-ns-fivepoint-order8-coefficient-table-subtraction-v4",
+        "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5",
     ):
         raise ValueError("unexpected cluster config schema")
     recursion = config["recursion"]
@@ -33,32 +35,43 @@ def _load_config(path: Path) -> dict[str, object]:
         raise ValueError("this production bundle is fixed at recursion order (8,8)")
     if int(recursion["global_max_total_twice_level"]) < 16:
         raise ValueError("full rectangular order (8,8) requires total twice-level 16")
-    if recursion["block_backend"] != "h":
-        raise ValueError("the production bundle requires regulated h-recursion")
-    if recursion.get("h_recursion_role") != (
-        "production_coefficientwise_self_dual_limit"
-    ):
-        raise ValueError("h-recursion must use the coefficient-wise self-dual limit")
-    if recursion.get("c_recursion_role") != (
-        "collar_overlap_check_through_total_level_eight"
-    ):
-        raise ValueError("c-recursion must provide the total-level-eight collar check")
-    regulator = config.get("self_dual_regulator", {})
-    eta_values = tuple(float(value) for value in regulator.get("eta_values", ()))
-    degree = int(regulator.get("polynomial_degree", -1))
-    comparison_degree = int(regulator.get("comparison_degree", -1))
-    if len(eta_values) < degree + 1 or any(value <= 0.0 for value in eta_values):
-        raise ValueError("the self-dual sweep has too few positive eta values")
-    if len(set(eta_values)) != len(eta_values):
-        raise ValueError("self-dual eta values must be distinct")
-    if not 1 <= comparison_degree < degree:
-        raise ValueError("the comparison fit degree must be below the production fit")
-    if not bool(regulator.get("common_random_numbers")):
-        raise ValueError("regulator extrapolation requires common random numbers")
-    if regulator.get("extrapolation_stage") != (
-        "per_coefficient_before_moduli_integration"
-    ):
-        raise ValueError("the regulator fit must precede moduli integration")
+    backend = recursion["block_backend"]
+    if backend == "h":
+        if recursion.get("h_recursion_role") != (
+            "production_coefficientwise_self_dual_limit"
+        ):
+            raise ValueError("h-recursion must use the coefficient-wise self-dual limit")
+        if recursion.get("c_recursion_role") != (
+            "collar_overlap_check_through_total_level_eight"
+        ):
+            raise ValueError("c-recursion must provide the total-level-eight collar check")
+        regulator = config.get("self_dual_regulator", {})
+        eta_values = tuple(float(value) for value in regulator.get("eta_values", ()))
+        degree = int(regulator.get("polynomial_degree", -1))
+        comparison_degree = int(regulator.get("comparison_degree", -1))
+        if len(eta_values) < degree + 1 or any(value <= 0.0 for value in eta_values):
+            raise ValueError("the self-dual sweep has too few positive eta values")
+        if len(set(eta_values)) != len(eta_values):
+            raise ValueError("self-dual eta values must be distinct")
+        if not 1 <= comparison_degree < degree:
+            raise ValueError("the comparison fit degree must be below production")
+        if not bool(regulator.get("common_random_numbers")):
+            raise ValueError("regulator extrapolation requires common random numbers")
+        if regulator.get("extrapolation_stage") != (
+            "per_coefficient_before_moduli_integration"
+        ):
+            raise ValueError("the regulator fit must precede moduli integration")
+    elif backend == "c":
+        if schema != "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5":
+            raise ValueError("pure c-recursion requires the v5 production schema")
+        if recursion.get("h_recursion_role") != "disabled":
+            raise ValueError("h-recursion must be disabled in the c-only bundle")
+        if recursion.get("c_recursion_role") != "production_in_every_selected_chart":
+            raise ValueError("c-recursion must be the all-chart production backend")
+        if "self_dual_regulator" in config:
+            raise ValueError("the c-only bundle must not define an h regulator")
+    else:
+        raise ValueError("the production bundle requires pure h or pure c recursion")
     atlas = config.get("atlas", {})
     if int(atlas.get("oriented_linear_charts", 0)) != 120:
         raise ValueError("the production bundle requires the 120-chart atlas")
@@ -91,12 +104,14 @@ def _load_config(path: Path) -> dict[str, object]:
         raise ValueError("the collar certificate enforce policy must be boolean")
     if certificate.get("reference_max_twice_levels") != [8, 8]:
         raise ValueError("the c-recursion collar check is fixed at edge order (8,8)")
-    if int(certificate.get("reference_max_total_twice_level", -1)) != 8:
-        raise ValueError("the c-recursion collar check must use total level eight")
+    expected_reference_total = 16 if backend == "c" else 8
+    if int(certificate.get("reference_max_total_twice_level", -1)) != expected_reference_total:
+        raise ValueError("the c-recursion collar check has the wrong total cutoff")
     if certificate.get("previous_reference_max_twice_levels") != [6, 6]:
         raise ValueError("the preceding c-recursion check is fixed at edge order (6,6)")
-    if int(certificate.get("previous_reference_max_total_twice_level", -1)) != 6:
-        raise ValueError("the preceding c-recursion check must use total level six")
+    expected_previous_total = 12 if backend == "c" else 6
+    if int(certificate.get("previous_reference_max_total_twice_level", -1)) != expected_previous_total:
+        raise ValueError("the preceding c-recursion check has the wrong total cutoff")
     compatible_hashes = config.get("merge", {}).get(
         "compatible_shard_config_sha256", {}
     )
@@ -133,8 +148,8 @@ def _tasks(config: dict[str, object]) -> tuple[dict[str, object], ...]:
             "task_index": shard_index,
             "shard_index": shard_index,
             "central_charge_shift": 0.0,
-            # Every collar and both coefficient fits are evaluated inside this
-            # worker, so one seed couples all stability differences exactly.
+            # Every collar is evaluated inside this worker, so one seed couples
+            # all collar-stability differences exactly.
             "seed": base_seed + shard_index,
         }
         for shard_index in range(shard_count)
@@ -150,7 +165,6 @@ def _worker_arguments(
     precision = config["precision"]
     qmc = config["qmc"]
     certificate = config["collar_certificate"]
-    regulator = config["self_dual_regulator"]
     radii = tuple(float(value) for value in config["subtraction"]["collar_radii"])
     arguments = [
         "--energies",
@@ -177,13 +191,6 @@ def _worker_arguments(
         str(precision["structure_digits"]),
         "--central-charge-shift",
         str(task["central_charge_shift"]),
-        "--h-regulator-etas",
-        *(str(value) for value in regulator["eta_values"]),
-        "--h-regulator-polynomial-degree",
-        str(regulator["polynomial_degree"]),
-        "--h-regulator-comparison-degree",
-        str(regulator["comparison_degree"]),
-        "--include-comparison-fit",
         "--block-working-precision",
         str(precision["block_digits"]),
         "--collar-radii",
@@ -203,6 +210,18 @@ def _worker_arguments(
         "--output",
         str(output),
     ]
+    if recursion["block_backend"] == "h":
+        regulator = config["self_dual_regulator"]
+        insertion = arguments.index("--block-working-precision")
+        arguments[insertion:insertion] = [
+            "--h-regulator-etas",
+            *(str(value) for value in regulator["eta_values"]),
+            "--h-regulator-polynomial-degree",
+            str(regulator["polynomial_degree"]),
+            "--h-regulator-comparison-degree",
+            str(regulator["comparison_degree"]),
+            "--include-comparison-fit",
+        ]
     if int(task["shard_index"]) < int(
         certificate["audit_shards"]
     ):
@@ -285,7 +304,9 @@ def run_worker(
         "worker_wall_seconds": worker_wall_seconds,
     }
     payload["status"] = (
-        "order8_coefficient_extrapolated_h_forest_cluster_shard_not_frozen"
+        "order8_c_recursion_forest_cluster_shard_not_frozen"
+        if config["recursion"]["block_backend"] == "c"
+        else "order8_coefficient_extrapolated_h_forest_cluster_shard_not_frozen"
     )
     _atomic_json(output, payload)
     return payload
@@ -330,7 +351,9 @@ def reduce_shards(
         if payload.get("schema") != "type0b-ns-fivepoint-coupled-collar-fit-bundle-v1":
             raise ValueError(f"unexpected worker bundle schema in {path}")
         shard_index = int(payload["cluster_task"]["shard_index"])
-        shard_diagnostics.append(payload["self_dual_coefficient_fit"])
+        diagnostic = payload.get("self_dual_coefficient_fit")
+        if diagnostic is not None:
+            shard_diagnostics.append(diagnostic)
         for result in payload["results"]:
             key = (str(result["h_fit_variant"]), float(result["collar_radius"]))
             groups.setdefault(key, []).append((shard_index, result))
@@ -340,7 +363,12 @@ def reduce_shards(
     radii = tuple(float(value) for value in config["subtraction"]["collar_radii"])
     shard_count = int(config["array"]["shards"])
     components: dict[tuple[str, float], dict[str, object]] = {}
-    for variant in ("production", "comparison"):
+    variants = (
+        ("production", "comparison")
+        if config["recursion"]["block_backend"] == "h"
+        else ("production",)
+    )
+    for variant in variants:
         for radius in radii:
             key = (variant, radius)
             if key not in groups:
@@ -422,24 +450,14 @@ def reduce_shards(
     production_by_radius: dict[float, np.ndarray] = {}
     for radius in radii:
         production = components[("production", radius)]
-        comparison = components[("comparison", radius)]
         totals = production["totals"]
-        comparison_totals = comparison["totals"]
-        if totals.shape != comparison_totals.shape:
-            raise ArithmeticError("paired coefficient-fit replicate shapes disagree")
-        fit_shifts = totals - comparison_totals
         production_by_radius[radius] = totals
         first_result = production["first_result"]
-        radius_summaries.append(
-            {
+        radius_summary = {
                 "collar_radius": radius,
-                "regulator_extrapolated_per_coefficient": True,
-                "fit_variable": "eta^2",
-                "polynomial_degree": int(
-                    config["self_dual_regulator"]["polynomial_degree"]
-                ),
-                "comparison_degree": int(
-                    config["self_dual_regulator"]["comparison_degree"]
+                "block_backend": config["recursion"]["block_backend"],
+                "regulator_extrapolated_per_coefficient": (
+                    config["recursion"]["block_backend"] == "h"
                 ),
                 "replicate_count": int(totals.size),
                 "integral_mean": _encoded(complex(np.mean(totals))),
@@ -448,18 +466,6 @@ def reduce_shards(
                 ),
                 "standard_error_imag": float(
                     np.std(totals.imag, ddof=1) / math.sqrt(totals.size)
-                ),
-                "coefficient_fit_shift_mean": _encoded(
-                    complex(np.mean(fit_shifts))
-                ),
-                "maximum_paired_coefficient_fit_shift": float(
-                    np.max(np.abs(fit_shifts))
-                ),
-                "coefficient_fit_shift_standard_error_real": float(
-                    np.std(fit_shifts.real, ddof=1) / math.sqrt(fit_shifts.size)
-                ),
-                "coefficient_fit_shift_standard_error_imag": float(
-                    np.std(fit_shifts.imag, ddof=1) / math.sqrt(fit_shifts.size)
                 ),
                 "bulk_mean": _encoded(complex(np.mean(production["bulks"]))),
                 "face_mean": _encoded(complex(np.mean(production["faces"]))),
@@ -479,10 +485,36 @@ def reduce_shards(
                     * int(first_result["face_samples_per_replicate"])
                 ),
             }
-        )
+        if config["recursion"]["block_backend"] == "h":
+            comparison_totals = components[("comparison", radius)]["totals"]
+            if totals.shape != comparison_totals.shape:
+                raise ArithmeticError("paired coefficient-fit shapes disagree")
+            fit_shifts = totals - comparison_totals
+            radius_summary.update(
+                {
+                    "fit_variable": "eta^2",
+                    "polynomial_degree": int(
+                        config["self_dual_regulator"]["polynomial_degree"]
+                    ),
+                    "comparison_degree": int(
+                        config["self_dual_regulator"]["comparison_degree"]
+                    ),
+                    "coefficient_fit_shift_mean": _encoded(
+                        complex(np.mean(fit_shifts))
+                    ),
+                    "maximum_paired_coefficient_fit_shift": float(
+                        np.max(np.abs(fit_shifts))
+                    ),
+                }
+            )
+        radius_summaries.append(radius_summary)
 
     payload: dict[str, object] = {
-        "schema": "type0b-ns-fivepoint-order8-coefficient-table-summary-v4",
+        "schema": (
+            "type0b-ns-fivepoint-order8-c-recursion-summary-v5"
+            if config["recursion"]["block_backend"] == "c"
+            else "type0b-ns-fivepoint-order8-coefficient-table-summary-v4"
+        ),
         "status": "worldsheet_cluster_preflight_not_frozen",
         "config": str(config_path.resolve()),
         "config_sha256": config_hash,
@@ -498,7 +530,7 @@ def reduce_shards(
             "and corner finite parts"
         ),
         "recursion": config["recursion"],
-        "self_dual_regulator": config["self_dual_regulator"],
+        "self_dual_regulator": config.get("self_dual_regulator"),
         "atlas": config["atlas"],
         "collar_certificate_policy": config["collar_certificate"],
         "coefficient_fit_diagnostics_by_shard": shard_diagnostics,

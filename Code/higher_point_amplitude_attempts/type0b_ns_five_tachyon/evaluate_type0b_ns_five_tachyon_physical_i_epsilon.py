@@ -62,10 +62,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--block-backend",
         choices=("hybrid", "h", "c"),
-        default="h",
+        default="c",
         help=(
-            "production uses regulated h-recursion in the best CCY chart; "
-            "c and hybrid are overlap-audit modes"
+            "production defaults to fixed-weight c-recursion in every selected "
+            "CCY chart; h and hybrid are retained only for explicit diagnostics"
         ),
     )
     parser.add_argument("--hybrid-q-threshold", type=float, default=0.3)
@@ -372,6 +372,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 seed=args.seed,
             )
             encoded = result.to_json()
+            encoded["recursion_variant"] = fit_variant
+            # Backward-compatible key used by the existing cluster reducer.
             encoded["h_fit_variant"] = fit_variant
             encoded["radius_index"] = radius_index
             result_payloads.append(encoded)
@@ -380,7 +382,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "status": (
             "worldsheet_coefficient_extrapolated_not_frozen"
             if args.block_backend == "h"
-            else "worldsheet_recursion_audit_not_frozen"
+            else "worldsheet_c_recursion_not_frozen"
         ),
         "prescription": "direct physical-domain +i-epsilon boundary value",
         "large_remote_analytic_continuation_used": False,
@@ -398,12 +400,28 @@ def main(argv: Sequence[str] | None = None) -> int:
         "production_block_policy": (
             "coefficient-wise self-dual h-recursion in the best CCY chart"
             if args.block_backend == "h"
-            else "non-production recursion-overlap audit"
+            else (
+                "fixed-weight c-recursion in every selected CCY chart"
+                if args.block_backend == "c"
+                else "hybrid recursion-overlap audit"
+            )
         ),
-        "h_recursion_role": "production coefficient-wise self-dual limit",
-        "c_recursion_role": "low-order descendant-validated overlap check",
+        "h_recursion_role": (
+            "production coefficient-wise self-dual limit"
+            if args.block_backend == "h"
+            else "disabled"
+        ),
+        "c_recursion_role": (
+            "production in every selected chart"
+            if args.block_backend == "c"
+            else "low-order descendant-validated overlap check"
+        ),
         "self_dual_regulator_eta": args.h_regulator_eta,
-        "self_dual_coefficient_fit": kernel.h_self_dual_fit_diagnostics(),
+        "self_dual_coefficient_fit": (
+            kernel.h_self_dual_fit_diagnostics()
+            if args.block_backend == "h"
+            else None
+        ),
         "q_variable_convention": (
             "ordinary CCY sphere-linear plumbing coordinates q1=z1/z2 and q2=z2"
         ),
