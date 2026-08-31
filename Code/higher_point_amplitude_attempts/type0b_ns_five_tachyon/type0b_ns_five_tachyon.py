@@ -1629,6 +1629,8 @@ class BRYNSFiveTachyonIntegrand:
         block_cache_limit: int = 2048,
         auxiliary_cache_limit: int = 4096,
         c_coefficient_cache_path: str | os.PathLike[str] | None = None,
+        batch_c_evaluation: bool = False,
+        tensor_cache_mebibytes: int = 512,
     ) -> None:
         if len(outgoing_energies) != 4:
             raise ValueError("outgoing_energies must contain four values")
@@ -1745,6 +1747,13 @@ class BRYNSFiveTachyonIntegrand:
         self.pole_tolerance = float(pole_tolerance)
         self.factorize_single_primary = bool(factorize_single_primary)
         self.compact_c_cache = bool(compact_c_cache) and block_backend == "c"
+        self.batch_c_evaluation = bool(batch_c_evaluation)
+        if self.batch_c_evaluation and (
+            not self.compact_c_cache or recursion_max_twice_level is not None
+        ):
+            raise ValueError("batch evaluation requires compact coefficient c-recursion")
+        from fivepoint_batch import TensorCache
+        self._momentum_tensor_cache = TensorCache(int(tensor_cache_mebibytes) * 1024**2)
         self._c_block_type = CompactCBlock if self.compact_c_cache else NSSphereLinearCRecursion
         self._c_coefficient_store = (
             CoefficientStore(c_coefficient_cache_path)
@@ -1796,6 +1805,12 @@ class BRYNSFiveTachyonIntegrand:
             ),
             "disk_hits": self._c_coefficient_store.hits if self._c_coefficient_store else 0,
             "disk_writes": self._c_coefficient_store.writes if self._c_coefficient_store else 0,
+            "tensor_bytes": self._momentum_tensor_cache.bytes,
+            "tensor_hits": self._momentum_tensor_cache.hits,
+            "tensor_misses": self._momentum_tensor_cache.misses,
+            "tensor_evictions": self._momentum_tensor_cache.evictions,
+            "tensor_evaluated_rows": self._momentum_tensor_cache.evaluated_rows,
+            "tensor_fallback_rows": self._momentum_tensor_cache.fallback_rows,
         }
 
     def close_runtime(self) -> None:
@@ -2351,12 +2366,12 @@ class BRYNSFiveTachyonIntegrand:
                         epsilon1=selected_parity,
                         epsilon2=ordered_descendants[1],
                         epsilon3=ordered_descendants[0],
-                        d1=internal_weights[0],
-                        d2=ordered_weights[1],
-                        d3=ordered_weights[0],
+                        d1=mpmath.mpc(internal_weights[0]),
+                        d2=mpmath.mpc(ordered_weights[1]),
+                        d3=mpmath.mpc(ordered_weights[0]),
                     )
                     endpoint_norm = osp_norm(
-                        internal_weights[0], 0, selected_parity
+                        mpmath.mpc(internal_weights[0]), 0, selected_parity
                     )
                     face_external_weights = (
                         internal_weights[0],
@@ -2381,12 +2396,12 @@ class BRYNSFiveTachyonIntegrand:
                         epsilon1=ordered_descendants[4],
                         epsilon2=ordered_descendants[3],
                         epsilon3=selected_parity,
-                        d1=ordered_weights[4],
-                        d2=ordered_weights[3],
-                        d3=internal_weights[1],
+                        d1=mpmath.mpc(ordered_weights[4]),
+                        d2=mpmath.mpc(ordered_weights[3]),
+                        d3=mpmath.mpc(internal_weights[1]),
                     )
                     endpoint_norm = osp_norm(
-                        internal_weights[1], 0, selected_parity
+                        mpmath.mpc(internal_weights[1]), 0, selected_parity
                     )
                     face_external_weights = (
                         ordered_weights[0],
@@ -3417,6 +3432,26 @@ class BRYNSFiveTachyonIntegrand:
             * abs(jacobian) ** 2
         )
 
+    def _linear_q_primary_densities(self, ordering, q1, q2, momenta, edges):
+        """Batch the same primary projection with one channel/geometry setup."""
+        from fivepoint_batch import momentum_densities
+        selected = tuple(int(label) for label in ordering)
+        first, second = complex(q1), complex(q2)
+        if len(selected) != 5 or set(selected) != set(range(5)):
+            raise ValueError("ordering must permute labels 0,...,4")
+        if not 0 < abs(first) < 1 or not 0 < abs(second) < 1:
+            raise ValueError("linear plumbing coordinates must lie in the punctured bidisc")
+        positions = _to_fixed_gauge(first, second, selected)
+        channel = linear_channel_from_ordering(positions, selected)
+        jacobian = linear_channel_complex_jacobian_to_chart(
+            first, second, selected, fixed_zero=FIXED_ZERO_LABEL,
+            fixed_one=FIXED_ONE_LABEL, fixed_infinity=FIXED_INFINITY_LABEL,
+            moving_labels=MOVING_LABELS,
+        )
+        return momentum_densities(self, positions, channel, momenta, edges) * (
+            _superghost_pair_factor(positions) * abs(jacobian)**2
+        )
+
     def linear_q_primary_density(
         self,
         *,
@@ -3438,6 +3473,13 @@ class BRYNSFiveTachyonIntegrand:
             _smooth_momentum_nodes(order, self.momentum_maximum)
             for order in self.momentum_orders
         )
+        if self.batch_c_evaluation:
+            pairs = tuple(product(*node_sets))
+            values = self._linear_q_primary_densities(
+                ordering, q1, q2, [(a[0], b[0]) for a, b in pairs], boundary_edges,
+            )
+            return complex(sum(a[1] * b[1] * value
+                               for (a, b), value in zip(pairs, values)))
         total = 0.0 + 0.0j
         for first, second in product(*node_sets):
             p1, weight1 = first
@@ -3545,6 +3587,31 @@ class BRYNSFiveTachyonIntegrand:
             if use_singularity_subtraction
             else None
         )
+        if self.batch_c_evaluation:
+            # One reusable tensor contains the normal grid and, when needed,
+            # its subtraction node. The radial finite part stays unchanged.
+            radius = float(projection_radius)
+            if not math.isfinite(radius) or radius <= 0 or radius >= min(0.01, 0.1 * abs(remaining_modulus)):
+                raise ValueError("projection_radius must be positive and small compared with the remaining modulus")
+            normal_momenta = [p for p, _ in normal_nodes]
+            if use_singularity_subtraction:
+                normal_momenta.append(normal_root)
+            pairs = [(p, remaining) for remaining, _ in remaining_nodes
+                     for p in normal_momenta]
+            densities = self._linear_q_primary_densities(
+                ordering, projection_radius, remaining_modulus, pairs, (0,),
+            ).reshape(len(remaining_nodes), len(normal_momenta))
+            betas = [self.boundary_radial_beta(ordering, p, side="left")
+                     for p in normal_momenta]
+            coefficients = densities / np.exp(np.asarray(betas) * math.log(projection_radius))
+            for row, (_, weight_remaining) in enumerate(remaining_nodes):
+                root = coefficients[row, -1] if use_singularity_subtraction else 0j
+                normal_integral = root * universal_integral if use_singularity_subtraction else 0j
+                for column, (_, weight_normal) in enumerate(normal_nodes):
+                    normal_integral += weight_normal * _complex_radial_finite_part(
+                        betas[column], collar_radius) * (coefficients[row, column] - root)
+                total += weight_remaining * normal_integral
+            return complex(total)
         for second in remaining_nodes:
             p_remaining, weight_remaining = second
             root_coefficient = (
@@ -3624,6 +3691,18 @@ class BRYNSFiveTachyonIntegrand:
         self._boundary_corner_coefficient_cache[cache_key] = result
         return result
 
+    def _corner_coefficient_grid(self, ordering, left_momenta, right_momenta, radius):
+        """Prepare one primary tensor; retain the scalar subtraction arithmetic."""
+        radius = float(radius)
+        if not math.isfinite(radius) or not 1e-7 <= radius < 1e-3:
+            raise ValueError("corner projection_radius must lie in [1e-7,1e-3)")
+        pairs = tuple(product(left_momenta, right_momenta))
+        values = self._linear_q_primary_densities(ordering, radius, radius, pairs, (0, 1))
+        betas = [self.boundary_radial_beta(ordering, a, side="left") +
+                 self.boundary_radial_beta(ordering, b, side="right") for a, b in pairs]
+        values /= np.exp(np.asarray(betas) * math.log(radius))
+        return dict(zip(pairs, values))
+
     def boundary_corner_finite_part(
         self,
         *,
@@ -3671,9 +3750,20 @@ class BRYNSFiveTachyonIntegrand:
             for beta_zero, use_subtraction in zip(beta_zeros, use_subtractions)
         )
 
+        coefficients = None
+        if self.batch_c_evaluation:
+            grids = [[p for p, _ in nodes] + ([root] if use else [])
+                     for nodes, root, use in zip(node_sets, roots, use_subtractions)]
+            coefficients = self._corner_coefficient_grid(ordering, *grids, projection_radius)
+
+        def coefficient_at(**kwargs):
+            if coefficients is not None:
+                return coefficients[(kwargs["left_momentum"], kwargs["right_momentum"])]
+            return self.boundary_corner_leading_momentum_coefficient(**kwargs)
+
         def left_integral(right_momentum: float) -> complex:
             root_coefficient = (
-                self.boundary_corner_leading_momentum_coefficient(
+                coefficient_at(
                     ordering=ordering,
                     left_momentum=roots[0],
                     right_momentum=right_momentum,
@@ -3688,7 +3778,7 @@ class BRYNSFiveTachyonIntegrand:
                 else 0.0j
             )
             for left_momentum, left_weight in node_sets[0]:
-                coefficient = self.boundary_corner_leading_momentum_coefficient(
+                coefficient = coefficient_at(
                     ordering=ordering,
                     left_momentum=left_momentum,
                     right_momentum=right_momentum,
@@ -3777,11 +3867,22 @@ class BRYNSFiveTachyonIntegrand:
             if use_subtraction
             else None
         )
+        coefficients = None
+        if self.batch_c_evaluation:
+            left_grid = [p for p, _ in left_nodes] + ([left_root] if use_subtraction else [])
+            coefficients = self._corner_coefficient_grid(
+                ordering, left_grid, [p for p, _ in right_nodes], projection_radius)
+
+        def coefficient_at(**kwargs):
+            if coefficients is not None:
+                return coefficients[(kwargs["left_momentum"], kwargs["right_momentum"])]
+            return self.boundary_corner_leading_momentum_coefficient(**kwargs)
+
         log_modulus = math.log(abs(modulus))
         total = 0.0 + 0.0j
         for right_momentum, right_weight in right_nodes:
             root_coefficient = (
-                self.boundary_corner_leading_momentum_coefficient(
+                coefficient_at(
                     ordering=ordering,
                     left_momentum=left_root,
                     right_momentum=right_momentum,
@@ -3796,7 +3897,7 @@ class BRYNSFiveTachyonIntegrand:
                 else 0.0j
             )
             for left_momentum, left_weight in left_nodes:
-                coefficient = self.boundary_corner_leading_momentum_coefficient(
+                coefficient = coefficient_at(
                     ordering=ordering,
                     left_momentum=left_momentum,
                     right_momentum=right_momentum,
@@ -4154,6 +4255,15 @@ class BRYNSFiveTachyonIntegrand:
             _smooth_momentum_nodes(order, self.momentum_maximum)
             for order in self.momentum_orders
         )
+        if self.batch_c_evaluation:
+            from fivepoint_batch import momentum_densities
+            pairs = tuple(product(*node_sets))
+            values = momentum_densities(
+                self, normalized_positions, active_channel,
+                [(a[0], b[0]) for a, b in pairs],
+            )
+            return complex(sum(a[1] * b[1] * value
+                               for (a, b), value in zip(pairs, values)))
         total = 0.0 + 0.0j
         for first, second in product(*node_sets):
             p1, weight1 = first
@@ -5970,6 +6080,20 @@ def _leading_local_forest_remainder_integrand(
         for edge, coordinate in enumerate((channel.q1, channel.q2))
         if abs(coordinate) < radius
     )
+    if (getattr(kernel, "batch_c_evaluation", False) is True and active_edges
+        and min(kernel.global_max_twice_levels) >= 1
+        and (kernel.global_max_total_twice_level is None or
+             kernel.global_max_total_twice_level >= sum(kernel.global_max_twice_levels))):
+        from fivepoint_batch import momentum_densities
+        nodes = tuple(_smooth_momentum_nodes(order, kernel.momentum_maximum)
+                      for order in kernel.momentum_orders)
+        pairs = tuple(product(*nodes))
+        values = momentum_densities(
+            kernel, normalized, channel, [(a[0], b[0]) for a, b in pairs],
+            remainder_edges=active_edges,
+        )
+        return complex(_superghost_pair_factor(normalized) * sum(
+            a[1] * b[1] * value for (a, b), value in zip(pairs, values)))
     raw = kernel.fixed_gauge_integrand_positions(
         normalized, channel=channel
     )

@@ -248,6 +248,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--c-coefficient-cache", type=Path)
     parser.add_argument("--block-cache-limit", type=int, default=2048)
     parser.add_argument("--auxiliary-cache-limit", type=int, default=4096)
+    parser.add_argument("--batch-c-evaluation", action="store_true")
+    parser.add_argument("--tensor-cache-mebibytes", type=int, default=512)
     parser.add_argument("--checkpoint-directory", type=Path)
     return parser
 
@@ -301,13 +303,15 @@ def main(argv: Sequence[str] | None = None) -> int:
         ),
         block_cache_limit=args.block_cache_limit,
         auxiliary_cache_limit=args.auxiliary_cache_limit,
+        batch_c_evaluation=args.batch_c_evaluation,
+        tensor_cache_mebibytes=args.tensor_cache_mebibytes,
     )
     checkpoint_directory = args.checkpoint_directory or args.output.with_suffix(".checkpoints")
     checkpoint_identity = {
         "source": runtime_source_fingerprint(),
         "arguments": {key: value for key, value in vars(args).items() if key not in (
             "output", "c_coefficient_cache", "checkpoint_directory",
-            "block_cache_limit", "auxiliary_cache_limit",
+            "block_cache_limit", "auxiliary_cache_limit", "tensor_cache_mebibytes",
         )},
     }
     checkpoint_signature = hashlib.sha256(json.dumps(
@@ -452,6 +456,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             "in the numerical forest remainder"
         ),
         "block_working_precision": args.block_working_precision,
+        "batch_c_evaluation": args.batch_c_evaluation,
+        "runtime_cache_diagnostics": kernel.cache_diagnostics(),
         "worldsheet_normalization": {
             "stored_quantity": "integral d2z d2w I_NS(z,w)",
             "literal_all_tachyon_diagram": (

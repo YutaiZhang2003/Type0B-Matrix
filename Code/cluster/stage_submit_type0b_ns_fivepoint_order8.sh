@@ -46,9 +46,13 @@ ssh "${SSH_HOST}" "mkdir -p '${REMOTE_ROOT}/Code/higher_point_amplitude_attempts
     "${SSH_HOST}:${REMOTE_ROOT}/"
 )
 rsync -az "${LOCAL_CONFIG}" "${SSH_HOST}:${REMOTE_CONFIG}"
+# Regression tests also read the canonical baseline configuration when a
+# separate optimized or convergence configuration is being staged.
+rsync -az "${LOCAL_ROOT}/Code/config/type0b_ns_five_tachyon_c_recursion_order8_small_collar_cluster.json" \
+  "${SSH_HOST}:${REMOTE_ROOT}/Code/config/"
 
 REMOTE_PYTHONPATH="${REMOTE_ROOT}/Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon:${REMOTE_ROOT}/Code/c_Recursion:${REMOTE_ROOT}/Code/bosonic_c1_one_to_n_reference/reference_implementation/plumbing"
-ssh "${SSH_HOST}" "set -e; '${REMOTE_PYTHON}' -c 'import numpy,scipy,mpmath; print(numpy.__version__,scipy.__version__,mpmath.__version__)'; cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_PYTHONPATH}' '${REMOTE_PYTHON}' -m unittest Code/c_Recursion/test_ns_multipoint_h_recursion.py Code/c_Recursion/test_ns_multipoint_c_recursion.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_fivepoint_runtime.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_type0b_ns_five_tachyon.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_type0b_ns_five_tachyon_domain.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_run_type0b_ns_five_tachyon_cluster.py; PYTHONPATH='${REMOTE_PYTHONPATH}' '${REMOTE_PYTHON}' Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/run_type0b_ns_five_tachyon_cluster.py --config '${REMOTE_CONFIG}' plan"
+ssh "${SSH_HOST}" "set -e; '${REMOTE_PYTHON}' -c 'import numpy,scipy,mpmath; print(numpy.__version__,scipy.__version__,mpmath.__version__)'; cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_PYTHONPATH}' '${REMOTE_PYTHON}' -m unittest Code/c_Recursion/test_ns_multipoint_h_recursion.py Code/c_Recursion/test_ns_multipoint_c_recursion.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_fivepoint_runtime.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_fivepoint_batch.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_type0b_ns_five_tachyon.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_type0b_ns_five_tachyon_domain.py Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/test_run_type0b_ns_five_tachyon_cluster.py; PYTHONPATH='${REMOTE_PYTHONPATH}' '${REMOTE_PYTHON}' Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/run_type0b_ns_five_tachyon_cluster.py --config '${REMOTE_CONFIG}' plan"
 
 TASK_COUNT=$(ssh "${SSH_HOST}" "cd '${REMOTE_ROOT}'; PYTHONPATH='${REMOTE_PYTHONPATH}' '${REMOTE_PYTHON}' Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/run_type0b_ns_five_tachyon_cluster.py --config '${REMOTE_CONFIG}' plan --task-count-only")
 if [[ ${TASK_COUNT} -le 0 || ${ARRAY_CAP} -le 0 ]]; then

@@ -87,6 +87,22 @@ def runtime_source_fingerprint() -> str:
     return digest.hexdigest()
 
 
+@lru_cache(maxsize=1)
+def coefficient_source_fingerprint() -> str:
+    """Coefficient identity excludes integration, plotting and scheduling code.
+
+    The complete c-recursion dependency directory remains conservatively
+    hashed. Change the schema marker when changing final-table compilation or
+    serialization. Sample checkpoints still use the complete runtime hash.
+    """
+    digest = hashlib.sha256(b"compact-c-final-tables-v2-json-dps12")
+    directory = Path(__file__).resolve().parents[2] / "c_Recursion"
+    for path in sorted(directory.glob("*.py")):
+        digest.update(path.name.encode())
+        digest.update(path.read_bytes())
+    return digest.hexdigest()
+
+
 class CoefficientStore:
     """Durable final tables, with a bounded SQLite page cache and one writer."""
 
@@ -108,6 +124,15 @@ class CoefficientStore:
             "(key TEXT PRIMARY KEY, payload TEXT NOT NULL)"
         )
         self.connection.commit()
+        self.legacy_source = None
+        if self.connection.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name='migration'"
+        ).fetchone():
+            metadata = dict(self.connection.execute("SELECT key,value FROM migration"))
+            if metadata.get("coefficient_source") != coefficient_source_fingerprint():
+                self.close()
+                raise ValueError("migrated coefficient source mismatch")
+            self.legacy_source = metadata["legacy_source"]
         self.hits = 0
         self.misses = 0
         self.writes = 0
@@ -154,8 +179,8 @@ class CompactCBlock(NSSphereLinearCRecursion):
         if self.coefficient_store is None or self._store_key is not None:
             return
         identity = {
-            "version": 1,
-            "source": runtime_source_fingerprint(),
+            "version": 2,
+            "source": coefficient_source_fingerprint(),
             "precision": self.working_precision,
             "pole_tolerance": self.pole_tolerance,
             "central_charge": self._encode_number(self.central_charge),
@@ -168,6 +193,13 @@ class CompactCBlock(NSSphereLinearCRecursion):
             json.dumps(identity, sort_keys=True, separators=(",", ":")).encode()
         ).hexdigest()
         payload = self.coefficient_store.get(self._store_key)
+        if payload is None and self.coefficient_store.legacy_source is not None:
+            legacy_identity = {**identity, "version": 1,
+                               "source": self.coefficient_store.legacy_source}
+            legacy_key = hashlib.sha256(json.dumps(
+                legacy_identity, sort_keys=True, separators=(",", ":")
+            ).encode()).hexdigest()
+            payload = self.coefficient_store.get(legacy_key)
         if payload is not None:
             self.final_coefficients = {
                 tuple(levels): mpmath.mpc(real, imag)

@@ -233,6 +233,9 @@ def _worker_arguments(
     ):
         arguments.append("--skip-corner-contribution")
     runtime = config.get("runtime", {})
+    if runtime.get("batch_c_evaluation", False):
+        arguments.extend(["--batch-c-evaluation", "--tensor-cache-mebibytes",
+                          str(runtime.get("tensor_cache_mebibytes", 512))])
     arguments.extend([
         "--block-cache-limit", str(runtime.get("block_cache_limit", 2048)),
         "--auxiliary-cache-limit", str(runtime.get("auxiliary_cache_limit", 4096)),
