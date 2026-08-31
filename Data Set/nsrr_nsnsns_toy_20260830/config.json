@@ -1,0 +1,342 @@
+{
+  "schema": "nsrr-nsnsns-theta-omega-scan-v1",
+  "parameters": {
+    "b": 1.4,
+    "mu": "1+0j",
+    "include_cosmological_prefactor": false
+  },
+  "convention_ledger": {
+    "spectral_measure": "dP_NS dP_R1 dP_R2 / pi^3",
+    "all_NS_three_point": "C_HN^(0)=C_BRY and C_HN^(1)=i*tilde_C_BRY, with the phase inserted exactly once before squaring",
+    "NSRR_three_point": "HJS eta=+ maps to C_even and eta=- maps to C_odd, with one overall 1/2 completeness factor",
+    "NSRR_closed_R_edges": "sum both diagonal Type-0B Ramond ground labels on each of the two internal R edges, giving factor four",
+    "NSRR_branching_coefficients": "use the finite-cutoff Ward recursion relation for the branching coefficients, with only certified low-state anchors",
+    "NSRR_double_virasoro": "compute the product of the two ordinary genus-two Virasoro blocks by applying c-recursion to each factor; do not use a direct PBW genus-two block contraction",
+    "generic_b_leg_normalization": "Poghossian reflection-symmetric NS/R metrics and the common b^(-3) per pants are included",
+    "cosmological_factor": "when omitted, either genus-two partition is restored by K_b^(-Q/b)",
+    "free_denominator": "one noncompact scalar plus one physical Majorana evaluated in the same local theta plumbing frame as its numerator",
+    "weyl_anomaly": "raise the free superfield answer to kappa=c_SL/(3/2)=1+2(b+1/b)^2"
+  },
+  "scan": {
+    "coordinate": "Re Omega_12",
+    "family": "[[i,t+0.5i],[t+0.5i,i]]",
+    "symplectic_matrix_source_to_target": [
+      [
+        1,
+        0,
+        0,
+        -1
+      ],
+      [
+        0,
+        -1,
+        1,
+        -1
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        1,
+        -1,
+        0
+      ]
+    ]
+  },
+  "quadrature_orders": [
+    3,
+    4
+  ],
+  "source_physical_levels": [
+    2,
+    3
+  ],
+  "target_physical_level": 3,
+  "target_recursion_order_twice_level": 6,
+  "numerics": {
+    "structure_precision": 25,
+    "branching_mp_dps": 0,
+    "maximum_ward_residual": 1e-05,
+    "block_working_precision": 40,
+    "global_tolerance": 1e-06,
+    "global_max_total_occupation": 28,
+    "vacuum_word_length": 7,
+    "vacuum_max_mode": 50,
+    "free_max_mode": 44,
+    "free_check_mode": 36
+  },
+  "points": [
+    {
+      "t": 0.56,
+      "charts": {
+        "source_nsrr": {
+          "q_values": [
+            "(-0.04356585863502376+0.0189719248165201j)",
+            "(-0.0477584138085044+0.019093555788779967j)",
+            "(-0.04018536194097238-0.015772015181660496j)"
+          ],
+          "omega": [
+            [
+              "1j",
+              "(0.56+0.5j)"
+            ],
+            [
+              "(0.56+0.5j)",
+              "1j"
+            ]
+          ],
+          "inverse_period_residual": 5.45039547906448e-13,
+          "seam_residual": 2.9908832808082905e-15,
+          "cross_ratio_period_residual": 7.516579937922244e-13,
+          "cross_ratio_integer_branch": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "collocation_basis_order": 24,
+          "cross_ratio_word_length": 8,
+          "lifts": [
+            1,
+            1,
+            -1
+          ],
+          "physical_free_superfield": 0.667388326622667,
+          "free_mode_relative_change": 1.2212453270876722e-15,
+          "source_majorana_spin_change_ratio": 0.889493418739015
+        },
+        "target_nsnsns": {
+          "q_values": [
+            "(0.04200552465456932-0.01656077662234685j)",
+            "(-0.03058737997847166-0.0011540660476112414j)",
+            "(-0.06261138957256782-5.1567493866988e-05j)"
+          ],
+          "omega": [
+            [
+              "(0.43999999999999995+0.9436j)",
+              "(0.5+0.43999999999999995j)"
+            ],
+            [
+              "(0.5+0.43999999999999995j)",
+              "(-1+1j)"
+            ]
+          ],
+          "inverse_period_residual": 2.9944046306540316e-12,
+          "seam_residual": 2.705588651213673e-15,
+          "cross_ratio_period_residual": 2.95216506677797e-12,
+          "cross_ratio_integer_branch": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              -1
+            ]
+          ],
+          "collocation_basis_order": 24,
+          "cross_ratio_word_length": 8,
+          "lifts": [
+            1,
+            -1,
+            1
+          ],
+          "physical_free_superfield": 0.5315708523598659,
+          "free_mode_relative_change": 1.4432899320127035e-15,
+          "source_majorana_spin_change_ratio": 1.0
+        }
+      }
+    },
+    {
+      "t": 0.6,
+      "charts": {
+        "source_nsrr": {
+          "q_values": [
+            "(-0.03646907441609439+0.029601511900343686j)",
+            "(-0.04059269806473948+0.029788087387553206j)",
+            "(-0.03496279096596407-0.025186929920020883j)"
+          ],
+          "omega": [
+            [
+              "1j",
+              "(0.6+0.5j)"
+            ],
+            [
+              "(0.6+0.5j)",
+              "1j"
+            ]
+          ],
+          "inverse_period_residual": 2.3444997299259768e-11,
+          "seam_residual": 3.036204688496472e-15,
+          "cross_ratio_period_residual": 2.3610433400517422e-11,
+          "cross_ratio_integer_branch": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "collocation_basis_order": 24,
+          "cross_ratio_word_length": 8,
+          "lifts": [
+            1,
+            1,
+            -1
+          ],
+          "physical_free_superfield": 0.6798265191486321,
+          "free_mode_relative_change": 0.0,
+          "source_majorana_spin_change_ratio": 0.9171041821606366
+        },
+        "target_nsnsns": {
+          "q_values": [
+            "(0.034728649738917886-0.02512904810285939j)",
+            "(-0.024917675594662316-0.0014728712197212173j)",
+            "(-0.08055905018198473-7.808926020263012e-05j)"
+          ],
+          "omega": [
+            [
+              "(0.4+0.91j)",
+              "(0.5+0.4j)"
+            ],
+            [
+              "(0.5+0.4j)",
+              "(-1+1j)"
+            ]
+          ],
+          "inverse_period_residual": 6.331589571018214e-11,
+          "seam_residual": 1.0280583331508033e-14,
+          "cross_ratio_period_residual": 6.330881190044817e-11,
+          "cross_ratio_integer_branch": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              -1
+            ]
+          ],
+          "collocation_basis_order": 24,
+          "cross_ratio_word_length": 8,
+          "lifts": [
+            1,
+            -1,
+            1
+          ],
+          "physical_free_superfield": 0.5372515435695151,
+          "free_mode_relative_change": 7.771561172376096e-16,
+          "source_majorana_spin_change_ratio": 1.0
+        }
+      }
+    },
+    {
+      "t": 0.64,
+      "charts": {
+        "source_nsrr": {
+          "q_values": [
+            "(-0.02691350706399865+0.037570682507096116j)",
+            "(-0.030945264260884026+0.03780201523154681j)",
+            "(-0.027543187036365248-0.033023597195995125j)"
+          ],
+          "omega": [
+            [
+              "1j",
+              "(0.64+0.5j)"
+            ],
+            [
+              "(0.64+0.5j)",
+              "1j"
+            ]
+          ],
+          "inverse_period_residual": 4.1918682669255506e-13,
+          "seam_residual": 8.05500820583833e-15,
+          "cross_ratio_period_residual": 5.770543061616208e-13,
+          "cross_ratio_integer_branch": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ]
+          ],
+          "collocation_basis_order": 24,
+          "cross_ratio_word_length": 8,
+          "lifts": [
+            1,
+            1,
+            -1
+          ],
+          "physical_free_superfield": 0.6915597671311355,
+          "free_mode_relative_change": 3.3306690738754696e-16,
+          "source_majorana_spin_change_ratio": 0.9487021763681043
+        },
+        "target_nsnsns": {
+          "q_values": [
+            "(0.02556068956641517-0.03076253096042355j)",
+            "(-0.020581931060803943-0.0015482416876724302j)",
+            "(-0.10363143236245942-9.460854353636346e-05j)"
+          ],
+          "omega": [
+            [
+              "(0.36+0.8795999999999999j)",
+              "(0.5+0.36j)"
+            ],
+            [
+              "(0.5+0.36j)",
+              "(-1+1j)"
+            ]
+          ],
+          "inverse_period_residual": 1.7766656942368782e-10,
+          "seam_residual": 1.8477555963484887e-13,
+          "cross_ratio_period_residual": 1.776689029681482e-10,
+          "cross_ratio_integer_branch": [
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              -1
+            ]
+          ],
+          "collocation_basis_order": 24,
+          "cross_ratio_word_length": 8,
+          "lifts": [
+            1,
+            -1,
+            1
+          ],
+          "physical_free_superfield": 0.5454770111880776,
+          "free_mode_relative_change": 2.220446049250313e-16,
+          "source_majorana_spin_change_ratio": 1.0
+        }
+      }
+    }
+  ],
+  "quadrature_reference_abs_q": {
+    "source_nsrr": [
+      0.04751755433364143,
+      0.05143374341970062,
+      0.0431696626952016
+    ],
+    "target_nsnsns": [
+      0.04515222501539543,
+      0.030609143770933187,
+      0.10363147554807618
+    ]
+  },
+  "experiment": "toy-first feasibility check; no automatic accuracy escalation"
+}

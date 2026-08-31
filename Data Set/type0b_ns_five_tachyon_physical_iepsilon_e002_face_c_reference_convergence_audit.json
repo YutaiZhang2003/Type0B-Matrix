@@ -1,0 +1,107 @@
+{
+  "schema": "type0b-ns-fivepoint-face-c-reference-convergence-audit-v1",
+  "status": "failed_c_reference_level_convergence_not_worldsheet_freeze",
+  "outgoing_energy": {
+    "real": 0.25,
+    "imag": 0.02
+  },
+  "collar_radius": 0.02,
+  "check_radii": [0.02, 0.01],
+  "covered_face_sector_count": 60,
+  "representative_orbit_count": 18,
+  "samples_per_orbit": 3,
+  "normal_angle_count": 2,
+  "comparison_count": 216,
+  "polynomial_agreement_test": {
+    "reference_global_max_twice_levels": [6, 6],
+    "reference_global_max_total_twice_level": 10,
+    "relative_tolerance": 0.05,
+    "maximum_relative_error": 0.04518382887085094,
+    "passed": true
+  },
+  "c_reference_level_convergence_test": {
+    "coarse_global_max_twice_levels": [4, 4],
+    "coarse_global_max_total_twice_level": 6,
+    "fine_global_max_twice_levels": [6, 6],
+    "fine_global_max_total_twice_level": 10,
+    "relative_tolerance": 0.01,
+    "maximum_full_density_relative_change": 0.3250962519813306,
+    "maximum_boundary_primary_relative_change": 0.3250796008034887,
+    "maximum_tolerance_ratio": 32.50962518678225,
+    "passed": false
+  },
+  "worst_grid_point": {
+    "ordering": [1, 3, 2, 0, 4],
+    "orbit_multiplicity": 4,
+    "normal_coordinate": {
+      "real": 0.01,
+      "imag": 0.0
+    },
+    "remaining_modulus": {
+      "real": 0.41519794054329395,
+      "imag": 0.2634972495011354
+    },
+    "normal_momentum": 0.49839826778725227,
+    "remaining_momentum": 0.7989326731301845,
+    "coarse_full_density": {
+      "real": 15.339998231487796,
+      "imag": 11.775024767987965
+    },
+    "fine_full_density": {
+      "real": 22.422552736265708,
+      "imag": 17.819239631539183
+    }
+  },
+  "single_point_higher_order_sequence": {
+    "normal_coordinate": {
+      "real": 0.02,
+      "imag": 0.0
+    },
+    "remaining_modulus": {
+      "real": 0.41519794054329395,
+      "imag": 0.2634972495011354
+    },
+    "normal_momentum": 0.49839826778725227,
+    "remaining_momentum": 0.7989326731301845,
+    "values": [
+      {
+        "global_max_twice_levels": [4, 4],
+        "global_max_total_twice_level": 6,
+        "full_density": {
+          "real": 3.9495137944188063,
+          "imag": 2.8575491764137997
+        }
+      },
+      {
+        "global_max_twice_levels": [6, 6],
+        "global_max_total_twice_level": 10,
+        "relative_change_from_previous": 0.32462354770278484,
+        "full_density": {
+          "real": 5.772999614624717,
+          "imag": 4.327352121547398
+        }
+      },
+      {
+        "global_max_twice_levels": [8, 8],
+        "global_max_total_twice_level": 14,
+        "relative_change_from_previous": 0.13795072093019478,
+        "full_density": {
+          "real": 6.631951031495379,
+          "imag": 5.097930790006562
+        }
+      },
+      {
+        "global_max_twice_levels": [10, 10],
+        "global_max_total_twice_level": 18,
+        "relative_change_from_previous": 0.026807862828234857,
+        "full_density": {
+          "real": 6.775257445973712,
+          "imag": 5.278135611223972
+        }
+      }
+    ]
+  },
+  "joint_face_collar_certificate_passed": false,
+  "conclusion": "Level (4,4) is not a converged c-recursion reference on the face grid. The amplitude driver now fails closed unless both the face-polynomial comparison and the c-reference level-convergence comparison pass.",
+  "matrix_model_used": false
+}

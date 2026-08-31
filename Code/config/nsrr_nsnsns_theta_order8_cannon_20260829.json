@@ -1,0 +1,119 @@
+{
+  "schema": "nsrr-nsnsns-theta-cannon-v1",
+  "description": "Generic-b order-eight matched-surface check of NSRR theta sewing by double Virasoro against its partial-S transformed NSNSNS theta sewing by direct N=1 c-recursion",
+  "parameters": {
+    "b": 1.4,
+    "mu": "1+0j",
+    "include_cosmological_prefactor": false
+  },
+  "marked_surface": {
+    "transformation": "partial S on the second handle, followed by the integer period-basis change used by the target theta chart",
+    "partial_s_second_handle": [
+      [1, 0, 0, 0],
+      [0, 0, 0, -1],
+      [0, 0, 1, 0],
+      [0, 1, 0, 0]
+    ],
+    "symplectic_matrix_source_to_target": [
+      [1, 0, 0, -1],
+      [0, -1, 1, -1],
+      [0, 0, 1, 0],
+      [0, 1, -1, 0]
+    ],
+    "period_transport_tolerance": 1e-9,
+    "charts": {
+      "source_nsrr": {
+        "q_values": [
+          "-3.6469074416094392e-02+2.9601511900343686e-02j",
+          "-4.0592698064739495e-02+2.9788087387553220e-02j",
+          "-3.4962790965964073e-02-2.5186929920020883e-02j"
+        ],
+        "lifts": [1, 1, -1],
+        "omega": [
+          ["+0.0000000000000000e+00+1.0000000000000000e+00j", "+6.0000000000000000e-01+5.0000000000000000e-01j"],
+          ["+6.0000000000000000e-01+5.0000000000000000e-01j", "+0.0000000000000000e+00+1.0000000000000000e+00j"]
+        ],
+        "characteristic": {
+          "alpha": [0, 1],
+          "beta": [1, 0]
+        },
+        "physical_free_reference_characteristic": {
+          "alpha": [0, 0],
+          "beta": [1, 0]
+        },
+        "majorana_spin_change": "multiply the physical NS reference determinant selected by the lifts by |theta[01|10]/theta[00|10]|",
+        "integer_period_branch": [
+          [0, 1],
+          [1, 0]
+        ],
+        "inverse_period_residual": 2.344568910754979e-11
+      },
+      "target_nsnsns": {
+        "q_values": [
+          "+3.4728649738917886e-02-2.5129048102859389e-02j",
+          "-2.4917675594662306e-02-1.4728712197212166e-03j",
+          "-8.0559050181984726e-02-7.8089260202630117e-05j"
+        ],
+        "lifts": [1, -1, 1],
+        "omega": [
+          ["+4.0000000000000002e-01+9.1000000000000003e-01j", "+5.0000000000000000e-01+4.0000000000000002e-01j"],
+          ["+5.0000000000000000e-01+4.0000000000000002e-01j", "-1.0000000000000000e+00+1.0000000000000000e+00j"]
+        ],
+        "characteristic": {
+          "alpha": [0, 0],
+          "beta": [0, 0]
+        },
+        "integer_period_branch": [
+          [0, 0],
+          [0, -1]
+        ],
+        "inverse_period_residual": 6.33129168259162e-11
+      }
+    }
+  },
+  "numerics": {
+    "structure_precision": 40,
+    "all_ns_block_method": "collision_aware_mp",
+    "block_working_precision": 70,
+    "global_method": "resummed",
+    "global_tolerance": 2e-10,
+    "global_max_total_occupation": 22,
+    "vacuum_word_length": 8,
+    "vacuum_max_mode": 50,
+    "branching_mp_dps": 0,
+    "maximum_ward_residual": 1e-7,
+    "free_max_mode": 70
+  },
+  "convergence_designs": [
+    {
+      "block_order": 8,
+      "quadrature_order": 8
+    },
+    {
+      "block_order": 8,
+      "quadrature_order": 10
+    },
+    {
+      "block_order": 8,
+      "quadrature_order": 12
+    }
+  ],
+  "convention_ledger": {
+    "spectral_measure": "dP_NS dP_R1 dP_R2 / pi^3",
+    "all_NS_three_point": "C_HN^(0)=C_BRY and C_HN^(1)=i*tilde_C_BRY, with the phase inserted exactly once before squaring",
+    "NSRR_three_point": "HJS eta=+ maps to C_even and eta=- maps to C_odd, with one overall 1/2 completeness factor",
+    "NSRR_closed_R_edges": "sum both diagonal Type-0B Ramond ground labels on each of the two internal R edges, giving factor four",
+    "NSRR_branching_coefficients": "use the finite-cutoff Ward recursion relation for the branching coefficients, with only certified low-state anchors",
+    "NSRR_double_virasoro": "compute the product of the two ordinary genus-two Virasoro blocks by applying c-recursion to each factor; do not use a direct PBW genus-two block contraction",
+    "generic_b_leg_normalization": "Poghossian reflection-symmetric NS/R metrics and the common b^(-3) per pants are included",
+    "cosmological_factor": "when omitted, either genus-two partition is restored by K_b^(-Q/b)",
+    "free_denominator": "one noncompact scalar plus one physical Majorana evaluated in the same local theta plumbing frame as its numerator",
+    "weyl_anomaly": "raise the free superfield answer to kappa=c_SL/(3/2)=1+2(b+1/b)^2"
+  },
+  "provenance": {
+    "template": "most recent Human-Note all-NS Cannon cross-channel certification workflow",
+    "sharding": "one immutable Cartesian momentum node per channel task; deterministic node-ordered reduction",
+    "precision_axis": "fixed total block order eight with quadrature orders 8, 10, and 12",
+    "matching_assumed": false
+  }
+}

@@ -309,8 +309,13 @@ The physical map is
   exchanged-momentum integrands, and the reduced four-tachyon moduli density.
 - bry_one_to_three.py: BRY's first regulated four-punctured-sphere benchmark,
   with the complex-energy family (4.15), the leading t-channel OPE
-  counterterm, the three-region \(z\)-integration, and comparison with the
-  matrix-model answer (2.13).
+  counterterm, the three-region \(z\)-integration, an (h)-recursive default
+  for the interior sphere block, and comparison with the matrix-model answer
+  (2.13).
+- recover_bry_one_to_three_h_recursion.py: production architecture check that
+  performs the full regulated integral with (h)-recursion, audits generic
+  block densities against (c)-recursion without using it in the integral,
+  and writes the three boundary/bulk contributions separately.
 - evaluate_sphere_four_point.py: command-line evaluation on a chosen
   cross-ratio grid.
 - plot_bry_figure4.py: dependency-free reproduction of BRY's Figure 4
@@ -414,7 +419,12 @@ Reproduce BRY's Figure 4 crossing plot:
 Evaluate the first nontrivial BRY \(1_R\to3_R\) benchmark at
 \(\omega=1/3+0.6i\), \(\omega_i=\omega/3\):
 
-    python3 -m c_Recursion.bry_one_to_three --p-order 24 --angular-order 14 --radial-order 14 --cap-angular-order 14 --cap-radial-order 10 --block-q-order 8
+    python3 -m c_Recursion.bry_one_to_three --block-backend h --p-order 24 --angular-order 14 --radial-order 14 --cap-angular-order 14 --cap-radial-order 10 --block-q-order 8
+
+Run the matched-grid recovery check, including the independent pointwise
+(h)-versus-(c) audit and the recorded-(q^8) regression gate:
+
+    python3 c_Recursion/recover_bry_one_to_three_h_recursion.py
 
 This product-quadrature implementation currently reproduces the complex
 matrix-model coefficient to about 1.8% at that setting.  The \(q^6\) cutoff is

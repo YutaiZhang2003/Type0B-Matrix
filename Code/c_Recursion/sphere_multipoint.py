@@ -223,9 +223,9 @@ class BRYNSSphereMultipointCorrelator:
     where ``C_v(0)=C`` and ``C_v(1)=tilde C``.  Only even-total vertex
     sectors occur for bottom external components.  The chiral block is the
     finite local-plumbing series produced by the selected block recursion.
-    The default hybrid atlas uses fixed-difference h-recursion in the bulk
-    and central-charge recursion in local degeneration charts.  The pure
-    backends remain available as independent checks.
+    The default uses central-charge recursion in every chart. Explicit
+    h/hybrid selections are retained only for standalone research checks,
+    not the production amplitude entry points.
     """
 
     def __init__(
@@ -236,7 +236,7 @@ class BRYNSSphereMultipointCorrelator:
         max_twice_levels: Sequence[int] | None = None,
         max_total_twice_level: int | None = None,
         recursion_max_twice_level: int | None = None,
-        block_backend: Literal["hybrid", "h", "c"] = "hybrid",
+        block_backend: Literal["hybrid", "h", "c"] = "c",
         hybrid_corner_radius: float = 0.15,
         structure_precision: int = 30,
         central_charge_shift: float = 1.0e-5,

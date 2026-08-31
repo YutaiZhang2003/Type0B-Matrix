@@ -1,0 +1,2267 @@
+{
+  "schema": "fixed-spin-free-NSRR-plumbing-v1",
+  "b": 1.4,
+  "c_SL": 14.91061224489796,
+  "kappa": 9.940408163265307,
+  "geometry_path": "/Users/yutaizhang/Desktop/Type0B-Matrix/Data Set/nsnsns_recompute_fivepoint_R16_N5_20260830/source_geometry_audit.json",
+  "geometry_sha256": "5d43fb51f4c4a469159bea90dbb036798eec229d57f7ac722309a68f42f5f7ce",
+  "protected_kernel_sha256": {
+    "Code/full_ramond_block_runtime/compute_full_block.py": "10c3cfa5bb4b87a8407cbe35fe7c0530be79bf62f231c93c27868baefff7913c",
+    "Code/full_ramond_block_runtime/compute_q_expansion.py": "a3d9bb8f305469354ce25d494163b1a01f6fbecd7587f3be3bcbf5e075fb3a3e",
+    "Code/ramond_branching_recursion/compute_target.py": "46ebb1a8bd10b356ee8697637f61ffb62b680258858e95aabbb69ad68b6568ca",
+    "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470",
+    "Code/double_virasoro/nsrr/nsrr_genus2_block.py": "f9448f5393898d1fcd8957b83b4c94dd5084a4728100f0eb5d027097fa25869d",
+    "Code/double_virasoro/nsrr/ramond_pbw_generalized_ward.py": "6f904573e9b323ecc96593afbaac19746bae32ecd319f89448548b7474525ce5",
+    "Code/c_Recursion/ns_genus2_partition.py": "56499bf06d3f12809ffc44331ececd40966cf974c65606edab9c332b964ffd2c",
+    "Code/c_Recursion/theta_star_algebra.py": "57de475cc566c00984578945aedfba621d33e94056d0a3a5a29e08bfccd2c017"
+  },
+  "implementation_sha256": {
+    "Code/genus_2/run_fixed_spin_free_check.py": "cf9b0f9761c8c7bea6507a9cb0f3327f359d59fa19372719235d6f5cc46cbf28",
+    "Code/genus_2/fixed_spin_free_plumbing.py": "07698b93780cb4e22529b6e0661ad4350272c9d4b8fdcfc5a648068e8c2fb60c",
+    "Code/genus_2/physical_free_plumbing_resummation.py": "e365f29107222c8a55bf3a69e5db20c6a3e17ddb7d5fa36ea3a739e43dea8fe6",
+    "Code/genus_2_cross_channel/free_boson_pair_of_pants.py": "fe17b3e4dd6b676065117d6ac6096fb83072b4e828999ce5bd300a3589afa48d",
+    "Code/genus_2_cross_channel/free_boson_plumbing.py": "1e4e14584725ae345d783d1630d8ac13032d7c4bb50ebbffd6f162bbc031e164"
+  },
+  "conventions": {
+    "edge_order": [
+      "zero",
+      "one",
+      "infinity"
+    ],
+    "source_sectors": [
+      "R",
+      "R",
+      "NS"
+    ],
+    "human_slot_sectors": [
+      "NS",
+      "R",
+      "R"
+    ],
+    "scalar_measure": "da_zero da_one, h(a)=a^2/2; unit connected zero-mode volume",
+    "propagator": "q^L0; common edge Casimir powers stripped",
+    "free_formula": "det(2 Im Omega_charge)^(-1/2) |P(q)|^3 |theta_delta|",
+    "Ramond_ground": "2 |q_zero q_one|^(1/8) for the nonchiral Majorana in the joint small-q limit",
+    "physical_spin": "explicit marked characteristic; no unproved identification of package Ramond parity lifts",
+    "legacy_outputs": "unchanged; legacy filtered NS denominator must not be reused as a fixed-spin determinant"
+  },
+  "source_to_target": [
+    [
+      -1,
+      0,
+      0,
+      0
+    ],
+    [
+      1,
+      -1,
+      0,
+      -2
+    ],
+    [
+      0,
+      0,
+      -1,
+      -1
+    ],
+    [
+      -1,
+      1,
+      0,
+      1
+    ]
+  ],
+  "points": [
+    {
+      "t": 0.52,
+      "source_NSrr": {
+        "q_values": [
+          "(-0.04749241584859442-0.005344001731353941j)",
+          "(-0.05158565202448047+0.006579707584382888j)",
+          "(-0.0428927995832524+0.005375216765392275j)"
+        ],
+        "characteristic_marked": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(1.1667058666685901e-13+0.9999999999999176j)",
+            "(0.4800000000005411+0.5000000000001114j)"
+          ],
+          [
+            "(0.4800000000005411+0.5000000000001114j)",
+            "(0.9600000000004681+1.0000000000002398j)"
+          ]
+        ],
+        "period_residual": 5.524615797738591e-13,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(1.0061894613374853-0.0005549051153946089j)",
+        "loop_gaussian": 0.5773502691896081,
+        "dirac_charge_sum": "(0.9243195385389162+0.17300201199679477j)",
+        "marked_theta": "(0.7759235095263697-0.5312617178420975j)",
+        "theta_absolute_relative_error": 2.9432937147952665e-13,
+        "lattice_relative_change": 2.361246461930311e-16,
+        "Z_boson": 0.5845195392664687,
+        "Z_majorana": 0.9461908318347537,
+        "Z_free": 0.5530670290822071,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5530670290822067
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5530670290822071
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5530670290822071
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.045964299467979+0.004871810439421727j)",
+              "filtered_legacy_block": "(0.9540606961191331-0.004876303373792744j)",
+              "complex_bosonization_relative_error": 2.9976504407936178e-15
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0453095205772651-0.005493559362731063j)",
+              "filtered_legacy_block": "(0.9547154750098469+0.005489066428360049j)",
+              "complex_bosonization_relative_error": 1.2219071463898979e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(0.8634666505517185+0.006106322417458078j)",
+              "filtered_legacy_block": "(1.1365583450353929-0.006110815351829095j)",
+              "complex_bosonization_relative_error": 2.220647648563946e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0453095205772611-0.005493559362890777j)",
+              "filtered_legacy_block": "(0.9547154750098508+0.005489066428519762j)",
+              "complex_bosonization_relative_error": 2.4446967841283058e-15
+            }
+          ],
+          "maximum_relative_error": 2.9976504407936178e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        },
+        "direct_Ramond_Fock_sweep": [
+          {
+            "dirac_chiral": "(0.9301377062915371+0.17355986844639604j)",
+            "total_oscillator_level": 6,
+            "lattice_cutoff": 4,
+            "fock_triples": 415,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 1.1924042384584934e-06
+          },
+          {
+            "dirac_chiral": "(0.9301365799449145+0.17355989155135187j)",
+            "total_oscillator_level": 10,
+            "lattice_cutoff": 4,
+            "fock_triples": 5773,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 1.753101327289381e-09
+          },
+          {
+            "dirac_chiral": "(0.9301365782901673+0.17355989162096608j)",
+            "total_oscillator_level": 14,
+            "lattice_cutoff": 4,
+            "fock_triples": 53292,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 2.704599735204905e-12
+          }
+        ]
+      },
+      "target_NSnsns": {
+        "q_values": [
+          "(0.046413589872849416-0.005835518610566158j)",
+          "(-0.03805928535584474-0.0004917669328993333j)",
+          "(-0.0486548030188379-1.8178590161718805e-05j)"
+        ],
+        "characteristic_marked": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            0
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(-0.5200000000000481+0.9803999999991074j)",
+            "(-0.500000000000351+0.47999999999973103j)"
+          ],
+          [
+            "(-0.500000000000351+0.47999999999973103j)",
+            "(-1.000000000005565+0.9999999999908348j)"
+          ]
+        ],
+        "period_residual": 1.0722486429739751e-11,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(0.9976504928230732+0.0005250776713557241j)",
+        "loop_gaussian": 0.5773502691933285,
+        "dirac_charge_sum": "(0.9243195385380744+0.17300201200133125j)",
+        "marked_theta": "(0.9243195385391219+0.17300201199719922j)",
+        "theta_absolute_relative_error": 2.8653725815515895e-13,
+        "lattice_relative_change": 2.433917142663647e-16,
+        "Z_boson": 0.5746406382501487,
+        "Z_majorana": 0.9381610254811409,
+        "Z_free": 0.5391054504638968,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5391054504638966
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5391054504638968
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5391054504638968
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.9532416494006748-0.0902441944650372j)",
+              "filtered_legacy_block": "(1.0467805698583632+0.09024014429894295j)",
+              "complex_bosonization_relative_error": 3.434724433735161e-16
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0408673804648767-0.004909273549672956j)",
+              "filtered_legacy_block": "(0.9591548387941617+0.004905223383578697j)",
+              "complex_bosonization_relative_error": 1.3323706097631071e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.9644215958635635+0.08973299790555565j)",
+              "filtered_legacy_block": "(1.0356006233954747-0.0897370480716499j)",
+              "complex_bosonization_relative_error": 2.2538327559827953e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0415138127889618+0.0054123697769660195j)",
+              "filtered_legacy_block": "(0.9585084064700766-0.005416419943060262j)",
+              "complex_bosonization_relative_error": 3.220220822303768e-15
+            }
+          ],
+          "maximum_relative_error": 3.220220822303768e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        }
+      },
+      "free_frame_ratio": 1.0258976766165069,
+      "scalar_frame_ratio": 1.0171914416745786,
+      "free_modular_frame_relative_error": 3.2143177008947532e-12,
+      "Q_NSrr": null,
+      "Q_status": "Liouville nonchiral Ramond assembly remains separate; no Q computed here"
+    },
+    {
+      "t": 0.56,
+      "source_NSrr": {
+        "q_values": [
+          "(-0.044731799537463084-0.01570088079437282j)",
+          "(-0.04775841380849645+0.019093555788818852j)",
+          "(-0.04027470721369837+0.01581918603729783j)"
+        ],
+        "characteristic_marked": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(-2.0417725387952062e-13+0.9999999999995265j)",
+            "(0.43999999999993117+0.5000000000000064j)"
+          ],
+          [
+            "(0.43999999999993117+0.5000000000000064j)",
+            "(0.8799999999999446+1.0000000000004918j)"
+          ]
+        ],
+        "period_residual": 5.156551025120247e-13,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(1.0056793547690623-0.0015350495230382613j)",
+        "loop_gaussian": 0.5773502691896213,
+        "dirac_charge_sum": "(0.9461452249359559+0.17133452176638145j)",
+        "marked_theta": "(0.7901775067318817-0.547873902347004j)",
+        "theta_absolute_relative_error": 4.2144291834871484e-14,
+        "lattice_relative_change": 1.1546381324621837e-16,
+        "Z_boson": 0.5839282061277111,
+        "Z_majorana": 0.9669953246201815,
+        "Z_free": 0.5646558452393462,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5646558452393462
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5646558452393462
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5646558452393462
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0483584874891452+0.014322742215746627j)",
+              "filtered_legacy_block": "(0.9516595744427117-0.014332614645953779j)",
+              "complex_bosonization_relative_error": 1.998818289363649e-15
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0425308927499353-0.01611597789355755j)",
+              "filtered_legacy_block": "(0.9574871691819218+0.016106105463350402j)",
+              "complex_bosonization_relative_error": 1.4382667830516526e-17
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(0.8666158508748225+0.01788946871093493j)",
+              "filtered_legacy_block": "(1.1334022110570345-0.01789934114114208j)",
+              "complex_bosonization_relative_error": 1.16005722593394e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0425308927498111-0.01611597789353831j)",
+              "filtered_legacy_block": "(0.9574871691820458+0.01610610546333116j)",
+              "complex_bosonization_relative_error": 1.7764411345494625e-15
+            }
+          ],
+          "maximum_relative_error": 1.998818289363649e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        },
+        "direct_Ramond_Fock_sweep": [
+          {
+            "dirac_chiral": "(0.9517825191117585+0.17085500698913952j)",
+            "total_oscillator_level": 6,
+            "lattice_cutoff": 4,
+            "fock_triples": 415,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 8.46708503211014e-07
+          },
+          {
+            "dirac_chiral": "(0.9517817273209483+0.17085521119207997j)",
+            "total_oscillator_level": 10,
+            "lattice_cutoff": 4,
+            "fock_triples": 5773,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 1.1027875486859402e-09
+          },
+          {
+            "dirac_chiral": "(0.951781726308675+0.17085521152282696j)",
+            "total_oscillator_level": 14,
+            "lattice_cutoff": 4,
+            "fock_triples": 53292,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 1.5104884002717515e-12
+          }
+        ]
+      },
+      "target_NSnsns": {
+        "q_values": [
+          "(0.04200552465456932-0.01656077662234685j)",
+          "(-0.03058737997847166-0.0011540660476112414j)",
+          "(-0.06261138957256782-5.1567493866988e-05j)"
+        ],
+        "characteristic_marked": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            0
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(-0.5599999999992759+0.9435999999980643j)",
+            "(-0.5000000000001198+0.44000000000050155j)"
+          ],
+          [
+            "(-0.5000000000001198+0.44000000000050155j)",
+            "(-1.000000000001117+1.0000000000027778j)"
+          ]
+        ],
+        "period_residual": 2.993990211236217e-12,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(0.9977633169685021+0.001600057874647277j)",
+        "loop_gaussian": 0.5773502691895318,
+        "dirac_charge_sum": "(0.9461452249365743+0.1713345217674792j)",
+        "marked_theta": "(0.9461452249358951+0.1713345217664894j)",
+        "theta_absolute_relative_error": 8.784486911772665e-13,
+        "lattice_relative_change": 1.154638132461218e-16,
+        "Z_boson": 0.5747719365521203,
+        "Z_majorana": 0.959383897738405,
+        "Z_free": 0.5514269408000244,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5514269408000245
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5514269408000244
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5514269408000244
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.9419124350394605-0.08989947122182748j)",
+              "filtered_legacy_block": "(1.0581080946739005+0.08988622871964809j)",
+              "complex_bosonization_relative_error": 1.1301096170364382e-16
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0384436457337445-0.014427268611449322j)",
+              "filtered_legacy_block": "(0.9615768839796166+0.014414026109269961j)",
+              "complex_bosonization_relative_error": 2.2514746410551726e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.9754841747958481+0.0883997876765891j)",
+              "filtered_legacy_block": "(1.0245363549175122-0.08841303017876849j)",
+              "complex_bosonization_relative_error": 2.3324301642876045e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0442008038576684+0.015900467152328922j)",
+              "filtered_legacy_block": "(0.9558197258556924-0.015913709654508317j)",
+              "complex_bosonization_relative_error": 6.851114164694468e-16
+            }
+          ],
+          "maximum_relative_error": 2.3324301642876045e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        }
+      },
+      "free_frame_ratio": 1.023990312152919,
+      "scalar_frame_ratio": 1.0159302655423932,
+      "free_modular_frame_relative_error": 9.139355938714289e-13,
+      "Q_NSrr": null,
+      "Q_status": "Liouville nonchiral Ramond assembly remains separate; no Q computed here"
+    },
+    {
+      "t": 0.6,
+      "source_NSrr": {
+        "q_values": [
+          "(-0.03938929794343916-0.02508339199638473j)",
+          "(-0.04059269805965829+0.02978808739157108j)",
+          "(-0.03515917339490496+0.025344924433414715j)"
+        ],
+        "characteristic_marked": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(9.130621526181966e-14+0.9999999999997635j)",
+            "(0.4000000000001265+0.49999999999981376j)"
+          ],
+          [
+            "(0.4000000000001265+0.49999999999981376j)",
+            "(0.8000000000000124+1.0000000000000417j)"
+          ]
+        ],
+        "period_residual": 2.5349247515351736e-13,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(1.0047858960799787-0.0021608522104184145j)",
+        "loop_gaussian": 0.5773502691896291,
+        "dirac_charge_sum": "(0.9680240725822378+0.16779059490099132j)",
+        "marked_theta": "(0.8031422535486462-0.565850518601j)",
+        "theta_absolute_relative_error": 1.4939207654789494e-13,
+        "lattice_relative_change": 2.8251149120256666e-17,
+        "Z_boson": 0.5828924658743758,
+        "Z_majorana": 0.9871625146304981,
+        "Z_free": 0.5754095923717206,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5754095923717206
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5754095923717206
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5754095923717206
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0530070478421663+0.022912002511087985j)",
+              "filtered_legacy_block": "(0.9470031076015857-0.022919665290040074j)",
+              "complex_bosonization_relative_error": 5.5027881605934845e-18
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0371747445823447-0.025678014800484563j)",
+              "filtered_legacy_block": "(0.9628354108614072+0.025670352021532464j)",
+              "complex_bosonization_relative_error": 2.2204497948259896e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(0.872663773880754+0.028428701532043212j)",
+              "filtered_legacy_block": "(1.127346381562998-0.0284363643109953j)",
+              "complex_bosonization_relative_error": 2.763670285382906e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.037174744582239-0.02567801480055082j)",
+              "filtered_legacy_block": "(0.9628354108615131+0.02567035202159873j)",
+              "complex_bosonization_relative_error": 9.7404617679143e-17
+            }
+          ],
+          "maximum_relative_error": 2.2204497948259896e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        },
+        "direct_Ramond_Fock_sweep": [
+          {
+            "dirac_chiral": "(0.973019929388524+0.16650172083253803j)",
+            "total_oscillator_level": 6,
+            "lattice_cutoff": 4,
+            "fock_triples": 415,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 4.536217066087425e-07
+          },
+          {
+            "dirac_chiral": "(0.9730195062796267+0.16650186606610567j)",
+            "total_oscillator_level": 10,
+            "lattice_cutoff": 4,
+            "fock_triples": 5773,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 4.711502454716191e-10
+          },
+          {
+            "dirac_chiral": "(0.9730195058747602+0.16650186629411481j)",
+            "total_oscillator_level": 14,
+            "lattice_cutoff": 4,
+            "fock_triples": 53292,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 4.598322401523197e-13
+          }
+        ]
+      },
+      "target_NSnsns": {
+        "q_values": [
+          "(0.034728649738917886-0.02512904810285939j)",
+          "(-0.024917675594662316-0.0014728712197212173j)",
+          "(-0.08055905018198473-7.808926020263012e-05j)"
+        ],
+        "characteristic_marked": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            0
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(-0.5999999999839642+0.9099999999925024j)",
+            "(-0.5000000000010238+0.40000000000147534j)"
+          ],
+          [
+            "(-0.5000000000010238+0.40000000000147534j)",
+            "(-1.0000000000569162+1.0000000000277347j)"
+          ]
+        ],
+        "period_residual": 6.33140839789693e-11,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(0.9980354475355028+0.0027349792631957723j)",
+        "loop_gaussian": 0.5773502691832516,
+        "dirac_charge_sum": "(0.9680240725913972+0.1677905949152652j)",
+        "marked_theta": "(0.968024072582385+0.1677905949010013j)",
+        "theta_absolute_relative_error": 1.1517993496326925e-11,
+        "lattice_relative_change": 1.130045964797082e-16,
+        "Z_boson": 0.5750883463032327,
+        "Z_majorana": 0.9805318794325775,
+        "Z_free": 0.5638924570404817,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5638924570404816
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5638924570404817
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5638924570404817
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.9304206974735546-0.0886080750685121j)",
+              "filtered_legacy_block": "(1.0695935858238934+0.08858378023613955j)",
+              "complex_bosonization_relative_error": 8.896079649565772e-16
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0337450877319179-0.02306372474297681j)",
+              "filtered_legacy_block": "(0.96626919556553+0.023039429910604273j)",
+              "complex_bosonization_relative_error": 1.443435401343107e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.986457123789174+0.08622193664124846j)",
+              "filtered_legacy_block": "(1.013557159508274-0.08624623147362098j)",
+              "complex_bosonization_relative_error": 2.221557848541575e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0494056576002493+0.025401273505495387j)",
+              "filtered_legacy_block": "(0.9506086256971987-0.025425568337867917j)",
+              "complex_bosonization_relative_error": 1.7780781889830773e-15
+            }
+          ],
+          "maximum_relative_error": 1.7780781889830773e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        }
+      },
+      "free_frame_ratio": 1.0204243472091914,
+      "scalar_frame_ratio": 1.0135702968444924,
+      "free_modular_frame_relative_error": 1.7190471268691e-11,
+      "Q_NSrr": null,
+      "Q_status": "Liouville nonchiral Ramond assembly remains separate; no Q computed here"
+    },
+    {
+      "t": 0.64,
+      "source_NSrr": {
+        "q_values": [
+          "(-0.031808844667146-0.03290506269274954j)",
+          "(-0.030945264260776154+0.03780201523154279j)",
+          "(-0.02780550995500702+0.033354797331897466j)"
+        ],
+        "characteristic_marked": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(-1.127771680802272e-13+0.9999999999998344j)",
+            "(0.3600000000002756+0.5000000000000215j)"
+          ],
+          [
+            "(0.3600000000002756+0.5000000000000215j)",
+            "(0.7200000000001532+1.0000000000003455j)"
+          ]
+        ],
+        "period_residual": 3.779480961057106e-13,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(1.0037261659829924-0.0023001144739104827j)",
+        "loop_gaussian": 0.5773502691895648,
+        "dirac_charge_sum": "(0.9898610202451282+0.16216190630082716j)",
+        "marked_theta": "(0.8146032234434128-0.585271656251982j)",
+        "theta_absolute_relative_error": 2.4483312495523265e-13,
+        "lattice_relative_change": 1.1068405287309791e-16,
+        "Z_boson": 0.5816639456549779,
+        "Z_majorana": 1.0067961886944745,
+        "Z_free": 0.5856170435864217,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5856170435864223
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5856170435864217
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5856170435864217
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.059637824591037+0.030119158286116433j)",
+              "filtered_legacy_block": "(0.9403699548123485-0.030119738645715377j)",
+              "complex_bosonization_relative_error": 2.77776728510942e-15
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0296153993929358-0.033576428823447635j)",
+              "filtered_legacy_block": "(0.9703923800104496+0.03357584846384867j)",
+              "complex_bosonization_relative_error": 1.5598639019682795e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(0.8811469354299403+0.03703253864168905j)",
+              "filtered_legacy_block": "(1.1188608439734455-0.03703311900128801j)",
+              "complex_bosonization_relative_error": 5.657076230179172e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0296153993928583-0.03357642882355575j)",
+              "filtered_legacy_block": "(0.9703923800105274+0.0335758484639568j)",
+              "complex_bosonization_relative_error": 9.992063230897358e-16
+            }
+          ],
+          "maximum_relative_error": 2.77776728510942e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        },
+        "direct_Ramond_Fock_sweep": [
+          {
+            "dirac_chiral": "(0.9939226193722248+0.16048928244087787j)",
+            "total_oscillator_level": 6,
+            "lattice_cutoff": 4,
+            "fock_triples": 415,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 2.3165833591148405e-07
+          },
+          {
+            "dirac_chiral": "(0.9939223977536654+0.160489354739275j)",
+            "total_oscillator_level": 10,
+            "lattice_cutoff": 4,
+            "fock_triples": 5773,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 1.270376678287947e-10
+          },
+          {
+            "dirac_chiral": "(0.9939223976545072+0.16048935481993443j)",
+            "total_oscillator_level": 14,
+            "lattice_cutoff": 4,
+            "fock_triples": 53292,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 8.05804869533886e-14
+          }
+        ]
+      },
+      "target_NSnsns": {
+        "q_values": [
+          "(0.02556068956641517-0.03076253096042355j)",
+          "(-0.020581931060803943-0.0015482416876724302j)",
+          "(-0.10363143236245942-9.460854353636346e-05j)"
+        ],
+        "characteristic_marked": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            0
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(-0.6399999999681873+0.8795999999429482j)",
+            "(-0.5000000000174687+0.3600000000538389j)"
+          ],
+          [
+            "(-0.5000000000174687+0.3600000000538389j)",
+            "(-1.0000000000668685+1.0000000001645948j)"
+          ]
+        ],
+        "period_residual": 1.7765933713255867e-10,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(0.9985451791077393+0.003925121734413069j)",
+        "loop_gaussian": 0.5773502691707804,
+        "dirac_charge_sum": "(0.9898610202881649+0.1621619063448294j)",
+        "marked_theta": "(0.9898610202453163+0.16216190630119903j)",
+        "theta_absolute_relative_error": 4.9188214464898404e-11,
+        "lattice_relative_change": 3.3663240474237264e-16,
+        "Z_boson": 0.5756805036608252,
+        "Z_majorana": 1.0016044633793861,
+        "Z_free": 0.5766041619471756,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5766041619471758
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5766041619471756
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5766041619471756
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.9187957218149042-0.08623015527051715j)",
+              "filtered_legacy_block": "(1.0812040385042405+0.08619578891853756j)",
+              "complex_bosonization_relative_error": 1.5545683254887658e-15
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0270564925598773-0.030294523318896285j)",
+              "filtered_legacy_block": "(0.9729432677592678+0.030260156966916696j)",
+              "complex_bosonization_relative_error": 4.510013827034445e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.9973436990204813+0.0831264663240864j)",
+              "filtered_legacy_block": "(1.0026560612986641-0.08316083267606598j)",
+              "complex_bosonization_relative_error": 4.740685684490243e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0568036072430276+0.03332947956136788j)",
+              "filtered_legacy_block": "(0.9431961530761176-0.03336384591334745j)",
+              "complex_bosonization_relative_error": 2.665776567919429e-15
+            }
+          ],
+          "maximum_relative_error": 2.665776567919429e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        }
+      },
+      "free_frame_ratio": 1.0156309687547345,
+      "scalar_frame_ratio": 1.0103936853099995,
+      "free_modular_frame_relative_error": 6.570055610666259e-11,
+      "Q_NSrr": null,
+      "Q_status": "Liouville nonchiral Ramond assembly remains separate; no Q computed here"
+    },
+    {
+      "t": 0.68,
+      "source_NSrr": {
+        "q_values": [
+          "(-0.02247475130907189-0.03867253918321004j)",
+          "(-0.01984968728015519+0.04268340856043288j)",
+          "(-0.01863123442661699+0.03930303127215786j)"
+        ],
+        "characteristic_marked": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            1,
+            1
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            1
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(-3.17869935789933e-13+0.999999999999881j)",
+            "(0.31999999999976897+0.500000000000035j)"
+          ],
+          [
+            "(0.31999999999976897+0.500000000000035j)",
+            "(0.6399999999998229+1.000000000000285j)"
+          ]
+        ],
+        "period_residual": 3.394202152100617e-13,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(1.002748680145439-0.0019421521612188442j)",
+        "loop_gaussian": 0.5773502691895753,
+        "dirac_charge_sum": "(1.011452276974603+0.15420879615047262j)",
+        "marked_theta": "(0.8242468493719991-0.6061626784185755j)",
+        "theta_absolute_relative_error": 1.8446924168169943e-14,
+        "lattice_relative_change": 0.0,
+        "Z_boson": 0.5805307113939059,
+        "Z_majorana": 1.0259545038389648,
+        "Z_free": 0.5955980979714159,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5955980979714152
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5955980979714159
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5955980979714159
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.067861464104124+0.03550195441714443j)",
+              "filtered_legacy_block": "(0.9321507361377881-0.03549733820405576j)",
+              "complex_bosonization_relative_error": 7.781140122181513e-16
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0203560640145803-0.039338065540465504j)",
+              "filtered_legacy_block": "(0.9796561362273319+0.03934268175355418j)",
+              "complex_bosonization_relative_error": 6.666586837851342e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(0.8914508083506018+0.043183409089890046j)",
+              "filtered_legacy_block": "(1.1085613918913104-0.043178792876801375j)",
+              "complex_bosonization_relative_error": 1.2743945911860384e-16
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.020356064014518-0.03933806554039163j)",
+              "filtered_legacy_block": "(0.9796561362273941+0.03934268175348031j)",
+              "complex_bosonization_relative_error": 3.997777632220713e-15
+            }
+          ],
+          "maximum_relative_error": 3.997777632220713e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        },
+        "direct_Ramond_Fock_sweep": [
+          {
+            "dirac_chiral": "(1.0145320110316582+0.15266821136407752j)",
+            "total_oscillator_level": 6,
+            "lattice_cutoff": 4,
+            "fock_triples": 415,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 9.689003739866567e-08
+          },
+          {
+            "dirac_chiral": "(1.0145319327370803+0.15266827256816418j)",
+            "total_oscillator_level": 10,
+            "lattice_cutoff": 4,
+            "fock_triples": 5773,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 2.6510704934437097e-11
+          },
+          {
+            "dirac_chiral": "(1.0145319327130817+0.1526682725809972j)",
+            "total_oscillator_level": 14,
+            "lattice_cutoff": 4,
+            "fock_triples": 53292,
+            "charge_pairs": 64,
+            "relative_error_against_resummation": 2.4667601102150482e-14
+          }
+        ]
+      },
+      "target_NSnsns": {
+        "q_values": [
+          "(0.015677770028186804-0.033130168851242134j)",
+          "(-0.017241849006860568-0.0014675374338757182j)",
+          "(-0.13328479394266152-9.867269194745828e-05j)"
+        ],
+        "characteristic_marked": [
+          [
+            0,
+            0
+          ],
+          [
+            0,
+            0
+          ]
+        ],
+        "characteristic_charge": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "period_branch": [
+          [
+            -1,
+            -1
+          ],
+          [
+            -1,
+            0
+          ]
+        ],
+        "omega_charge": [
+          [
+            "(-0.6799999997888564+0.852399999669647j)",
+            "(-0.500000000168744+0.3200000004254946j)"
+          ],
+          [
+            "(-0.500000000168744+0.3200000004254946j)",
+            "(-1.000000000552028+1.000000001180109j)"
+          ]
+        ],
+        "period_residual": 1.302839938030131e-09,
+        "max_mode": 32,
+        "lattice_cutoff": 5,
+        "boson_chiral": "(0.9993768821394402+0.005110873300394069j)",
+        "loop_gaussian": 0.5773502690344127,
+        "dirac_charge_sum": "(1.0114522772940753+0.15420879646532112j)",
+        "marked_theta": "(1.0114522769745626+0.15420879615061212j)",
+        "theta_absolute_relative_error": 3.5507920072453415e-10,
+        "lattice_relative_change": 0.0,
+        "Z_boson": 0.5766460596580476,
+        "Z_majorana": 1.0225161284514976,
+        "Z_free": 0.5896298964083582,
+        "has_fermion_zero_mode": false,
+        "mode_sweep": [
+          {
+            "max_mode": 16,
+            "Z_free": 0.5896298964083584
+          },
+          {
+            "max_mode": 24,
+            "Z_free": 0.5896298964083582
+          },
+          {
+            "max_mode": 32,
+            "Z_free": 0.5896298964083582
+          }
+        ],
+        "mode_relative_change_24_to_32": 0.0,
+        "all_NS_bosonization_audit": {
+          "rows": [
+            {
+              "lifts_geometry": [
+                1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(0.9071309957371831-0.08259404241412067j)",
+              "filtered_legacy_block": "(1.0928447917527717+0.0825573264340948j)",
+              "complex_bosonization_relative_error": 1.5574738512389464e-15
+            },
+            {
+              "lifts_geometry": [
+                1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0187769425127298-0.035680703592590096j)",
+              "filtered_legacy_block": "(0.9811988449772255+0.03564398761256424j)",
+              "complex_bosonization_relative_error": 2.109465431564192e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  0
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  0
+                ]
+              ],
+              "unfiltered_fredholm": "(1.0081046597813985+0.07900078087287686j)",
+              "filtered_legacy_block": "(0.9918711277085572-0.07903749685290273j)",
+              "complex_bosonization_relative_error": 3.886761348896323e-15
+            },
+            {
+              "lifts_geometry": [
+                -1,
+                -1,
+                1
+              ],
+              "characteristic_charge": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  1,
+                  1
+                ]
+              ],
+              "characteristic_marked": [
+                [
+                  0,
+                  0
+                ],
+                [
+                  0,
+                  1
+                ]
+              ],
+              "unfiltered_fredholm": "(1.065938976948599+0.03920053317378216j)",
+              "filtered_legacy_block": "(0.9340368105413561-0.039237249153808045j)",
+              "complex_bosonization_relative_error": 2.291239817053556e-16
+            }
+          ],
+          "maximum_relative_error": 3.886761348896323e-15,
+          "legacy_filter_identity": "(-D+++ + D-++ + D+-+ + D++-)/2",
+          "conclusion": "The unfiltered determinants are fixed-spin Majorana blocks; their legacy filtered linear combination is not one fixed-spin partition."
+        }
+      },
+      "free_frame_ratio": 1.0101219453074075,
+      "scalar_frame_ratio": 1.0067366310248644,
+      "free_modular_frame_relative_error": 4.894356031570624e-10,
+      "Q_NSrr": null,
+      "Q_status": "Liouville nonchiral Ramond assembly remains separate; no Q computed here"
+    }
+  ],
+  "elapsed_seconds": 2.39474625
+}

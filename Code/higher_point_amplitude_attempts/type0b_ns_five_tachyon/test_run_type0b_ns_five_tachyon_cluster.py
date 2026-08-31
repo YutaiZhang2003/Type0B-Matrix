@@ -75,6 +75,16 @@ def _write_mock_shards(output_dir: Path, *, wrong_hash_shard: int | None = None)
 
 
 class Type0BFivePointClusterTests(unittest.TestCase):
+    def test_production_config_rejects_h_and_hybrid_backends(self):
+        for backend in ("h", "hybrid"):
+            with self.subTest(backend=backend), tempfile.TemporaryDirectory() as directory:
+                config = json.loads(CONFIG.read_text())
+                config["recursion"]["block_backend"] = backend
+                path = Path(directory) / "retired-backend.json"
+                path.write_text(json.dumps(config))
+                with self.assertRaisesRegex(ValueError, "requires all-c recursion"):
+                    _load_config(path)
+
     def test_plan_is_four_shard_pure_c_recursion(self):
         config = _load_config(CONFIG)
         tasks = _tasks(config)
@@ -88,6 +98,9 @@ class Type0BFivePointClusterTests(unittest.TestCase):
         self.assertNotIn("--h-regulator-etas", arguments)
         self.assertNotIn("--include-comparison-fit", arguments)
         self.assertNotIn("--enforce-face-collar-certificate", arguments)
+        self.assertIn("--c-coefficient-cache", arguments)
+        self.assertIn("--checkpoint-directory", arguments)
+        self.assertEqual(arguments[arguments.index("--block-cache-limit") + 1], "2048")
         radii_index = arguments.index("--collar-radii")
         self.assertEqual(
             tuple(map(float, arguments[radii_index + 1 : radii_index + 4])),

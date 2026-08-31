@@ -1,0 +1,48 @@
+{
+  "description": "Nested Sobol-depth audit of the formerly worst wall-one scan point",
+  "status": "diagnostic-refinement",
+  "x": 0.27,
+  "t": 0.604,
+  "ray_base": "-x+i*t",
+  "note": "This legacy-sheet anchor diagnoses moduli convergence. Future production scans use the BRY positive-real continuation sheet +x+i*t.",
+  "settings": {
+    "twice_level": 8,
+    "momentum_order": 30,
+    "momentum_maximum": 3.0,
+    "momentum_rule": "wall-one-30",
+    "structure_precision": 22,
+    "block_precision": 45,
+    "sobol_power": 9,
+    "samples_per_replicate": 512,
+    "replicates": 4,
+    "seed": 20262827
+  },
+  "reduced_moduli_replicates": [
+    {"real": 0.13049123523143885, "imag": -0.1620000944021396},
+    {"real": 0.150090243525502, "imag": -0.19248872623356011},
+    {"real": 0.22112074820114966, "imag": -0.1684304242533255},
+    {"real": 0.1694637290419589, "imag": -0.280396645200781}
+  ],
+  "reduced_moduli_mean": {
+    "real": 0.16779148900001234,
+    "imag": -0.20082897252245158
+  },
+  "reduced_moduli_standard_error_real": 0.019475303370013762,
+  "reduced_moduli_standard_error_imag": 0.027322033156462557,
+  "matrix_model_reduced_target": {
+    "real": 0.1639217518024104,
+    "imag": -0.17723104058730293
+  },
+  "relative_complex_discrepancy": 0.09905400657694273,
+  "two_component_chi_square": 0.7854524314989026,
+  "bry_worldsheet_coefficient": {
+    "real": 0.5114067790882335,
+    "imag": 0.42727751812962156
+  },
+  "bry_worldsheet_standard_error_real": 0.06957498611474681,
+  "bry_worldsheet_standard_error_imag": 0.049593452792831005,
+  "matrix_model_coefficient": {
+    "real": 0.45131513886063346,
+    "imag": 0.4174233132741827
+  }
+}

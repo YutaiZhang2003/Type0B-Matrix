@@ -95,7 +95,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--recursion-max-twice-level", type=int, default=0)
     parser.add_argument(
         "--block-backend",
-        choices=("hybrid", "h", "c"),
+        choices=("c",),
         default="c",
     )
     parser.add_argument("--hybrid-q-threshold", type=float, default=0.3)

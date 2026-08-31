@@ -51,7 +51,7 @@ def _parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
             "Evaluate the matrix-blind all-NS Type-0B sphere five-point "
-            "integral on the certified one-divisor hybrid-recursion ray."
+            "integral on the certified one-divisor ray using all-c recursion."
         )
     )
     parser.add_argument(
@@ -65,13 +65,12 @@ def _parser() -> argparse.ArgumentParser:
         type=int,
         default=-1,
         help=(
-            "use -1 for the matched finite plumbing-series truncation required "
-            "by the hybrid production run"
+            "use -1 for direct finite plumbing-series truncation"
         ),
     )
     parser.add_argument(
         "--block-backend",
-        choices=("hybrid", "h", "c"),
+        choices=("c",),
         default="c",
     )
     parser.add_argument("--hybrid-q-threshold", type=float, default=0.3)
@@ -141,11 +140,6 @@ def main(argv: Sequence[str] | None = None) -> int:
         if args.recursion_max_twice_level < 0
         else args.recursion_max_twice_level
     )
-    if args.block_backend == "hybrid" and recursion_cutoff is not None:
-        raise ValueError(
-            "hybrid production requires --recursion-max-twice-level -1 so "
-            "the h- and c-recursive regions use the same finite plumbing-series cutoff"
-        )
     cap = float(args.radial_power_cap)
     margin_factor = float(args.radial_power_margin_factor)
     if not 0.0 < cap <= 2.0:

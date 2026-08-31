@@ -21,11 +21,10 @@ Only zero or two free-fermion selections survive in each chiral half.  The
 remaining Liouville components use the 120-chart CCY block atlas, including
 independent holomorphic and antiholomorphic ``G_-1/2`` markings.  The proper
 linear channel is selected geometrically by minimizing
-``max(|q1|,|q2|)``.  Following the attached five-point review, production
-uses fixed-difference ``h``-recursion at ``b=exp(eta)`` and extrapolates in
-``eta**2`` to the self-dual point.  Fixed-weight ``c``-recursion is retained
-as a low-order descendant-validated overlap check; the former hybrid gate is
-diagnostic only.
+``max(|q1|,|q2|)``. Production uses fixed-weight ``c``-recursion in every
+chart, with compact coefficient tables and bounded caches. The ``h`` and
+hybrid paths remain explicit diagnostics, not production defaults in the
+physical-domain driver.
 
 The returned density is the PCO component sum ``I_NS(z,w)`` normalized so
 that the BRY-style inference from the all-tachyon diagram to the full RHS
@@ -42,11 +41,13 @@ factors.  Matrix-model comparison belongs in a separate post-freeze module.
 from __future__ import annotations
 
 import cmath
+import json
 from dataclasses import dataclass
 from functools import lru_cache
 from itertools import combinations, permutations, product
 import math
 import os
+import resource
 from pathlib import Path
 import sys
 import time
@@ -71,6 +72,9 @@ for dependency in (SCRIPT_DIR, C_RECURSION, REFERENCE_PLUMBING):
         sys.path.insert(0, str(dependency))
 
 from ns_multipoint_c_recursion import NSSphereLinearCRecursion  # noqa: E402
+from fivepoint_runtime import (  # noqa: E402
+    BoundedLRU, CoefficientStore, CompactCBlock, SampleCheckpoint,
+)
 from ns_multipoint_h_recursion import NSSphereLinearHRecursion  # noqa: E402
 from ns_global_osp_block import osp_norm, osp_sector_vertex  # noqa: E402
 from sphere_five_point_liouville import (  # noqa: E402
@@ -1594,13 +1598,16 @@ class BRYNSFiveTachyonIntegrand:
     polynomial.  External Liouville momenta may be complex.  Internal
     Liouville momenta remain on the positive real BRY contour with measure
     ``dP_1 dP_2 / pi^2``.
+
+    All amplitude entry points use c-recursion in every chart. Explicit
+    h/hybrid choices in this shared kernel are historical research checks.
     """
 
     def __init__(
         self,
         *,
         outgoing_energies: Sequence[Number],
-        block_backend: Literal["hybrid", "h", "c"] = "h",
+        block_backend: Literal["hybrid", "h", "c"] = "c",
         hybrid_q_threshold: float = 0.3,
         recursion_max_twice_level: int | None = None,
         global_max_twice_levels: Sequence[int] = (8, 4),
@@ -1618,6 +1625,10 @@ class BRYNSFiveTachyonIntegrand:
         block_working_precision: int = 50,
         pole_tolerance: float = 1.0e-28,
         factorize_single_primary: bool = True,
+        compact_c_cache: bool = True,
+        block_cache_limit: int = 2048,
+        auxiliary_cache_limit: int = 4096,
+        c_coefficient_cache_path: str | os.PathLike[str] | None = None,
     ) -> None:
         if len(outgoing_energies) != 4:
             raise ValueError("outgoing_energies must contain four values")
@@ -1733,6 +1744,12 @@ class BRYNSFiveTachyonIntegrand:
         self.block_working_precision = int(block_working_precision)
         self.pole_tolerance = float(pole_tolerance)
         self.factorize_single_primary = bool(factorize_single_primary)
+        self.compact_c_cache = bool(compact_c_cache) and block_backend == "c"
+        self._c_block_type = CompactCBlock if self.compact_c_cache else NSSphereLinearCRecursion
+        self._c_coefficient_store = (
+            CoefficientStore(c_coefficient_cache_path)
+            if self.compact_c_cache and c_coefficient_cache_path is not None else None
+        )
         self._structure_cache: dict[tuple[object, ...], complex] = {}
         self._structure_residue_cache: dict[tuple[object, ...], complex] = {}
         self._structure_laurent_cache: dict[
@@ -1755,6 +1772,36 @@ class BRYNSFiveTachyonIntegrand:
         self._boundary_corner_coefficient_cache: dict[
             tuple[object, ...], complex
         ] = {}
+        if self.compact_c_cache:
+            self._block_cache = BoundedLRU(block_cache_limit)
+            for name in (
+                "_structure_cache", "_structure_residue_cache", "_structure_laurent_cache",
+                "_middle_corner_projection_cache", "_middle_face_projection_cache",
+                "_boundary_face_coefficient_cache", "_boundary_corner_coefficient_cache",
+            ):
+                setattr(self, name, BoundedLRU(auxiliary_cache_limit))
+
+    def cache_diagnostics(self) -> dict[str, object]:
+        """Small progress record; does not retain individual sample diagnostics."""
+        return {
+            "compact_c_cache": self.compact_c_cache,
+            "block_entries": len(self._block_cache),
+            "block_evictions": getattr(self._block_cache, "evictions", 0),
+            "resident_final_coefficients": sum(
+                len(getattr(block, "final_coefficients", {}))
+                for block in self._block_cache.values()
+            ),
+            "resident_recursive_coefficients": sum(
+                len(block._coefficient_cache) for block in self._block_cache.values()
+            ),
+            "disk_hits": self._c_coefficient_store.hits if self._c_coefficient_store else 0,
+            "disk_writes": self._c_coefficient_store.writes if self._c_coefficient_store else 0,
+        }
+
+    def close_runtime(self) -> None:
+        if self._c_coefficient_store is not None:
+            self._c_coefficient_store.close()
+            self._c_coefficient_store = None
 
     @property
     def block_central_charge(self) -> float:
@@ -1787,7 +1834,10 @@ class BRYNSFiveTachyonIntegrand:
                     self.h_coefficient_cache_directory
                 ),
             }
-        return {"central_charge": self.block_central_charge}
+        return {
+            "central_charge": self.block_central_charge,
+            **({"coefficient_store": self._c_coefficient_store} if self.compact_c_cache else {}),
+        }
 
     def set_h_fit_variant(
         self, variant: Literal["production", "comparison"]
@@ -2230,7 +2280,7 @@ class BRYNSFiveTachyonIntegrand:
                 "c" if selected_leading_edges == {0, 1} else backend
             )
             block_type = (
-                NSSphereLinearCRecursion
+                self._c_block_type
                 if constructor_backend == "c"
                 else NSSphereLinearHRecursion
             )
@@ -2365,7 +2415,7 @@ class BRYNSFiveTachyonIntegrand:
                     face_block_type = (
                         NSSphereLinearHRecursion
                         if backend == "h"
-                        else NSSphereLinearCRecursion
+                        else self._c_block_type
                     )
                     self._block_cache[face_key] = face_block_type(
                         **self._recursion_charge_arguments(backend),
@@ -2586,7 +2636,7 @@ class BRYNSFiveTachyonIntegrand:
             block_type = (
                 NSSphereLinearHRecursion
                 if backend == "h"
-                else NSSphereLinearCRecursion
+                else self._c_block_type
             )
             self._block_cache[block_key] = block_type(
                 **self._recursion_charge_arguments(backend),
@@ -6975,6 +7025,7 @@ def _integrate_leading_local_finite_part_qmc(
     momentum_singularity_subtraction: bool = False,
     face_collar_certificate: FaceCollarCertificate | None = None,
     compute_corner_contribution: bool = True,
+    checkpoint: SampleCheckpoint | None = None,
     seed: int = 20260825,
     subtraction_scheme: str = (
         "pointwise full-minus-faces-plus-corner local forest remainder, with "
@@ -7001,11 +7052,18 @@ def _integrate_leading_local_finite_part_qmc(
 
     def progress(stage: str) -> None:
         if progress_enabled:
-            print(
-                f"type0b_5pt_progress stage={stage} "
-                f"elapsed_seconds={time.perf_counter() - timing_started:.3f}",
-                flush=True,
-            )
+            rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+            print(json.dumps({
+                "stage": stage,
+                "elapsed_seconds": time.perf_counter() - timing_started,
+                "peak_rss_mib": rss / (1024**2 if sys.platform == "darwin" else 1024),
+                "cache": kernel.cache_diagnostics(),
+                "checkpoint_samples": len(checkpoint.values) if checkpoint else 0,
+                "reused_samples": checkpoint.reused if checkpoint else 0,
+            }), file=sys.stderr, flush=True)
+
+    def checkpointed(key, compute):
+        return compute() if checkpoint is None else checkpoint.evaluate(key, compute)
 
     bulk_sobol_power = int(bulk_sobol_power)
     face_sobol_power = int(face_sobol_power)
@@ -7046,12 +7104,15 @@ def _integrate_leading_local_finite_part_qmc(
         complex(
             sum(
                 multiplicity
-                * kernel.boundary_corner_finite_part(
-                    ordering=ordering,
-                    collar_radius=collar_radius,
-                    projection_radius=projection_radius,
-                    momentum_refinement_shells=momentum_refinement_shells,
-                    momentum_singularity_subtraction=momentum_singularity_subtraction,
+                * checkpointed(
+                    "corner_" + "_".join(map(str, ordering)),
+                    lambda: kernel.boundary_corner_finite_part(
+                        ordering=ordering,
+                        collar_radius=collar_radius,
+                        projection_radius=projection_radius,
+                        momentum_refinement_shells=momentum_refinement_shells,
+                        momentum_singularity_subtraction=momentum_singularity_subtraction,
+                    ),
                 )
                 for ordering, multiplicity in corner_orbits
             )
@@ -7083,10 +7144,12 @@ def _integrate_leading_local_finite_part_qmc(
                 )
             )
             bulk_values.append(
-                _leading_local_forest_remainder_integrand(
-                    kernel, positions, collar_radius, channel=channel
+                checkpointed(
+                    f"replicate_{replicate}_bulk_{sample_index}",
+                    lambda: _leading_local_forest_remainder_integrand(
+                        kernel, positions, collar_radius, channel=channel
+                    ) / proposal_density,
                 )
-                / proposal_density
             )
             progress(f"replicate_{replicate}_bulk_sample_{sample_index + 1}")
         bulk_estimate = complex(
@@ -7106,31 +7169,30 @@ def _integrate_leading_local_finite_part_qmc(
                 sample[0], sample[1]
             )
             in_corner_collar = abs(modulus) < collar_radius
-            density = 0.0 + 0.0j
-            for ordering, multiplicity in face_orbits:
-                face_density = kernel.boundary_face_finite_part_density(
-                    ordering=ordering,
-                    remaining_modulus=modulus,
-                    collar_radius=collar_radius,
-                    projection_radius=projection_radius,
-                    momentum_refinement_shells=momentum_refinement_shells,
-                    momentum_singularity_subtraction=momentum_singularity_subtraction,
-                )
-                if in_corner_collar:
-                    face_density -= (
-                        kernel.boundary_corner_face_counterterm_density(
-                            ordering=ordering,
-                            remaining_modulus=modulus,
-                            collar_radius=collar_radius,
-                            projection_radius=projection_radius,
-                            momentum_refinement_shells=momentum_refinement_shells,
-                            momentum_singularity_subtraction=(
-                                momentum_singularity_subtraction
-                            ),
-                        )
+            def compute_face_sample():
+                density = 0.0 + 0.0j
+                for ordering, multiplicity in face_orbits:
+                    face_density = kernel.boundary_face_finite_part_density(
+                        ordering=ordering,
+                        remaining_modulus=modulus,
+                        collar_radius=collar_radius,
+                        projection_radius=projection_radius,
+                        momentum_refinement_shells=momentum_refinement_shells,
+                        momentum_singularity_subtraction=momentum_singularity_subtraction,
                     )
-                density += multiplicity * face_density
-            face_values.append(complex(area_jacobian * density))
+                    if in_corner_collar:
+                        face_density -= kernel.boundary_corner_face_counterterm_density(
+                            ordering=ordering, remaining_modulus=modulus,
+                            collar_radius=collar_radius, projection_radius=projection_radius,
+                            momentum_refinement_shells=momentum_refinement_shells,
+                            momentum_singularity_subtraction=momentum_singularity_subtraction,
+                        )
+                    density += multiplicity * face_density
+                return complex(area_jacobian * density)
+
+            face_values.append(checkpointed(
+                f"replicate_{replicate}_face_{sample_index}", compute_face_sample
+            ))
             progress(f"replicate_{replicate}_face_sample_{sample_index + 1}")
         face_estimate = complex(
             np.mean(np.asarray(face_values, dtype=complex))

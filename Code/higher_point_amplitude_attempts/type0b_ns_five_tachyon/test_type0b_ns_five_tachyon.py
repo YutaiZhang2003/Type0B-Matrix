@@ -634,7 +634,7 @@ class Type0BNSFiveTachyonTests(unittest.TestCase):
         self.assertTrue(math.isfinite(value.imag))
         self.assertGreater(abs(value), 1.0e-12)
 
-    def test_production_default_uses_h_recursion_in_both_chart_regions(self):
+    def test_production_default_uses_c_recursion_in_all_chart_regions(self):
         kernel = BRYNSFiveTachyonIntegrand(
             outgoing_energies=(0.05j,) * 4,
             recursion_max_twice_level=0,
@@ -645,9 +645,10 @@ class Type0BNSFiveTachyonTests(unittest.TestCase):
             structure_precision=15,
             block_working_precision=30,
         )
-        self.assertEqual(kernel.block_backend, "h")
-        self.assertEqual(kernel._selected_block_backend((0.05, 0.10)), "h")
-        self.assertEqual(kernel._selected_block_backend((0.70, 0.80)), "h")
+        self.assertEqual(kernel.block_backend, "c")
+        for coordinates in ((0.05, 0.10), (0.299, 0.299), (0.3, 0.3), (0.70, 0.80)):
+            with self.subTest(coordinates=coordinates):
+                self.assertEqual(kernel._selected_block_backend(coordinates), "c")
 
     def test_explicit_legacy_hybrid_obeys_strict_point_three_gate(self):
         kernel = BRYNSFiveTachyonIntegrand(

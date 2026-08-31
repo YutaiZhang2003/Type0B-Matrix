@@ -1,0 +1,67 @@
+{
+  "status": "worldsheet_only_unfrozen",
+  "calculation": "BRY regulated Type-0B sphere four-point integral",
+  "comparison_performed": false,
+  "matrix_model_data_included": false,
+  "recursion_backend": "h",
+  "campaign": "p-order-control",
+  "kinematics": {
+    "incoming_energy": {
+      "real": 0.3333333333333333,
+      "imag": 0.6
+    },
+    "each_outgoing_energy": {
+      "real": 0.1111111111111111,
+      "imag": 0.19999999999999998
+    }
+  },
+  "momentum_quadrature": {
+    "minimum": 0.0,
+    "maximum": 5.0,
+    "order_per_threshold_interval": 24,
+    "threshold": 0.9430708966187976,
+    "node_count": 48
+  },
+  "precision": {
+    "structure_digits": 30,
+    "block_digits": 70
+  },
+  "source_sha256": {
+    "run_bry_one_to_three_high_accuracy_worldsheet.py": "9ac916701140e7fd6956a3191edc2036b5813edcf53dc006593416eaea52bd1f",
+    "bry_one_to_three.py": "3dcca303d2cf6cc42e8301f9db62b1e86b0ab16ccd139e08ad5c2f1215562817",
+    "sphere_four_point.py": "7e58d06cff38bbee161905765b12b0cd25ec5317ba8d3fa81d9087cf7314e519",
+    "ns_multipoint_h_recursion.py": "ce63ae0b8f34328ad05ebec471d2c01dbd4f0fe7d51e1cd4027649c1e54dabcd"
+  },
+  "variants": [
+    {
+      "name": "candidate_q12_eps005_z20",
+      "q_order": 12,
+      "epsilon": 0.005,
+      "angular_order": 20,
+      "radial_order": 20,
+      "cap_angular_order": 20,
+      "cap_radial_order": 14,
+      "block_backend": "h",
+      "low_z_region_integral": {
+        "real": 0.0023799535833824116,
+        "imag": 0.00061486696461063
+      },
+      "bulk_region_integral": {
+        "real": 0.014471805957495937,
+        "imag": -0.003524123450133214
+      },
+      "t_cap_region_integral": {
+        "real": 0.0006754314858215351,
+        "imag": -0.0002531084624602226
+      },
+      "reduced_moduli_integral": {
+        "real": 0.017527191026699886,
+        "imag": -0.0031623649479828064
+      },
+      "worldsheet_amplitude_coefficient": {
+        "real": 0.00805289621331213,
+        "imag": 0.04463262544664318
+      }
+    }
+  ]
+}

@@ -13,6 +13,7 @@ from type0b_ns_five_tachyon import (
     BRYNSFiveTachyonIntegrand,
     integrate_physical_i_epsilon_finite_part_qmc,
 )
+from fivepoint_runtime import SampleCheckpoint, runtime_source_fingerprint
 from type0b_ns_five_tachyon_domain import (
     physical_i_epsilon_frequencies,
     physical_i_epsilon_subtraction_audit,
@@ -61,11 +62,11 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--block-backend",
-        choices=("hybrid", "h", "c"),
+        choices=("c",),
         default="c",
         help=(
-            "production defaults to fixed-weight c-recursion in every selected "
-            "CCY chart; h and hybrid are retained only for explicit diagnostics"
+            "amplitude runs require fixed-weight c-recursion in every "
+            "selected CCY chart; no h/hybrid production route is enabled"
         ),
     )
     parser.add_argument("--hybrid-q-threshold", type=float, default=0.3)
@@ -74,8 +75,7 @@ def _parser() -> argparse.ArgumentParser:
         type=int,
         default=-1,
         help=(
-            "-1 uses direct coefficient-series truncation; explicit h or "
-            "hybrid audits also require matched h/c cutoffs"
+            "-1 uses direct coefficient-series truncation"
         ),
     )
     parser.add_argument(
@@ -86,7 +86,7 @@ def _parser() -> argparse.ArgumentParser:
         "--momentum-orders",
         type=int,
         nargs=2,
-        default=(5, 7),
+        default=(6, 7),
         help=(
             "normal-threshold and smooth-continuum Gauss orders per fixed panel"
         ),
@@ -183,7 +183,7 @@ def _parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "--face-collar-reference-backend",
-        choices=("h", "c"),
+        choices=("c",),
         default="c",
         help="near-collar full-CFT recursion used by the truncation certificate",
     )
@@ -245,21 +245,15 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--radial-power", type=float, default=0.5)
     parser.add_argument("--seed", type=int, default=20260828)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--c-coefficient-cache", type=Path)
+    parser.add_argument("--block-cache-limit", type=int, default=2048)
+    parser.add_argument("--auxiliary-cache-limit", type=int, default=4096)
+    parser.add_argument("--checkpoint-directory", type=Path)
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
-    if args.block_backend == "hybrid":
-        if abs(args.hybrid_q_threshold - 0.3) > 1.0e-15:
-            raise ValueError(
-                "the legacy hybrid audit is fixed at strict |q|<0.3"
-            )
-        if args.recursion_max_twice_level != -1:
-            raise ValueError(
-                "hybrid production requires matched plumbing-series cutoffs; "
-                "use --recursion-max-twice-level=-1"
-            )
     recursion_cutoff = (
         None
         if args.recursion_max_twice_level < 0
@@ -302,7 +296,23 @@ def main(argv: Sequence[str] | None = None) -> int:
         h_regulator_comparison_degree=args.h_regulator_comparison_degree,
         h_fit_variant=args.h_fit_variant,
         block_working_precision=args.block_working_precision,
+        c_coefficient_cache_path=(
+            args.c_coefficient_cache or args.output.with_suffix(".coefficients.sqlite")
+        ),
+        block_cache_limit=args.block_cache_limit,
+        auxiliary_cache_limit=args.auxiliary_cache_limit,
     )
+    checkpoint_directory = args.checkpoint_directory or args.output.with_suffix(".checkpoints")
+    checkpoint_identity = {
+        "source": runtime_source_fingerprint(),
+        "arguments": {key: value for key, value in vars(args).items() if key not in (
+            "output", "c_coefficient_cache", "checkpoint_directory",
+            "block_cache_limit", "auxiliary_cache_limit",
+        )},
+    }
+    checkpoint_signature = hashlib.sha256(json.dumps(
+        checkpoint_identity, sort_keys=True, default=str
+    ).encode()).hexdigest()
     collar_radii = tuple(
         float(value)
         for value in (
@@ -328,6 +338,10 @@ def main(argv: Sequence[str] | None = None) -> int:
             )
             result = integrate_physical_i_epsilon_finite_part_qmc(
                 kernel,
+                checkpoint=SampleCheckpoint(
+                    checkpoint_directory / f"{fit_variant}_radius_{radius_index}.json",
+                    f"{checkpoint_signature}:{fit_variant}:{radius.hex()}",
+                ),
                 real_outgoing_energies=args.energies,
                 epsilon=args.epsilon,
                 epsilon_weights=args.epsilon_weights,
@@ -379,6 +393,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             result_payloads.append(encoded)
 
     common_payload = {
+        "runtime_cache": kernel.cache_diagnostics(),
+        "checkpoint_directory": str(checkpoint_directory),
         "status": (
             "worldsheet_coefficient_extrapolated_not_frozen"
             if args.block_backend == "h"
@@ -444,6 +460,8 @@ def main(argv: Sequence[str] | None = None) -> int:
             "matrix_model_comparison_performed": False,
         },
         "source_sha256": {
+            "fivepoint_runtime.py": _sha256(SCRIPT_DIR / "fivepoint_runtime.py"),
+            "runtime_source_fingerprint": runtime_source_fingerprint(),
             "type0b_ns_five_tachyon.py": _sha256(
                 SCRIPT_DIR / "type0b_ns_five_tachyon.py"
             ),
@@ -476,6 +494,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     temporary = output.with_suffix(output.suffix + ".tmp")
     temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     temporary.replace(output)
+    kernel.close_runtime()
     print(json.dumps(payload, indent=2, sort_keys=True))
     return 0
 

@@ -11,12 +11,12 @@ BRY-normalized Liouville utilities from `Code/c_Recursion/`, and reuses the
 plumbing atlas from the supplied bosonic c=1 reference implementation.  At
 each moduli point the atlas compares all 120 oriented representatives of the
 15 five-leaf trivalent trees and selects the linear chart that minimizes
-`max(|q1|,|q2|)`.  Following the attached five-point review, the production
-backend is h-recursion at `b=exp(eta)`, followed by a polynomial extrapolation
-in `eta^2` to the self-dual point.  Fixed-weight c-recursion remains the
-descendant-validated low-order collar check; legacy `"hybrid"` mode is an
-overlap audit.  Here `q1=z1/z2` and `q2=z2` are the ordinary CCY sphere
-linear-channel plumbing coordinates.
+`max(|q1|,|q2|)`. Production now uses fixed-weight **c-recursion in every
+chart**, with no h-regulator fit. The shared kernel default is also `c`.
+Amplitude CLI selectors accept only `c`, and the cluster loader rejects old
+h/hybrid production bundles. Explicit h/hybrid Python APIs remain historical
+research diagnostics, not amplitude routes. Here `q1=z1/z2` and `q2=z2` are the ordinary CCY
+sphere linear-channel plumbing coordinates, not elliptic nomes.
 
 For a face primary projection, the exact algebraic reduction to a four-point
 block is enabled for the production c-series.  Regression tests compare it
@@ -63,30 +63,24 @@ then restores the face and corner polynomials by analytic radial finite
 parts.  The face integral applies the same construction recursively:
 `A_D-A_DE` is retained numerically in a tangential corner collar and the
 double finite part `A_DE` is added once.  Thus higher normal powers supplied
-by h/c recursion remain in the numerical remainder.  Agreement between the
+by c-recursion remain in the numerical remainder. Agreement between the
 degree-zero polynomial and the untruncated c-recursive value at the collar
 boundary is recorded only as a diagnostic and is not a production equality
 condition.
 
-The prepared matrix-blind cluster bundle uses regulated h-recursion at
-edgewise twice-level `(8,8)`, total twice-level 16, in the best chart,
-retaining the corner coefficient at `(8,8)`.  It evaluates the five regulator
-values `eta=(0.16,0.13,0.10,0.075,0.055)` at fixed physical weights and fits
-every recursion coefficient in `eta^2` before moduli integration.  Degree
-three is the production table and degree two is integrated on the same Sobol
-points as its regulator systematic.  The three collars
-`rho=(0.01,0.005,0.0025)` share the same fitted CFT tables and Sobol points.
-One shard also records the configured tolerance-based face-CFT versus
-c-recursion diagnostic at total level eight against the preceding total-level-six
-series at every collar.  It is deliberately non-fatal so that reference-series
-non-convergence is reported alongside, rather than substituted for, the first
-moduli estimate;
-exact boundary equality is not required because the full block contains the
-higher normal powers left in the numerical remainder:
+The prepared matrix-blind cluster bundle uses c-recursion at edgewise
+**twice-level** `(8,8)`, total twice-level 16, in the best chart. This means
+physical descendant levels up to `(4,4)`; the historical job label "order8"
+refers to twice-level, not physical level eight. The three collars
+`rho=(0.01,0.005,0.0025)` share coefficients and Sobol points. The momentum
+quadrature is `(6,7)` per unit panel: unlike `(5,7)`, its two smooth node
+sets do not coincide. One shard records the `(8,8)` versus `(6,6)` c-series
+collar diagnostic. This remains non-fatal and does not impose equality
+between the degree-zero subtraction polynomial and the full CFT value:
 
 ```bash
 python3 run_type0b_ns_five_tachyon_cluster.py \
-  --config ../../config/type0b_ns_five_tachyon_order8_small_collar_cluster.json \
+  --config ../../config/type0b_ns_five_tachyon_c_recursion_order8_small_collar_cluster.json \
   plan
 ```
 
@@ -106,9 +100,55 @@ Code/cluster/stage_submit_type0b_ns_fivepoint_order8.sh \
 ```
 
 This creates four independent array tasks followed by a deterministic reducer.
-Each shard evaluates all three collars and both coefficient fits with common
-random numbers.  A hash-addressed, lock-protected shared cache ensures that an
-order-eight fitted coefficient table is constructed only once across the
-array.  There are sixteen RQMC replicates per shard; only one shard computes
-the common deterministic corner terms.
+Each shard evaluates all three collars with common random numbers. There are
+sixteen RQMC replicates per shard; only one shard computes the common
+deterministic corner terms.
 The resulting summary remains matrix-model blind and is not labeled frozen.
+
+## Bounded-memory c-series runtime
+
+The old all-c array `42734882` exceeded 12 GB per shard. It retained unbounded
+collections of blocks and recursive intermediate states. The revised implementation in
+`fivepoint_runtime.py` separates compilation from evaluation:
+
+1. Compile only the required final coefficients using the unchanged recurrence.
+   Release the intermediate recursion dictionary after each table extension,
+   including on exceptions. At the configured cutoff a fixed-parity five-point
+   block has at most 25 final coefficients.
+2. Evaluate that polynomial by Horner contraction, retaining the original
+   mpmath precision and the supplied holomorphic/antiholomorphic logarithm lift.
+   Polynomial masks and total-level cutoffs are unchanged.
+3. Keep at most 2,048 blocks and 4,096 entries in each auxiliary cache. Evicted
+   c tables are reloaded from a per-shard SQLite file, not recomputed. Only
+   final coefficients are serialized, with enough decimal digits for an exact
+   round trip at the configured precision. Source hashes and all block
+   parameters enter the key. A process lock rejects concurrent writers to the
+   same shard database. SQLite uses a 2 MiB page cache and rollback journaling,
+   not a shared WAL on the cluster filesystem.
+4. Atomically checkpoint each completed bulk sample, face sample, and corner
+   orbit. Restarting with the same source/config/seed reuses those values;
+   changed source or sampling settings fail closed. A completed face sample
+   includes its corner subtraction, so partial forest terms are never reused
+   as a completed sample. Collar diagnostics may be repeated on restart.
+
+The worker emits progress, peak RSS, resident coefficient counts, evictions,
+and disk-hit counts after each sample. Files are `task_NNNNN.coefficients.sqlite`
+and `task_NNNNN.checkpoints/`, beside the final shard JSON. The 12-hour cap and
+existing memory allocation have not been increased; a production-scale pilot
+is still needed before certifying a smaller allocation or a completion time.
+
+The tests in `test_fivepoint_runtime.py` cover parity/branch/mask preservation,
+45-digit disk round trips, bounded eviction, concurrent-writer rejection,
+and interrupted integration followed by exact sample reuse. Run the isolated
+process benchmarks from the repository root with:
+
+```bash
+python3 -B Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/benchmark_fivepoint_runtime.py \
+  --blocks 96 --cache-limit 16 --output /tmp/fivepoint-tables.json
+python3 -B Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon/benchmark_fivepoint_runtime.py \
+  --integrand --cache-limit 16 --output /tmp/fivepoint-integrand.json
+```
+
+The table benchmark uses production momentum nodes and cutoff; the integrand
+benchmark uses a reduced `(2,3)` momentum rule at one point. Neither is a full
+integration or a convergence certificate. Timings include allocation tracing.

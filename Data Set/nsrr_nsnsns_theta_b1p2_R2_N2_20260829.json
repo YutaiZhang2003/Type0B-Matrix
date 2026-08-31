@@ -1,0 +1,153 @@
+{
+  "calculation": "generic-b NSRR theta / NSNSNS theta modular check",
+  "parameters": {
+    "b": 1.2,
+    "Q_background": 2.033333333333333,
+    "c_super_liouville": 13.903333333333332,
+    "weyl_cancelling_free_superfield_power": 9.268888888888888,
+    "block_order": 2,
+    "quadrature_order_per_edge": 2,
+    "structure_dps": 30,
+    "mu": [
+      1.0,
+      0.0
+    ],
+    "include_cosmological_prefactor": false,
+    "one_pants_cosmological_factor": [
+      1.0,
+      0.0
+    ]
+  },
+  "marked_charts": {
+    "source": {
+      "sector": "NSRR",
+      "q": [
+        [
+          -0.03646907441609439,
+          0.029601511900343686
+        ],
+        [
+          -0.040592698064739495,
+          0.02978808738755322
+        ],
+        [
+          -0.03496279096596407,
+          -0.025186929920020883
+        ]
+      ],
+      "lifts": [
+        1,
+        1,
+        -1
+      ],
+      "characteristic": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "period_residual": 2.344568910754979e-11,
+      "integer_period_branch": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ]
+    },
+    "target": {
+      "sector": "NSNSNS",
+      "q": [
+        [
+          0.034728649738917886,
+          -0.02512904810285939
+        ],
+        [
+          -0.024917675594662306,
+          -0.0014728712197212166
+        ],
+        [
+          -0.08055905018198473,
+          -7.808926020263012e-05
+        ]
+      ],
+      "lifts": [
+        1,
+        -1,
+        1
+      ],
+      "characteristic": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "period_residual": 6.33129168259162e-11,
+      "integer_period_branch": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          -1
+        ]
+      ]
+    }
+  },
+  "free_superfield_same_local_frame": {
+    "source_NSRR": 0.6798265191486327,
+    "target_NSNSNS": 0.5372515435695161,
+    "source_majorana_spin_change_ratio": 0.9171041821606366,
+    "mode_cutoff": 16
+  },
+  "partitions": {
+    "source_NSRR": {
+      "value": 3.97355719885505e-08,
+      "sector_values": [
+        1.9592844083726737e-08,
+        2.014272790482376e-08
+      ],
+      "quadrature_order": 2,
+      "block_order": 2,
+      "runtime_seconds": 7.678652959,
+      "maximum_ward_residual": 3.7098683200891405e-14
+    },
+    "target_NSNSNS": {
+      "value": 1.7663179523845738e-08,
+      "sector_values": [
+        1.7626446295692986e-08,
+        3.673322815275213e-11
+      ],
+      "quadrature_order": 2,
+      "block_order": 2,
+      "runtime_seconds": 6.319517334,
+      "maximum_ward_residual": null
+    }
+  },
+  "Q_observable": {
+    "source_NSRR": 1.4212250075108934e-06,
+    "target_NSNSNS": 5.597860372206914e-06,
+    "ratio_source_over_target": 0.2538871842118824,
+    "symmetric_relative_difference": -1.1900796581744775
+  },
+  "conventions": {
+    "spectral_measure": "dP_NS dP_R1 dP_R2 / pi^3",
+    "all_NS_three_point": "C_HN(0)=C_BRY; C_HN(1)=i*tilde_C_BRY exactly once",
+    "NSRR_HJS_map": "eta=+ -> C_even; eta=- -> C_odd; overall HJS completeness 1/2",
+    "source_block": "double-Virasoro branching + ordinary genus-two Virasoro c-recursion + fixed-spin auxiliary-Majorana quotient",
+    "target_block": "direct N=1 genus-two c-recursion",
+    "cosmological_restoration": "multiply either genus-two partition and either Q by K_b^(-Q/b) when the prefactor is omitted"
+  }
+}

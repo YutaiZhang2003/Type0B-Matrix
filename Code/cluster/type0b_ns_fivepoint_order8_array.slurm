@@ -28,6 +28,7 @@ export OPENBLAS_NUM_THREADS=1
 export MKL_NUM_THREADS=1
 export NUMEXPR_NUM_THREADS=1
 export PYTHONUNBUFFERED=1
+export TYPE0B_5PT_PROGRESS=1
 export PYTHONPATH="${TYPE0B_5PT_ROOT}/Code/higher_point_amplitude_attempts/type0b_ns_five_tachyon:${TYPE0B_5PT_ROOT}/Code/c_Recursion:${TYPE0B_5PT_ROOT}/Code/bosonic_c1_one_to_n_reference/reference_implementation/plumbing${PYTHONPATH:+:${PYTHONPATH}}"
 
 "${TYPE0B_5PT_PYTHON}" \

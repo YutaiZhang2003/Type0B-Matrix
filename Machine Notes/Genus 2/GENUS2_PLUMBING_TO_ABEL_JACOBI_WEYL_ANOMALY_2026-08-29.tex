@@ -1,0 +1,389 @@
+% Standalone machine note.
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage[margin=1in]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\allowdisplaybreaks
+
+\title{Analytic Weyl Anomaly from Plumbing to the Abel--Jacobi Metric}
+\author{Machine Note}
+\date{29 August 2026}
+
+\newcommand{\dd}{\mathrm d}
+\newcommand{\Tr}{\operatorname{Tr}}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\pl}{\mathrm{pl}}
+\newcommand{\can}{\mathrm{can}}
+
+\begin{document}
+\maketitle
+
+\paragraph{Purpose.}
+We want the Weyl-anomaly factor that converts a vacuum partition function
+defined by CFT sewing in a plumbing frame to the metric induced from the flat
+Abel--Jacobi torus.  The direct Polyakov formula is awkward because a plumbing
+metric is naturally singular at the seams.  Instead, we evaluate one real
+free-boson partition function in the two frames and take their quotient.  The
+result determines the Weyl factor of every CFT by its central charge.
+
+\section{Abel--Jacobi map and canonical metric}
+
+Let $\Sigma_g$ be a compact genus-$g$ Riemann surface.  Choose a symplectic
+basis $(A_I,B_I)$ and normalized holomorphic one-forms
+\begin{equation}
+ \oint_{A_J}\omega_I=\delta_{IJ},
+ \qquad
+ \oint_{B_J}\omega_I=\Omega_{IJ},
+ \qquad
+ Y\equiv\operatorname{Im}\Omega>0.
+\end{equation}
+The Abel--Jacobi map is
+\begin{equation}
+ \mathfrak A_{p_0}:\Sigma_g\longrightarrow
+ J(\Sigma_g)=\mathbb C^g/(\mathbb Z^g+\Omega\mathbb Z^g),
+ \qquad
+ p\longmapsto
+ \left(\int_{p_0}^{p}\omega_1,\ldots,
+       \int_{p_0}^{p}\omega_g\right).
+\end{equation}
+Pulling back the flat Hermitian form $\dd Z^T Y^{-1}\dd\bar Z$ gives the
+Bergman, or Abel--Jacobi, metric.  We use its unit-area normalization,
+\begin{equation}
+ \boxed{
+ \mu_{\can}
+ =\frac{i}{2g}\sum_{I,J=1}^{g}
+   (Y^{-1})_{IJ}\,\omega_I\wedge\overline{\omega_J},
+ \qquad
+ \int_{\Sigma_g}\mu_{\can}=1 .}
+ \label{eq:canonical-metric}
+\end{equation}
+The unrescaled restriction has area $g$.  This fixed rescaling changes only a
+moduli-independent determinant constant at fixed genus.
+
+For one noncompact real boson, after dividing out the constant target-space
+zero mode, write
+\begin{equation}
+ Z_X[g]=\left(\frac{\det{}'\Delta_g}{\operatorname{Area}(g)}\right)^{-1/2}.
+ \label{eq:scalar-definition}
+\end{equation}
+If $g'=e^{2\sigma}g$ is smooth, then
+\begin{equation}
+ \log\frac{Z_X[g']}{Z_X[g]}
+ =\frac{1}{24\pi}\int_{\Sigma_g}
+ \left(|\nabla\sigma|_g^2+R_g\sigma\right)\dd A_g.
+ \label{eq:polyakov}
+\end{equation}
+For plumbing metrics, the quotient below is the regularized definition of
+the right-hand side, including its seam contributions.
+
+\section{Problem and quotient strategy}
+
+For a plumbing channel $a$, define
+\begin{equation}
+ W_a^{\pl/\can}
+ \equiv\frac{Z_X^{\pl,a}}{Z_X^{\can}},
+ \qquad
+ \cA_a\equiv\log W_a^{\pl/\can}.
+ \label{eq:weyl-definition}
+\end{equation}
+Here the plumbing propagator is the raw $q^{L_0}$ propagator: no
+$q^{-c/24}$ Casimir factor is hidden in $Z_X^{\pl,a}$.  Momentum states obey
+$\langle p|p'\rangle=\delta(p-p')$ and completeness uses $\dd p$.
+
+Since the Weyl anomaly is proportional to the ordinary Virasoro central
+charge $c$, a vacuum partition function transforms as
+\begin{equation}
+ \boxed{
+ Z_c^{\can}=Z_c^{\pl,a}\left(W_a^{\pl/\can}\right)^{-c}
+ =Z_c^{\pl,a}e^{-c\cA_a}.}
+ \label{eq:central-charge-power}
+\end{equation}
+
+\section{Genus one}
+
+For $\Sigma_1=\mathbb C/(\mathbb Z+\tau\mathbb Z)$, the Abel--Jacobi map is
+the identity and
+\begin{equation}
+ \dd s_{\can}^2=\frac{|\dd z|^2}{\tau_2},
+ \qquad \tau_2=\operatorname{Im}\tau.
+\end{equation}
+With the standard torus CFT normalization,
+\begin{equation}
+ \det{}'\Delta_{\can}=\tau_2|\eta(\tau)|^4,
+ \qquad
+ \boxed{Z_X^{\can,(1)}(\tau)
+ =\frac{1}{\sqrt{\tau_2}\,|\eta(\tau)|^2}.}
+ \label{eq:genus1-canonical}
+\end{equation}
+For $q=e^{2\pi i\tau}$, raw plumbing gives
+\begin{equation}
+ Z_X^{\pl,(1)}
+ =\frac{1}{\sqrt{\tau_2}}
+   \prod_{n=1}^{\infty}|1-q^n|^{-2}.
+\end{equation}
+Using $\eta(\tau)=q^{1/24}\prod_{n\geq1}(1-q^n)$,
+\begin{equation}
+ \boxed{
+ W_1^{\pl/\can}=|q|^{1/12},
+ \qquad
+ \cA_1=\frac{1}{12}\log|q|.}
+ \label{eq:genus1-weyl}
+\end{equation}
+Thus $Z_c^{\can}=Z_c^{\pl}|q|^{-c/12}$.  If the sewing propagator already
+contains $q^{L_0-c/24}\bar q^{\bar L_0-c/24}$, this genus-one transition is
+instead unity.
+
+\section{The bielliptic conformal frame}
+\label{sec:bielliptic-frame}
+
+The analogue of the four-point pillow starts from a torus
+\begin{equation}
+ E_\tau=\mathbb C/(\mathbb Z+\tau\mathbb Z)
+\end{equation}
+with two insertions at $z_1,z_2$.  A connected double cover
+$\pi:\Sigma_2\to E_\tau$ branched at these points has genus two by
+Riemann--Hurwitz.  Its deck involution $\iota$ has two fixed points, and the
+quotient $\Sigma_2/\langle\iota\rangle$ is the original torus with two
+angle-$\pi$ corners.  Thus this is a branched conformal frame, rather than an
+ordinary one-to-one change of coordinate.
+
+Let $E(z,w)$ be the prime form of $E_\tau$; in the flat coordinate we use
+\begin{equation}
+ E(z,w)=\frac{\theta_1(z-w\mid\tau)}{\theta_1'(0\mid\tau)}.
+\end{equation}
+Choose $a\in E_\tau$ such that
+\begin{equation}
+ 2a=z_1+z_2
+ \qquad\text{in the group law of }E_\tau.
+ \label{eq:half-branch-divisor}
+\end{equation}
+There are four choices, differing by $E_\tau[2]$; they encode the four
+discrete $\mathbb Z_2$ monodromy sectors.  If
+$z_1+z_2-2a=m+n\tau$, define
+\begin{equation}
+ f_a(z)=e^{-2\pi i n z}
+ \frac{E(z,z_1)E(z,z_2)}{E(z,a)^2}.
+ \label{eq:elliptic-cover-function}
+\end{equation}
+The exponential makes $f_a$ doubly periodic.  Its divisor is
+$z_1+z_2-2a$, so the curve
+\begin{equation}
+ \boxed{\Sigma_{2,a}:\qquad \xi^2=f_a(z)}
+ \label{eq:bielliptic-cover}
+\end{equation}
+is branched only at $z_1,z_2$; the double pole at $a$ is unramified.
+
+The invariant and anti-invariant holomorphic one-forms are
+\begin{equation}
+ \omega_+=\pi^*\dd z,
+ \qquad
+ \omega_-=\pi^*\!\left(\frac{\dd z}{\xi}\right),
+ \qquad
+ \iota^*\omega_\pm=\pm\omega_\pm .
+ \label{eq:eigen-one-forms}
+\end{equation}
+In the torus coordinate, the cut differential is
+\begin{equation}
+ \boxed{
+ \omega_-(z)=\mathcal N_a e^{\pi i n z}
+ \frac{\theta_1(z-a\mid\tau)}
+ {\sqrt{\theta_1(z-z_1\mid\tau)\theta_1(z-z_2\mid\tau)}}\,\dd z .}
+ \label{eq:cut-differential}
+\end{equation}
+For $z_1=0,z_2=u$, one may take
+$a=u/2+\epsilon$ with $\epsilon\in E_\tau[2]$.  Formula
+\eqref{eq:cut-differential} is the torus replacement of
+$\dd z/\sqrt{z(z-1)(z-w)}$.  The theta-function numerator is required by
+double periodicity; it also supplies the zero divisor of the genus-two
+one-form.
+
+Regularity is transparent locally.  At a branch point, write
+$z-z_i=t^2$.  Then $\xi\sim t$ and
+\begin{equation}
+ \omega_-\sim\frac{\dd z}{t}=2\,\dd t.
+\end{equation}
+At $z=a$, one has $\xi\sim(z-a)^{-1}$ and hence
+$\omega_-\sim(z-a)\dd z$.  The two lifts of $a$ therefore give the two
+zeros required by $\deg K_{\Sigma_2}=2$.
+
+Choose anti-invariant cycles $A_-,B_-$ and set
+\begin{equation}
+ \widehat\omega_-=
+ \frac{\omega_-}{\oint_{A_-}\omega_-},
+ \qquad
+ \tau_{\mathrm P}(\tau,z_2-z_1)
+ =\oint_{B_-}\widehat\omega_- .
+ \label{eq:prym-period}
+\end{equation}
+The two eigenperiods are the quotient modulus $\tau$ and the Prym modulus
+$\tau_{\mathrm P}$.  In a common involution-adapted convention,
+\begin{equation}
+ \Omega=\frac12
+ \begin{pmatrix}
+  \tau+\tau_{\mathrm P}&\tau-\tau_{\mathrm P}\\
+  \tau-\tau_{\mathrm P}&\tau+\tau_{\mathrm P}
+ \end{pmatrix}.
+ \label{eq:bielliptic-period-matrix}
+\end{equation}
+Factors of two can move between \eqref{eq:prym-period} and
+\eqref{eq:bielliptic-period-matrix} under a different integral homology
+convention; invariantly, the two eigenperiods are $\tau$ and
+$\tau_{\mathrm P}$.
+
+Now present the genus-two surface as two pairs of pants joined by three
+plumbing tubes $e_1,e_2,e_3$, with parameters $q_1,q_2,q_3$.  The
+bielliptic involution exchanges $e_1,e_2$ and preserves $e_3$, so equivariant
+sewing imposes
+\begin{equation}
+ \boxed{(q_1,q_2,q_3)=(x,x,y).}
+ \label{eq:symmetric-plumbing-locus}
+\end{equation}
+The quotient graph is the two-edge necklace graph for a torus two-point
+function: the orbit $\{e_1,e_2\}$ gives one quotient tube, the invariant
+edge gives the other, and the two fixed points give the external insertions.
+Equality of $q_1,q_2$ constrains the moduli, not the two channel labels; the
+involution exchanges those labels, and an invariant block is obtained by
+the corresponding projection.
+
+Equations \eqref{eq:prym-period} and \eqref{eq:symmetric-plumbing-locus}
+give an analytic definition of the desired change of variables:
+\begin{equation}
+ \tau_+(x,y)=\tau,
+ \qquad
+ \tau_-(x,y)=\tau_{\mathrm P}(\tau,u).
+ \label{eq:period-matching-map}
+\end{equation}
+Equivalently, the two standard necklace multipliers are analytic functions
+$p_1(x,y),p_2(x,y)$.  They need not equal $x,y$ literally: the quotient of
+an invariant collar can introduce a square or square root, fixed by the
+local plumbing coordinates.
+
+Finally, the Abel--Jacobi metric diagonalizes in the eigenbasis as
+\begin{equation}
+ \dd s_{\can}^2\ \propto\
+ \frac{|\omega_+|^2}{\operatorname{Im}\tau}
+ +\frac{|\widehat\omega_-|^2}{\operatorname{Im}\tau_{\mathrm P}},
+ \label{eq:bielliptic-canonical-metric}
+\end{equation}
+with the overall factor fixed by \eqref{eq:canonical-metric}.  Although
+$\omega_-$ changes sign across the cut, $|\omega_-|^2$ is single-valued on
+the quotient.  Near a fixed point,
+\begin{equation}
+ |\omega_-|^2\sim\frac{|\dd z|^2}{|z-z_i|},
+\end{equation}
+which is the angle-$\pi$ corner.  Thus the prime-form construction supplies
+the conformal frame relating the torus two-point geometry to
+$\Sigma_2/\mathbb Z_2$, as well as the explicit canonical metric needed for
+the Weyl-anomaly quotient.
+
+\section{Genus two}
+
+Let $Y=\operatorname{Im}\Omega$ and use the raw Igusa product
+\begin{equation}
+ \chi_{10}^{\mathrm{raw}}(\Omega)
+ =\prod_{\delta\ \mathrm{even}}
+   \theta[\delta](0|\Omega)^2.
+ \label{eq:chi10}
+\end{equation}
+Define the Petersson-norm combination
+\begin{equation}
+ F_2(\Omega)
+ =(\det Y)^{5/2}
+   \prod_{\delta\ \mathrm{even}}|\theta[\delta](0|\Omega)|
+ =(\det Y)^{5/2}|\chi_{10}^{\mathrm{raw}}(\Omega)|^{1/2}.
+ \label{eq:F2}
+\end{equation}
+For the Abel--Jacobi metric, Klein--Kokotov--Korotkin give
+\begin{equation}
+ \det{}'\Delta_{\can}=C_2 F_2(\Omega)^{1/3},
+\end{equation}
+where $C_2$ is independent of the moduli.  Hence
+\begin{equation}
+ \boxed{
+ Z_X^{\can,(2)}(\Omega)
+ =C_2^{-1/2}(\det Y)^{-5/12}
+  |\chi_{10}^{\mathrm{raw}}(\Omega)|^{-1/12}.}
+ \label{eq:genus2-canonical}
+\end{equation}
+
+Let $\Gamma_a$ be the rank-two Schottky group obtained from plumbing channel
+$a$.  If $k_\gamma$ is the attracting multiplier of a primitive class, set
+\begin{equation}
+ \cP_a(\mathbf q)
+ =\prod_{[\gamma]\in\mathcal P_{\mathrm{prim}}}
+   \prod_{n=1}^{\infty}(1-k_\gamma(\mathbf q)^n)^{-1},
+ \label{eq:schottky-product}
+\end{equation}
+with one representative of each inverse-paired primitive class.  The exact
+raw plumbing scalar is
+\begin{equation}
+ \boxed{
+ Z_X^{\pl,a}(\mathbf q)
+ =(\det Y_a)^{-1/2}|\cP_a(\mathbf q)|^2.}
+ \label{eq:genus2-plumbing}
+\end{equation}
+The factor $(\det Y_a)^{-1/2}$ is the Gaussian integral over the two handle
+momenta; it is distinct from the constant target-space zero mode.
+
+Dividing \eqref{eq:genus2-plumbing} by
+\eqref{eq:genus2-canonical} gives the analytic Weyl factor
+\begin{equation}
+ \boxed{
+ W_a^{\pl/\can}
+ =C_2^{1/2}(\det Y_a)^{-1/12}
+  |\chi_{10}^{\mathrm{raw}}(\Omega_a)|^{1/12}
+  |\cP_a(\mathbf q)|^2.}
+ \label{eq:genus2-weyl}
+\end{equation}
+Equivalently,
+\begin{equation}
+ \boxed{
+ \cA_a
+ =2\operatorname{Re}\log\cP_a
+ -\frac{1}{12}\log\det Y_a
+ +\frac{1}{12}\log|\chi_{10}^{\mathrm{raw}}(\Omega_a)|
+ +\frac{1}{2}\log C_2.}
+ \label{eq:genus2-log-weyl}
+\end{equation}
+Equations \eqref{eq:genus2-weyl}--\eqref{eq:genus2-log-weyl} are the desired
+analytic answer.  The period map $\Omega_a(\mathbf q)$ and the multipliers
+$k_\gamma(\mathbf q)$ have convergent Schottky expansions throughout the
+plumbing domain.
+
+\paragraph{Relative channel comparison.}
+If channels $a$ and $b$ represent the same surface in the same symplectic
+marking, then the canonical determinant and $C_2$ cancel:
+\begin{equation}
+ \frac{W_a^{\pl/\can}}{W_b^{\pl/\can}}
+ =\frac{Z_X^{\pl,a}}{Z_X^{\pl,b}}.
+ \label{eq:relative-channel}
+\end{equation}
+Period matrices recorded in different $\operatorname{Sp}(4,\mathbb Z)$
+markings must first be transported to a common marking, together with the
+corresponding automorphy factors.
+
+\paragraph{Type 0B application.}
+One real $N=1$ superfield has $c=3/2$, so its Weyl factor is
+$(W_a^{\pl/\can})^{3/2}$.  Nine such superfields and the $b=1$
+super-Liouville theory both have $c=27/2$; their common Weyl factor therefore
+cancels in a same-frame quotient.
+
+\section*{References}
+
+\begin{enumerate}
+ \item C.~Klein, A.~Kokotov, and D.~Korotkin,
+ \emph{Extremal properties of the determinant of the Laplacian in the
+ Bergman metric on the moduli space of genus two Riemann surfaces},
+ \href{https://arxiv.org/abs/math/0511217}{arXiv:math/0511217}.
+ \item G.~Mason and M.~P.~Tuite,
+ \emph{The genus two partition function for free bosonic and lattice vertex
+ operator algebras},
+ \href{https://arxiv.org/abs/0712.0628}{arXiv:0712.0628}.
+\end{enumerate}
+
+\end{document}

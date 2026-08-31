@@ -1,0 +1,1072 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools,bm}
+\usepackage{booktabs,array,microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+\numberwithin{equation}{section}
+\allowdisplaybreaks[2]
+\setlength{\parskip}{0.35em}
+\newcommand{\NS}{\mathrm{NS}}
+\newcommand{\fq}{\mathfrak q}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\ve}{\boldsymbol\epsilon}
+\newcommand{\vh}{\boldsymbol h}
+\newcommand{\vd}{\boldsymbol d}
+\newcommand{\bpzbraket}[2]{\bigl\langle\!\bigl\langle #1\bigm|#2\bigr\rangle}
+\DeclareMathOperator*{\Res}{Res}
+
+\title{Sphere \texorpdfstring{$n$}{n}-Point NS Blocks in the Pillow Frame\\
+and the Proposed Elliptic \texorpdfstring{$h$}{h}-Recursion}
+\author{Machine note}
+\date{August 30, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We give a self-contained recipe for bottom-component Neveu--Schwarz
+sphere blocks in the comb, or open-necklace, channel. The ordinary pillow
+map and its geometric conformal factor are retained. After primary
+propagation powers are removed, the proposed regular part is a universal
+infinite product; the singular part is determined by NS null-vector
+factorization and closes the elliptic recursion. We use the conventions
+of \texttt{Human Notes/SCblock.tex}, including its normalized elliptic
+integral, torus coordinate, central charge, and three-point forms. The
+general multipoint large-weight seed is an assumption supported by the
+five- and six-point checks recorded below, not a proved cap Ward identity. This
+standalone note neither inputs nor modifies the human note.
+\end{abstract}
+
+\section{Conventions and scope}
+\label{sec:conventions}
+
+We use the ordinary central charge of the human note:
+\begin{align}
+ [L_m,L_n]&=(m-n)L_{m+n}
+       +\frac{c}{12}(m^3-m)\delta_{m+n,0},\notag\\
+ [L_m,G_r]&=\left(\frac m2-r\right)G_{m+r},\qquad
+ \{G_r,G_s\}=2L_{r+s}
+       +\frac c3\left(r^2-\frac14\right)\delta_{r+s,0},
+ \label{eq:algebra}\\
+ c&=\frac32+3Q^2,\qquad Q=b+b^{-1},\qquad
+ r,s\in\mathbb Z+\frac12\quad\hbox{in the algebra}.
+ \notag
+\end{align}
+In subsequent Kac labels, $r,s$ will instead be positive integers.
+We take external bottom components of intrinsically even NS primaries,
+and choose even highest-weight representatives for the internal modules.
+Upper external components and Ramond modules require separate seeds and
+are not included here.
+
+Put the external weights $d_1,\ldots,d_n$ at the ordered positions
+\begin{equation}
+ (0,z,t_1,\ldots,t_{n-4},1,\infty),\qquad
+ 0<z<t_1<\cdots<t_{n-4}<1,
+ \label{eq:positions}
+\end{equation}
+initially on the real OPE sheet. Write $m=n-3$ for the number of internal
+edges, with weights $h_1,\ldots,h_m$. This follows the human note's
+necklace convention: $h_i$ are internal and $d_i$ external. In its
+four-point subsection, the four external weights denoted there by $h_i$
+are consequently relabelled $d_i$ here.
+
+The human-note descendant and three-form conventions are
+\begin{align}
+ \mathbf L_{-A}\phi
+ &=L_{-n_1}\cdots L_{-n_\ell}G_{-r_1}\cdots G_{-r_p}\phi,
+ &(-1)^A&=(-1)^p,\notag\\
+ \rho_0(\phi_1,\phi_2,\phi_3)&=1,
+ &\rho_1(\phi_1,G_{-1/2}\phi_2,\phi_3)&=1,
+ \label{eq:three-form-convention}\\
+ (\mathbf G_h)_{AB}
+ &=\bpzbraket{\mathbf L_{-A}\phi_h}{\mathbf L_{-B}\phi_h}.
+ \notag
+\end{align}
+The relative label on $\rho_\alpha$ is total descendant parity, not the
+absolute parity including the primaries. We keep the fixed-parity
+ordering of the human note; the local fusion-polynomial arguments must
+not be interchanged without their reflection signs.
+
+Let $\epsilon_i\in\{0,1\}$ select levels
+$\mathbb Z_{\geq0}+\epsilon_i/2$ on internal edge $i$. The vertex labels are
+\begin{equation}
+ \alpha_1=\epsilon_1,\qquad
+ \alpha_v=\epsilon_{v-1}\oplus\epsilon_v\ (2\leq v\leq m),\qquad
+ \alpha_{m+1}=\epsilon_m.
+ \label{eq:vertex-labels}
+\end{equation}
+Thus the all-bottom problem has $2^{n-3}$ component blocks. The ordered
+vertices are the left cap $\rho_{\alpha_1}(\phi_{h_1},\phi_{d_2},\phi_{d_1})$,
+the interior forms
+$\rho_{\alpha_v}(\phi_{h_v},\phi_{d_{v+1}},\phi_{h_{v-1}})$,
+and the right cap
+$\rho_{\alpha_{m+1}}(\phi_{d_n},\phi_{d_{n-1}},\phi_{h_m})$,
+with descendants inserted as appropriate. Primary structure constants
+are stripped off.
+
+\section{The pillow map and the sphere conformal factor}
+\label{sec:geometry}
+
+\subsection{Periods, the normalized elliptic integral, and the coordinate}
+
+Use the double cover and holomorphic differential
+\begin{equation}
+ y^2=x(x-z)(x-1),\qquad \omega=\frac{dx}{y}.
+\end{equation}
+With the cycle orientations chosen to give $\operatorname{Im}\tau>0$,
+the periods and the human-note normalization of $K$ are
+\begin{align}
+ \oint_A\omega&=2\pi K(z),&
+ \oint_B\omega&=2\pi iK(1-z),\notag\\
+ K(z)&=\frac1\pi\int_0^1
+ \frac{d\xi}{\sqrt{\xi(1-\xi)(1-z\xi)}}
+ ={}_2F_1\!\left(\frac12,\frac12;1;z\right),
+ \label{eq:K}\\
+ \tau&=i\frac{K(1-z)}{K(z)},&\fq&=e^{\pi i\tau}.
+ \label{eq:nome}
+\end{align}
+In particular, $K(0)=1$. Set
+$\theta_j(\tau)=\vartheta_j(0\mid\tau)$. When a nome is used as the
+argument, $\theta_3(\fq)=\sum_{k\in\mathbb Z}\fq^{k^2}$, so
+$\theta_3(\fq)=\theta_3(\tau)$ and
+$\theta_3(\fq^2)=\vartheta_3(0\mid2\tau)$. Then
+\begin{equation}
+ z=\frac{\theta_2(\tau)^4}{\theta_3(\tau)^4},\qquad
+ K(z)=\theta_3(\tau)^2,\qquad
+ w(x)=\frac1{\theta_3(\tau)^2}
+       \int_0^x\frac{d\xi}{\sqrt{\xi(\xi-z)(\xi-1)}}.
+ \label{eq:AJ}
+\end{equation}
+Thus $w\sim w+2\pi\sim w+2\pi\tau$. On the chosen sheet the branch
+points map to $0,\pi,\pi+\pi\tau,\pi\tau$, respectively. The quotient
+$w\sim-w$ is the pillow. Write $w_j=w(t_j)$ for the mobile insertions.
+
+\subsection{Propagation factors and their branches}
+
+For $n\geq5$, define the OPE-aligned cylinder parameters and effective
+propagation factors by
+\begin{align}
+ p_1&=-e^{iw_1},&\varrho_1&=4p_1,\notag\\
+ p_i&=e^{i(w_i-w_{i-1})}\quad(2\leq i\leq m-1),
+ &\varrho_i&=p_i,\notag\\
+ p_m&=-\fq e^{-iw_{m-1}},&\varrho_m&=4p_m.
+ \label{eq:propagation}
+\end{align}
+They obey
+\begin{equation}
+ \prod_{i=1}^m p_i=\fq,\qquad
+ \prod_{i=1}^m\varrho_i=16\fq.
+ \label{eq:propagation-product}
+\end{equation}
+For $n=4$, set $p_1=\fq$ and $\varrho_1=16\fq$ instead.
+We use $\varrho_i$ to distinguish propagation factors from the three-form
+$\rho_\alpha$.
+
+The two endpoint factors of $4$ encode the cap normalization, and each
+interior segment has no such factor. Their product gives the same
+$16\fq$ as the four-point OPE normalization. The endpoint minus signs
+in \eqref{eq:propagation} are fixed by the aligned sheet: there
+$w_j=\pi+i v_j$ and all $p_i$ are positive. Take positive square roots
+there and continue them coherently. Since NS null levels can be
+half-integral, these signs cannot be discarded or reselected at recursive
+calls. They are geometric branch choices, not the edge-parity labels
+$\epsilon_i$.
+
+\subsection{Geometric prefactor and normalized pillow block}
+
+The flat metrics are related by
+\begin{equation}
+ dw\,d\bar w=e^{2\sigma}dx\,d\bar x,\qquad
+ e^{2\sigma}=\frac1{|\theta_3(\tau)|^4|x(x-z)(x-1)|}.
+\end{equation}
+A mobile bottom primary transforms as
+$\phi_x(t)=(dw/dt)^d\phi_w(w(t))$. Its chiral Jacobian is therefore
+\begin{equation}
+ \left(\frac{dw}{dt}\right)^d
+ =\theta_3(\tau)^{-2d}[t(t-z)(t-1)]^{-d/2}.
+ \label{eq:Jacobian}
+\end{equation}
+On the ordered real sheet we absorb the fixed local phase into the
+insertion state and write the positive radicand $t(1-t)(t-z)$ below.
+Combining these Jacobians with the corner factors and Weyl anomaly gives
+the scalar coordinate factor
+\begin{equation}
+ \begin{aligned}
+ \Lambda_n^{(c)}={}&
+ z^{c/24-d_1-d_2}
+ (1-z)^{c/24-d_2-d_{n-1}}\\
+ &\times\theta_3(\tau)^{c/2
+       -4(d_1+d_2+d_{n-1}+d_n)-2\sum_{j=1}^{n-4}d_{j+2}}\\
+ &\times\prod_{j=1}^{n-4}
+       [t_j(1-t_j)(t_j-z)]^{-d_{j+2}/2}.
+ \end{aligned}
+ \label{eq:Lambda}
+\end{equation}
+This is the same bottom-primary coordinate factor as in the bosonic
+construction; supersymmetry changes
+the sewn modules, not the ordinary primary Jacobians.
+
+Following the human note, $\cG$ denotes the pillow cap matrix element
+after removing the primary propagation powers. Its sphere reconstruction is
+\begin{equation}
+ \boxed{\quad
+ \cF^{\NS}_{c,\ve}(\vd,\vh;z,\boldsymbol t)
+ =\Lambda_n^{(c)}
+   \prod_{i=1}^m\varrho_i^{h_i-c/24}\,
+   \cG_{n,\ve}(\vh;\boldsymbol p).
+ \quad}
+ \label{eq:sphere-G}
+\end{equation}
+At four points this is the parity-resolved version of the human note's
+definition:
+\begin{equation}
+ \cG_{4,\epsilon}
+ =(16\fq)^{-h+c/24}
+ \langle\psi_{43}|\mathbb P_h\,
+       \fq^{L_0-c/24}|\psi_{12}\rangle_{\epsilon}.
+\end{equation}
+For the even primary term the cap overlaps multiply to $16^{h-c/24}$,
+as in the human note. The odd component has no level-zero term.
+
+\section{The regular part: the NS pillow product}
+\label{sec:seed}
+
+Define
+\begin{equation}
+ P(\fq)=\prod_{j\geq1}(1-\fq^{2j}).
+\end{equation}
+In the human note's normalization, the known four-point all-bottom
+large-weight limits are~\cite{HJS}
+\begin{equation}
+ \lim_{h\to\infty}\cG_{4,0}(h;\fq)
+ =\frac{\theta_3(\fq^2)}{P(\fq)^{3/4}},\qquad
+ \lim_{h\to\infty}\cG_{4,1}(h;\fq)=0.
+ \label{eq:four-seed}
+\end{equation}
+The theta identity useful for checking the sphere normalization is
+\begin{equation}
+ z(1-z)\theta_3(\tau)^{12}=16\fq\,P(\fq)^{12}.
+ \label{eq:theta-identity}
+\end{equation}
+
+Use the human note's common-weight variable,
+\begin{equation}
+ a_1=0,\qquad a_i=h_i-h_1\quad(2\leq i\leq m).
+\end{equation}
+The multipoint proposal is
+\begin{equation}
+ \boxed{\quad
+ \lim_{\substack{h_1\to\infty\\a_i\ \mathrm{fixed}}}
+ \cG_{n,\ve}
+ =\delta_{\ve,\boldsymbol0}\,\cC_{\NS}(\fq),\qquad
+ \cC_{\NS}(\fq)
+ =\frac{\theta_3(\fq^2)}{P(\fq)^{3/4}}.
+ \quad}
+ \label{eq:seed}
+\end{equation}
+By the Jacobi triple product, this is explicitly
+\begin{equation}
+ \boxed{\quad
+ \cC_{\NS}(\fq)
+ =\prod_{j=1}^{\infty}
+ \frac{(1-\fq^{4j})(1+\fq^{4j-2})^2}
+      {(1-\fq^{2j})^{3/4}}.
+ \quad}
+ \label{eq:NS-product}
+\end{equation}
+Fractional powers are continued from $\fq=0$, where the product is one.
+Equation~\eqref{eq:NS-product} replaces the bosonic pillow product
+$P(\fq)^{-1/2}$ while keeping the geometric factor
+$\Lambda_n^{(c)}$ unchanged. The dependence of the regular part on the
+mobile insertion positions is only through
+$\fq=\prod_i p_i$. The propagation powers in \eqref{eq:sphere-G}
+retain the individual-position dependence.
+
+The proposed large-weight reduction is that leading normalized even
+interior vertices transport the same oscillator state, leaving the
+four-point cap contribution. Parity-changing vertices have no leading
+contribution in the present normalization. This motivates
+\eqref{eq:seed}; a direct cap Ward-identity proof is not supplied here.
+
+The pillow factor must not be identified with an unprojected torus trace.
+The ordinary NS descendant character at torus nome $\fq^2$ is
+$\prod_{j\geq1}(1+\fq^{2j-1})/(1-\fq^{2j})$. It has a term linear in
+$\fq$, whereas the cap seed in \eqref{eq:four-seed} is
+\begin{equation}
+ \cC_{\NS}(\fq)=1+\frac{11}{4}\fq^2
+                  +\frac{93}{32}\fq^4+O(\fq^6).
+\end{equation}
+
+\section{Singular part and the closed recursion}
+\label{sec:recursion}
+
+\subsection{Null-vector data in the human-note convention}
+
+At fixed generic $c$, the NS Kac weights, levels, and null parities are
+\begin{equation}
+ h_{rs}(c)=\frac{Q^2-(rb+sb^{-1})^2}{8},\qquad
+ \ell_{rs}=\frac{rs}{2},\qquad \pi_{rs}=rs\bmod2,
+ \qquad r,s\geq1,\quad r+s\in2\mathbb Z.
+ \label{eq:Kac}
+\end{equation}
+The range includes $(r,s)=(1,1)$, for which $h_{11}=0$ and
+$\ell_{11}=1/2$. The $r\geq2$ restriction used to solve for a moving
+$c$-pole does not apply to this fixed-$c$ $h$-recursion.
+
+The inverse null-norm slope is the human note's
+\begin{equation}
+ \mathbf A^c_{rs}
+ =\frac12
+ \prod_{\substack{u=1-r,\ldots,r\\v=1-s,\ldots,s\\
+                    u+v\in2\mathbb Z\\
+                    (u,v)\ne(0,0),(r,s)}}
+ \left[\frac{ub+vb^{-1}}{\sqrt2}\right]^{-1}.
+ \label{eq:A}
+\end{equation}
+Here $b$ is fixed by $c$, not recalculated from a shifted internal weight.
+For any weight $x$, set $\lambda_x^2=Q^2-8x$. Define
+\begin{equation}
+ \mathbf P^{\alpha}_{rs}(x,y;c)
+ =\prod_{\substack{u=1-r,3-r,\ldots,r-1\\
+                    v=1-s,3-s,\ldots,s-1\\
+                    u+v-r-s\in4\mathbb Z+2(1-\alpha)}}
+ \frac{\lambda_x-\lambda_y+ub+vb^{-1}}{2\sqrt2}
+ \frac{\lambda_x+\lambda_y+ub+vb^{-1}}{2\sqrt2},
+ \qquad \alpha\in\{0,1\}.
+ \label{eq:P}
+\end{equation}
+These are precisely the $\mathbf P^0,\mathbf P^1$ of the human note.
+For example $\mathbf P^0_{11}(x,y;c)=y-x$, $\mathbf P^1_{11}=1$,
+and $\mathbf A^c_{11}=1/2$. Their argument order matters:
+\begin{equation}
+ \mathbf P^0_{rs}(x,y;c)=(-1)^{\lceil rs/2\rceil}
+                         \mathbf P^0_{rs}(y,x;c),\qquad
+ \mathbf P^1_{rs}(x,y;c)=(-1)^{\lfloor rs/2\rfloor}
+                         \mathbf P^1_{rs}(y,x;c).
+\end{equation}
+
+For a pole on edge $k$, define the pole values and shifted child by
+\begin{align}
+ h_j^*&=h_j-h_k+h_{rs}=a_j-a_k+h_{rs},\notag\\
+ h'_j&=h_j^*+\ell_{rs}\delta_{jk},&
+ \epsilon'_j&=\epsilon_j\oplus\bigl(\pi_{rs}\delta_{jk}\bigr).
+ \label{eq:child}
+\end{align}
+The two weight pairs adjacent to edge $k$ are
+\begin{equation}
+ (x_L,y_L)=
+ \begin{cases}(d_1,d_2),&k=1,\\
+              (h_{k-1}^*,d_{k+1}),&k>1,
+ \end{cases}
+ \qquad
+ (x_R,y_R)=
+ \begin{cases}(d_n,d_{n-1}),&k=m,\\
+              (h_{k+1}^*,d_{k+2}),&k<m.
+ \end{cases}
+ \label{eq:adjacent-pairs}
+\end{equation}
+In the oriented bottom-component convention of
+Section~\ref{sec:conventions}, the scalar residue kernel is
+\begin{equation}
+ \boxed{\quad
+ \mathbf R^{(k,\ve)}_{rs}(\vh^*)
+ =(-1)^{rs}\mathbf A^c_{rs}
+   \mathbf P^{\alpha_k}_{rs}(x_L,y_L;c)
+   \mathbf P^{\alpha_{k+1}}_{rs}(x_R,y_R;c).
+ \quad}
+ \label{eq:R}
+\end{equation}
+The sign is tied to the human note's fixed-parity three-form ordering,
+not an extra universal sign to append to an independently normalized
+formula. An odd null vector flips the edge label and both adjacent
+vertex labels; an even null vector flips neither. This ordered kernel
+is the one used in the numerical check described below.
+
+\subsection{Regular part plus recursively factorized residues}
+
+The common-weight pole is $h_1=h_{rs}-a_k$. At the pole,
+\begin{equation}
+ \Res_{h_1=h_{rs}-a_k}\cG_{n,\ve}
+ =\varrho_k^{\ell_{rs}}
+   \mathbf R^{(k,\ve)}_{rs}(\vh^*)\,
+   \cG_{n,\ve'}(\vh').
+ \label{eq:residue}
+\end{equation}
+The propagation factor follows by comparing the primary powers before
+and after replacing the null state by its primary of weight
+$h_{rs}+\ell_{rs}$:
+\begin{equation}
+ \frac{\prod_j\varrho_j^{h_j^*+\ell_{rs}\delta_{jk}-c/24}}
+      {\prod_j\varrho_j^{h_j^*-c/24}}
+ =\varrho_k^{\ell_{rs}}.
+\end{equation}
+The geometric factor is independent of internal weights and cancels.
+The null-state matrix elements can therefore be evaluated in the plane
+with the human-note fusion polynomials and transformed back.
+
+At a fixed elliptic order, assume coefficientwise rationality in $h_1$
+and generic, noncoincident simple poles. Subtracting their principal
+parts leaves a polynomial in $h_1$. The finite large-$h_1$ limit in
+\eqref{eq:seed} fixes that polynomial to the constant regular part.
+Consequently the proposed recursion is
+\begin{equation}
+ \boxed{\begin{aligned}
+ \cG_{n,\ve}(\vh)
+ ={}&\underbrace{\delta_{\ve,\boldsymbol0}\cC_{\NS}(\fq)}
+                         _{\text{regular part in }h_1}\\
+ &+\sum_{k=1}^m\sum_{\substack{r,s\geq1\\r+s\in2\mathbb Z}}
+ \frac{\varrho_k^{rs/2}\mathbf R^{(k,\ve)}_{rs}(\vh^*)}
+      {h_k-h_{rs}(c)}\,
+ \cG_{n,\ve'}(\vh').
+ \end{aligned}}
+ \label{eq:G-recursion}
+\end{equation}
+The sum is the singular part. There is no separate $o(1)$ remainder:
+finite-weight corrections are supplied by the pole terms. For the
+all-even component the regular part is the infinite product, and for
+the other components it is zero. ``Regular'' refers to internal-weight
+dependence, not to an expansion order in $\fq$.
+
+\subsection{The unit-seed elliptic block and reconstruction}
+
+As in the human note, reserve $H$ for the block with the regular product
+removed:
+\begin{equation}
+ H_{n,\ve}:=\cC_{\NS}(\fq)^{-1}\cG_{n,\ve}.
+ \label{eq:unit-H}
+\end{equation}
+It obeys
+\begin{equation}
+ \boxed{\quad
+ H_{n,\ve}(\vh)=\delta_{\ve,\boldsymbol0}
+ +\sum_{k=1}^m\sum_{\substack{r,s\geq1\\r+s\in2\mathbb Z}}
+ \frac{\varrho_k^{rs/2}\mathbf R^{(k,\ve)}_{rs}(\vh^*)}
+      {h_k-h_{rs}(c)}\,
+ H_{n,\ve'}(\vh').
+ \quad}
+ \label{eq:H-recursion}
+\end{equation}
+All external weights, $c$, and coordinates remain fixed. The internal
+differences for the next call are obtained from the child tuple
+$\vh'$; they are not frozen to their parent values. Since
+$\cC_{\NS}$ is weight independent, there is no additional ratio of
+theta functions in the kernel. The final sphere block is
+\begin{equation}
+ \boxed{\quad
+ \cF^{\NS}_{c,\ve}
+ =\Lambda_n^{(c)}
+   \prod_i\varrho_i^{h_i-c/24}\,
+   \cC_{\NS}(\fq)\,H_{n,\ve}.
+ \quad}
+ \label{eq:reconstruction}
+\end{equation}
+
+\section{Four- and five-point specializations}
+\label{sec:examples}
+
+For four points, $\varrho_1=16\fq$ and
+$\alpha_1=\alpha_2=\epsilon$. Thus
+\begin{equation}
+ \begin{aligned}
+ H_{4,\epsilon}(h)={}&\delta_{\epsilon,0}\\
+ &+\sum_{\substack{r,s\geq1\\r+s\in2\mathbb Z}}
+ \frac{(16\fq)^{rs/2}(-1)^{rs}\mathbf A^c_{rs}
+       \mathbf P^\epsilon_{rs}(d_1,d_2;c)
+       \mathbf P^\epsilon_{rs}(d_4,d_3;c)}{h-h_{rs}}
+ H_{4,\epsilon\oplus\pi_{rs}}(h_{rs}+rs/2).
+ \end{aligned}
+ \label{eq:four-recursion}
+\end{equation}
+The odd component is understood in the human-note phase convention.
+As a useful sign check, the $(1,1)$ term
+gives $H_{4,1}=-2\fq^{1/2}/h+\cdots$; in the plane this corresponds
+to the leading coefficient $-1/(2h)$ multiplying
+$z^{h-d_1-d_2+1/2}$ in the same convention.
+
+For five points, the weights at $(0,z,t,1,\infty)$ are
+$(d_1,d_2,d_3,d_4,d_5)$ and
+\begin{equation}
+ \varrho_1=-4e^{iw(t)},\qquad
+ \varrho_2=-4\fq e^{-iw(t)},\qquad a=h_2-h_1.
+\end{equation}
+For each $(r,s)$ define
+\begin{align}
+ \mathbf R^{(1)}_{rs}
+ &=(-1)^{rs}\mathbf A^c_{rs}
+   \mathbf P^{\epsilon_1}_{rs}(d_1,d_2;c)
+   \mathbf P^{\epsilon_1\oplus\epsilon_2}_{rs}(h_{rs}+a,d_3;c),
+ \notag\\
+ \mathbf R^{(2)}_{rs}
+ &=(-1)^{rs}\mathbf A^c_{rs}
+   \mathbf P^{\epsilon_1\oplus\epsilon_2}_{rs}(h_{rs}-a,d_3;c)
+   \mathbf P^{\epsilon_2}_{rs}(d_5,d_4;c).
+\end{align}
+The complete two-edge recursion is
+\begin{equation}
+ \boxed{\begin{aligned}
+ H_{5,\epsilon_1\epsilon_2}(h_1,h_2)
+ ={}&\delta_{\epsilon_1,0}\delta_{\epsilon_2,0}\\
+ &+\sum_{\substack{r,s\geq1\\r+s\in2\mathbb Z}}
+ \frac{\varrho_1^{rs/2}\mathbf R^{(1)}_{rs}}{h_1-h_{rs}}
+ H_{5,\epsilon_1\oplus\pi_{rs},\epsilon_2}
+       (h_{rs}+rs/2,h_{rs}+a)\\
+ &+\sum_{\substack{r,s\geq1\\r+s\in2\mathbb Z}}
+ \frac{\varrho_2^{rs/2}\mathbf R^{(2)}_{rs}}{h_2-h_{rs}}
+ H_{5,\epsilon_1,\epsilon_2\oplus\pi_{rs}}
+       (h_{rs}-a,h_{rs}+rs/2).
+ \end{aligned}}
+ \label{eq:five-recursion}
+\end{equation}
+Its full sphere prefactor is \eqref{eq:Lambda} with $n=5$, and
+$\cC_{\NS}$ is unchanged. No new function of $t$ is inserted into the
+regular part.
+
+\section{Implementation, checks, and status}
+\label{sec:checks}
+
+To evaluate a component block, compute $(\fq,w_j,p_i,\varrho_i)$ on a
+coherent sheet, form the labels \eqref{eq:vertex-labels}, and apply
+\eqref{eq:H-recursion} using \eqref{eq:A}--\eqref{eq:R}. Each recursive
+term lowers the requested level on edge $k$ by $rs/2$, so a finite-order
+coefficient calculation terminates. A twice-level integer index avoids
+floating-point comparisons of half-integers. Finally multiply by
+\eqref{eq:reconstruction}. Coincident Kac poles or coincident common-weight
+pole locations require limits or a separate confluent treatment.
+
+\subsection{Independent PBW audit: definition of the comparison}
+
+The direct calculation uses only the NS algebra \eqref{eq:algebra}, the
+primary Ward identities, and the three-form normalization
+\eqref{eq:three-form-convention}. It does not call either $c$- or
+$h$-recursion, or use Kac weights or fusion polynomials. At each level
+$\ell_i$ it constructs the PBW Gram matrix $G_i$ and the ordered
+three-point matrices. The plane coefficient is their contraction,
+\begin{equation}
+ B_{\boldsymbol\ell}
+ =\beta_R^{\mathsf T}G_m^{-1}V_{m-1}G_{m-1}^{-1}\cdots
+     V_1G_1^{-1}\beta_L.
+ \label{eq:PBW-coefficient}
+\end{equation}
+Here $V_i$ has bra weight $h_{i+1}$, inserted weight $d_{i+2}$, and
+ket weight $h_i$; $\beta_L,\beta_R$ are the cap vectors in the ordering
+specified in Section~\ref{sec:conventions}. For one edge this reduces to
+$\beta_R^{\mathsf T}G_1^{-1}\beta_L$.
+All parity sectors are retained, with $\epsilon_i=2\ell_i\bmod2$.
+
+Set $x_1=z/t_1$, $x_i=t_{i-1}/t_i$ for $2\leq i<m$, and
+$x_m=t_{m-1}$; for four points use $x_1=z$. Then the plane expansion is
+\begin{equation}
+ \cF^{\NS}_{c,\ve}
+ =z^{h_1-d_1-d_2}
+   \prod_{j=1}^{m-1}t_j^{h_{j+1}-h_j-d_{j+2}}
+   \sum_{\ell_i\in\mathbb Z_{\geq0}+\epsilon_i/2}
+      B_{\boldsymbol\ell}\prod_i x_i^{\ell_i}.
+ \label{eq:PBW-plane-series}
+\end{equation}
+We substitute the pillow map and divide by the entire prefactor in
+\eqref{eq:reconstruction}; thus the quantity tested is precisely $H$,
+not a block in a different normalization.
+
+For reproducibility, the coordinate expansion is generated to the
+requested order from products, rather than from a fixed low-order
+polynomial. Write $U_j=\prod_{i\leq j}p_i$,
+$V_j=\prod_{i>j}p_i$, so $U_jV_j=\fq$, and define
+\begin{align}
+ Z:=\frac{z}{16\fq}
+ &=\prod_{k\geq1}\frac{(1+\fq^{2k})^8}{(1+\fq^{2k-1})^8},
+ \label{eq:audit-Z}\\
+ Y_j:=\frac{t_j}{4V_j}
+ &=(1+U_j)^2\prod_{k\geq1}
+ \frac{(1+\fq^{2k})^4}{(1+\fq^{2k-1})^4}
+ \frac{(1+U_j\fq^{2k})^2(1+V_j\fq^{2k-1})^2}
+      {(1+U_j\fq^{2k-1})^2(1+V_j\fq^{2k-2})^2}.
+ \label{eq:audit-Y}
+\end{align}
+The coordinate units are $x_1/(4p_1)=Z/Y_1$,
+$x_i/p_i=Y_{i-1}/Y_i$ in the interior, and $x_m/(4p_m)=Y_{m-1}$.
+Their constant terms are one. The multiplier applied to the composed
+plane descendant series, after the primary powers cancel, is
+\begin{equation}
+ \begin{split}
+ &Z^{h_1-c/24}\prod_{j=1}^{m-1}Y_j^{h_{j+1}-h_j}
+ \prod_{j=1}^{m-1}\bigl[(1-t_j)(1-z/t_j)\bigr]^{d_{j+2}/2}\\
+ &\quad\times(1-z)^{-c/24+d_2+d_{n-1}}
+ \theta_3(\fq)^{-c/2+4(d_1+d_2+d_{n-1}+d_n)
+                        +2\sum_jd_{j+2}}
+ \cC_{\NS}(\fq)^{-1}.
+ \end{split}
+ \label{eq:audit-multiplier}
+\end{equation}
+Consequently the check tests the coordinate map, all conformal factors,
+the fermionic signs, the regular product, and the residue recursion
+together. No effective shift of $c$ is used in this implementation.
+
+``Through degree $N$'' means every coefficient of
+$\prod_i p_i^{\ell_i}$ with $\ell_i\geq0$ half-integral and
+$\sum_i\ell_i\leq N$. It is not a rectangular cutoff on each edge.
+The number of tested coefficients is $\binom{2N+m}{m}$, including the
+constant and the vanishing coefficients. At $N=10$ the largest individual
+Gram matrix has dimension $161$.
+
+As an independent algebra check, the new PBW/Ward implementation was
+compared with the existing exact descendant-three-form implementation
+through total level three: all $57$ Gram entries and $110$ Ward entries
+agree identically for independent symbols $c,h,d,k$.
+
+\subsection{Analytic PBW comparison through total degree three}
+
+All parameters are kept symbolic, with coefficients in
+$\mathbb Q(b,d_1,\ldots,d_n,h_1,\ldots,h_m)$. The PBW calculation first
+uses an independent $c$, and only at the comparison stage substitutes
+$c=3/2+3(b+b^{-1})^2$. Thus an exact comparison here does not mean
+evaluation at a special rational parameter set.
+
+There are two equivalent symbolic tests. One expands both sides of
+\eqref{eq:H-recursion} and reduces every coefficient difference to zero.
+The other gives a smaller rational-identity certificate. Write
+$C_{\boldsymbol\ell}=[\prod_i p_i^{\ell_i}]H$ and
+$\kappa_i=\varrho_i/p_i$. For every coefficient computed by PBW, check:
+\begin{enumerate}
+\item Its reduced denominator, viewed over $\mathbb Q(b)$, divides
+\begin{equation}
+ \prod_{k=1}^m\prod_{\substack{r,s\geq1,\ r+s\in2\mathbb Z\\rs\leq2\ell_k}}
+      (h_k-h_{rs}).
+ \label{eq:audit-pole-catalog}
+\end{equation}
+Thus no additional poles or higher-order poles are left unchecked.
+\item Every residue equals the proposed kernel times the lower-degree
+PBW coefficient:
+\begin{equation}
+ \Res_{h_k=h_{rs}} C_{\boldsymbol\ell}
+ =\kappa_k^{rs/2}
+    \left.\mathbf R^{(k,\ve)}_{rs}\right|_{h_k=h_{rs}}
+    \left.C_{\boldsymbol\ell-(rs/2)\boldsymbol e_k}
+                    \right|_{h_k=h_{rs}+rs/2}.
+ \label{eq:audit-residue-identity}
+\end{equation}
+In this local test the other $h_j$ are independent symbolic variables
+held fixed. Substitution of their pole values $h_j^*$ then gives exactly
+the common-weight residue in \eqref{eq:H-recursion}.
+\item The directly computed regular part is
+\begin{equation}
+ \lim_{L\to\infty}C_{\boldsymbol\ell}(h_1+L,\ldots,h_m+L)
+ =\delta_{\boldsymbol\ell,\boldsymbol0}.
+ \label{eq:audit-regular-part}
+\end{equation}
+This is tested from numerator and denominator degrees in $L$, including
+their leading coefficients; the seed is not supplied to the PBW side.
+\end{enumerate}
+With the differences $h_j-h_1$ fixed, the difference from the recursive
+answer is a rational function with no poles and zero regular part.
+It therefore vanishes identically. Induction in total degree makes these
+three checks an exact coefficient comparison with the expanded recursion,
+not merely a check of its pole locations.
+
+The completed generic-symbolic audit gives
+\begin{center}
+\begin{tabular}{@{}ccll@{}}
+\toprule
+Points & Coefficients & Exact method & Result\\
+\midrule
+4 & 7 & Expanded coefficient differences & All zero\\
+5 & 28 & Expanded differences and certificate & All zero\\
+6 & 84 & Pole and regular-part certificate & All zero\\
+\bottomrule
+\end{tabular}
+\end{center}
+The five-point certificate checks all $106$ candidate residue identities,
+and the six-point certificate all $342$, including vanishing residues.
+Every coefficient also passes the denominator-divisibility and
+large-common-weight regular-part tests. There is no numerical tolerance
+or specialization of $b,d_i,h_i$ in these results. No change to the
+proposed recursion or its conformal factor is required by this audit.
+
+For example, both independent calculations give
+\begin{align}
+ H_{5,00}={}&1
+ -\frac{2(d_1-d_2)(d_3+h_1-h_2)}{h_1}\,p_1
+ +\frac{2(d_4-d_5)(d_3-h_1+h_2)}{h_2}\,p_2
+ +O_{\rm tot}(2),\notag\\
+ H_{5,10}={}&-\frac{\sqrt{p_1}}{h_1}+O_{\rm tot}(3/2),\qquad
+ H_{5,01}=-\frac{\sqrt{p_2}}{h_2}+O_{\rm tot}(3/2),\notag\\
+ H_{5,11}={}&\frac{d_3-h_1-h_2}{h_1h_2}\sqrt{p_1p_2}
+                  +O_{\rm tot}(2).
+ \label{eq:audit-leading-coefficients}
+\end{align}
+Here $O_{\rm tot}(a)$ contains terms of total degree at least $a$.
+These signs refer throughout to the human-note three-form convention.
+The six-point leading terms additionally distinguish an interior edge
+from a cap edge:
+\begin{align}
+ H_{6,010}&=-\frac{\sqrt{p_2}}{2h_2}+O_{\rm tot}(3/2),\notag\\
+ H_{6,101}&=\frac{\sqrt{p_1p_3}}{h_1h_3}+O_{\rm tot}(2),\notag\\
+ H_{6,111}&=-\frac{(d_3-h_1-h_2)(d_4-h_2-h_3)}{2h_1h_2h_3}
+              \sqrt{p_1p_2p_3}+O_{\rm tot}(5/2).
+ \label{eq:audit-six-leading-coefficients}
+\end{align}
+In particular, the interior edge uses $\varrho_2=p_2$, not $4p_2$.
+
+\subsection{Numerical PBW comparison through total degree ten}
+\label{sec:PBW-numerical}
+
+Four generic parameter sets were tested for both five and six points.
+The six-point fixtures are listed below; the five-point fixture deletes
+the fourth external entry and the third internal entry. In this table
+$c=3/2+3(b+b^{-1})^2$, and the labels A--D refer to the PBW audit, not
+the earlier degree-four fixtures below. The new degree-ten
+$c$-recursion audit uses these same A--D fixtures.
+\begin{center}
+\small
+\begin{tabular}{@{}ccll@{}}
+\toprule
+Case & $b$ & $(d_1,d_2,d_3,d_4,d_5,d_6)$ & $(h_1,h_2,h_3)$\\
+\midrule
+A & $1.27$ & $(.31,.42,.53,.37,.47,.28)$ & $(.73,1.10,1.37)$\\
+B & $1.43$ & $(.22,.61,.39,.58,.74,.45)$ & $(1.13,.85,1.69)$\\
+C & $.83$ & $(.17,.83,1.21,.46,.34,.67)$ & $(.19,1.47,.82)$\\
+D & $1.61$ & $(1.12,.26,.79,1.33,.58,.91)$ & $(2.31,.64,1.09)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+For each set, every coefficient through total degree ten was compared:
+$231$ coefficients in all four parity sectors for five points, and
+$1771$ coefficients in all eight sectors for six points. Using 80-digit
+arithmetic, the maximum scaled errors are
+\begin{center}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+PBW case & Five points & Six points\\
+\midrule
+A & $4.84\times10^{-74}$ & $1.80\times10^{-69}$\\
+B & $9.34\times10^{-72}$ & $7.81\times10^{-69}$\\
+C & $1.94\times10^{-71}$ & $7.57\times10^{-69}$\\
+D & $3.37\times10^{-70}$ & $2.42\times10^{-67}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Let $u_{\boldsymbol\ell}$ and $v_{\boldsymbol\ell}$ denote the coefficient
+of the same $H$ computed by PBW and recursion, respectively. The error is
+\begin{equation}
+ \frac{|u_{\boldsymbol\ell}-v_{\boldsymbol\ell}|}
+ {\max\{1,|u_{\boldsymbol\ell}|,|v_{\boldsymbol\ell}|\}}.
+ \label{eq:audit-error}
+\end{equation}
+Every coefficient passes
+the $10^{-50}$ tolerance. Individual edge levels can reach ten; the
+comparison does not restrict each edge to the evenly shared cutoff.
+The general numerical audit includes the four-point control at case A:
+all $21$ coefficients through degree ten agree with maximum scaled
+error $7.01\times10^{-70}$.
+
+Repeating six-point case C at 110-digit precision gives maximum scaled
+error $1.48\times10^{-97}$ for the same $1771$ coefficients. Comparing
+the 80- and 110-digit runs directly, the PBW coefficients change by at
+most $3.04\times10^{-74}$, and the recursion coefficients by at most
+$7.57\times10^{-69}$ in the same scaled norm. This precision improvement
+is consistent with finite-precision cancellation rather than a residual
+disagreement in the formula.
+
+These tests include the regular product, whose first nonconstant term
+occurs at total $p_i$-degree $2m$: four for five points and six for six
+points. Thus the degree-ten audit is stronger than a low-order comparison
+that never sees the proposed NS regular product.
+
+\subsection{Reproducing the PBW audit}
+
+The implementation lives in
+\nolinkurl{Code/sphere_five_kummer_h_recursion/}.
+The independent sewing engine is \nolinkurl{ns_pillow_direct_pbw.py};
+the coordinate products and proposed recursion are in
+\nolinkurl{ns_pillow_elliptic_audit.py}. From that directory run
+\begin{quote}\small\ttfamily
+python3 check\_ns\_pillow\_direct\_pbw.py\\
+\hspace*{1em}-{}-mode symbolic -{}-points 5 -{}-degree 3\\[0.4em]
+python3 check\_ns\_pillow\_direct\_pbw.py\\
+\hspace*{1em}-{}-mode symbolic -{}-symbolic-method residues -{}-points 6 -{}-degree 3\\[0.4em]
+python3 check\_ns\_pillow\_direct\_pbw.py\\
+\hspace*{1em}-{}-mode numeric -{}-points 6 -{}-degree 10 -{}-case A -{}-dps 80
+\end{quote}
+Each indented line continues the command above it. Repeat the numerical
+command for both five and six points and cases A--D. Use
+\texttt{-{}-case C -{}-dps 110} for the precision repeat and
+\texttt{-{}-mode oracle} for the independent low-level Gram/Ward audit.
+Appending \texttt{-{}-output result.json} saves the coefficient ledger.
+The saved audit files are under \texttt{Data Set/h-Recursion/}, with
+names beginning \texttt{ns\_pillow\_pbw\_}. The numerical files contain
+both coefficient values, precision, error by degree and parity, and the
+minimum visited recursion denominator. The symbolic files retain an
+exact-zero status for each coefficient and, for the certificate method,
+the individual pole and regular-part checks.
+
+The five quick regression tests also check signs, truncation consistency,
+and rejection of deliberately incorrect residues, regular parts, and
+extra poles. The numerical PBW fixtures have positive-definite Gram
+matrices and use diagonally scaled Cholesky solves. This audit does not
+claim to implement a general nonunitary or complex-weight Gram solver.
+
+\subsection{Independent literature \texorpdfstring{$c$}{c}-recursion: conventions and seed}
+\label{sec:c-literature}
+
+The independent comparison uses the sphere linear-channel recursion of
+Belavin--Geiko~\cite{BG}, equations (3.12)--(3.18), with the global
+matrix elements of their Appendix~A. The four-point control uses their
+equations (3.8)--(3.10). There is an indexing caveat in arXiv v1:
+the interior line of (3.18) prints the adjacent external labels as
+$d_{i+2},d_{i+3}$. With the $h_i$ ordering in their Figure~3 and
+(3.15), the adjacent insertions are instead $d_{i+1},d_{i+2}$,
+with the corresponding component labels. We use this graph-consistent
+adjacency, not the literal shifted indices of that line. For six
+points, for example, the middle edge joins insertions $d_3,d_4$.
+This indexing correction is separate from a normalization change.
+
+Their central charge, denoted $c_{\rm BG}$ here
+only to make the translation explicit, satisfies
+\begin{equation}
+ c=\frac32c_{\rm BG},\qquad
+ c_{rs}(h)=\frac32c^{\rm BG}_{rs}(h),\qquad
+ J_{rs}(h):=-\frac{dc_{rs}(h)}{dh}
+           =\frac32J^{\rm BG}_{rs}(h).
+ \label{eq:c-charge-conversion}
+\end{equation}
+All subsequent formulas use only the human-note $c$. Converting a pole
+but not its Jacobian would change the residue by a factor of $3/2$.
+The three-form reflection phases and odd-null transport are likewise
+translated into \eqref{eq:three-form-convention}; no second normalization
+of $H$ is introduced.
+
+The paper's parameters $q_i$ in its equation (3.16) are plane plumbing
+ratios, not $\fq$ or the pillow $p_i$. After reversing its external and
+internal ordering to \eqref{eq:positions}, they are the reverse-ordered
+list of our $x_i$ in \eqref{eq:PBW-plane-series}. For example, at six points
+their list becomes $(t_2,t_1/t_2,z/t_1)=(x_3,x_2,x_1)$.
+Their normalized plane series is therefore compared with $H$ only after
+restoring the primary powers and dividing by the entire prefactor in
+\eqref{eq:reconstruction}, as in the PBW pullback above.
+
+For clarity, the implemented coefficient recursion in our ordering is
+\begin{equation}
+ \begin{aligned}
+ B_{\boldsymbol\ell}^{\ve}(c,\vh)
+ ={}&B_{\boldsymbol\ell}^{\mathrm{glob},\ve}(\vh)\\
+ &+\sum_{k=1}^{m}
+ \sum_{\substack{r\geq2,\ s\geq1\\r+s\in2\mathbb Z\\rs\leq2\ell_k}}
+ \frac{J_{rs}(h_k)\,\mathcal R_{rs}^{(k,\ve)}(\vh;c_*)}
+      {c-c_*}\,
+ B_{\boldsymbol\ell-(rs/2)\boldsymbol e_k}^{\ve'}
+       \left(c_*,\vh+\frac{rs}{2}\boldsymbol e_k\right),
+ \qquad c_*=c_{rs}(h_k).
+ \end{aligned}
+ \label{eq:literature-c-recursion}
+\end{equation}
+Here $\boldsymbol e_k$ is the $k$th unit vector,
+$\epsilon'_j=\epsilon_j\oplus(\pi_{rs}\delta_{jk})$, and
+$B_{\boldsymbol\ell}^{\ve}$ denotes the coefficient of the plane
+descendant series with its leading powers removed. With the adjacent
+pairs of \eqref{eq:adjacent-pairs}, now using the unshifted neighboring
+$h_j$ rather than $h_j^*$, the residue is
+\begin{equation}
+ \mathcal R_{rs}^{(k,\ve)}(\vh;c_*)
+ =(-1)^{rs}\mathbf A^{c_*}_{rs}
+  \mathbf P^{\alpha_k}_{rs}(x_L,y_L;c_*)
+  \mathbf P^{\alpha_{k+1}}_{rs}(x_R,y_R;c_*).
+ \label{eq:c-residue}
+\end{equation}
+Every null-vector factor is evaluated at the moving central-charge pole.
+One convenient branch, appropriate to the generic fixtures below, is
+\begin{align}
+ X_{rs}(h):=b_{rs}(h)^2
+ &=-\frac{4h+rs-1+\sqrt{16h^2+8(rs-1)h+(r-s)^2}}{r^2-1},\notag\\
+ c_{rs}(h)&=\frac{15}{2}+3\left(X_{rs}(h)+X_{rs}(h)^{-1}\right).
+ \label{eq:c-pole}
+\end{align}
+The range $r\geq2$ is essential for this moving-$c$ parametrization.
+Only $h_k$ shifts in its child, and $c$ changes to $c_*$. In contrast,
+\eqref{eq:child} shifts the entire internal-weight tuple at fixed $c$.
+Thus this is not a rearrangement of the implemented elliptic recursion.
+
+The large-$c$ seed is a genuine global $\mathfrak{osp}(1|2)$ network.
+Writing $\ell_i=N_i+\epsilon_i/2$ and
+$v_i=L_{-1}^{N_i}G_{-1/2}^{\epsilon_i}\phi_{h_i}$, it is
+\begin{equation}
+ B_{\boldsymbol\ell}^{\mathrm{glob},\ve}
+ =\frac{\rho_{\alpha_1}(v_1,\phi_{d_2},\phi_{d_1})
+     \displaystyle\prod_{i=1}^{m-1}
+       \rho_{\alpha_{i+1}}(v_{i+1},\phi_{d_{i+2}},v_i)
+     \rho_{\alpha_{m+1}}(\phi_{d_n},\phi_{d_{n-1}},v_m)}
+    {\displaystyle\prod_{i=1}^{m}N_i!\,(2h_i)_{N_i+\epsilon_i}}.
+ \label{eq:c-global-seed}
+\end{equation}
+The matrix elements are evaluated algebraically in the global algebra,
+with precisely the human-note ordering of $\rho_\alpha$.
+This seed is neither the constant $1$ nor $\cC_{\NS}$.
+In particular, the $c$-recursive plane calculation does not assume the
+proposed large-internal-weight pillow seed.
+
+The independent code is
+\nolinkurl{Code/c_Recursion/ns_multipoint_c_recursion.py}, using
+\nolinkurl{ns_recursion_recipe.py} for moving poles and scalar residues
+and \nolinkurl{ns_global_osp_block.py} for the global seed. None calls
+the elliptic recursion or a PBW solver. The new comparison driver only
+adds memoization and selects the vertex labels for each edge-parity
+tuple. The exact pillow map and geometric multiplier are shared with
+the preceding PBW audit; the two plane-block constructions are not.
+
+\subsection{Numerical literature comparison through total degree ten}
+\label{sec:c-numerical}
+
+The new test recomputes both the plane $c$-recursion and the elliptic
+$h$-recursion at 80-digit precision, using all four fixtures in
+Section~\ref{sec:PBW-numerical}. It compares their coefficients of the
+same unit-seed $H$, with the scaled error \eqref{eq:audit-error}.
+The cutoff is $\sum_i\ell_i\leq10$, including every half-integer edge
+level: $231$ coefficients per five-point fixture in four parity sectors,
+and $1771$ per six-point fixture in eight sectors. The maximum errors are
+\begin{center}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+Case & Five points: $c$ versus $h$ & Six points: $c$ versus $h$\\
+\midrule
+A & $4.14\times10^{-74}$ & $1.80\times10^{-69}$\\
+B & $9.34\times10^{-72}$ & $7.81\times10^{-69}$\\
+C & $1.94\times10^{-71}$ & $7.57\times10^{-69}$\\
+D & $3.37\times10^{-70}$ & $2.42\times10^{-67}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Every coefficient passes the $10^{-50}$ tolerance; no modification of
+the proposed $h$-recursion or its prefactor is required. The four-point
+control at case A also passes all $21$ coefficients, with maximum error
+$1.41\times10^{-69}$.
+
+As a third check, the newly computed $c$-recursive $H$ is compared with
+the saved independent PBW coefficient ledgers. The maximum errors across
+A--D are $1.47\times10^{-73}$ for five points and
+$3.58\times10^{-74}$ for six points. These saved PBW values are used
+only as comparison targets, never to construct either recursion.
+Both recursions are computed afresh at each precision.
+
+Repeating six-point case C at 110 digits gives maximum error
+$1.48\times10^{-97}$ between the two recursions, and
+$2.34\times10^{-104}$ between $c$-recursion and the independent PBW
+ledger. Across the 80- and 110-digit runs, the transformed $c$-recursive
+coefficients change by at most $1.28\times10^{-74}$ and the
+$h$-recursive coefficients by $7.57\times10^{-69}$ in the same scaled
+norm. The improvement is consistent with finite-precision cancellation,
+not an order-ten discrepancy in the proposal.
+
+The comparison includes the nonconstant terms of the NS product:
+$\fq^2=(\prod_i p_i)^2$ first appears at total degree four for five
+points and six for six points. Since the independent $c$-recursive seed
+is \eqref{eq:c-global-seed}, the agreement checks the proposed pillow
+regular product, rather than assuming it on both sides.
+
+From \nolinkurl{Code/sphere_five_kummer_h_recursion/}, run
+\begin{quote}\small\ttfamily
+python3 check\_ns\_pillow\_c\_recursion.py\\
+\hspace*{1em}-{}-points 6 -{}-case A -{}-degree 10 -{}-dps 80\\
+\hspace*{1em}-{}-output result.json
+\end{quote}
+Repeat with five points and cases A--D; case C at 110 digits provides
+the precision repeat. The optional \texttt{-{}-pbw-ledger} argument
+takes the corresponding saved PBW JSON path and enables the third
+comparison. It is not needed for $c$ versus $h$. The new files in
+\texttt{Data Set/h-Recursion/} begin with
+\texttt{ns\_pillow\_c\_comparison\_}. They retain every plane
+$c$-recursive coefficient, its transformed $H$, the independently
+computed $h$-recursive $H$, per-degree and per-parity errors, precision,
+and source hashes. The summary JSON collects all runs and the precision
+comparison. These are our numerical evaluations of the published
+recursion, not numerical data supplied by the paper's authors.
+
+Five additional regression tests check that memoization leaves the
+unmodified literature implementation unchanged, exercise all six-point
+sectors at degree three, verify the nonunit global seed and odd phase,
+reject invalid level tuples, and detect an intentionally omitted
+Jacobian conversion. The 13 existing multipoint $c$-recursion regression
+tests also pass. The numerical test assumes generic nonconfluent moving
+$c$-poles; it does not prescribe a limiting procedure at collisions.
+
+\subsection{Earlier comparison with the NS \texorpdfstring{$c$}{c}-recursion}
+
+The existing reproducible five-point test compares the elliptic proposal
+against the independent multipoint NS $c$-recursion~\cite{BG}, pulled
+back by the exact pillow coordinate series. It checks all four parity
+channels through total elliptic degree four: 45 coefficients per parameter
+set, including half-integer edge powers. This is not a rectangular
+level-four check and not a direct PBW computation. The generic cases are
+\begin{center}
+\begin{tabular}{@{}ccll@{}}
+\toprule
+Case & $c$ & $(d_1,d_2,d_3,d_4,d_5)$ & $(h_1,h_2)$\\
+\midrule
+A & $14.7$ & $(0.31,0.42,0.53,0.47,0.28)$ & $(0.73,1.10)$\\
+B & $21.3$ & $(0.22,0.61,0.39,0.74,0.45)$ & $(1.13,0.85)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+At 75-digit working precision, with 60-digit comparison data, the maximum
+relative errors were
+\begin{center}
+\begin{tabular}{@{}cc@{}}
+\toprule
+Case & Maximum relative error for $H$\\
+\midrule
+A & $2.7\times10^{-60}$\\
+B & $1.9\times10^{-60}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The error denominator is $\max(1,|\text{left}|,|\text{right}|)$.
+A separate large-weight check used $(h_1,h_1+0.37)$ in case A and
+$(h_1,h_1-0.28)$ in case B, with $h_1=50,200,800$. The coefficientwise
+deviations from the proposed seed decreased approximately as $h_1^{-1}$.
+For example, the all-even $p_1^2p_2^2$ coefficient of
+$H$ in case A was
+$-0.0971729251,-0.0253007025,-0.0063915533$, approaching $0$.
+
+The product identity in \eqref{eq:NS-product} was separately checked
+symbolically through $\fq^{10}$. The prefactor conversion at
+$\fq=0.01,0.1,0.3$ agreed to better than $2.3\times10^{-75}$.
+Those separate tests by themselves check normalization; the actual
+degree-ten block-coefficient comparisons are in
+Sections~\ref{sec:PBW-numerical} and~\ref{sec:c-numerical}.
+From \nolinkurl{Code/sphere_five_kummer_h_recursion/}, rerun the checks with:
+\begin{quote}\small\ttfamily
+python3 check\_ns\_sphere\_five\_elliptic\_h\_recursion.py
+\end{quote}
+
+The general-$n$ seed remains the proposal in \eqref{eq:seed}. The direct
+PBW and independent $c$-recursion checks support the four-, five-, and six-point formulas at the
+stated finite orders; they do not prove the seed for arbitrary $n$ or
+control the remainder at a fixed nonzero coordinate. The bosonic
+multipoint elliptic construction is prior work of Artemev and
+Khromov~\cite{AK}, in particular their equations (3.16) and (5.14)--(5.18).
+The four-point NS seed is prior work of Hadasz, Jask\'olski, and
+Suchanek~\cite{HJS}, Section~6. We do not claim either as new, nor make a
+novelty claim for this multipoint NS proposal without a separate
+literature audit.
+
+\begin{samepage}
+\begin{thebibliography}{9}
+\bibitem{AK}
+A.~Artemev and D.~Khromov,
+\emph{WKB-asymptotics for multipoint Virasoro conformal blocks and
+applications}, \href{https://arxiv.org/abs/2603.08194v2}{arXiv:2603.08194v2}.
+
+\bibitem{HJS}
+L.~Hadasz, Z.~Jask\'olski, and P.~Suchanek,
+\emph{Elliptic recurrence representation of the $N=1$ Neveu--Schwarz
+blocks}, \href{https://arxiv.org/abs/0711.1619}{arXiv:0711.1619}.
+
+\bibitem{BG}
+V.~A.~Belavin and R.~V.~Geiko,
+\emph{$c$-Recursion for multi-point superconformal blocks. NS sector},
+\href{https://arxiv.org/abs/1806.09563}{arXiv:1806.09563}.
+\end{thebibliography}
+\end{samepage}
+
+\end{document}

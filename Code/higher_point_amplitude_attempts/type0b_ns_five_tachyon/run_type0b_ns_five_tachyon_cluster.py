@@ -4,9 +4,7 @@
 from __future__ import annotations
 
 import argparse
-from contextlib import redirect_stdout
 import hashlib
-import io
 import json
 import math
 from pathlib import Path
@@ -36,42 +34,16 @@ def _load_config(path: Path) -> dict[str, object]:
     if int(recursion["global_max_total_twice_level"]) < 16:
         raise ValueError("full rectangular order (8,8) requires total twice-level 16")
     backend = recursion["block_backend"]
-    if backend == "h":
-        if recursion.get("h_recursion_role") != (
-            "production_coefficientwise_self_dual_limit"
-        ):
-            raise ValueError("h-recursion must use the coefficient-wise self-dual limit")
-        if recursion.get("c_recursion_role") != (
-            "collar_overlap_check_through_total_level_eight"
-        ):
-            raise ValueError("c-recursion must provide the total-level-eight collar check")
-        regulator = config.get("self_dual_regulator", {})
-        eta_values = tuple(float(value) for value in regulator.get("eta_values", ()))
-        degree = int(regulator.get("polynomial_degree", -1))
-        comparison_degree = int(regulator.get("comparison_degree", -1))
-        if len(eta_values) < degree + 1 or any(value <= 0.0 for value in eta_values):
-            raise ValueError("the self-dual sweep has too few positive eta values")
-        if len(set(eta_values)) != len(eta_values):
-            raise ValueError("self-dual eta values must be distinct")
-        if not 1 <= comparison_degree < degree:
-            raise ValueError("the comparison fit degree must be below production")
-        if not bool(regulator.get("common_random_numbers")):
-            raise ValueError("regulator extrapolation requires common random numbers")
-        if regulator.get("extrapolation_stage") != (
-            "per_coefficient_before_moduli_integration"
-        ):
-            raise ValueError("the regulator fit must precede moduli integration")
-    elif backend == "c":
-        if schema != "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5":
-            raise ValueError("pure c-recursion requires the v5 production schema")
-        if recursion.get("h_recursion_role") != "disabled":
-            raise ValueError("h-recursion must be disabled in the c-only bundle")
-        if recursion.get("c_recursion_role") != "production_in_every_selected_chart":
-            raise ValueError("c-recursion must be the all-chart production backend")
-        if "self_dual_regulator" in config:
-            raise ValueError("the c-only bundle must not define an h regulator")
-    else:
-        raise ValueError("the production bundle requires pure h or pure c recursion")
+    if backend != "c":
+        raise ValueError("amplitude production requires all-c recursion; h/hybrid bundles are retired")
+    if schema != "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5":
+        raise ValueError("pure c-recursion requires the v5 production schema")
+    if recursion.get("h_recursion_role") != "disabled":
+        raise ValueError("h-recursion must be disabled in the c-only bundle")
+    if recursion.get("c_recursion_role") != "production_in_every_selected_chart":
+        raise ValueError("c-recursion must be the all-chart production backend")
+    if "self_dual_regulator" in config:
+        raise ValueError("the c-only bundle must not define an h regulator")
     atlas = config.get("atlas", {})
     if int(atlas.get("oriented_linear_charts", 0)) != 120:
         raise ValueError("the production bundle requires the 120-chart atlas")
@@ -260,6 +232,13 @@ def _worker_arguments(
         config["array"]["deterministic_corner_shards"]
     ):
         arguments.append("--skip-corner-contribution")
+    runtime = config.get("runtime", {})
+    arguments.extend([
+        "--block-cache-limit", str(runtime.get("block_cache_limit", 2048)),
+        "--auxiliary-cache-limit", str(runtime.get("auxiliary_cache_limit", 4096)),
+        "--c-coefficient-cache", str(output.with_suffix(".coefficients.sqlite")),
+        "--checkpoint-directory", str(output.with_suffix(".checkpoints")),
+    ])
     return arguments
 
 
@@ -288,10 +267,8 @@ def run_worker(
             raise ValueError(f"existing shard has the wrong config hash: {output}")
         return existing
 
-    buffer = io.StringIO()
     started = time.perf_counter()
-    with redirect_stdout(buffer):
-        status = evaluate_main(_worker_arguments(config, task, output))
+    status = evaluate_main(_worker_arguments(config, task, output))
     worker_wall_seconds = time.perf_counter() - started
     if status != 0 or not output.exists():
         raise RuntimeError(f"five-point worker failed for task {index}")
@@ -300,7 +277,7 @@ def run_worker(
         **task,
         "config": str(config_path.resolve()),
         "config_sha256": config_hash,
-        "stdout_character_count": len(buffer.getvalue()),
+        "stdout_streamed": True,
         "worker_wall_seconds": worker_wall_seconds,
     }
     payload["status"] = (

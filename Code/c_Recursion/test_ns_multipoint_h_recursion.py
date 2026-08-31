@@ -304,8 +304,9 @@ class MultipointNSHRecursionTests(unittest.TestCase):
                             mpmath.mpf("2e-14"),
                         )
 
-    def test_multipoint_correlator_defaults_to_h_bulk_c_corner_hybrid(self):
+    def test_explicit_research_hybrid_uses_h_bulk_c_corner(self):
         correlator = BRYNSSphereMultipointCorrelator(
+            block_backend="hybrid",
             momenta=(0.5, 1.0 / 3.0, 0.25, 0.6, 0.4),
             points=(0.0, 0.05, 0.1, 1.0, 2.0),
             max_twice_levels=(4, 4),

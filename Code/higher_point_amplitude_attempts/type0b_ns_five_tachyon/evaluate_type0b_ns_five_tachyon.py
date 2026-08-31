@@ -38,11 +38,10 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--t", type=float, default=0.10)
     parser.add_argument(
         "--block-backend",
-        choices=("hybrid", "h", "c"),
+        choices=("c",),
         default="c",
         help=(
-            "production uses c-recursion in the best chart; h and hybrid "
-            "are recursion-overlap audits"
+            "amplitude runs use c-recursion in every selected chart"
         ),
     )
     parser.add_argument("--hybrid-q-threshold", type=float, default=0.3)

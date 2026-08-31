@@ -1,5 +1,28 @@
 # Ramond block q-expansion runtime benchmark
 
+## Physical-block boundary audit, 2026-08-30
+
+The certified enlarged series below must not be confused with a physical
+fixed-lift block or with a nonchiral partition function. The corrected
+`nsrr_double_virasoro_block.py` now:
+
+- divides the four supported auxiliary-star characters and reconstructs
+  parity components before taking the **ordinary** lift sum;
+- supplies the opposite-HJS-sign nullspace explicitly from the independent
+  PBW oracle (default cost cap: physical level 3);
+- obtains the odd form from the exact Ramond ground-partner Ward identity
+  `F_1 = -i e_(001) star F_0`, applied to the certified even-form series.
+  The old odd-form branching-grid extension is not used: its level-1/2
+  coefficient interchanges the HJS signs relative to the physical PBW block.
+
+Thus the supported data still use the branching recursion and the product
+of two ordinary Virasoro c-recursions. Missing star channels are not claimed
+to be a second double-Virasoro determination. The new level-3 certificate
+checks both primary parities, both form parities and all HJS sign pairs.
+See `Data Set/nsrr_nsnsns_human_note_repair_20260830/README.md` from the
+repository root. The nonchiral NSRR comparison is guarded until its Ramond
+ground projector and marked spin-lift dictionary are established.
+
 ## Authoritative calculation
 
 `compute_q_expansion.py` computes the coefficient-by-coefficient,
@@ -54,6 +77,14 @@ series.  It leaves all three plumbing variables unrestricted.  Passing
 primary.  The `L_{\pm1}` recursion matrices are unchanged; every direct
 boundary anchor is instead recomputed using the selected primary parity.
 
+Passing `--branching-mp-dps 50` evaluates the free-field action
+decompositions with `mpmath` and solves each finite Ward grid by
+multiprecision residual refinement around a binary64 QR factorization. The
+directly computed low-state PBW anchors are deliberately left in their
+independently certified binary64 implementation. This option is useful once
+conditioning, rather than algebraic signs, limits the coefficient
+comparison.
+
 The current Human Note defines the enlarged and auxiliary boxes with the
 first-tube signs
 
@@ -87,6 +118,29 @@ a maximum discrepancy of `4.131e-10`.  These values are obtained using the
 current Human-note definitions directly, not by converting the output after
 the calculation.
 
+## Level-seven multiprecision certification
+
+The unrestricted level-seven comparison is
+
+```sh
+python3 Code/full_ramond_block_runtime/compute_q_expansion.py \
+  --cutoff 7 \
+  --branching-mp-dps 50 \
+  --direct-pbw-check \
+  --primary-parity 0 \
+  --json /tmp/type0b_full_q7_p0_mp50.json
+```
+
+It checks all 1,632 parity-resolved entries through
+`e1+e2+e3 <= 14`. The maximum absolute discrepancy is `2.0533e-10`, and
+the maximum scaled relative discrepancy is `9.6783e-11`. Repeating the
+command with `--primary-parity 1` gives `6.0907e-11` and `3.1944e-11`,
+respectively. Thus both intrinsic NS parities satisfy the strict `1e-9`
+maximum-absolute-error standard at level seven. The corresponding binary64
+Ward solve had errors of order `2e-8`; their disappearance under precision
+refinement identifies conditioning, not a parity sign, as the source of that
+earlier discrepancy.
+
 ## Adaptive Virasoro cutoffs
 
 There are 388 branch-label triples and 776 ordinary Virasoro blocks.
@@ -110,9 +164,9 @@ There are 388 branch-label triples and 776 ordinary Virasoro blocks.
 The timed command was
 
 ```sh
-python3 python/full_ramond_block_runtime/compute_q_expansion.py \
+python3 Code/full_ramond_block_runtime/compute_q_expansion.py \
   --cutoff 10 \
-  --json python/full_ramond_block_runtime/level10_q_expansion.json
+  --json Code/full_ramond_block_runtime/level10_q_expansion.json
 ```
 
 It ran serially with Python 3.14.3 on macOS arm64.

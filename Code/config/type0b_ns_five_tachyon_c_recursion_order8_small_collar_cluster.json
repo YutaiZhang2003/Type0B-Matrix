@@ -1,6 +1,6 @@
 {
   "schema": "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5",
-  "status": "ready_for_c_recursion_production",
+  "status": "bounded_memory_production_rerun",
   "run_label": "Ea_equal_quarter_plus_0p02i_all_c_recursion",
   "physics": {
     "real_outgoing_energies": [0.25, 0.25, 0.25, 0.25],
@@ -74,7 +74,14 @@
   },
   "merge": {
     "compatible_shard_config_sha256": {},
-    "justification": "Fresh c-recursion production run; no h-recursion shard data are compatible."
+    "justification": "Reuse audit found no saved c-recursion shards or tables. Existing h-fit tables are preserved but excluded; physics and Sobol seeds match the preceding all-c run."
+  },
+  "runtime": {
+    "block_cache_limit": 2048,
+    "auxiliary_cache_limit": 4096,
+    "coefficient_storage": "per_shard_sqlite_final_tables_only",
+    "checkpoint_granularity": "bulk_sample_face_sample_corner_orbit",
+    "precision_loss_from_storage": false
   },
   "resources": {
     "partition": "yin",
