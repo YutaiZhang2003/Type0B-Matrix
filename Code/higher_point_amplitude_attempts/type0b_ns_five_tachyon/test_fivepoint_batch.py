@@ -97,4 +97,15 @@ class BatchTests(unittest.TestCase):
             k.batch_c_evaluation=False
             self.assertClose(actual,method(**args,**extra))
 
+    def test_corner_counterterm_accepts_stratified_tangential_projection(self):
+        k=kernel(batch_c_evaluation=True)
+        # This is the scale of the v8 point that exposed the obsolete 1e-7
+        # internal floor. The public configuration projection remains >=1e-7;
+        # only its tangential safety cap needs a smaller auxiliary value.
+        value=k.boundary_corner_face_counterterm_density(
+            ordering=(1,2,0,3,4),remaining_modulus=4.526488334408974e-6,
+            collar_radius=.01,projection_radius=4.526488334408974e-8,
+            momentum_refinement_shells=1,momentum_singularity_subtraction=True)
+        self.assertTrue(np.isfinite(value.real) and np.isfinite(value.imag))
+
 if __name__=='__main__': unittest.main()

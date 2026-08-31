@@ -3664,8 +3664,8 @@ class BRYNSFiveTachyonIntegrand:
         """Project the double-leading coefficient at a compatible corner."""
 
         radius = float(projection_radius)
-        if not math.isfinite(radius) or not 1.0e-7 <= radius < 1.0e-3:
-            raise ValueError("corner projection_radius must lie in [1e-7,1e-3)")
+        if not math.isfinite(radius) or not 1.0e-10 <= radius < 1.0e-3:
+            raise ValueError("corner projection_radius must lie in [1e-10,1e-3)")
         left_beta = self.boundary_radial_beta(
             ordering, left_momentum, side="left"
         )
@@ -3698,8 +3698,8 @@ class BRYNSFiveTachyonIntegrand:
     def _corner_coefficient_grid(self, ordering, left_momenta, right_momenta, radius):
         """Prepare one primary tensor; retain the scalar subtraction arithmetic."""
         radius = float(radius)
-        if not math.isfinite(radius) or not 1e-7 <= radius < 1e-3:
-            raise ValueError("corner projection_radius must lie in [1e-7,1e-3)")
+        if not math.isfinite(radius) or not 1e-10 <= radius < 1e-3:
+            raise ValueError("corner projection_radius must lie in [1e-10,1e-3)")
         pairs = tuple(product(left_momenta, right_momenta))
         values = self._linear_q_primary_densities(ordering, radius, radius, pairs, (0, 1))
         betas = [self.boundary_radial_beta(ordering, a, side="left") +
