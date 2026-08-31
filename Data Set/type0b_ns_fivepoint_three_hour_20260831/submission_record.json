@@ -1,0 +1,38 @@
+{
+  "status": "submitted",
+  "submitted_utc": "2026-08-31T21:13:34.037823+00:00",
+  "job_id": "43320186",
+  "source_commit": "57a49ff53e2b03ec71221fdbba9652405c38609d",
+  "runtime_source_fingerprint": "9a634a001a97870356390751a58d5e87674d0423f463eedc53378b9059b1abb6",
+  "remote_run_root": "/n/home09/yutaizhang/Type0B-Matrix-runs/type0b-ns-fivepoint-ea-quarter-threehour-20260831-v8",
+  "primary_config_sha256": "188ec37b486efcc6aa578fc4a468ae0e5e4fa7c3f6e47902f44c0b0cb54d2ded",
+  "manifest_sha256": "aa39e0602e32df8418a8f1f6df9e055ee1bac2c9efae9c91fd70149052b93bb5",
+  "resources": {
+    "cpus": 4,
+    "memory": "8G",
+    "wall_time": "03:00:00"
+  },
+  "primary_samples_per_radius": {
+    "bulk": 65536,
+    "face": 65536
+  },
+  "independent_replicates": 16,
+  "collar_radii": [
+    0.01,
+    0.005
+  ],
+  "face_sampling": "polar_stratified",
+  "control_phases": [
+    "projection_radius",
+    "block_depth",
+    "momentum_order",
+    "momentum_tail"
+  ],
+  "sample_checkpoint_policy": "persistent append-only journal; fsync every 16 samples and on handled exit",
+  "relative_accuracy_target": 0.1,
+  "accuracy_target_established": false,
+  "epsilon_extrapolation_required": false,
+  "delta_function_evaluated_at_complex_energies": false,
+  "main_result_saved_before_controls": true,
+  "controls_may_be_incomplete_if_time_budget_expires": true
+}
