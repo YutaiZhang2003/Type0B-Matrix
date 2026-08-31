@@ -13,7 +13,8 @@ from type0b_ns_five_tachyon import (
     BRYNSFiveTachyonIntegrand,
     integrate_physical_i_epsilon_finite_part_qmc,
 )
-from fivepoint_runtime import SampleCheckpoint, runtime_source_fingerprint
+from fivepoint_runtime import runtime_source_fingerprint
+from fivepoint_sample_journal import open_sample_checkpoint
 from type0b_ns_five_tachyon_domain import (
     physical_i_epsilon_frequencies,
     physical_i_epsilon_subtraction_audit,
@@ -243,6 +244,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--face-sobol-power", type=int, default=4)
     parser.add_argument("--replicates", type=int, default=4)
     parser.add_argument("--radial-power", type=float, default=0.5)
+    parser.add_argument("--face-sampling", choices=("cartesian", "polar_stratified"), default="cartesian")
     parser.add_argument("--seed", type=int, default=20260828)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--c-coefficient-cache", type=Path)
@@ -251,6 +253,7 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--batch-c-evaluation", action="store_true")
     parser.add_argument("--tensor-cache-mebibytes", type=int, default=512)
     parser.add_argument("--checkpoint-directory", type=Path)
+    parser.add_argument("--sample-checkpoint-storage", choices=("snapshot", "journal"), default="snapshot")
     return parser
 
 
@@ -340,55 +343,58 @@ def main(argv: Sequence[str] | None = None) -> int:
                 not args.skip_face_collar_diagnostic
                 and fit_variant == "production"
             )
-            result = integrate_physical_i_epsilon_finite_part_qmc(
-                kernel,
-                checkpoint=SampleCheckpoint(
-                    checkpoint_directory / f"{fit_variant}_radius_{radius_index}.json",
-                    f"{checkpoint_signature}:{fit_variant}:{radius.hex()}",
-                ),
-                real_outgoing_energies=args.energies,
-                epsilon=args.epsilon,
-                epsilon_weights=args.epsilon_weights,
-                face_collar_relative_tolerance=args.face_collar_relative_tolerance,
-                face_collar_absolute_tolerance=args.face_collar_absolute_tolerance,
-                face_collar_samples_per_orbit=args.face_collar_samples_per_orbit,
-                face_collar_normal_angle_count=args.face_collar_normal_angle_count,
-                face_collar_reference_backend=args.face_collar_reference_backend,
-                face_collar_reference_max_twice_levels=(
-                    args.face_collar_reference_max_twice_levels
-                ),
-                face_collar_reference_max_total_twice_level=(
-                    args.face_collar_reference_max_total_twice_level
-                ),
-                face_collar_previous_reference_max_twice_levels=(
-                    args.face_collar_previous_reference_max_twice_levels
-                ),
-                face_collar_previous_reference_max_total_twice_level=(
-                    args.face_collar_previous_reference_max_total_twice_level
-                ),
-                face_collar_reference_convergence_relative_tolerance=(
-                    args.face_collar_reference_convergence_relative_tolerance
-                ),
-                face_collar_certificate_seed=(
-                    args.face_collar_certificate_seed + radius_index
-                ),
-                run_face_collar_diagnostic=run_diagnostic,
-                enforce_face_collar_certificate=(
-                    args.enforce_face_collar_certificate and run_diagnostic
-                ),
-                compute_corner_contribution=not args.skip_corner_contribution,
-                collar_radius=radius,
-                projection_radius=args.projection_radius,
-                bulk_sobol_power=args.bulk_sobol_power,
-                face_sobol_power=args.face_sobol_power,
-                replicates=args.replicates,
-                radial_power=args.radial_power,
-                momentum_refinement_shells=args.momentum_refinement_shells,
-                momentum_singularity_subtraction=(
-                    not args.disable_momentum_singularity_subtraction
-                ),
-                seed=args.seed,
-            )
+            with open_sample_checkpoint(
+                checkpoint_directory / f"{fit_variant}_radius_{radius_index}.json",
+                f"{checkpoint_signature}:{fit_variant}:{radius.hex()}",
+                args.sample_checkpoint_storage,
+            ) as checkpoint:
+                result = integrate_physical_i_epsilon_finite_part_qmc(
+                    kernel,
+                    checkpoint=checkpoint,
+                    real_outgoing_energies=args.energies,
+                    epsilon=args.epsilon,
+                    epsilon_weights=args.epsilon_weights,
+                    face_collar_relative_tolerance=args.face_collar_relative_tolerance,
+                    face_collar_absolute_tolerance=args.face_collar_absolute_tolerance,
+                    face_collar_samples_per_orbit=args.face_collar_samples_per_orbit,
+                    face_collar_normal_angle_count=args.face_collar_normal_angle_count,
+                    face_collar_reference_backend=args.face_collar_reference_backend,
+                    face_collar_reference_max_twice_levels=(
+                        args.face_collar_reference_max_twice_levels
+                    ),
+                    face_collar_reference_max_total_twice_level=(
+                        args.face_collar_reference_max_total_twice_level
+                    ),
+                    face_collar_previous_reference_max_twice_levels=(
+                        args.face_collar_previous_reference_max_twice_levels
+                    ),
+                    face_collar_previous_reference_max_total_twice_level=(
+                        args.face_collar_previous_reference_max_total_twice_level
+                    ),
+                    face_collar_reference_convergence_relative_tolerance=(
+                        args.face_collar_reference_convergence_relative_tolerance
+                    ),
+                    face_collar_certificate_seed=(
+                        args.face_collar_certificate_seed + radius_index
+                    ),
+                    run_face_collar_diagnostic=run_diagnostic,
+                    enforce_face_collar_certificate=(
+                        args.enforce_face_collar_certificate and run_diagnostic
+                    ),
+                    compute_corner_contribution=not args.skip_corner_contribution,
+                    collar_radius=radius,
+                    projection_radius=args.projection_radius,
+                    bulk_sobol_power=args.bulk_sobol_power,
+                    face_sobol_power=args.face_sobol_power,
+                    replicates=args.replicates,
+                    radial_power=args.radial_power,
+                    face_sampling=args.face_sampling,
+                    momentum_refinement_shells=args.momentum_refinement_shells,
+                    momentum_singularity_subtraction=(
+                        not args.disable_momentum_singularity_subtraction
+                    ),
+                    seed=args.seed,
+                )
             encoded = result.to_json()
             encoded["recursion_variant"] = fit_variant
             # Backward-compatible key used by the existing cluster reducer.

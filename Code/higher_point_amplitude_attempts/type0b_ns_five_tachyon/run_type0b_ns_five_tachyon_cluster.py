@@ -76,6 +76,11 @@ def _load_config(path: Path) -> dict[str, object]:
         raise ValueError("exactly one shard per regulator-radius point needs the corner")
     if int(config["qmc"]["replicates_per_shard"]) < 2:
         raise ValueError("each shard must contain at least two RQMC replicates")
+    face_sampling = config["qmc"].get("face_sampling", "cartesian")
+    if face_sampling not in ("cartesian", "polar_stratified"):
+        raise ValueError("unknown face sampling map")
+    if face_sampling == "polar_stratified" and int(config["qmc"]["face_sobol_power"]) < 2:
+        raise ValueError("four face strata require face_sobol_power >= 2")
     if int(config["array"].get("seed_stride", config["qmc"]["replicates_per_shard"])) < int(config["qmc"]["replicates_per_shard"]):
         raise ValueError("seed_stride must prevent overlapping replicate seeds")
     certificate = config.get("collar_certificate", {})
@@ -192,6 +197,8 @@ def _worker_arguments(
         str(qmc["replicates_per_shard"]),
         "--radial-power",
         str(qmc["radial_power"]),
+        "--face-sampling",
+        str(qmc.get("face_sampling", "cartesian")),
         "--seed",
         str(task["seed"]),
         "--output",
@@ -252,6 +259,7 @@ def _worker_arguments(
         arguments.extend(["--batch-c-evaluation", "--tensor-cache-mebibytes",
                           str(runtime.get("tensor_cache_mebibytes", 512))])
     arguments.extend([
+        "--sample-checkpoint-storage", str(runtime.get("sample_checkpoint_storage", "snapshot")),
         "--block-cache-limit", str(runtime.get("block_cache_limit", 2048)),
         "--auxiliary-cache-limit", str(runtime.get("auxiliary_cache_limit", 4096)),
         "--c-coefficient-cache", str(output.with_suffix(".coefficients.sqlite")),
@@ -462,6 +470,7 @@ def reduce_shards(
                 "certificates": certificates,
                 "certificates_passed": certificates_passed,
                 "first_result": shards[0][1],
+                "shards": shards,
             }
 
     radius_summaries: list[dict[str, object]] = []
@@ -502,7 +511,45 @@ def reduce_shards(
                     * int(first_result["replicates"])
                     * int(first_result["face_samples_per_replicate"])
                 ),
+                "face_sampling": first_result.get("face_sampling", "cartesian"),
+                "bulk_standard_error_real": float(np.std(production["bulks"].real, ddof=1)/math.sqrt(totals.size)),
+                "bulk_standard_error_imag": float(np.std(production["bulks"].imag, ddof=1)/math.sqrt(totals.size)),
+                "face_standard_error_real": float(np.std(production["faces"].real, ddof=1)/math.sqrt(totals.size)),
+                "face_standard_error_imag": float(np.std(production["faces"].imag, ddof=1)/math.sqrt(totals.size)),
             }
+        prefixes = {}
+        for shard_index, result in production["shards"]:
+            for entry in result.get("sampling_prefix_estimates", []):
+                counts = (int(entry["bulk_samples"]), int(entry["face_samples"]))
+                prefix = prefixes.setdefault(counts, {})
+                identity = (shard_index, int(entry["replicate"]))
+                if identity in prefix:
+                    raise ArithmeticError("duplicate sampling prefix replicate")
+                prefix[identity] = (_complex(entry["bulk_estimate"])
+                                    + _complex(entry["face_estimate"])
+                                    + production["corner"])
+        prefix_summaries = []
+        previous = None
+        expected_identities = {(s,r) for s in range(shard_count)
+                               for r in range(int(first_result["replicates"]))}
+        for (nb,nf), values in sorted(prefixes.items()):
+            if set(values) != expected_identities:
+                raise ArithmeticError("incomplete sampling prefix replicates")
+            estimates = np.asarray([values[k] for k in sorted(values)],dtype=complex)
+            mean = complex(np.mean(estimates))
+            se = complex(np.std(estimates.real,ddof=1),np.std(estimates.imag,ddof=1))/math.sqrt(len(estimates))
+            row = {"bulk_samples":nb*len(estimates), "face_samples":nf*len(estimates),
+                   "integral_mean":_encoded(mean), "standard_error_real":se.real,
+                   "standard_error_imag":se.imag,
+                   "relative_qmc_standard_error":abs(se)/abs(mean) if mean else None}
+            if previous is not None:
+                shift = estimates-previous
+                row["paired_shift_from_previous_prefix"] = _encoded(complex(np.mean(shift)))
+                row["paired_shift_standard_error_real"] = float(np.std(shift.real,ddof=1)/math.sqrt(len(shift)))
+                row["paired_shift_standard_error_imag"] = float(np.std(shift.imag,ddof=1)/math.sqrt(len(shift)))
+            previous = estimates
+            prefix_summaries.append(row)
+        radius_summary["sampling_prefix_summaries"] = prefix_summaries
         if config["recursion"]["block_backend"] == "h":
             comparison_totals = components[("comparison", radius)]["totals"]
             if totals.shape != comparison_totals.shape:

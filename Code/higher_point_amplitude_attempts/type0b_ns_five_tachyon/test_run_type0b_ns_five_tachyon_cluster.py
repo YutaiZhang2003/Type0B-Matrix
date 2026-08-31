@@ -76,6 +76,31 @@ def _write_mock_shards(output_dir: Path, *, wrong_hash_shard: int | None = None,
 
 
 class Type0BFivePointClusterTests(unittest.TestCase):
+    def test_prefix_reduction_preserves_pairing_and_rejects_missing_replicates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output=Path(directory)
+            _write_mock_shards(output,config_path=QUICK_CONFIG)
+            for path in output.glob('task_*.json'):
+                payload=json.loads(path.read_text())
+                row=payload['results'][0]
+                row['sampling_prefix_estimates']=[{
+                    'replicate':rep,'bulk_samples':2,'face_samples':4,
+                    'bulk_estimate':_encoded(complex(rep,rep)),
+                    'face_estimate':_encoded(-1j),
+                } for rep in range(2)]
+                path.write_text(json.dumps(payload))
+            summary=reduce_shards(QUICK_CONFIG,output,output/'summary.json')
+            prefix=summary['radius_summaries'][0]['sampling_prefix_summaries'][0]
+            self.assertEqual(prefix['bulk_samples'],16)
+            self.assertEqual(prefix['face_samples'],32)
+            self.assertEqual(prefix['integral_mean'],_encoded(1.5-.5j))
+            p=output/'task_00001.json'
+            payload=json.loads(p.read_text())
+            payload['results'][0]['sampling_prefix_estimates'].pop()
+            p.write_text(json.dumps(payload))
+            with self.assertRaisesRegex(ArithmeticError,'incomplete sampling prefix'):
+                reduce_shards(QUICK_CONFIG,output,output/'summary.json')
+
     def test_quick_profile_retains_forest_and_skips_only_optional_audits(self):
         config = _load_config(QUICK_CONFIG)
         tasks = _tasks(config)

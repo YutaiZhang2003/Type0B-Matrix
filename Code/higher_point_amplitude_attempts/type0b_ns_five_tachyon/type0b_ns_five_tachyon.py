@@ -1091,6 +1091,8 @@ class NSFivePointFinitePartQMCResult:
     )
     corner_contribution_computed: bool = True
     h_regulator_eta: float | None = None
+    face_sampling: str = "cartesian"
+    sampling_prefix_estimates: tuple[dict[str, object], ...] = ()
 
     def to_json(self) -> dict[str, object]:
         return {
@@ -1151,6 +1153,8 @@ class NSFivePointFinitePartQMCResult:
             "momentum_refinement_shells": self.momentum_refinement_shells,
             "momentum_singularity_subtraction": self.momentum_singularity_subtraction,
             "extreme_bulk_weights": list(self.extreme_bulk_weights),
+            "face_sampling": self.face_sampling,
+            "sampling_prefix_estimates": list(self.sampling_prefix_estimates),
             "matrix_model_used": False,
         }
 
@@ -7144,6 +7148,7 @@ def _integrate_leading_local_finite_part_qmc(
     face_sobol_power: int = 4,
     replicates: int = 2,
     radial_power: float = 0.5,
+    face_sampling: str = "cartesian",
     projection_radius: float = 1.0e-5,
     momentum_refinement_shells: int = 0,
     momentum_singularity_subtraction: bool = False,
@@ -7173,9 +7178,14 @@ def _integrate_leading_local_finite_part_qmc(
     collar_radius = float(collar_radius)
     timing_started = time.perf_counter()
     progress_enabled = os.environ.get("TYPE0B_5PT_PROGRESS") == "1"
+    progress_every = max(1, int(os.environ.get("TYPE0B_5PT_PROGRESS_EVERY", "1")))
 
     def progress(stage: str) -> None:
         if progress_enabled:
+            if "_sample_" in stage:
+                index = int(stage.rsplit("_", 1)[-1])
+                if index != 1 and index % progress_every:
+                    return
             rss = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
             print(json.dumps({
                 "stage": stage,
@@ -7201,6 +7211,10 @@ def _integrate_leading_local_finite_part_qmc(
         raise ValueError("Sobol powers must be positive and replicates at least two")
     if not 0.0 < radial_power <= 2.0:
         raise ValueError("radial_power must lie in (0,2]")
+    if face_sampling not in ("cartesian", "polar_stratified"):
+        raise ValueError("unknown face sampling map")
+    if face_sampling == "polar_stratified" and face_sobol_power < 2:
+        raise ValueError("four face strata require face_sobol_power >= 2")
     if not 1.0e-7 <= projection_radius < min(1.0e-3, 0.1 * collar_radius):
         raise ValueError(
             "projection_radius must lie in [1e-7,min(1e-3,0.1*collar))"
@@ -7248,6 +7262,7 @@ def _integrate_leading_local_finite_part_qmc(
     bulk_estimates: list[complex] = []
     face_estimates: list[complex] = []
     estimates: list[complex] = []
+    sampling_prefix_estimates: list[dict[str, object]] = []
     for replicate in range(replicates):
         bulk_sampler = qmc.Sobol(
             d=5, scramble=True, seed=int(seed) + replicate
@@ -7286,13 +7301,28 @@ def _integrate_leading_local_finite_part_qmc(
             seed=int(seed) + 10000 + replicate,
         )
         face_values: list[complex] = []
-        for sample_index, sample in enumerate(
-            face_sampler.random_base2(face_sobol_power)
-        ):
-            modulus, area_jacobian = _four_point_fundamental_cell_sample(
-                sample[0], sample[1]
+        if face_sampling == "polar_stratified":
+            from fivepoint_sampling import stratified_face_sample
+            # Each consecutive group of four contains all radial bands.
+            # Reusing its square point couples their errors within a replicate.
+            face_points = (
+                (z, 4*jac)
+                for sample in face_sampler.random_base2(face_sobol_power-2)
+                for band in range(4)
+                for z,jac in [stratified_face_sample(*sample,collar_radius,band)]
             )
+        else:
+            face_points = (
+                _four_point_fundamental_cell_sample(*sample)
+                for sample in face_sampler.random_base2(face_sobol_power)
+            )
+        for sample_index, (modulus, area_jacobian) in enumerate(face_points):
             in_corner_collar = abs(modulus) < collar_radius
+            # Keep the extraction point inside the normal collar even at
+            # very small tangential radii. Finite projection radius remains
+            # an accuracy parameter, checked separately from sampling.
+            face_projection = (min(projection_radius, .01*abs(modulus))
+                               if face_sampling == "polar_stratified" else projection_radius)
             def compute_face_sample():
                 density = 0.0 + 0.0j
                 for ordering, multiplicity in face_orbits:
@@ -7300,14 +7330,14 @@ def _integrate_leading_local_finite_part_qmc(
                         ordering=ordering,
                         remaining_modulus=modulus,
                         collar_radius=collar_radius,
-                        projection_radius=projection_radius,
+                        projection_radius=face_projection,
                         momentum_refinement_shells=momentum_refinement_shells,
                         momentum_singularity_subtraction=momentum_singularity_subtraction,
                     )
                     if in_corner_collar:
                         face_density -= kernel.boundary_corner_face_counterterm_density(
                             ordering=ordering, remaining_modulus=modulus,
-                            collar_radius=collar_radius, projection_radius=projection_radius,
+                            collar_radius=collar_radius, projection_radius=face_projection,
                             momentum_refinement_shells=momentum_refinement_shells,
                             momentum_singularity_subtraction=momentum_singularity_subtraction,
                         )
@@ -7325,6 +7355,16 @@ def _integrate_leading_local_finite_part_qmc(
         bulk_estimates.append(bulk_estimate)
         face_estimates.append(face_estimate)
         estimates.append(bulk_estimate + face_estimate + corner_contribution)
+        for divisor in (2**power for power in range(max(3, min(bulk_sobol_power, face_sobol_power)-5), -1, -1)):
+            nb, nf = len(bulk_values)//divisor, len(face_values)//divisor
+            if nb < 1 or nf < (4 if face_sampling == "polar_stratified" else 1):
+                continue
+            b, f = complex(np.mean(bulk_values[:nb])), complex(np.mean(face_values[:nf]))
+            sampling_prefix_estimates.append({
+                "replicate": replicate, "bulk_samples": nb, "face_samples": nf,
+                "bulk_estimate": {"real":b.real,"imag":b.imag},
+                "face_estimate": {"real":f.real,"imag":f.imag},
+            })
 
     array = np.asarray(estimates, dtype=complex)
     return NSFivePointFinitePartQMCResult(
@@ -7359,6 +7399,8 @@ def _integrate_leading_local_finite_part_qmc(
         subtraction_scheme=subtraction_scheme,
         corner_contribution_computed=bool(compute_corner_contribution),
         h_regulator_eta=kernel.h_regulator_eta,
+        face_sampling=face_sampling,
+        sampling_prefix_estimates=tuple(sampling_prefix_estimates),
     )
 
 

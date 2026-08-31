@@ -1,0 +1,117 @@
+{
+  "schema": "type0b-ns-fivepoint-preliminary-c-recursion-subtraction-v1",
+  "status": "three_hour_accuracy_refinement",
+  "run_label": "Ea_quarter_three_hour_stratified_faces",
+  "physics": {
+    "real_outgoing_energies": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "epsilon": 0.02,
+    "epsilon_weights": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "prescription": "fixed complex-energy analytic continuation on Omega=sum omega_a",
+    "outgoing_point": "omega_a=1/4+0.02i",
+    "incoming_point": "omega_in=1+0.08i"
+  },
+  "recursion": {
+    "block_backend": "c",
+    "global_max_twice_levels": [
+      4,
+      4
+    ],
+    "global_max_total_twice_level": 8,
+    "h_recursion_role": "disabled",
+    "c_recursion_role": "production_in_every_selected_chart",
+    "comment": "c-recursion through physical level 2 on each edge; no regulator extrapolation."
+  },
+  "atlas": {
+    "oriented_linear_charts": 120,
+    "unoriented_trivalent_trees": 15,
+    "selection_score": "minimize max(|q1|,|q2|)",
+    "series_domain": "|q1|<1 and |q2|<1"
+  },
+  "subtraction": {
+    "scheme": "pointwise_F-P1-P2+P12_plus_analytic_forest",
+    "collar_radii": [
+      0.01,
+      0.005
+    ],
+    "projection_radius": 1e-05,
+    "strict_boundary_matching_required": false,
+    "comment": "Common random points at rho=.01 and .005; four radial strata resolve the face collar. No assumption that smaller rho is better."
+  },
+  "collar_certificate": {
+    "audit_shards": 0,
+    "enforce": false,
+    "interpretation": "Separate matched block-depth and momentum control phases replace the optional collar diagnostic in this allocation."
+  },
+  "momentum": {
+    "orders": [
+      2,
+      3
+    ],
+    "maximum": 2.0,
+    "refinement_shells": 1,
+    "constant_singularity_subtraction": true
+  },
+  "precision": {
+    "structure_digits": 22,
+    "block_digits": 45
+  },
+  "qmc": {
+    "bulk_sobol_power": 12,
+    "face_sobol_power": 12,
+    "replicates_per_shard": 4,
+    "radial_power": 0.5,
+    "effective_bulk_samples_per_radius": 65536,
+    "effective_face_samples_per_radius": 65536,
+    "face_sampling": "polar_stratified"
+  },
+  "array": {
+    "shards": 4,
+    "deterministic_corner_shards": 1,
+    "base_seed": 20260903,
+    "seed_stride": 100000,
+    "task_count": 4,
+    "recommended_array_cap": 4
+  },
+  "merge": {
+    "compatible_shard_config_sha256": {},
+    "justification": "New independent preliminary run; do not merge samples from higher-accuracy configurations."
+  },
+  "runtime": {
+    "block_cache_limit": 2048,
+    "auxiliary_cache_limit": 8192,
+    "coefficient_storage": "verified_existing_tables_staged_to_node_local_sqlite_then_atomic_copy_back",
+    "checkpoint_granularity": "one append record per sample; fsync every 16 new samples and at phase exit",
+    "precision_loss_from_storage": false,
+    "batch_c_evaluation": true,
+    "tensor_cache_mebibytes": 256,
+    "node_local_coefficient_cache": true,
+    "sample_checkpoint_storage": "journal"
+  },
+  "resources": {
+    "partition": "yin",
+    "cpus_per_task": 4,
+    "memory": "8G",
+    "wall_time": "03:00:00",
+    "requeue": false
+  },
+  "matrix_model_used": false,
+  "production_policy": {
+    "target_wall_minutes": 180,
+    "frequency_epsilon_extrapolation": false,
+    "convergence_certified": false,
+    "batch_benchmark_dependency": false,
+    "execution": "four workers for primary estimate, then matched block and momentum controls within one three-hour allocation",
+    "accuracy_caveat": "10% total accuracy remains a target. Inspect nested sampling estimates and paired control shifts; no automatic certification.",
+    "relative_accuracy_target": 0.1
+  }
+}

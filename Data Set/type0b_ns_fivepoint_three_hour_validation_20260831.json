@@ -1,0 +1,77 @@
+{
+  "status": "validated_before_submission",
+  "tests_passed_local": 34,
+  "tests_passed_cannon": 34,
+  "pilot_note": "Local polar pilot compared with Cannon v7 at the same sample counts and seeds; hardware differs. Large sample weights remain. No accuracy certification.",
+  "face_pilot": [
+    {
+      "radius": 0.01,
+      "old_cannon_face_complex_standard_error": 156.9723166123514,
+      "local_polar_face_complex_standard_error": 80.42687827684902,
+      "error_reduction_factor": 1.9517395176276047,
+      "local_face_mean": {
+        "imag": -582.9389782361982,
+        "real": -566.2830362317604
+      }
+    },
+    {
+      "radius": 0.005,
+      "old_cannon_face_complex_standard_error": 1016.0761256158713,
+      "local_polar_face_complex_standard_error": 218.9005976369694,
+      "error_reduction_factor": 4.641723853586545,
+      "local_face_mean": {
+        "imag": -2569.2681383920926,
+        "real": -2184.095166823091
+      }
+    }
+  ],
+  "journal_numerical_replay": {
+    "status": "passed",
+    "comparison": "snapshot and journal worker results exactly equal",
+    "fields": [
+      "integral_mean",
+      "bulk_estimates",
+      "face_estimates",
+      "sampling_prefix_estimates"
+    ],
+    "seconds": 47.797031542
+  },
+  "geometry_preflight": {
+    "status": "passed",
+    "bulk_coordinates": 65536,
+    "seconds": 97.96340783299999
+  },
+  "accuracy_target_established": false,
+  "campaign_smoke_test": {
+    "schema": "type0b-fivepoint-three-hour-campaign-v1",
+    "job_id": null,
+    "state": "completed",
+    "phases": [
+      {
+        "name": "primary",
+        "state": "completed",
+        "config": "tmp/type0b_campaign_smoke_20260831/config.json",
+        "output": "/Users/yutaizhang/Desktop/Type0B-Matrix/tmp/type0b_campaign_smoke_20260831/output",
+        "worker_exit_codes": [
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    ],
+    "relative_accuracy_target": 0.1,
+    "accuracy_target_established": false,
+    "elapsed_seconds": 53.792656125,
+    "note": "Real four-worker primary phase with reduced counts: journal, cache staging/copy-back, reduction, comparison and campaign status all completed."
+  },
+  "runtime_source_fingerprint": "9a634a001a97870356390751a58d5e87674d0423f463eedc53378b9059b1abb6",
+  "primary_config_sha256": "188ec37b486efcc6aa578fc4a468ae0e5e4fa7c3f6e47902f44c0b0cb54d2ded",
+  "final_cannon_tests_passed": 34,
+  "controls": [
+    "projection_radius",
+    "block_depth",
+    "momentum_order",
+    "momentum_tail"
+  ]
+}
