@@ -1,0 +1,70 @@
+{
+  "atlas": {
+    "oriented_linear_charts": 120,
+    "selection_score": "minimize max(|q1|,|q2|)",
+    "series_domain": "|q1|<1 and |q2|<1",
+    "unoriented_trivalent_trees": 15
+  },
+  "coefficient_fit_diagnostics_by_shard": [],
+  "collar_certificate_policy": {
+    "audit_shards": 0,
+    "enforce": false,
+    "interpretation": "Convergence audit omitted for the user-requested one-hour estimate."
+  },
+  "collar_stability_differences": [],
+  "config": "/n/home09/yutaizhang/Type0B-Matrix-runs/type0b-ns-fivepoint-ea-quarter-onehour-20260831-v6/code/Code/config/type0b_ns_five_tachyon_one_hour_preliminary.json",
+  "config_sha256": "44ba15eda6dc101e879375c5193b643b09d278ad7f8116defe7c0fdf2c67dbf5",
+  "matrix_model_used": false,
+  "merged_shard_config_sha256": {
+    "0": "44ba15eda6dc101e879375c5193b643b09d278ad7f8116defe7c0fdf2c67dbf5",
+    "1": "44ba15eda6dc101e879375c5193b643b09d278ad7f8116defe7c0fdf2c67dbf5",
+    "2": "44ba15eda6dc101e879375c5193b643b09d278ad7f8116defe7c0fdf2c67dbf5",
+    "3": "44ba15eda6dc101e879375c5193b643b09d278ad7f8116defe7c0fdf2c67dbf5"
+  },
+  "radius_summaries": [
+    {
+      "block_backend": "c",
+      "bulk_mean": {
+        "imag": 145.03116748416392,
+        "real": 138.51352852109784
+      },
+      "bulk_samples": 32,
+      "collar_radius": 0.01,
+      "corner_contribution": {
+        "imag": 190.6022524977178,
+        "real": 243.764676358392
+      },
+      "face_collar_certificates": [],
+      "face_collar_certificates_passed": null,
+      "face_mean": {
+        "imag": -117.96026027447573,
+        "real": -142.56823970606501
+      },
+      "face_samples": 64,
+      "integral_mean": {
+        "imag": 217.67315970740603,
+        "real": 239.7099651734248
+      },
+      "regulator_extrapolated_per_coefficient": false,
+      "replicate_count": 8,
+      "standard_error_imag": 90.90717514272136,
+      "standard_error_real": 92.31500538930355
+    }
+  ],
+  "recursion": {
+    "block_backend": "c",
+    "c_recursion_role": "production_in_every_selected_chart",
+    "comment": "c-recursion through physical level 2 on each edge; no regulator extrapolation.",
+    "global_max_total_twice_level": 8,
+    "global_max_twice_levels": [
+      4,
+      4
+    ],
+    "h_recursion_role": "disabled"
+  },
+  "schema": "type0b-ns-fivepoint-preliminary-c-recursion-summary-v1",
+  "self_dual_regulator": null,
+  "status": "worldsheet_cluster_preflight_not_frozen",
+  "subtraction_scheme": "pointwise F-P1-P2+P12 numerical remainder plus analytic face and corner finite parts",
+  "task_count": 4
+}
