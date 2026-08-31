@@ -2,6 +2,9 @@
 
 The production target is the amplitude at the specified complex energies
 `omega_a = E_a + i epsilon nu_a`, with `Omega = sum_a omega_a`.
+The object evaluated is the analytic continuation of the reduced amplitude
+on `Omega=sum_a omega_a`; no delta function is evaluated at complex energies.
+The delta function belongs only to the real-energy S-matrix convention.
 An epsilon-to-zero extrapolation is not required for comparison with the
 matrix prediction evaluated at those same complex energies. This supersedes
 any earlier proposal to require that limit before reporting a comparison.
@@ -20,7 +23,7 @@ Its equations (2.9)-(2.13) give the basis and energy dictionary. In particular,
 `A_T = 2^(-n) A_R` for `1->n`. This is a prediction for the all-tachyon
 amplitude, without assuming equality among worldsheet NS/R diagrams.
 
-For the coefficient of `delta(E) mu_F^(-(n-1))`, the implemented predictions
+After removing the coupling power `mu_F^(-(n-1))`, the implemented reduced predictions
 for `n=2,3,4,5` are
 
 ```
@@ -37,7 +40,7 @@ are not modified or imported by the worldsheet calculation.
 For the existing five-point integral `I5`, the literal all-NS prefactor is
 `(i/64) g_s^5 C_S2 delta(E) I5`. Applying BRY (4.14),
 `g_s=4/(pi mu_F)` and `C_S2=pi/g_s^2`, gives
-`A_T,worldsheet = i I5/pi^2` after stripping `delta(E) mu_F^-3`.
+`A_T,worldsheet = i I5/pi^2` for the reduced amplitude with `mu_F^-3` removed.
 The postprocessor compares this with the all-tachyon matrix prediction.
 It does not multiply the worldsheet result by sixteen and call it a
 calculated all-right-mode amplitude.

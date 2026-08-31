@@ -81,6 +81,17 @@ class ComparisonTests(unittest.TestCase):
         self.assertIsNone(result["comparisons"][0]["face_collar_certificates_passed"])
         self.assertFalse(result["convergence_certified"])
 
+    def test_complex_quantity_has_no_evaluated_delta_and_sampling_is_not_total_accuracy(self):
+        config, summary = self.fixture()
+        config["production_policy"] = {"relative_accuracy_target": .1}
+        for row in summary["radius_summaries"]:
+            row["standard_error_real"] = row["standard_error_imag"] = .001
+        result = compare_summary(summary, config, "verified-hash")
+        self.assertFalse(result["prediction"]["delta_function_evaluated_at_complex_energies"])
+        self.assertEqual(result["prediction"]["coupling_factor_removed"], "mu_F^(-3)")
+        self.assertTrue(result["comparisons"][0]["sampling_target_met"])
+        self.assertFalse(result["accuracy_target_established"])
+
     def test_cannot_label_fivepoint_data_as_sixpoint(self):
         config, summary = self.fixture()
         config["physics"]["real_outgoing_energies"].append(.2)

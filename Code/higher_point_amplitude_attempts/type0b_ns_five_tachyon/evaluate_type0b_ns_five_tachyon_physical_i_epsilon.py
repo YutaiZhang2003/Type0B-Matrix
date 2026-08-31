@@ -404,7 +404,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             if args.block_backend == "h"
             else "worldsheet_c_recursion_not_frozen"
         ),
-        "prescription": "direct physical-domain +i-epsilon boundary value",
+        "prescription": "fixed complex-energy analytic continuation on Omega=sum omega_a",
         "large_remote_analytic_continuation_used": False,
         "liouville_residue_forest_used": False,
         "subtraction_audit": audit,
@@ -460,9 +460,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         "runtime_cache_diagnostics": kernel.cache_diagnostics(),
         "worldsheet_normalization": {
             "stored_quantity": "integral d2z d2w I_NS(z,w)",
-            "literal_all_tachyon_diagram": (
-                "(i/64) g_s^5 C_S2 delta(E) times stored_quantity"
+            "literal_all_tachyon_reduced_amplitude": (
+                "(i/64) g_s^5 C_S2 times stored_quantity"
             ),
+            "delta_function_evaluated": False,
+            "real_energy_convention": "The full real-energy S matrix includes delta(E); the computed object is its reduced analytic continuation.",
             "matrix_model_comparison_performed": False,
         },
         "source_sha256": {

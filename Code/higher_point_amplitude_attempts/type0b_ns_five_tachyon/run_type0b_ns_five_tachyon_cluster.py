@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import sys
 import time
@@ -285,7 +286,18 @@ def run_worker(
         return existing
 
     started = time.perf_counter()
-    status = evaluate_main(_worker_arguments(config, task, output))
+    arguments = _worker_arguments(config, task, output)
+    cache_transfer = None
+    if config.get("runtime", {}).get("node_local_coefficient_cache", False):
+        from fivepoint_local_cache import staged_coefficient_cache
+        scratch = os.environ.get("TYPE0B_5PT_LOCAL_CACHE_ROOT")
+        if not scratch:
+            raise ValueError("node-local cache requested but TYPE0B_5PT_LOCAL_CACHE_ROOT is unset")
+        with staged_coefficient_cache(output.with_suffix(".coefficients.sqlite"), Path(scratch)) as (local, cache_transfer):
+            arguments[arguments.index("--c-coefficient-cache") + 1] = str(local)
+            status = evaluate_main(arguments)
+    else:
+        status = evaluate_main(arguments)
     worker_wall_seconds = time.perf_counter() - started
     if status != 0 or not output.exists():
         raise RuntimeError(f"five-point worker failed for task {index}")
@@ -296,6 +308,7 @@ def run_worker(
         "config_sha256": config_hash,
         "stdout_streamed": True,
         "worker_wall_seconds": worker_wall_seconds,
+        "coefficient_cache_transfer": cache_transfer,
     }
     payload["status"] = (
         "preliminary_c_recursion_forest_cluster_shard_not_frozen"

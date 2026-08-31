@@ -34,7 +34,7 @@ def decoded(value: dict) -> complex:
 
 
 def matrix_coefficients(outgoing: tuple[complex, ...]) -> dict:
-    """Coefficients of delta(E) mu_F^(-(n-1)), in BRY worldsheet energies.
+    """Analytically continued reduced amplitudes, with mu_F^(-(n-1)) removed.
 
     BRY (2.12)-(2.13): the c=1 energy is twice the worldsheet energy,
     including a factor 1/2 from delta(E). Perturbatively T=(R+L)/2 and
@@ -56,7 +56,11 @@ def matrix_coefficients(outgoing: tuple[complex, ...]) -> dict:
         "external_point_count": n + 1,
         "incoming_energy": encoded(incoming),
         "outgoing_energies": [encoded(value) for value in outgoing],
-        "stripped_factor": f"delta(omega_in-sum omega_a) * mu_F^(-{n-1})",
+        "quantity": "analytic_continuation_of_reduced_tree_amplitude",
+        "coupling_factor_removed": f"mu_F^(-{n-1})",
+        "real_energy_S_matrix_factor": f"delta(omega_in-sum omega_a) * mu_F^(-{n-1})",
+        "delta_function_evaluated_at_complex_energies": False,
+        "energy_conservation": "Omega=sum_a omega_a, also at complex energies",
         "all_tachyon": encoded(tachyon),
         "all_right_mode": encoded(2**n * tachyon),
         "formula_all_tachyon": "i Omega prod_a(omega_a) prod_{j=1}^{n-2}(j+2i Omega)",
@@ -102,6 +106,7 @@ def compare_summary(summary: dict, config: dict, config_sha256: str) -> dict:
     if not expected or sorted(radii) != sorted(expected) or len(set(radii)) != len(radii):
         raise ValueError("summary must contain every configured collar radius exactly once")
     comparisons = []
+    accuracy_target = config.get("production_policy", {}).get("relative_accuracy_target")
     for row in rows:
         if row.get("block_backend") != "c":
             raise ValueError("expected c-recursion data")
@@ -111,6 +116,7 @@ def compare_summary(summary: dict, config: dict, config_sha256: str) -> dict:
         errors = [float(row[f"standard_error_{part}"]) for part in ("real", "imag")]
         if any(not math.isfinite(v) or v < 0 for v in errors):
             raise ValueError("standard errors must be finite and nonnegative")
+        relative_sampling_error = math.hypot(*errors) / abs(integral) if integral else None
         comparisons.append({
             "collar_radius": row["collar_radius"],
             "raw_integral": encoded(integral),
@@ -123,6 +129,11 @@ def compare_summary(summary: dict, config: dict, config_sha256: str) -> dict:
             "relative_complex_discrepancy": abs(residual) / abs(matrix) if matrix else None,
             "replicate_count": row["replicate_count"],
             "face_collar_certificates_passed": row.get("face_collar_certificates_passed"),
+            "relative_qmc_standard_error": relative_sampling_error,
+            "sampling_target_met": (
+                relative_sampling_error <= accuracy_target
+                if relative_sampling_error is not None and accuracy_target is not None else None
+            ),
         })
     return {
         "schema": "type0b-fixed-complex-frequency-comparison-v1",
@@ -134,13 +145,17 @@ def compare_summary(summary: dict, config: dict, config_sha256: str) -> dict:
         "epsilon_extrapolation_performed": False,
         "normalization": {
             "g_s": "4/(pi mu_F)", "C_S2": "pi/g_s^2",
-            "literal_fivepoint": "(i/64) g_s^5 C_S2 delta(E) I5",
+            "literal_fivepoint_reduced": "(i/64) g_s^5 C_S2 I5",
+            "delta_function_convention": "Only the real-energy S matrix carries delta(E); this comparison evaluates its reduced analytic amplitude.",
             "stripped_worldsheet_all_tachyon": "i I5 / pi^2",
             "worldsheet_NS_R_diagram_equality_assumed": False,
         },
         "comparisons": comparisons,
         "collar_stability_differences_raw_integral": summary.get("collar_stability_differences", []),
         "convergence_certified": False,
+        "relative_accuracy_target": accuracy_target,
+        "accuracy_target_established": False,
+        "accuracy_assessment": "Sampling precision alone does not bound block, momentum, or collar errors.",
         "error_scope": "QMC sampling only; block, momentum and collar systematics are not bounded here.",
         "continuation_caveat": "Uses the worldsheet run's continuation prescription; no contour or residue changes are made here.",
         "radius_selection": "all configured radii; no selection or fit to the matrix prediction",
