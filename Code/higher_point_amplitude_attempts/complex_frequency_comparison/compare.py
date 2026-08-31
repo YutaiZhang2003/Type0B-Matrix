@@ -16,6 +16,7 @@ from pathlib import Path
 
 
 SUMMARY_SCHEMA = "type0b-ns-fivepoint-order8-c-recursion-summary-v5"
+PRELIMINARY_SUMMARY_SCHEMA = "type0b-ns-fivepoint-preliminary-c-recursion-summary-v1"
 SOURCE = "https://arxiv.org/pdf/2201.05621"
 
 
@@ -82,7 +83,7 @@ def fivepoint_worldsheet(raw_integral: complex) -> complex:
 
 
 def compare_summary(summary: dict, config: dict, config_sha256: str) -> dict:
-    if summary.get("schema") != SUMMARY_SCHEMA:
+    if summary.get("schema") not in (SUMMARY_SCHEMA, PRELIMINARY_SUMMARY_SCHEMA):
         raise ValueError("only the five-point c-recursion summary is supported")
     if summary.get("config_sha256") != config_sha256:
         raise ValueError("summary/config SHA-256 mismatch")

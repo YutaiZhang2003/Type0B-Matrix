@@ -18,8 +18,9 @@ The tensor cache has a byte budget independent of the small block-object LRU.
 Final arbitrary-precision coefficients remain durable in SQLite. A conservative
 rounding/cancellation indicator sends unsafe momentum rows to the scalar
 implementation. This indicator is a numerical safeguard, not a rigorous bound
-on the final integral. Momentum, moduli, truncation and epsilon convergence
-must still be checked separately.
+on the final integral. Momentum, moduli and truncation convergence remain
+separate questions. An epsilon-to-zero study is needed only for a real-energy
+boundary value, not for the requested fixed-complex-energy comparison.
 
 Inside a collar the tensor evaluator partitions each chiral polynomial into
 primary and excited states. The forest remainder sums the disjoint products
@@ -49,4 +50,5 @@ The optimized calculation still computes the all-NS contribution
 `integral d2z d2w I_NS`. Its literal diagram carries `(i/64) g_s^5 C_S2 delta(E)`.
 No matrix-model amplitude is used as an input, normalization fit or convergence
 target, and this runtime change does not establish equality of the other
-NS/R diagrams or complete the physical epsilon-to-zero limit.
+NS/R diagrams. A separate postprocessor can compare the all-tachyon result
+directly at the finite complex energies, without an epsilon-to-zero limit.

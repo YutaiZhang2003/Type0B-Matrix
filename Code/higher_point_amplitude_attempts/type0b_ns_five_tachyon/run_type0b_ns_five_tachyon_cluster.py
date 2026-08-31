@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Plan, execute, and reduce the order-eight Type-0B five-point RQMC array."""
+"""Plan, execute, and reduce Type-0B five-point RQMC production profiles."""
 
 from __future__ import annotations
 
@@ -22,21 +22,28 @@ from evaluate_type0b_ns_five_tachyon_physical_i_epsilon import (
 def _load_config(path: Path) -> dict[str, object]:
     config = json.loads(path.read_text())
     schema = config.get("schema")
+    preliminary = schema == "type0b-ns-fivepoint-preliminary-c-recursion-subtraction-v1"
     if schema not in (
         "type0b-ns-fivepoint-order8-coefficient-table-subtraction-v4",
         "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5",
+        "type0b-ns-fivepoint-preliminary-c-recursion-subtraction-v1",
     ):
         raise ValueError("unexpected cluster config schema")
     recursion = config["recursion"]
     subtraction = config["subtraction"]
-    if recursion["global_max_twice_levels"] != [8, 8]:
+    levels = recursion["global_max_twice_levels"]
+    if preliminary and (
+        len(levels) != 2 or any(type(value) is not int or value < 2 for value in levels)
+    ):
+        raise ValueError("preliminary production needs two positive twice-level cutoffs")
+    if not preliminary and levels != [8, 8]:
         raise ValueError("this production bundle is fixed at recursion order (8,8)")
-    if int(recursion["global_max_total_twice_level"]) < 16:
-        raise ValueError("full rectangular order (8,8) requires total twice-level 16")
+    if int(recursion["global_max_total_twice_level"]) < sum(levels):
+        raise ValueError("production requires the full rectangular block cutoff")
     backend = recursion["block_backend"]
     if backend != "c":
         raise ValueError("amplitude production requires all-c recursion; h/hybrid bundles are retired")
-    if schema != "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5":
+    if not preliminary and schema != "type0b-ns-fivepoint-order8-c-recursion-subtraction-v5":
         raise ValueError("pure c-recursion requires the v5 production schema")
     if recursion.get("h_recursion_role") != "disabled":
         raise ValueError("h-recursion must be disabled in the c-only bundle")
@@ -52,8 +59,10 @@ def _load_config(path: Path) -> dict[str, object]:
     if subtraction["scheme"] != "pointwise_F-P1-P2+P12_plus_analytic_forest":
         raise ValueError("the cluster job requires the consistent local forest")
     radii = tuple(float(value) for value in subtraction["collar_radii"])
-    if len(radii) < 3 or any(not 0.0 < value <= 0.01 for value in radii):
+    if len(radii) < (1 if preliminary else 3) or any(not 0.0 < value <= 0.01 for value in radii):
         raise ValueError("all production collar radii must lie in (0,0.01]")
+    if len(set(radii)) != len(radii):
+        raise ValueError("collar radii must be distinct")
     shard_count = int(config["array"]["shards"])
     if shard_count < 2:
         raise ValueError("at least two shards per regulator-radius point are required")
@@ -66,23 +75,27 @@ def _load_config(path: Path) -> dict[str, object]:
         raise ValueError("exactly one shard per regulator-radius point needs the corner")
     if int(config["qmc"]["replicates_per_shard"]) < 2:
         raise ValueError("each shard must contain at least two RQMC replicates")
+    if int(config["array"].get("seed_stride", config["qmc"]["replicates_per_shard"])) < int(config["qmc"]["replicates_per_shard"]):
+        raise ValueError("seed_stride must prevent overlapping replicate seeds")
     certificate = config.get("collar_certificate", {})
     audit_count = int(certificate.get("audit_shards", 0))
-    if not 1 <= audit_count <= shard_count:
+    if not (0 if preliminary else 1) <= audit_count <= shard_count:
         raise ValueError("each regulator-radius point requires a certificate shard")
-    if certificate.get("reference_backend") != "c":
+    if audit_count and certificate.get("reference_backend") != "c":
         raise ValueError("the collar overlap certificate must use c-recursion")
     if not isinstance(certificate.get("enforce"), bool):
         raise ValueError("the collar certificate enforce policy must be boolean")
-    if certificate.get("reference_max_twice_levels") != [8, 8]:
+    if not audit_count and certificate["enforce"]:
+        raise ValueError("cannot enforce a skipped collar certificate")
+    if audit_count and certificate.get("reference_max_twice_levels") != [8, 8]:
         raise ValueError("the c-recursion collar check is fixed at edge order (8,8)")
     expected_reference_total = 16 if backend == "c" else 8
-    if int(certificate.get("reference_max_total_twice_level", -1)) != expected_reference_total:
+    if audit_count and int(certificate.get("reference_max_total_twice_level", -1)) != expected_reference_total:
         raise ValueError("the c-recursion collar check has the wrong total cutoff")
-    if certificate.get("previous_reference_max_twice_levels") != [6, 6]:
+    if audit_count and certificate.get("previous_reference_max_twice_levels") != [6, 6]:
         raise ValueError("the preceding c-recursion check is fixed at edge order (6,6)")
     expected_previous_total = 12 if backend == "c" else 6
-    if int(certificate.get("previous_reference_max_total_twice_level", -1)) != expected_previous_total:
+    if audit_count and int(certificate.get("previous_reference_max_total_twice_level", -1)) != expected_previous_total:
         raise ValueError("the preceding c-recursion check has the wrong total cutoff")
     compatible_hashes = config.get("merge", {}).get(
         "compatible_shard_config_sha256", {}
@@ -115,6 +128,7 @@ def _config_sha256(path: Path) -> str:
 def _tasks(config: dict[str, object]) -> tuple[dict[str, object], ...]:
     shard_count = int(config["array"]["shards"])
     base_seed = int(config["array"]["base_seed"])
+    seed_stride = int(config["array"].get("seed_stride", config["qmc"]["replicates_per_shard"]))
     return tuple(
         {
             "task_index": shard_index,
@@ -122,7 +136,7 @@ def _tasks(config: dict[str, object]) -> tuple[dict[str, object], ...]:
             "central_charge_shift": 0.0,
             # Every collar is evaluated inside this worker, so one seed couples
             # all collar-stability differences exactly.
-            "seed": base_seed + shard_index,
+            "seed": base_seed + seed_stride * shard_index,
         }
         for shard_index in range(shard_count)
     )
@@ -284,6 +298,9 @@ def run_worker(
         "worker_wall_seconds": worker_wall_seconds,
     }
     payload["status"] = (
+        "preliminary_c_recursion_forest_cluster_shard_not_frozen"
+        if config["schema"] == "type0b-ns-fivepoint-preliminary-c-recursion-subtraction-v1"
+        else
         "order8_c_recursion_forest_cluster_shard_not_frozen"
         if config["recursion"]["block_backend"] == "c"
         else "order8_coefficient_extrapolated_h_forest_cluster_shard_not_frozen"
@@ -374,10 +391,10 @@ def reduce_shards(
                     f"coefficient-fit/radius {key} has {len(certificates)} "
                     f"certificates; expected {required_certificates}"
                 )
-            certificates_passed = not any(
+            certificates_passed = (not any(
                 not bool(certificate.get("passed"))
                 for certificate in certificates
-            )
+            )) if certificates else None
             if bool(config["collar_certificate"]["enforce"]) and not certificates_passed:
                 raise ArithmeticError(f"collar certificate failed at {key}")
             bulks = np.asarray(
@@ -491,6 +508,9 @@ def reduce_shards(
 
     payload: dict[str, object] = {
         "schema": (
+            "type0b-ns-fivepoint-preliminary-c-recursion-summary-v1"
+            if config["schema"] == "type0b-ns-fivepoint-preliminary-c-recursion-subtraction-v1"
+            else
             "type0b-ns-fivepoint-order8-c-recursion-summary-v5"
             if config["recursion"]["block_backend"] == "c"
             else "type0b-ns-fivepoint-order8-coefficient-table-summary-v4"

@@ -22,15 +22,16 @@ CONFIG = (
     / "config"
     / "type0b_ns_five_tachyon_c_recursion_order8_small_collar_cluster.json"
 )
+QUICK_CONFIG = CODE_ROOT / "config" / "type0b_ns_five_tachyon_one_hour_preliminary.json"
 
 
 def _encoded(value: complex) -> dict[str, float]:
     return {"real": complex(value).real, "imag": complex(value).imag}
 
 
-def _write_mock_shards(output_dir: Path, *, wrong_hash_shard: int | None = None):
-    config = _load_config(CONFIG)
-    config_hash = _config_sha256(CONFIG)
+def _write_mock_shards(output_dir: Path, *, wrong_hash_shard: int | None = None, config_path: Path = CONFIG):
+    config = _load_config(config_path)
+    config_hash = _config_sha256(config_path)
     radii = tuple(config["subtraction"]["collar_radii"])
     for task in _tasks(config):
         shard_index = int(task["shard_index"])
@@ -51,11 +52,11 @@ def _write_mock_shards(output_dir: Path, *, wrong_hash_shard: int | None = None)
                     "corner_contribution": _encoded(1.0 + 0.0j),
                     "corner_contribution_computed": shard_index == 0,
                     "face_collar_certificate": (
-                        {"passed": False} if shard_index == 0 else None
+                        {"passed": False} if shard_index < config["collar_certificate"]["audit_shards"] else None
                     ),
                     "replicates": 2,
-                    "bulk_samples_per_replicate": 8,
-                    "face_samples_per_replicate": 16,
+                    "bulk_samples_per_replicate": 2 ** config["qmc"]["bulk_sobol_power"],
+                    "face_samples_per_replicate": 2 ** config["qmc"]["face_sobol_power"],
                 }
             )
         payload = {
@@ -75,6 +76,50 @@ def _write_mock_shards(output_dir: Path, *, wrong_hash_shard: int | None = None)
 
 
 class Type0BFivePointClusterTests(unittest.TestCase):
+    def test_quick_profile_retains_forest_and_skips_only_optional_audits(self):
+        config = _load_config(QUICK_CONFIG)
+        tasks = _tasks(config)
+        seen = set()
+        for task in tasks:
+            seeds = set(range(task["seed"], task["seed"] + config["qmc"]["replicates_per_shard"]))
+            self.assertFalse(seen & seeds)
+            seen.update(seeds)
+            args = _worker_arguments(config, task, Path("/tmp/quick-shard.json"))
+            self.assertIn("--skip-face-collar-diagnostic", args)
+            self.assertEqual("--skip-corner-contribution" in args, task["shard_index"] != 0)
+            self.assertIn("--batch-c-evaluation", args)
+            self.assertNotIn("--disable-momentum-singularity-subtraction", args)
+        self.assertEqual(len(seen), 8)
+        self.assertEqual(config["recursion"]["global_max_twice_levels"], [4, 4])
+
+    def test_quick_reducer_does_not_label_an_omitted_audit_as_passed(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            _write_mock_shards(output, config_path=QUICK_CONFIG)
+            summary = reduce_shards(QUICK_CONFIG, output, output / "summary.json")
+            self.assertEqual(summary["schema"], "type0b-ns-fivepoint-preliminary-c-recursion-summary-v1")
+            self.assertEqual(len(summary["radius_summaries"]), 1)
+            self.assertIsNone(summary["radius_summaries"][0]["face_collar_certificates_passed"])
+            self.assertEqual(summary["radius_summaries"][0]["bulk_samples"], 32)
+            self.assertEqual(summary["radius_summaries"][0]["face_samples"], 64)
+            self.assertEqual(summary["radius_summaries"][0]["integral_mean"], _encoded(3 + .5j))
+            self.assertEqual(summary["collar_stability_differences"], [])
+
+    def test_standard_profile_cannot_silently_skip_audits_or_reduce_cutoff(self):
+        for change in ("cutoff", "audit", "seeds"):
+            with self.subTest(change=change), tempfile.TemporaryDirectory() as directory:
+                config = json.loads(CONFIG.read_text())
+                if change == "cutoff":
+                    config["recursion"]["global_max_twice_levels"] = [4, 4]
+                elif change == "audit":
+                    config["collar_certificate"]["audit_shards"] = 0
+                else:
+                    config["array"]["seed_stride"] = 1
+                path = Path(directory) / "invalid.json"
+                path.write_text(json.dumps(config))
+                with self.assertRaises(ValueError):
+                    _load_config(path)
+
     def test_production_config_rejects_h_and_hybrid_backends(self):
         for backend in ("h", "hybrid"):
             with self.subTest(backend=backend), tempfile.TemporaryDirectory() as directory:

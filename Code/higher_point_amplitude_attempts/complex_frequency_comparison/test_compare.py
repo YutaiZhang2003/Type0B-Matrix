@@ -3,7 +3,7 @@ import copy
 import math
 import unittest
 
-from compare import (SUMMARY_SCHEMA, compare_summary, configured_energies,
+from compare import (SUMMARY_SCHEMA, PRELIMINARY_SUMMARY_SCHEMA, compare_summary, configured_energies,
                      decoded, encoded, matrix_coefficients)
 
 
@@ -69,6 +69,17 @@ class ComparisonTests(unittest.TestCase):
         summary["radius_summaries"].pop()
         with self.assertRaisesRegex(ValueError, "every configured collar radius"):
             compare_summary(summary, config, "verified-hash")
+
+    def test_one_radius_preliminary_summary_needs_no_convergence_certificate(self):
+        config, summary = self.fixture()
+        config["subtraction"]["collar_radii"] = [.01]
+        summary["schema"] = PRELIMINARY_SUMMARY_SCHEMA
+        summary["radius_summaries"] = summary["radius_summaries"][:1]
+        summary["radius_summaries"][0]["face_collar_certificates_passed"] = None
+        result = compare_summary(summary, config, "verified-hash")
+        self.assertEqual(len(result["comparisons"]), 1)
+        self.assertIsNone(result["comparisons"][0]["face_collar_certificates_passed"])
+        self.assertFalse(result["convergence_certified"])
 
     def test_cannot_label_fivepoint_data_as_sixpoint(self):
         config, summary = self.fixture()
