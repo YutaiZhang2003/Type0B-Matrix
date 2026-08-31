@@ -120,6 +120,18 @@ class Type0BFivePointClusterTests(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     _load_config(path)
 
+    def test_quick_reducer_accepts_evaluators_flat_single_collar_format(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            _write_mock_shards(output, config_path=QUICK_CONFIG)
+            for path in output.glob("task_*.json"):
+                payload = json.loads(path.read_text())
+                row = payload.pop("results")[0]
+                payload.update(row, schema="type0b-ns-sphere-five-tachyon-worldsheet-finite-part-v1")
+                path.write_text(json.dumps(payload))
+            summary = reduce_shards(QUICK_CONFIG, output, output / "summary.json")
+            self.assertEqual(summary["radius_summaries"][0]["integral_mean"], _encoded(3 + .5j))
+
     def test_production_config_rejects_h_and_hybrid_backends(self):
         for backend in ("h", "hybrid"):
             with self.subTest(backend=backend), tempfile.TemporaryDirectory() as directory:

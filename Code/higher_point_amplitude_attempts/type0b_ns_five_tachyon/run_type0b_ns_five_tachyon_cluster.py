@@ -345,13 +345,21 @@ def reduce_shards(
             allowed_hashes.add(compatible_hashes[task_index])
         if actual_hash not in allowed_hashes:
             raise ValueError(f"config hash mismatch in {path}")
-        if payload.get("schema") != "type0b-ns-fivepoint-coupled-collar-fit-bundle-v1":
+        if payload.get("schema") == "type0b-ns-fivepoint-coupled-collar-fit-bundle-v1":
+            shard_results = payload["results"]
+        elif (
+            payload.get("schema") == "type0b-ns-sphere-five-tachyon-worldsheet-finite-part-v1"
+            and len(config["subtraction"]["collar_radii"]) == 1
+        ):
+            # The evaluator returns its original flat format for one collar.
+            shard_results = (payload,)
+        else:
             raise ValueError(f"unexpected worker bundle schema in {path}")
         shard_index = int(payload["cluster_task"]["shard_index"])
         diagnostic = payload.get("self_dual_coefficient_fit")
         if diagnostic is not None:
             shard_diagnostics.append(diagnostic)
-        for result in payload["results"]:
+        for result in shard_results:
             key = (str(result["h_fit_variant"]), float(result["collar_radius"]))
             groups.setdefault(key, []).append((shard_index, result))
     if missing:
