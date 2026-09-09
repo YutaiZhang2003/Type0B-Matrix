@@ -1,0 +1,91 @@
+{
+  "schema": "type0b-fixed-complex-frequency-comparison-v1",
+  "status": "preliminary_fixed_complex_frequency_comparison",
+  "worldsheet_source_status": "worldsheet_cluster_preflight_not_frozen",
+  "prediction": {
+    "process": "1->4",
+    "external_point_count": 5,
+    "incoming_energy": {
+      "real": 1.0,
+      "imag": 0.08
+    },
+    "outgoing_energies": [
+      {
+        "real": 0.25,
+        "imag": 0.02
+      },
+      {
+        "real": 0.25,
+        "imag": 0.02
+      },
+      {
+        "real": 0.25,
+        "imag": 0.02
+      },
+      {
+        "real": 0.25,
+        "imag": 0.02
+      }
+    ],
+    "stripped_factor": "delta(omega_in-sum omega_a) * mu_F^(-3)",
+    "all_tachyon": {
+      "real": -0.015815844583679996,
+      "imag": -0.017243732128
+    },
+    "all_right_mode": {
+      "real": -0.25305351333887993,
+      "imag": -0.275899714048
+    },
+    "formula_all_tachyon": "i Omega prod_a(omega_a) prod_{j=1}^{n-2}(j+2i Omega)",
+    "matrix_basis_relation": "A_T = 2^(-n) A_R; T=(R+L)/2",
+    "source": "https://arxiv.org/pdf/2201.05621"
+  },
+  "frequency_epsilon": 0.02,
+  "epsilon_extrapolation_required": false,
+  "epsilon_extrapolation_performed": false,
+  "normalization": {
+    "g_s": "4/(pi mu_F)",
+    "C_S2": "pi/g_s^2",
+    "literal_fivepoint": "(i/64) g_s^5 C_S2 delta(E) I5",
+    "stripped_worldsheet_all_tachyon": "i I5 / pi^2",
+    "worldsheet_NS_R_diagram_equality_assumed": false
+  },
+  "comparisons": [
+    {
+      "collar_radius": 0.01,
+      "raw_integral": {
+        "real": 239.7099651734248,
+        "imag": 217.67315970740603
+      },
+      "worldsheet_all_tachyon": {
+        "real": -22.054902188722007,
+        "imag": 24.287697402234965
+      },
+      "worldsheet_qmc_standard_error_real": 9.210822587041834,
+      "worldsheet_qmc_standard_error_imag": 9.353465613993027,
+      "matrix_all_tachyon": {
+        "real": -0.015815844583679996,
+        "imag": -0.017243732128
+      },
+      "residual": {
+        "real": -22.039086344138326,
+        "imag": 24.304941134362966
+      },
+      "relative_complex_discrepancy": 1402.2008685290311,
+      "replicate_count": 8,
+      "face_collar_certificates_passed": null
+    }
+  ],
+  "collar_stability_differences_raw_integral": [],
+  "convergence_certified": false,
+  "error_scope": "QMC sampling only; block, momentum and collar systematics are not bounded here.",
+  "continuation_caveat": "Uses the worldsheet run's continuation prescription; no contour or residue changes are made here.",
+  "radius_selection": "all configured radii; no selection or fit to the matrix prediction",
+  "matrix_model_used_in_postprocessing": true,
+  "matrix_model_used_in_worldsheet_input": false,
+  "summary_source": "/n/home09/yutaizhang/Type0B-Matrix-runs/type0b-ns-fivepoint-ea-quarter-onehour-20260831-v6/summary.json",
+  "summary_sha256": "14dc450b0483951cb6213684c395c5d2da9d42e2e8255ecdbad576a08192a9a2",
+  "config_source": "/n/home09/yutaizhang/Type0B-Matrix-runs/type0b-ns-fivepoint-ea-quarter-onehour-20260831-v6/code/Code/config/type0b_ns_five_tachyon_one_hour_preliminary.json",
+  "config_sha256": "44ba15eda6dc101e879375c5193b643b09d278ad7f8116defe7c0fdf2c67dbf5",
+  "comparison_code_sha256": "2c837319fa26778379c4a4b05915c2fd32dc64858faa2a2a4d386c66ad04bf1e"
+}

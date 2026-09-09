@@ -1,0 +1,115 @@
+{
+  "schema": "type0b-ns-fivepoint-preliminary-c-recursion-subtraction-v1",
+  "status": "ten_percent_target_sampling_and_radius_step",
+  "run_label": "Ea_quarter_dense_sampling_paired_radii",
+  "physics": {
+    "real_outgoing_energies": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "epsilon": 0.02,
+    "epsilon_weights": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "prescription": "direct physical-domain +i-epsilon",
+    "outgoing_point": "omega_a=1/4+0.02i",
+    "incoming_point": "omega_in=1+0.08i"
+  },
+  "recursion": {
+    "block_backend": "c",
+    "global_max_twice_levels": [
+      4,
+      4
+    ],
+    "global_max_total_twice_level": 8,
+    "h_recursion_role": "disabled",
+    "c_recursion_role": "production_in_every_selected_chart",
+    "comment": "c-recursion through physical level 2 on each edge; no regulator extrapolation."
+  },
+  "atlas": {
+    "oriented_linear_charts": 120,
+    "unoriented_trivalent_trees": 15,
+    "selection_score": "minimize max(|q1|,|q2|)",
+    "series_domain": "|q1|<1 and |q2|<1"
+  },
+  "subtraction": {
+    "scheme": "pointwise_F-P1-P2+P12_plus_analytic_forest",
+    "collar_radii": [
+      0.01,
+      0.005
+    ],
+    "projection_radius": 1e-05,
+    "strict_boundary_matching_required": false,
+    "comment": "Smaller requested radius compared with the baseline using identical Sobol points; no assumed reduction of cancellation."
+  },
+  "collar_certificate": {
+    "audit_shards": 0,
+    "enforce": false,
+    "interpretation": "Convergence audit omitted for the user-requested one-hour estimate."
+  },
+  "momentum": {
+    "orders": [
+      2,
+      3
+    ],
+    "maximum": 2.0,
+    "refinement_shells": 1,
+    "constant_singularity_subtraction": true
+  },
+  "precision": {
+    "structure_digits": 22,
+    "block_digits": 45
+  },
+  "qmc": {
+    "bulk_sobol_power": 6,
+    "face_sobol_power": 7,
+    "replicates_per_shard": 2,
+    "radial_power": 0.5,
+    "effective_bulk_samples_per_radius": 512,
+    "effective_face_samples_per_radius": 1024
+  },
+  "array": {
+    "shards": 4,
+    "deterministic_corner_shards": 1,
+    "base_seed": 20260903,
+    "seed_stride": 100000,
+    "task_count": 4,
+    "recommended_array_cap": 4
+  },
+  "merge": {
+    "compatible_shard_config_sha256": {},
+    "justification": "New independent preliminary run; do not merge samples from higher-accuracy configurations."
+  },
+  "runtime": {
+    "block_cache_limit": 2048,
+    "auxiliary_cache_limit": 8192,
+    "coefficient_storage": "verified_existing_tables_staged_to_node_local_sqlite_then_atomic_copy_back",
+    "checkpoint_granularity": "bulk_sample_face_sample_corner_orbit",
+    "precision_loss_from_storage": false,
+    "batch_c_evaluation": true,
+    "tensor_cache_mebibytes": 256,
+    "node_local_coefficient_cache": true
+  },
+  "resources": {
+    "partition": "yin",
+    "cpus_per_task": 4,
+    "memory": "8G",
+    "wall_time": "01:00:00",
+    "requeue": false
+  },
+  "matrix_model_used": false,
+  "production_policy": {
+    "target_wall_minutes": 60,
+    "frequency_epsilon_extrapolation": false,
+    "convergence_certified": false,
+    "batch_benchmark_dependency": false,
+    "execution": "four workers, reduction and complex-frequency comparison in one allocation",
+    "accuracy_caveat": "10% is the target, not a certification from this run. Block/momentum controls remain fixed to isolate sampling and radius dependence.",
+    "relative_accuracy_target": 0.1
+  }
+}

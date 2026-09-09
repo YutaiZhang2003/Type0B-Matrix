@@ -1,0 +1,1362 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cM}{\mathcal M}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\PP}{\mathbb P}
+\newcommand{\vp}{\varphi}
+
+\title{Sphere Five-Point Virasoro Block in the Pillow Frame\\
+and the Sphere \texorpdfstring{$n$}{n}-Point Open-Necklace
+Elliptic \texorpdfstring{$h$}{h}-Recursion}
+\author{}
+\date{August 29, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We write the chiral sphere five-point Virasoro block as a matrix element on
+the pillow $T^2/\mathbb Z_2$.  Four external operators sit at the branch
+points, while the fifth becomes a local operator inserted between two
+projected propagation segments.  We first audit the sphere four-point
+elliptic recursion directly against a PBW expansion.  This fixes the typo in
+Eq.~(E.103) of the string note and separates the geometric
+$c$-normalization from the character-absorbed $c-1$ normalization.  We then
+generalize the corrected conformal factor to five points and state the
+resulting two-channel elliptic $h$-recursion.  The recursion uses the
+correlated large-weight pillow-character asymptotic as its regular seed.
+Finally, we extend the construction to a sphere $n$-point block with
+$n-4$ local insertions during pillow evolution.  The resulting
+$(n-3)$-edge recursion has a single diagonal large-weight parameter and the
+same twisted pillow character.
+\end{abstract}
+
+\section{Sphere block and pillow geometry}
+
+Place the five chiral primaries at
+\begin{equation}
+ V_{d_1}(0),\qquad V_{d_2}(z),\qquad V_{d_3}(1),\qquad
+ V_{d_4}(\infty),\qquad V_{d_5}(t),
+ \label{eq:insertions}
+\end{equation}
+and choose $(0,z,1,\infty)$ as the branch quartet.  In the comb channel the
+block is
+\begin{equation}
+ \cF^{S^2}_5(z,t)
+ =
+ \langle d_4|V_{d_3}(1)\PP_{h_2}V_{d_5}(t)
+ \PP_{h_1}V_{d_2}(z)|d_1\rangle .
+ \label{eq:sphere-block}
+\end{equation}
+Primary three-point constants are stripped from this definition.
+
+The pillow coordinate and elliptic modulus are
+\begin{align}
+ w(x)
+ &=\frac{1}{\theta_3(\tau)^2}
+   \int_0^x\frac{dy}{\sqrt{y(1-y)(z-y)}},
+ &
+ \tau&=i\frac{K(1-z)}{K(z)},
+ \label{eq:pillow-map}\\
+ q&=e^{i\pi\tau},
+ &
+ z&=\frac{\theta_2(\tau)^4}{\theta_3(\tau)^4}.
+ \label{eq:elliptic-data}
+\end{align}
+Here $\theta_j(\tau)=\vartheta_j(0|\tau)$.  The fifth puncture maps to
+\begin{equation}
+ w_5=w(t),\qquad
+ \frac{dw_5}{dt}
+ =\frac{1}{\theta_3(\tau)^2\sqrt{t(1-t)(z-t)}}.
+ \label{eq:mobile-jacobian}
+\end{equation}
+The square-root branch in Eqs.~\eqref{eq:pillow-map} and
+\eqref{eq:mobile-jacobian} must be continued together with all fractional
+powers below.
+
+Quantizing the pillow along the $A$-cycle splits its propagation at $w_5$.
+The raw cylinder variables are
+\begin{equation}
+ \widetilde p_1=e^{iw_5},\qquad
+ \widetilde p_2=e^{i(\pi\tau-w_5)}.
+\end{equation}
+After rotating each boundary state by half an $A$-cycle, define the
+OPE-aligned local coordinates
+\begin{equation}
+ p_1=-e^{iw_5},\qquad
+ p_2=-e^{i(\pi\tau-w_5)},\qquad
+ \boxed{p_1p_2=q}.
+ \label{eq:segment-nomes}
+\end{equation}
+They obey
+\begin{equation}
+ \frac{z}{t}=4p_1+O(p^2),\qquad t=4p_2+O(p^2),
+ \label{eq:aligned-cusp}
+\end{equation}
+which fixes the signs in the recursion variables $4p_i$.  The half-period
+phases are absorbed into the aligned pillow boundary states.
+The corresponding projected pillow matrix element is
+\begin{equation}
+ \boxed{
+ \cM_5(q,w_5)=
+ \langle\psi_{43}|\PP_{h_2}
+ p_2^{L_0-c/24}V_{d_5}^{(w)}(0)
+ p_1^{L_0-c/24}\PP_{h_1}|\psi_{12}\rangle .}
+ \label{eq:pillow-matrix-element}
+\end{equation}
+The states $|\psi_{12}\rangle$ and $\langle\psi_{43}|$ are prepared by the
+two lower and two upper corner insertions, respectively.  They include the
+corner regularizations appropriate to the pillow metric.
+
+\section{Exact conformal factor}
+
+The four branch-point operators produce precisely the Weyl-anomaly and
+corner factor of the four-point pillow relation.  Since the fifth operator
+is away from the ramification points, it transforms as an ordinary primary,
+\begin{equation}
+ V_{d_5}^{(x)}(t)
+ =\left(\frac{dw_5}{dt}\right)^{d_5}V_{d_5}^{(w)}(w_5).
+ \label{eq:primary-transform}
+\end{equation}
+Consequently, the exact five-point generalization of the four-point
+relation is
+\begin{align}
+ \cF^{S^2}_5(z,t)
+ ={}&
+ \theta_3(\tau)^{c/2-4(d_1+d_2+d_3+d_4)}
+ z^{c/24-d_1-d_2}(1-z)^{c/24-d_2-d_3}
+ \left(\frac{dw_5}{dt}\right)^{d_5}
+ \cM_5(q,w_5).
+ \label{eq:e103-five-point}
+\end{align}
+The exponent of $1-z$ pairs the operators at $z$ and $1$.  The
+$h_3+h_4$ exponent printed in E.103 of the current string-note PDF is a
+labeling error, while the $h_2+h_3$ pairing in E.106 is correct.  The
+four-point audit in Sec.~\ref{sec:four-point-audit} fixes this statement
+independently of the five-point proposal.
+It is useful to define, for arbitrary $\kappa$,
+\begin{align}
+ \Lambda_5^{(\kappa)}(z,t)
+ :={}&
+ \theta_3(\tau)^{\kappa/2-4(d_1+d_2+d_3+d_4)-2d_5}
+ z^{\kappa/24-d_1-d_2}(1-z)^{\kappa/24-d_2-d_3}
+ \nonumber\\[-2mm]
+ &\hspace{35mm}\times
+ [t(1-t)(z-t)]^{-d_5/2}.
+ \label{eq:lambda-five}
+\end{align}
+Then Eq.~\eqref{eq:e103-five-point} becomes
+\begin{equation}
+ \boxed{
+ \cF^{S^2}_5(z,t)=\Lambda_5^{(c)}(z,t)\cM_5(q,w_5).}
+ \label{eq:exact-factorization}
+\end{equation}
+
+\section{Cusp normalization and large-weight seed}
+
+The factors $4p_1$ and $4p_2$ are fixed by the local degeneration
+coordinates; they are not introduced by arbitrarily splitting $16q$.
+We first recall how $16q$ itself arises in the four-point problem.  If the
+external weights are $\eta_i$ and the exchanged weight is $h$, the plane
+OPE normalization gives
+\begin{equation}
+ \cF^{S^2}_4(z)\sim z^{h-\eta_1-\eta_2}
+ \qquad(z\to0).
+ \label{eq:four-point-ope-leading}
+\end{equation}
+The corrected pillow relation instead has the leading form
+\begin{equation}
+ \cF^{S^2}_4(z)
+ \sim z^{c/24-\eta_1-\eta_2}\cM_4(h;q).
+ \label{eq:four-point-pillow-leading}
+\end{equation}
+Matching Eqs.~\eqref{eq:four-point-ope-leading} and
+\eqref{eq:four-point-pillow-leading} fixes
+\begin{equation}
+ \cM_4(h;q)\sim z^{h-c/24}.
+ \label{eq:four-point-matrix-leading-z}
+\end{equation}
+Since the modular lambda function obeys
+\begin{equation}
+ z=\frac{\theta_2(\tau)^4}{\theta_3(\tau)^4}
+  =16q\bigl(1-8q+44q^2+O(q^3)\bigr),
+ \label{eq:lambda-leading-sixteen}
+\end{equation}
+we obtain, without taking any large-weight limit,
+\begin{equation}
+ \boxed{\cM_4(h;q)\sim(16q)^{h-c/24}.}
+ \label{eq:four-point-sixteen-q}
+\end{equation}
+The cylinder propagator supplies $q^{h-c/24}$; the factor
+$16^{h-c/24}$ is fixed by the normalization of the pillow boundary states
+relative to the plane OPE coordinate.
+
+For five points the corresponding argument uses the two independent OPE
+coordinates
+\begin{equation}
+ x:=\frac{z}{t}\longrightarrow0,\qquad t\longrightarrow0.
+ \label{eq:double-cusp-variables}
+\end{equation}
+The primary term of the plane comb block is
+\begin{equation}
+ \cF^{S^2}_5(z,t)
+ \sim z^{h_1-d_1-d_2}t^{h_2-h_1-d_5}.
+ \label{eq:five-point-ope-leading}
+\end{equation}
+In the same limit $\theta_3\to1$, $1-z\to1$, and
+Eq.~\eqref{eq:mobile-jacobian} gives
+\begin{equation}
+ \frac{dw_5}{dt}\sim\frac{\epsilon}{t},
+ \label{eq:mobile-jacobian-cusp}
+\end{equation}
+where the constant branch phase $\epsilon$ is absorbed into the local
+operator convention.  The exact factorization
+Eq.~\eqref{eq:exact-factorization} therefore reduces to
+\begin{equation}
+ \cF^{S^2}_5(z,t)
+ \sim z^{c/24-d_1-d_2}t^{-d_5}\cM_5.
+ \label{eq:five-point-pillow-leading}
+\end{equation}
+Dividing Eq.~\eqref{eq:five-point-ope-leading} by
+Eq.~\eqref{eq:five-point-pillow-leading} gives
+\begin{align}
+ \cM_5
+ &\sim z^{h_1-c/24}t^{h_2-h_1}
+  =x^{h_1-c/24}t^{h_2-c/24}.
+ \label{eq:five-point-matrix-leading-plane}
+\end{align}
+
+The inverse pillow map fixes the normalization of each local coordinate
+separately:
+\begin{align}
+ x&=4p_1\left[1-2p_1+2p_2+O(p^2)\right],
+ &
+ t&=4p_2\left[1+2p_1-2p_2+O(p^2)\right].
+ \label{eq:local-coordinate-leading-four}
+\end{align}
+Consequently the primary propagation factor is fixed a priori as
+\begin{equation}
+ \boxed{
+ \cM_5
+ =(4p_1)^{h_1-c/24}(4p_2)^{h_2-c/24}
+  \mathcal R_5(h_1,h_2;p_1,p_2),}
+ \qquad
+ \mathcal R_5=1+O(p_1,p_2)
+ \label{eq:five-point-primary-normalization}
+\end{equation}
+in the double-cusp expansion.  Only after setting $h_1=h_2=h$ and using
+$p_1p_2=q$ does this imply
+\begin{equation}
+ (4p_1)^{h-c/24}(4p_2)^{h-c/24}
+ =(16q)^{h-c/24}.
+ \label{eq:four-point-reduction-of-segments}
+\end{equation}
+Thus the five-point factors are derived from the two local coordinates;
+their product reproduces the four-point normalization as a consistency
+check, rather than serving as its assumed split.
+
+\pagebreak[3]
+We now isolate the genuinely additional large-weight proposal.  Set
+\begin{equation}
+ h_1=H,\qquad h_2=H+a,
+ \label{eq:fixed-difference}
+\end{equation}
+and take $H\to\infty$ at fixed $a,c,d_i,\tau,w_5$.  We assume only that
+the regular factor in Eq.~\eqref{eq:five-point-primary-normalization}
+approaches the pillow character,
+\begin{equation}
+ \mathcal R_5(H,H+a;p_1,p_2)
+ \longrightarrow\chi_{\mathrm{pill}}(q),
+ \qquad
+ \chi_{\mathrm{pill}}(q)
+ :=\prod_{n=1}^{\infty}(1-q^{2n})^{-1/2}.
+ \label{eq:regular-large-h-seed}
+\end{equation}
+Equivalently, the complete large-weight asymptotic is
+\begin{equation}
+ \cM_5
+ \sim
+ (4p_1)^{h_1-c/24}(4p_2)^{h_2-c/24}
+ \chi_{\mathrm{pill}}(q).
+ \label{eq:large-h-seed}
+\end{equation}
+The propagation powers in Eq.~\eqref{eq:large-h-seed} are fixed by the
+double-cusp normalization.  Only Eq.~\eqref{eq:regular-large-h-seed}, the
+limiting form of the regular factor, is the non-geometric assumption
+entering the final recursion.
+
+Define the reduced block by
+\begin{equation}
+ \cM_5
+ =
+ (4p_1)^{h_1-c/24}(4p_2)^{h_2-c/24}
+ \chi_{\mathrm{pill}}(q)
+ \cH_5(H,a;p_1,p_2),
+ \qquad
+ \cH_5\longrightarrow1
+ \quad(H\to\infty).
+ \label{eq:reduced-block}
+\end{equation}
+Combining Eqs.~\eqref{eq:exact-factorization} and
+\eqref{eq:reduced-block} gives the complete sphere block in the geometric
+$c$-normalization:
+\begin{equation}
+ \boxed{
+ \cF^{S^2}_5
+ =\Lambda_5^{(c)}(z,t)
+ (4p_1)^{h_1-c/24}(4p_2)^{h_2-c/24}
+ \chi_{\mathrm{pill}}(q)
+ \cH_5(H,a;p_1,p_2).}
+ \label{eq:full-block-c}
+\end{equation}
+
+The identity
+\begin{equation}
+ \theta_3(\tau)^{1/2}[z(1-z)]^{1/24}(16q)^{-1/24}
+ =\chi_{\mathrm{pill}}(q)^{-1}
+ \label{eq:theta-character-identity}
+\end{equation}
+gives the exactly equivalent Zamolodchikov normalization
+\begin{equation}
+ \boxed{
+ \cF^{S^2}_5
+ =\Lambda_5^{(c-1)}(z,t)
+ (4p_1)^{h_1-(c-1)/24}(4p_2)^{h_2-(c-1)/24}
+ \cH_5(H,a;p_1,p_2).}
+ \label{eq:full-block-c-minus-one}
+\end{equation}
+Thus $\chi_{\mathrm{pill}}$ is explicit in
+Eq.~\eqref{eq:full-block-c}, but is already absorbed in
+Eq.~\eqref{eq:full-block-c-minus-one}; it must not be included a second
+time in the latter convention.
+
+\section{Degenerate data}
+
+We use
+\begin{equation}
+ c=1+6Q^2,\qquad Q=b+b^{-1},\qquad
+ d=\frac{Q^2-\lambda_d^2}{4}.
+ \label{eq:momentum-convention}
+\end{equation}
+The degenerate weight and shifted weight are
+\begin{equation}
+ h_{r,s}(c)=\frac{Q^2-(rb+s b^{-1})^2}{4},
+ \qquad
+ h_{r,s}(c)+rs=h_{r,-s}(c),
+ \qquad r,s\in\mathbb Z_{>0}.
+ \label{eq:kac-weight}
+\end{equation}
+In this convention the inverse null-norm slope is
+\begin{equation}
+ A_{r,s}^{c}
+ =\frac12
+ \prod_{\substack{
+ m=1-r,\ldots,r\\
+ n=1-s,\ldots,s\\
+ (m,n)\neq(0,0),(r,s)}}
+ \frac{1}{mb+n b^{-1}}.
+ \label{eq:null-slope}
+\end{equation}
+For weights $d_a,d_b$, define the fusion polynomial
+\begin{align}
+ P_{r,s}^{c}\!\begin{bmatrix}d_a\\d_b\end{bmatrix}
+ :={}&
+ \prod_{\substack{p=1-r,\,3-r,\ldots,r-1\\
+                   \ell=1-s,\,3-s,\ldots,s-1}}
+ \frac{\lambda_{d_a}+\lambda_{d_b}+pb+\ell b^{-1}}{2}
+ \frac{\lambda_{d_a}-\lambda_{d_b}+pb+\ell b^{-1}}{2}.
+ \label{eq:fusion-polynomial}
+\end{align}
+Equations~\eqref{eq:null-slope} and \eqref{eq:fusion-polynomial} fix the
+normalization of every residue below.
+
+\section{Four-point elliptic recursion and normalization audit}
+\label{sec:four-point-audit}
+
+Before proposing the five-point recursion, we fix its normalization by a
+direct four-point calculation.  Put four primaries of weights
+$(\eta_1,\eta_2,\eta_3,\eta_4)$ at $(0,z,1,\infty)$ and let $h$ propagate
+in the $(12)(34)$ channel.  With three-point constants removed, write
+\begin{equation}
+ \cF^{S^2}_4(z)
+ =z^{h-\eta_1-\eta_2}\sum_{N\geq0}F_Nz^N,
+ \qquad F_0=1.
+ \label{eq:four-point-plane-block}
+\end{equation}
+The PBW coefficients are obtained without elliptic recursion from
+\begin{equation}
+ F_N=\rho_{43,N}^{\mathsf T}G_{c,h}^{(N)-1}\rho_{N,12},
+ \label{eq:four-point-pbw}
+\end{equation}
+where $G_{c,h}^{(N)}$ is the level-$N$ Verma Gram matrix.  For example,
+\begin{equation}
+ F_1=\frac{(h-\eta_1+\eta_2)(h+\eta_3-\eta_4)}{2h}.
+ \label{eq:four-point-level-one}
+\end{equation}
+
+The corrected geometric pillow relation is
+\begin{equation}
+ \boxed{
+ \cF^{S^2}_4(z)
+ =\theta_3(\tau)^{c/2-4\sum_{i=1}^4\eta_i}
+  z^{c/24-\eta_1-\eta_2}
+  (1-z)^{c/24-\eta_2-\eta_3}\cM_4(h;q).}
+ \label{eq:corrected-e103}
+\end{equation}
+Thus the $(1-z)$ exponent pairs the adjacent insertions at $z$ and $1$.
+The $\eta_3+\eta_4$ pairing in E.103 is a typo; the
+$\eta_2+\eta_3$ pairing appearing in E.106 is the correct one.
+
+At large $h$ the pillow matrix element has the regular asymptotic
+\begin{equation}
+ \cM_4(h;q)
+ \sim(16q)^{h-c/24}\chi_{\mathrm{pill}}(q),
+ \qquad
+ \chi_{\mathrm{pill}}(q)
+ =\prod_{n\geq1}(1-q^{2n})^{-1/2}.
+ \label{eq:four-point-large-h}
+\end{equation}
+Define the reduced elliptic block by
+\begin{equation}
+ \cM_4(h;q)
+ =(16q)^{h-c/24}\chi_{\mathrm{pill}}(q)\cH_4(h;q).
+ \label{eq:four-point-reduced-geometric}
+\end{equation}
+Using Eq.~\eqref{eq:theta-character-identity} and
+$\delta=(c-1)/24$, Eqs.~\eqref{eq:corrected-e103} and
+\eqref{eq:four-point-reduced-geometric} become
+\begin{equation}
+ \boxed{
+ \cF^{S^2}_4(z)
+ =(16q)^{h-\delta}
+  z^{\delta-\eta_1-\eta_2}
+  (1-z)^{\delta-\eta_2-\eta_3}
+  \theta_3(\tau)^{(c-1)/2-4\sum_i\eta_i}\cH_4(h;q).}
+ \label{eq:four-point-zamolodchikov}
+\end{equation}
+The character is explicit in
+Eq.~\eqref{eq:four-point-reduced-geometric}, where the anomaly exponents
+contain $c$.  It is already absorbed in
+Eq.~\eqref{eq:four-point-zamolodchikov}, where they contain $c-1$.
+Consequently, retaining the explicit product in E.106 after making all
+$c\to c-1$ shifts counts the same character twice.
+
+The reduced block obeys the standard elliptic recursion
+\begin{equation}
+\boxed{
+ \cH_4(h;q)
+ =1+\sum_{r,s\geq1}
+ \frac{(16q)^{rs}A_{r,s}^{c}}
+      {h-h_{r,s}(c)}
+ P_{r,s}^{c}\!\begin{bmatrix}\eta_1\\\eta_2\end{bmatrix}
+ P_{r,s}^{c}\!\begin{bmatrix}\eta_4\\\eta_3\end{bmatrix}
+ \cH_4\!\left(h_{r,s}(c)+rs;q\right).}
+ \label{eq:four-point-h-recursion}
+\end{equation}
+
+To decide between the printed formulas numerically, we computed
+Eq.~\eqref{eq:four-point-pbw} through level six, changed variables with
+$z=\lambda(q)$, and compared every coefficient with
+Eq.~\eqref{eq:four-point-h-recursion}.  The three generic test points were
+\begin{align*}
+ &(26.215;0.13,0.27,0.41,0.56;0.91),\\
+ &(31.7;0.19,0.34,0.48,0.67;1.07),\\
+ &(42.3;0.16,0.31,0.52,0.73;1.23),
+\end{align*}
+where each row denotes $(c;\eta_1,\eta_2,\eta_3,\eta_4;h)$.  The largest
+relative errors for the corrected normalization were respectively
+$1.86\times10^{-10}$, $1.36\times10^{-10}$, and
+$7.28\times10^{-11}$.  In contrast, the literal E.103 exponent gives
+\begin{equation}
+ [q]\bigl(\cH_4^{\mathrm{E.103}}-\cH_4^{\mathrm{rec}}\bigr)
+ =16(\eta_2-\eta_4),
+ \label{eq:four-point-e103-obstruction}
+\end{equation}
+while retaining the extra character in the $c-1$ formula gives the
+universal obstruction
+\begin{equation}
+ [q^2]\bigl(\cH_4^{\mathrm{hybrid}}-\cH_4^{\mathrm{rec}}\bigr)
+ =-\frac12.
+ \label{eq:four-point-character-obstruction}
+\end{equation}
+
+The five-point formulas must therefore inherit both lessons: use the
+adjacent branch-point pairing $d_2+d_3$, and choose either the geometric
+$c$-normalization with $\chi_{\mathrm{pill}}$ or the $c-1$ normalization
+without it.  In particular, the reduced block used below is equivalently
+extracted as
+\begin{equation}
+ \boxed{
+ \cH_5
+ =\frac{\cF^{S^2}_5}
+ {\Lambda_5^{(c-1)}(z,t)
+  (4p_1)^{h_1-(c-1)/24}(4p_2)^{h_2-(c-1)/24}}.}
+ \label{eq:corrected-five-point-extraction}
+\end{equation}
+No additional character factor is allowed in the denominator of
+Eq.~\eqref{eq:corrected-five-point-extraction}.
+
+\section{Elliptic \texorpdfstring{$h$}{h}-recursion for
+\texorpdfstring{$\cH_5$}{H5}}
+
+Treat $\cH_5$ as a meromorphic function of $H=h_1$ while holding
+$a=h_2-h_1$ fixed.  A pole of the first internal edge occurs at
+$H=h_{r,s}$; replacing the null module by its descendant module sends
+\begin{equation}
+ (H,a)\longmapsto(h_{r,s}+rs,a-rs).
+ \label{eq:first-shift}
+\end{equation}
+A pole of the second edge occurs at $H+a=h_{r,s}$ and sends
+\begin{equation}
+ (H,a)\longmapsto(h_{r,s}-a,a+rs).
+ \label{eq:second-shift}
+\end{equation}
+The resulting two-channel recursion is
+\begin{equation}
+\boxed{
+\begin{aligned}
+ \cH_5(H,a;p_1,p_2)
+={}&1\\
+&+\sum_{r,s\geq1}
+ \frac{(4p_1)^{rs}A_{r,s}^{c}}
+      {H-h_{r,s}(c)}
+ P_{r,s}^{c}\!\begin{bmatrix}d_1\\d_2\end{bmatrix}
+ P_{r,s}^{c}\!\begin{bmatrix}h_{r,s}(c)+a\\d_5\end{bmatrix}
+ \cH_5\!\left(h_{r,s}(c)+rs,a-rs;p_1,p_2\right)
+ \\
+&+\sum_{r,s\geq1}
+ \frac{(4p_2)^{rs}A_{r,s}^{c}}
+      {H+a-h_{r,s}(c)}
+ P_{r,s}^{c}\!\begin{bmatrix}d_4\\d_3\end{bmatrix}
+ P_{r,s}^{c}\!\begin{bmatrix}h_{r,s}(c)-a\\d_5\end{bmatrix}
+ \cH_5\!\left(h_{r,s}(c)-a,a+rs;p_1,p_2\right).
+\end{aligned}}
+\label{eq:h-recursion}
+\end{equation}
+All unshifted arguments $c,d_i,p_1,p_2$ are implicit on the right-hand
+side.  Iterating Eq.~\eqref{eq:h-recursion} automatically generates terms
+with simultaneous poles in the two internal weights.
+
+When $d_5=0$ and the middle vertex is restricted to the identity channel,
+$h_2=h_1$ and $p_1p_2=q$.  The matrix element then reduces to the
+four-point pillow propagator, while
+\begin{equation}
+ (4p_1)^{h-c/24}(4p_2)^{h-c/24}
+ =(16q)^{h-c/24},
+\end{equation}
+providing the normalization check against the four-point result.
+
+\section{Direct PBW comparison}
+
+For an independent check, write the same sphere block in the plane comb
+frame as
+\begin{equation}
+ \cF^{\mathrm{PBW}}_5(z,t)
+ =z^{h_1-d_1-d_2}t^{h_2-h_1-d_5}
+ \sum_{n_1,n_2\geq0}C_{n_1,n_2}
+ \left(\frac{z}{t}\right)^{n_1}t^{n_2},
+ \label{eq:pbw-plane-series}
+\end{equation}
+where each $C_{n_1,n_2}$ is computed directly by contracting the two PBW
+Verma bases with inverse Gram matrices and the three descendant
+three-point tensors.  No recursion data enter this calculation.
+
+The inverse covering map in the aligned variables has the form
+\begin{equation}
+ z=16p_1p_2\,Z(p_1p_2),\qquad
+ t=4p_2\,Y(p_1,p_2),\qquad
+ \frac{z}{t}=4p_1\frac{Z}{Y},
+ \label{eq:inverse-covering-series}
+\end{equation}
+with $Z(0)=Y(0,0)=1$.  Explicitly,
+\begin{align}
+ Z(q)
+ &=\prod_{n\geq1}
+   \frac{(1+q^{2n})^8}{(1+q^{2n-1})^8},
+ \label{eq:z-cover-product}\\
+ Y(p_1,p_2)
+ &=(1+p_1)^2
+ \prod_{n\geq1}\frac{(1+q^{2n})^4}{(1+q^{2n-1})^4}
+ \nonumber\\
+ &\quad\times
+ \prod_{n\geq1}
+ \left[
+ \frac{(1+p_1^{2n+1}p_2^{2n})
+       (1+p_1^{2n-1}p_2^{2n})}
+      {(1+p_1^{2n}p_2^{2n-1})
+       (1+p_1^{2n-2}p_2^{2n-1})}
+ \right]^2,
+ \qquad q=p_1p_2.
+ \label{eq:t-cover-product}
+\end{align}
+Substituting Eqs.~\eqref{eq:inverse-covering-series}--
+\eqref{eq:t-cover-product} into Eq.~\eqref{eq:pbw-plane-series} and dividing
+by the denominator of Eq.~\eqref{eq:corrected-five-point-extraction} gives
+a direct PBW series for $\cH_5$.  Equivalently one may divide by the
+geometric factor in Eq.~\eqref{eq:full-block-c}, including exactly one
+$\chi_{\mathrm{pill}}$.  The two procedures agree by
+Eq.~\eqref{eq:theta-character-identity}.
+
+At first order the direct result is
+\begin{equation}
+ \cH_5
+ =1+
+ \frac{2(d_2-d_1)(d_5-a)}{H}\,p_1
+ +\frac{2(d_3-d_4)(d_5+a)}{H+a}\,p_2
+ +O(p^2),
+ \label{eq:first-pbw-coefficients}
+\end{equation}
+which agrees with the $(r,s)=(1,1)$ terms of
+Eq.~\eqref{eq:h-recursion}.  Generic symbolic comparison gives exact
+agreement through total bidegree three.  We then computed the PBW Gram
+matrices, three-point tensors, and the complete pillow change of variables
+with exact rational arithmetic through
+\begin{equation}
+ n_1+n_2\leq10,
+\end{equation}
+and compared the result with an independent $80$-digit numerical evaluation
+of the $h$-recursion.  This checks all $66$ coefficients in each case.  We
+used five fully asymmetric samples:
+\begin{center}
+\scriptsize
+\begin{tabular}{c|c|c|c}
+case & $c$ & $(d_1,d_2,d_3,d_4,d_5)$ & $(h_1,h_2)$\\ \hline
+1 & $26.215$  & $(0.17,0.29,0.58,0.71,0.43)$ & $(0.93,1.08)$\\
+2 & $31.7$    & $(0.21,0.34,0.63,0.79,0.49)$ & $(1.03,1.19)$\\
+3 & $42.3$    & $(0.13,0.31,0.69,0.83,0.47)$ & $(0.87,1.14)$\\
+4 & $29.3761$ & $(0.113,0.367,1.237,0.524,0.811)$ & $(1.417,0.682)$\\
+5 & $37.219$  & $(0.907,0.223,0.376,0.658,1.041)$ & $(0.749,1.533)$
+\end{tabular}
+\end{center}
+The last two samples deliberately use non-monotone external weights, and
+case 4 has $a=h_2-h_1=-0.735$; hence both signs of the middle-channel weight
+difference are tested.  The discrepancies follow.
+\begin{center}
+\begin{tabular}{c|c|c|c}
+case & $c$ & $(h_1,h_2)$ & largest relative discrepancy\\ \hline
+1 & $26.215$ & $(0.93,1.08)$ & $1.363\times10^{-74}$ at $(10,0)$\\
+2 & $31.7$   & $(1.03,1.19)$ & $1.225\times10^{-74}$ at $(10,0)$\\
+3 & $42.3$   & $(0.87,1.14)$ & $6.019\times10^{-74}$ at $(10,0)$\\
+4 & $29.3761$ & $(1.417,0.682)$ & $3.297\times10^{-73}$ at $(10,0)$\\
+5 & $37.219$ & $(0.749,1.533)$ & $4.539\times10^{-73}$ at $(0,10)$
+\end{tabular}
+\end{center}
+As a genericity audit, all seven weights are pairwise distinct in each case,
+all $65$ nonconstant PBW coefficients through total order ten are nonzero,
+and every denominator actually visited by the recursion was recorded.  The
+smallest denominator magnitude over all five cases was
+$1.232\times10^{-3}$, far from a pole at $80$-digit precision.  Thus the
+comparison comprises $5\times66=330$ coefficients and does not rely on a
+symmetric choice, a vanishing coefficient, or an accidental null-state
+specialization.
+Using the literal $h_3+h_4$ exponent printed in E.103 instead produces
+\begin{equation}
+ [p_1p_2]\bigl(\cH_5^{\mathrm{literal\ E.103}}
+                   -\cH_5^{\mathrm{recursion}}\bigr)
+ =16(d_2-d_4),
+ \label{eq:e103-pbw-obstruction}
+\end{equation}
+which is nonzero for generic weights.  The direct PBW calculation therefore
+both validates Eq.~\eqref{eq:h-recursion} through order ten and fixes the
+corrected $1-z$ conformal factor.  As a second regression test, using the
+$c-1$ prefactor together with an additional character produces
+\begin{equation}
+ [p_1^2p_2^2]\bigl(\cH_5^{\mathrm{hybrid}}
+                         -\cH_5^{\mathrm{recursion}}\bigr)
+ =-\frac12,
+ \label{eq:five-point-character-obstruction}
+\end{equation}
+exactly as predicted by the four-point audit.  This fixes the character
+normalization in the five-point computation as well.
+
+\section{Comparison with the CCY plane \texorpdfstring{$h$}{h}-recursion}
+
+There is a second, already-known $h$-recursion for the same five-point
+block: the linear-channel plane recursion of Cho--Collier--Yin (CCY),
+specialized from their Eq.~(3.26).  It is important not to identify this
+representation term by term with Eq.~\eqref{eq:h-recursion}.  Put
+\begin{equation}
+ x=\frac{z}{t},\qquad H=h_1,\qquad a=h_2-h_1,\qquad
+ e_L=d_1-H,\qquad e_R=d_4-H,
+ \label{eq:ccy-plane-variables}
+\end{equation}
+and let $G(H,a,e_L,e_R;x,t)$ be the normalized plane descendant series,
+whose regular term is one.  In the notation of this note the CCY recursion
+is
+\begin{equation}
+\boxed{
+\begin{aligned}
+G(H,a,e_L,e_R;x,t)={}&1\\
+&+\sum_{r,s\geq1}\frac{x^{rs}A_{r,s}^{c}}{H-h_{r,s}}
+ P_{r,s}^{c}\!\begin{bmatrix}h_{r,s}+e_L\\d_2\end{bmatrix}
+ P_{r,s}^{c}\!\begin{bmatrix}h_{r,s}+a\\d_5\end{bmatrix}\\[-2pt]
+&\qquad\times
+ G(h_{r,s}+rs,a-rs,e_L-rs,e_R-rs;x,t)\\
+&+\sum_{r,s\geq1}\frac{t^{rs}A_{r,s}^{c}}{H+a-h_{r,s}}
+ P_{r,s}^{c}\!\begin{bmatrix}h_{r,s}-a\\d_5\end{bmatrix}
+ P_{r,s}^{c}\!\begin{bmatrix}h_{r,s}-a+e_R\\d_3\end{bmatrix}\\[-2pt]
+&\qquad\times G(h_{r,s}-a,a+rs,e_L,e_R;x,t).
+\end{aligned}}
+\label{eq:ccy-plane-h-recursion}
+\end{equation}
+Here and below $h_{r,s}=h_{r,s}(c)$.  The pole denominators, the two
+shifts of $(H,a)$, and the fusion polynomials adjacent to the middle
+insertion agree exactly with Eq.~\eqref{eq:h-recursion}.  The boundary
+fusion polynomials and the expansion variables do not: CCY use $(x,t)$
+and send $H,d_1,d_4\to\infty$ while keeping $(a,e_L,e_R)$ fixed.  The
+pillow limit instead keeps every $d_i$ fixed, uses $(4p_1,4p_2)$, and has
+the twisted-character asymptotic before the character is stripped.  Thus
+Eq.~\eqref{eq:h-recursion} is not obtained from
+Eq.~\eqref{eq:ccy-plane-h-recursion} by the replacements
+$x\mapsto4p_1$ and $t\mapsto4p_2$ alone; the coordinate change and the
+complete conformal prefactor must be transformed together.
+
+As a normalization and implementation check, we evaluated
+Eq.~\eqref{eq:ccy-plane-h-recursion} at $80$-digit precision and compared
+all $66$ coefficients with $n_1+n_2\leq10$ against the exact rational PBW
+series at the parameters in Eq.~\eqref{eq:value-test-weights} below.  The
+largest relative discrepancy is $1.51\times10^{-69}$, at coefficient
+$(n_1,n_2)=(10,0)$.  This independently verifies both the CCY dictionary
+and the plane-recursion implementation used in the following value test.
+
+\section{Value comparison of the two \texorpdfstring{$h$}{h}-recursions
+with the central-charge recursion}
+
+The coefficient audit can be strengthened to a comparison of the block at
+finite moduli.  We choose
+\begin{equation}
+ \begin{gathered}
+ c=31.7,\qquad
+ (d_1,d_2,d_3,d_4,d_5)=(0.21,0.34,0.63,0.79,0.49),\\
+ (h_1,h_2)=(1.03,1.19),
+ \end{gathered}
+ \label{eq:value-test-weights}
+\end{equation}
+fix $z=0.08$, and scan $0.12\leq t\leq0.72$.  At each point, the aligned
+segment nomes are obtained from the exact product map
+\begin{equation}
+ p_1p_2=q(z),\qquad t=4p_2Y(p_1,p_2),
+ \label{eq:value-test-map}
+\end{equation}
+not from its leading cusp approximation.  We evaluate the pillow recursion
+through total elliptic degree ten and restore the complete plane block with
+Eq.~\eqref{eq:full-block-c-minus-one}.  We also evaluate the CCY plane
+$h$-recursion, Eq.~\eqref{eq:ccy-plane-h-recursion}, through total degree
+ten in $(z/t,t)$.  Independently, the CCY fixed-weight $c$-recursion gives
+the same plane descendant series through total degree $22$.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.9\textwidth]{\detokenize{../../Data Set/h-Recursion/sphere_five_pillow_h_vs_c_fixed_z.png}}
+ \caption{The reconstructed pillow $h$-recursion, the CCY plane
+ $h$-recursion, and the independent CCY $c$-recursion at fixed $z=0.08$.
+ The lower panel shows the two relative differences from the order-$22$
+ $c$-recursion together with the changes under $8\to10$ in each
+ $h$-recursion and $20\to22$ in the $c$-recursion.}
+ \label{fig:pillow-h-vs-c-fixed-z}
+\end{figure}
+
+For all $61$ sample points, each $h$--$c$ difference is smaller than the sum
+of its displayed $h$-recursion shift and the $c$-recursion shift.  For the
+pillow representation the median and maximum relative differences are
+$1.22\times10^{-9}$ and $2.77\times10^{-5}$; for the CCY plane
+$h$-recursion they are $1.81\times10^{-5}$ and $2.52\times10^{-3}$.
+At the central point $t=0.42$, the respective differences are
+$9.62\times10^{-11}$ and $6.33\times10^{-6}$.  At the least convergent
+endpoint $t=0.72$, the order shifts are $2.77\times10^{-7}$ for the pillow
+$h$-recursion, $3.20\times10^{-3}$ for the CCY plane $h$-recursion, and
+$2.98\times10^{-5}$ for the $c$-recursion.  Therefore both $h$-recursions
+converge to the same block within independently measured truncation
+uncertainty, while the pillow variables give substantially faster
+convergence at equal total order over this scan.
+
+\section{Sphere \texorpdfstring{$n$}{n}-point open-necklace extension}
+
+The five-point construction extends without changing the boundary-state
+geometry.  Let
+\begin{equation}
+ m=n-4,\qquad r=m+1=n-3,
+ \label{eq:npoint-counts}
+\end{equation}
+where $m$ is the number of ordinary mobile insertions and $r$ is the number
+of internal propagation segments.  Keep the four branch-point weights
+$(d_1,d_2,d_3,d_4)$ and denote the mobile weights by
+$\mu_1,\ldots,\mu_m$.  If $w_j=w(t_j)$ are ordered along the chosen pillow
+evolution contour, set $w_0=0$, $w_r=\pi\tau$, and define raw segment
+parameters
+\begin{equation}
+ \widetilde p_i=e^{i(w_i-w_{i-1})},\qquad
+ \prod_{i=1}^{r}\widetilde p_i=q.
+ \label{eq:npoint-raw-segments}
+\end{equation}
+The phases are fixed by the collision limits of the chosen comb channel.
+For the nested real ordering
+\begin{equation}
+ 0<z<t_1<\cdots<t_m<1,
+ \qquad
+ x_1=\frac{z}{t_1},\quad
+ x_i=\frac{t_{i-1}}{t_i}\ (2\leq i\leq m),\quad
+ x_r=t_m,
+ \label{eq:npoint-plane-ope-variables}
+\end{equation}
+the simultaneous comb cusp is $x_i\to0$.  The degenerating pillow map gives
+\begin{equation}
+ e^{iw(t_j)}=-\frac{z}{4t_j}\bigl[1+O(\boldsymbol x)\bigr],
+ \qquad q=\frac{z}{16}\bigl[1+O(z)\bigr].
+ \label{eq:npoint-pillow-collision-asymptotic}
+\end{equation}
+It follows directly that, for $r\geq2$,
+\begin{align}
+ \widetilde p_1
+ &=-\frac{x_1}{4}\bigl[1+O(\boldsymbol x)\bigr],
+ &
+ \widetilde p_i
+ &=x_i\bigl[1+O(\boldsymbol x)\bigr]
+ &&(2\leq i\leq r-1),
+ \nonumber\\
+ \widetilde p_r
+ &=-\frac{x_r}{4}\bigl[1+O(\boldsymbol x)\bigr].
+ \label{eq:npoint-raw-collision-asymptotic}
+\end{align}
+Therefore the OPE-aligned phases are not arbitrary:
+\begin{equation}
+ \boxed{
+ \varepsilon_1=\varepsilon_r=-1,
+ \qquad \varepsilon_i=+1\quad(2\leq i\leq r-1),
+ \qquad p_i=\varepsilon_i\widetilde p_i.}
+ \label{eq:npoint-aligned-phases}
+\end{equation}
+Their product is one, and hence
+\begin{equation}
+ \boxed{\prod_{i=1}^{r}p_i=q.}
+ \label{eq:npoint-product-nome}
+\end{equation}
+For another analytic continuation the phases are continued from
+Eq.~\eqref{eq:npoint-aligned-phases}; they are not independently selectable.
+
+Up to translations that place every middle vertex at its sewing seam, the
+projected matrix element is
+\begin{equation}
+\boxed{
+ \cM_n=
+ \langle\psi_{43}|\PP_{h_r}p_r^{D}V_{\mu_m}
+ \PP_{h_{r-1}}p_{r-1}^{D}\cdots
+ V_{\mu_1}p_1^{D}\PP_{h_1}|\psi_{12}\rangle,
+ \qquad D=L_0-\frac{c}{24}.}
+ \label{eq:npoint-pillow-matrix-element}
+\end{equation}
+All primary three-point constants are stripped.  Since every mobile
+operator is inserted away from a branch point, it transforms by its ordinary
+primary Jacobian.  In the present conventions,
+\begin{equation}
+ w(t)=\frac{1}{\theta_3(\tau)^2}
+ \int_0^t\frac{dy}{\sqrt{y(1-y)(z-y)}},
+ \qquad
+ \frac{dw_j}{dt_j}=
+ \frac{1}{\theta_3(\tau)^2
+ \sqrt{t_j(1-t_j)(z-t_j)}}.
+ \label{eq:npoint-pillow-map-jacobian}
+\end{equation}
+
+\subsection{Exact sphere-to-pillow conformal factor and extraction recipe}
+
+The relation needed for an actual computation is exact, before taking any
+large-internal-weight limit.  It is the $n$-point generalization of the
+four-point pillow transformation:
+\begin{equation}
+ \boxed{\begin{aligned}
+ \cF_n^{S^2}(z;\boldsymbol t)
+ ={}&
+ \theta_3(\tau)^{c/2-4\sum_{a=1}^{4}d_a}
+ z^{c/24-d_1-d_2}(1-z)^{c/24-d_2-d_3}
+ \\[-1mm]
+ &\times
+ \prod_{j=1}^{m}\left(\frac{dw_j}{dt_j}\right)^{\mu_j}
+ \cM_n(\tau;\boldsymbol w).
+ \end{aligned}}
+ \label{eq:npoint-exact-sphere-pillow}
+\end{equation}
+Thus there are no additional pairwise prime-form factors between the
+mobile insertions.  Such dependence remains inside the matrix element
+$\cM_n$; the coordinate change supplies one local Jacobian per mobile
+primary.  All square-root branches are continued together with the pillow
+map.
+
+For later use, define for arbitrary $\kappa$
+\begin{align}
+ \Lambda_n^{(\kappa)}
+ :={}&
+ \theta_3(\tau)^{\kappa/2-4\sum_{a=1}^{4}d_a
+                         -2\sum_{j=1}^{m}\mu_j}
+ z^{\kappa/24-d_1-d_2}(1-z)^{\kappa/24-d_2-d_3}
+ \nonumber\\[-1mm]
+ &\times\prod_{j=1}^{m}
+ [t_j(1-t_j)(z-t_j)]^{-\mu_j/2}.
+ \label{eq:npoint-lambda}
+\end{align}
+Equations~\eqref{eq:npoint-pillow-map-jacobian} and
+\eqref{eq:npoint-exact-sphere-pillow} are then simply
+\begin{equation}
+ \boxed{\cF_n^{S^2}=\Lambda_n^{(c)}\cM_n.}
+ \label{eq:npoint-exact-lambda-relation}
+\end{equation}
+
+Once the effective plumbing coordinates $\rho_i$ are fixed below, the two
+equivalent useful forms are
+\begin{align}
+ \boxed{\cF_n^{S^2}
+ ={}
+ \Lambda_n^{(c)}
+ \left[\prod_i\rho_i^{h_i-c/24}\right]
+ \chi_{\mathrm{pill}}(q)\cH_n}
+ \label{eq:npoint-full-c}\\
+ \boxed{\cF_n^{S^2}
+ ={}
+ \Lambda_n^{(c-1)}
+ \left[\prod_i\rho_i^{h_i-(c-1)/24}\right]\cH_n}
+ \label{eq:npoint-full-c-minus-one}
+\end{align}
+The second line is the most convenient PBW-to-elliptic conversion.  In
+particular, the reduced elliptic block is extracted from a direct sphere
+block by
+\begin{equation}
+ \boxed{\begin{aligned}
+ \cH_n(H,\boldsymbol a;\boldsymbol p)
+ ={}&
+ \frac{\cF_n^{S^2}(z;\boldsymbol t)}
+ {\Lambda_n^{(c-1)}(z;\boldsymbol t)
+  \displaystyle\prod_{i=1}^{r}
+  \rho_i^{h_i-(c-1)/24}}
+ \\[1mm]
+ ={}&
+ \frac{\cF_n^{S^2}(z;\boldsymbol t)}
+ {\Lambda_n^{(c)}(z;\boldsymbol t)
+  \displaystyle\prod_{i=1}^{r}\rho_i^{h_i-c/24}
+  \chi_{\mathrm{pill}}(q)}.
+ \end{aligned}}
+ \label{eq:npoint-extraction-c-minus-one}
+\end{equation}
+The equality follows from
+\begin{equation}
+ \theta_3(\tau)^{1/2}[z(1-z)]^{1/24}(16q)^{-1/24}
+ =\chi_{\mathrm{pill}}(q)^{-1},
+ \label{eq:npoint-theta-character-identity}
+\end{equation}
+together with $\prod_i\rho_i=16q$.  Notice that all mobile-position and
+mobile-weight factors cancel in passing between the two conventions.
+
+The computational recipe is therefore:
+\begin{enumerate}
+ \item choose the branch quartet $(0,z,1,\infty)$ and order the mobile
+ insertions $t_j$ in the desired open-necklace channel;
+ \item evaluate $w_j=w(t_j)$ and form the raw segment nomes
+ $\widetilde p_i$;
+ \item determine the phases from the nested OPE collision limit, then form
+ $p_i$ and the endpoint-normalized $\rho_i$;
+ \item compute $\Lambda_n^{(c-1)}$ and divide the direct PBW sphere block
+ by either denominator in Eq.~\eqref{eq:npoint-extraction-c-minus-one};
+ \item re-expand the result in the aligned $p_i$ and apply the edge
+ $h$-recursion to the resulting $\cH_n$.
+\end{enumerate}
+
+\subsection{Endpoint normalization and the diagonal large-weight seed}
+
+The factors of $4$ belong to the two regulated pillow boundary states, not
+to every propagation segment.  The effective plumbing parameters are
+therefore
+\begin{equation}
+ \boxed{\rho_i=4^{\delta_{i1}+\delta_{ir}}p_i,
+ \qquad \prod_{i=1}^{r}\rho_i=16q.}
+ \label{eq:npoint-effective-plumbing}
+\end{equation}
+Equations~\eqref{eq:npoint-raw-collision-asymptotic} and
+\eqref{eq:npoint-aligned-phases} now give the stronger componentwise
+normalization for $r\geq2$
+\begin{equation}
+ \boxed{\rho_i=x_i\bigl[1+O(\boldsymbol x)\bigr],
+ \qquad i=1,\ldots,r.}
+ \label{eq:npoint-rho-ope-alignment}
+\end{equation}
+For $r=1$, define $x_1=z$; then $\rho_1=16q=x_1[1+O(x_1)]$ gives the
+same statement.
+This formula also covers $r=1$: both Kronecker deltas contribute and give
+$\rho_1=16q$, the four-point variable.  For $r=2$ it gives
+$(\rho_1,\rho_2)=(4p_1,4p_2)$, while for $r>2$ the intermediate segments
+carry no additional factor of $4$.  Assigning $4p_i$ to every segment
+would instead give $4^rq$ and would fail the identity-insertion reduction
+to the four-point block.
+
+Now set
+\begin{equation}
+ h_i=H+a_i,\qquad a_1=0,\qquad H\longrightarrow\infty,
+ \label{eq:npoint-diagonal-limit}
+\end{equation}
+with $c,d_a,\mu_j,a_i,p_i$ fixed.  In an orthonormal descendant basis the
+$j$th middle vertex obeys the same CCY diagonal limit used at five points,
+\begin{equation}
+ \frac{\langle H+a_{j+1},A|V_{\mu_j}|H+a_j,B\rangle}
+ {\|H+a_{j+1},A\|\,\|H+a_j,B\|}
+ \longrightarrow\delta_{AB}.
+ \label{eq:npoint-diagonal-vertex}
+\end{equation}
+Thus all oscillator labels along the open necklace agree.  Their descendant
+propagation is
+$\prod_i p_i^{|A|}=q^{|A|}$, and the two terminal wavefunctions contract
+them exactly as in the four-point pillow amplitude.  Consequently no new
+character is generated by an additional middle insertion.  Coefficientwise
+in the segment parameters,
+\begin{equation}
+\boxed{
+ \cM_n
+ \underset{H\to\infty}{\sim}
+ \left[\prod_{i=1}^{r}\rho_i^{h_i-c/24}\right]
+ \chi_{\mathrm{pill}}(q),
+ \qquad
+ \chi_{\mathrm{pill}}(q)=
+ \prod_{k\geq1}(1-q^{2k})^{-1/2}.}
+ \label{eq:npoint-large-h}
+\end{equation}
+Equivalently,
+\begin{equation}
+ \cM_n\sim
+ (16q)^{H-c/24}
+ \left[\prod_{i=2}^{r}\rho_i^{a_i}\right]
+ \chi_{\mathrm{pill}}(q).
+ \label{eq:npoint-large-h-fixed-differences}
+\end{equation}
+The product involving $a_i$ is finite primary propagation; the oscillator
+regular part depends only on $q$.  For example, at six points
+$r=3$ and $(\rho_1,\rho_2,\rho_3)=(4p_1,p_2,4p_3)$, so this finite factor is
+$p_2^{a_2}(4p_3)^{a_3}$ rather than $(4p_2)^{a_2}(4p_3)^{a_3}$.
+
+Define the reduced block by
+\begin{equation}
+ \cM_n=
+ \left[\prod_{i=1}^{r}\rho_i^{h_i-c/24}\right]
+ \chi_{\mathrm{pill}}(q)\,
+ \cH_n(H,\boldsymbol a;\boldsymbol p),
+ \qquad \cH_n\longrightarrow1.
+ \label{eq:npoint-reduced-block}
+\end{equation}
+Substituting this definition into
+Eq.~\eqref{eq:npoint-exact-lambda-relation} reproduces the exact full-block
+relations~\eqref{eq:npoint-full-c}--\eqref{eq:npoint-full-c-minus-one}.
+
+\subsection{The \texorpdfstring{$(n-3)$}{(n-3)}-edge recursion}
+
+At a pole on edge $i$,
+\begin{equation}
+ H+a_i=h_{\alpha,\beta}(c).
+ \label{eq:npoint-edge-pole}
+\end{equation}
+The two fusion factors adjacent to that edge are conveniently written
+\begin{align}
+ \mathcal L_{i;\alpha,\beta}
+ &:={}
+ \begin{cases}
+ P_{\alpha,\beta}^{c}\!\begin{bmatrix}d_1\\d_2\end{bmatrix},&i=1,\\[3pt]
+ P_{\alpha,\beta}^{c}\!\begin{bmatrix}
+ h_{\alpha,\beta}+a_{i-1}-a_i\\\mu_{i-1}
+ \end{bmatrix},&i>1,
+ \end{cases}
+ \label{eq:npoint-left-residue}\\
+ \mathcal R_{i;\alpha,\beta}
+ &:={}
+ \begin{cases}
+ P_{\alpha,\beta}^{c}\!\begin{bmatrix}
+ h_{\alpha,\beta}+a_{i+1}-a_i\\\mu_i
+ \end{bmatrix},&i<r,\\[3pt]
+ P_{\alpha,\beta}^{c}\!\begin{bmatrix}d_4\\d_3\end{bmatrix},&i=r.
+ \end{cases}
+ \label{eq:npoint-right-residue}
+\end{align}
+The null-submodule shift is the map
+\begin{align}
+ \mathsf T_{1;\alpha,\beta}:&\quad
+ (H,a_2,\ldots,a_r)\longmapsto
+ (h_{\alpha,\beta}+\alpha\beta,
+  a_2-\alpha\beta,\ldots,a_r-\alpha\beta),
+ \label{eq:npoint-base-shift}\\
+ \mathsf T_{i;\alpha,\beta}:&\quad
+ (H,a_i)\longmapsto
+ (h_{\alpha,\beta}-a_i,a_i+\alpha\beta),
+ \qquad i>1,
+ \label{eq:npoint-nonbase-shift}
+\end{align}
+with all $a_{j\ne i}$ fixed in the second line.  These shifts replace the
+singular module by the module of weight
+$h_{\alpha,\beta}+\alpha\beta$ while preserving every
+other physical internal weight at the pole.
+
+The proposed sphere $n$-point pillow recursion is therefore
+\begin{equation}
+\boxed{
+ \cH_n(H,\boldsymbol a;\boldsymbol p)
+ =1+
+ \sum_{i=1}^{r}\sum_{\alpha,\beta\geq1}
+ \frac{\rho_i^{\alpha\beta}A_{\alpha,\beta}^{c}
+       \mathcal L_{i;\alpha,\beta}\mathcal R_{i;\alpha,\beta}}
+      {H+a_i-h_{\alpha,\beta}(c)}
+ \cH_n\!\left(
+ \mathsf T_{i;\alpha,\beta}(H,\boldsymbol a);\boldsymbol p\right).}
+ \label{eq:npoint-h-recursion}
+\end{equation}
+For two segments this formula reproduces Eq.~\eqref{eq:h-recursion} term by
+term.  For one segment
+it is the four-point elliptic recursion.  If all mobile operators are set to
+the identity and all $h_i$ are identified, the projectors must first be
+composed; Eq.~\eqref{eq:npoint-effective-plumbing} then reduces the entire
+propagation to $(16q)^{L_0-c/24}$.  This is a matrix-element reduction and
+should not be performed term by term after separating coincident pole
+families.
+
+The new part of this proposal is therefore not a new regular function for
+each insertion.  Once the fixed-external-weight pillow boundary asymptotic
+is accepted, the CCY diagonal-vertex limit forces every additional mobile
+operator to act as the identity on the leading oscillator labels.  The same
+single twisted character supplies the regular term for all $n$.
+
+\subsection{Six-point PBW consistency certificate}
+
+The first genuine three-edge test is the comb block at
+$(0,z,t_1,t_2,1,\infty)$.  Put
+\begin{equation}
+ x_1=\frac{z}{t_1},\qquad x_2=\frac{t_1}{t_2},\qquad x_3=t_2,
+ \qquad q=p_1p_2p_3,
+ \label{eq:sixpoint-ope-coordinates}
+\end{equation}
+and define the two exact mobile-coordinate units by
+\begin{equation}
+ t_1=4p_2p_3Y_1,\qquad t_2=4p_3Y_2,
+ \qquad z=16qZ.
+ \label{eq:sixpoint-mobile-units}
+\end{equation}
+Here $Y_1$ is the five-point pillow product with aggregate nomes
+$(p_1,p_2p_3)$, $Y_2$ is the same product with aggregate nomes
+$(p_1p_2,p_3)$, and $Z=z/(16q)$.  The direct PBW variables therefore obey
+the exact identities
+\begin{equation}
+ \boxed{
+ x_1=4p_1\frac{Z}{Y_1},\qquad
+ x_2=p_2\frac{Y_1}{Y_2},\qquad
+ x_3=4p_3Y_2.}
+ \label{eq:sixpoint-exact-variable-map}
+\end{equation}
+This equation tests the central assertion that the middle plumbing segment
+has no factor of $4$.
+
+The plane primary factor used in the independent PBW computation is
+\begin{equation}
+ z^{h_1-d_1-d_2}
+ t_1^{h_2-h_1-d_3}
+ t_2^{h_3-h_2-d_4}.
+ \label{eq:sixpoint-plane-primary-factor}
+\end{equation}
+After multiplying by the inverse of the exact conformal factor in
+Eq.~\eqref{eq:npoint-exact-sphere-pillow}, the remaining unit-series factor
+is
+\begin{align}
+ Z^{h_1-c/24}Y_1^{a_2}Y_2^{a_3-a_2}
+ &[(1-t_1)(1-z/t_1)]^{d_3/2}
+ [(1-t_2)(1-z/t_2)]^{d_4/2}
+ \nonumber\\[-1mm]
+ &\times
+ \theta_3^{-c/2+4(d_1+d_2+d_5+d_6)+2(d_3+d_4)}
+ (1-z)^{-c/24+d_2+d_5}\chi_{\mathrm{pill}}^{-1}.
+ \label{eq:sixpoint-pbw-stripping-factor}
+\end{align}
+Together with a factor $4^{n_1+n_3}$ on a PBW monomial
+$x_1^{n_1}x_2^{n_2}x_3^{n_3}$, this is the complete direct conversion to
+$\cH_6$.
+
+Two independent executable checks were performed.
+First, all $20$ coefficients with $n_1+n_2+n_3\leq3$ were computed with
+generic symbolic
+$(H,a_2,a_3,d_1,\ldots,d_6)$ and
+$c=1+6(b+b^{-1})^2$.  Sparse polynomial cross-multiplication proves that
+every PBW coefficient equals the corresponding three-edge recursion
+coefficient exactly, including all ten coefficients of total degree three.
+
+Second, all $286$ coefficients with total degree at most ten were tested at
+each of ten asymmetric generic internal-weight points.  This ensemble
+includes strictly ascending and descending triples, central peaks and
+valleys, two near-equal nonmonotone triples, and widely separated weights.
+The plane PBW Gram matrices,
+three-point tensors, coordinate transformation, and conformal-factor
+stripping were evaluated with exact rational arithmetic; the recursion was
+evaluated independently at $80$ decimal digits.  Before each PBW evaluation,
+an exhaustive traversal of every affine recursion shift through total degree
+ten rejected any point within $10^{-4}$ of a visited Kac denominator.  The
+choices and audit results were
+\begin{center}
+\scriptsize
+\begin{tabular}{c|c|c|c}
+case & $(h_1,h_2,h_3)$ & minimum pole denominator & maximum relative error\\
+\hline
+1 & $(0.9371,1.0837,1.3321)$ & $1.60\times10^{-3}$ & $2.85\times10^{-71}$\\
+2 & $(1.4193,0.6871,1.1098)$ & $1.34\times10^{-3}$ & $5.16\times10^{-71}$\\
+3 & $(0.7517,1.5372,0.8894)$ & $9.97\times10^{-3}$ & $4.24\times10^{-70}$\\
+4 & $(1.6423,1.2711,0.8237)$ & $5.73\times10^{-3}$ & $3.22\times10^{-71}$\\
+5 & $(0.9043,0.9187,0.8871)$ & $2.80\times10^{-3}$ & $7.39\times10^{-71}$\\
+6 & $(0.6189,1.2473,1.8891)$ & $4.98\times10^{-3}$ & $2.53\times10^{-70}$\\
+7 & $(1.1267,1.8429,0.5679)$ & $1.71\times10^{-3}$ & $3.44\times10^{-69}$\\
+8 & $(1.7731,0.5427,1.2863)$ & $4.82\times10^{-3}$ & $7.38\times10^{-73}$\\
+9 & $(1.1047,1.1299,1.0873)$ & $6.63\times10^{-3}$ & $5.43\times10^{-72}$\\
+10 & $(0.4831,1.9637,1.2249)$ & $6.00\times10^{-4}$ & $2.29\times10^{-69}$
+\end{tabular}
+\end{center}
+Cases $1,4,5,10$ use $c=26.215$, cases $2,6,7$ use $c=29.3761$, and
+cases $3,8,9$ use $c=37.219$.  Each group reuses one generic external-weight
+tuple; the exact tuples are stored in the executable certificate.
+All nine weights are distinct at every point, no nonconstant PBW
+coefficient vanishes, and no visited recursion denominator is smaller than
+the values shown.  Thus $2860$ numerical coefficients pass.  The global
+worst case is coefficient $(0,10,0)$ in case 7, precisely a pure excitation
+of the unrescaled middle segment.
+
+The executable certificates are the symbolic-order-three and
+numerical-order-ten six-point checkers in
+\path{Code/sphere_five_kummer_h_recursion/}.
+
+\subsection{Six-point value comparison with the central-charge recursion}
+
+We next compare values of the reconstructed pillow block with the
+independent fixed-internal-weight $c$-recursion.  Keep the last two mobile
+insertions fixed and vary the first one in the ordered real cell:
+\begin{equation}
+ t_1=0.32,\qquad t_2=0.62,\qquad 0.015\leq z\leq0.20.
+ \label{eq:sixpoint-value-moduli}
+\end{equation}
+At every $z$, set $q=q(z)$ and let $T(p,q)$ denote the exact five-point
+product $4pY(q/p,p)$.  The six-point inverse map is particularly simple:
+\begin{equation}
+ \boxed{
+ T(P_{23},q)=t_1,\qquad T(p_3,q)=t_2,\qquad
+ p_1=\frac{q}{P_{23}},\qquad p_2=\frac{P_{23}}{p_3}.}
+ \label{eq:sixpoint-value-inverse-map}
+\end{equation}
+Thus $P_{23}=p_2p_3$ and $p_1p_2p_3=q$ hold exactly; no multivariate root
+search is required.  We solved the two monotone real equations using the
+infinite product itself.  The largest coordinate residual in the scan was
+$7.8\times10^{-67}$.
+
+The generic parameters were
+\begin{equation}
+ \begin{gathered}
+ c=26.215,\qquad
+ (d_1,\ldots,d_6)=(0.17,0.29,0.43,0.58,0.71,0.86),\\
+ (h_1,h_2,h_3)=(0.9371,1.0837,1.3321),
+ \end{gathered}
+ \label{eq:sixpoint-value-weights}
+\end{equation}
+where the external weights are ordered at
+$(0,z,t_1,t_2,1,\infty)$.  With
+$\delta=(c-1)/24$, the pillow computation was restored to the plane block
+as
+\begin{equation}
+ \cF^{(h,N)}_6=
+ \Lambda_6^{(c-1)}
+ (4p_1)^{h_1-\delta}p_2^{h_2-\delta}(4p_3)^{h_3-\delta}
+ \cH_6^{(N)}(p_1,p_2,p_3).
+ \label{eq:sixpoint-value-pillow-reconstruction}
+\end{equation}
+This is compared with
+\begin{equation}
+ \cF^{(c,N)}_6=
+ z^{h_1-d_1-d_2}t_1^{h_2-h_1-d_3}t_2^{h_3-h_2-d_4}
+ \sum_{n_1+n_2+n_3\leq N}
+ C^{(c)}_{n_1n_2n_3}
+ \left(\frac{z}{t_1}\right)^{n_1}
+ \left(\frac{t_1}{t_2}\right)^{n_2}t_2^{n_3},
+ \label{eq:sixpoint-value-c-recursion}
+\end{equation}
+where $C^{(c)}$ is generated by the fixed-weight central-charge recursion.
+The displayed curves use $N=10$ for the elliptic recursion and $N=20$ for
+the $c$-recursion.  Their observed truncation scales are measured by
+$8\to10$ and $18\to20$, respectively.
+
+\begin{figure}[H]
+ \centering
+ \includegraphics[width=0.9\textwidth]{\detokenize{../../Data Set/h-Recursion/sphere_six_pillow_h_vs_c_fixed_t1_t2.png}}
+ \caption{The sphere six-point chiral block as the first mobile insertion
+ $z$ varies while $t_1,t_2$ and all weights remain fixed.  The upper-panel
+ curves are visually indistinguishable.  The lower panel compares their
+ relative difference with the independently observed elliptic and
+ central-charge truncation shifts.}
+ \label{fig:sixpoint-pillow-h-vs-c-fixed-t1-t2}
+\end{figure}
+
+Across all $61$ points, the median relative difference is
+$9.25\times10^{-6}$ and the maximum is $2.91\times10^{-5}$, attained at
+$z=0.20$.  At that endpoint the elliptic $8\to10$ shift is
+$1.78\times10^{-6}$ and the $c$-recursion $18\to20$ shift is
+$4.98\times10^{-5}$.  Point by point, the disagreement is smaller than the
+sum of these two shifts; its maximum ratio to that sum is $0.563$.  The
+six-point elliptic and central-charge recursions therefore agree throughout
+the scan within an uncertainty estimated independently from each series.
+
+\paragraph{Posterior convergence of the order-ten elliptic truncation.}
+The $8\to10$ shift used in Fig.~\ref{fig:sixpoint-pillow-h-vs-c-fixed-t1-t2}
+is deliberately conservative: it includes two complete shells already
+retained in the order-ten answer.  To estimate the omitted tail more
+directly, we extended only the elliptic recursion to total degree twelve.
+For
+\begin{equation}
+ \epsilon_N(z):=
+ \frac{|\cF_6^{(h,N)}(z)-\cF_6^{(h,N-1)}(z)|}
+ {|\cF_6^{(h,N)}(z)|},
+ \label{eq:sixpoint-shell-size}
+\end{equation}
+the shell sizes over the same $61$ points are
+\begin{center}
+\begin{tabular}{c|c|c}
+shell & median $\epsilon_N$ & maximum $\epsilon_N$\\
+\hline
+$N=10$ & $4.91\times10^{-7}$ & $1.54\times10^{-6}$\\
+$N=11$ & $2.26\times10^{-7}$ & $6.47\times10^{-7}$\\
+$N=12$ & $1.07\times10^{-7}$ & $2.62\times10^{-7}$
+\end{tabular}
+\end{center}
+There is mild pointwise alternation, so the most useful diagnostic is the
+combined two-shell change
+\begin{equation}
+ \eta_{10}^{(12)}(z):=
+ \frac{|\cF_6^{(h,12)}(z)-\cF_6^{(h,10)}(z)|}
+ {|\cF_6^{(h,12)}(z)|}.
+ \label{eq:sixpoint-order-ten-posterior}
+\end{equation}
+Its minimum, median, and maximum are respectively
+$1.18\times10^{-7}$, $3.19\times10^{-7}$, and
+$9.09\times10^{-7}$.  The maximum occurs at $z=0.015$; at the midpoint
+$z=0.1075$ and the opposite endpoint $z=0.20$ the values are
+$3.19\times10^{-7}$ and $1.18\times10^{-7}$.  Thus a conservative
+posterior statement for this real-moduli scan is
+\begin{equation}
+ \boxed{\text{relative truncation uncertainty of the order-ten elliptic
+ block is below }10^{-6}.}
+ \label{eq:sixpoint-order-ten-convergence}
+\end{equation}
+This is an empirical next-shell estimate, not a rigorous tail bound.  It is
+nevertheless much smaller than the maximum $2.90\times10^{-5}$ elliptic--$c$
+difference and the maximum $4.98\times10^{-5}$ $c$-recursion
+$18\to20$ shift.  Hence the value comparison is limited by the slower
+central-charge series, not by the order-ten elliptic truncation.
+
+The script, CSV table, JSON summary, and vector/raster plots are stored in
+\path{Code/sphere_five_kummer_h_recursion/} and
+\path{Data Set/h-Recursion/}.
+
+The formulas above are chiral.  The full nonchiral block is obtained by
+multiplying by the antiholomorphic counterpart with barred weights and
+coordinates.
+
+\end{document}

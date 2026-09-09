@@ -1,0 +1,344 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,hyperref}
+\newcommand{\NS}{\mathrm{NS}}
+\newcommand{\eps}{\boldsymbol\epsilon}
+\newcommand{\bet}{\boldsymbol\beta}
+\newcommand{\hp}{\boldsymbol h}
+\newcommand{\pp}{\boldsymbol p}
+\newcommand{\Pol}{\operatorname{Pol}}
+\title{External NS upper components in the sphere pillow $h$-recursion}
+\author{Machine note: human-note conventions only}
+\date{30 August 2026}
+\begin{document}
+\maketitle
+
+\paragraph{Status and scope.}
+This extends the bottom-component research code to external
+$G_{-1/2}\phi$ states of intrinsically even NS superprimaries.  We give
+the component conformal factor, parity transport, and fixed-$c$ pole
+recursion.  For general cap components the regular term is a polynomial
+in the common internal weight, not the bottom-component unit seed.
+An exact, finite-cutoff PBW polynomial-division prescription computes
+these regular terms and gives an executable reference recursion.  It is
+not a new fast all-orders formula for the general seed.  A simpler
+unit-seed extension for upper components confined to mobile insertions
+has a separate power-counting argument and independent numerical tests.
+The human note and the released bottom-component package are unchanged.
+No production amplitude or subtraction prescription is changed here.
+
+\section{States and three-point functions}
+
+Write
+\begin{equation}
+ V_j^{(\beta_j)}=(G_{-1/2})^{\beta_j}\phi_{d_j},\qquad
+ \beta_j\in\{0,1\},\qquad D_j=d_j+\frac{\beta_j}{2}.
+\end{equation}
+The $d_j$ remain the superprimary weights.  The $D_j$ are the weights
+under ordinary conformal transformations: $G_{-1/2}\phi_d$ is a
+Virasoro primary because $[L_m,G_{-1/2}]\phi_d=0$ for $m>0$.
+It is not a new NS superprimary.
+
+We use exactly
+\begin{equation}
+ \rho_0(\phi_1,\phi_2,\phi_3)=1,\qquad
+ \rho_1(\phi_1,G_{-1/2}\phi_2,\phi_3)=1.
+\end{equation}
+For even intrinsic primary parities the human-note table is
+\begin{center}
+\begin{tabular}{ccl}
+\toprule
+$(a_1a_2a_3)$ & $a=\sum a_i\bmod2$ &
+$\rho_a(G_{-1/2}^{a_1}\phi_{h_1},G_{-1/2}^{a_2}\phi_{h_2},G_{-1/2}^{a_3}\phi_{h_3})$\\
+\midrule
+000&0&$1$\\
+110&0&$h_1+h_2-h_3$\\
+101&0&$h_1-h_2+h_3$\\
+011&0&$h_1-h_2-h_3$\\
+100&1&$1$\\
+010&1&$1$\\
+001&1&$-1$\\
+111&1&$-(h_1+h_2+h_3-\tfrac12)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Thus the upper components have their own three-point numerators; simply
+feeding $D_j$ into the bottom-component fusion polynomials is incorrect.
+Nor should these three-point coefficients be divided out to impose an
+artificial unit level-zero normalization.
+
+The Ward engine uses, for $W_d=G_{-1/2}\phi_d$,
+\begin{align}
+ [G_r,\phi_d(z)]&=z^{r+1/2}W_d(z),\\
+ \{G_r,W_d(z)\}&=z^{r-1/2}
+       \bigl(z\partial_z+(2r+1)d\bigr)\phi_d(z),\\
+ [L_m,V^{(\beta)}_d(z)]&=z^m
+       \bigl(z\partial_z+(m+1)(d+\beta/2)\bigr)V^{(\beta)}_d(z).
+\end{align}
+The signs are those of the fixed-parity three-form, not an extra BRY
+scalar rephasing.  External upper states at zero and infinity are
+explicit ket and bra $G_{-1/2}$ states in the direct PBW implementation.
+
+\section{The sphere--pillow factor and component labels}
+
+Let $m=n-3$ and place the ordered fields at
+$(0,z,t_1,\ldots,t_{m-1},1,\infty)$.  Keep
+\begin{equation}
+ c=\frac32+3(b+b^{-1})^2,\qquad
+ q=e^{i\pi\tau}=\prod_{i=1}^m p_i,\qquad
+ \tau=i\frac{K(1-z)}{K(z)},\quad
+ K(z)={}_2F_1(\tfrac12,\tfrac12;1;z).
+\end{equation}
+The Abel--Jacobi map and the collision-selected segment nomes are
+unchanged.  In particular
+\begin{equation}
+ (\varrho_1,\ldots,\varrho_m)=
+ \begin{cases}(16q),&m=1,\\
+ (4p_1,p_2,\ldots,p_{m-1},4p_m),&m\ge2.
+ \end{cases}
+\end{equation}
+All powers below initially use the ordered real OPE sheet.  A complex
+continuation must carry consistent spin and logarithm lifts.
+
+Use the same normalization of the elliptic block as in the bottom note:
+\begin{equation}\label{eq:reconstruction}
+ \boxed{\displaystyle
+ \mathcal F_{\bet,\eps}=
+ \Lambda_n^{(c)}(D_1,\ldots,D_n)
+ \prod_{i=1}^m\varrho_i^{h_i-c/24}\,
+ C_{\NS}(q)\,H_{\bet,\eps}(\hp;\pp).}
+\end{equation}
+Here
+\begin{align}
+ \Lambda_n^{(c)}(D)
+ &=z^{c/24-D_1-D_2}(1-z)^{c/24-D_2-D_{n-1}}
+   \theta_3(q)^{c/2-4(D_1+D_2+D_{n-1}+D_n)-2\sum_{j=3}^{n-2}D_j}
+   \notag\\
+ &\quad\times\prod_{j=1}^{m-1}[t_j(1-t_j)(t_j-z)]^{-D_{j+2}/2},\\
+ C_{\NS}(q)&=\theta_3(q^2)\prod_{k\ge1}(1-q^{2k})^{-3/4}.
+\end{align}
+The actual central charge is used, and $C_{\NS}$ is held fixed as a
+normalization factor.  For cap upper components it is not by itself the
+whole regular part.
+
+Let $\epsilon_i$ be the parity of the internal level on edge $i$.
+The relative three-form labels are now
+\begin{align}\label{eq:labels}
+ \alpha_1&=\epsilon_1+\beta_1+\beta_2,\\
+ \alpha_v&=\epsilon_{v-1}+\epsilon_v+\beta_{v+1},\qquad 2\le v\le m,\\
+ \alpha_{m+1}&=\epsilon_m+\beta_{n-1}+\beta_n
+ \qquad\pmod 2.
+\end{align}
+In particular $\sum_v\alpha_v=\sum_j\beta_j\pmod2$.  Every external
+marking still has $2^m$ internal parity sectors.  They are not to be
+summed without the corresponding CFT structure constants.
+
+\section{Pole term and common-weight recursion}
+
+Define
+\begin{equation}
+ h_{rs}=\frac{(b+b^{-1})^2-(rb+s/b)^2}{8},\qquad
+ \ell_{rs}=\frac{rs}{2},\qquad \pi_{rs}=rs\bmod2,
+ \quad r,s\ge1,\quad r+s\in2\mathbb Z.
+\end{equation}
+The $(1,1)$ pole is included.  For a pole on edge $k$, put
+\begin{equation}
+ \widehat h_j=h_j-h_k+h_{rs},\qquad
+ h'_j=\widehat h_j+\ell_{rs}\delta_{jk},\qquad
+ \epsilon'_j=\epsilon_j+\pi_{rs}\delta_{jk}\pmod2.
+\end{equation}
+The external markings do not change.  Exactly the two incident
+three-form labels toggle for an odd null vector.
+
+With the human-note inverse norm slope $A_{rs}^c$ and fusion
+polynomials $P_{rs}^{\alpha}(x,y;c)$, the residue kernel is
+\begin{equation}\label{eq:R}
+ R_{rs}^{(k;\bet,\eps)}
+ =(-1)^{rs}A_{rs}^c
+ P_{rs}^{\alpha_k}(L_k;c)P_{rs}^{\alpha_{k+1}}(R_k;c),
+\end{equation}
+where the ordered weight pairs are
+\begin{align}
+ L_k&=\begin{cases}(d_1,d_2),&k=1,\\
+              (\widehat h_{k-1},d_{k+1}),&k>1,
+       \end{cases}\\
+ R_k&=\begin{cases}(d_n,d_{n-1}),&k=m,\\
+              (\widehat h_{k+1},d_{k+2}),&k<m.
+       \end{cases}
+\end{align}
+Crucially, these use $d_j$, not $D_j$.  The component dependence is
+carried by the labels, the unchanged upper-state insertions in the child
+block, and the regular seed.  Null-vector factorization is an identity
+for arbitrary descendant states in the other slots, so it applies also
+when those states are external $G_{-1/2}\phi$.
+
+For completeness, with $\lambda_x^2=(b+b^{-1})^2-8x$,
+\begin{align}
+ A_{rs}^c&=\frac12
+  \prod_{\substack{u=1-r,\ldots,r;\ v=1-s,\ldots,s\\u+v\ {m even}\\
+                    (u,v)\ne(0,0),(r,s)}}
+           \left(\frac{ub+v/b}{\sqrt2}\right)^{-1},\\
+ P_{rs}^{\alpha}(x,y;c)&=
+  \prod_{\substack{u=1-r,3-r,\ldots,r-1\\v=1-s,3-s,\ldots,s-1\\
+             u+v-r-s=2(1-\alpha)\ ({\rm mod}\ 4)}}
+   \frac{\lambda_x-\lambda_y+ub+v/b}{2\sqrt2}
+   \frac{\lambda_x+\lambda_y+ub+v/b}{2\sqrt2}.
+\end{align}
+No new fusion-polynomial normalization is introduced.
+
+Write $h_1=H$, $h_j=H+a_j$, with $a_1=0$.  The resulting recursion is
+\begin{equation}\label{eq:recursion}
+ \boxed{\displaystyle
+ H_{\bet,\eps}(\hp;\pp)
+ =S_{\bet,\eps}(H,\boldsymbol a;\pp)
+ +\sum_{k=1}^m\sum_{\substack{r,s\ge1\\r+s\ {m even}}}
+   \frac{\varrho_k^{rs/2} R_{rs}^{(k;\bet,\eps)}}{h_k-h_{rs}}
+   H_{\bet,\eps'}(\hp';\pp).}
+\end{equation}
+Differences are recomputed in each child.  They are not frozen to their
+initial values after shifting only the null edge.
+
+\section{The regular part: why a unit seed is not general}
+
+At a fixed coefficient $\pp^{\boldsymbol N/2}$ the block is a rational
+function of the internal weights.  Its coordinate pullback and division
+by the prefactor in \eqref{eq:reconstruction} add no internal-weight
+poles.  Therefore, away from confluent parameters, subtracting the
+simple principal parts leaves a polynomial in $H$ at fixed differences.
+Define the seed coefficient unambiguously by
+\begin{equation}\label{eq:seed}
+ S_{\bet,\boldsymbol N}(H,\boldsymbol a)=
+ \Pol_{H=\infty}
+ \left[H_{\bet,\boldsymbol N}(H,H+a_2,\ldots,H+a_m)\right],
+ \qquad
+ S_{\bet,\eps}=\sum_{\boldsymbol N\bmod2=\eps}
+       S_{\bet,\boldsymbol N}\,\pp^{\boldsymbol N/2}.
+\end{equation}
+$\Pol$ retains \emph{all} nonnegative Laurent powers, including the
+constant.  It does not mean retaining only the highest power of $H$.
+
+An exact finite-order computation of \eqref{eq:seed} is:
+\begin{enumerate}
+ \item Sew the component three-forms with the NS PBW inverse Gram matrices.
+ \item Pull the plane ratios $(z/t_1,t_1/t_2,\ldots,t_{m-1})$ back to the
+ elliptic $p_i$, using $D_j$ in the conformal factor.
+ \item Substitute $h_i=H+a_i$ and cancel each rational coefficient.
+ \item Divide its numerator polynomial by its denominator polynomial in
+ $H$; retain the quotient.
+\end{enumerate}
+This determines every regular coefficient at a prescribed finite order
+without an asymptotic fit or guessed seed.  These polynomials can be
+compiled once for fixed $c,d_j,\bet$ and reused at varying internal
+weights.  Using PBW to construct them, however, means the resulting
+recursion comparison is a pole-factorization test, not independent
+evidence for a proposed closed seed.  It is not yet a production speedup
+for arbitrary cap components.
+
+\subsection{Four-point counterexample to the unchanged seed}
+
+For $\bet=(0,1,1,0)$, the odd leading plane coefficient is
+\begin{equation}
+ B_{1/2}=-\frac{(h+d_2-d_1)(h+d_3-d_4)}{2h}.
+\end{equation}
+Because $(16q)^{1/2}=4q^{1/2}$, its elliptic regular part starts as
+\begin{align}
+ S_{0110,0}&=1+O(q^3),\\
+ S_{0110,1}&=
+   2(-h+d_1-d_2-d_3+d_4)q^{1/2}
+   +4(2d_1-2d_2-1)(2d_3-2d_4+1)q^{3/2}
+   +O(q^{5/2}).
+\end{align}
+The displayed integer seed coefficients at $q$ and $q^2$ vanish.
+The linear term in $h$ is required by the same human-note three-form
+normalization, not an optional change of convention.
+
+\subsection{Five points with three upper components}
+
+For $\bet=(0,1,1,1,0)$ and $a=h_2-h_1$, the regular coefficients through
+total degree one are
+\begin{align}
+ S_{\bet,00}&=1+O_{>1},\\
+ S_{\bet,10}&=(a-d_3)p_1^{1/2}+O_{>1},\\
+ S_{\bet,01}&=-(a+d_3)p_2^{1/2}+O_{>1},\\
+ S_{\bet,11}&=
+ \left[2h_1+a+d_3-\frac12+2(d_2+d_4-d_1-d_5)\right]
+       (p_1p_2)^{1/2}+O_{>1}.
+\end{align}
+Here $O_{>1}$ denotes total physical degree greater than one.
+The integer degree-one terms in the $00$ sector vanish.
+All four parity sectors must be kept as separate blocks.
+
+\section{Fast special case: upper components only at mobile insertions}
+
+Suppose
+\begin{equation}\label{eq:bottom-caps}
+ \beta_1=\beta_2=\beta_{n-1}=\beta_n=0,
+\end{equation}
+with arbitrary markings at $t_j$.  There is a useful extension of the
+previous large-common-weight argument.  At fixed PBW levels and fixed
+$h_{i+1}-h_i$, the commutators of a mode with a light insertion bring
+only finite differences and light weights.  Commuting matched internal
+modes through the insertion gives the leading Gram contraction.  For
+$W=G_{-1/2}\phi$, moving a fermionic mode through $W$ contributes a
+minus sign, so the normalized leading diagonal matrix element differs
+from that for $\phi$ by $(-1)^F$.  Off-diagonal transitions are suppressed
+in the same oscillator power counting.
+
+The bottom caps in the original proposal retain only the all-even
+internal parity sector at leading order.  Hence $F$ is even on every
+surviving propagator and the additional diagonal signs are all $+1$.
+Under the same coefficientwise cap-asymptotic assumptions as the
+bottom-component proposal, this gives
+\begin{equation}\label{eq:interior-seed}
+ S_{\bet,\eps}=\delta_{\eps,0}\qquad\text{when \eqref{eq:bottom-caps} holds}.
+\end{equation}
+Before dividing by $C_{\NS}$, the regular term is
+$\delta_{\eps,0}C_{\NS}(q)$.  This is a proposed all-orders conclusion
+of the shared power-counting assumptions; the finite numerical tests
+below are not a proof of uniform convergence in the moduli.
+
+For five points this covers $(0,0,1,0,0)$, namely a single upper
+component at the mobile insertion.  The corresponding $h$ evaluator
+uses no PBW or $c$-recursion coefficients.  This fast seed is explicitly
+rejected by the code when any of the four cap fields is upper.
+
+\section{Implementation and validation boundaries}
+
+The research implementation is
+\begin{quote}\ttfamily\small
+Code/sphere\_five\_kummer\_h\_recursion/\\
+ns\_pillow\_components.py
+\end{quote}
+It supplies \texttt{ComponentEllipticRecursion},
+\texttt{ExactPBWSeeds}, compiled numerical polynomial seeds, and the
+explicitly selected \texttt{InteriorUnitSeed}.
+The direct PBW engine now accepts the option
+\texttt{external\_\allowbreak descendants}; its all-bottom behavior is
+unchanged.  Missing general upper-component seeds raise an error.
+
+The accompanying \texttt{check\_ns\_pillow\_components.py} separates:
+the eight exact human-note three-forms; independent component PBW versus
+$c$-recursion; symbolic pole-factorization certificates with PBW-derived
+regular polynomials; and independent tests of \eqref{eq:interior-seed}.
+Detailed results, parameter scope, and reproducible commands are recorded
+in the companion Markdown note and JSON ledgers.
+
+At total degree three, all 16 four-point and all 32 five-point component
+markings pass the pole certificates with arbitrary internal weights and
+fixed exact external parameters.  In addition, the four-point marking
+$0110$ and five-point marking $01110$ pass with $b$ and every external
+and internal weight symbolic; the latter includes 28 coefficients and
+106 residue identities.  Independently of these PBW-derived seeds,
+the mobile-upper five-point marking $00100$ agrees with PBW and
+$c$-recursion through total degree ten for four generic numerical
+fixtures.  These are coefficient checks, not amplitude-level tests.
+
+The present extension does not implement a confluent $b=1$ limit,
+complex-moduli spin transport, or the physical PCO component sum.
+General cap-component seed polynomials are available at a chosen finite
+cutoff, but a compact all-orders seed formula remains a separate task.
+Only after those pieces and amplitude-level comparisons are complete
+should the proposed $|q|<0.3$ hybrid backend be enabled.  Polynomial
+subtraction remains above that eventual block-evaluation layer.
+
+\end{document}

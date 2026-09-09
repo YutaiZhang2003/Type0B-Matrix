@@ -1,0 +1,112 @@
+{
+  "schema": "type0b-ns-fivepoint-preliminary-c-recursion-subtraction-v1",
+  "status": "one_hour_preliminary_production",
+  "run_label": "Ea_equal_quarter_plus_0p02i_one_hour_preliminary",
+  "physics": {
+    "real_outgoing_energies": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "epsilon": 0.02,
+    "epsilon_weights": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "prescription": "direct physical-domain +i-epsilon",
+    "outgoing_point": "omega_a=1/4+0.02i",
+    "incoming_point": "omega_in=1+0.08i"
+  },
+  "recursion": {
+    "block_backend": "c",
+    "global_max_twice_levels": [
+      4,
+      4
+    ],
+    "global_max_total_twice_level": 8,
+    "h_recursion_role": "disabled",
+    "c_recursion_role": "production_in_every_selected_chart",
+    "comment": "c-recursion through physical level 2 on each edge; no regulator extrapolation."
+  },
+  "atlas": {
+    "oriented_linear_charts": 120,
+    "unoriented_trivalent_trees": 15,
+    "selection_score": "minimize max(|q1|,|q2|)",
+    "series_domain": "|q1|<1 and |q2|<1"
+  },
+  "subtraction": {
+    "scheme": "pointwise_F-P1-P2+P12_plus_analytic_forest",
+    "collar_radii": [
+      0.01
+    ],
+    "projection_radius": 1e-05,
+    "strict_boundary_matching_required": false,
+    "comment": "One fixed collar radius; no collar scan in this preliminary estimate."
+  },
+  "collar_certificate": {
+    "audit_shards": 0,
+    "enforce": false,
+    "interpretation": "Convergence audit omitted for the user-requested one-hour estimate."
+  },
+  "momentum": {
+    "orders": [
+      2,
+      3
+    ],
+    "maximum": 2.0,
+    "refinement_shells": 1,
+    "constant_singularity_subtraction": true
+  },
+  "precision": {
+    "structure_digits": 22,
+    "block_digits": 45
+  },
+  "qmc": {
+    "bulk_sobol_power": 2,
+    "face_sobol_power": 3,
+    "replicates_per_shard": 2,
+    "radial_power": 0.5,
+    "effective_bulk_samples_per_radius": 32,
+    "effective_face_samples_per_radius": 64
+  },
+  "array": {
+    "shards": 4,
+    "deterministic_corner_shards": 1,
+    "base_seed": 20260903,
+    "seed_stride": 100000,
+    "task_count": 4,
+    "recommended_array_cap": 4
+  },
+  "merge": {
+    "compatible_shard_config_sha256": {},
+    "justification": "New independent preliminary run; do not merge samples from higher-accuracy configurations."
+  },
+  "runtime": {
+    "block_cache_limit": 2048,
+    "auxiliary_cache_limit": 8192,
+    "coefficient_storage": "fresh_per_worker_sqlite_for_reduced_cutoff; prior stores preserved unchanged",
+    "checkpoint_granularity": "bulk_sample_face_sample_corner_orbit",
+    "precision_loss_from_storage": false,
+    "batch_c_evaluation": true,
+    "tensor_cache_mebibytes": 256
+  },
+  "resources": {
+    "partition": "yin",
+    "cpus_per_task": 4,
+    "memory": "8G",
+    "wall_time": "01:00:00",
+    "requeue": false
+  },
+  "matrix_model_used": false,
+  "production_policy": {
+    "target_wall_minutes": 60,
+    "frequency_epsilon_extrapolation": false,
+    "convergence_certified": false,
+    "batch_benchmark_dependency": false,
+    "execution": "four workers, reduction and complex-frequency comparison in one allocation",
+    "accuracy_caveat": "Coarse first estimate. Sampling error does not include block or momentum truncation error."
+  }
+}

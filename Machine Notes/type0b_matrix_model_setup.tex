@@ -993,7 +993,11 @@ worldsheet and matrix-model normalizations imply
 which is equivalent to
 $\mathcal A_{1_R\to3_R}^{\rm MQM}
 =8i\omega\omega_1\omega_2\omega_3(1+2i\omega)$.
-The executable implementation is \texttt{bry\_one\_to\_three.py}.  It keeps
+The executable implementation is \texttt{bry\_one\_to\_three.py}.  Its
+production default evaluates every interior elliptic block by the
+fixed-difference $h$-recursion; the $c$-recursive backend is retained only
+as an independently selectable cross-check and is not used by the regulated
+integral reported below.  It keeps
 the internal-$P$ contour and threshold explicit, evaluates all three moduli
 regions, and reports both sides of Eq.~\eqref{eq:bry-reduced-moduli-target}
 as complex numbers.  Fast regression tests separately check the OPE square,
@@ -1012,6 +1016,20 @@ orders recorded by the command-line output gives
  \mathcal A_{\rm MQM}&=0.00756958+0.04514122i.
  \label{eq:bry-first-regulated-numerical-result}
 \end{align}
+More precisely, the all-$h$-recursive run gives
+
+\begin{equation}
+ \mathcal M_{h,q^8}
+ =0.0175087924398481-0.00320541443732949i.
+ \label{eq:bry-h-recursion-architecture-check}
+\end{equation}
+
+This agrees with the previously recorded $q^8$ result to the displayed
+precision.  The recovery driver
+\texttt{recover\_bry\_one\_to\_three\_h\_recursion.py} also compares two
+generic fixed-$(P,z)$ densities to the $c$-recursive evaluation and records
+the low-$z$, interior, and $z=1$-cap integrals separately, so $c$-recursion
+does not enter the production amplitude.
 The relative complex-amplitude discrepancy is $1.78\%$.  This recovers the
 BRY curve at the first nontrivial level, but does not yet reproduce their
 quoted sub-$0.3\%$ numerical precision.  At the same production quadrature,
@@ -1030,6 +1048,162 @@ changing the moduli orders from 12 to 14 at $q^8$ gives $0.074\%$.  Thus
 $q^6$ is not converged and production begins at approximately $q^8$.  The
 remaining limitation is the narrow-$z=1$ and oscillatory-$P$ product
 quadrature rather than the superconformal recursion.
+
+\subsection{Nome-gated hybrid recursion (under construction)}
+
+The next implementation removes the short crossed-block truncation from the
+finite part of the $z=1$ cap.  In each linear $s$- or $u$-chart we use
+$h$-recursion only when the active elliptic nome obeys
+\begin{equation}
+ |q_{\rm ell}|<0.3.
+ \label{eq:bry-hybrid-nome-gate}
+\end{equation}
+When this condition fails, the four-punctured sphere is evaluated in a
+channel adapted to the relevant boundary divisor using $c$-recursion with
+arbitrary external NS descendants.  The bulk $h$-chart retains the numerical
+detuning $c=27/2+10^{-5}$ needed at the confluent $b=1$ Kac weights.  The
+corner $c$-chart has no such confluent-$h$ obstruction and is evaluated at
+the physical value $c=27/2$; this is essential because a detuned corner
+exponent does not cancel the physical counterterm
+\eqref{eq:bry-leading-t-counterterm-density} uniformly as $z\to1$.
+
+The subtraction ledger itself is unchanged.  The $s$- and $u$-channel
+polynomial lists are empty for \eqref{eq:bry-complex-energy-benchmark}, while
+$r_t(P,z)$ is subtracted explicitly for $P<P_*$.  The nome interface is
+located separately on each ray in the $z=1$ cap and the radial quadrature is
+split there.  In the microscopic disk $|1-z|<10^{-4}$ the retained BRY local
+terms are integrated analytically as monomials $w^a\bar w^b$:
+\begin{equation}
+ \int_0^R r\,dr\int_{-\pi/2}^{\pi/2}d\phi\,
+ w^a\bar w^b
+ =\frac{R^{a+b+2}}{a+b+2}
+   \frac{2\sin\!\left[\pi(a-b)/2\right]}{a-b},
+ \label{eq:bry-hybrid-endpoint-monomial}
+\end{equation}
+with the smooth spin-zero limit understood.  Expanding the factors
+$(1-w)^\gamma(1-\bar w)^\gamma$ through cubic order makes the leading
+polynomial cancellation algebraic before conversion to machine precision.
+An independent log-radial and angular integration agrees with
+\eqref{eq:bry-hybrid-endpoint-monomial} at representative momenta to better
+than $6\times10^{-15}$.
+
+The target-blind $q^{12}$ production run uses $P_{\max}=5$, thirty
+Gauss--Legendre nodes on each side of $P_*$, $20\times20$ bulk quadrature,
+and an $8\times8$ cap rule.  Its region ledger is
+\begin{align}
+ \mathcal M_{z\simeq0}
+  &=0.00246626504023+0.000552825247043i,
+ \notag\\
+ \mathcal M_{\rm bulk}
+  &=0.01447184979094-0.00352414080537i,
+ \notag\\
+ \mathcal M_{z\simeq1}
+  &=0.000802660370616-0.0000936982731671i,
+ \notag\\
+ \mathcal M_{\rm hybrid}
+  &=0.01774077520178-0.00306501383149i.
+ \label{eq:bry-hybrid-unfrozen-worldsheet-result}
+\end{align}
+This result is deliberately marked \emph{unfrozen}: no matrix-model target
+was used in selecting the numerical parameters.  In corner-only controls at
+$\epsilon=10^{-2}$, the $6\times6\to8\times8$ cap displacement is
+$5.5\times10^{-6}$, the $q^{10}\to q^{12}$ displacement is
+$1.75\times10^{-5}$, and halving the analytic matching radius changes the
+cap by $6.7\times10^{-6}$.  Production-level control artifacts must still be
+assembled before a new matrix-model comparison is made.  The target-blind
+driver is \texttt{run\_bry\_one\_to\_three\_hybrid\_worldsheet.py}.
+
+After preserving that target-blind artifact, with SHA--256 digest
+\begin{center}
+ \texttt{3a36e8ff914ca6a0b21a47e328a6021b}\\
+ \texttt{f16eb5510832a06b91734a8bf26a4df7}
+\end{center}
+we performed a separate preliminary matrix-model comparison.  At the same
+kinematics the BRY-normalized prediction is
+\begin{align}
+ \mathcal M_{\rm MQM}
+  &=0.01772691417914-0.00297256625415i,
+ \notag\\
+ \mathcal A_{\rm MQM}
+  &=0.00756957780826+0.04514121627801i,
+ \notag\\
+ \mathcal A_{\rm hybrid}
+  &=0.00780499363083+0.04517651308233i.
+ \label{eq:bry-hybrid-preliminary-mqm-comparison}
+\end{align}
+Thus
+\begin{equation}
+ \frac{|\mathcal M_{\rm hybrid}-\mathcal M_{\rm MQM}|}
+ {|\mathcal M_{\rm MQM}|}
+ =0.52008\%.
+ \label{eq:bry-hybrid-preliminary-relative-difference}
+\end{equation}
+The comparison is target-blind, but it is not a new freeze or a final
+accuracy claim: the source worldsheet artifact remains marked
+\texttt{worldsheet\_only\_unfrozen}.  The comparison driver is
+\texttt{compare\_bry\_one\_to\_three\_hybrid\_to\_matrix.py}.
+
+\subsection{Analytic-continuation hybrid pilot (under construction)}
+
+We next keep the nome-gated block atlas but replace the BRY polynomial
+finite part by an ordinary moduli integral in a convergent continuation
+chamber.  The pilot ray is
+\begin{equation}
+ \omega_j=a_j\lambda,
+ \qquad
+ (a_1,a_2,a_3)=(0.1,1,1),
+ \qquad
+ \lambda(s)=x+ist,quad 0\leq s\leq1.
+ \label{eq:type0b-analytic-hybrid-ray}
+\end{equation}
+It starts on the positive-real energy sheet.  On the rectangle
+\begin{equation}
+ 0.238<x<0.304,
+ \qquad
+ 0.596<t<0.628,
+ \label{eq:type0b-analytic-hybrid-rectangle}
+\end{equation}
+only Liouville wall one is crossed.  The exact rectangle audit gives a
+continuum margin at least $0.0512$, a wall-one residue margin at least
+$0.056584$, and a wall clearance at least $0.0532$.  The largest coincident
+product pole has order two, so the residue collar can contain at most one
+power of $\log|q|$.  Thus the real-$P$ contour and every crossed residue are
+ordinarily integrable; no divergent finite part is required in this chamber.
+
+Both the continuum and the residue blocks use the same hybrid rule:
+$h$-recursion is allowed only in the verified picture routing and only for
+$|q_{\rm ell}|<0.3$, while the remaining evaluations use a channel-adapted
+$c$-recursion.  At the pilot point $(x,t)=(0.271,0.612)$ the two connected
+crossing checks give relative spreads
+\begin{equation}
+ \varepsilon_{01}=5.65\times10^{-4},
+ \qquad
+ \varepsilon_{12}=4.08\times10^{-4}.
+ \label{eq:type0b-analytic-hybrid-crossing}
+\end{equation}
+These checks connect canonical frames 0, 1, and 2, which cover the three
+standard charts $z$, $1-z$, and $1/z$.  Two other oriented representatives,
+frames 3 and 4, fail the present spin-lift/covariance implementation already
+on the undeformed real sheet and are excluded from the integration atlas.
+
+No amplitude has yet been accepted from this continuation pilot.  The
+certified exponent with the largest phase-to-margin ratio has the bound
+$29.83$, so direct sampling of the wall-one log-radial oscillation has large
+variance.  A stratified three-chart Sobol pilot has a $59.5\%$ relative
+replicate spread.  Deterministic power quadrature is also not converged:
+the $4\times8$ and $5\times10$ rules give, respectively,
+\begin{align}
+ \mathcal M_{4\times8}&=1.33567949955+1.57585032070i,
+ \notag\\
+ \mathcal M_{5\times10}&=-0.663211389208+1.17670039444i,
+ \label{eq:type0b-analytic-hybrid-unconverged-controls}
+\end{align}
+whose relative displacement is $151\%$.  These numbers are diagnostics,
+not worldsheet estimates, and have not been compared with the matrix model.
+The next numerical step is to extract the integrable residue-collar terms
+$r^{\Delta-2+i\Phi}(A+B\log r)$, integrate them analytically, and apply the
+quadrature only to the smooth remainder.  The target-blind driver is
+\texttt{run\_type0b\_sphere\_four\_point\_analytic\_hybrid.py}.
 
 \section{Matrix quantum mechanics}
 

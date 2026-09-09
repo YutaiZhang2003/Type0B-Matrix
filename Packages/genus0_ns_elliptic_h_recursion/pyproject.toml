@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "genus0-ns-elliptic-h-recursion"
+version = "0.1.0"
+description = "All-NS sphere comb blocks: parity-resolved elliptic h-recursion and pillow reconstruction"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["mpmath>=1.3"]
+authors = [{name = "Research implementation"}]
+classifiers = ["Programming Language :: Python :: 3", "Topic :: Scientific/Engineering :: Physics"]
+
+[project.optional-dependencies]
+validation = ["sympy>=1.10"]
+
+[project.scripts]
+ns-elliptic-block = "genus0_ns_elliptic_h_recursion.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

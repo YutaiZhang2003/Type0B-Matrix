@@ -1,0 +1,3943 @@
+{
+  "description": "Evaluate ten crossing-gated amplitudes in the wall-1-only chamber.",
+  "ray_coefficients": [
+    0.1,
+    1.0,
+    1.0
+  ],
+  "certified_rectangle": {
+    "x": [
+      0.238,
+      0.304
+    ],
+    "t": [
+      0.596,
+      0.628
+    ]
+  },
+  "domain_certificate": {
+    "ray_coefficients": [
+      0.1,
+      1.0,
+      1.0
+    ],
+    "x_interval": [
+      0.238,
+      0.304
+    ],
+    "t_interval": [
+      0.596,
+      0.628
+    ],
+    "continuum_record_count": 6,
+    "continuum_minimum_margin_lower_bound": 0.05119999999999991,
+    "residue_walls": [
+      {
+        "wall": 1,
+        "record_count": 5,
+        "minimum_margin_lower_bound": 0.056583999999999524,
+        "maximum_combined_pole_order": 2,
+        "maximum_logarithm_power": 1
+      }
+    ],
+    "minimum_wall_clearance": 0.053199999999999914,
+    "chamber_record_count": 11,
+    "chamber_stable": true,
+    "certified": true
+  },
+  "settings": {
+    "twice_level": 8,
+    "momentum_order": 30,
+    "momentum_maximum": 3.0,
+    "momentum_rule": "wall-one-30",
+    "structure_precision": 22,
+    "block_precision": 45,
+    "sobol_power": 6,
+    "replicates": 4,
+    "corner_radius": 0.15,
+    "crossing_tolerance": 0.01,
+    "seed": 20260827
+  },
+  "points": [
+    {
+      "index": 0,
+      "x": 0.246,
+      "t": 0.604,
+      "outgoing_energies": [
+        {
+          "real": -0.0246,
+          "imag": 0.0604
+        },
+        {
+          "real": -0.246,
+          "imag": 0.604
+        },
+        {
+          "real": -0.246,
+          "imag": 0.604
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.0246,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.246,
+            "imag": 0.604
+          },
+          {
+            "real": -0.246,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5166,
+          "imag": 1.2684
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.27059999999999995,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.368203
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.7626,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.27059999999999995,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.1886800000000002
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.2706,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.368203
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.27059999999999995,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.368203
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.7626,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.27059999999999995,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.1886800000000002
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.2706,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.368203
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.492,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.21719999999999984
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.492,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": 0.492,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.49199999999999994,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.21720000000000006
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.5411999999999999,
+              "imag": -0.3288
+            },
+            "channel_energy": {
+              "real": -0.49199999999999994,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.401988
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.49199999999999994,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": -0.49199999999999994,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          }
+        ],
+        "minimum_margin": 0.1886800000000002,
+        "minimum_wall_clearance": 0.12760000000000016,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.03239802466514059,
+              "imag": -0.028794468173711032
+            },
+            "residues": {
+              "real": 0.0873278060621964,
+              "imag": 0.016876926108877956
+            },
+            "total": {
+              "real": 0.11972583072733699,
+              "imag": -0.011917542064833076
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.23602360827297708,
+              "imag": 0.13518217989120082
+            },
+            "residues": {
+              "real": -0.11628435792607528,
+              "imag": -0.147144636095497
+            },
+            "total": {
+              "real": 0.1197392503469018,
+              "imag": -0.011962456204296174
+            }
+          }
+        ],
+        "maximum_absolute_difference": 4.687607185947831e-05,
+        "relative_spread": 0.0003895454232918667,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.0246,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.246,
+            "imag": 0.604
+          },
+          {
+            "real": -0.246,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5166,
+          "imag": 1.2684
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": -0.15345564724664718,
+            "imag": -0.01155028875164886
+          },
+          {
+            "real": 0.5011268435606342,
+            "imag": -0.18021528717374674
+          },
+          {
+            "real": 0.18482340840435735,
+            "imag": -0.244403259433741
+          },
+          {
+            "real": 0.1793771766892271,
+            "imag": -0.024946596834431345
+          }
+        ],
+        "mean": {
+          "real": 0.17796794535189286,
+          "imag": -0.11527885804839198
+        },
+        "standard_error_real": 0.13364201389316052,
+        "standard_error_imag": 0.05759729765438465,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.16981200000000019,
+        "convergence_margin": 0.1886800000000002
+      }
+    },
+    {
+      "index": 1,
+      "x": 0.258,
+      "t": 0.604,
+      "outgoing_energies": [
+        {
+          "real": -0.025800000000000003,
+          "imag": 0.0604
+        },
+        {
+          "real": -0.258,
+          "imag": 0.604
+        },
+        {
+          "real": -0.258,
+          "imag": 0.604
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.025800000000000003,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.258,
+            "imag": 0.604
+          },
+          {
+            "real": -0.258,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5418000000000001,
+          "imag": 1.2684
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.28380000000000005,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.36088491999999994
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.7998000000000001,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.28380000000000005,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.23948320000000034
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.2838,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.36088492
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.28380000000000005,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.36088491999999994
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.7998000000000001,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.28380000000000005,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.23948320000000034
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.2838,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.36088492
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.516,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.19300799999999985
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.516,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": 0.516,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.516,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.19300799999999985
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.5676000000000001,
+              "imag": -0.3288
+            },
+            "channel_energy": {
+              "real": -0.516,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.40706832000000004
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.516,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": -0.516,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          }
+        ],
+        "minimum_margin": 0.19300799999999985,
+        "minimum_wall_clearance": 0.12760000000000016,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.04057661800402998,
+              "imag": -0.026139926103058018
+            },
+            "residues": {
+              "real": 0.08733989124107412,
+              "imag": 0.026824227279830505
+            },
+            "total": {
+              "real": 0.12791650924510412,
+              "imag": 0.0006843011767724873
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.2860334412603142,
+              "imag": 0.15699686564681126
+            },
+            "residues": {
+              "real": -0.15812586508179827,
+              "imag": -0.1563824633533979
+            },
+            "total": {
+              "real": 0.12790757617851595,
+              "imag": 0.0006144022934133631
+            }
+          }
+        ],
+        "maximum_absolute_difference": 7.046739369042324e-05,
+        "relative_spread": 0.0005508779578579683,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.025800000000000003,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.258,
+            "imag": 0.604
+          },
+          {
+            "real": -0.258,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5418000000000001,
+          "imag": 1.2684
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": 0.34676286484072016,
+            "imag": 0.18639466975385086
+          },
+          {
+            "real": 0.09558653048707537,
+            "imag": -0.4875950978731064
+          },
+          {
+            "real": -0.03360863640641645,
+            "imag": -0.01235874511351287
+          },
+          {
+            "real": 0.15295501298471592,
+            "imag": -0.287005898840516
+          }
+        ],
+        "mean": {
+          "real": 0.14042394297652375,
+          "imag": -0.15014126801832112
+        },
+        "standard_error_real": 0.07907302038677999,
+        "standard_error_imag": 0.14856184892830754,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.17370719999999987,
+        "convergence_margin": 0.19300799999999985
+      }
+    },
+    {
+      "index": 2,
+      "x": 0.27,
+      "t": 0.604,
+      "outgoing_energies": [
+        {
+          "real": -0.027000000000000003,
+          "imag": 0.0604
+        },
+        {
+          "real": -0.27,
+          "imag": 0.604
+        },
+        {
+          "real": -0.27,
+          "imag": 0.604
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.027000000000000003,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.27,
+            "imag": 0.604
+          },
+          {
+            "real": -0.27,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5670000000000001,
+          "imag": 1.2684
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.29700000000000004,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.35321835999999995
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.8370000000000001,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.29700000000000004,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.29270560000000034
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.29700000000000004,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.35321835999999995
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.29700000000000004,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.35321835999999995
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.8370000000000001,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.29700000000000004,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.29270560000000034
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.29700000000000004,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.35321835999999995
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.54,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.1676639999999998
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.54,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": 0.54,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.54,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.1676639999999998
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.5940000000000001,
+              "imag": -0.3288
+            },
+            "channel_energy": {
+              "real": -0.54,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.41239055999999996
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.54,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": -0.54,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          }
+        ],
+        "minimum_margin": 0.1676639999999998,
+        "minimum_wall_clearance": 0.12760000000000016,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.04908039930851857,
+              "imag": -0.02227710371605455
+            },
+            "residues": {
+              "real": 0.08594225402937855,
+              "imag": 0.036685512964914624
+            },
+            "total": {
+              "real": 0.13502265333789712,
+              "imag": 0.014408409248860075
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.34688173505829334,
+              "imag": 0.18323171129633672
+            },
+            "residues": {
+              "real": -0.21193761210967077,
+              "imag": -0.16890272951158092
+            },
+            "total": {
+              "real": 0.13494412294862257,
+              "imag": 0.014328981784755807
+            }
+          }
+        ],
+        "maximum_absolute_difference": 0.00011169487048941565,
+        "relative_spread": 0.0008225605065016787,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.027000000000000003,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.27,
+            "imag": 0.604
+          },
+          {
+            "real": -0.27,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5670000000000001,
+          "imag": 1.2684
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": 0.3923637701801536,
+            "imag": -0.34424314474605416
+          },
+          {
+            "real": 0.46877297724772893,
+            "imag": -0.35471469855307214
+          },
+          {
+            "real": 0.4298972363986907,
+            "imag": -0.723050206588933
+          },
+          {
+            "real": 0.1176050048624414,
+            "imag": -0.10832408529962179
+          }
+        ],
+        "mean": {
+          "real": 0.3521597471722537,
+          "imag": -0.38258303379692027
+        },
+        "standard_error_real": 0.07972559880924295,
+        "standard_error_imag": 0.12694567663030984,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.15089759999999983,
+        "convergence_margin": 0.1676639999999998
+      }
+    },
+    {
+      "index": 3,
+      "x": 0.282,
+      "t": 0.604,
+      "outgoing_energies": [
+        {
+          "real": -0.0282,
+          "imag": 0.0604
+        },
+        {
+          "real": -0.282,
+          "imag": 0.604
+        },
+        {
+          "real": -0.282,
+          "imag": 0.604
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.0282,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.282,
+            "imag": 0.604
+          },
+          {
+            "real": -0.282,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5922,
+          "imag": 1.2684
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.3102,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.34520332
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.8741999999999999,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.3102,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.3483472
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.3102,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.34520332
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.3102,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.34520332
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.8741999999999999,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.3102,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.3483472
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.3102,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.34520332
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.564,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.14116799999999996
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.564,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": 0.564,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.564,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.14116799999999996
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.6204,
+              "imag": -0.3288
+            },
+            "channel_energy": {
+              "real": -0.564,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.41795472
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.564,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": -0.564,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          }
+        ],
+        "minimum_margin": 0.14116799999999996,
+        "minimum_wall_clearance": 0.12760000000000016,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.057824377239919345,
+              "imag": -0.017110155745210485
+            },
+            "residues": {
+              "real": 0.08316203508079845,
+              "imag": 0.046223497643413956
+            },
+            "total": {
+              "real": 0.1409864123207178,
+              "imag": 0.02911334189820347
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.4206121672422284,
+              "imag": 0.21504521269833837
+            },
+            "residues": {
+              "real": -0.27977337946994085,
+              "imag": -0.18598850814678558
+            },
+            "total": {
+              "real": 0.14083878777228753,
+              "imag": 0.029056704551552792
+            }
+          }
+        ],
+        "maximum_absolute_difference": 0.00015811640122032528,
+        "relative_spread": 0.0010983284090561492,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.0282,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.282,
+            "imag": 0.604
+          },
+          {
+            "real": -0.282,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5922,
+          "imag": 1.2684
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": 0.32784727845419087,
+            "imag": -0.46360658298119706
+          },
+          {
+            "real": 0.5230701014790046,
+            "imag": -0.2677996001343622
+          },
+          {
+            "real": 0.41337631736917974,
+            "imag": -0.07641111012204035
+          },
+          {
+            "real": 0.044558990308982416,
+            "imag": -0.22603363773553167
+          }
+        ],
+        "mean": {
+          "real": 0.3272131719028394,
+          "imag": -0.2584627327432828
+        },
+        "standard_error_real": 0.10233841448973278,
+        "standard_error_imag": 0.07977343745736182,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.12705119999999998,
+        "convergence_margin": 0.14116799999999996
+      }
+    },
+    {
+      "index": 4,
+      "x": 0.294,
+      "t": 0.604,
+      "outgoing_energies": [
+        {
+          "real": -0.0294,
+          "imag": 0.0604
+        },
+        {
+          "real": -0.294,
+          "imag": 0.604
+        },
+        {
+          "real": -0.294,
+          "imag": 0.604
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.0294,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.294,
+            "imag": 0.604
+          },
+          {
+            "real": -0.294,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.6174,
+          "imag": 1.2684
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.32339999999999997,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.3368398
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.9114,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.32339999999999997,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.40640800000000027
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.32339999999999997,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.3368398
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.32339999999999997,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.3368398
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.9114,
+              "imag": -0.8723999999999998
+            },
+            "channel_energy": {
+              "real": -0.32339999999999997,
+              "imag": 0.6644
+            },
+            "threshold": 0,
+            "margin": 0.40640800000000027
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.32339999999999997,
+              "imag": -0.6644
+            },
+            "threshold": 0,
+            "margin": 0.3368398
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.588,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.11351999999999984
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.588,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": 0.588,
+              "imag": -1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.588,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.11351999999999984
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.6467999999999999,
+              "imag": -0.3288
+            },
+            "channel_energy": {
+              "real": -0.588,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.4237607999999997
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.588,
+              "imag": -0.20799999999999996
+            },
+            "channel_energy": {
+              "real": -0.588,
+              "imag": 1.208
+            },
+            "threshold": 1,
+            "margin": 0.4159999999999999
+          }
+        ],
+        "minimum_margin": 0.11351999999999984,
+        "minimum_wall_clearance": 0.12760000000000016,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.06673163806445613,
+              "imag": -0.01053156775376155
+            },
+            "residues": {
+              "real": 0.07907071698936041,
+              "imag": 0.05521147367224923
+            },
+            "total": {
+              "real": 0.14580235505381656,
+              "imag": 0.04467990591848768
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.5094875922278024,
+              "imag": 0.2537646443259815
+            },
+            "residues": {
+              "real": -0.36389909002265775,
+              "imag": -0.2091648098851463
+            },
+            "total": {
+              "real": 0.14558850220514463,
+              "imag": 0.04459983444083521
+            }
+          }
+        ],
+        "maximum_absolute_difference": 0.00022835166392769698,
+        "relative_spread": 0.0014974404143454436,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.0294,
+            "imag": 0.0604
+          },
+          {
+            "real": -0.294,
+            "imag": 0.604
+          },
+          {
+            "real": -0.294,
+            "imag": 0.604
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.6174,
+          "imag": 1.2684
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": -0.2573586519850614,
+            "imag": -0.7864750978732534
+          },
+          {
+            "real": -0.08768852520087339,
+            "imag": -0.09279825555881868
+          },
+          {
+            "real": 0.30779594927609644,
+            "imag": 0.23657944133589542
+          },
+          {
+            "real": 0.2956190170292169,
+            "imag": 0.4092617410667435
+          }
+        ],
+        "mean": {
+          "real": 0.06459194727984463,
+          "imag": -0.058358042757358314
+        },
+        "standard_error_real": 0.14123361976112397,
+        "standard_error_imag": 0.26410177267412954,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.10216799999999986,
+        "convergence_margin": 0.11351999999999984
+      }
+    },
+    {
+      "index": 5,
+      "x": 0.246,
+      "t": 0.62,
+      "outgoing_energies": [
+        {
+          "real": -0.0246,
+          "imag": 0.062
+        },
+        {
+          "real": -0.246,
+          "imag": 0.62
+        },
+        {
+          "real": -0.246,
+          "imag": 0.62
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.0246,
+            "imag": 0.062
+          },
+          {
+            "real": -0.246,
+            "imag": 0.62
+          },
+          {
+            "real": -0.246,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5166,
+          "imag": 1.302
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.27059999999999995,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.3918996400000001
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.7626,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.27059999999999995,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.12337439999999972
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.2706,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.39189963999999994
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.27059999999999995,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.3918996400000001
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.7626,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.27059999999999995,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.12337439999999972
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.2706,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.39189963999999994
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.492,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.295536
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.492,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": 0.492,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.49199999999999994,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.29553600000000024
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.5411999999999999,
+              "imag": -0.3640000000000001
+            },
+            "channel_energy": {
+              "real": -0.49199999999999994,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.45593744
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.49199999999999994,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": -0.49199999999999994,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.4800000000000002
+          }
+        ],
+        "minimum_margin": 0.12337439999999972,
+        "minimum_wall_clearance": 0.07799999999999985,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.03478213711348288,
+              "imag": -0.040475580075902066
+            },
+            "residues": {
+              "real": 0.10188104267986878,
+              "imag": 0.01577041177333371
+            },
+            "total": {
+              "real": 0.13666317979335166,
+              "imag": -0.024705168302568355
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.2542513130212103,
+              "imag": 0.07253445556491922
+            },
+            "residues": {
+              "real": -0.11757937341306901,
+              "imag": -0.09725282566215943
+            },
+            "total": {
+              "real": 0.13667193960814128,
+              "imag": -0.024718370097240205
+            }
+          }
+        ],
+        "maximum_absolute_difference": 1.5843665538825403e-05,
+        "relative_spread": 0.00011407411559719674,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.0246,
+            "imag": 0.062
+          },
+          {
+            "real": -0.246,
+            "imag": 0.62
+          },
+          {
+            "real": -0.246,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5166,
+          "imag": 1.302
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": 0.00958782976939744,
+            "imag": -0.40981558547615593
+          },
+          {
+            "real": 0.20530354710069448,
+            "imag": -0.15742983074592887
+          },
+          {
+            "real": 0.2651257628473401,
+            "imag": -0.3306072062271078
+          },
+          {
+            "real": 0.2990115909056993,
+            "imag": -0.5961876398793655
+          }
+        ],
+        "mean": {
+          "real": 0.19475718265578285,
+          "imag": -0.3735100655821395
+        },
+        "standard_error_real": 0.06469134007544562,
+        "standard_error_imag": 0.09102871163236585,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.11103695999999975,
+        "convergence_margin": 0.12337439999999972
+      }
+    },
+    {
+      "index": 6,
+      "x": 0.258,
+      "t": 0.62,
+      "outgoing_energies": [
+        {
+          "real": -0.025800000000000003,
+          "imag": 0.062
+        },
+        {
+          "real": -0.258,
+          "imag": 0.62
+        },
+        {
+          "real": -0.258,
+          "imag": 0.62
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.025800000000000003,
+            "imag": 0.062
+          },
+          {
+            "real": -0.258,
+            "imag": 0.62
+          },
+          {
+            "real": -0.258,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5418000000000001,
+          "imag": 1.302
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.28380000000000005,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.38458156000000004
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.7998000000000001,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.28380000000000005,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.17417759999999988
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.2838,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.38458155999999993
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.28380000000000005,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.38458156000000004
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.7998000000000001,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.28380000000000005,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.17417759999999988
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.2838,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.38458155999999993
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.516,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.27134400000000003
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.516,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": 0.516,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.516,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.27134400000000003
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.5676000000000001,
+              "imag": -0.3640000000000001
+            },
+            "channel_energy": {
+              "real": -0.516,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.46101776000000005
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.516,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": -0.516,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          }
+        ],
+        "minimum_margin": 0.17417759999999988,
+        "minimum_wall_clearance": 0.07799999999999985,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.04461522018832494,
+              "imag": -0.0384453052014138
+            },
+            "residues": {
+              "real": 0.10195682634418753,
+              "imag": 0.027827197802477076
+            },
+            "total": {
+              "real": 0.14657204653251246,
+              "imag": -0.010618107398936726
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.30782653130072823,
+              "imag": 0.08037206228627392
+            },
+            "residues": {
+              "real": -0.16131144176059475,
+              "imag": -0.0909459342807315
+            },
+            "total": {
+              "real": 0.14651508954013348,
+              "imag": -0.010573871994457584
+            }
+          }
+        ],
+        "maximum_absolute_difference": 7.211705755431638e-05,
+        "relative_spread": 0.0004907386265420243,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.025800000000000003,
+            "imag": 0.062
+          },
+          {
+            "real": -0.258,
+            "imag": 0.62
+          },
+          {
+            "real": -0.258,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5418000000000001,
+          "imag": 1.302
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": 0.11819806665057284,
+            "imag": -0.3856828306413628
+          },
+          {
+            "real": -0.09335877430656467,
+            "imag": -0.3825576751605469
+          },
+          {
+            "real": 0.22013805722174268,
+            "imag": 0.03996313220228773
+          },
+          {
+            "real": 0.15946818364482693,
+            "imag": -0.30599071729405714
+          }
+        ],
+        "mean": {
+          "real": 0.10111138330264444,
+          "imag": -0.2585670227234198
+        },
+        "standard_error_real": 0.06811966321530792,
+        "standard_error_imag": 0.1012016842420421,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.1567598399999999,
+        "convergence_margin": 0.17417759999999988
+      }
+    },
+    {
+      "index": 7,
+      "x": 0.27,
+      "t": 0.62,
+      "outgoing_energies": [
+        {
+          "real": -0.027000000000000003,
+          "imag": 0.062
+        },
+        {
+          "real": -0.27,
+          "imag": 0.62
+        },
+        {
+          "real": -0.27,
+          "imag": 0.62
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.027000000000000003,
+            "imag": 0.062
+          },
+          {
+            "real": -0.27,
+            "imag": 0.62
+          },
+          {
+            "real": -0.27,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5670000000000001,
+          "imag": 1.302
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.29700000000000004,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.37691500000000006
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.8370000000000001,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.29700000000000004,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.2273999999999999
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.29700000000000004,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.3769149999999999
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.29700000000000004,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.37691500000000006
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.8370000000000001,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.29700000000000004,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.2273999999999999
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.29700000000000004,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.3769149999999999
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.54,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.246
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.54,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": 0.54,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.54,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.246
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.5940000000000001,
+              "imag": -0.3640000000000001
+            },
+            "channel_energy": {
+              "real": -0.54,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.46634
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.54,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": -0.54,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          }
+        ],
+        "minimum_margin": 0.2273999999999999,
+        "minimum_wall_clearance": 0.07799999999999985,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.05476379766028323,
+              "imag": -0.03513996291669906
+            },
+            "residues": {
+              "real": 0.10025815751057994,
+              "imag": 0.03979130924420391
+            },
+            "total": {
+              "real": 0.15502195517086317,
+              "imag": 0.00465134632750485
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.3734183925038717,
+              "imag": 0.08993215390536587
+            },
+            "residues": {
+              "real": -0.2183897293036816,
+              "imag": -0.0851262473450114
+            },
+            "total": {
+              "real": 0.1550286632001901,
+              "imag": 0.00480590656035447
+            }
+          }
+        ],
+        "maximum_absolute_difference": 0.0001547057311025661,
+        "relative_spread": 0.0009974377949572956,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.027000000000000003,
+            "imag": 0.062
+          },
+          {
+            "real": -0.27,
+            "imag": 0.62
+          },
+          {
+            "real": -0.27,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5670000000000001,
+          "imag": 1.302
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": 0.10544912298579258,
+            "imag": -0.20787369387626908
+          },
+          {
+            "real": 0.06012486618291135,
+            "imag": -0.40416638362881474
+          },
+          {
+            "real": 0.22607248491737975,
+            "imag": -0.6074925678052998
+          },
+          {
+            "real": 0.13443951189997605,
+            "imag": -0.2808581924205911
+          }
+        ],
+        "mean": {
+          "real": 0.13152149649651493,
+          "imag": -0.3750977094327437
+        },
+        "standard_error_real": 0.035030524434504905,
+        "standard_error_imag": 0.0874153476050943,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.20465999999999993,
+        "convergence_margin": 0.2273999999999999
+      }
+    },
+    {
+      "index": 8,
+      "x": 0.282,
+      "t": 0.62,
+      "outgoing_energies": [
+        {
+          "real": -0.0282,
+          "imag": 0.062
+        },
+        {
+          "real": -0.282,
+          "imag": 0.62
+        },
+        {
+          "real": -0.282,
+          "imag": 0.62
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.0282,
+            "imag": 0.062
+          },
+          {
+            "real": -0.282,
+            "imag": 0.62
+          },
+          {
+            "real": -0.282,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5922,
+          "imag": 1.302
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.3102,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.3688999600000001
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.8741999999999999,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.3102,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.28304159999999956
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.3102,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.3688999599999999
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.3102,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.3688999600000001
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.8741999999999999,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.3102,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.28304159999999956
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.3102,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.3688999599999999
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.564,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.21950400000000014
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.564,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": 0.564,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.564,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.21950400000000014
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.6204,
+              "imag": -0.3640000000000001
+            },
+            "channel_energy": {
+              "real": -0.564,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.47190416
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.564,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": -0.564,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          }
+        ],
+        "minimum_margin": 0.21950400000000014,
+        "minimum_wall_clearance": 0.07799999999999985,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.06517601500420261,
+              "imag": -0.03016890460257496
+            },
+            "residues": {
+              "real": 0.09682191048068958,
+              "imag": 0.051354941926383256
+            },
+            "total": {
+              "real": 0.1619979254848922,
+              "imag": 0.021186037323808297
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.4533208417629168,
+              "imag": 0.10200873105788409
+            },
+            "residues": {
+              "real": -0.29116326291175376,
+              "imag": -0.08078739211195773
+            },
+            "total": {
+              "real": 0.16215757885116305,
+              "imag": 0.021221338945926357
+            }
+          }
+        ],
+        "maximum_absolute_difference": 0.0001635096385103416,
+        "relative_spread": 0.00099981259114644,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.0282,
+            "imag": 0.062
+          },
+          {
+            "real": -0.282,
+            "imag": 0.62
+          },
+          {
+            "real": -0.282,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.5922,
+          "imag": 1.302
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": 0.34616487599491613,
+            "imag": -0.19030647974598874
+          },
+          {
+            "real": 0.15966137014407156,
+            "imag": -0.26560398651562117
+          },
+          {
+            "real": 0.26686496504693397,
+            "imag": -0.4146568182987701
+          },
+          {
+            "real": 0.02557486398871478,
+            "imag": -0.22011105734884268
+          }
+        ],
+        "mean": {
+          "real": 0.1995665187936591,
+          "imag": -0.2726695854773057
+        },
+        "standard_error_real": 0.06945362723472455,
+        "standard_error_imag": 0.049796567014974896,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.19755360000000013,
+        "convergence_margin": 0.21950400000000014
+      }
+    },
+    {
+      "index": 9,
+      "x": 0.294,
+      "t": 0.62,
+      "outgoing_energies": [
+        {
+          "real": -0.0294,
+          "imag": 0.062
+        },
+        {
+          "real": -0.294,
+          "imag": 0.62
+        },
+        {
+          "real": -0.294,
+          "imag": 0.62
+        }
+      ],
+      "convergence_audit": {
+        "outgoing_energies": [
+          {
+            "real": -0.0294,
+            "imag": 0.062
+          },
+          {
+            "real": -0.294,
+            "imag": 0.62
+          },
+          {
+            "real": -0.294,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.6174,
+          "imag": 1.302
+        },
+        "records": [
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.32339999999999997,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.3605364400000001
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              0,
+              1
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.9114,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.32339999999999997,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.3411023999999998
+          },
+          {
+            "partition": [
+              0,
+              1
+            ],
+            "side": [
+              2,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.32339999999999997,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.36053643999999996
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.32339999999999997,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.3605364400000001
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              0,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.9114,
+              "imag": -0.9220000000000002
+            },
+            "channel_energy": {
+              "real": -0.32339999999999997,
+              "imag": 0.682
+            },
+            "threshold": 0,
+            "margin": 0.3411023999999998
+          },
+          {
+            "partition": [
+              0,
+              2
+            ],
+            "side": [
+              1,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.32339999999999997,
+              "imag": -0.6819999999999999
+            },
+            "threshold": 0,
+            "margin": 0.36053643999999996
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": 0.588,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.19185600000000003
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              1,
+              2
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.588,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": 0.588,
+              "imag": -1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "continuous",
+            "sector": null,
+            "momentum": {
+              "real": 0.0,
+              "imag": 0.0
+            },
+            "channel_energy": {
+              "real": -0.588,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.19185600000000003
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-sum:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.6467999999999999,
+              "imag": -0.3640000000000001
+            },
+            "channel_energy": {
+              "real": -0.588,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.47771023999999995
+          },
+          {
+            "partition": [
+              1,
+              2
+            ],
+            "side": [
+              0,
+              3
+            ],
+            "kind": "residue:reflected-difference:wall-1",
+            "sector": 0,
+            "momentum": {
+              "real": 0.588,
+              "imag": -0.24
+            },
+            "channel_energy": {
+              "real": -0.588,
+              "imag": 1.24
+            },
+            "threshold": 1,
+            "margin": 0.48
+          }
+        ],
+        "minimum_margin": 0.19185600000000003,
+        "minimum_wall_clearance": 0.07799999999999985,
+        "convergent": true
+      },
+      "crossing_audit": {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "values": [
+          {
+            "frame": 0,
+            "q": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.0762447520073071,
+              "imag": -0.023581571173365425
+            },
+            "residues": {
+              "real": 0.09174381613366484,
+              "imag": 0.062225753104686775
+            },
+            "total": {
+              "real": 0.16798856814097193,
+              "imag": 0.03864418193132135
+            }
+          },
+          {
+            "frame": 1,
+            "q": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "backend": "c",
+            "continuous": {
+              "real": 0.5501069839811371,
+              "imag": 0.11761404941873299
+            },
+            "residues": {
+              "real": -0.3822185606301538,
+              "imag": -0.07914273860955712
+            },
+            "total": {
+              "real": 0.1678884233509833,
+              "imag": 0.038471310809175874
+            }
+          }
+        ],
+        "maximum_absolute_difference": 0.000199783392287005,
+        "relative_spread": 0.0011589968217129959,
+        "relative_tolerance": 0.01,
+        "passed": true
+      },
+      "status": "integrated",
+      "amplitude": {
+        "outgoing_energies": [
+          {
+            "real": -0.0294,
+            "imag": 0.062
+          },
+          {
+            "real": -0.294,
+            "imag": 0.62
+          },
+          {
+            "real": -0.294,
+            "imag": 0.62
+          }
+        ],
+        "incoming_energy": {
+          "real": -0.6174,
+          "imag": 1.302
+        },
+        "backend": "hybrid",
+        "estimates": [
+          {
+            "real": 0.5290616110892128,
+            "imag": -0.14143517945154963
+          },
+          {
+            "real": -0.1396739015337832,
+            "imag": -0.14974287254355884
+          },
+          {
+            "real": 0.3411917528505911,
+            "imag": -0.028038880593937388
+          },
+          {
+            "real": 0.15962374328551893,
+            "imag": -0.31673151379549497
+          }
+        ],
+        "mean": {
+          "real": 0.2225508014228849,
+          "imag": -0.1589871115961352
+        },
+        "standard_error_real": 0.14235843900633624,
+        "standard_error_imag": 0.0594588526528414,
+        "samples_per_replicate": 64,
+        "replicates": 4,
+        "radial_power": 0.17267040000000003,
+        "convergence_margin": 0.19185600000000003
+      }
+    }
+  ]
+}

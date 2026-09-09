@@ -1,0 +1,88 @@
+{
+  "schema": "nsrr-spin-quadrature-diagnostic-v1",
+  "t": 0.6,
+  "config_digest": "a52c461223624ce68de9dce0aa1d2571befad8eea0bd009762008cc146bd34ec",
+  "kappa": 9.940408163265307,
+  "rows": [
+    {
+      "channel": "target",
+      "N": 5,
+      "Z": 6.55686638700861e-10,
+      "origin": "validated reference",
+      "Q_diagnostic": 1.949426255891526e-07
+    },
+    {
+      "channel": "target",
+      "N": 6,
+      "Z": 6.570771422318683e-10,
+      "origin": "fresh fixed-cutoff nodes",
+      "Q_diagnostic": 1.953560371080492e-07,
+      "nodes": 216,
+      "seconds_sum": 1812.492610282,
+      "relative_change_from_previous_N": 0.0021206830350581907
+    },
+    {
+      "channel": "target",
+      "N": 7,
+      "Z": 6.574598832292943e-10,
+      "origin": "fresh fixed-cutoff nodes",
+      "Q_diagnostic": 1.9546983008560124e-07,
+      "nodes": 343,
+      "seconds_sum": 2604.896012745,
+      "relative_change_from_previous_N": 0.0005824902021793754
+    },
+    {
+      "channel": "source",
+      "N": 3,
+      "Z": 7.648195010412685e-10,
+      "origin": "validated reference",
+      "Q_diagnostic": 1.85987849117151e-07
+    },
+    {
+      "channel": "source",
+      "N": 4,
+      "Z": 7.715045297564742e-10,
+      "origin": "validated reference",
+      "Q_diagnostic": 1.8761350603402453e-07,
+      "relative_change_from_previous_N": 0.008740661955015883
+    },
+    {
+      "channel": "source",
+      "N": 5,
+      "Z": 7.72057166576776e-10,
+      "origin": "validated reference",
+      "Q_diagnostic": 1.8774789556437902e-07,
+      "relative_change_from_previous_N": 0.0007163105321965624
+    },
+    {
+      "channel": "source",
+      "N": 6,
+      "Z": 7.720704252824786e-10,
+      "origin": "fresh fixed-cutoff nodes",
+      "Q_diagnostic": 1.8775111979983892e-07,
+      "nodes": 216,
+      "seconds_sum": 3021.913556375,
+      "Z_by_literal_lift": [
+        7.720704252824786e-10,
+        7.720704252824786e-10,
+        7.720704252824786e-10,
+        7.720704252824786e-10
+      ],
+      "mixed_fraction": 0.4795739971512664,
+      "relative_change_from_previous_N": 1.717321757577217e-05
+    }
+  ],
+  "finest_diagnostic_gap": -0.03948798790269625,
+  "physical_Q_NSrr": null,
+  "protected": {
+    "Code/full_ramond_block_runtime/compute_full_block.py": "10c3cfa5bb4b87a8407cbe35fe7c0530be79bf62f231c93c27868baefff7913c",
+    "Code/full_ramond_block_runtime/compute_q_expansion.py": "a3d9bb8f305469354ce25d494163b1a01f6fbecd7587f3be3bcbf5e075fb3a3e",
+    "Code/ramond_branching_recursion/compute_target.py": "46ebb1a8bd10b356ee8697637f61ffb62b680258858e95aabbb69ad68b6568ca",
+    "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470",
+    "Code/double_virasoro/nsrr/nsrr_genus2_block.py": "f9448f5393898d1fcd8957b83b4c94dd5084a4728100f0eb5d027097fa25869d",
+    "Code/double_virasoro/nsrr/ramond_pbw_generalized_ward.py": "6f904573e9b323ecc96593afbaac19746bae32ecd319f89448548b7474525ce5",
+    "Code/c_Recursion/ns_genus2_partition.py": "56499bf06d3f12809ffc44331ececd40966cf974c65606edab9c332b964ffd2c",
+    "Code/c_Recursion/theta_star_algebra.py": "57de475cc566c00984578945aedfba621d33e94056d0a3a5a29e08bfccd2c017"
+  },
+  "warning": "Successive differences are convergence observations, not rigorous error bounds; numerator spin identification remains separate."
+}

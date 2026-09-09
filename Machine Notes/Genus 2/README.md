@@ -16,6 +16,12 @@ reorganization.
 
 ## Other genus-two notes
 
+- `NSRR_SPIN_AND_QUADRATURE_2026-08-30.md` checks numerator spin
+  identification and fixed-block momentum convergence, with the refined
+  t=0.60 point overlaid on the previous Omega scan.
+- `GENUS2_PLUMBING_TO_ABEL_JACOBI_WEYL_ANOMALY_2026-08-29.tex` gives the
+  compact analytic free-boson derivation of the plumbing-to-canonical Weyl
+  factor, including the genus-one normalization check.
 - `NS_GENUS2_FIRST_RESULT.md`
 - `NS_GENUS2_FREE_SPIN_REVIEW_2026-08-08.md`
 - `ns_genus2_cross_sewing_glasses_parity_audit.md`

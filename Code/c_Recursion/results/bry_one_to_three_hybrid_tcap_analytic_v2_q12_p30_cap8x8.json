@@ -1,0 +1,82 @@
+{
+  "status": "worldsheet_only_unfrozen",
+  "comparison_performed": false,
+  "matrix_model_data_included": false,
+  "calculation": "BRY regulated Type-0B sphere four-point integral",
+  "recursion_atlas": {
+    "bulk": "linear-channel h recursion",
+    "bulk_gate": "|q_ell| < 0.3",
+    "corners": "channel-adapted c recursion",
+    "maximum_twice_level": 24
+  },
+  "polynomial_subtraction": {
+    "s_channel": [],
+    "t_channel": [
+      {
+        "sector": "NS-C",
+        "momentum_range": [
+          0.0,
+          0.9430708966187976
+        ],
+        "coefficient": "C(omega1,omega,P) C(omega2,omega3,P) [1+(omega2+omega3)^2-P^2]^2/(4*pi)",
+        "radial_power": "-3+P^2-(omega2+omega3)^2"
+      }
+    ],
+    "u_channel": [],
+    "implementation": "subtracted pointwise before moduli quadrature"
+  },
+  "settings": {
+    "incoming_imaginary": 0.6,
+    "epsilon": 0.01,
+    "p_max": 4.0,
+    "p_order": 30,
+    "angular_order": 8,
+    "radial_order": 8,
+    "cap_angular_order": 8,
+    "cap_radial_order": 8,
+    "q_order": 12,
+    "q_threshold": 0.3,
+    "structure_precision": 28,
+    "block_precision": 65,
+    "region": "t-cap"
+  },
+  "kinematics": {
+    "incoming_energy": {
+      "real": 0.3333333333333333,
+      "imag": 0.6
+    },
+    "each_outgoing_energy": {
+      "real": 0.1111111111111111,
+      "imag": 0.19999999999999998
+    }
+  },
+  "regions": {
+    "low_z": {
+      "real": 0.0,
+      "imag": 0.0
+    },
+    "bulk": {
+      "real": 0.0,
+      "imag": 0.0
+    },
+    "t_cap": {
+      "real": 0.0009477481497558656,
+      "imag": -0.000219000799775161
+    }
+  },
+  "reduced_moduli_integral": {
+    "real": 0.0009477481497558656,
+    "imag": -0.000219000799775161
+  },
+  "worldsheet_amplitude_coefficient": {
+    "real": 0.0005576809572047251,
+    "imag": 0.0024134208454375024
+  },
+  "source_sha256": {
+    "run_bry_one_to_three_hybrid_worldsheet.py": "063114548ba7cfbfdbba69696ed51c3f96ed30f7f489f918a698af841c07534b",
+    "bry_one_to_three.py": "fc2cd97f74249e8aeab1116c31b8372175f71a59d5a7e937c66221b06a2998f7",
+    "type0b_sphere_four_point_hybrid.py": "5e540f8d65fe30937aeebdc3fa49c17350e0e21d860ea4133b0135fb5e287ba5",
+    "ns_multipoint_c_recursion.py": "9387baa58c25a24d155716a48fb70ec14b9a18e52c24a6d5bc0f190cedb92b75",
+    "ns_multipoint_h_recursion.py": "ce63ae0b8f34328ad05ebec471d2c01dbd4f0fe7d51e1cd4027649c1e54dabcd"
+  }
+}

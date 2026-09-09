@@ -82,7 +82,7 @@ one can then arrive at
 W^{(1)}_{rs} &= -\frac{\partial c_{rs}(h_1)}{\partial h_1} A^c_{rs} q_1^{rs} [P_c^{rs}(h_3, h_2)]^2 F(h_1\rightarrow h_1+rs,c\rightarrow c_{rs}(h_1)),
 \fe
 where the quantity $A^c_{rs}$ and the fusion polynomial $P_c^{rs}(h_3, h_2)$ are defined as
-\ie
+\ie\label{norm_fusion_poly}
 &A_{r s}^c=\lim _{h \rightarrow d_{r s}}\frac{h-d_{r s}}{\|\sum_{|M|=rs} \chi_{rs}^M L_{-M}\nu_h \|^2}=\frac{1}{2} \prod_{m=1-r}^r \prod_{n=1-s}^s\left(m b_{rs}+n b^{-1}_{rs}\right)^{-1}, \quad(m, n) \neq(0,0),(r, s)\\
 &P_c^{r s}(h_1, h_2)  \equiv \rho\left(\chi_{r s}, \nu_2, \nu_1\right) =\prod_{p=1-r \text { step } 2}^{r-1} \prod_{q=1-s \text { step } 2}^{s-1} \frac{\lambda_1+\lambda_2+p b_{rs}+q b^{-1}_{rs}}{2} \frac{\lambda_1-\lambda_2+p b_{rs}+q b^{-1}_{rs}}{2},
 \fe
@@ -123,26 +123,28 @@ Using this relation, one can recursively evalute the conformal block $F(h_1, h_2
 
 \subsection{h-recursion}
 
-We now review the derivation of h recursion relation, using tours n point block in the necklace channel as the example. The analogous relation for sphere n-point block can be obtained by the standard map from Riemann sphere to pillow geometry $T^2/Z^2$ and do the analogous analysis.
-
-Consider the tours with complex structrue $\tau$, and the flat coordinate on the torus has $z\sim z+2\pi\sim z+2\pi \tau$. The torus n point block in the necklace channel is given by
-\ie
-....
+We now review the derivation of h recursion relation for the  tours n point block in the necklace channel.
+Consider the tours with complex structrue $\tau$, and the flat coordinate on the torus has $z\sim z+2\pi\sim z+2\pi \tau$. We consider $N$ primary operators inserted at positions $z=w_i$ for $i=1,\cdots,N$. We set $w_N=0$ by convention, and write $w_i=2\pi(\tau-\sum_{k=1}^i\tau_k)$. In the necklace channel, the torus is decomposed into $N$ cylinders, of moduli $\tau_1, \tau_2, \cdots,\tau_N$, with $\sum_{k=1}^N\tau_k=\tau$. We will also write $q_i=e^{2\pi i\tau_i}$.  The torus $N$-point block is defined as
+\ie\label{necklaceblock}
+&F\left(q_1,h_1,d_1,...,q_N,h_N,d_N,c\right)
+\\
+=&\sum_{n_1,...,n_N=0}^{\infty}\left(\prod_{i=1}^{N}q_i^{n_i}\right)\sum_{|A_1|=|B_1|=n_1}...\sum_{|A_N|=|B_N|=n_N}\left[\prod_{i=1}^N\left(G_{h_i}\right)^{A_iB_i}\rho(L_{-B_i}\nu_i,\mu_i,L_{-A_{i+1}}\nu_{i+1})\right].
 \fe
 where $h_i$ denotes the weight of the intermediate primaries $\nu_i$ and $d_i$ denote the conformal weight of external primaries $\mu_i$.
-The gram matrix would be degenerate at $h_i=h_{r_i,s_i}(c)$. For a generic $c$, the matrix element of the inverse gram matrix will develop a simple pole. Therefore, one can make the following ansatz on the virasoro block
+
+The idea of the $h$ recursion relation is to analyze the analytic structure of the conformal block as a meromorphic function in $h_i$, sharing the same spirit as the c recursion. The gram matrix would be degenerate at $h_i=h_{r_i,s_i}(c)$, where a singular vector $\chi_{r,s}$ with weight $h_{r,s}+rs$ is developed. For a generic $c$, the matrix element of the inverse gram matrix will develop a simple pole. Therefore, one can make the following ansatz on the Virasoro block
 \ie
-F(q_i,h_i,d_i;c)= F^{\text{reg}}(q_i,h_i,d_i;c)+ \sum_{i=1}^N \sum_{r_i\geq 1, s_i\geq 1}\frac{B^{(i)}_{r,s}}{h_i- h_{r,s}(c)}.
+F(q_i,h_i,d_i;c)= F_{\text{reg}}(q_i,h_i,d_i;c)+ \sum_{i=1}^N \sum_{r_i\geq 1, s_i\geq 1}\frac{B^{(i)}_{r,s}}{h_i- h_{r,s}(c)}.
 \fe
-where $F^{\text{reg}}$ has no pole on the entire $h_i$ plane.
+where $F^{\text{reg}}$ has no pole on the entire $h_i$ plane. The rest of the work will be devoted to pinning down the unknown factor $B^{(i)}_{r,s}$ and $F^{\text{reg}}(q_i,h_i,d_i;c)$.
 
 The factor $B^{(i)}_{r,s}$ can be extracted by considering the limit 
 \ie
-\lim_{h_i\rightarrow h_{r,s}} \left(h_i-h_{r,s}(c)\right) F
+B^{(i)}_{r,s}=\lim_{h_i\rightarrow h_{r,s}} \left(h_i-h_{r,s}(c)\right) F(q_i,h_i,d_i;c).
 \fe
-Under this limit, only the singular vector inside the Verma module of $\nu_i$,  as well as the descendant of $\chi_{r,s}$ will contribute to the Virasoro block. Following from the same derivation in the c-recursion, we have 
-\ie
-B^{(i)}_{r,s}(h_1,\dots \hat{h}_i, h_N) =A_{r,s}^c q_i^{rs} P_{c}^{r,s}  P_c^{rs}(h_{i-1}, d_{i-1}) P_c^{rs}(h_{i+1}, d_{i}) F(h_i\rightarrow h_{r,s}+rs, c),
+Under this limit, only the singular vector $\chi_{r,s}$ inside the Verma module of $\nu_i$,  as well as the descendant of $\chi_{r,s}$ will contribute to the Virasoro block. Following from the same derivation in the c-recursion, we have 
+\ie\label{virasoro_Res}
+B^{(i)}_{r,s}(h_1,\dots \hat{h}_i, h_N) =A_{r,s}^c q_i^{rs} P_c^{rs}(h_{i-1}, d_{i-1}) P_c^{rs}(h_{i+1}, d_{i}) F(h_i\rightarrow h_{r,s}+rs, c),
 \fe 
 Now let us try to extract the regular part $F_{\text{reg}}$. The key step is to change the variable from $\{h_i |i=1,\dots N \}$ to $\{h_1,a_i=h_i-h_1 |i=2,\dots N \}$, with $a_1=0$ as the bookkeeping notation. Then we have
 \ie
@@ -152,40 +154,233 @@ In this new variable, $B^{(i)}_{r,s}(h_1,\dots \hat{h}_i, h_N)$ can be viewed as
 \ie
 B^{(i)}_{r,s}=\lim_{h_1\rightarrow -a_i+h_{r,s}} \left(h_1+a_i-h_{r,s}(c)\right) F.
 \fe
-It can thus be treated as a function of $a_2\dots a_N$ and independent of $h_1$. It allows us to extract $F^{\text{reg}}$ by analyzing the large $h_1$ limit with $a_i$ keep fixed, where the singular term all get surpressed. A prior, the large $h_1$ limit alone is not sufficient to pin down $F^{\text{reg}} (h_1,a_2\dots ,a_N)$ as a function of $h_1$. The last recipe comes from analyzing the large $h_1$ behavior of the virasoro block, which shows that $F^{\text{reg}} (h_1,a_2\dots ,a_N)$ has no pole at $h_1\rightarrow \infty$. By the Liouville theorem of analytic function, the regular part must be independent of $h_1$. Therefore, the regular part can be fully determined by the limit
+It can thus be treated as a function of $a_2\dots a_N$ and independent of $h_1$. It allows us to extract $F^{\text{reg}}$ by analyzing the large $h_1$ behavior of Virasoro block with $a_i$ keep fixed, where the singular term all get suppressed. As we will show, the strict large $h_1$ limit for the Virasoro block exist, and therefore $F^{\text{reg}} (h_1,a_2\dots ,a_N)$ has no pole at $h_1\rightarrow \infty$. By the Liouville theorem of analytic function, the regular part must be independent of $h_1$. Therefore, the regular part can be fully determined by the limit
 \ie
 F_{\text{reg}} (q_i, a_i,d_i ; c) =\lim_{h_1\rightarrow \infty} F(q_i,h_i,d_i;c).
 \fe
-Now we will present the analysis for the large $h$ behavior of the Virasoro block, and compute the regular part $F^{\text{reg}} $ explicitly. To do that, it is convenient to work in the orthogonal basis for the internal states. Let us use $[A]$ to denote the length of the partition and use $|A|$ to denote the number of boxes in a partition. We would assign the following complete order on the set of all the partitions.
-A<B if [A]<[B] or  [A]=[B] \text{and} $a_i <b_ i$ for the first distinct $a_i$ and $b_i$. Using that order, we can conduct the gram smith algorithm and obtain a orthogonal basis for the Verma module
-\ie 
-\ell_{-A}\ket{h} = L_{-A}\ket{h} + \sum_{|B|=n, B<A} k_{AB}(c,h) L_{-B}\ket{h}.
+Now we will present the analysis for the large $h$ behavior of the Virasoro block, and compute the regular part $F_{\text{reg}}$ explicitly. 
+
+To do the power counting for $h_1$ in the conformal block, it is convenient to introduce an orthogonal basis defined as follows. Let $A=(a_1,\ldots,a_n)$ be a partition, with
+$a_1\geq\cdots\geq a_n\geq1$. We write
+\ie
+[A]=n,
+\qquad
+|A|=\sum_{i=1}^{n}a_i,
+\fe
+for the number of rows and the size of the partition, respectively. Introduce a total order on the set of partitions by declaring $A<B$
+if either
+\begin{enumerate}
+    \item $[A]<[B]$; or
+    \item $[A]=[B]$ and $a_j<b_j$ at the first index $j$ for which
+    $a_j\neq b_j$.
+\end{enumerate}
+
+For generic $c$ and $h$, an orthogonal basis of the Verma module
+can be constructed by applying the Gram--Schmidt procedure to the
+states $L_{-A}|h\rangle$ at each fixed level, in increasing order
+with respect to the ordering above. The resulting states take the form
+\ie\label{orthob}
+\ell_{-A}|h\rangle
+=
+L_{-A}|h\rangle
++
+\sum_{\substack{|B|=|A|\\ B<A}}
+k^A_B(c,h)\,L_{-B}|h\rangle.
+\fe
+The scaling of $k^A_B(c,h)$ can be determined by the orthogonal condition $\langle h| \ell_{-B}^\dagger \ell_{-A} |h\rangle =0$ as well as the scaling of the matrix element 
+\ie\label{gram-scaling}
+\langle h|L_{-A}^{\dagger}L_{-B}|h\rangle
+=
+\begin{cases}
+C_A h^{[A]}\left(1+\mathcal{O}(h^{-1})\right),
+& A=B,\\[4pt]
+\mathcal{O}\!\left(h^{[A]-1}\right),
+& [A]=[B],\quad A\neq B,\\[4pt]
+\mathcal{O}\!\left(h^{\min([A],[B])}\right),
+& [A]\neq[B].
+\end{cases}
+\fe
+One has
+\ie\label{kscaling}
+&k^A_B(c,h) \sim {\cal O}(h^{-1}),~~~ [B]=[A],~B\not=A;
+\\
+& k^A_B(c,h) \sim {\cal O}(h^0),~~~ [B]<[A].
+\fe
+Therefore, the norm of the basis state $\ell_{-A}|h\rangle$ satisfies
+\ie
+\langle h| \ell_{-A}^\dagger \ell_{-A} |h\rangle =\langle h| L_{-A}^\dagger L_{-A} |h\rangle +\dots.
+\fe
+where $\dots$ denote the subleading term in $h_1$. Under the orthogonal basis, the Virasoro block can be represented as 
+\ie\label{hlimit}
+F= \sum_{n_1,...,n_N=0}^{\infty}\left(\prod_{i=1}^{N}q_i^{n_i}\right)\sum_{|A_1|=n_1}...\sum_{|A_N|=n_N}\left[\prod_{i=1}^N{\rho(\ell_{-A_i}h_1,d_i,\ell_{-A_{i+1}}h_1)\over\langle h_1|\ell_{-A_i}^\dag\ell_{-A_i}|h_1\rangle}\right].
 \fe
 
-\todo[inline]{CCY's prove can be further simplified. The only point that one need to prove is that at large $h_1$ limit with $a_i$ keep fixed, the three point function $\rho(L_{-A}\nu_i,\mu_i,L_{-B}\nu_{i+1})$ satisfy the same ward identity as $\rho(L_{-A}\nu_i,\mu_i,L_{-B}\nu_{i+1})$. Therefore, the large $h$ limit can be identified with the vacuum block. }
+We also need to determine the asymptotic of three point function  $\rho(\ell_{-A}\nu_i,\mu_i,\ell_{-B}\nu_{i+1})$. The key observation is that the three point function $\rho(L_{-A}\nu_i,\mu_i,L_{-B}\nu_{i+1})$ satisfy the same conformal ward identity as $G_{AB}=\rho(L_{-A}\nu_i,\mathbf{1},L_{-B}\nu_{i})$  when $h_1$ is large. This is because all the terms in the ward identity that involves the action of Virasoro generators on $\mu_i$ will produce the subleading contribution in $h_1$. Therefore, one can effectively replace $\mu_i$ with the identity operator, with the caveat of replacing $\nu_{i+1}$ in the matrix element with $\nu_i$ to ensure the normalization $\rho(\nu_i , \mathbf{1},\nu_i)=1$ make sense.
 
-This orthogonal basis is different from \ref{eq:gram-smith} used in c-recursion analysis, because we choose a different order of doing the orthogonalization. Under this basis, the Virasoro block can be expressed as
+Combining this argument with the scaling of $k^A_B$ \eqref{kscaling}, we conclude
 \ie
-123
+\lim_{h_1\rightarrow \infty} \frac{\rho(\ell_{-A}\nu_i,\mu_i,\ell_{-B}\nu_{i+1})}{\langle h| \ell_{-A}^\dagger \ell_{-A} |h\rangle}=\lim_{h_1\rightarrow \infty} \frac{\rho(L_{-A}\nu_i,\mathbf{1},L_{-B}\nu_{i+1} )+\dots}{\langle h| L_{-A}^\dagger L_{-A} |h\rangle+\dots} = \delta_{AB}.
 \fe
-At large $h_1$ limit with $a_i$ fixed, all the weight of the intermediate primary grows as $h_1$. The conformal Ward identity for the three point function get simplified because the external weight does not scale with $h_1$.
+Therefore, the large $h_1$ limit of the Virasoro block exist and collapse into 
 \ie
-\rho(\ell_{-A} \nu_{i},  \mu_{i}, \ell_{-B} \nu_{i+1}) \sim \rho(\ell_{-A} \nu_{i},  \mathbb{1}, \ell_{-B} \nu_{i+1})
+\lim_{h_1\rightarrow \infty} F(h_1,a_i,d_i)= \sum_{n=0}^{\infty} p(n) (q_1\dots q_N)^n= \prod_{n=1}^{\infty} \frac{1}{1-(q_1\dots q_N)^n}.
 \fe
-Therefore, the large $h_1$ regular block can be identified with the vacuum torus block. We have
+We can thus identify it as the regular block and conclude the $h$ recursion in the necklace channel as
 \ie
-F_{\text{reg}} (q_i, a_i,d_i ; c) = \prod_{n=1}^{\infty} \frac{1}{1-(q_1\dots q_N)^n}.
+F(q_i,h_i,d_i;c)= \prod_{n=1}^{\infty} \frac{1}{1-(q_1\dots q_N)^n} + \sum_{i=1}^N \sum_{r_i\geq 1, s_i\geq 1}\frac{B^{(i)}_{r,s}}{h_i- h_{r,s}(c)}.
+\fe
+with $B^{(i)}_{r,s}$ defined in \eqref{virasoro_Res}.
+
+\subsection{h-recursion for sphere n point block in elliptic parameter}
+
+In this section, we are going to explore the $h$ recursion for sphere $n$ point block in the elliptic parameter. The idea is to use the fact that the 4-punctured Riemann sphere $S^2$ is conformal equivalent to the pillow geometry $T^2/Z_2$ with flat metric, and write down the recursion relation in the pillow frame. As we will see, it provides an efficient resummation over the puncture position moduli $z_i$ and thus providing a very efficient way of computing sphere n point block.
+
+\subsubsection*{Conformal mapping to pillow geometry}
+
+Use conformal symmetry to fix 4 puncture to be at $(0,z,1,\infty)$.  The conformal map from 4-punctured sphere to pillow geometry can be worked out by identifying the Riemann sphere as the $x$-plane for the elliptic curve\footnote{The genus of the curve can be worked out by treating it as a projective variety inside $\mathbb{CP}^2$ and using the adjunction formula to compute the chern class. Use the fact that the top chern class = eular class, one can compute the eular characteristic of the curve to show that it has $\chi= 0$, namely it has genus 1.}
+\ie
+y^2= x(x-z)(x-1).
+\fe
+In this presentation, the elliptic curve provides a double cover of the $x$-plane by looking at two branches for $y$. The single copy of the Riemann sphere can thus be identified as the quotient $T^2/\mathbb{Z}_2$, with $\mathbb{Z}_2$ acting as $y\rightarrow -y$ that identify two branches. Four fix point loci of the $\mathbb{Z}_2 $ action is the position of 4 punctures. 
+
+Introduce the holomorphic one form on the elliptic curve
+\ie
+\omega =\frac{dx}{y} = \frac{dx}{\sqrt{x(x-z)(x-1)}}
+\fe
+We can choose A cycle to be the loop surrounding $(0,z)$ and B cycle to be the loop surrounding $(z,1)$. The complex structure of the torus can be computed by
+\ie
+\tau =\frac{\int_{B}\omega}{\int_{A}\omega} =  i\frac{K(1-z)}{K(z)}, 
+ \fe
+where
+\ie
+K(z):= \frac{1}{\pi}\int_0^1\frac{d\xi}{\sqrt{\xi(1-\xi)(1-z\xi)}} ={}_2F_1\!\left(\frac12,\frac12;1;z\right).
+\fe
+The inverse map from $z$ to $\tau$ is given by
+\ie
+z=\frac{\theta_2(0|\mathfrak{q})^4}{\theta_3(0|\mathfrak{q})^4}, \quad K(z) = \theta_3(0|\mathfrak{q})^2, \quad \mathfrak{q}=e^{\pi i\tau}.
+\fe
+One can construct the Abel-Jacobi map from the elliptic curve to the flat torus $\mathbb{C}/\Gamma$ via
+\ie
+w(x)= \frac{1}{\theta_3(\tau)^2}\int_0^{x}  \frac{d\xi}{\sqrt{\xi(\xi-z)(\xi-1)}}
+\fe
+where the factor $\theta_3(\tau)^2$ is introduced such that $w\cong w+2\pi w\cong w+2\pi \tau$.
+
+\subsubsection*{Sphere 4 point block in pillow frame}
+
+The sphere 4 point block can be understood as the 4 point correlation function with projection operator for the Verma module $\mathbb{P}_{h,\bar{h}}$ inserted. As $\mathbb{P}_{h,\bar{h}}$ commute with the Virasoro generators, it does not transform under the local conformal transformation.
+
+Now we are going to derive the conformal transformation of sphere conformal block in the pillow geometry. The flat metric on the torus is related with the one on the Riemann sphere as
+\ie
+ds^2 =dwd\bar{w} = e^{2\sigma(x,\bar{x})}dx d\bar{x},
+\fe
+with 
+\ie
+e^{2\sigma(x,\bar{x})}= \frac{1}{|\theta_3(\tau)|^4} \frac{1}{|x(x-z)(x-1)|}.
 \fe
 
-Using the property that $\bra{h}L_A^{\dagger}L_B\ket{h}$ scales as $h^{[A]}$ for $A=B$, and no faster than $h^{[A]-1}$ for $[A]=[B],\quad A\neq B$ and no faster thatn $h^{\min{[A],[B]}}$ for $[A]\neq[B]$, we conclude the scaling of $k_{AB}(c,h)$ to be
+
+
 \ie
-k_{AB}(c,h) \sim \mathcal{O}(h^{-1}) \\
-&k_{AB}(c,h) \sim \mathcal{O}(h^{0}).
+\mathcal F_c(h_1,h_2,h_3,h_4,h;z)
+={}
+\theta_3(0|\tau)^{\frac c2-4\sum_{i=1}^4 h_i}
+z^{\frac c{24}-h_1-h_2}
+(1-z)^{\frac c{24}-h_2-h_3}
+\left\langle\psi_{43}\left|
+\mathbb P_h\,\mathfrak{q}^{L_0-\frac c{24}}
+\right|\psi_{12}\right\rangle.
 \fe
-Therefore, the norm of the state $\ell_{-A}\ket{h}$ will scale as
+
+\subsubsection*{$h$ recursion in the pillow frame}
+
+The matrix element can be computed by resolving the projection operator $\mathbb{P}_h$
 \ie
-\bra{h}\ell_{-A}^{\dagger} \ell_{-A}\ket{h} \sim \mathcal{O}(h^{[A]})
+\bra{\psi_{34}}\mathbb{P}_h \mathfrak{q}^{L_0-\frac{c}{24}}\ket{\psi_{12}} =\mathfrak{q}^{h-\frac{c}{24}} \sum_{N} \mathfrak{q}^{N} \bra{\psi_{34}} L_{-N}\ket{h}G^{NM} \bra{h}L_{-M}^{\dagger}\ket{\psi_{12}} .
 \fe
+The subtlety here is that $\bra{\psi_{34}}\ket{h}$ is not normalized. The normalization of this factor can be determined by compare with the defining equation for sphere 4 point block at $z\rightarrow 0$ limit to be 
+\ie
+\bra{\psi_{43}}\ket{h}\bra{h}\ket{\psi_{12}} =16^{h-\frac{c}{24}}.
+\fe
+Therefore, we can subtract this factor and introduce
+\ie
+\mathcal{G}(h_1,h_2,h_3,h_4,h; \mathfrak{q})= (16\mathfrak{q})^{-h+\frac{c}{24}}\bra{\psi_{34}}\mathbb{P}_h \mathfrak{q}^{L_0-\frac{c}{24}}\ket{\psi_{12}} = \sum_{N} \mathfrak{q}^{N} \rho(\psi_{34}, L_{-N}\nu_h) G^{NM} \rho( L_{-M}\nu_h,\psi_{12})
+\fe
+where the factor is normalized by $\rho(\psi_{34},\nu_h)=\rho(\nu_h,\psi_{12})=1$. In the same spirit as the c recursion relations derived before, we can analyze the pole structure of $\mathcal{G}$ as an analytic function of $h$. For generic $c$, it would suggest the following pole structure
+\ie
+\mathcal{G}(h_1,h_2,h_3,h_4,h; \mathfrak{q}) = F_{reg}+ \sum_{r,s\geq 1}\frac{C_{r,s}}{h-h_{r,s}(c)}.
+\fe
+The pole factor $C_{r,s}$ can be extracted by the $h\rightarrow h_{r,s}(c)$ limit, where only the null states $\chi_{r,s}$ will contribute in this sum. The norm factor for the null state follows from \eqref{norm_fusion_poly}. We also have the factoralization relation
+\ie
+\rho(\psi_{34}, L_{-N}\chi_{r,s}) =\rho(\psi_{34}, \chi_{r,s}) \rho(\psi_{34},L_{-N}\nu_{h_{r,s}+rs}).
+\fe
+The factor that is not obvious to determine is $\rho(\psi_{34}, \chi_{r,s})$. It can be determined by doing the transforming back to the sphere coordinate and compare with the three point normalization.  The result is that it is still given by the fusion polynomial up to an extra $16$ factor
+\ie
+\rho(\psi_{34}, \chi_{r,s}) \rho(\chi_{r,s},\psi_{12})= 16^{rs} P_c^{rs}(h_4, h_3)P_c^{rs}(h_2, h_1).
+\fe
+Therefore, we have 
+\ie\label{residue_hrecursion}
+C_{r,s}=A_{r,s}^c (16\mathfrak{q})^{rs} P_c^{rs}(h_{4}, h_{3}) P_c^{rs}(h_{2}, h_{1}) \mathcal{G}(h\rightarrow h_{r,s}+rs, c).
+\fe
+The regular part of the recursion relation can be determined analyzing the large $h$ asymptotic. One can determine
+\ie
+F_{reg}= \prod_{n\geq 1}(1-\mathfrak{q}^{2n})^{-1/2}.
+\fe
+\todo[inline]{The derivation using the conformal ward identity for the pillow states. Require conformal wald identity in pillow geometry}
+Therefore, the block $\mathcal{G}$ satisfy the following $h$ recursion relation
+\ie
+\mathcal{G}(h_1,h_2,h_3,h_4,h; \mathfrak{q}) = \prod_{n\geq 1}(1-\mathfrak{q}^{2n})^{-1/2}+ \sum_{r,s\geq 1}\frac{C_{r,s}}{h-h_{r,s}(c)}.
+\fe
+with $C_{r,s}$ given in \eqref{residue_hrecursion}. It is convenient to strip off the global block part and define the elliptic block as
+\ie
+H(h_1,h_2,h_3,h_4,h; \mathfrak{q})= \prod_{n\geq 1}(1-\mathfrak{q}^{2n})^{1/2}\mathcal{G}(h_1,h_2,h_3,h_4,h; \mathfrak{q})
+\fe
+It would satisfy the following $h$ recursion relation
+\ie\label{elliptic_h_4pt}
+H(h_1,h_2,h_3,h_4,h; \mathfrak{q}) =1+ \sum_{r,s\geq 1}\frac{B_{r,s}}{h-h_{r,s}(c)}.
+\fe
+where
+\ie
+B_{r,s}=A_{r,s}^c (16\mathfrak{q})^{rs} P_c^{rs}(h_{4}, h_{3}) P_c^{rs}(h_{2}, h_{1}) H(h\rightarrow h_{r,s}+rs, c).
+\fe
+As a result, the computation of the sphere 4 point block follows from
+\ie
+\mathcal F_c(h_1,h_2,h_3,h_4,h;z)
+={}&
+\theta_3(0|\tau)^{\frac c2-4\sum_{i=1}^4 h_i}
+z^{\frac c{24}-h_1-h_2}
+(1-z)^{\frac c{24}-h_2-h_3} \\
+&(16\mathfrak{q})^{h-\frac{c}{24}}  \prod_{n\geq 1}(1-\mathfrak{q}^{2n})^{-1/2} H(h_1,h_2,h_3,h_4,h; \mathfrak{q})
+\fe
+with $H(h_1,h_2,h_3,h_4,h; \mathfrak{q})$ computed from the recursion relation \eqref{elliptic_h_4pt}. In this formalism, the recursion relation produce a series expansion of sphere 4 point block in $\mathfrak{q}$, which efficiently resum the series in $z$ by
+\ie
+\mathfrak{q} = \frac{z}{16}+ \frac{z^2}{32} \dots.
+\fe
+In practical application, $h$ recursion product an efficient algorithm for computing the sphere 4 point block, which converges faster than the c recusion relation.
+
+
+\subsubsection*{$h$ recursion for sphere n point block in pillow frame}
+
+One can generalize the construction above to the sphere $n$ point block. Put 
+
+\ie
+\mathcal F_c(h_1,h_2,h_3,h_4,h;z)
+={}
+\theta_3(0|\tau)^{\frac c2-4\sum_{i=1}^4 h_i}
+z^{\frac c{24}-h_1-h_2}
+(1-z)^{\frac c{24}-h_2-h_3} \prod_i \left(\frac{\partial w}{\partial x}(z_i)\right)^{-h_i}
+\left\langle\psi_{43}\left|
+\mathbb P_h\,\mathfrak{q}^{L_0-\frac c{24}}
+\right|\psi_{12}\right\rangle.
+\fe
+
+
+
+
+with 4 of them chosen to be at the corner of the pillow. 
+
+
+
+
 
 
 \section{$\mathcal{N}=1$ superconformal algebra}

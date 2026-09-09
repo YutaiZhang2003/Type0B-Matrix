@@ -1,0 +1,292 @@
+{
+  "description": "UNCERTIFIED fixed-contour channel-patched diagnostic; crossed Liouville poles are omitted, so this is not a Type-0B amplitude",
+  "certification_status": "historical-fixed-contour-diagnostic",
+  "omega_test": [
+    "0.6i",
+    "0.6i",
+    "0.6i"
+  ],
+  "ope_powers": {
+    "z_to_0": 1.44,
+    "z_to_1": 0.44,
+    "z_to_infinity": 1.44
+  },
+  "audit": {
+    "outgoing_energies": [
+      {
+        "real": 0.0,
+        "imag": 0.6
+      },
+      {
+        "real": 0.0,
+        "imag": 0.6
+      },
+      {
+        "real": 0.0,
+        "imag": 0.6
+      }
+    ],
+    "incoming_energy": {
+      "real": 0.0,
+      "imag": 1.7999999999999998
+    },
+    "records": [
+      {
+        "partition": [
+          0,
+          1
+        ],
+        "side": [
+          0,
+          1
+        ],
+        "kind": "continuous",
+        "sector": null,
+        "momentum": {
+          "real": 0.0,
+          "imag": 0.0
+        },
+        "channel_energy": {
+          "real": 0.0,
+          "imag": 1.1999999999999997
+        },
+        "threshold": 0,
+        "margin": 1.4399999999999993
+      },
+      {
+        "partition": [
+          0,
+          1
+        ],
+        "side": [
+          2,
+          3
+        ],
+        "kind": "continuous",
+        "sector": null,
+        "momentum": {
+          "real": 0.0,
+          "imag": 0.0
+        },
+        "channel_energy": {
+          "real": -0.0,
+          "imag": -1.2
+        },
+        "threshold": 0,
+        "margin": 1.44
+      },
+      {
+        "partition": [
+          0,
+          2
+        ],
+        "side": [
+          0,
+          2
+        ],
+        "kind": "continuous",
+        "sector": null,
+        "momentum": {
+          "real": 0.0,
+          "imag": 0.0
+        },
+        "channel_energy": {
+          "real": 0.0,
+          "imag": 1.1999999999999997
+        },
+        "threshold": 0,
+        "margin": 1.4399999999999993
+      },
+      {
+        "partition": [
+          0,
+          2
+        ],
+        "side": [
+          1,
+          3
+        ],
+        "kind": "continuous",
+        "sector": null,
+        "momentum": {
+          "real": 0.0,
+          "imag": 0.0
+        },
+        "channel_energy": {
+          "real": -0.0,
+          "imag": -1.2
+        },
+        "threshold": 0,
+        "margin": 1.44
+      },
+      {
+        "partition": [
+          1,
+          2
+        ],
+        "side": [
+          1,
+          2
+        ],
+        "kind": "continuous",
+        "sector": null,
+        "momentum": {
+          "real": 0.0,
+          "imag": 0.0
+        },
+        "channel_energy": {
+          "real": -0.0,
+          "imag": -1.2
+        },
+        "threshold": 1,
+        "margin": 0.43999999999999995
+      },
+      {
+        "partition": [
+          1,
+          2
+        ],
+        "side": [
+          0,
+          3
+        ],
+        "kind": "continuous",
+        "sector": null,
+        "momentum": {
+          "real": 0.0,
+          "imag": 0.0
+        },
+        "channel_energy": {
+          "real": 0.0,
+          "imag": 1.1999999999999997
+        },
+        "threshold": 1,
+        "margin": 0.4399999999999993
+      }
+    ],
+    "minimum_margin": 0.4399999999999993,
+    "minimum_wall_clearance": 0.19999999999999973,
+    "convergent": true
+  },
+  "settings": {
+    "contour_prescription": "fixed P>=0",
+    "twice_level": 10,
+    "elliptic_coefficient_count": 6,
+    "momentum_order": 8,
+    "momentum_maximum": 6,
+    "sobol_power": 8,
+    "replicates": 4,
+    "hybrid_corner_radius": 0.15,
+    "bulk_frames": [
+      0,
+      2
+    ],
+    "c_corner_frames": [
+      0,
+      1,
+      2,
+      5
+    ]
+  },
+  "result": {
+    "outgoing_energies": [
+      {
+        "real": 0.0,
+        "imag": 0.6
+      },
+      {
+        "real": 0.0,
+        "imag": 0.6
+      },
+      {
+        "real": 0.0,
+        "imag": 0.6
+      }
+    ],
+    "incoming_energy": {
+      "real": 0.0,
+      "imag": 1.7999999999999998
+    },
+    "backend": "hybrid:folded-disk",
+    "estimates": [
+      {
+        "real": 5.941176449907889,
+        "imag": -2.9837227866208367e-18
+      },
+      {
+        "real": 4.847911224438078,
+        "imag": 1.315829052214831e-17
+      },
+      {
+        "real": 4.922129143984824,
+        "imag": 1.3128264995390424e-17
+      },
+      {
+        "real": 5.31891012179232,
+        "imag": -6.374093136115083e-18
+      }
+    ],
+    "mean": {
+      "real": 5.257531735030778,
+      "imag": 4.2321848987007034e-18
+    },
+    "standard_error_real": 0.25023676510447396,
+    "standard_error_imag": 5.191162844701884e-18,
+    "samples_per_replicate": 256,
+    "replicates": 4,
+    "radial_power": 0.39599999999999935,
+    "convergence_margin": 0.4399999999999993
+  },
+  "hybrid_c_pointwise_checks": [
+    {
+      "z": [
+        0.1,
+        0.2
+      ],
+      "hybrid": [
+        0.15328201610117215,
+        6.67704578107102e-19
+      ],
+      "c": [
+        0.15328201610117215,
+        6.67704578107102e-19
+      ],
+      "absolute_difference": 0.0
+    },
+    {
+      "z": [
+        0.5,
+        0.3
+      ],
+      "hybrid": [
+        0.9738403974234722,
+        1.6702287989057776e-17
+      ],
+      "c": [
+        0.9738403974234722,
+        1.6702287989057776e-17
+      ],
+      "absolute_difference": 0.0
+    },
+    {
+      "z": [
+        0.9,
+        0.05
+      ],
+      "hybrid": [
+        0.7654752031711303,
+        6.722248177325149e-18
+      ],
+      "c": [
+        0.7654752031711303,
+        6.722248177325149e-18
+      ],
+      "absolute_difference": 0.0
+    }
+  ],
+  "analytically_continued_bry_target_not_used_for_fixed_contour": {
+    "real": -3.1757731816608503,
+    "imag": 0.0
+  },
+  "elapsed_seconds": 287.3500270843506
+}

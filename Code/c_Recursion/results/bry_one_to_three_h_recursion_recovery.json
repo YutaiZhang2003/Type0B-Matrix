@@ -1,0 +1,135 @@
+{
+  "description": "Recover BRY's regulated Type-0B sphere four point with h-recursion.",
+  "scheme": {
+    "integral_backend": "h recursion only",
+    "c_backend_role": "pointwise validation only; not used in the integral",
+    "bulk": "elliptic sphere block with fixed-difference h-recursion",
+    "low_z_boundary": "BRY direct OPE through the recorded local orders",
+    "t_boundary": "BRY crossed OPE with the leading CC power subtracted",
+    "analytic_subtraction": "global folded t-channel counterterm on 0<=P<P_star",
+    "momentum_contour": "positive real P, split at P_star",
+    "liouville_pole_residues": "none crossed on the BRY (4.15) family"
+  },
+  "settings": {
+    "incoming_imaginary": 0.6,
+    "epsilon": 0.01,
+    "p_max": 4.0,
+    "p_order_per_threshold_interval": 24,
+    "angular_order": 14,
+    "radial_order": 14,
+    "cap_angular_order": 14,
+    "cap_radial_order": 10,
+    "q_orders": [
+      8
+    ],
+    "structure_precision": 30,
+    "block_precision": 60
+  },
+  "pointwise_h_vs_c_audit": {
+    "q_order": 8,
+    "records": [
+      {
+        "momentum": 0.37,
+        "z": {
+          "real": 0.31,
+          "imag": 0.27
+        },
+        "h_density": {
+          "real": -0.04371907877175483,
+          "imag": -0.01193104259364661
+        },
+        "c_density": {
+          "real": -0.04371907877175483,
+          "imag": -0.01193104259364661
+        },
+        "relative_difference": 0.0
+      },
+      {
+        "momentum": 0.83,
+        "z": {
+          "real": 0.71,
+          "imag": 0.16
+        },
+        "h_density": {
+          "real": 0.04619409241241112,
+          "imag": -0.094413628796656
+        },
+        "c_density": {
+          "real": 0.04619409241241112,
+          "imag": -0.094413628796656
+        },
+        "relative_difference": 0.0
+      }
+    ],
+    "maximum_relative_difference": 0.0,
+    "tolerance": 1e-11,
+    "passed": true
+  },
+  "recorded_bry_q8_check": {
+    "reference": {
+      "real": 0.01750879244,
+      "imag": -0.00320541444
+    },
+    "computed": {
+      "real": 0.017508792439848056,
+      "imag": -0.0032054144373294853
+    },
+    "relative_difference": 1.5027335032761643e-10,
+    "tolerance": 1e-08,
+    "passed": true
+  },
+  "results": [
+    {
+      "omega": {
+        "real": 0.3333333333333333,
+        "imag": 0.6
+      },
+      "omega_out": {
+        "real": 0.1111111111111111,
+        "imag": 0.19999999999999998
+      },
+      "epsilon": 0.01,
+      "p_max": 4.0,
+      "p_quadrature_order": 24,
+      "angular_order": 14,
+      "radial_order": 14,
+      "cap_angular_order": 14,
+      "cap_radial_order": 10,
+      "block_q_order": 8,
+      "block_backend": "h",
+      "hybrid_corner_radius": 0.15,
+      "low_z_region_integral": {
+        "real": 0.0031241064468157,
+        "imag": 0.0005485514487955803
+      },
+      "bulk_region_integral": {
+        "real": 0.013631953942596775,
+        "imag": -0.003370444960403538
+      },
+      "t_cap_region_integral": {
+        "real": 0.0007527320504355831,
+        "imag": -0.00038352092572152714
+      },
+      "reduced_moduli_integral": {
+        "real": 0.017508792439848056,
+        "imag": -0.0032054144373294853
+      },
+      "reduced_moduli_target": {
+        "real": 0.017726914179136608,
+        "imag": -0.0029725662541511093
+      },
+      "worldsheet_amplitude_coefficient": {
+        "real": 0.008162520837745824,
+        "imag": 0.044585773829949195
+      },
+      "matrix_amplitude_coefficient": {
+        "real": 0.0075695778082609366,
+        "imag": 0.04514121627800639
+      },
+      "relative_error": 0.017750443926401238
+    }
+  ],
+  "finest_relative_error": 0.017750443926401238,
+  "matrix_tolerance": 0.03,
+  "recovered_bry_curve": true
+}

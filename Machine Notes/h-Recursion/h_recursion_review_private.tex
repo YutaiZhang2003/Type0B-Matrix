@@ -504,13 +504,15 @@ which is the analogue of CCY (3.11).  Its diagonal norm is
 This is the NS version of CCY (3.12).
 
 \paragraph{The sewn block in the orthogonal basis.}
-Since \(a_i\) is fixed, replacing \(H+a_i\) by \(H\) in the leading Gram
-matrices and vertices changes only subleading terms.  The inverse Gram
-matrices are diagonal in the orthogonal basis, so
+Choose the orthogonal basis separately at the actual weight
+\(h_i=H+a_i\) on every internal edge.  No identification of two different
+Verma modules is being made.  Since the inverse Gram matrices are diagonal
+in these bases, their norms can be distributed symmetrically between the
+two adjacent vertices.  Thus
 \begin{equation}
  \begin{split}
  \F^{\NS}_{\boldsymbol\eta}
- \longrightarrow{}&
+ ={}&
  \sum_{\mathsf A_1,\ldots,\mathsf A_N}
  \prod_{i=1}^{N}
  q_i^{|\mathsf A_i|}
@@ -520,11 +522,13 @@ matrices are diagonal in the orthogonal basis, so
  \prod_{i=1}^{N}
  \frac{
  \rho_0\!\left(
- \boldsymbol\ell_{-\mathsf A_i}\phi_H,
+ \boldsymbol\ell_{-\mathsf A_i}\phi_{H+a_i},
  \phi_{d_i},
- \boldsymbol\ell_{-\mathsf A_{i+1}}\phi_H
+ \boldsymbol\ell_{-\mathsf A_{i+1}}\phi_{H+a_{i+1}}
  \right)}
- {\mathcal N_{\mathsf A_i}(H)} ,
+ {\sqrt{
+ \mathcal N_{\mathsf A_i}(H+a_i)
+ \mathcal N_{\mathsf A_{i+1}}(H+a_{i+1})}} ,
  \qquad
  \mathsf A_{N+1}=\mathsf A_1 .
  \end{split}
@@ -536,25 +540,25 @@ This is the direct NS analogue of CCY (3.13), including the plumbing signs.
 Extend the definition in Eq.~\eqref{eq:ns-large-h-gram-schmidt} by setting
 \(f^{\mathsf A}_{\mathsf A}=1\) and
 \(f^{\mathsf A}_{\mathsf C}=0\) for
-\(\#\mathsf C>\#\mathsf A\).  Then
+\(\#\mathsf C>\#\mathsf A\).  Let \(a,b\) be fixed.  Then
 \begin{equation}
  \begin{split}
  &\rho_0\!\left(
- \boldsymbol\ell_{-\mathsf A}\phi_H,
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+a},
  \phi_d,
- \boldsymbol\ell_{-\mathsf B}\phi_H
+ \boldsymbol\ell_{-\mathsf B}\phi_{H+b}
  \right)
  \\
  &\qquad=
  \sum_{\substack{
  |\mathsf C|=|\mathsf A|,\;p(\mathsf C)=p(\mathsf A)\\
  |\mathsf D|=|\mathsf B|,\;p(\mathsf D)=p(\mathsf B)}}
- f^{\mathsf A}_{\mathsf C}
- f^{\mathsf B}_{\mathsf D}
+ f^{\mathsf A}_{\mathsf C}(c,H+a)
+ f^{\mathsf B}_{\mathsf D}(c,H+b)
  \rho_0\!\left(
- \mathbf L_{-\mathsf C}\phi_H,
+ \mathbf L_{-\mathsf C}\phi_{H+a},
  \phi_d,
- \mathbf L_{-\mathsf D}\phi_H
+ \mathbf L_{-\mathsf D}\phi_{H+b}
  \right).
  \end{split}
  \label{eq:ns-large-h-three-point-expansion}
@@ -564,20 +568,25 @@ This is the NS counterpart of CCY (3.14).
 Move the BPZ-conjugate positive modes on the first leg through the fixed
 external primary.  A commutator with \(\phi_d\) contains no factor of \(H\);
 only a direct positive-negative mode contraction produces a factor of \(H\).
+Indeed, the superconformal Ward identities replace such a commutator by a
+derivative of \(\phi_d\) or by its superpartner.  After evaluating the
+three-point function at the standard insertion points, the coefficients
+depend on \(c,d\), and the difference
+\((H+a)-(H+b)=a-b\), but not on the common large part \(H\).
 Consequently
 \begin{equation}
  \begin{split}
  &\rho_0\!\left(
- \mathbf L_{-\mathsf C}\phi_H,
+ \mathbf L_{-\mathsf C}\phi_{H+a},
  \phi_d,
- \mathbf L_{-\mathsf D}\phi_H
+ \mathbf L_{-\mathsf D}\phi_{H+b}
  \right)
  \\
  &\quad=
  \rho_0\!\left(
- \phi_H,\phi_d,
+ \phi_{H+a},\phi_d,
  (\mathbf L_{-\mathsf C})^\dagger
- \mathbf L_{-\mathsf D}\phi_H
+ \mathbf L_{-\mathsf D}\phi_{H+b}
  \right)
  +\text{terms with at least one external-field commutator}
  \\
@@ -601,13 +610,13 @@ Combining Eqs.~\eqref{eq:ns-large-h-gram-schmidt-coefficients},
 \eqref{eq:ns-large-h-ward-power-counting} gives
 \begin{equation}
  \rho_0\!\left(
- \boldsymbol\ell_{-\mathsf A}\phi_H,
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+a},
  \phi_d,
- \boldsymbol\ell_{-\mathsf B}\phi_H
+ \boldsymbol\ell_{-\mathsf B}\phi_{H+b}
  \right)
  =
  \begin{cases}
- \mathcal N_{\mathsf A}(H)
+ \mathcal N_{\mathsf A}(H+a)
  \bigl(1+\order(H^{-1})\bigr),
  &\mathsf A=\mathsf B,\\[2pt]
  \order(H^{\#\mathsf A-1}),
@@ -622,14 +631,61 @@ In particular,
 \begin{equation}
  \frac{
  \rho_0\!\left(
- \boldsymbol\ell_{-\mathsf A}\phi_H,
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+a},
  \phi_d,
- \boldsymbol\ell_{-\mathsf A}\phi_H
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+b}
  \right)}
- {\mathcal N_{\mathsf A}(H)}
+ {
+ \rho_0\!\left(
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+a},
+ \mathbf 1,
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+a}
+ \right)}
  \longrightarrow1 .
  \label{eq:ns-large-h-diagonal-vertex}
 \end{equation}
+Introduce the diagonal descendant notation
+\begin{equation}
+ \rho_{\mathsf A}(h_L,d,h_R)
+ :=
+ \rho_0\!\left(
+ \boldsymbol\ell_{-\mathsf A}\phi_{h_L},
+ \phi_d,
+ \boldsymbol\ell_{-\mathsf A}\phi_{h_R}
+ \right).
+ \label{eq:ns-diagonal-descendant-vertex}
+\end{equation}
+The denominator is the exact identity matrix element
+\begin{equation}
+ \rho_{\mathsf A}(h,\mathbf 1,h)
+ :=
+ \rho_0\!\left(
+ \boldsymbol\ell_{-\mathsf A}\phi_h,
+ \mathbf 1,
+ \boldsymbol\ell_{-\mathsf A}\phi_h
+ \right)
+ =\mathcal N_{\mathsf A}(h).
+ \label{eq:ns-identity-matrix-element}
+\end{equation}
+Here the equality is exact because the identity vertex operator is the
+identity map on the NS Verma module.
+Thus Eq.~\eqref{eq:ns-large-h-diagonal-vertex} states precisely
+\begin{equation}
+ \frac{
+ \rho_{\mathsf A}(h_i,d_i,h_{i+1})}
+ {\rho_{\mathsf A}(h_i,\mathbf 1,h_i)}
+ \longrightarrow1,
+ \qquad h_i=H+a_i,
+ \label{eq:ns-vertex-to-identity-comparison}
+\end{equation}
+with \(h_{i+1}-h_i\) fixed.  This is a comparison with an identity
+insertion inside the single module of weight \(h_i\); it does not posit an
+identity intertwiner between the distinct modules of weights \(h_i\) and
+\(h_{i+1}\).  Since
+\(\mathcal N_{\mathsf A}(H+a_i)/
+\mathcal N_{\mathsf A}(H+a_{i+1})\to1\), the symmetrically normalized
+vertex appearing in Eq.~\eqref{eq:ns-large-h-block-orthogonal-basis}
+tends to one for equal labels and to zero for unequal labels.
 Equation~\eqref{eq:ns-large-h-diagonal-vertex} is the exact NS analogue of
 CCY (3.16).  For \(\mathsf A\neq\mathsf B\), division by
 \(\sqrt{\mathcal N_{\mathsf A}\mathcal N_{\mathsf B}}\) tends to zero.
@@ -656,6 +712,56 @@ Thus \(\varepsilon=+1\) gives the ordinary NS descendant character and
 \(\varepsilon=-1\) gives the \((-1)^F\)-twined character.  Dividing the
 block by \(\chi^{(\varepsilon)}_{\NS}(Q)\) produces a reduced block with
 unit large-\(H\) seed.
+
+\paragraph{Global NS contribution.}
+The global NS algebra is \(\mathfrak{osp}(1|2)\), generated by
+\(L_0,L_{\pm1},G_{\pm1/2}\).  A convenient basis for its generic
+highest-weight module is
+\begin{equation}
+ |m,0;h\rangle=L_{-1}^{m}\phi_h,
+ \qquad
+ |m,1;h\rangle=L_{-1}^{m}G_{-1/2}\phi_h,
+ \qquad m\geq0,
+ \label{eq:ns-global-basis}
+\end{equation}
+with exact norms
+\begin{align}
+ \lVert |m,0;h\rangle\rVert^2
+ &=m!(2h)_m,
+ &
+ \lVert |m,1;h\rangle\rVert^2
+ &=2h\,m!(2h+1)_m.
+ \label{eq:ns-global-norms}
+\end{align}
+Applying the identity comparison
+Eq.~\eqref{eq:ns-vertex-to-identity-comparison} at every vertex forces the
+same pair \((m,\sigma)\) to propagate around the necklace.  Consequently
+the global part of the large-\(H\) boundary is
+\begin{equation}
+ \chi^{(\varepsilon)}_{\mathfrak{osp}(1|2)}(Q)
+ =
+ \sum_{m=0}^{\infty}\sum_{\sigma=0}^{1}
+ \varepsilon^\sigma Q^{m+\sigma/2}
+ =
+ \frac{1+\varepsilon Q^{1/2}}{1-Q}.
+ \label{eq:ns-global-necklace-character}
+\end{equation}
+It is therefore the generic global torus character with the single torus
+nome replaced by the necklace nome \(Q=\prod_iq_i\).  The full NS Verma
+character in Eq.~\eqref{eq:ns-necklace-large-h-character} contains in
+addition all non-global oscillators:
+\begin{equation}
+ \chi^{(\varepsilon)}_{\NS}(Q)
+ =
+ \chi^{(\varepsilon)}_{\mathfrak{osp}(1|2)}(Q)
+ \prod_{n=2}^{\infty}
+ \frac{1+\varepsilon Q^{n-1/2}}{1-Q^n}.
+ \label{eq:ns-character-global-factorization}
+\end{equation}
+Thus, if ``global part'' means the complete \(H\)-independent regular part
+of the full super-Virasoro block, it is the NS torus Verma character.  If it
+means the restriction to global descendants, it is
+Eq.~\eqref{eq:ns-global-necklace-character}.
 
 \paragraph{No pole at \(H=\infty\).}
 The power-counting limit must also exclude a polynomial ambiguity in the
@@ -814,10 +920,588 @@ the character begins
 \(1+\varepsilon Q^{1/2}+Q+\cdots\), with no isolated
 \(q_i^{1/2}\) or \(q_i\) term.
 
+\paragraph{Level-six direct-PBW consistency check.}
+The fixed-difference recursion was checked independently against a direct
+PBW sewing calculation through total physical level six.  Let
+\(B_{h_i}^{(n_i)}\) be the NS Gram matrix at level \(n_i\), and let
+\(V_{d_i}^{(n_i,n_{i+1})}(h_i,h_{i+1})\) be the rectangular matrix of the
+fixed-parity Ward form \(\rho_0\) between the corresponding PBW bases.  The
+direct coefficient is
+\begin{equation}
+ F^{\mathrm{PBW}}_{n_1,n_2}
+ =
+ \operatorname{Tr}\!\left[
+ \bigl(B_{h_1}^{(n_1)}\bigr)^{-1}
+ V_{d_1}^{(n_1,n_2)}(h_1,h_2)
+ \bigl(B_{h_2}^{(n_2)}\bigr)^{-1}
+ V_{d_2}^{(n_2,n_1)}(h_2,h_1)
+ \right].
+ \label{eq:ns-two-point-direct-pbw-coefficient}
+\end{equation}
+This side of the comparison uses only the NS commutation relations,
+Shapovalov matrices, and superconformal Ward identities.  In particular,
+it does not call Kac weights, null-vector residues, fusion polynomials, the
+character seed, or the \(h\)-recursion routine.
+
+All pairs
+\begin{equation}
+ n_1,n_2\in\tfrac12\mathbb Z_{\geq0},
+ \qquad n_1+n_2\leq6,
+ \qquad 2n_1\equiv2n_2\pmod2
+ \label{eq:ns-two-point-level-six-domain}
+\end{equation}
+were compared.  The last condition is the even-bottom-component parity
+selection rule.  There are \(49\) such coefficients.  The PBW side was
+evaluated in exact rational arithmetic, while the recursion side was
+evaluated numerically only after the exact coefficient had been constructed.
+At the two generic samples
+\begin{align}
+ (b,h_1,h_2,d_1,d_2)
+ &=\left(\frac{127}{100},\frac{71}{100},\frac{83}{100},
+ \frac{27}{100},\frac9{25}\right),
+ \\
+ (b,h_1,h_2,d_1,d_2)
+ &=\left(\frac{137}{100},\frac{79}{100},\frac{97}{100},
+ \frac{31}{100},\frac{43}{100}\right),
+\end{align}
+all \(49+49\) comparisons passed.  Their maximum absolute discrepancies
+were respectively
+\begin{equation}
+ 1.76\times10^{-11},
+ \qquad
+ 4.80\times10^{-11}.
+ \label{eq:ns-two-point-level-six-errors}
+\end{equation}
+To check that this agreement is not peculiar to those two choices, a
+fixed-seed generic-weight sweep was also performed with
+\((b,d_1,d_2)=(127/100,27/100,9/25)\).  At each of eight independently
+drawn rational pairs \((h_1,h_2)\), every one of the (49) coefficients in
+\eqref{eq:ns-two-point-level-six-domain} was compared separately.  Thus all
+\(8\cdot49=392\) additional comparisons passed.  The largest absolute
+discrepancy was
+\begin{equation}
+ 9.13\times10^{-10},
+ \qquad
+ (h_1,h_2)=\left(\frac{61}{50},\frac{73}{100}\right),
+ \qquad
+ (n_1,n_2)=(6,0).
+ \label{eq:ns-two-point-generic-sweep-error}
+\end{equation}
+The sampling seed, all eight weight pairs, and all (392) individual
+coefficient comparisons are recorded in the executable certificate.  This
+is strong generic numerical evidence rather than a symbolic identity in
+\((h_1,h_2)\): a proof by interpolation would additionally require a bound
+on the numerator degree after the known Kac denominators are cleared.
+At lower order one can remove this qualification completely.  Fixing
+\begin{equation}
+ b=\frac{127}{100},
+ \qquad
+ c=\frac{2290108923}{161290000},
+ \qquad
+ (d_1,d_2)=\left(\frac{27}{100},\frac9{25}\right),
+ \label{eq:ns-two-point-symbolic-fixed-data}
+\end{equation}
+but leaving \(h_1,h_2\) algebraically independent, both sides of
+\eqref{eq:ns-two-point-direct-pbw-coefficient} were constructed as exact
+rational functions.  For every allowed pair with \(n_1+n_2\leq3\), namely
+all \(16\) coefficients, the analytic test was
+\begin{equation}
+ \operatorname{num}\!\left[
+  \operatorname{together}\!\left(
+   F^{\mathrm{PBW}}_{n_1,n_2}(h_1,h_2)
+   -F^{h\text{-}\mathrm{rec}}_{n_1,n_2}(h_1,h_2)
+  \right)
+ \right]=0.
+ \label{eq:ns-two-point-symbolic-level-three-check}
+\end{equation}
+All \(16\) residual numerators vanish as polynomials in \(h_1,h_2\).
+Consequently the level-three agreement is an identity in the two internal
+weights at the fixed data \eqref{eq:ns-two-point-symbolic-fixed-data}, away
+from the common Kac-pole divisor; it is not an agreement at sampled internal
+weights.  The exact rational expressions are included in the certificate.
+This simultaneously tests the NS character regular part, the even/odd
+routing changes caused by odd singular vectors, all Kac channels with
+\(rs/2\leq6\), and nested residues appearing by that order.  The executable
+certificate and coefficient ledger are in
+\path{Code/ns_torus_two_point_h_recursion_check/}.
+
 The argument assumes generic \(a_i\), so that distinct Kac hyperplanes do
 not collapse to the same \(H\)-pole, and is a statement about every fixed
 plumbing coefficient rather than a uniform large-\(H\) limit of the summed
 series.
+
+\subsection{\texorpdfstring{NS sphere \(N\)-point block in the linear channel}
+{NS sphere N-point block in the linear channel}}
+\label{sec:ns-sphere-linear-h-recursion}
+
+The sphere analogue closes in the standard linear channel.  It is not an
+\(h\)-recursion for an arbitrary sphere pants decomposition.  Let
+\begin{equation}
+ m=N-3
+\end{equation}
+be the number of internal edges.  Order the external weights
+\(d_1,\ldots,d_N\) from \(0\) to \(\infty\), and denote the internal weights
+and plumbing parameters by
+\((h_i,q_i)\), \(i=1,\ldots,m\).  The corresponding puncture positions may
+be chosen as
+\begin{equation}
+ z_1=0,\qquad z_{N-1}=1,\qquad z_N=\infty,\qquad
+ z_{i+1}=q_iq_{i+1}\cdots q_m
+ \quad(1\leq i\leq m).
+ \label{eq:ns-sphere-linear-coordinates}
+\end{equation}
+Thus the \(q_i\) are ordinary plumbing or cross-ratio variables, not the
+four-point elliptic nome.
+
+\paragraph{Component block.}
+Assume for now that all external insertions are even bottom components.
+There are \(m+1=N-2\) trinions.  Let
+\begin{equation}
+ \boldsymbol\alpha=(\alpha_0,\ldots,\alpha_m),
+ \qquad \alpha_v\in\mathbb Z_2,
+ \label{eq:ns-sphere-vertex-sectors}
+\end{equation}
+record whether trinion \(v\) uses the normalized form \(\rho_0\) or
+\(\rho_1\) of the human note.  In the same PBW notation as
+Eq.~\eqref{eq:ns-necklace-pbw-state}, define
+\begin{equation}
+ \begin{split}
+ \F^{\NS,\mathrm{lin}}_{\boldsymbol\alpha}
+ ={}&
+ \sum_{\{\mathsf A_i,\mathsf B_i\}}
+ \prod_{i=1}^{m}
+ \left[
+ q_i^{|\mathsf A_i|}
+ \eta_i^{p(\mathsf A_i)}
+ (\mathbf G_{h_i})^{\mathsf A_i\mathsf B_i}
+ \right]
+ \\
+ &\times
+ \rho_{\alpha_0}\!\left(
+ \mathbf L_{-\mathsf B_1}\phi_{h_1},
+ \phi_{d_2},\phi_{d_1}\right)
+ \\
+ &\times
+ \prod_{i=1}^{m-1}
+ \rho_{\alpha_i}\!\left(
+ \mathbf L_{-\mathsf B_{i+1}}\phi_{h_{i+1}},
+ \phi_{d_{i+2}},
+ \mathbf L_{-\mathsf A_i}\phi_{h_i}\right)
+ \\
+ &\times
+ \rho_{\alpha_m}\!\left(
+ \phi_{d_N},\phi_{d_{N-1}},
+ \mathbf L_{-\mathsf A_m}\phi_{h_m}\right).
+ \end{split}
+ \label{eq:ns-sphere-linear-block-definition}
+\end{equation}
+Here \(|\mathsf A_i|=|\mathsf B_i|\).  The local plumbing lifts
+\(\eta_i=\pm1\) have been displayed to match the human-note convention.
+On a sphere they carry no independent spin-structure data and may be
+gauge-fixed to \(+1\).
+
+The component labels impose
+\begin{equation}
+ \alpha_0=p(\mathsf A_1),\qquad
+ \alpha_i=p(\mathsf A_i)+p(\mathsf A_{i+1})
+ \quad(1\leq i<m),\qquad
+ \alpha_m=p(\mathsf A_m)
+ \pmod2.
+ \label{eq:ns-sphere-linear-parity-constraints}
+\end{equation}
+Consequently a bottom-component block is nonempty only when
+\begin{equation}
+ \alpha_0+\cdots+\alpha_m=0\pmod2.
+ \label{eq:ns-sphere-linear-sector-constraint}
+\end{equation}
+External \(G_{-1/2}\)-components are incorporated by xoring their markings
+into the right-hand sides of
+Eq.~\eqref{eq:ns-sphere-linear-parity-constraints}; nothing else in the
+recursion changes.
+
+\paragraph{Correlated large-weight limit.}
+The limit that closes the recursion is
+\begin{equation}
+ H=h_1,\qquad
+ h_i=H+a_i,\quad a_1=0,\qquad
+ d_1=H+e_L,\qquad d_N=H+e_R,
+ \label{eq:ns-sphere-linear-fixed-difference-data}
+\end{equation}
+with \(c,d_2,\ldots,d_{N-1},a_i,e_L,e_R,q_i,\eta_i\) fixed.  Thus the two
+endpoint external weights must become large together with all internal
+weights.  Sending only the \(h_i\) to infinity is not the boundary problem
+used here.
+
+Use the orthogonal states
+\(\boldsymbol\ell_{-\mathsf A}\phi_{H+a_i}\) constructed in
+Eq.~\eqref{eq:ns-large-h-gram-schmidt}, and write
+\begin{align}
+ E_L(\mathsf A)
+ &:=
+ \rho_{\alpha_0}\!\left(
+ \boldsymbol\ell_{-\mathsf A}\phi_H,
+ \phi_{d_2},\phi_{H+e_L}\right),
+ \notag\\
+ E_R(\mathsf A)
+ &:=
+ \rho_{\alpha_m}\!\left(
+ \phi_{H+e_R},\phi_{d_{N-1}},
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+a_m}\right),
+ \label{eq:ns-sphere-linear-endpoint-vertices}\\
+ V_i(\mathsf A,\mathsf B)
+ &:=
+ \rho_{\alpha_i}\!\left(
+ \boldsymbol\ell_{-\mathsf B}\phi_{H+a_{i+1}},
+ \phi_{d_{i+2}},
+ \boldsymbol\ell_{-\mathsf A}\phi_{H+a_i}\right).
+ \notag
+\end{align}
+In this basis the block is
+\begin{equation}
+ \begin{split}
+ \F^{\NS,\mathrm{lin}}_{\boldsymbol\alpha}
+ ={}&
+ \sum_{\mathsf A_1,\ldots,\mathsf A_m}
+ \prod_{i=1}^{m}
+ q_i^{|\mathsf A_i|}\eta_i^{p(\mathsf A_i)}
+ \\
+ &\times
+ \frac{E_L(\mathsf A_1)E_R(\mathsf A_m)}
+ {\sqrt{\mathcal N_{\mathsf A_1}(H)
+ \mathcal N_{\mathsf A_m}(H+a_m)}}
+ \prod_{i=1}^{m-1}
+ \frac{V_i(\mathsf A_i,\mathsf A_{i+1})}
+ {\sqrt{\mathcal N_{\mathsf A_i}(H+a_i)
+ \mathcal N_{\mathsf A_{i+1}}(H+a_{i+1})}} .
+ \end{split}
+ \label{eq:ns-sphere-linear-orthogonal-block}
+\end{equation}
+
+Every interior vertex is exactly of the type already analyzed in
+Eq.~\eqref{eq:ns-large-h-orthogonal-vertex-power-counting}.  For
+\(\alpha_i=0\), it forces
+\(\mathsf A_i=\mathsf A_{i+1}\) at leading order.  For \(\alpha_i=1\),
+equal labels are forbidden by
+Eq.~\eqref{eq:ns-sphere-linear-parity-constraints}, so the normalized
+vertex is already subleading.  Thus a leading term requires every interior
+sector to be even and
+\(\mathsf A_1=\cdots=\mathsf A_m=\mathsf A\).  At the left endpoint, the
+superconformal Ward identities express a fixed descendant
+matrix element in terms of \(c,d_2\), and the fixed difference
+\(h_1-d_1=-e_L\).  No positive power of the common \(H\) remains.  The same
+argument applies at the right endpoint.  Hence, at every fixed PBW label,
+\begin{equation}
+ E_L(\mathsf A)=\order(H^0),
+ \qquad
+ E_R(\mathsf A)=\order(H^0).
+ \label{eq:ns-sphere-linear-endpoint-power-counting}
+\end{equation}
+After the \(m-1\) diagonal interior norms cancel, the contribution of a
+common non-vacuum label is therefore
+\begin{equation}
+ \frac{E_L(\mathsf A)E_R(\mathsf A)}
+ {\sqrt{\mathcal N_{\mathsf A}(H)
+ \mathcal N_{\mathsf A}(H+a_m)}}
+ =
+ \order\!\left(H^{-\#\mathsf A}\right).
+ \label{eq:ns-sphere-linear-final-norm-suppression}
+\end{equation}
+Only \(\mathsf A=\varnothing\) survives.  Since a level-zero trinion uses
+\(\rho_0\), the componentwise boundary value is
+\begin{equation}
+ \boxed{
+ \lim_{\substack{H\to\infty\\
+ \boldsymbol a,e_L,e_R\ {\rm fixed}}}
+ \F^{\NS,\mathrm{lin}}_{\boldsymbol\alpha}
+ =
+ \delta_{\boldsymbol\alpha,\boldsymbol0}.}
+ \label{eq:ns-sphere-linear-large-h-seed}
+\end{equation}
+Unlike the torus necklace, there is no closed descendant loop and hence no
+NS character.  The unreduced plumbing block itself has unit seed in the
+all-even routing and zero seed in every other routing.
+
+\paragraph{Pole data and parity transport.}
+For later use set
+\begin{equation}
+ \ell_{r,s}=\frac{rs}{2},\qquad
+ \kappa_{r,s}=rs\pmod2,\qquad r+s\in2\mathbb Z.
+ \label{eq:ns-sphere-linear-null-data}
+\end{equation}
+The inverse null-norm slope in the present convention is
+\begin{equation}
+ A^{\NS}_{r,s}
+ =
+ \frac12
+ \prod_{\substack{
+ p=1-r,\ldots,r\\ q=1-s,\ldots,s\\
+ p+q\in2\mathbb Z\\
+ (p,q)\neq(0,0),(r,s)}}
+ \frac{\sqrt2}{pb+qb^{-1}}.
+ \label{eq:ns-sphere-linear-a-factor}
+\end{equation}
+For \(\alpha\in\mathbb Z_2\), the weight-only part of the human-note NS
+fusion polynomial is
+\begin{equation}
+ \mathbf P^\alpha_{r,s}(x,y;c)
+ =
+ \prod_{\substack{
+ p=1-r,\,1-r+2,\ldots,r-1\\
+ q=1-s,\,1-s+2,\ldots,s-1\\
+ p+q-r-s\equiv2(1-\alpha)\ ({\rm mod}\ 4)}}
+ \frac{\lambda_x-\lambda_y+pb+qb^{-1}}{2\sqrt2}
+ \frac{\lambda_x+\lambda_y+pb+qb^{-1}}{2\sqrt2},
+ \label{eq:ns-sphere-linear-fusion-polynomial}
+\end{equation}
+where \(x=(Q^2-\lambda_x^2)/8\), and similarly for \(y\).
+We place a hat on a fusion factor when the slot-permutation and Koszul signs
+from the corresponding human-note factorization identity are included.
+Thus \(\widehat{\mathbf P}\), rather than the unordered polynomial alone,
+is the convention-independent incidence factor.
+
+The two spectator pairs adjacent to edge \(i\) are
+\begin{align}
+ W_{i,-}
+ &=
+ \begin{cases}
+ (d_1,d_2),&i=1,\\
+ (h_{i-1},d_{i+1}),&2\leq i\leq m,
+ \end{cases}
+ &
+ W_{i,+}
+ &=
+ \begin{cases}
+ (h_{i+1},d_{i+2}),&1\leq i<m,\\
+ (d_N,d_{N-1}),&i=m.
+ \end{cases}
+ \label{eq:ns-sphere-linear-spectator-pairs}
+\end{align}
+In the incidence ordering of
+Eq.~\eqref{eq:ns-sphere-linear-block-definition}, define the local residue
+multiplier
+\begin{equation}
+ \mathcal K^{\boldsymbol\alpha}_{i;r,s}(H)
+ :=
+ \eta_i^{\kappa_{r,s}}q_i^{\ell_{r,s}}
+ A^{\NS}_{r,s}\,
+ \widehat{\mathbf P}^{\alpha_{i-1},-}_{r,s}(W_{i,-};c)\,
+ \widehat{\mathbf P}^{\alpha_i,+}_{r,s}(W_{i,+};c).
+ \label{eq:ns-sphere-linear-local-kernel}
+\end{equation}
+This definition absorbs all convention-dependent endpoint phases.  If the
+block components themselves are defined in the corresponding
+incidence-ordered convention, the hats may be suppressed.
+For the fixed-parity \(\rho_a\) convention of the human note, with even
+bottom-component external primaries and the slot ordering in
+Eq.~\eqref{eq:ns-sphere-linear-block-definition}, the conversion is
+\begin{equation}
+ \widehat{\mathbf P}^{\alpha_{i-1},-}_{r,s}(W_{i,-};c)\,
+ \widehat{\mathbf P}^{\alpha_i,+}_{r,s}(W_{i,+};c)
+ =
+ (-1)^{rs}\,
+ \mathbf P^{\alpha_{i-1}}_{r,s}(W_{i,-};c)\,
+ \mathbf P^{\alpha_i}_{r,s}(W_{i,+};c).
+ \label{eq:ns-sphere-linear-fixed-parity-phase}
+\end{equation}
+The phase is invisible if one writes only unordered weight polynomials, but
+it is detected already by the four-point
+\((\alpha_0,\alpha_1)=(1,1)\) coefficient at level \(1/2\).
+
+An odd singular vector changes the descendant parity on edge \(i\).
+Accordingly it toggles the two adjacent trinion labels.  Define
+\begin{equation}
+ T_i^{\kappa}\boldsymbol\alpha
+ :=
+ (\alpha_0,\ldots,
+ \alpha_{i-1}+\kappa,\alpha_i+\kappa,
+ \ldots,\alpha_m)
+ \pmod2.
+ \label{eq:ns-sphere-linear-routing-transport}
+\end{equation}
+Because two labels are toggled,
+Eq.~\eqref{eq:ns-sphere-linear-sector-constraint} is preserved.
+
+\paragraph{Closed fixed-difference recursion.}
+At fixed
+\((\boldsymbol a,e_L,e_R)\), the pole on edge \(i\) is
+\begin{equation}
+ H=H_{i;r,s}:=h^{\NS}_{r,s}-a_i.
+ \label{eq:ns-sphere-linear-h-poles}
+\end{equation}
+All weights appearing in
+\(\mathcal K_{i;r,s}^{\boldsymbol\alpha}\) are to be evaluated on this pole
+using
+Eq.~\eqref{eq:ns-sphere-linear-fixed-difference-data}.  For example, the
+two pairs on an interior edge become
+\begin{equation}
+ W_{i,-}\big|_{H_{i;r,s}}
+ =
+ (h^{\NS}_{r,s}-a_i+a_{i-1},d_{i+1}),
+ \qquad
+ W_{i,+}\big|_{H_{i;r,s}}
+ =
+ (h^{\NS}_{r,s}-a_i+a_{i+1},d_{i+2}).
+ \label{eq:ns-sphere-linear-interior-pole-pairs}
+\end{equation}
+The obvious endpoint replacements are
+\(d_1=h^{\NS}_{r,s}-a_i+e_L\) and
+\(d_N=h^{\NS}_{r,s}-a_i+e_R\).
+
+The complete component recursion is
+\begin{equation}
+ \boxed{
+ \begin{aligned}
+ &\F^{\NS,\mathrm{lin}}_{\boldsymbol\alpha}
+ (H;\boldsymbol a,e_L,e_R)
+ =
+ \delta_{\boldsymbol\alpha,\boldsymbol0}
+ \\
+ &\quad+
+ \sum_{\substack{r,s\geq1\\r+s\in2\mathbb Z}}
+ \frac{
+ \mathcal K^{\boldsymbol\alpha}_{1;r,s}
+ (h^{\NS}_{r,s})}
+ {H-h^{\NS}_{r,s}}\,
+ \F^{\NS,\mathrm{lin}}_{T_1^{\kappa_{r,s}}\boldsymbol\alpha}
+ \left(
+ h^{\NS}_{r,s}+\ell_{r,s};
+ \{a_j-\ell_{r,s}\}_{j=2}^{m},
+ e_L-\ell_{r,s},e_R-\ell_{r,s}
+ \right)
+ \\
+ &\quad+
+ \sum_{i=2}^{m}
+ \sum_{\substack{r,s\geq1\\r+s\in2\mathbb Z}}
+ \frac{
+ \mathcal K^{\boldsymbol\alpha}_{i;r,s}
+ (h^{\NS}_{r,s}-a_i)}
+ {H+a_i-h^{\NS}_{r,s}}\,
+ \F^{\NS,\mathrm{lin}}_{T_i^{\kappa_{r,s}}\boldsymbol\alpha}
+ \left(
+ h^{\NS}_{r,s}-a_i;
+ a_i\mapsto a_i+\ell_{r,s},
+ e_L,e_R
+ \right).
+ \end{aligned}}
+ \label{eq:ns-sphere-linear-h-recursion}
+\end{equation}
+In the first recursive block, every \(a_j\) with \(j\geq2\) is shifted by
+\(-\ell_{r,s}\); if \(m=1\), that set is empty.  In the second line only
+the displayed \(a_i\) is shifted.  These substitutions keep the
+\emph{actual} neighboring internal and endpoint external weights fixed at
+their pole values while replacing the singular module by its null
+submodule of weight \(h^{\NS}_{r,s}+\ell_{r,s}\).
+
+At a fixed plumbing multi-level, only terms with
+\(\ell_{r,s}\) no larger than the level on edge \(i\) contribute, so the
+recursion is triangular.  The coefficient is a rational function of \(H\).
+Equations
+\eqref{eq:ns-sphere-linear-orthogonal-block}--%
+\eqref{eq:ns-sphere-linear-large-h-seed} show that it is bounded at
+\(H=\infty\).  Subtracting all finite Kac principal parts therefore leaves
+the constant
+\(\delta_{\boldsymbol\alpha,\boldsymbol0}\); there is no additional
+polynomial in \(H\).  This proves the regular term used in
+Eq.~\eqref{eq:ns-sphere-linear-h-recursion}.
+
+\paragraph{Direct-PBW check through order three.}
+Equation~\eqref{eq:ns-sphere-linear-h-recursion} was checked independently
+against exact descendant sewing for both the four-point and five-point
+linear blocks.  The direct side constructs the NS Shapovalov matrices and
+the human-note fixed-parity Ward forms in
+Eq.~\eqref{eq:ns-sphere-linear-block-definition}; it does not import Kac
+weights, inverse null slopes, fusion polynomials, or the recursion.
+
+The cutoff is rectangular:
+\begin{equation}
+ 0\leq n_i\leq3
+ \qquad\text{on every internal edge}.
+ \label{eq:ns-sphere-linear-order-three-domain}
+\end{equation}
+Thus the five-point check includes the coefficient
+\((n_1,n_2)=(3,3)\), not merely terms with \(n_1+n_2\leq3\).
+For four points, the routings \((0,0)\) and \((1,1)\) give \(7\)
+admissible coefficients.  For five points, all four bottom-component
+routings
+\begin{equation}
+ (0,0,0),\qquad(0,1,1),\qquad(1,0,1),\qquad(1,1,0)
+ \label{eq:ns-sphere-linear-checked-routings}
+\end{equation}
+give \(49\) admissible coefficients.  At each of two independent generic
+rational parameter sets, every one of these \(7+49=56\) comparisons has
+exactly zero residual.  Hence all
+\begin{equation}
+ 2(7+49)=112
+ \label{eq:ns-sphere-linear-check-count}
+\end{equation}
+exact coefficient identities pass.  In particular, this tests both
+base-edge and non-base-edge substitutions, half-integral levels, odd-null
+transport of the two adjacent trinion sectors, the fixed-parity phase in
+Eq.~\eqref{eq:ns-sphere-linear-fixed-parity-phase}, and nested residues.
+The executable checker, the two rational samples, and the complete
+coefficient ledger are in
+\path{Code/ns_sphere_linear_h_recursion_check/}.
+
+\paragraph{Numerical four-point check against the \(c\)-recursion.}
+As a recursion-to-recursion test, with no PBW data on either side, the
+four-point specialization of
+Eq.~\eqref{eq:ns-sphere-linear-h-recursion} was compared with the production
+BRY \(c\)-recursion.  For each of the same two generic rational parameter
+sets, all \(33\) even and odd local coefficients through physical level
+\(16\) agree at \(80\)-digit working precision.  The maximum absolute
+coefficient residual over all \(66\) comparisons is
+\begin{equation}
+ 1.45\times10^{-81}.
+ \label{eq:ns-sphere-linear-h-c-coefficient-check}
+\end{equation}
+
+There is also a genuinely pointwise check.  The \(c\)-recursion is summed
+through accumulated null level \(16\), keeping the global
+\(\mathfrak{osp}(1|2)\) block exactly at every leaf, whereas the
+\(h\)-recursion is summed as a local \(z\)-series through level \(16\).
+At \(z=1/4+i/20\), the comparison is
+\begin{center}
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{c c c c c}
+\toprule
+sample & sector & \(h\)-series & global-leaf \(c\)-recursion
+ & absolute difference \\
+\midrule
+I & even
+& \(1.02028696185636+0.02046935012076i\)
+& \(1.02028696185446+0.02046935012021i\)
+& \(1.98\times10^{-12}\) \\
+I & odd
+& \(-0.38502120298964-0.05198058453017i\)
+& \(-0.38502120298129-0.05198058452862i\)
+& \(8.49\times10^{-12}\) \\
+II & even
+& \(1.05669249819712+0.01895676575736i\)
+& \(1.05669249819451+0.01895676575661i\)
+& \(2.71\times10^{-12}\) \\
+II & odd
+& \(-0.35849153996485-0.04763207590474i\)
+& \(-0.35849153995528-0.04763207590300i\)
+& \(9.72\times10^{-12}\) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The pointwise discrepancy is the expected omitted local-series tail; it is
+not a coefficient mismatch.  The same check at \(z=0.08\) and \(z=0.15\)
+has maximum errors \(1.70\times10^{-17}\) and
+\(1.35\times10^{-15}\), respectively.  The executable comparison and full
+ledger are in
+\path{Code/ns_sphere_linear_h_recursion_check/}.
+
+For \(N=4\), Eq.~\eqref{eq:ns-sphere-linear-h-recursion} gives a local
+cross-ratio recursion that shifts the internal weight together with
+\(d_1\) and \(d_4\).  It is therefore different from the usual
+Zamolodchikov elliptic recursion, even though both reconstruct the same
+four-point block.  The structure is exactly the NS extension of the sphere
+linear recursion of Cho--Collier--Yin
+\cite{ChoCollierYin2017Recursive}.
 
 \paragraph{Ramond sector deferred.}
 For R internal edges the positive modes obey analogous power counting, but
@@ -1103,6 +1787,11 @@ The conceptual changes relative to Virasoro recursion are only:
  \item the large-\(h\) prefactor contains bosonic and fermionic oscillator
  characters.
 \end{enumerate}
+
+For the multipoint sphere linear channel, the complete fixed-difference
+component recursion, including the two endpoint-weight shifts and odd-null
+transport of adjacent trinion sectors, is
+Eq.~\eqref{eq:ns-sphere-linear-h-recursion}.
 
 \subsection{Toric NS blocks}
 

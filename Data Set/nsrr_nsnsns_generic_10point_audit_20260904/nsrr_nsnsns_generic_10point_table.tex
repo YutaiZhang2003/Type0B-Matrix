@@ -1,0 +1,135 @@
+% -----------------------------------------------------------------------------
+% COMPUTATIONAL SETUP FOR TABLE \ref{tab:nsrr-nsnsns-generic-ten}
+% -----------------------------------------------------------------------------
+% This input-ready table is stored with its numerical dataset. It requires
+% amsmath, booktabs, and graphicx. No Human Note file inputs this table.
+%
+% Observable and fixed normalization
+% ----------------------------------
+% The entries compare the Weyl-reduced sewing quantities
+%
+%   Q_channel = Z_channel / (Z_{X+psi,channel})^kappa,
+%
+% at fixed Super-Liouville coupling
+%
+%   b = 1.4 = 7/5,
+%   Q_bg = b+b^{-1} = 74/35,
+%   c_SL = 3/2 + 3 Q_bg^2 = 14.91061224489796...,
+%   kappa = c_SL/(3/2) = 9.940408163265307....
+%
+% The displayed ratio is the directly computed raw quotient
+%
+%   R = Q_NSRR / Q_NSNSNS.
+%
+% The sewing prediction is R = 1. No overall constant is fitted or applied.
+%
+% Generic sample and displayed plumbing data
+% ------------------------------------------
+% The ten nonsymmetric points change all six real coordinates of the symmetric
+% genus-two period matrix. All Im(Omega) are positive definite. The table lists
+% the corresponding plumbing data in geometry-edge order (q_0,q_1,q_infinity)
+% on both sides. The displayed eta vectors are the transported square-root
+% lifts. The fixed source spin is the amplitude-level combination of the two
+% NSRR lifts {(+,+,+),(+,-,+)} divided by sqrt(2).
+%
+% Branches, blocks, and integration
+% ---------------------------------
+% The NSRR chart uses the Human-Note Ramond-block and three-point conventions,
+% amplitude-level [11|00] projection, and the unscaled contraction
+%
+%   sum_{eta_L,eta_R} c_{eta_L} c_{eta_R}
+%   |F_0 + i eta_L eta_R F_1|^2.
+%
+% The NSNSNS chart uses the direct N=1 theta-channel c-recursion and the graded
+% theta-channel sign. Target square-root lifts are transported analytically
+% with the marked spin structure. Cartesian Gauss-Laguerre order N in each of
+% the three internal momenta uses N^3 common-grid nodes. Each row displays only
+% its highest computed momentum order: N=5 for points 03, 04, 05, 06, and 10,
+% and N=4 for the other five points. On the NSRR side the saved full total-L3
+% node is supplemented by the equal-HJS-sign CCY Virasoro c-recursion change
+% from descendant depth D=3 to D=5 at fixed branching cutoff K=3. The mixed-sign
+% contribution is reused unchanged. Thus this is the highest c-recursion-depth
+% result computed here, not a uniform total-L5 NSRR block.
+%
+% Reproducible data
+% -----------------
+% N=3: Data Set/nsrr_nsnsns_generic_10point_N3_20260904/
+% N=4: Data Set/nsrr_nsnsns_generic_10point_N4_20260904/
+% N=5: Data Set/nsrr_nsnsns_generic_10point_selected_N5_20260904/
+% D=5 refinement, N=4:
+%   Data Set/nsrr_nsnsns_generic_10point_N4_cD5_20260904/
+% D=5 refinement, selected N=5:
+%   Data Set/nsrr_nsnsns_generic_10point_selected_N5_cD5_20260904/
+% Final audit:
+%   Data Set/nsrr_nsnsns_generic_10point_audit_20260904/
+%   c_recursion_D3_to_D5_summary.json
+% -----------------------------------------------------------------------------
+\begin{table}[p]
+  \centering
+  \scriptsize
+  \setlength{\tabcolsep}{3.5pt}
+  \renewcommand{\arraystretch}{1.10}
+  \resizebox{\textwidth}{!}{%
+  \begin{tabular}{@{}cllrrr@{}}
+    \toprule
+    Point
+      & NSNSNS $(q_0,q_1,q_\infty;\boldsymbol\eta)$
+      & NSRR $(q_0,q_1,q_\infty;\boldsymbol\eta)$
+      & $\mathcal Q_{\rm NSRR}$
+      & $\mathcal Q_{\rm NSNSNS}$
+      & $\mathcal Q_{\rm NSRR}/\mathcal Q_{\rm NSNSNS}$ \\
+    \midrule
+    01
+      & $\begin{gathered}(0.017998-0.080979i,\;-0.019696+0.005144i,\\-0.071250-0.042549i);\quad(+,+,+)\end{gathered}$
+      & $\begin{gathered}(-0.026376-0.017260i,\;-0.057774+0.066640i,\\-0.027941+0.071218i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $1.065263225277\times10^{-7}$ & $1.069889378308\times10^{-7}$ & $0.995676045463$ \\
+    02
+      & $\begin{gathered}(0.049890-0.014666i,\;-0.033283-0.013330i,\\-0.082935+0.006449i);\quad(+,-,-)\end{gathered}$
+      & $\begin{gathered}(-0.043145-0.012892i,\;-0.027736+0.021163i,\\-0.060523+0.011892i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $4.203522366500\times10^{-7}$ & $4.203478316504\times10^{-7}$ & $1.000010479416$ \\
+    03
+      & $\begin{gathered}(0.020629-0.007765i,\;-0.015537-0.007620i,\\-0.062544+0.013403i);\quad(+,-,-)\end{gathered}$
+      & $\begin{gathered}(-0.072252-0.037339i,\;-0.039397+0.032408i,\\-0.016109+0.005454i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $1.242533619721\times10^{-7}$ & $1.241843110261\times10^{-7}$ & $1.000556035987$ \\
+    04
+      & $\begin{gathered}(0.023875-0.010459i,\;-0.032588-0.026727i,\\-0.080397+0.073055i);\quad(+,-,-)\end{gathered}$
+      & $\begin{gathered}(-0.056249-0.036215i,\;-0.011178+0.008110i,\\-0.029248+0.019339i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $3.420134338341\times10^{-7}$ & $3.451453324643\times10^{-7}$ & $0.990925855471$ \\
+    05
+      & $\begin{gathered}(0.073492-0.059010i,\;-0.017256+0.000446i,\\-0.057225-0.017265i);\quad(+,+,+)\end{gathered}$
+      & $\begin{gathered}(-0.046420-0.019395i,\;-0.069915+0.051999i,\\-0.061589+0.039921i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $1.403693857686\times10^{-7}$ & $1.400222540025\times10^{-7}$ & $1.002479118541$ \\
+    06
+      & $\begin{gathered}(0.013474-0.017942i,\;-0.020448-0.018347i,\\-0.069370+0.024053i);\quad(+,-,-)\end{gathered}$
+      & $\begin{gathered}(-0.071563-0.025133i,\;-0.023198+0.022171i,\\-0.013911+0.016093i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $1.474155689816\times10^{-7}$ & $1.480983562719\times10^{-7}$ & $0.995389636270$ \\
+    07
+      & $\begin{gathered}(0.040852-0.011942i,\;-0.037505-0.020450i,\\-0.074203+0.022952i);\quad(+,-,-)\end{gathered}$
+      & $\begin{gathered}(-0.050842-0.011843i,\;-0.022885+0.012734i,\\-0.049364+0.012976i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $4.135578146371\times10^{-7}$ & $4.146179259792\times10^{-7}$ & $0.997443160858$ \\
+    08
+      & $\begin{gathered}(0.040470-0.032913i,\;-0.033476-0.018628i,\\-0.067061+0.003058i);\quad(+,-,-)\end{gathered}$
+      & $\begin{gathered}(-0.050247-0.004106i,\;-0.030295+0.020925i,\\-0.048123+0.028738i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $2.702341404666\times10^{-7}$ & $2.703347614306\times10^{-7}$ & $0.999627791249$ \\
+    09
+      & $\begin{gathered}(0.041879-0.035882i,\;-0.025878-0.005284i,\\-0.078821+0.015521i);\quad(+,-,-)\end{gathered}$
+      & $\begin{gathered}(-0.044637-0.028816i,\;-0.034555+0.023510i,\\-0.040796+0.039739i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $1.751853623629\times10^{-7}$ & $1.758775327671\times10^{-7}$ & $0.996064475130$ \\
+    10
+      & $\begin{gathered}(0.016411-0.010169i,\;-0.033207-0.014493i,\\-0.089186+0.052432i);\quad(+,-,-)\end{gathered}$
+      & $\begin{gathered}(-0.045417-0.035425i,\;-0.017174+0.011483i,\\-0.018493+0.016088i);\quad\{(+,+,+),(+,-,+)\}\end{gathered}$
+      & $2.465577358521\times10^{-7}$ & $2.474189018833\times10^{-7}$ & $0.996519400803$ \\
+    \midrule
+    \multicolumn{5}{@{}l}{RMS deviation of the displayed raw ratios from one}
+      & $0.404\%$ \\
+    \multicolumn{5}{@{}l}{Maximum absolute deviation of the displayed raw ratios from one}
+      & $0.907\%$ \\
+    \bottomrule
+  \end{tabular}%
+  }
+  \caption{Highest-order genus-two NSRR/NSNSNS sewing result available at each
+  of ten generic surfaces, with the plumbing parameters and transported lifts
+  shown on both sides. The coupling is $b=1.4$ and the predicted normalization
+  is fixed to one; no overall constant is fitted or applied.}
+  \label{tab:nsrr-nsnsns-generic-ten}
+\end{table}

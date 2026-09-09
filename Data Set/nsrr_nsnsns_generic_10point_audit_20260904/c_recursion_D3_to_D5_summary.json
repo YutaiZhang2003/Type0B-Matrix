@@ -1,0 +1,43 @@
+{
+  "schema": "nsrr-c-recursion-depth-refinement-audit-v1",
+  "b": 1.4,
+  "kappa": 9.940408163265307,
+  "normalization": 1.0,
+  "normalization_fitted_or_applied": false,
+  "scope": "The saved full total-L3 NSRR source node is retained. At fixed branching cutoff K=3, only the equal-HJS-sign double-Virasoro contribution is changed by adding its CCY c-recursion value at descendant depth D=5 minus its value at D=3. The mixed-sign PBW completion, momentum nodes and measures, three-point coefficients, fixed-spin projection, free factors, and NSNSNS target values are reused unchanged. This is an isolated Virasoro-descendant convergence test, not a uniform total-L5 NSRR block.",
+  "parent_datasets": {
+    "N4": "Data Set/nsrr_nsnsns_generic_10point_N4_20260904",
+    "selected_N5": "Data Set/nsrr_nsnsns_generic_10point_selected_N5_20260904"
+  },
+  "refinement_datasets": {
+    "N4": "Data Set/nsrr_nsnsns_generic_10point_N4_cD5_20260904",
+    "selected_N5": "Data Set/nsrr_nsnsns_generic_10point_selected_N5_cD5_20260904"
+  },
+  "cutoffs": {
+    "branching_cutoff": 3,
+    "virasoro_descendant_depth_before": 3,
+    "virasoro_descendant_depth_after": 5,
+    "auxiliary_majorana_total_twice_level": 32
+  },
+  "highest_momentum_order_policy": {
+    "N5_points": ["generic_03", "generic_04", "generic_05", "generic_06", "generic_10"],
+    "N4_points": ["generic_01", "generic_02", "generic_07", "generic_08", "generic_09"]
+  },
+  "fixed_normalization_one_before": {
+    "rms_fractional_residual": 0.004044338732238975,
+    "maximum_absolute_fractional_residual": 0.00914753390997991
+  },
+  "fixed_normalization_one_after": {
+    "rms_fractional_residual": 0.004037652072539417,
+    "maximum_absolute_fractional_residual": 0.00907414452867572,
+    "minimum_raw_ratio": 0.9909258554713243,
+    "maximum_raw_ratio": 1.00247911854089
+  },
+  "maximum_absolute_source_D3_to_D5_relative_change": 0.0007904385194219543,
+  "checks": {
+    "maximum_branching_ward_residual": 1.2015622556122097e-12,
+    "maximum_unsupported_character_leakage": 4.128907025248195e-13,
+    "maximum_auxiliary_L14_to_L16_scaled_change": 4.396108186943051e-11
+  },
+  "comparison_csv": "Data Set/nsrr_nsnsns_generic_10point_audit_20260904/c_recursion_D3_to_D5_comparison.csv"
+}

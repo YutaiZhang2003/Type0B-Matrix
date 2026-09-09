@@ -13,11 +13,63 @@ from type0b_ns_five_tachyon_domain import (
     minimal_subtraction_ray_frequencies,
     one_divisor_ray_certificate,
     one_divisor_ray_frequencies,
+    physical_i_epsilon_frequencies,
+    physical_i_epsilon_subtraction_audit,
     three_fixed_pco_subtraction_free_no_go,
 )
 
 
 class Type0BNSFiveTachyonDomainTests(unittest.TestCase):
+    def test_physical_i_epsilon_audit_enumerates_complete_degree_zero_forest(self):
+        outgoing = physical_i_epsilon_frequencies((0.25,) * 4, 0.01)
+        self.assertEqual(outgoing, (0.25 + 0.01j,) * 4)
+        audit = physical_i_epsilon_subtraction_audit(
+            (0.25,) * 4,
+            0.01,
+            central_charge_shift=1.0e-5,
+        )
+        self.assertTrue(audit["exact_energy_conservation"])
+        self.assertTrue(audit["undeformed_positive_real_liouville_contours"])
+        self.assertEqual(audit["crossed_structure_poles"], [])
+        self.assertAlmostEqual(audit["first_C_wall_parameter"], 0.05)
+        self.assertAlmostEqual(audit["first_C_wall_clearance"], 0.95)
+        self.assertTrue(
+            audit["all_counterterm_denominator_imaginary_parts_negative"]
+        )
+        self.assertEqual(len(audit["ten_boundary_divisors"]), 10)
+        self.assertEqual(audit["required_polynomial_mode_count"], 10)
+        self.assertEqual(audit["maximum_diagonal_degree"], 0)
+        self.assertTrue(audit["all_required_modes_degree_zero"])
+        self.assertEqual(audit["compatible_corner_count"], 15)
+        self.assertTrue(
+            all(
+                corner["required_degree_pairs"] == [[0, 0]]
+                for corner in audit["fifteen_compatible_corners"]
+            )
+        )
+
+        records = {
+            tuple(record["pair"]): record
+            for record in audit["ten_boundary_divisors"]
+        }
+        self.assertEqual(records[(0, 1)]["threshold"], 1)
+        self.assertEqual(records[(1, 3)]["threshold"], 0)
+        self.assertEqual(records[(3, 4)]["threshold"], 1)
+        self.assertAlmostEqual(
+            records[(0, 1)]["divergent_momentum_intervals"][0][1] ** 2,
+            1.0 + 1.0e-5 / 12.0 + ((0.75 + 0.03j) ** 2).real,
+        )
+
+    def test_physical_i_epsilon_audit_lists_higher_diagonal_modes_when_needed(self):
+        audit = physical_i_epsilon_subtraction_audit((1.0,) * 4, 0.01)
+        raised_pair = next(
+            record
+            for record in audit["ten_boundary_divisors"]
+            if record["pair"] == [1, 2]
+        )
+        self.assertEqual(raised_pair["required_diagonal_degrees"], [0, 1, 2])
+        self.assertFalse(audit["all_required_modes_degree_zero"])
+
     def test_old_separated_point_is_rejected_by_superghost_face(self):
         audit = general_complex_energy_convergence_audit(
             CERTIFIED_OUTGOING_FREQUENCIES

@@ -1,0 +1,885 @@
+{
+  "status": "target_blind_worldsheet_pilot_unfrozen_unconverged",
+  "precision_caveat": "This result differs by 151 percent from the 4 by 8 control and has a 32 percent offset spread. It must not be used as an amplitude estimate.",
+  "comparison_performed": false,
+  "matrix_model_data_included": false,
+  "calculation": "analytic continuation from the positive-real energy sheet, including the complete wall-one Liouville residue ledger",
+  "kinematics": {
+    "ray_coefficients": [
+      0.1,
+      1.0,
+      1.0
+    ],
+    "ray_base": {
+      "real": 0.271,
+      "imag": 0.612
+    },
+    "outgoing_energies": [
+      {
+        "real": 0.027100000000000003,
+        "imag": 0.061200000000000004
+      },
+      {
+        "real": 0.271,
+        "imag": 0.612
+      },
+      {
+        "real": 0.271,
+        "imag": 0.612
+      }
+    ],
+    "incoming_energy": {
+      "real": 0.5691,
+      "imag": 1.2852000000000001
+    }
+  },
+  "continuation": {
+    "path": "lambda(s) = x + i s t, 0 <= s <= 1",
+    "origin": "positive real energy axis",
+    "crossed_walls": [
+      1
+    ],
+    "domain_certificate": {
+      "ray_coefficients": [
+        0.1,
+        1.0,
+        1.0
+      ],
+      "ray_real_sign": 1,
+      "x_interval": [
+        0.238,
+        0.304
+      ],
+      "t_interval": [
+        0.596,
+        0.628
+      ],
+      "center_base": {
+        "real": 0.271,
+        "imag": 0.612
+      },
+      "center_outgoing_energies": [
+        {
+          "real": 0.027100000000000003,
+          "imag": 0.061200000000000004
+        },
+        {
+          "real": 0.271,
+          "imag": 0.612
+        },
+        {
+          "real": 0.271,
+          "imag": 0.612
+        }
+      ],
+      "path_formula": "positive-real sheet: lambda(s)=+1*x+i*s*t, 0<=s<=1",
+      "crossed_walls": [
+        1
+      ],
+      "limiting_signature": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        "continuous",
+        null
+      ],
+      "minimum_margin_lower_bound": 0.05119999999999991,
+      "maximum_phase_upper_bound": 1.5272960000000009,
+      "maximum_phase_to_margin_upper_bound": 29.83000000000005,
+      "rectangle_area": 0.002112000000000002,
+      "residue_wall_count": 1,
+      "residue_record_count": 5,
+      "residue_cost": 10,
+      "maximum_combined_pole_order": 2,
+      "maximum_logarithm_power": 1,
+      "required_minimum_margin": 0.02,
+      "required_wall_clearance": 0.01,
+      "supported_product_pole_order": 2,
+      "mathematically_certified": true,
+      "production_ready": true,
+      "quality_score": 8.463853210639402e-05,
+      "domain_certificate": {
+        "ray_coefficients": [
+          0.1,
+          1.0,
+          1.0
+        ],
+        "x_interval": [
+          0.238,
+          0.304
+        ],
+        "t_interval": [
+          0.596,
+          0.628
+        ],
+        "continuum_record_count": 6,
+        "continuum_minimum_margin_lower_bound": 0.05119999999999991,
+        "residue_walls": [
+          {
+            "wall": 1,
+            "record_count": 5,
+            "minimum_margin_lower_bound": 0.056583999999999524,
+            "maximum_combined_pole_order": 2,
+            "maximum_logarithm_power": 1
+          }
+        ],
+        "minimum_wall_clearance": 0.053199999999999914,
+        "chamber_record_count": 11,
+        "chamber_stable": true,
+        "certified": true
+      },
+      "exponent_bounds": [
+        {
+          "partition": [
+            0,
+            1
+          ],
+          "side": [
+            0,
+            1
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "threshold": 0,
+          "minimum_real_part": 0.31798800000000005,
+          "maximum_absolute_imaginary_part": 0.46200704000000004,
+          "phase_to_margin_upper_bound": 1.4529071537290714
+        },
+        {
+          "partition": [
+            0,
+            1
+          ],
+          "side": [
+            0,
+            1
+          ],
+          "kind": "residue:sum:wall-1",
+          "sector": 0,
+          "threshold": 0,
+          "minimum_real_part": 0.056583999999998635,
+          "maximum_absolute_imaginary_part": 1.3225216000000004,
+          "phase_to_margin_upper_bound": 23.37271313445554
+        },
+        {
+          "partition": [
+            0,
+            1
+          ],
+          "side": [
+            2,
+            3
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "threshold": 0,
+          "minimum_real_part": 0.31798800000000005,
+          "maximum_absolute_imaginary_part": 0.46200704000000004,
+          "phase_to_margin_upper_bound": 1.4529071537290714
+        },
+        {
+          "partition": [
+            0,
+            2
+          ],
+          "side": [
+            0,
+            2
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "threshold": 0,
+          "minimum_real_part": 0.31798800000000005,
+          "maximum_absolute_imaginary_part": 0.46200704000000004,
+          "phase_to_margin_upper_bound": 1.4529071537290714
+        },
+        {
+          "partition": [
+            0,
+            2
+          ],
+          "side": [
+            0,
+            2
+          ],
+          "kind": "residue:sum:wall-1",
+          "sector": 0,
+          "threshold": 0,
+          "minimum_real_part": 0.056583999999998635,
+          "maximum_absolute_imaginary_part": 1.3225216000000004,
+          "phase_to_margin_upper_bound": 23.37271313445554
+        },
+        {
+          "partition": [
+            0,
+            2
+          ],
+          "side": [
+            1,
+            3
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "threshold": 0,
+          "minimum_real_part": 0.31798800000000005,
+          "maximum_absolute_imaginary_part": 0.46200704000000004,
+          "phase_to_margin_upper_bound": 1.4529071537290714
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            1,
+            2
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "threshold": 1,
+          "minimum_real_part": 0.05119999999999991,
+          "maximum_absolute_imaginary_part": 1.527296,
+          "phase_to_margin_upper_bound": 29.83000000000005
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            1,
+            2
+          ],
+          "kind": "residue:sum:wall-1",
+          "sector": 0,
+          "threshold": 1,
+          "minimum_real_part": 0.3839999999999999,
+          "maximum_absolute_imaginary_part": 1.216,
+          "phase_to_margin_upper_bound": 3.1666666666666674
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            0,
+            3
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "threshold": 1,
+          "minimum_real_part": 0.051200000000000356,
+          "maximum_absolute_imaginary_part": 1.5272960000000009,
+          "phase_to_margin_upper_bound": 29.82999999999981
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            0,
+            3
+          ],
+          "kind": "residue:sum:wall-1",
+          "sector": 0,
+          "threshold": 1,
+          "minimum_real_part": 0.3715995200000006,
+          "maximum_absolute_imaginary_part": 1.0332108800000006,
+          "phase_to_margin_upper_bound": 2.7804419123038664
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            0,
+            3
+          ],
+          "kind": "residue:difference:wall-1",
+          "sector": 0,
+          "threshold": 1,
+          "minimum_real_part": 0.38400000000000034,
+          "maximum_absolute_imaginary_part": 1.2160000000000004,
+          "phase_to_margin_upper_bound": 3.1666666666666647
+        }
+      ]
+    },
+    "pointwise_convergence_audit": {
+      "outgoing_energies": [
+        {
+          "real": 0.027100000000000003,
+          "imag": 0.061200000000000004
+        },
+        {
+          "real": 0.271,
+          "imag": 0.612
+        },
+        {
+          "real": 0.271,
+          "imag": 0.612
+        }
+      ],
+      "incoming_energy": {
+        "real": 0.5691,
+        "imag": 1.2852000000000001
+      },
+      "records": [
+        {
+          "partition": [
+            0,
+            1
+          ],
+          "side": [
+            0,
+            1
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "momentum": {
+            "real": 0.0,
+            "imag": 0.0
+          },
+          "channel_energy": {
+            "real": 0.29810000000000003,
+            "imag": 0.6732000000000001
+          },
+          "threshold": 0,
+          "margin": 0.36433463000000016
+        },
+        {
+          "partition": [
+            0,
+            1
+          ],
+          "side": [
+            0,
+            1
+          ],
+          "kind": "residue:sum:wall-1",
+          "sector": 0,
+          "momentum": {
+            "real": 0.8401000000000001,
+            "imag": 0.8972000000000002
+          },
+          "channel_energy": {
+            "real": 0.29810000000000003,
+            "imag": 0.6732000000000001
+          },
+          "threshold": 0,
+          "margin": 0.26513479999999984
+        },
+        {
+          "partition": [
+            0,
+            1
+          ],
+          "side": [
+            2,
+            3
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "momentum": {
+            "real": 0.0,
+            "imag": 0.0
+          },
+          "channel_energy": {
+            "real": -0.29810000000000003,
+            "imag": -0.6732
+          },
+          "threshold": 0,
+          "margin": 0.36433463
+        },
+        {
+          "partition": [
+            0,
+            2
+          ],
+          "side": [
+            0,
+            2
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "momentum": {
+            "real": 0.0,
+            "imag": 0.0
+          },
+          "channel_energy": {
+            "real": 0.29810000000000003,
+            "imag": 0.6732000000000001
+          },
+          "threshold": 0,
+          "margin": 0.36433463000000016
+        },
+        {
+          "partition": [
+            0,
+            2
+          ],
+          "side": [
+            0,
+            2
+          ],
+          "kind": "residue:sum:wall-1",
+          "sector": 0,
+          "momentum": {
+            "real": 0.8401000000000001,
+            "imag": 0.8972000000000002
+          },
+          "channel_energy": {
+            "real": 0.29810000000000003,
+            "imag": 0.6732000000000001
+          },
+          "threshold": 0,
+          "margin": 0.26513479999999984
+        },
+        {
+          "partition": [
+            0,
+            2
+          ],
+          "side": [
+            1,
+            3
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "momentum": {
+            "real": 0.0,
+            "imag": 0.0
+          },
+          "channel_energy": {
+            "real": -0.29810000000000003,
+            "imag": -0.6732
+          },
+          "threshold": 0,
+          "margin": 0.36433463
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            1,
+            2
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "momentum": {
+            "real": 0.0,
+            "imag": 0.0
+          },
+          "channel_energy": {
+            "real": -0.542,
+            "imag": -1.224
+          },
+          "threshold": 1,
+          "margin": 0.20441199999999982
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            1,
+            2
+          ],
+          "kind": "residue:sum:wall-1",
+          "sector": 0,
+          "momentum": {
+            "real": 0.542,
+            "imag": 0.22399999999999998
+          },
+          "channel_energy": {
+            "real": -0.542,
+            "imag": -1.224
+          },
+          "threshold": 1,
+          "margin": 0.44799999999999995
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            0,
+            3
+          ],
+          "kind": "continuous",
+          "sector": null,
+          "momentum": {
+            "real": 0.0,
+            "imag": 0.0
+          },
+          "channel_energy": {
+            "real": 0.542,
+            "imag": 1.2240000000000002
+          },
+          "threshold": 1,
+          "margin": 0.20441200000000026
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            0,
+            3
+          ],
+          "kind": "residue:sum:wall-1",
+          "sector": 0,
+          "momentum": {
+            "real": 0.5962000000000001,
+            "imag": 0.34640000000000004
+          },
+          "channel_energy": {
+            "real": 0.542,
+            "imag": 1.2240000000000002
+          },
+          "threshold": 1,
+          "margin": 0.43987348000000037
+        },
+        {
+          "partition": [
+            1,
+            2
+          ],
+          "side": [
+            0,
+            3
+          ],
+          "kind": "residue:difference:wall-1",
+          "sector": 0,
+          "momentum": {
+            "real": 0.542,
+            "imag": 0.2240000000000002
+          },
+          "channel_energy": {
+            "real": 0.542,
+            "imag": 1.2240000000000002
+          },
+          "threshold": 1,
+          "margin": 0.4480000000000002
+        }
+      ],
+      "minimum_margin": 0.20441199999999982,
+      "minimum_wall_clearance": 0.10279999999999978,
+      "convergent": true
+    }
+  },
+  "recursion_atlas": {
+    "h_rule": "linear h recursion only for the verified picture routing and |q_ell| < 0.3",
+    "c_rule": "channel-adapted c recursion everywhere else",
+    "maximum_twice_level": 8,
+    "routing_audits": [
+      {
+        "z": {
+          "real": 0.37,
+          "imag": 0.28
+        },
+        "frames_checked": [
+          0,
+          1
+        ],
+        "threshold": 0.3,
+        "maximum_h_nome": 0.034985546796688964,
+        "passed": true,
+        "frames": [
+          {
+            "frame": 0,
+            "ordering": [
+              3,
+              2,
+              1,
+              0
+            ],
+            "cross_ratio": {
+              "real": 0.37,
+              "imag": 0.28
+            },
+            "elliptic_nome_magnitude": 0.034985546796688964,
+            "backend": "h"
+          },
+          {
+            "frame": 1,
+            "ordering": [
+              2,
+              1,
+              0,
+              3
+            ],
+            "cross_ratio": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "elliptic_nome_magnitude": 0.06273053017187298,
+            "backend": "c"
+          }
+        ]
+      },
+      {
+        "z": {
+          "real": 1.3254786450662739,
+          "imag": 0.5891016200294551
+        },
+        "frames_checked": [
+          1,
+          2
+        ],
+        "threshold": 0.3,
+        "maximum_h_nome": 0.06273053017187298,
+        "passed": true,
+        "frames": [
+          {
+            "frame": 1,
+            "ordering": [
+              2,
+              1,
+              0,
+              3
+            ],
+            "cross_ratio": {
+              "real": -0.3254786450662739,
+              "imag": -0.5891016200294551
+            },
+            "elliptic_nome_magnitude": 0.03498554679668898,
+            "backend": "c"
+          },
+          {
+            "frame": 2,
+            "ordering": [
+              0,
+              2,
+              1,
+              3
+            ],
+            "cross_ratio": {
+              "real": 0.63,
+              "imag": -0.28
+            },
+            "elliptic_nome_magnitude": 0.06273053017187298,
+            "backend": "h"
+          }
+        ]
+      }
+    ]
+  },
+  "crossing_audits": [
+    {
+      "z": {
+        "real": 0.37,
+        "imag": 0.28
+      },
+      "values": [
+        {
+          "frame": 0,
+          "q": {
+            "real": 0.37,
+            "imag": 0.28
+          },
+          "backend": "h",
+          "continuous": {
+            "real": 0.052819016185656854,
+            "imag": 0.027970187448687775
+          },
+          "residues": {
+            "real": 0.09255554135535218,
+            "imag": -0.03905010450489847
+          },
+          "total": {
+            "real": 0.14537455754100903,
+            "imag": -0.011079917056210697
+          }
+        },
+        {
+          "frame": 1,
+          "q": {
+            "real": 0.63,
+            "imag": -0.28
+          },
+          "backend": "c",
+          "continuous": {
+            "real": 0.369070153394545,
+            "imag": -0.13916538503109216
+          },
+          "residues": {
+            "real": -0.2237731435643746,
+            "imag": 0.12811325114525918
+          },
+          "total": {
+            "real": 0.1452970098301704,
+            "imag": -0.011052133885832982
+          }
+        }
+      ],
+      "maximum_absolute_difference": 8.237446213813835e-05,
+      "relative_spread": 0.000564997390784246,
+      "relative_tolerance": 0.01,
+      "passed": true
+    },
+    {
+      "z": {
+        "real": 1.3254786450662739,
+        "imag": 0.5891016200294551
+      },
+      "values": [
+        {
+          "frame": 1,
+          "q": {
+            "real": -0.3254786450662739,
+            "imag": -0.5891016200294551
+          },
+          "backend": "c",
+          "continuous": {
+            "real": 0.08759415170084957,
+            "imag": 0.05275639306756513
+          },
+          "residues": {
+            "real": -0.0367747701545581,
+            "imag": -0.024363738319762573
+          },
+          "total": {
+            "real": 0.05081938154629147,
+            "imag": 0.02839265474780256
+          }
+        },
+        {
+          "frame": 2,
+          "q": {
+            "real": 0.63,
+            "imag": -0.28
+          },
+          "backend": "h",
+          "continuous": {
+            "real": 0.015924847219739673,
+            "imag": 0.008312546770249344
+          },
+          "residues": {
+            "real": 0.03490610264230162,
+            "imag": 0.02010087515782474
+          },
+          "total": {
+            "real": 0.0508309498620413,
+            "imag": 0.028413421928074084
+          }
+        }
+      ],
+      "maximum_absolute_difference": 2.3771867947593686e-05,
+      "relative_spread": 0.0004082183263127114,
+      "relative_tolerance": 0.01,
+      "passed": true
+    }
+  ],
+  "settings": {
+    "q_threshold": 0.3,
+    "momentum_order": 30,
+    "momentum_maximum": 3.0,
+    "momentum_rule": "wall-one-30",
+    "structure_precision": 22,
+    "block_precision": 45,
+    "sobol_power": 5,
+    "replicates": 2,
+    "integration_method": "verified-cells",
+    "radial_order": 5,
+    "angular_order": 10,
+    "crossing_tolerance": 0.01,
+    "seed": 20260828
+  },
+  "source_sha256": {
+    "run_type0b_sphere_four_point_analytic_hybrid.py": "41bf2cb6471373db55958e780461fb472a7a2367ce4f5bc945ec20bfe0194070",
+    "type0b_sphere_four_point_hybrid.py": "6d64e355fbef712c871e9813c237e13e628508c36cc5f0c391cf703eb6c6620d",
+    "type0b_sphere_four_point_continuation.py": "ef30e792de9b3e3ab53c7f549e429aff34c9c6ae64430e8e90ef8d93ea9ed0c4",
+    "ns_multipoint_h_recursion.py": "ce63ae0b8f34328ad05ebec471d2c01dbd4f0fe7d51e1cd4027649c1e54dabcd",
+    "ns_multipoint_c_recursion.py": "9387baa58c25a24d155716a48fb70ec14b9a18e52c24a6d5bc0f190cedb92b75"
+  },
+  "worldsheet_result": {
+    "outgoing_energies": [
+      {
+        "real": 0.027100000000000003,
+        "imag": 0.061200000000000004
+      },
+      {
+        "real": 0.271,
+        "imag": 0.612
+      },
+      {
+        "real": 0.271,
+        "imag": 0.612
+      }
+    ],
+    "incoming_energy": {
+      "real": 0.5691,
+      "imag": 1.2852000000000001
+    },
+    "backend": "hybrid:continued-component-cells",
+    "estimates": [
+      {
+        "real": -0.44471288629986483,
+        "imag": 1.5551638972484014
+      },
+      {
+        "real": -0.8817098921166246,
+        "imag": 0.7982368916275668
+      }
+    ],
+    "mean": {
+      "real": -0.6632113892082447,
+      "imag": 1.1767003944379841
+    },
+    "standard_error_real": 0.2184985029083799,
+    "standard_error_imag": 0.37846350281041724,
+    "continuous": {
+      "estimates": [
+        {
+          "real": 0.8712538013879534,
+          "imag": 0.4148560780640402
+        },
+        {
+          "real": 0.8979792377162741,
+          "imag": 0.46550700752486907
+        }
+      ],
+      "mean": {
+        "real": 0.8846165195521137,
+        "imag": 0.44018154279445465
+      },
+      "standard_error_real": 0.013362718164160348,
+      "standard_error_imag": 0.02532546473041444
+    },
+    "residues": {
+      "estimates": [
+        {
+          "real": -1.3159666876878182,
+          "imag": 1.1403078191843612
+        },
+        {
+          "real": -1.7796891298328987,
+          "imag": 0.33272988410269777
+        }
+      ],
+      "mean": {
+        "real": -1.5478279087603584,
+        "imag": 0.7365188516435295
+      },
+      "standard_error_real": 0.23186122107254026,
+      "standard_error_imag": 0.40378896754083166
+    },
+    "samples_per_replicate": 300,
+    "replicates": 2,
+    "radial_power": 0.18397079999999985,
+    "convergence_margin": 0.20441199999999982
+  }
+}

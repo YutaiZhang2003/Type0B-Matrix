@@ -442,6 +442,7 @@ def run(
     *,
     check_direct_pbw: bool = False,
     primary_parity: int = 0,
+    branching_mp_dps: int = 0,
 ) -> dict[str, object]:
     b = 7.0 / 5.0
     momenta = (11.0 / 23.0, 13.0 / 29.0, 17.0 / 31.0)
@@ -450,7 +451,11 @@ def run(
     total_started = time.perf_counter()
 
     branching = BranchingGrid(
-        b, momenta, cutoff, primary_parity=primary_parity
+        b,
+        momenta,
+        cutoff,
+        primary_parity=primary_parity,
+        mp_dps=branching_mp_dps,
     )
     started = time.perf_counter()
     branching.build_actions()
@@ -631,6 +636,15 @@ def run(
         },
         "method": {
             "branching": "first L1 Ward identity with direct low-level anchors",
+            "branching_arithmetic": (
+                {
+                    "backend": "mixed-precision mpmath/QR refinement",
+                    "decimal_digits": int(branching_mp_dps),
+                    "boundary_anchor_backend": "certified direct PBW complex128",
+                }
+                if branching_mp_dps
+                else {"backend": "complex128", "decimal_digits": None}
+            ),
             "ordinary_blocks": "formal trivariate CCY central-charge recursion",
             "adaptive_virasoro_cutoff": True,
             "pbw_generic_block_sum_used": False,
@@ -716,16 +730,28 @@ def main() -> None:
         "--physical-json", type=Path,
         help="also recover the physical equal-structure block and write its q-series",
     )
+    parser.add_argument(
+        "--branching-mp-dps",
+        type=int,
+        default=0,
+        help=(
+            "refine branch actions and Ward grids at this many decimal digits "
+            "(0 keeps complex128; nonzero values must be at least 30)"
+        ),
+    )
     arguments = parser.parse_args()
     if arguments.cutoff < 0:
         raise ValueError("cutoff must be nonnegative")
     if arguments.physical_json is not None and arguments.physical_json.resolve() == arguments.json.resolve():
         raise ValueError("physical and enlarged output paths must differ")
+    if arguments.branching_mp_dps and arguments.branching_mp_dps < 30:
+        parser.error("--branching-mp-dps must be 0 or at least 30")
     enlarged = run(
         arguments.cutoff,
         arguments.json,
         check_direct_pbw=arguments.direct_pbw_check,
         primary_parity=arguments.primary_parity,
+        branching_mp_dps=arguments.branching_mp_dps,
     )
     if arguments.physical_json is not None:
         from recover_physical_block import recover_record

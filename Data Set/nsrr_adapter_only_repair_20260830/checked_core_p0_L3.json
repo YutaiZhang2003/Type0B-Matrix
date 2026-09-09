@@ -1,0 +1,1463 @@
+{
+  "calculation": "formal q-expansion of the full three-variable enlarged Ramond block",
+  "block": "widehat F_0^(+,+)",
+  "total_level_cutoff": 3,
+  "exponent_convention": "twice_levels e represent q_i^(e_i/2)",
+  "parameters": {
+    "b": 1.4,
+    "P": [
+      0.4782608695652174,
+      0.4482758620689655,
+      0.5483870967741935
+    ],
+    "three_point_eta": [
+      1,
+      1
+    ],
+    "fermion_parity": 0,
+    "primary_parity": 0
+  },
+  "method": {
+    "branching": "first L1 Ward identity with direct low-level anchors",
+    "branching_arithmetic": {
+      "backend": "complex128",
+      "decimal_digits": null
+    },
+    "ordinary_blocks": "formal trivariate CCY central-charge recursion",
+    "adaptive_virasoro_cutoff": true,
+    "pbw_generic_block_sum_used": false,
+    "vacuum_seed": "large-c vacuum-module limit, computed once",
+    "human_note_signs": {
+      "enlarged_first_tube": "(-1)^(A+mathsf_A)",
+      "auxiliary_first_tube": "(-1)^mathsf_A",
+      "double_virasoro_branch": "(-1)^(2*n_1)",
+      "pbw_extra_sign": "none"
+    }
+  },
+  "counts": {
+    "branch_label_triples": 80,
+    "ordinary_virasoro_blocks": 160,
+    "full_block_coefficients_with_eta_parity": 60,
+    "vacuum_coefficients": 1
+  },
+  "virasoro_cutoff_histogram": [
+    {
+      "descendant_cutoff": 3,
+      "block_count": 8
+    },
+    {
+      "descendant_cutoff": 2,
+      "block_count": 32
+    },
+    {
+      "descendant_cutoff": 1,
+      "block_count": 56
+    },
+    {
+      "descendant_cutoff": 0,
+      "block_count": 64
+    }
+  ],
+  "timing_seconds": {
+    "branch_action_decompositions": 0.11039470799999998,
+    "branching_ward_systems": 0.126366584,
+    "formal_vacuum_seed": 0.00015966699999997447,
+    "formal_virasoro_c_recursions": 0.013433958000000024,
+    "formal_assembly": 0.005779665999999961,
+    "low_level_validation": 0.000731083999999993,
+    "direct_pbw_comparison": 2.309792042,
+    "total": 2.568138834,
+    "q_expansion_with_branching_coefficients_available": 0.01937329099999996
+  },
+  "diagnostics": {
+    "maximum_action_fit_relative_residual": 5.984632677481897e-13,
+    "ward_systems": [
+      {
+        "alpha_2": 0,
+        "alpha_3": 0,
+        "eta": 1,
+        "form_parity": 0,
+        "unknowns": 108,
+        "equations": 124,
+        "anchors": 16,
+        "rank": 108,
+        "full_column_rank": true,
+        "absolute_residual": 7.497509378452553e-14,
+        "relative_residual": 2.546400312239759e-14,
+        "smallest_retained_singular_value": 0.00022796057288051178,
+        "condition_number": 8246.319805392599
+      },
+      {
+        "alpha_2": 0,
+        "alpha_3": 1,
+        "eta": 1,
+        "form_parity": 0,
+        "unknowns": 72,
+        "equations": 104,
+        "anchors": 32,
+        "rank": 72,
+        "full_column_rank": true,
+        "absolute_residual": 1.0312625218183854e-14,
+        "relative_residual": 2.4101020254550287e-15,
+        "smallest_retained_singular_value": 0.018322976234269192,
+        "condition_number": 80.64581321197032
+      },
+      {
+        "alpha_2": 1,
+        "alpha_3": 0,
+        "eta": 1,
+        "form_parity": 0,
+        "unknowns": 72,
+        "equations": 104,
+        "anchors": 32,
+        "rank": 72,
+        "full_column_rank": true,
+        "absolute_residual": 8.788898980392767e-15,
+        "relative_residual": 2.0865646606118327e-15,
+        "smallest_retained_singular_value": 0.018685146119870495,
+        "condition_number": 79.21525818375677
+      },
+      {
+        "alpha_2": 1,
+        "alpha_3": 1,
+        "eta": 1,
+        "form_parity": 0,
+        "unknowns": 108,
+        "equations": 124,
+        "anchors": 16,
+        "rank": 108,
+        "full_column_rank": true,
+        "absolute_residual": 9.606919311499353e-14,
+        "relative_residual": 4.9883847093786e-14,
+        "smallest_retained_singular_value": 0.00021807311745081277,
+        "condition_number": 8618.98086539414
+      }
+    ],
+    "vacuum_extrapolation": {
+      "first_c": 100000000.0,
+      "second_c": 200000000.0,
+      "maximum_extrapolation_rounding_error": 0.0,
+      "maximum_change_between_samples": 0.0
+    },
+    "low_level_virasoro_check": {
+      "labels": [
+        "0",
+        "-1/4",
+        "1/4"
+      ],
+      "copy": 1,
+      "maximum_absolute_error_through_level_2": 1.6965595595053173e-15
+    },
+    "direct_pbw_comparison": {
+      "maximum_total_twice_level": 6,
+      "coefficient_count": 240,
+      "maximum_absolute_error": 3.703763236313831e-12,
+      "maximum_relative_error": 3.131121193600536e-13,
+      "worst_twice_levels": [
+        0,
+        4,
+        2
+      ],
+      "worst_eta_component": 6,
+      "production_double_virasoro_value": {
+        "real": 11.828872174873572,
+        "imag": 2.0918657189657538e-14
+      },
+      "factorized_direct_pbw_value": {
+        "real": 11.828872174869868,
+        "imag": -2.688821387764051e-17
+      },
+      "human_note_signs": {
+        "enlarged_first_tube": "(-1)^(A+mathsf_A)",
+        "auxiliary_first_tube": "(-1)^mathsf_A",
+        "double_virasoro_branch": "(-1)^(2*n_1)",
+        "pbw_extra_sign": "none"
+      }
+    }
+  },
+  "evaluation_check": {
+    "q": [
+      0.019,
+      0.023,
+      0.029
+    ],
+    "eta_tubes": [
+      1,
+      1,
+      1
+    ],
+    "value_from_formal_series": {
+      "real": 4.119622268444983,
+      "imag": -8.466129740009039e-16
+    }
+  },
+  "coefficients": [
+    {
+      "twice_levels": [
+        0,
+        0,
+        0
+      ],
+      "levels": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 1.9999999999999956,
+        "imag": -3.9651869296535765e-16
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        0,
+        0
+      ],
+      "levels": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 2.000000000000031,
+        "imag": -4.3042709340299557e-16
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        0,
+        0
+      ],
+      "levels": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 0.9887240534465216,
+        "imag": -9.932851153031475e-17
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        0,
+        0
+      ],
+      "levels": [
+        0.5,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -0.9887240534465184,
+        "imag": 2.325348807440587e-16
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        0,
+        2
+      ],
+      "levels": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.8742017525600134,
+        "imag": -2.2328276461656824e-16
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        0,
+        2
+      ],
+      "levels": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.8742017525600472,
+        "imag": -1.0651856427807578e-14
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        2,
+        0
+      ],
+      "levels": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.7899097214815864,
+        "imag": -1.52641212880505e-16
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        2,
+        0
+      ],
+      "levels": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.7899097214816958,
+        "imag": 1.3055099337483979e-14
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        0,
+        0
+      ],
+      "levels": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.5441483744060535,
+        "imag": -1.0788250109935659e-16
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        0,
+        0
+      ],
+      "levels": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.544148374406063,
+        "imag": -1.1710810158778136e-16
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        0,
+        2
+      ],
+      "levels": [
+        0.5,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 1.7806388124395554,
+        "imag": 5.708755880461311e-16
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        0,
+        2
+      ],
+      "levels": [
+        0.5,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -1.7806388124395676,
+        "imag": -4.387344720548626e-17
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        2,
+        0
+      ],
+      "levels": [
+        0.5,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 1.7644139972791881,
+        "imag": -1.4485290450138876e-15
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        2,
+        0
+      ],
+      "levels": [
+        0.5,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -1.7644139972791866,
+        "imag": 1.986804586427661e-16
+      }
+    },
+    {
+      "twice_levels": [
+        3,
+        0,
+        0
+      ],
+      "levels": [
+        1.5,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 0.4906426910028052,
+        "imag": -1.298286186789648e-16
+      }
+    },
+    {
+      "twice_levels": [
+        3,
+        0,
+        0
+      ],
+      "levels": [
+        1.5,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -0.4906426910028035,
+        "imag": 1.0139342999716764e-16
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        0,
+        4
+      ],
+      "levels": [
+        0.0,
+        0.0,
+        2.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.6483629248185251,
+        "imag": -1.9825815810856596e-16
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        0,
+        4
+      ],
+      "levels": [
+        0.0,
+        0.0,
+        2.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.6483629248185594,
+        "imag": -1.3232540303577219e-14
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        2,
+        2
+      ],
+      "levels": [
+        0.0,
+        1.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 5.422604646632436,
+        "imag": -2.382242099311926e-15
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        2,
+        2
+      ],
+      "levels": [
+        0.0,
+        1.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 5.422604646633476,
+        "imag": -3.54308152668035e-14
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        4,
+        0
+      ],
+      "levels": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.5595190745533792,
+        "imag": -1.1214741879714862e-16
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        4,
+        0
+      ],
+      "levels": [
+        0.0,
+        2.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.5595190745535233,
+        "imag": 1.8566114282459844e-14
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        0,
+        2
+      ],
+      "levels": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 1.2881485790785405,
+        "imag": -3.3839615308077043e-16
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        0,
+        2
+      ],
+      "levels": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 1.2881485790785399,
+        "imag": 1.041085390733027e-14
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        2,
+        0
+      ],
+      "levels": [
+        1.0,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.26744439154291955,
+        "imag": -2.3568516300891317e-16
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        2,
+        0
+      ],
+      "levels": [
+        1.0,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.26744439154301997,
+        "imag": 1.3184838620223901e-14
+      }
+    },
+    {
+      "twice_levels": [
+        4,
+        0,
+        0
+      ],
+      "levels": [
+        2.0,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.39004157382078164,
+        "imag": -5.834880916090127e-18
+      }
+    },
+    {
+      "twice_levels": [
+        4,
+        0,
+        0
+      ],
+      "levels": [
+        2.0,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.3900415738208411,
+        "imag": 9.599178367997053e-15
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        0,
+        4
+      ],
+      "levels": [
+        0.5,
+        0.0,
+        2.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 0.9629053319836197,
+        "imag": 8.31990629608209e-15
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        0,
+        4
+      ],
+      "levels": [
+        0.5,
+        0.0,
+        2.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -0.9629053319836696,
+        "imag": -3.3630300932697436e-16
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        2,
+        2
+      ],
+      "levels": [
+        0.5,
+        1.0,
+        1.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 6.401837309155013,
+        "imag": -1.2041496614327928e-14
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        2,
+        2
+      ],
+      "levels": [
+        0.5,
+        1.0,
+        1.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -6.401837309155059,
+        "imag": -3.313138838152233e-15
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        4,
+        0
+      ],
+      "levels": [
+        0.5,
+        2.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 0.8746569912552985,
+        "imag": -1.020779978093446e-15
+      }
+    },
+    {
+      "twice_levels": [
+        1,
+        4,
+        0
+      ],
+      "levels": [
+        0.5,
+        2.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -0.8746569912553015,
+        "imag": 2.527849494175617e-15
+      }
+    },
+    {
+      "twice_levels": [
+        3,
+        0,
+        2
+      ],
+      "levels": [
+        1.5,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 2.61467148213441,
+        "imag": 7.990949602287336e-15
+      }
+    },
+    {
+      "twice_levels": [
+        3,
+        0,
+        2
+      ],
+      "levels": [
+        1.5,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -2.6146714821344395,
+        "imag": 3.217836385676566e-15
+      }
+    },
+    {
+      "twice_levels": [
+        3,
+        2,
+        0
+      ],
+      "levels": [
+        1.5,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 5.84142194045107,
+        "imag": 2.2289626655228374e-15
+      }
+    },
+    {
+      "twice_levels": [
+        3,
+        2,
+        0
+      ],
+      "levels": [
+        1.5,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -5.841421940451092,
+        "imag": 8.144688840830444e-15
+      }
+    },
+    {
+      "twice_levels": [
+        5,
+        0,
+        0
+      ],
+      "levels": [
+        2.5,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        0,
+        1
+      ],
+      "coefficient": {
+        "real": 0.36434347700800607,
+        "imag": -2.063480713515546e-16
+      }
+    },
+    {
+      "twice_levels": [
+        5,
+        0,
+        0
+      ],
+      "levels": [
+        2.5,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        1,
+        1,
+        0
+      ],
+      "coefficient": {
+        "real": -0.36434347700800435,
+        "imag": 7.447613456090832e-17
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        0,
+        6
+      ],
+      "levels": [
+        0.0,
+        0.0,
+        3.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.5395027244395562,
+        "imag": -2.1424643281318013e-16
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        0,
+        6
+      ],
+      "levels": [
+        0.0,
+        0.0,
+        3.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.5395027244395865,
+        "imag": -1.4684092058697766e-14
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        2,
+        4
+      ],
+      "levels": [
+        0.0,
+        1.0,
+        2.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 12.142448735879588,
+        "imag": -5.5419959669932106e-15
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        2,
+        4
+      ],
+      "levels": [
+        0.0,
+        1.0,
+        2.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 12.142448735882377,
+        "imag": -2.327710300277639e-13
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        4,
+        2
+      ],
+      "levels": [
+        0.0,
+        2.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 11.82887217487032,
+        "imag": -4.344626769282168e-15
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        4,
+        2
+      ],
+      "levels": [
+        0.0,
+        2.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 11.828872174873572,
+        "imag": 2.0918657189657538e-14
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        6,
+        0
+      ],
+      "levels": [
+        0.0,
+        3.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.45208649081170454,
+        "imag": -3.017556921773547e-17
+      }
+    },
+    {
+      "twice_levels": [
+        0,
+        6,
+        0
+      ],
+      "levels": [
+        0.0,
+        3.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.4520864908118707,
+        "imag": 2.2675338366442334e-14
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        0,
+        4
+      ],
+      "levels": [
+        1.0,
+        0.0,
+        2.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 1.0066678509414684,
+        "imag": -1.8384140077113896e-16
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        0,
+        4
+      ],
+      "levels": [
+        1.0,
+        0.0,
+        2.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 1.0066678509414795,
+        "imag": 3.1827207050029543e-15
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        2,
+        2
+      ],
+      "levels": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 2.169715106444962,
+        "imag": -3.3473427886103714e-16
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        2,
+        2
+      ],
+      "levels": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 2.169715106445457,
+        "imag": 3.6914029231514915e-14
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        4,
+        0
+      ],
+      "levels": [
+        1.0,
+        2.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.6183959926911168,
+        "imag": -1.8556292461283855e-16
+      }
+    },
+    {
+      "twice_levels": [
+        2,
+        4,
+        0
+      ],
+      "levels": [
+        1.0,
+        2.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.6183959926913082,
+        "imag": 2.4986353472450585e-14
+      }
+    },
+    {
+      "twice_levels": [
+        4,
+        0,
+        2
+      ],
+      "levels": [
+        2.0,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 1.932872695069221,
+        "imag": 1.2892846893361973e-14
+      }
+    },
+    {
+      "twice_levels": [
+        4,
+        0,
+        2
+      ],
+      "levels": [
+        2.0,
+        0.0,
+        1.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 1.9328726950687285,
+        "imag": 4.553781619074542e-14
+      }
+    },
+    {
+      "twice_levels": [
+        4,
+        2,
+        0
+      ],
+      "levels": [
+        2.0,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 2.37811853442074,
+        "imag": 1.2021168233940944e-14
+      }
+    },
+    {
+      "twice_levels": [
+        4,
+        2,
+        0
+      ],
+      "levels": [
+        2.0,
+        1.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 2.3781185344208,
+        "imag": 8.031724346019809e-14
+      }
+    },
+    {
+      "twice_levels": [
+        6,
+        0,
+        0
+      ],
+      "levels": [
+        3.0,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        0,
+        0
+      ],
+      "coefficient": {
+        "real": 0.3180228454465641,
+        "imag": 3.3004342434538807e-17
+      }
+    },
+    {
+      "twice_levels": [
+        6,
+        0,
+        0
+      ],
+      "levels": [
+        3.0,
+        0.0,
+        0.0
+      ],
+      "eta_parity": [
+        0,
+        1,
+        1
+      ],
+      "coefficient": {
+        "real": 0.31802284544664045,
+        "imag": 1.3459490506322714e-14
+      }
+    }
+  ],
+  "environment": {
+    "python": "3.9.6 (default, Apr 30 2025, 02:07:17) \n[Clang 17.0.0 (clang-1700.0.13.5)]",
+    "platform": "macOS-15.7.1-arm64-arm-64bit",
+    "machine": "arm64",
+    "processor": "arm",
+    "logical_cpu_count": 10
+  }
+}

@@ -108,6 +108,39 @@ class BoundaryMarginRecord:
         return result
 
 
+@dataclass(frozen=True)
+class DirectPolynomialMode:
+    """One diagonal BRY counterterm on a physical boundary divisor."""
+
+    pair: tuple[int, int]
+    picture_zero_count: int
+    threshold: int
+    diagonal_degree: int
+    channel_energy: complex
+    cutoff_squared: float
+    cutoff_momentum: float
+    denominator_imaginary_part: float
+
+    def to_json(self) -> dict[str, object]:
+        return {
+            "pair": list(self.pair),
+            "picture_zero_count": self.picture_zero_count,
+            "threshold": self.threshold,
+            "diagonal_degree": self.diagonal_degree,
+            "channel_energy": {
+                "real": self.channel_energy.real,
+                "imag": self.channel_energy.imag,
+            },
+            "cutoff_squared": self.cutoff_squared,
+            "cutoff_momentum": self.cutoff_momentum,
+            "radial_denominator": (
+                "P^2-K_pair^2-threshold-central_charge_shift/12"
+                f"+2*{self.diagonal_degree}"
+            ),
+            "denominator_imaginary_part": self.denominator_imaginary_part,
+        }
+
+
 def _finite_complex(name: str, value: complex) -> complex:
     result = complex(value)
     if not math.isfinite(result.real) or not math.isfinite(result.imag):
@@ -183,6 +216,210 @@ def _picture_threshold(pair: Sequence[int]) -> tuple[int, int]:
     # by two units, from -1 to +1.
     threshold = 1 if selected == frozenset(MINUS_ONE_LABELS) else count - 1
     return count, threshold
+
+
+def physical_i_epsilon_frequencies(
+    real_outgoing_energies: Sequence[float],
+    epsilon: float,
+    *,
+    epsilon_weights: Sequence[float] | None = None,
+) -> tuple[complex, complex, complex, complex]:
+    r"""Return physical outgoing energies with a positive Feynman tilt.
+
+    The real energies and all tilt weights are positive.  The incoming
+    energy is always formed later as their exact sum, so every signed
+    two-particle channel has ``Im(K^2)>0`` and hence every BRY radial
+    denominator has the boundary value ``...-i0``.
+    """
+
+    if len(real_outgoing_energies) != 4:
+        raise ValueError("real_outgoing_energies must contain four values")
+    energies = tuple(float(value) for value in real_outgoing_energies)
+    if any(not math.isfinite(value) or value <= 0.0 for value in energies):
+        raise ValueError("physical outgoing energies must be positive and finite")
+    tilt = float(epsilon)
+    if not math.isfinite(tilt) or tilt <= 0.0:
+        raise ValueError("epsilon must be positive and finite")
+    weights = (
+        (1.0, 1.0, 1.0, 1.0)
+        if epsilon_weights is None
+        else tuple(float(value) for value in epsilon_weights)
+    )
+    if len(weights) != 4 or any(
+        not math.isfinite(value) or value <= 0.0 for value in weights
+    ):
+        raise ValueError("epsilon_weights must contain four positive finite values")
+    return tuple(
+        complex(energy, tilt * weight)
+        for energy, weight in zip(energies, weights)
+    )  # type: ignore[return-value]
+
+
+def physical_i_epsilon_subtraction_audit(
+    real_outgoing_energies: Sequence[float],
+    epsilon: float,
+    *,
+    epsilon_weights: Sequence[float] | None = None,
+    central_charge_shift: float = 0.0,
+) -> dict[str, object]:
+    r"""Enumerate the direct BRY subtraction forest near physical energies.
+
+    In a divisor ``D_ij`` the angularly diagonal normal term of degree ``n``
+    has radial denominator
+
+    ``lambda_n(P)=P^2-K_ij^2-tau_ij-delta_c/12+2*n``.
+
+    It is non-integrable on the real boundary at ``epsilon=0`` for
+    ``0 <= P <= sqrt(tau_ij+delta_c/12+K_ij^2-2*n)``.  Only these finitely
+    many diagonal modes are listed.  Compatible pairs of divisors give the
+    fifteen codimension-two forest overlaps of ``Mbar_0,5``.
+    """
+
+    outgoing = physical_i_epsilon_frequencies(
+        real_outgoing_energies,
+        epsilon,
+        epsilon_weights=epsilon_weights,
+    )
+    shift = float(central_charge_shift)
+    if not math.isfinite(shift) or shift < 0.0:
+        raise ValueError("central_charge_shift must be finite and non-negative")
+    weights = (
+        (1.0, 1.0, 1.0, 1.0)
+        if epsilon_weights is None
+        else tuple(float(value) for value in epsilon_weights)
+    )
+    incoming = sum(outgoing)
+    external = (incoming, *outgoing)
+    signed = (incoming, *(-value for value in outgoing))
+    first_c_wall_parameter = float(epsilon) * (sum(weights) + max(weights))
+
+    crossed: list[dict[str, object]] = []
+    for left, right in combinations(range(5), 2):
+        for sector in (0, 1):
+            for pole in _positive_contour_structure_poles(
+                external[left], external[right], sector
+            ):
+                crossed.append(
+                    {
+                        "pair": [left, right],
+                        "sector": sector,
+                        "family": pole.family,
+                        "wall": pole.wall,
+                    }
+                )
+
+    modes: list[DirectPolynomialMode] = []
+    modes_by_pair: dict[tuple[int, int], tuple[DirectPolynomialMode, ...]] = {}
+    divisor_records: list[dict[str, object]] = []
+    charge_correction = shift / 12.0
+    for pair in combinations(range(5), 2):
+        count, threshold = _picture_threshold(pair)
+        channel_energy = signed[pair[0]] + signed[pair[1]]
+        pair_modes: list[DirectPolynomialMode] = []
+        degree = 0
+        while True:
+            cutoff_squared = float(
+                threshold
+                + charge_correction
+                + (channel_energy * channel_energy).real
+                - 2 * degree
+            )
+            if cutoff_squared <= 1.0e-14:
+                break
+            mode = DirectPolynomialMode(
+                pair=pair,
+                picture_zero_count=count,
+                threshold=threshold,
+                diagonal_degree=degree,
+                channel_energy=channel_energy,
+                cutoff_squared=cutoff_squared,
+                cutoff_momentum=math.sqrt(cutoff_squared),
+                denominator_imaginary_part=float(
+                    -(channel_energy * channel_energy).imag
+                ),
+            )
+            pair_modes.append(mode)
+            modes.append(mode)
+            degree += 1
+        modes_by_pair[pair] = tuple(pair_modes)
+        divisor_records.append(
+            {
+                "pair": list(pair),
+                "picture_zero_count": count,
+                "threshold": threshold,
+                "channel_energy": {
+                    "real": channel_energy.real,
+                    "imag": channel_energy.imag,
+                },
+                "required_diagonal_degrees": [
+                    mode.diagonal_degree for mode in pair_modes
+                ],
+                "divergent_momentum_intervals": [
+                    [0.0, mode.cutoff_momentum] for mode in pair_modes
+                ],
+            }
+        )
+
+    corner_records: list[dict[str, object]] = []
+    divisors = tuple(combinations(range(5), 2))
+    for index, left in enumerate(divisors):
+        for right in divisors[index + 1 :]:
+            if set(left) & set(right):
+                continue
+            overlap_modes = [
+                [left_mode.diagonal_degree, right_mode.diagonal_degree]
+                for left_mode in modes_by_pair[left]
+                for right_mode in modes_by_pair[right]
+            ]
+            corner_records.append(
+                {
+                    "divisors": [list(left), list(right)],
+                    "middle_label": next(
+                        iter(set(range(5)) - set(left) - set(right))
+                    ),
+                    "required_degree_pairs": overlap_modes,
+                }
+            )
+
+    denominator_signs = [
+        mode.denominator_imaginary_part for mode in modes
+    ]
+    undeformed = not crossed and first_c_wall_parameter < 1.0
+    return {
+        "prescription": (
+            "omega_a=E_a+i*epsilon*nu_a with E_a,nu_a>0; "
+            "omega_0=sum_a omega_a; epsilon approaches zero from above"
+        ),
+        "real_outgoing_energies": [float(value) for value in real_outgoing_energies],
+        "epsilon": float(epsilon),
+        "epsilon_weights": list(weights),
+        "outgoing_frequencies": [
+            {"real": value.real, "imag": value.imag} for value in outgoing
+        ],
+        "incoming_frequency": {"real": incoming.real, "imag": incoming.imag},
+        "exact_energy_conservation": abs(incoming - sum(outgoing)) == 0.0,
+        "first_C_wall_parameter": first_c_wall_parameter,
+        "first_C_wall_clearance": 1.0 - first_c_wall_parameter,
+        "crossed_structure_poles": crossed,
+        "undeformed_positive_real_liouville_contours": undeformed,
+        "radial_boundary_value": "lambda_n(P)-i0",
+        "all_counterterm_denominator_imaginary_parts_negative": bool(
+            denominator_signs and all(value < 0.0 for value in denominator_signs)
+        ),
+        "central_charge_shift": shift,
+        "ten_boundary_divisors": divisor_records,
+        "required_polynomial_modes": [mode.to_json() for mode in modes],
+        "required_polynomial_mode_count": len(modes),
+        "maximum_diagonal_degree": max(
+            (mode.diagonal_degree for mode in modes), default=-1
+        ),
+        "all_required_modes_degree_zero": all(
+            mode.diagonal_degree == 0 for mode in modes
+        ),
+        "fifteen_compatible_corners": corner_records,
+        "compatible_corner_count": len(corner_records),
+        "matrix_model_used": False,
+    }
 
 
 def _record(
@@ -648,19 +885,21 @@ def certified_ray_frequencies(t: float) -> tuple[complex, ...]:
     return tuple(value * parameter for value in CERTIFIED_RAY_COEFFICIENTS)
 
 
-def all_c_atlas_orderings(
+def hybrid_atlas_orderings(
     outgoing_frequencies: Sequence[complex],
 ) -> tuple[tuple[int, ...], ...]:
-    r"""Return the symmetric 120-chart all-``c`` plumbing atlas.
+    r"""Return the symmetric 120-chart proper-channel plumbing atlas.
 
     The earlier 60-chart split selected one orientation of each stable tree
     from a boundary-convergence ledger.  That asymmetry was useful only for
-    the old mixed ``h``/``c`` implementation.  A fixed-weight ``c`` block is
-    available in both plumbing variables in every orientation, so the
-    geometric split must instead minimize ``max(|q1|,|q2|)`` over all eight
-    orientations of each of the fifteen labelled stable trees.  Boundary
-    finite-part data remain separate from this purely geometric Voronoi
-    atlas.
+    an old mixed implementation.  The geometric split minimizes
+    ``max(|q1|,|q2|)`` over all eight orientations of each of the fifteen
+    labelled stable trees.  The production evaluator uses regulated
+    h-recursion after this proper channel is fixed; c-recursion supplies the
+    low-order overlap audit.  Boundary finite-part data remain separate
+    from this purely geometric Voronoi atlas.  The historical function name
+    is retained for compatibility; the returned atlas itself is independent
+    of the recursion backend.
     """
 
     if len(outgoing_frequencies) != 4:
@@ -669,8 +908,16 @@ def all_c_atlas_orderings(
         _finite_complex(f"outgoing_frequencies[{index}]", value)
     result = tuple(oriented_tree_orderings())
     if len(result) != 120 or len(set(result)) != 120:
-        raise AssertionError("the all-c Mbar_0,5 atlas must have 120 charts")
+        raise AssertionError("the Mbar_0,5 atlas must have 120 charts")
     return result
+
+
+def all_c_atlas_orderings(
+    outgoing_frequencies: Sequence[complex],
+) -> tuple[tuple[int, ...], ...]:
+    """Backward-compatible alias for :func:`hybrid_atlas_orderings`."""
+
+    return hybrid_atlas_orderings(outgoing_frequencies)
 
 
 def certified_ray_atlas_orderings(t: float) -> tuple[tuple[int, ...], ...]:
@@ -689,7 +936,7 @@ def certified_ray_atlas_orderings(t: float) -> tuple[tuple[int, ...], ...]:
     )
     if not audit["strictly_subtraction_free"]:
         raise ValueError("t is outside the certified subtraction-free ray")
-    return all_c_atlas_orderings(certified_ray_frequencies(t))
+    return hybrid_atlas_orderings(certified_ray_frequencies(t))
 
 
 def _record_signature(item: dict[str, object]) -> tuple[object, ...]:
@@ -1174,6 +1421,7 @@ __all__ = [
     "CERTIFIED_RAY_COEFFICIENTS",
     "CERTIFIED_RAY_REFERENCE_T",
     "all_c_atlas_orderings",
+    "hybrid_atlas_orderings",
     "certified_open_neighborhood",
     "certified_ray_atlas_orderings",
     "certified_ray_frequencies",
