@@ -1,5 +1,22 @@
 # Ramond block q-expansion runtime benchmark
 
+## Physical-block recovery
+
+The equal-structure physical block can now be recovered from the enlarged
+series by a restricted convolution inverse. Pass `--physical-json PATH` to
+`compute_q_expansion.py`, or use `recover_physical_block.py` on an existing
+enlarged JSON record. The reconstruction uses no physical PBW coefficients.
+The derivation, supported sectors, validation, and commands are in
+[PHYSICAL_RECOVERY.md](PHYSICAL_RECOVERY.md).
+
+The timings and saved level-ten file described below are historical enlarged
+block results. They do not include the new recovery step. The new input-sector
+check detects high-order inconsistencies in that saved file and in fresh
+level-ten output; these should not be used as certified physical-block data
+without further numerical validation. Fresh physical level-six coefficients
+are saved in [physical_level6_q_expansion.json](physical_level6_q_expansion.json)
+and agree with direct physical PBW sewing to `3.98e-10` in scaled error.
+
 ## Authoritative calculation
 
 `compute_q_expansion.py` computes the coefficient-by-coefficient,

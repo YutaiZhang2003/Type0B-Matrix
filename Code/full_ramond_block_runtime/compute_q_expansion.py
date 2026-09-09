@@ -340,6 +340,8 @@ def direct_pbw_comparison(
         auxiliary_majorana_nsrr_series,
         direct_pbw_nsrr_series,
         level_triples,
+        ramond_sector_residual,
+        recover_same_structure_nsrr_series,
         star_convolve_series,
     )
 
@@ -407,6 +409,12 @@ def direct_pbw_comparison(
         maximum_relative,
         worst,
     ) = compare(production, factorized)
+    recovered = recover_same_structure_nsrr_series(
+        production,
+        auxiliary,
+        maximum_total_twice_level=twice_cutoff,
+    )
+    _, physical_absolute, physical_relative, _ = compare(recovered, physical)
     return {
         "maximum_total_twice_level": twice_cutoff,
         "coefficient_count": coefficient_count,
@@ -416,6 +424,9 @@ def direct_pbw_comparison(
         "worst_eta_component": worst[1],
         "production_double_virasoro_value": encode(worst[2]),
         "factorized_direct_pbw_value": encode(worst[3]),
+        "recovered_physical_maximum_absolute_error": physical_absolute,
+        "recovered_physical_maximum_scaled_error": physical_relative,
+        "physical_pbw_sector_scaled_residual": ramond_sector_residual(physical),
         "human_note_signs": {
             "enlarged_first_tube": "(-1)^(A+mathsf_A)",
             "auxiliary_first_tube": "(-1)^mathsf_A",
@@ -701,15 +712,29 @@ def main() -> None:
         help="also sew the unrestricted direct NSRR PBW block and compare",
     )
     parser.add_argument("--primary-parity", type=int, choices=(0, 1), default=0)
+    parser.add_argument(
+        "--physical-json", type=Path,
+        help="also recover the physical equal-structure block and write its q-series",
+    )
     arguments = parser.parse_args()
     if arguments.cutoff < 0:
         raise ValueError("cutoff must be nonnegative")
-    run(
+    if arguments.physical_json is not None and arguments.physical_json.resolve() == arguments.json.resolve():
+        raise ValueError("physical and enlarged output paths must differ")
+    enlarged = run(
         arguments.cutoff,
         arguments.json,
         check_direct_pbw=arguments.direct_pbw_check,
         primary_parity=arguments.primary_parity,
     )
+    if arguments.physical_json is not None:
+        from recover_physical_block import recover_record
+
+        physical = recover_record(enlarged)
+        physical["enlarged_input"] = str(arguments.json.resolve())
+        arguments.physical_json.parent.mkdir(parents=True, exist_ok=True)
+        arguments.physical_json.write_text(json.dumps(physical, indent=2) + "\n")
+        print(f"wrote physical block: {arguments.physical_json}", flush=True)
 
 
 if __name__ == "__main__":
