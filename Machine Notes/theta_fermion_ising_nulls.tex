@@ -1,0 +1,217 @@
+% Ising quotient analysis; include after the generic CCY section.
+\subsection{The Ising quotient in central-charge recursion}
+
+It is not legitimate simply to substitute these weights into a
+generic-Verma $c$-recursion and discard singular residues.  An ordinary
+limit of the complete generic-Verma block is also insufficient without
+a specified quotient prescription.  The problem already appears when
+null states propagate around a closed cycle.  The following calculation
+identifies it directly.
+
+At $c=1/2$, the level-two null states in the modules of weights $1/16$
+and $1/2$ are
+\begin{equation}
+ \left(L_{-2}-\frac43L_{-1}^2\right)|1/16\rangle,
+ \qquad
+ \left(L_{-2}-\frac34L_{-1}^2\right)|1/2\rangle.
+\end{equation}
+Keep the highest weights fixed and let $c$ vary.  Both displayed
+states have squared norm $(c-1/2)/2$.  Indeed, in the basis
+$(L_{-2}|h\rangle,L_{-1}^2|h\rangle)$ the Gram matrix is
+\begin{equation}
+ \begin{pmatrix}
+ 4h+c/2&6h\\6h&4h(2h+1)
+ \end{pmatrix}.
+\end{equation}
+For the three-point function with highest weights
+$(1/2,1/16,1/16)$, replacing either pair of entries by its displayed
+null state gives $(c-1/2)/2$.  This follows either by the Virasoro Ward
+identity or by identifying the $L_2$--$L_{-2}$ central contraction;
+the coefficient of $c$ is $1/2$ and the value at $c=1/2$ vanishes.
+The same statement holds when the middle entry is the external fermion
+and the two Ramond entries are replaced by null states.
+
+Therefore a closed cycle of level-two null states contributes with
+normalized primary coefficient one.  In the vacuum term of
+\eqref{eq:ising-ordered-theta-decomposition}, the first such cycle
+uses all three Ramond segments.  Its leading monomial is
+$\hat q_{2,1}^{2}\hat q_{2,2}^{2}q_3^2$.  In the fermion term there
+are two additional cycles, with leading monomials $q_1^2q_3^2$ and
+$q_1^2\hat q_{2,1}^{2}\hat q_{2,2}^{2}$.  The first cycle enters
+at physical total level $4$ in the vacuum branch.  All three enter
+at level $9/2$ in the fermion branch.  This is why a subtraction based
+only on the Ramond character misses terms in the level-five comparison.
+
+The subtraction involves full shifted Virasoro blocks, not just their
+leading coefficients.  Write $\epsilon=c-1/2$.  A positive Virasoro
+mode acting on either displayed off-critical null state gives
+$O(\epsilon)$ times an ordinary state.  In a two-null three-point Ward
+identity, that ordinary state is still paired with the other null
+state.  The unwanted term is therefore $O(\epsilon^2)$.  Dividing by
+$\epsilon$ and taking the limit gives homogeneous Ward identities at
+the two shifted highest weights.  The same argument gives the shifted
+descendant Gram matrix multiplied by the null norm.  This proves the
+shifted-block contribution until another singular submodule enters.
+
+Here are the formulas needed through physical total level five.  The
+external weight is $1/2$ and the sewing parameters are
+$(q_1,\hat q_{2,1},\hat q_{2,2},q_3)$ in every term; the parameters
+are suppressed in these displays to keep the shifted weights visible.
+The subscript ``irr'' specifies the irreducible block:
+\begin{align}
+ &F\left(0,\tfrac1{16},\tfrac1{16},\tfrac1{16};\tfrac12;\tfrac12\right)_{\rm irr}
+ \nonumber\\
+ &\quad=\lim_{c\to1/2}\left[
+ F\left(0,\tfrac1{16},\tfrac1{16},\tfrac1{16};\tfrac12;c\right)
+ -\hat q_{2,1}^2\hat q_{2,2}^2q_3^2
+ F\left(0,\tfrac{33}{16},\tfrac{33}{16},\tfrac{33}{16};\tfrac12;c\right)
+ \right],\label{eq:ising-vacuum-first-cycle}\\
+ &F\left(\tfrac12,\tfrac1{16},\tfrac1{16},\tfrac1{16};\tfrac12;\tfrac12\right)_{\rm irr}
+ \nonumber\\
+ &\quad=\lim_{c\to1/2}\left[
+ F\left(\tfrac12,\tfrac1{16},\tfrac1{16},\tfrac1{16};\tfrac12;c\right)
+ -\hat q_{2,1}^2\hat q_{2,2}^2q_3^2
+ F\left(\tfrac12,\tfrac{33}{16},\tfrac{33}{16},\tfrac{33}{16};\tfrac12;c\right)
+ \right.\nonumber\\
+ &\qquad\qquad\left.
+ -q_1^2q_3^2
+ F\left(\tfrac52,\tfrac1{16},\tfrac1{16},\tfrac{33}{16};\tfrac12;c\right)
+ -q_1^2\hat q_{2,1}^2\hat q_{2,2}^2
+ F\left(\tfrac52,\tfrac{33}{16},\tfrac{33}{16},\tfrac1{16};\tfrac12;c\right)
+ \right].\label{eq:ising-fermion-first-cycles}
+\end{align}
+These equalities apply only through total physical level five,
+including the factor $q_1^{1/2}$ multiplying the second one in the
+auxiliary block.  In the limits, the internal and external weights
+acquire distinct $O(\epsilon^3)$ perturbations; the vacuum weight is
+also $O(\epsilon^3)$.  The shifts by two are applied after these
+perturbations.  The complete $c$-recursive expression is evaluated
+before taking its limit; individually confluent residues are never
+discarded.
+
+The degree bound needs a selection argument.  A spin null of level
+four on one split segment and level-two nulls on the other segment
+and the third edge would have balanced degree five.  In the vacuum
+branch there is then no degree available for an NS descendant.  The
+outer identity vertex between distinct shifted spin highest weights
+vanishes.  In the NS fermion branch the same configuration starts at
+degree $11/2$.  The NS fermion's level-three null together with a spin
+level-two null also first makes a cycle at degree $11/2$; the vacuum
+level-six null is already above the bound.  No additional closed null
+contribution is needed in the two displayed level-five formulas.
+
+There is a further difficulty at higher levels.  Applying the same
+Ward identities with \emph{all three} entries replaced gives
+\begin{align}
+ &\rho\left(
+ (L_{-2}-\tfrac34L_{-1}^2)|1/2\rangle,
+ (L_{-2}-\tfrac43L_{-1}^2)|1/16\rangle,
+ (L_{-2}-\tfrac43L_{-1}^2)|1/16\rangle
+ \right)=c-\frac12.
+ \label{eq:ising-triple-null}
+\end{align}
+Thus this vertex vanishes to first order, not second order.  If all
+four internal edges carry level-two null states, the two outer
+vertices give $(c-1/2)^2$, the middle vertex gives $(c-1/2)/2$, and
+the four inverse Gram matrices give $16/(c-1/2)^4$.  Their contribution
+therefore begins with
+\begin{equation}
+ \frac{8}{c-1/2}\,
+ q_1^2\hat q_{2,1}^{2}\hat q_{2,2}^{2}q_3^2.
+\end{equation}
+After the external $q_1^{1/2}$ is restored this is physical level
+$13/2$.  This fixed-weight generic-Verma limit is consequently singular
+within a level-ten calculation.  Higher precision cannot remove its pole.
+One must remove the interacting null submodules before claiming an
+irreducible Ising block.
+
+This does not rule out every correlated limit.  The first variation
+of the triple-null vertex is twice that of a two-null vertex, and a
+correlated variation can cancel both.  It must also remove the higher
+primitive nulls and their intersections.  Finiteness of a full null
+graph does not by itself justify an ordinary shifted primary block:
+when a vertex starts at $O(\epsilon^2)$, anomalous Ward terms can
+start at the same order and survive normalization.  This issue must
+be resolved before extending the displayed subtraction formulas.
+
+There is a useful exact correlated family, but it also requires further
+subtractions.  Introduce a deformation parameter $x$ with $x\to-4/3$
+and set
+\begin{align}
+ c&=13+6(x+x^{-1}),\nonumber\\
+ h_L=h_R=h_3&=\frac{x+2+x^{-1}}4-\frac{x}{16},\qquad
+ h_\psi=-\frac12-\frac{3x}{4}.
+ \label{eq:ising-exact-family}
+\end{align}
+The external field is $(2,1)$ throughout this family.  Its degenerate
+fusion maps the Ramond momentum to its negative and therefore preserves
+the Ramond weight.  In the NS fermion branch one may also set
+$h_1=h_\psi$ and first quotient its generic level-two null submodule.
+Since that NS edge alone is not a cycle, its independent preliminary
+quotient does not leave a closed null contribution.  The analogous
+preliminary operation removes $L_{-1}|0\rangle$ in the vacuum branch.
+
+Nevertheless, at $c=1/2$ the NS fermion module develops its second
+primitive null at level three.  The explicit states relevant to this
+remaining problem are
+\begin{align}
+ &\left(\tfrac34 L_{-3}-3L_{-2}L_{-1}+L_{-1}^3\right)|1/2\rangle,
+ \nonumber\\
+ &\left(-\tfrac14 L_{-4}+\tfrac{11}{6}L_{-3}L_{-1}
+ +\tfrac{49}{144}L_{-2}^2-\tfrac{25}{6}L_{-2}L_{-1}^2
+ +L_{-1}^4\right)|1/16\rangle.
+\end{align}
+They are the level-three NS null and the level-four Ramond null,
+respectively; the level-two Ramond null was displayed above.  Along
+\eqref{eq:ising-exact-family}, the first derivatives of their squared
+norms with respect to $c$ are $75/8$ and $1925/648$.  The corresponding
+level-two Ramond norm derivative is $4/9$.  The three-point Ward
+identities give first derivatives $5/4$ and $275/48$ when the NS
+level-three null and, respectively, the Ramond level-two or level-four
+null are inserted at an outer vertex.  Exchanging Ramond slots can
+reverse a sign, but both original vertices have the same ordering.
+The closed null cycle along the NS edge and the third edge consequently
+has leading coefficients
+\begin{equation}
+ \frac{(5/4)^2}{(75/8)(4/9)}=\frac38,
+ \qquad
+ \frac{(275/48)^2}{(75/8)(1925/648)}=\frac{33}{28}.
+\end{equation}
+Their monomials are $q_1^3q_3^2$ and $q_1^3q_3^4$ before the
+NS factor $q_1^{1/2}$ is restored.  They therefore survive at physical
+levels $11/2$ and $15/2$.  The preliminary generic NS quotient does not
+change these coefficients: adding a descendant of its always-null
+level-two vector changes neither three-point form on the exact fusion
+family.  Thus \eqref{eq:ising-exact-family} alone is also insufficient
+for level ten, even though it improves the first interacting null
+singularity.  This is a separate, finite counterexample to that
+prescription, not a claim that every correlated prescription fails.
+
+The implementation exposes the exact parity assembly and the
+first-cycle subtraction restricted to total level five.  Its production
+API enforces this bound.  Both authorized integrated comparisons have
+passed for that prescription; the results appear in the main
+numerical-status section.  An uncorrected generic CCY limit remains
+available only as an explicitly unproved candidate.  None of these is
+declared a completed level-ten Ising algorithm.
+The primitive nulls at levels $3$ in the fermion module, $4$ in the
+spin module, and $6$ in the vacuum module, together with intersections
+of null submodules and the interaction in
+\eqref{eq:ising-triple-null}, still require a complete quotient
+prescription.  The ordinary vacuum null $L_{-1}|0\rangle$ must also
+be removed before the rational-central-charge limit.
+
+The exact symbolic derivatives used here, including those of all
+primitive three-null vertices relevant through level ten, are derived
+in \texttt{ising\_tangent\_derivation.py} and documented in
+\texttt{ISING\_TANGENT\_ANALYSIS.md}, both under
+\texttt{Code/theta\_fermion\_ccy}.  They are
+algebraic Ward calculations, not additional numerical block comparisons.
+
+For related warnings about path-dependent rational limits, including
+the distinction between Verma and irreducible characters, see
+N.~Javerzat, R.~Santachiara, and O.~Foda,
+\emph{Notes on the solutions of Zamolodchikov-type recursion relations
+in Virasoro minimal models}, arXiv:1806.02790, Secs.~3 and~5.
+Their sphere conjecture and torus character prescription do not by
+themselves provide the missing punctured genus-two quotient.

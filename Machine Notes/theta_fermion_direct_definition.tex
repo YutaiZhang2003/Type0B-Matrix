@@ -1,0 +1,244 @@
+% Separate subsection: direct-definition auxiliary benchmark.
+% The user selected this direct auxiliary backend after its benchmark.
+\subsection{Direct fermion sewing: definition and level-ten benchmark}
+\label{direct-fermion-definition}
+
+The selected algorithm evaluates the auxiliary factor directly in its
+fermion basis, while retaining central-charge recursion for both
+Virasoro factors in the enlarged block.  This subsection derives the
+direct auxiliary construction and records its measured cost for the
+inserted genus-two graph.  The timing below concerns the auxiliary
+factor alone and performs no comparison with another block; validation
+of the integrated physical calculation is reported separately.
+
+On the NS edge use the states
+$\boldsymbol\Psi_{-\mathsf A}\mathbf1$, where $\mathsf A$ is a
+strictly descending list of positive half-integers.  On each Ramond
+edge use $\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}$, where
+$\mathsf B$ is a strictly descending list of positive integers and
+$\mathsf b=0,1$.  The symbol $|\mathsf B|$ denotes the sum of the
+modes, whereas $\#\mathsf B$ counts them.  We retain the conventions
+\begin{equation}
+ \{\psi_r,\psi_s\}=\delta_{r+s,0},\qquad
+ \psi_0u^{\mathsf b}=\frac{u^{1-\mathsf b}}{\sqrt2},\qquad
+ \psi_r^\dagger=-\psi_{-r},\qquad
+ \langle u^{\mathsf b}|u^{\mathsf b}\rangle=(-1)^{\mathsf b}.
+\end{equation}
+The Fock metric is diagonal.  Its diagonal entries are
+$(-1)^{\#\mathsf A}$ in the NS sector and
+$(-1)^{\#\mathsf B+\mathsf b}$ in the Ramond sector.
+
+The incoming state on the additional sphere is at $z_3=0$ and carries
+$\hat q_{2,1}^{|\mathsf B|}$; the outgoing state is at infinity and
+carries $\hat q_{2,2}^{|\mathsf B'|}$.  Write their common parity and
+the parities on the other two edges as
+\begin{equation}
+ \delta_1=\#\mathsf A,\qquad
+ \delta_2=\#\mathsf B+\mathsf b
+          =\#\mathsf B'+\mathsf b',\qquad
+ \delta_3=\#\mathsf C+\mathsf c\pmod2.
+\end{equation}
+Both outer forms vanish unless
+$\delta_1+\delta_2+\delta_3=0\pmod2$.
+
+\paragraph{The complete middle insertion.}
+At $z_3=1$ every term in
+$\psi(z_3)=\sum_{m\in\mathbb Z}\psi_mz_3^{-m-1/2}$ has unit
+coordinate factor.  Using
+\begin{equation}
+ \Theta\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}
+ =(-1)^{\#\mathsf B+\mathsf b+1}
+  \boldsymbol\Psi_{-\mathsf B}u^{1-\mathsf b},
+\end{equation}
+the zero-mode action is
+\begin{equation}
+ Q\Theta\psi_0\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}
+ =\frac Q{\sqrt2}(-1)^{\mathsf b}
+  \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}.
+\end{equation}
+For $k>0$, creation by $\psi_{-k}$, when $k\notin\mathsf B$, and
+annihilation by $\psi_k$, when $k\in\mathsf B$, both give the sign
+$(-1)^{\#\{m\in\mathsf B:m>k\}}$ in the descending basis.
+The resulting word has one more or one fewer fermion.  The subsequent
+$\Theta$ action therefore contributes $(-1)^{\delta_2}$ and changes
+the ground label to $1-\mathsf b$.  Consequently the action
+coefficients of the full insertion are
+\begin{equation}
+ [Q\Theta\psi(1)]_{(\mathsf B',\mathsf b'),(\mathsf B,\mathsf b)}
+ =\begin{cases}
+  \dfrac Q{\sqrt2}(-1)^{\mathsf b},
+       &\mathsf B'=\mathsf B,\quad\mathsf b'=\mathsf b,\\[3pt]
+  Q(-1)^{\#\{m\in\mathsf B:m>k\}+\delta_2},
+       &\mathsf B'=\mathsf B\mathbin\triangle\{k\},
+          \quad\mathsf b'=1-\mathsf b,\quad k>0,\\[3pt]
+  0,&\text{otherwise}.
+ \end{cases}
+ \label{direct-fermion-middle}
+\end{equation}
+Here $\triangle\{k\}$ toggles the occupancy of $k$.  For each incoming
+state, each nonzero mode connects to at most one outgoing Fock state.
+Both transitions
+preserve $\delta_2$, although their two propagation levels need not
+agree.  Reversing a toggle leaves its sign unchanged: the number of
+occupied modes larger than $k$ and the total parity are unchanged.
+
+\paragraph{The state sum and its signs.}
+In the following formula the subscript on
+$[Q\Theta\psi(1)]$ means an action coefficient, as in
+\eqref{direct-fermion-middle}, rather than a BPZ matrix element.
+The latter contains the additional outgoing norm
+$(-1)^{\delta_2}$.  The four inverse Fock norms multiply to
+$(-1)^{\delta_1+2\delta_2+\delta_3}$, so including this outgoing
+norm leaves $(-1)^{\delta_1+\delta_2+\delta_3}=1$ on every allowed
+summand.  The NS contour sign and the original theta sign remain.
+With the two outer forms in the order $(\NS,\R,\R)$, the complete
+direct definition is therefore
+\begin{align}
+ &\mathbb F_{\mathsf F}[\Theta v_{1/2}]
+ (q_1,\hat q_{2,1},\hat q_{2,2},q_3)\nonumber\\
+ &=\sum_{\mathsf A,\mathsf B,\mathsf b,
+                \mathsf B',\mathsf b',\mathsf C,\mathsf c}
+ q_1^{|\mathsf A|}\hat q_{2,1}^{|\mathsf B|}
+ \hat q_{2,2}^{|\mathsf B'|}q_3^{|\mathsf C|}
+ \eta_1^{\delta_1}\eta_2^{\delta_2}\eta_3^{\delta_3}
+ (-1)^{\delta_1+\delta_1\delta_2+\delta_1\delta_3+\delta_2\delta_3}
+ \nonumber\\
+ &\quad\times
+ \rho_{\mathsf F}\!\left(
+  \boldsymbol\Psi_{-\mathsf A}\mathbf1,
+  \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b},
+  \boldsymbol\Psi_{-\mathsf C}u^{\mathsf c}\right)
+ \rho_{\mathsf F}\!\left(
+  \boldsymbol\Psi_{-\mathsf A}\mathbf1,
+  \boldsymbol\Psi_{-\mathsf B'}u^{\mathsf b'},
+  \boldsymbol\Psi_{-\mathsf C}u^{\mathsf c}\right)
+ [Q\Theta\psi(1)]_{(\mathsf B',\mathsf b'),(\mathsf B,\mathsf b)}.
+ \label{direct-fermion-sum}
+\end{align}
+The ground forms are
+$\rho_{\mathsf F}(\mathbf1,u^0,u^0)=1$ and
+$\rho_{\mathsf F}(\mathbf1,u^1,u^1)=i$.  They give the constant
+$Q(1-\eta_2\eta_3)/\sqrt2$ directly.  In particular the second
+split edge does not introduce an independent parity sign.
+
+The outer forms are computed by moving one fermion contour at a time
+between the punctures at infinity, one and zero.  For the three possible
+target slots, the useful test sections are
+\begin{equation}
+ z^{k-1/2}(z-1)^{-1/2},\qquad
+ z^{-1/2}(z-1)^{-n-1/2},\qquad
+ z^{-n-1/2}(z-1)^{-1/2}.
+\end{equation}
+Their expansions give half-integer binomial coefficients and the
+frame phases $(i,1,-i)$, together with the usual graded contour signs.
+For the first section the target NS creation mode is $k-1/2$; in the
+other two sections the target Ramond creation mode is $n$.  Remove
+the largest occupied mode in the first nonempty slot and solve the
+Ward relation for the original form.  Every remaining term has lower
+total nonzero-mode level, so this procedure terminates at the displayed
+ground forms.  Each local expansion is stopped only after its modes
+annihilate every state on that leg.  The resulting bound is determined
+by the occupied modes, rather than a fixed expansion order.
+Computed three-point forms are stored and reused throughout the sum.
+
+\paragraph{Exact rational arithmetic.}
+No irrational arithmetic is needed after extracting $Q/\sqrt2$ from
+the final block.  To see this, temporarily use $\sqrt2u^1$ in place
+of $u^1$.  In this basis the two zero-mode coefficients are $1/2$
+and $1$.  Strip the known phase $i^{\delta_2}$ from the outer form
+and denote the stored value by $\rho_{\mathsf F}^{\mathrm{rat}}$.
+Thus, with the same fermion words as above,
+\begin{equation}
+ \rho_{\mathsf F}
+ =i^{\delta_2}2^{-(\mathsf b+\mathsf c)/2}
+   \rho_{\mathsf F}^{\mathrm{rat}}.
+\end{equation}
+The stored ground values are $1$ and $2$.  The mode Ward relations
+then involve only rational binomial coefficients and signs, so every
+stored value is rational.  The two outer phases in a sewn term
+multiply to $(-1)^{\delta_2}$.
+
+For a diagonal transition, combining these phases, the factor
+$(-1)^{\mathsf b}$ from $\Theta\psi_0$, and the two ground rescalings
+gives the following normalized summand, apart from the common
+propagation monomial and sewing sign already displayed in
+\eqref{direct-fermion-sum}:
+\begin{equation}
+ \frac{(-1)^{\#\mathsf B}}{2^{\mathsf b+\mathsf c}}
+  \left(\rho_{\mathsf F}^{\mathrm{rat}}
+   (\mathsf A,\mathsf B,\mathsf C)\right)^2.
+\end{equation}
+For a toggle, $\mathsf b+\mathsf b'=1$.  The square root of two in
+$[Q\Theta\psi(1)]/(Q/\sqrt2)$ cancels the remaining half-integer
+ground-rescaling power, while the two factors
+$(-1)^{\delta_2}$ cancel.  Its normalized summand is
+\begin{equation}
+ \frac{(-1)^{\#\{m\in\mathsf B:m>k\}}}{2^{\mathsf c}}
+ \rho_{\mathsf F}^{\mathrm{rat}}(\mathsf A,\mathsf B,\mathsf C)
+ \rho_{\mathsf F}^{\mathrm{rat}}(\mathsf A,\mathsf B',\mathsf C).
+\end{equation}
+The ground labels in these abbreviated arguments remain those in
+\eqref{direct-fermion-sum}.  The temporary basis rescaling has
+therefore canceled from the physical normalization.  The implementation
+uses exact FLINT rational arithmetic and restores $Q/\sqrt2$ only
+when a numerical value of the full block is requested.
+
+\paragraph{Finite truncation and measured cost.}
+For the balanced split
+$\hat q_{2,1}=u\sqrt{q_2}$,
+$\hat q_{2,2}=u^{-1}\sqrt{q_2}$, total level $N$ means
+\begin{equation}
+ |\mathsf A|+
+ \frac{|\mathsf B|+|\mathsf B'|}{2}+|\mathsf C|\leq N.
+\end{equation}
+The stored exponent tuple is
+$(2|\mathsf A|,|\mathsf B|,|\mathsf B'|,2|\mathsf C|)$;
+its entries sum to at most $2N$.  Unequal split levels retain the
+power $u^{|\mathsf B|-|\mathsf B'|}$.  At $N=10$ a single split
+edge can reach level twenty.  To enumerate each nonzero-mode pair
+once, start from its lower-level state and add the unique toggled
+mode $k$.  The reverse removal supplies the transposed pair of
+propagation powers with the same coefficient.  The diagonal part
+is added separately.
+
+A fresh-process run on September 10, 2026, using Python 3.14.3 on
+macOS arm64, computed the complete normalized auxiliary series through
+$N=10$ in $0.186281209\,\mathrm{s}$.  This construction time includes
+the provider, Fock bases, Ward cache, all mode transitions, rational
+normalization and coefficient accumulation.  Elapsed process time
+through imports and the initial result save was
+$0.290214667\,\mathrm{s}$; peak resident memory was
+$46.765625\,\mathrm{MiB}$.  The saved result contains $4793$
+nonzero exponent tuples and $9586$ nonzero rational parity
+coefficients.  The calculation stored $7508$ three-point forms and
+summed $20156$ nonzero state contractions.  Its coefficients and
+timing metadata are recorded in
+\path{Code/theta_fermion_ccy/results/direct_fermion_level10.json}.
+The final small rewrite adding timing metadata is excluded from the
+process-through-save measurement.  These measurements establish the
+cost of this direct auxiliary calculation; they do not constitute a
+numerical validation or a timing of the complete physical block.
+
+Equation \eqref{direct-fermion-sum} gives the full auxiliary factor.
+Its normalization relative to the reduced central-charge recursion is
+explained in \S\ref{ccy-and-truncation}.
+
+\paragraph{Other genera and plumbing channels.}
+The ingredients in \eqref{direct-fermion-sum} are local: a fermion
+Fock basis on each edge, its diagonal pairing, a three-point form on
+each sphere, and the sparse action of any inserted fermion.  They can
+be sewn on any pants graph with compatible NS and Ramond labels.
+NS--NS--NS vertices use the corresponding fermion Ward forms;
+NS--R--R vertices use the forms described above.  Spin transports
+and graded reordering signs are taken from the chosen graph and
+local coordinates.  The particular quadratic theta sign in
+\eqref{direct-fermion-sum} belongs to the present channel and must
+not be imposed unchanged on another graph.  A finite plumbing-level
+cutoff again leaves a finite sum, and the local three-point data can
+be reused.  This is an arbitrary-genus sewing construction, although
+the current assembler and the reported runtime concern only the
+specified four-edge genus-two graph.  Its computational cost can
+grow with the genus and the graph.  This direct auxiliary evaluation
+does not use an Ising Verma-module limit or an Ising central-charge
+recursion.  The two ordinary Virasoro blocks in the enlarged numerator
+continue to use the prescribed central-charge recursion.

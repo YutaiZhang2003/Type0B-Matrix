@@ -1,0 +1,72 @@
+% Component derivation for inclusion in the separate machine notes.
+% This file is intentionally not a replacement for the manuscript.
+\subsection{The Ising decomposition}
+
+We keep the auxiliary Ramond parity on each cut.  The two irreducible
+Virasoro modules in the Neveu--Schwarz Fock space have highest weights
+$0$ and $1/2$.  Each Ramond parity gives an irreducible module of highest
+weight $1/16$.  The field inserted on the additional sphere has weight
+$1/2$.  The central charge in this subsection is that of the Ising
+Virasoro algebra, namely $c=1/2$; it is not the superconformal central
+charge.
+
+The auxiliary three-point forms in the spin frames of the human notes
+obey
+\begin{align}
+ \rho_{\mathsf F}(\mathbf1,u^0,u^0)&=1,&
+ \rho_{\mathsf F}(\mathbf1,u^1,u^1)&=i,\\
+ \rho_{\mathsf F}(\psi_{-1/2}\mathbf1,u^0,u^1)&=-\frac1{\sqrt2},&
+ \rho_{\mathsf F}(\psi_{-1/2}\mathbf1,u^1,u^0)&=\frac{i}{\sqrt2}.
+\end{align}
+All other ground components vanish by parity.  To obtain the second
+line, move the fermion contour at infinity onto the Ramond puncture at
+one.  The Ward relation gives $i\rho_{\mathsf F}
+(\psi_{-1/2}\mathbf1,u^{\mathsf b},u^{1-\mathsf b})+
+\rho_{\mathsf F}(\mathbf1,\psi_0u^{\mathsf b},u^{1-\mathsf b})=0$.
+Substitution of $\psi_0u^{\mathsf b}=u^{1-\mathsf b}/\sqrt2$ gives
+the displayed values.
+
+The ordered middle insertion acts on a ground state as
+\begin{equation}
+ Q\Theta\psi_0u^{\mathsf b}
+ =\frac{Q}{\sqrt2}(-1)^{\mathsf b}u^{\mathsf b}.
+\end{equation}
+It commutes with parity and is a primary intertwiner of Ising weight
+$1/2$, since $\Theta$ commutes with every auxiliary Virasoro generator.
+Consequently its descendant matrix elements are precisely those in the
+Virasoro one-point block.  Combining the two outer ground forms with
+this middle matrix element and the theta sewing signs gives
+the following sign ledger.  The middle raw pairing is $Q/\sqrt2$
+in each row; the signs from its outgoing ground norm have already
+been included.  The norm column is the product of the four internal
+ground norms, and the last sign includes the NS fermion and theta
+reordering signs:
+\[
+\begin{array}{c|cc|ccc}
+ h_{\NS}&\mathsf b&\mathsf c&\rho_{\mathsf F}^{2}
+ &\text{norm product}&\text{sewing sign}\\\hline
+ 0&0&0&1&1&1\\
+ 0&1&1&-1&-1&-1\\
+ \tfrac12&0&1&\tfrac12&1&1\\
+ \tfrac12&1&0&-\tfrac12&-1&1
+\end{array}
+\]
+Thus the complete Ising decomposition is
+\begin{align}
+ \mathbb F_{\mathsf F}[\Theta v_{1/2}]
+ ={}&\frac{Q}{\sqrt2}(1-\eta_2\eta_3)
+ F\left(0,\frac1{16},\frac1{16},\frac1{16};\frac12;\frac12
+ \mathrel\big|q_1,\hat q_{2,1},\hat q_{2,2},q_3\right)\nonumber\\
+ &+\frac{Q}{2\sqrt2}(\eta_1\eta_2+\eta_1\eta_3)q_1^{1/2}
+ F\left(\frac12,\frac1{16},\frac1{16},\frac1{16};\frac12;\frac12
+ \mathrel\big|q_1,\hat q_{2,1},\hat q_{2,2},q_3\right).
+ \label{eq:ising-ordered-theta-decomposition}
+\end{align}
+Both blocks on the right must use the \emph{irreducible} Ising modules.
+Their primary coefficients are one.  The four internal entries refer,
+in order, to the Neveu--Schwarz edge, the two parts of the split Ramond
+edge, and the remaining Ramond edge.  The next entry is the external
+weight and the last is the central charge.  The $q_1^{1/2}$ in the
+second term restores the physical level of the Neveu--Schwarz fermion.
+This formula contains the complete parity dependence; all remaining
+coefficients are ordinary scalar Virasoro coefficients.

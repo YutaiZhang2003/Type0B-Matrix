@@ -1,0 +1,749 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb,amsthm,bm,geometry,hyperref,booktabs}
+\geometry{margin=23mm}
+\setlength{\parskip}{0.5em}
+\setlength{\emergencystretch}{2em}
+\newcommand{\ie}{\begin{equation}\begin{aligned}}
+\newcommand{\fe}{\end{aligned}\end{equation}}
+\newcommand{\NS}{\mathrm{NS}}
+\newcommand{\R}{\mathrm{R}}
+\numberwithin{equation}{section}
+\title{A fermion insertion on the Ramond tube of the theta block}
+\author{Separate working notes}
+\date{September 10, 2026}
+\begin{document}
+\maketitle
+
+We derive a fermion-inserted double-Virasoro representation of the
+NS--R--R theta block with $\eta\eta'=-1$, using the states, BPZ pairing,
+branching coefficients and spin signs of \texttt{Human Notes/SCblock.tex}.
+Both Virasoro factors in the enlarged block are evaluated by
+central-charge recursion.  The auxiliary factor is evaluated directly
+by fermion-state sewing; its Ising decomposition identifies the
+irreducible representations being propagated.
+One contour phase missing from the current definition of $\hat\rho$ is
+made explicit below.  It is necessary for the branching and physical
+sewing conventions to give the stated convolution.
+
+\section{The additional sphere and the operator on the tube}
+
+The two original spheres have Neveu--Schwarz punctures at infinity and
+Ramond punctures at one and zero.  We replace the second edge by a sphere
+with coordinate $z_3$, with sewing equations
+\ie
+ (z_1-1)z_3=\hat q_{2,1},\qquad
+ (z_2-1)z_3^{-1}=\hat q_{2,2}.
+\fe
+Eliminating $z_3$ gives
+\ie
+ (z_1-1)(z_2-1)=q_2,\qquad
+ q_2=\hat q_{2,1}\hat q_{2,2}.
+ \label{product}
+\fe
+Thus this insertion introduces a marked point on the second tube.  Moving
+it changes the two sewing parameters while preserving their product.
+We choose the transported Ramond spin frame on the additional sphere
+so that the lifts satisfy $\eta_2=\hat\eta_{2,1}\hat\eta_{2,2}$.
+This fixes the square-root transport convention in addition to the
+coordinate relation \eqref{product}.
+
+In the physical irreducible NS vacuum module,
+$G_{-1/2}\mathbf1=0$.  The normalization in the human notes consequently
+gives
+\ie
+ v_{1/2}(P=Q/2)=Q\psi_{-1/2}\mathbf1,
+ \qquad V[v_{1/2}(Q/2)](1)=Q\psi(1),
+ \qquad Q=b+b^{-1}.
+\fe
+The field has the physical identity as its SCA factor.  The insertion we
+use is the radially ordered tube operator
+\ie
+ \Theta V[v_{1/2}(Q/2)](1)=Q\Theta\psi(1).
+ \label{ordered-insertion}
+\fe
+Here $\Theta$ acts on the Ramond module on the outgoing side of the field;
+it is not a prescription to apply a Ramond zero mode to an NS state.
+
+For a chain $\boldsymbol\Psi_{-\mathsf B}$ of nonzero Ramond fermion
+modes, define the odd Ramond intertwiner by
+\ie
+ \Theta(\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b})
+ =(-1)^{\#\mathsf B+\mathsf b+1}
+ \boldsymbol\Psi_{-\mathsf B}u^{1-\mathsf b}.
+\fe
+The auxiliary conventions are
+$\psi_0u^{\mathsf b}=u^{1-\mathsf b}/\sqrt2$,
+$\langle u^{\mathsf b}|u^{\mathsf b}\rangle=(-1)^{\mathsf b}$ and
+$\psi_r^\dagger=-\psi_{-r}$.  Directly from the displayed definition,
+\ie
+ \Theta^2=-1,\qquad \{\Theta,\psi_r\}=0,
+ \qquad \{\Theta,G_r\}=0,\qquad
+ [\Theta,L_m]=[\Theta,L_m^{(1)}]=[\Theta,L_m^{(2)}]=0.
+\fe
+The anticommutator with $G_r$ uses the graded tensor product.  The product
+$\Theta\psi$ is even and acts only on the auxiliary factor.  Its
+zero-mode part acts diagonally:
+\ie
+ Q\Theta\psi_0
+ (\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b})
+ =\frac{Q}{\sqrt2}(-1)^{\mathsf b}
+ \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}.
+ \label{zero-mode-action}
+\fe
+The signs from moving $\psi_0$ past the nonzero modes and from $\Theta$
+cancel.  This ground-state sign makes recovery of the $\eta\eta'=-1$
+sector possible; the sector identity and inverse are derived below.
+The uninserted auxiliary block annihilates that sector under convolution.
+The full field also contains nonzero modes: we must not replace
+$\Theta\psi(1)$ by $\Theta\psi_0$ inside a split-tube block.
+
+\section{The double-Virasoro decomposition}
+
+The physical parameters and central charge are
+\ie
+ h_1=\frac{Q^2/4-P_1^2}{2},\qquad
+ \beta_2=\frac{P_2}{\sqrt2},\qquad
+ \beta_3=\frac{P_3}{\sqrt2},\qquad c=\frac32+3Q^2.
+\fe
+Here $p_1$ is the intrinsic parity of the NS primary and $f$ is the
+relative outer three-point label used in the human notes.  In particular,
+the allowed descendant parities satisfy the selection rule displayed
+in \eqref{full-branching}.  We assume $b\ne0$, $b^2\ne1$ for the
+embedding and $Q\ne0$ for the chosen insertion and its sector inverse.
+At isolated momentum poles the complete expressions are
+understood by meromorphic continuation, rather than by separately
+evaluating singular summands.
+
+The internal double-Virasoro weights are
+\ie
+ h_{j,n}^{(1)}&=\frac{Q^2/4-(P_j+2nb)^2}{2(1-b^2)},&
+ c^{(1)}&=1+\frac{3Q^2}{1-b^2},\\
+ h_{j,n}^{(2)}&=\frac{Q^2/4-(P_j+2n/b)^2}{2(1-b^{-2})},&
+ c^{(2)}&=1+\frac{3Q^2}{1-b^{-2}}.
+\fe
+The NS labels lie in $\frac12\mathbb Z$ and contribute level $2n^2$.
+The Ramond labels lie in $\frac12\mathbb Z+\frac14$ and contribute level
+$2n^2-\frac18$.  The latter subtraction measures level relative to the
+Ramond ground states, including the auxiliary ground weight $1/16$.
+The two weights of the inserted field are
+\ie
+ h_\psi^{(1)}=-\frac{1+2b^2}{2(1-b^2)},\qquad
+ h_\psi^{(2)}=\frac{b^2+2}{2(1-b^2)}.
+\fe
+Their sum is $1/2$.  Its two level-two degenerate fusion rules require
+\ie
+ n'=n+\frac12\quad\hbox{or}\quad n'=n-\frac12.
+ \label{middle-fusion}
+\fe
+The odd field reverses the Ramond parity and $\Theta$ reverses it back.
+The two parts of the split edge therefore carry the same parity $\alpha$.
+The outer three-point forms retain the same label $f$.
+
+\subsection{The outer vertex convention}
+
+The physical forms $\rho_f^{(\eta)}$ use the Ramond BPZ convention of
+the human notes.  The free-field branching forms require the following
+contour phase when they are expressed in that physical tensor basis:
+\begin{align}
+ &\hat\rho_f^{(\eta)}(
+ \Psi_{-\mathsf A}\mathbf L_{-A}\phi_1,
+ \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}\otimes\mathbb L_{-B}w_2^\alpha,
+ \boldsymbol\Psi_{-\mathsf C}u^{\mathsf c}\otimes\mathbb L_{-C}w_3^\gamma)
+ \nonumber\\
+ &\quad=(-i)^{A\bmod2}
+ (-1)^{f(A+B+|\alpha|)+A\mathsf A+(B+|\alpha|+p_1)(\mathsf C+\mathsf c)}
+ \nonumber\\
+ &\qquad\quad\times
+ \rho_{\mathsf F}(\Psi_{-\mathsf A}\mathbf1,
+ \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b},
+ \boldsymbol\Psi_{-\mathsf C}u^{\mathsf c})
+ \rho_f^{(\eta)}(\mathbf L_{-A}\phi_1,
+ \mathbb L_{-B}w_2^\alpha,\mathbb L_{-C}w_3^\gamma).
+ \label{outer-frame}
+\end{align}
+In \eqref{outer-frame}, $|\alpha|$ is the parity of the physical Ramond
+ground $w_2^\alpha$; in \eqref{full-branching},
+$\alpha,\gamma\in\{0,1\}$ label the total parities of the enlarged
+Ramond primaries.  Descendant indices in sign exponents count fermionic
+generators; their absolute values denote levels.  The factor
+$(-i)^{A\bmod2}(-1)^{f(A+B+|\alpha|)}$ follows by comparing the
+NS--R--R supercurrent Ward identities in the free-field and physical
+frames, after the Ramond ground basis is transported to its physical
+BPZ normalization.  The implementation's three-point label must also be
+transported as $\eta_{\mathrm{native}}=(-1)^f\eta$.
+For example, in the odd form the relative coefficients of $\beta_2$
+and $\beta_3$ in $\rho(G_{-1/2}\phi,w^+,w^+)$ have the wrong relative
+sign if this label transport is omitted.
+The NS supercurrent step changes the contour factor by
+$-i(-1)^{A+f}$, while flipping the second Ramond parity changes it by
+$(-1)^f$; substitution of these ratios reproduces the three physical
+supercurrent Ward recursions.  The transport also has a direct
+double-Virasoro interpretation: in this frame the physical supercurrent
+and auxiliary fermion contours at infinity have multipliers $-i$ and
+$+i$, so their product is $+1$, as required for the integer-spin field
+$:G\psi:$ entering $L^{(1,2)}$.
+
+Equation \eqref{outer-frame} supplies a correction to the current
+human-notes factorization of $\hat\rho$, which omits this contour phase
+while retaining $(-1)^{A+\mathsf A}$ in the enlarged sewing sum.
+Without the phase, an unwanted $(-1)^A$ remains in the physical factor.
+We use \eqref{outer-frame} throughout, including in the branching calculation.
+
+\subsection{Sewing the four internal edges}
+
+We first define the ordinary punctured Virasoro block, keeping the order
+of the three punctures $(\infty,1,0)$ explicit.  In the following formula
+the four internal weights are $(h_1,h_L,h_R,h_3)$; the additional weight
+$h_\psi$ is external.  This use of $L,R$ only specifies which half of the
+second tube is meant.  With each inverse Gram matrix restricted to equal
+levels,
+\ie
+ &F(h_1,h_L,h_R,h_3;h_\psi;c\mid
+ q_1,\hat q_{2,1},\hat q_{2,2},q_3)\\
+ &\quad=\sum_{\substack{|A|=|A'|,\ |B|=|B'|\\
+                         |C|=|C'|,\ |D|=|D'|}}
+ q_1^{|A|}\hat q_{2,1}^{|B|}\hat q_{2,2}^{|C|}q_3^{|D|}
+ G_{h_1}^{AA'}G_{h_L}^{BB'}G_{h_R}^{CC'}G_{h_3}^{DD'}\\
+ &\qquad\quad\times
+ \rho(L_{-A}\nu_{h_1},L_{-B}\nu_{h_L},L_{-D}\nu_{h_3})
+ \rho(L_{-A'}\nu_{h_1},L_{-C}\nu_{h_R},L_{-D'}\nu_{h_3})\\
+ &\qquad\quad\times
+ \rho(L_{-C'}\nu_{h_R},\nu_{h_\psi},L_{-B'}\nu_{h_L}).
+ \label{punctured-vir}
+\fe
+The leading coefficient is one.  There is no constraint $|B|=|C|$:
+the insertion can change the auxiliary level.  The displayed Gram
+contraction defines the block; the production computation evaluates it
+by $c$-recursion, not by constructing these Gram matrices.
+
+The middle primary matrix element needed for sewing is
+\ie
+ \langle v_{2,n'}^\alpha|\Theta V[v_{1/2}(Q/2)](1)
+ |v_{2,n}^\alpha\rangle.
+\fe
+Commutation of $\Theta$ with the two Virasoro algebras implies that
+every middle descendant matrix element is this primary matrix element
+times the two ordinary forms in the last line of
+\eqref{punctured-vir}.  The analogous statement holds at each outer
+vertex.  Inserting the double-Virasoro decomposition on all four cuts
+therefore gives the full formula
+\begin{align}
+ &\widehat{\mathbb F}_f^{(\eta,\eta')}[\Theta v_{1/2}]
+ =\sum_{\substack{n_1\in\frac12\mathbb Z,\ n,n',n_3\in\frac12\mathbb Z+\frac14\\
+ n'=n\pm\frac12,\ \alpha,\gamma\in\{0,1\}\\
+ 2n_1+\alpha+\gamma\equiv f\ (2)}}
+ q_1^{2n_1^2}\hat q_{2,1}^{2n^2-1/8}
+ \hat q_{2,2}^{2n'^2-1/8}q_3^{2n_3^2-1/8}
+ \eta_1^{2n_1+p_1}\eta_2^\alpha\eta_3^\gamma\nonumber\\
+ &\quad\times(-1)^{2n_1+(2n_1+p_1)(\alpha+\gamma)+\alpha\gamma}
+ \frac{\hat\rho_f^{(\eta)}(v_{1,n_1}^{p_1},v_{2,n}^\alpha,v_{3,n_3}^\gamma)
+       \hat\rho_f^{(\eta')}(v_{1,n_1}^{p_1},v_{2,n'}^\alpha,v_{3,n_3}^\gamma)}
+ {\|v_{1,n_1}^{p_1}\|^2\|v_{2,n}^\alpha\|^2
+  \|v_{2,n'}^\alpha\|^2\|v_{3,n_3}^\gamma\|^2}
+ \nonumber\\
+ &\quad\times\langle v_{2,n'}^\alpha|\Theta V[v_{1/2}(Q/2)](1)
+       |v_{2,n}^\alpha\rangle
+ \prod_{i=1}^2 F(h_{1,n_1}^{(i)},h_{2,n}^{(i)},h_{2,n'}^{(i)},h_{3,n_3}^{(i)};
+ h_\psi^{(i)};c^{(i)}\mid q_1,\hat q_{2,1},\hat q_{2,2},q_3).
+ \label{full-branching}
+\end{align}
+The additional split cut supplies one additional squared primary norm.
+The quadratic part is the original theta sign; $(-1)^{2n_1}$ is the
+enlarged NS contour sign.  The inserted tube operator is even, and both
+split cuts carry the same total parity.  Using squared
+norms in \eqref{full-branching} avoids a choice of complex square roots
+in the numerical contraction.
+
+For comparison with the normalized branching notation, define the
+radially ordered coefficient, with the NS field in the middle slot, by
+\ie
+ \mathbb B(n',\tfrac12,n;\alpha,1-\alpha)
+ =\frac{\langle v_{2,n'}^\alpha|V[v_{1/2}(Q/2)](1)
+ |v_{2,n}^{1-\alpha}\rangle}
+ {\|v_{2,n'}^\alpha\|\|v_{1/2}(Q/2)\|
+  \|v_{2,n}^{1-\alpha}\|}.
+ \label{radial-B}
+\fe
+No permutation of punctures is implicit in this notation.  The two
+outer normalized coefficients use the original $(\NS,\R,\R)$ order.
+For $M=2|n|-\frac12$, the raw primary definitions give
+\ie
+ \Theta v_n^0=-2^{(-1)^M/2}v_n^1,\qquad
+ \Theta v_n^1=2^{-(-1)^M/2}v_n^0.
+ \label{theta-primary}
+\fe
+With compatible norm roots such that
+$\Theta(v_n^\alpha/\|v_n^\alpha\|)=-i
+v_n^{1-\alpha}/\|v_n^{1-\alpha}\|$, anticommuting $\Theta$ through
+$V[v_{1/2}]$ gives
+\ie
+ \frac{\langle v_{n'}^\alpha|\Theta V[v_{1/2}](1)|v_n^\alpha\rangle}
+ {\|v_{n'}^\alpha\|\|v_n^\alpha\|}
+ =i\|v_{1/2}\|\mathbb B(n',\tfrac12,n;\alpha,1-\alpha).
+ \label{normalized-middle}
+\fe
+Accordingly the primary factor in \eqref{full-branching} is exactly
+\ie
+ &i\|v_{1/2}(Q/2)\|
+ \mathbb B_f^{(\eta);p_1}(n_1,n,n_3;\alpha,\gamma)
+ \mathbb B_f^{(\eta');p_1}(n_1,n',n_3;\alpha,\gamma)
+ \mathbb B(n',\tfrac12,n;\alpha,1-\alpha).
+\fe
+Here $\|v_{1/2}(Q/2)\|^2=-Q^2$.  The preceding raw formula is the
+definition when another square-root convention is used.
+
+\section{The middle coefficient from the physical Ward identity}
+
+The physical stress tensor acts on the SCA factor, whereas
+\eqref{ordered-insertion} acts on the auxiliary factor.  Hence
+\ie
+ {}[L_m,\Theta Q\psi(1)]=0.
+\fe
+This statement concerns the physical $L_m$, not $L_m^{(1)}$ or
+$L_m^{(2)}$.  BPZ conjugation, which is bilinear here, gives
+\ie
+ \langle L_1v_{n'}^\alpha|\Theta Q\psi(1)|v_n^\alpha\rangle
+ &=\langle v_{n'}^\alpha|\Theta Q\psi(1)|L_{-1}v_n^\alpha\rangle,\\
+ \langle L_{-1}v_{n'}^\alpha|\Theta Q\psi(1)|v_n^\alpha\rangle
+ &=\langle v_{n'}^\alpha|\Theta Q\psi(1)|L_1v_n^\alpha\rangle.
+ \label{middle-ward}
+\fe
+Use the reusable $\mathbb V$ action coefficients from the human notes:
+\ie
+ L_1v_n^\alpha&=\sum_{|A|+|B|=4n-3}\mathbb V_{1,n,\alpha}^{AB}
+ L_{-A}^{(1)}L_{-B}^{(2)}v_{n-1}^\alpha,\\
+ L_{-1}v_n^\alpha&=\sum_{i=1}^2\mathbb V_{n,\alpha}^{(i)}
+ L_{-1}^{(i)}v_n^\alpha+
+ \sum_{|A|+|B|=4n-1}\mathbb V_{-1,n,\alpha}^{AB}
+ L_{-A}^{(1)}L_{-B}^{(2)}v_{n-1}^\alpha
+ \qquad(n\geq3/4).
+\fe
+The levels follow from
+$2n^2-2(n-1)^2=4n-2$, followed by the physical level change $\mp1$.
+At the boundary $n=1/4$, $L_1v_{1/4}^\alpha=0$ and the second line is
+replaced by its two same-primary level-one terms and a primary term
+proportional to $v_{-3/4}^\alpha$.  Its coefficient is immaterial below
+because that term is forbidden by fusion.  The action coefficients are
+inputs from the finite double-Virasoro span decomposition in the human
+notes; no independent recursion for those coefficients is assumed.
+When $n'=n+\frac12>0$ and $n\geq\frac14$, $L_1$ on the larger
+endpoint produces descendants of $v_{n'-1}^\alpha$.  In $L_{-1}v_n$
+the other-primary branch has label $n-1$ (or $-3/4$ at $n=1/4$).
+Its separation from $n'$ is $3/2$, so the middle fusion rule
+\eqref{middle-fusion} kills its contribution.  The surviving same-primary
+descendants obey
+\ie
+ \rho(\nu_{h'},\nu_{h_\psi},L_{-1}\nu_h)=h+h_\psi-h'.
+\fe
+The first Ward identity thus becomes the scalar recurrence
+\begin{align}
+ &\left[\sum_{i=1}^2\mathbb V_{n,\alpha}^{(i)}
+ (h_n^{(i)}+h_\psi^{(i)}-h_{n'}^{(i)})\right]
+ \langle v_{n'}^\alpha|\Theta Q\psi(1)|v_n^\alpha\rangle
+ \nonumber\\
+ &\quad=\sum_{|A|+|B|=4n'-3}\mathbb V_{1,n',\alpha}^{AB}
+ \rho(L_{-A}\nu_{h_{n'-1}^{(1)}},\nu_{h_\psi^{(1)}},\nu_{h_n^{(1)}})
+ \rho(L_{-B}\nu_{h_{n'-1}^{(2)}},\nu_{h_\psi^{(2)}},\nu_{h_n^{(2)}})
+ \langle v_{n'-1}^\alpha|\Theta Q\psi(1)|v_n^\alpha\rangle.
+ \label{middle-recurrence-out}
+\end{align}
+If $n=n'+\frac12>0$ and $n'\geq\frac14$, apply the second identity
+instead.  Using
+$\rho(L_{-1}\nu_{h'},\nu_{h_\psi},\nu_h)=h'+h_\psi-h$ gives
+\begin{align}
+ &\left[\sum_{i=1}^2\mathbb V_{n',\alpha}^{(i)}
+ (h_{n'}^{(i)}+h_\psi^{(i)}-h_n^{(i)})\right]
+ \langle v_{n'}^\alpha|\Theta Q\psi(1)|v_n^\alpha\rangle
+ \nonumber\\
+ &\quad=\sum_{|A|+|B|=4n-3}\mathbb V_{1,n,\alpha}^{AB}
+ \rho(\nu_{h_{n'}^{(1)}},\nu_{h_\psi^{(1)}},L_{-A}\nu_{h_{n-1}^{(1)}})
+ \rho(\nu_{h_{n'}^{(2)}},\nu_{h_\psi^{(2)}},L_{-B}\nu_{h_{n-1}^{(2)}})
+ \langle v_{n'}^\alpha|\Theta Q\psi(1)|v_{n-1}^\alpha\rangle.
+ \label{middle-recurrence-in}
+\end{align}
+For negative labels use the human notes' simultaneous reflection
+$n\mapsto-n$, $P\mapsto-P$ in the action coefficients.  Applying $L_1$
+to the endpoint of larger absolute label lowers that absolute label,
+including the crossing $3/4\mapsto-1/4$.  Every allowed pair reaches
+one of the two oriented ground pairs.  Their values, obtained from
+\eqref{zero-mode-action}, follow directly from the ground primaries
+\ie
+ v_{\pm1/4}^0&=u^0\otimes w^+
+ \mp e^{i\pi/4}u^1\otimes w^-,\\
+ v_{\pm1/4}^1&=\frac1{\sqrt2}
+ (u^1\otimes w^+\pm e^{i\pi/4}u^0\otimes w^-).
+\fe
+With the physical ground metric $\operatorname{diag}(1,i)$ and the
+auxiliary metric $\operatorname{diag}(1,-1)$, their squared norms are
+$2$ and $-1$.  Moreover $Q\Theta\psi_0$ maps $v_{\pm1/4}^0$ to
+$(Q/\sqrt2)v_{\mp1/4}^0$, and $v_{\pm1/4}^1$ to
+$-(Q/\sqrt2)v_{\mp1/4}^1$.  Therefore
+\ie
+ \langle v_{1/4}^0|\Theta Q\psi(1)|v_{-1/4}^0\rangle
+ &=\langle v_{-1/4}^0|\Theta Q\psi(1)|v_{1/4}^0\rangle=\sqrt2Q,\\
+ \langle v_{1/4}^1|\Theta Q\psi(1)|v_{-1/4}^1\rangle
+ &=\langle v_{-1/4}^1|\Theta Q\psi(1)|v_{1/4}^1\rangle=Q/\sqrt2.
+\fe
+No other primary middle matrix elements are needed as anchors.
+Equations \eqref{theta-primary} and \eqref{radial-B} then give
+$\mathbb B(n',1/2,n;\alpha,1-\alpha)$.
+
+At a generic momentum the scalar pivot in the recurrence is nonzero.
+Exceptional zero pivots require continuation of the combined meromorphic
+expression, not division by zero.  The implementation raises an error
+at such a pivot.  Computing the finite ordinary three-point descendant
+factors in these equations by Ward identities is distinct from computing
+an entire conformal block.  All conformal blocks in
+\eqref{full-branching} use the $c$-recursion described below.
+
+\section{The convolution with the physical block}
+
+Return temporarily to the tensor-product basis on the split tube.  Its
+physical factor propagates through the identity.  A physical BPZ metric
+at the middle sphere therefore cancels one of the two physical inverse
+metrics.  Within each physical level and parity this is explicitly
+$G^{-1}GG^{-1}=G^{-1}$.  The remaining physical state has equal level on
+the two halves and propagation weight
+\ie
+ \hat q_{2,1}^{|B|}\hat q_{2,2}^{|B|}
+ =q_2^{|B|}.
+\fe
+This contracts the physical graph back to the original theta graph.
+The two contour phases in \eqref{outer-frame} multiply to $(-1)^A$:
+the NS descendant parity and the total second-slot physical parity agree
+at the paired vertices, so the two $f$-dependent signs cancel.  This
+removes the physical part of the enlarged factor $(-1)^{A+\mathsf A}$.
+The remaining $(-1)^{\mathsf A}$ is precisely the auxiliary NS contour
+sign in the fermion block.  After this linear sign is accounted for,
+only the quadratic theta signs remain to be compared.
+The auxiliary factors retain the inserted field and independent levels
+on the two halves.  Because $\Theta\psi$ is even, it identifies the
+auxiliary parity bits on the two halves.  There is consequently no
+fourth independent parity bit.  If $\epsilon_i$ and $\delta_i$ are the
+physical and auxiliary parities, respectively, the theta sign at total
+parity differs from the separate signs by
+\ie
+ &\sum_{i<j}(\epsilon_i+\delta_i)(\epsilon_j+\delta_j)
+ -\sum_{i<j}\epsilon_i\epsilon_j-\sum_{i<j}\delta_i\delta_j\\
+ &\qquad=\sum_{i<j}(\epsilon_i\delta_j+\delta_i\epsilon_j)
+ \pmod2.
+\fe
+This gives the original Ramond convolution cocycle:
+\ie
+ \eta_1^{\epsilon_1}\eta_2^{\epsilon_2}\eta_3^{\epsilon_3}
+ \star_{\R}\eta_1^{\delta_1}\eta_2^{\delta_2}\eta_3^{\delta_3}
+ =(-1)^{\sum_{i<j}(\epsilon_i\delta_j+\delta_i\epsilon_j)}
+ \eta_1^{\epsilon_1+\delta_1}\eta_2^{\epsilon_2+\delta_2}
+ \eta_3^{\epsilon_3+\delta_3}.
+ \label{cocycle}
+\fe
+Parity exponents are reduced modulo two.  The powers of sewing
+parameters multiply ordinarily.  In particular the complete map on
+monomials is
+\begin{align}
+ &(q_1^a q_2^b q_3^c\eta_1^{\epsilon_1}
+       \eta_2^{\epsilon_2}\eta_3^{\epsilon_3})
+ \star_{\R}
+ (q_1^{a'}\hat q_{2,1}^{b'}\hat q_{2,2}^{b''}q_3^{c'}
+       \eta_1^{\delta_1}\eta_2^{\delta_2}\eta_3^{\delta_3})
+ \nonumber\\
+ &\quad=(-1)^{\sum_{i<j}(\epsilon_i\delta_j+\delta_i\epsilon_j)}
+ q_1^{a+a'}\hat q_{2,1}^{b+b'}\hat q_{2,2}^{b+b''}q_3^{c+c'}
+ \eta_1^{\epsilon_1+\delta_1}\eta_2^{\epsilon_2+\delta_2}
+ \eta_3^{\epsilon_3+\delta_3}.
+ \label{coefficient-map}
+\end{align}
+Summing this identity over the physical and auxiliary descendants gives
+\ie
+ \widehat{\mathbb F}_f^{(\eta,\eta')}[\Theta v_{1/2}]
+ =\mathbb F_f^{(\eta,\eta')}(q_1,\hat q_{2,1}\hat q_{2,2},q_3)
+ \star_{\R}\mathbb F_{\mathsf F}[\Theta v_{1/2}]
+ (q_1,\hat q_{2,1},\hat q_{2,2},q_3).
+ \label{full-convolution}
+\fe
+This is an identity for the full inserted block.  Off-diagonal powers
+of the two split parameters must be retained on both sides before
+division.  Restricting them to equal powers would replace the inserted
+field by its zero-mode contribution and would lose terms needed for
+the convolution.
+
+\subsection{The inverse in the required sector}
+
+We first establish the sector identity from the physical sewing
+definition.  On either Ramond module use the level-preserving replacement
+\ie
+ \mathbb L_{-B}w^+&\longmapsto
+ (-1)^B e^{-i\pi/4}\mathbb L_{-B}w^-,\\
+ \mathbb L_{-B}w^-&\longmapsto
+ -(-1)^B e^{i\pi/4}\mathbb L_{-B}w^+.
+\fe
+Here $B$ in a sign counts the supercurrent generators, as in the human
+notes.  The map is odd, supercommutes with the physical SCA, and
+preserves the BPZ pairing with ground metric $\operatorname{diag}(1,i)$.
+The last assertion follows at the ground level from
+$(e^{-i\pi/4})^2 i=1$ and $(-e^{i\pi/4})^2=i$; contravariance extends
+it to descendants.  The ground definitions of $\rho_f^{(\eta)}$ give
+the factor $-i\eta(-1)^{\epsilon_2}$ when this replacement is applied
+to both Ramond slots.  Including the Koszul sign for the two odd maps,
+the simultaneous action intertwines the Ward identities.  The same
+factor therefore holds for arbitrary descendants, where $\epsilon_2$
+is the total physical parity of the second slot.
+
+Applying this change of summation basis at both outer vertices multiplies
+the unsigned sewing coefficient by $(-i\eta)(-i\eta')=-\eta\eta'$;
+the two factors $(-1)^{\epsilon_2}$ cancel.  Flipping both Ramond parity
+bits changes the quadratic theta sign by
+$(-1)^{\epsilon_2+\epsilon_3+1}$.  Consequently, at each fixed triple
+of levels, the coefficient at $(\epsilon_1,1-\epsilon_2,1-\epsilon_3)$
+is $\eta\eta'(-1)^{\epsilon_2+\epsilon_3}$ times the coefficient at
+$(\epsilon_1,\epsilon_2,\epsilon_3)$.  Equation \eqref{cocycle} also
+gives
+\ie
+ (\eta_2\eta_3)\star_{\R}
+ (\eta_1^{\epsilon_1}\eta_2^{\epsilon_2}\eta_3^{\epsilon_3})
+ =(-1)^{\epsilon_2+\epsilon_3}
+ \eta_1^{\epsilon_1}\eta_2^{1-\epsilon_2}\eta_3^{1-\epsilon_3}.
+\fe
+Thus $(\eta_2\eta_3)\star_{\R}\mathbb F_f^{(\eta,\eta')}
+=\eta\eta'\mathbb F_f^{(\eta,\eta')}$ to every level.  In particular,
+the opposite outer sector satisfies
+\ie
+ (\eta_2\eta_3)\star_{\R}\mathbb F_f^{(\eta,-\eta)}
+ =-\mathbb F_f^{(\eta,-\eta)}.
+ \label{sector-identity}
+\fe
+At zero level, the outer ground forms
+$\rho_{\mathsf F}(\mathbf1,u^0,u^0)=1$ and
+$\rho_{\mathsf F}(\mathbf1,u^1,u^1)=i$, together with
+\eqref{zero-mode-action}, give the auxiliary constant
+\ie
+ \left.\mathbb F_{\mathsf F}[\Theta v_{1/2}]\right|_{q=0}
+ =\frac{Q}{\sqrt2}(1-\eta_2\eta_3).
+\fe
+This constant has no inverse in the entire parity algebra.  However,
+$(\eta_2\eta_3)\star_{\R}(\eta_2\eta_3)=1$, so its multiplication
+on the sector \eqref{sector-identity} is the scalar $\sqrt2Q$.
+For $Q\ne0$ this scalar is invertible.  Thus the original formal inverse
+is replaced by a sector inverse whose identity is
+$(1-\eta_2\eta_3)/2$:
+\ie
+ \mathbb F_{\mathsf F}^{-1}[\Theta v_{1/2}]
+ \star_{\R}\mathbb F_{\mathsf F}[\Theta v_{1/2}]
+ =\frac{1-\eta_2\eta_3}{2}.
+\fe
+Within this sector the physical block is uniquely determined by
+\ie
+ \mathbb F_f^{(\eta,-\eta)}
+ =\mathbb F_{\mathsf F}^{-1}[\Theta v_{1/2}]
+ \star_{\R}\widehat{\mathbb F}_f^{(\eta,-\eta)}[\Theta v_{1/2}].
+ \label{recovery}
+\fe
+The computation need not construct an inverse as a separate series.
+At each monomial subtract all convolutions involving already determined
+lower coefficients and positive-level auxiliary coefficients; divide
+the remainder by $\sqrt2Q$.  Equation \eqref{sector-identity} makes this
+triangular division unique.  A remainder outside that sector is evidence
+of incorrect input or insufficient numerical precision and must not be
+silently projected away.
+
+\input{theta_fermion_direct_definition.tex}
+
+\input{theta_fermion_ising_component.tex}
+
+\section{Central-charge recursion and truncation}
+\label{ccy-and-truncation}
+
+For generic internal weights, \eqref{punctured-vir} is computed with the
+central-charge recursion of Cho, Collier and Yin~\cite{CCY}.  Its poles
+come from a null state on one of its four internal edges.  At a pole on
+edge $e$, the internal weight shifts by $rs$, the corresponding sewing
+factor contributes $q_e^{rs}$, and the residue multiplies the lower
+block by
+\ie
+ \frac{-\partial_{h_e}c_{rs}(h_e) A_{rs}}
+ {c-c_{rs}(h_e)}
+ P_{rs}[\text{spectators at the first endpoint}]
+ P_{rs}[\text{spectators at the second endpoint}].
+\fe
+For the ordered graph \eqref{punctured-vir}, the two spectator pairs are
+\[
+\begin{array}{c|cc}
+e&\text{first pair}&\text{second pair}\\\hline
+1&(h_3,h_L)&(h_3,h_R)\\
+L&(h_3,h_1)&(h_R,h_\psi)\\
+R&(h_3,h_1)&(h_L,h_\psi)\\
+3&(h_1,h_L)&(h_1,h_R)
+\end{array}
+\]
+The order in each pair matters for odd null level.  The external
+$h_\psi$ stays fixed during the recursion, including when its initial
+value is degenerate.  Replacing it by its degenerate formula evaluated
+at the recursive central charge would compute a different function.
+
+For completeness the pole and residue data are the ordinary Virasoro
+ones used in the human notes:
+\ie
+ b_{rs}(h)^2&=\frac{rs-1+2h\pm
+ \sqrt{(r-s)^2+4(rs-1)h+4h^2}}{1-r^2},\\
+ c_{rs}(h)&=1+6(b_{rs}+b_{rs}^{-1})^2,\\
+ A_{rs}&=\frac12\prod_{\substack{m=1-r,\ldots,r\,,\ k=1-s,\ldots,s\\
+ (m,k)\ne(0,0),(r,s)}}(mb_{rs}+kb_{rs}^{-1})^{-1},\\
+ P_{rs}(h_a,h_b)&=
+ \prod_{\substack{j=1-r,\,3-r,\ldots,r-1\\ k=1-s,\,3-s,\ldots,s-1}}
+ \frac{\lambda_a+\lambda_b+jb_{rs}+kb_{rs}^{-1}}2
+ \frac{\lambda_a-\lambda_b+jb_{rs}+kb_{rs}^{-1}}2,
+\fe
+where $h_a=((b_{rs}+b_{rs}^{-1})^2-\lambda_a^2)/4$ and likewise for
+$h_b$.  The sum runs over $r\geq2,s\geq1$.  The numerical continuation
+chooses the noncancelling quadratic root (the larger absolute value),
+consistently across $(r,s)$ and $(s,r)$.  This matters at negative weights
+when $s=1$, where a cancelling root can be zero.  Unresolved confluent
+poles raise an error; a singular residue is never simply discarded.
+
+The regular term at large $c$ is the global $SL(2)$ block times the
+universal large-$c$ vacuum factor.  The global coefficient at levels
+$(a,b,c,d)$ is
+\ie
+ \frac{\rho(L_{-1}^a\nu_{h_1},L_{-1}^b\nu_{h_L},L_{-1}^d\nu_{h_3})
+       \rho(L_{-1}^a\nu_{h_1},L_{-1}^c\nu_{h_R},L_{-1}^d\nu_{h_3})
+       \rho(L_{-1}^c\nu_{h_R},\nu_{h_\psi},L_{-1}^b\nu_{h_L})}
+ {a!(2h_1)_a\,b!(2h_L)_b\,c!(2h_R)_c\,d!(2h_3)_d}.
+\fe
+The universal factor is independent of all light weights.  We may
+therefore forget the external puncture and collapse the extra sphere.
+Every sewing and collapsing map is M\"obius, so no Schwarzian term is
+introduced.  Equation \eqref{product} shows that the factor depends
+only on $(q_1,\hat q_{2,1}\hat q_{2,2},q_3)$.
+It is computed by the leading Gaussian contractions of
+$L_{-m}/\sqrt c$, $m\geq2$.  For multiplicities $k_m$ the diagonal norm is
+\ie
+ \left\|\prod_{m\geq2}(L_{-m}/\sqrt c)^{k_m}\mathbf1\right\|^2
+ \longrightarrow
+ \prod_{m\geq2} k_m!\left[\frac{m(m^2-1)}{12}\right]^{k_m}.
+\fe
+The pair contractions between the ordered slots are
+\ie
+ C_{\infty,0}(m,n)&=\delta_{mn}\frac{m(m^2-1)}{12},\\
+ C_{\infty,1}(m,n)&=\frac{m(m^2-1)}{12}\binom{m-2}{n-2}
+ \quad(m\geq n),\\
+ C_{1,0}(m,n)&=\frac{(-1)^m(m+n-1)!}{12(m-2)!(n-2)!}.
+\fe
+The second is zero when $m<n$, and same-slot contractions are zero.
+These formulas follow by expanding or differentiating
+$\langle T(z)T(w)\rangle=c/[2(z-w)^4]$ at the three punctures.
+At a fixed triple of vacuum levels, sum the square of the three-slot
+Wick contraction over oscillator partitions and divide by the three
+diagonal norms above.  The code performs this finite sum exactly over
+the rationals.  It uses the large-$c$ algebra, not a finite-$c$ Gram
+inverse.  The reduced double-Virasoro numerator is missing two copies
+of this factor.  The selected direct fermion sum contains its full
+sewing dependence, so division by it must be followed by restoring
+two copies in the physical result.
+
+To define a finite physical total-level truncation without placing the
+insertion at an endpoint, write
+\ie
+ \hat q_{2,1}=u\sqrt{q_2},\qquad
+ \hat q_{2,2}=u^{-1}\sqrt{q_2}.
+\fe
+A term $q_1^{a/2}\hat q_{2,1}^l\hat q_{2,2}^r q_3^{d/2}$ has
+physical total degree $(a+l+r+d)/2$ and insertion-position dependence
+$u^{l-r}$.  Through physical total level $N$ retain all terms with
+$a+l+r+d\leq2N$.  This is a downward-closed truncation, so the
+triangular convolution uses no coefficients above the cutoff.
+The physical answer must have $l=r$ after division, but this property
+is a result to be checked, not a restriction imposed on the computation.
+At $N=10$ the contributing middle primary pairs satisfy
+$|n|,|n'|\leq9/4$.  For the middle recurrence the reusable $L_1$ and
+relevant $L_{-1}$ coefficients require descendant levels at most six.
+This bound does not apply to the entire outer Ward grid: the current
+outer implementation also constructs $L_{-1}v_{9/4}$, whose other-primary
+branch reaches descendant level eight.
+For negative branch labels, the implementation first uses the
+reflection $v_{-n}(P)\leftrightarrow v_n(-P)$ and reverses the labels
+of every term in the action expansion.  This is an intertwiner of
+the physical SCA and both Virasoro algebras.  On the physical Ramond
+grounds it acts as $\operatorname{diag}(1,-1)$ and maps the defining
+fermion strings without an extra normalization factor.  Consequently
+the action coefficients can be solved on the positive-label chart;
+no high-level Fock-to-PBW reflection matrix is needed.  The action
+data are stored for each momentum and reused across the outer Ward
+equations.
+
+\section{Implementation and numerical status}
+
+The implementation is in \texttt{Code/theta\_fermion\_ccy}.
+\texttt{middle\_branching.py} implements
+\eqref{middle-recurrence-out}--\eqref{middle-recurrence-in};
+\texttt{outer\_branching.py} uses the existing outer $L_1$ Ward system;
+\texttt{punctured\_ccy.py} supplies genuine central-charge residues and
+the global seed; \texttt{direct\_fermion.py} evaluates the full
+auxiliary factor by its mode Ward identities and diagonal Fock
+pairing; \texttt{pipeline.py} performs the branch sum and
+\texttt{series\_algebra.py} performs the sector division.
+The archived outer oracle uses the opposite label for an odd form:
+$\eta_{\mathrm{native}}=(-1)^f\eta_{\mathrm{physical}}$.  The adapter
+performs this transport before solving its Ward system.  It follows
+algebraically from comparing the two $G_{-1/2}$ Ward conventions; the
+numerical benchmark below tests $f=0$ only.
+
+Only the two requested numerical comparisons are designated as
+validation: the final physical block against an independent physical
+PBW calculation through total level five, and the final physical block
+at different split parameters with their product held fixed.  The PBW
+reference is stored separately and is not imported by the production
+pipeline.  No additional component numerical comparison suite is used.
+
+\textbf{The two requested comparisons pass through level five.}
+The benchmark is $b=7/5$, $(P_1,P_2,P_3)=(11/23,13/29,17/31)$,
+$p_1=f=0$ and $(\eta,\eta')=(+,-)$.  The calculation uses 70 decimal
+digits for the outer Ward system, 100 for the CCY engines, and exact
+rational fermion sewing before restoring its common $Q/\sqrt2$ factor.  The
+independent physical PBW reference uses 384-bit FLINT arithmetic.
+All 4,648 parity-coefficient slots in the four-variable truncation are
+compared, including off-diagonal slots whose physical answer is zero.
+The maximum absolute difference is $4.72\times10^{-52}$; the maximum
+difference divided by $\max(1,|\text{PBW coefficient}|)$ is
+$4.72\times10^{-52}$.
+
+The split-position comparison uses $(q_1,q_2,q_3)=(0.013,0.007,0.009)$,
+$u=1/2,1,2$, and all eight evaluations of the spin-lift signs.  The
+maximum change, divided by $\max(1,|\mathbb F(u=1)|)$, is
+$2.96\times10^{-60}$.  For example, at $(\eta_1,\eta_2,\eta_3)=(1,-1,1)$
+all three values agree with $2.0178804284272157747114188332429722451467$
+to the digits shown.
+These are numerical differences, not interval error bounds.
+
+The pipeline timer includes all mathematical stages and intermediate
+checkpoint writes.  It starts after imports and argument parsing and
+ends before encoding and saving the final physical series.
+This level-five run took $82.1968$ seconds in total: $52.1231$ for the
+outer coefficients, $2.6851$ for the middle recurrence, $26.1996$ for
+the two Virasoro blocks in the branch sum, $0.0825$ for the direct
+auxiliary factor, and $0.6678$ for division and the restored vacuum
+factors.  The balance is
+assembly and intermediate serialization.  This is a \emph{level-five}
+runtime; it is not a level-ten estimate.  The complete output and the
+two comparisons are saved under \texttt{Code/theta\_fermion\_ccy/results}
+as \texttt{ccy\_direct\_reflected\_level5.json} and
+\texttt{validation\_ccy\_direct\_reflected\_level5.json}.
+
+The production calculation retains the input, anchor and Ward-solution
+precision throughout.  Its sector guard raises an error if division
+leaves the required ideal; it does not project the answer to force the
+identity.  The separate level-ten auxiliary benchmark in
+\S\ref{direct-fermion-definition} is not a runtime for the physical
+block.  The full level-ten production timing is being measured with
+the same implementation and precision settings.
+
+\begin{thebibliography}{9}
+\bibitem{CCY}
+M. Cho, S. Collier and X. Yin, \emph{Recursive Representations of
+Arbitrary Virasoro Conformal Blocks},
+\href{https://arxiv.org/abs/1703.09805}{arXiv:1703.09805}.
+\bibitem{minimal-recursion}
+N. Javerzat, R. Santachiara and O. Foda, \emph{Notes on the solutions
+of Zamolodchikov-type recursion relations in Virasoro minimal models},
+\href{https://arxiv.org/abs/1806.02790}{arXiv:1806.02790}.
+\end{thebibliography}
+\end{document}

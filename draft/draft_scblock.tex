@@ -185,11 +185,11 @@ for $n>0$, and by the reflection formula
 \fe
 for $n<0$. The subscripts $\pm$ denote the components ending in \(w_\beta^+\) and \(w_\beta^-\), respectively. 
 
-\section{Decomposing superconformal blocks}
+\section{Reduction of superconformal blocks}
 
 \label{sec:blockdecomp}
 
-To reduce the superconformal block \eqref{scblock} to Virasoro conformal blocks, we first consider an enlarged $\mathsf{SCA}\otimes \mathsf{F}$ block $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)$, defined analogously to \eqref{scblock}, but with the descendant sum replaced by the sum over all states in $\mathcal{M}_{\NS}$ or $\mathcal{M}_{\R}$. The inverse Gram matrices and the Grassmann signs are also replaced by those of the new $\mathsf{SCA}\otimes \mathsf{F}$ descendants. 
+To reduce the superconformal block \eqref{scblock} to Virasoro conformal blocks, we first consider an enlarged $\mathsf{SCA}\otimes \mathsf{F}$ block $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)$, defined analogously to \eqref{scblock}, but with the descendant sum replaced by the sum over all states in $\mathcal{M}_{\NS}$ or $\mathcal{M}_{\R}$. The inverse Gram matrices and the Grassmann signs are also replaced by those of the new $\mathsf{SCA}\otimes \mathsf{F}$ descendants.  
 % Namely,
 % \begin{widetext}
 % \ie 
@@ -222,13 +222,17 @@ where we view the blocks as formal series in $q_e, \eta_e$, and the convolution 
 &q_1^{r_1}q_2^{r_2}q_3^{r_3}\eta_1^{\epsilon_1}\eta_2^{\epsilon_2}\eta_3^{\epsilon_3} \star q_1^{s_1}q_2^{s_2}q_3^{s_3}\eta_1^{\delta_1}\eta_2^{\delta_2}\eta_3^{\delta_3}\\
 &=(-1)^{\sum_{i<j} (\epsilon_i \delta_j + \delta_i \epsilon_j)}q_1^{r_1+s_1}q_2^{r_2+s_2}q_3^{r_3+s_3}\eta_1^{\epsilon_1+\delta_1}\eta_2^{\epsilon_2+\delta_2}\eta_3^{\epsilon_3+\delta_3}.
 \fe
-One can define the convolution inverse $\mathbf{F}_{\mathsf{F}}^{-1}$ of the free fermion block by $\mathbf{F}_{\mathsf{F}}^{-1}\star \mathbf{F}_{\mathsf{F}}= 1$, and the superconformal block can be written as
-\ie \label{convo}
-\mathbf{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3) = \mathbf{F}_{\mathsf{F}}^{-1} \star \widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3).\fe
+We should point out that the convolution \eqref{conv} differs from channel to channel. The one presented here is specific to the genus-2 theta channel with NS-R-R internal legs. Nevertheless, an analogous convolution formula for the enlarged block exists for arbitrary plumbing channels. 
 
-We should point out that the convolution \eqref{conv} differs from channel to channel. The one presented here is specific to the genus-2 theta channel with NS-R-R internal legs. Nevertheless, an analogous convolution formula for the enlarged block exists for arbitrary plumbing channels.
+As is, the free fermion block $\mathbf{F}_{\mathsf{F}}$ cannot be inverted under convolution. Moreover, in the genus-2 theta channel, the enlarged block $\hat{\mathbf{F}}^{(\eta, \eta')}_f$ vanishes for $\eta\eta'=-1$. More generally, this cancellation occurs whenever the three-point signs $\eta$ in $\rho_f^{(\eta)}$ around a closed Ramond loop have product $-1$. These problems obstruct us from solving $\mathbf{F}^{(\eta, \eta')}_f$ from $\hat{\mathbf{F}}^{(\eta, \eta')}_f$.
 
-On the other hand, one can choose the basis $L_{-A}^{(1)}L_{-B}^{(2)}v_n$ for $\mathcal{M}_{\NS}$ and $L_{-A}^{(1)}L_{-B}^{(2)}v_n^\alpha$ for $\mathcal{M}_{\R}$, which leads to the following decomposition of the enlarged block:
+To fix these problems, we define $\hat{\mathbf{F}}_f^{(\eta, \eta')}|_{\mathsf{b}=0}$ by fix one of the free fermion ground state label $\mathsf{b}$ to be 0 in the enlarged block. This resticted enlarged block can be computed as
+\ie
+\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)|_{\mathsf{b}=0} = \mathbf{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3) \star \mathbf{F}_{\mathsf{F}}|_{\mathsf{b}=0}.
+\fe
+Now, the restricted free fermion block $\mathbf{F}_{\mathsf{F}}|_{\mathsf{b}=0}$ does have a constant term and can be inverted, and $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)|_{\mathsf{b}=0}$ is nonzero for all choices of $\eta, \eta', f$.
+
+On the other hand, one can choose the basis $L_{-A}^{(1)}L_{-B}^{(2)}v_n$ for $\mathcal{M}_{\NS}$ and $L_{-A}^{(1)}L_{-B}^{(2)}v_n^\alpha$ for $\mathcal{M}_{\R}$. which leads to the following decomposition of $\widehat{\mathbf{F}}_f^{(\eta, \eta')}$:
 \begin{widetext}
 \ie
 \widehat{\mathbf{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3) &= \sum_{\substack{n_1 \in \frac{1}{2} \mathbb{Z}, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1+p_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
@@ -241,7 +245,11 @@ where $F(h_1, h_2, h_3; c)$ denotes the Virasoro conformal block with intermedia
 \ie \label{Rbranch}
 \mathbb{B}^{(\eta)}_f(n_1, n_2, n_3,\alpha_2, \alpha_3) = \frac{\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})}{\|v^{p_1}_{1,n_1}\|\|v_{2,n_2}^{\alpha_2}\|\|v_{3,n_3}^{\alpha_3}\|}.
 \fe
-Once one knows the branching coefficients, one can use the $c$-recursion relation to compute the Virasoro conformal blocks \cite{Cho:2017oxl}, which computes both $\mathbf{F}_{\mathsf{F}}$ and $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)$ as a $q$-series. One can then use \eqref{convo} to compute the superconformal block.
+Once one knows the branching coefficients, one can use the $c$-recursion relation to compute the Virasoro conformal blocks \cite{Cho:2017oxl}, which computes both $\mathbf{F}_{\mathsf{F}}$ and $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)$ as a $q$-series. 
+
+For the restricted block $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)|_{\mathsf{b}=0}$, one can realize the restriction as the insertion of a projector 
+
+One can then use \eqref{convo} to compute the superconformal block.
 
 \section{The branching coefficients}
 
@@ -293,7 +301,7 @@ Beyond string amplitudes, modular covariance of higher-genus partition functions
 
 \section*{Acknowledgments}
 
-We are grateful to Ben Mazel, Victor A. Rodriguez, and Jaroslav Scheinpflug for discussions. This work is supported by DOE grant DE-SC0007870. YW and XY thank the Yukawa Institute for Theoretical Physics for its hospitality during the course of this work. ChatGPT 5.6 Sol was used in this work for drafting and editing, literature searches, algorithm implementation, and conducting numerical tests. 
+We are grateful to Ben Mazel, Victor A. Rodriguez, and Jaroslav Scheinpflug for discussions. This work is supported by DOE grant DE-SC0007870. YW and XY thank the Yukawa Institute for Theoretical Physics for its hospitality during the course of this work. ChatGPT 5.6 Sol and 6 Astra was used in this work for drafting and editing, literature searches, algorithm implementation, and conducting numerical tests. 
 
 \bibliographystyle{apsrev4-2}
 \bibliography{references}
