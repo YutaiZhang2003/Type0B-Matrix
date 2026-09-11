@@ -1,0 +1,81 @@
+{
+  "scope": "Read-only comparison to existing 384-bit physical coefficient files; no PBW was computed",
+  "checks": [
+    {
+      "mode": "ordinary",
+      "dps": 0,
+      "candidate": "C++/results/recursive_branching_2026-09-11/full_pipeline_0dps/ordinary_level10_0dps.json",
+      "reference": "Code/ramond_zero_mode_recovery/restricted_level10.json",
+      "reference_precision_bits": 384,
+      "reference_sha256": "43f3befd3b8a25d5e71425514bf8e3d351cdb00b00c6cc3f730f71706236731a",
+      "components": 4048,
+      "maximum_scaled_difference": "6.97317243508320244e-7",
+      "maximum_absolute_difference": "5.50901603368381502e-6",
+      "worst_twice_levels": [
+        14,
+        0,
+        6
+      ],
+      "worst_component": 0,
+      "status": "failed",
+      "tolerance": "0.00000002"
+    },
+    {
+      "mode": "ordinary",
+      "dps": 40,
+      "candidate": "C++/results/recursive_branching_2026-09-11/full_pipeline_40dps/ordinary_level10_40dps.json",
+      "reference": "Code/ramond_zero_mode_recovery/restricted_level10.json",
+      "reference_precision_bits": 384,
+      "reference_sha256": "43f3befd3b8a25d5e71425514bf8e3d351cdb00b00c6cc3f730f71706236731a",
+      "components": 4048,
+      "maximum_scaled_difference": "2.86462555661467988e-21",
+      "maximum_absolute_difference": "8.65549262302692557e-21",
+      "worst_twice_levels": [
+        14,
+        0,
+        6
+      ],
+      "worst_component": 6,
+      "status": "passed",
+      "tolerance": "0.00000000000000000001"
+    },
+    {
+      "mode": "inserted",
+      "dps": 0,
+      "candidate": "C++/results/recursive_branching_2026-09-11/full_pipeline_0dps/inserted_level10_0dps.json",
+      "reference": "Code/theta_fermion_ccy/results/pbw_level10.json",
+      "reference_precision_bits": 384,
+      "reference_sha256": "191be7d348c3a1787ee21f6da2fe0caf93cdf469d22a620b2bf5b3aca5a28ee2",
+      "components": 4048,
+      "maximum_scaled_difference": "0.00120239768845334227",
+      "maximum_absolute_difference": "0.0393328808971959028",
+      "worst_twice_levels": [
+        4,
+        12,
+        4
+      ],
+      "worst_component": 0,
+      "status": "failed",
+      "tolerance": "0.00000002"
+    },
+    {
+      "mode": "inserted",
+      "dps": 40,
+      "candidate": "C++/results/recursive_branching_2026-09-11/full_pipeline_40dps/inserted_level10_40dps.json",
+      "reference": "Code/theta_fermion_ccy/results/pbw_level10.json",
+      "reference_precision_bits": 384,
+      "reference_sha256": "191be7d348c3a1787ee21f6da2fe0caf93cdf469d22a620b2bf5b3aca5a28ee2",
+      "components": 4048,
+      "maximum_scaled_difference": "6.60475862975186889e-21",
+      "maximum_absolute_difference": "1.28703837411014102e-20",
+      "worst_twice_levels": [
+        4,
+        14,
+        2
+      ],
+      "worst_component": 6,
+      "status": "passed",
+      "tolerance": "0.00000000000000000001"
+    }
+  ]
+}

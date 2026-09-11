@@ -78,6 +78,6 @@ lines += [r"\bottomrule", r"\end{tabular}", r"\end{center}",
           r"the sector identity. They do not bound every physical coefficient's error.",
           r"The full coefficient arrays and unrounded timers are retained with",
           r"the source hashes, so this table can be regenerated without rerunning a block."]
-target = ROOT / "Machine Notes/ramond_blocks_current_algorithm_timings.tex"
+target = Path(__file__).resolve().parent / "historical_timings.tex"
 target.write_text("\n".join(lines) + "\n")
 print(target)

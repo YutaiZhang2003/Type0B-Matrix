@@ -72,11 +72,21 @@ written to a temporary file and renamed after serialization.
    spectators, and descendant suffixes are reused. Raising/lowering solves share
    construction data. Reflected charts and Theta transport supply other labels
    and parities.
-2. **Outer and middle coefficients:** low physical PBW anchors fix the outer L_1
-   Ward systems. Matrix factorizations are reused for the vertex signs.
-   Single-leg Virasoro descendant factors use closed Ward products. The middle
-   recurrence reuses the Ramond actions. These small anchor systems do not
-   compute a physical PBW block.
+2. **Outer and middle coefficients:** directly evaluate the complete allowed
+   boundary box, NS n=0,+/-1/2 and R n=+/-1/4,+/-3/4, and store those values.
+   Build higher coefficients from already stored lower-label values. The bulk
+   update is a scalar division. Explicit boundary actions couple at most four
+   unanchored coefficients at a time; these small relations are eliminated at
+   the working precision. There is no global outer Ward matrix. If the first
+   identity cannot determine the coefficient or boundary group, use the second
+   conformal Ward identity with L1 on a Ramond leg. Needed NS L-1 and Ramond
+   L0/L1 actions are computed lazily and cached; physical L0 acts with the
+   physical oscillator level. Both vertex signs reuse the same Ward rows and
+   local elimination. Embedded weights and closed single-leg descendant factors
+   are cached. Every used Ward equation is checked after each update, and a
+   failure identifies the affected labels and parities. The middle recurrence
+   reuses the Ramond actions. Physical PBW is used only for the direct low
+   boundary data, not a high-level physical block.
 3. **Double-Virasoro sum:** forward CCY merges paths reaching the same null-state
    shift and central-charge pole. Pole geometry (including the universal A
    factor), fusion polynomials, and global three-point factors are cached within
@@ -95,16 +105,20 @@ from disk.
 
 ## Precision and residuals
 
-Higher precision applies to branching entries, iterative-refinement residuals,
-CCY, assembly, and recovery. LAPACK selects independent rows and supplies a
-double-precision LU preconditioner. Refinement uses the original multiprecision
-matrix and checks every row. Increasing `--dps` therefore does not remove a
-failure of double-precision rank selection at an ill-conditioned parameter point.
+Higher precision applies to branching entries, CCY, assembly, and recovery.
+Outer branching uses the stored recurrence and small local elimination at the
+working precision. Mode-action decomposition still uses LAPACK row selection
+and a double-precision LU preconditioner, with residuals refined and checked
+against the original multiprecision matrix. Increasing precision alone does
+not remove a failure of that mode-action rank selection.
 
-Inherited thresholds are retained: at 40 digits, the selected-system residual
-target is `1e-25`, the full-system residual guard is `1e-20`, and sparse arithmetic
-prunes at `1e-20`. These tighten with `--dps`; a precision setting does not
-guarantee that many correct output digits.
+At 40 digits, mode-action refinement targets `1e-25`, and its full-row residual
+and sparse-pruning thresholds are `1e-20`. The outer recursion checks each used
+Ward identity using abs(sum of terms)/(1 + sum of absolute terms), with tolerance
+`1e-20` at 40 digits or `1e-8` at machine precision. A local prefactor is tested
+against the absolute contributions to that prefactor, independently of the
+size of already-known lower-label terms. These thresholds tighten with the
+requested precision; a precision setting does not certify that many digits.
 
 Default `--sector-policy error` stops above a scaled sector residual of `1e-8`.
 Ordinary recovery projects its accepted small residual into the sector;
@@ -174,3 +188,16 @@ make -C 'C++' check PYTHON=/path/to/python
 The checks read saved references and never run PBW. Component drivers in `tests/`
 provide branching-action, low-anchor, and exact-factor output.
 See [MIGRATION.md](MIGRATION.md) for the source map.
+
+## Current recursive branching timings
+
+The fresh level-10 measurements, with separate action, outer-recursion, middle,
+and process-wall times, are recorded in
+[the recursion report](results/recursive_branching_2026-09-11/README.md).
+The same report records the successful level-20 branching-only diagnostic.
+These do not include CCY or full physical-block assembly.
+
+Reproduce the branching benchmark in separate fresh processes:
+
+    make -C C++ all bin/outer_ward_driver
+    python3 C++/tools/time_branching.py --level 10 --dps 0 40 --output /tmp/branching_level10

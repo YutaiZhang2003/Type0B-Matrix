@@ -23,4 +23,15 @@ clean:
 	rm -rf build bin
 check: bin/ramond
 	$(PYTHON) tests/verify_saved.py --run --level 3
-.PHONY: all clean check
+bin/outer_ward_driver: tests/outer_ward_driver.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/second_ward_actions: tests/second_ward_actions.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+check-branching: bin/outer_ward_driver bin/second_ward_actions
+	bin/second_ward_actions
+	bin/outer_ward_driver 5 40 0
+	bin/outer_ward_driver 5 40 0 1
+	bin/outer_ward_driver 5 0 0 1
+.PHONY: all clean check check-branching

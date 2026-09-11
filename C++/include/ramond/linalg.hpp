@@ -19,6 +19,9 @@ struct Fit {
     int rows = 0, columns = 0, rank = 0, iterations = 0;
     double relative_residual = 0, smallest_singular = 0;
 };
+struct RankFailure : std::runtime_error {
+    explicit RankFailure(const std::string &message) : std::runtime_error(message) {}
+};
 inline std::vector<Machine> least_squares(std::vector<Machine> a, int m, int n,
                                           std::vector<Machine> b, Fit &fit, double rcond = 1e-11) {
     int one = 1, ldb = std::max(m, n), lwork = -1, info = 0, rank = 0;
@@ -103,7 +106,13 @@ template <class S> class LinearSystem {
             least_squares(lu_, n, n, std::vector<Machine>(n), rank_fit);
             fit.rank = rank_fit.rank;
             fit.smallest_singular = rank_fit.smallest_singular;
-            require(fit.rank == n && fit.smallest_singular > 1e-11, "pivoted span lost full rank");
+            if (fit.rank != n || fit.smallest_singular <= 1e-11) {
+                std::ostringstream message;
+                message << "pivoted span lost full rank: rows=" << m << ", columns=" << n
+                        << ", numerical rank=" << fit.rank
+                        << ", smallest singular value=" << fit.smallest_singular;
+                throw RankFailure(message.str());
+            }
             pivots_.resize(n);
             zgetrf_(&n, &n, lu_.data(), &n, pivots_.data(), &info);
             require(!info, "singular pivoted span");

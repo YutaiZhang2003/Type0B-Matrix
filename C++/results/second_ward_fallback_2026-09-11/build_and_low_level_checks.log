@@ -1,0 +1,35 @@
+clang++ -Iinclude -I/opt/homebrew/include -O3 -g -std=c++17 -Wall -Wextra -Wpedantic -c src/main.cpp -o build/main.o
+clang++ -Iinclude -I/opt/homebrew/include -O3 -g -std=c++17 -Wall -Wextra -Wpedantic tests/outer_ward_driver.cpp -L/opt/homebrew/lib -lmpc -lmpfr -lgmpxx -lgmp -lm -framework Accelerate -o bin/outer_ward_driver
+clang++ -Iinclude -I/opt/homebrew/include -O3 -g -std=c++17 -Wall -Wextra -Wpedantic tests/second_ward_actions.cpp -L/opt/homebrew/lib -lmpc -lmpfr -lgmpxx -lgmp -lm -framework Accelerate -o bin/second_ward_actions
+bin/second_ward_actions
+NS reflected=0 n4=2 residual=1.78053e-30
+NS reflected=0 n4=4 residual=6.64254e-29
+NS reflected=0 n4=6 residual=1.86041e-27
+R reflected=0 n4=3 mode=0 residual=1.70517e-32
+R reflected=0 n4=3 mode=1 residual=2.92649e-33
+R reflected=0 n4=5 mode=0 residual=1.00625e-29
+R reflected=0 n4=5 mode=1 residual=2.84383e-31
+R reflected=0 n4=7 mode=0 residual=3.46928e-27
+R reflected=0 n4=7 mode=1 residual=2.51052e-28
+NS reflected=1 n4=2 residual=2.49119e-30
+NS reflected=1 n4=4 residual=1.66196e-26
+NS reflected=1 n4=6 residual=3.4234e-26
+R reflected=1 n4=3 mode=0 residual=2.96241e-30
+R reflected=1 n4=3 mode=1 residual=2.92649e-33
+R reflected=1 n4=5 mode=0 residual=4.69603e-29
+R reflected=1 n4=5 mode=1 residual=9.4211e-31
+R reflected=1 n4=7 mode=0 residual=3.234e-27
+R reflected=1 n4=7 mode=1 residual=6.02672e-29
+bin/outer_ward_driver 5 40 0
+actions completed in 0.0525845 s; support=192
+second Ward identities checked=608 maximum residual=4.14184e-26
+level=5 inserted=0 total_seconds=0.243657 actions_seconds=0.0525845 ward_seconds=0.1231 action_residual=2.03829e-26 ward_residual=1.26765e-27 second_ward_rows=0 vanishing_first_pivots=0
+bin/outer_ward_driver 5 40 0 1
+actions completed in 0.0535349 s; support=192
+second Ward identities checked=608 maximum residual=3.14257e-25
+level=5 inserted=0 total_seconds=0.245175 actions_seconds=0.0535349 ward_seconds=0.164432 action_residual=2.03829e-26 ward_residual=9.86096e-26 second_ward_rows=32 vanishing_first_pivots=32
+bin/outer_ward_driver 5 0 0 1
+actions completed in 0.00519617 s; support=192
+second Ward identities checked=608 maximum residual=1.01789e-11
+level=5 inserted=0 total_seconds=0.0360384 actions_seconds=0.00519617 ward_seconds=0.027717 action_residual=4.96908e-13 ward_residual=1.59999e-10 second_ward_rows=32 vanishing_first_pivots=32
+clang++ -L/opt/homebrew/lib build/main.o -lmpc -lmpfr -lgmpxx -lgmp -lm -framework Accelerate -o bin/ramond

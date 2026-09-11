@@ -17,6 +17,8 @@ template <class S> struct Result {
     ParitySeries<S> numerator, auxiliary, physical;
     Timings timing;
     size_t branch_cases = 0, virasoro_blocks = 0, transpose_reuse = 0;
+    int direct_boundary_values = 0, recursive_branching_values = 0, recursive_groups = 0,
+        maximum_local_unknowns = 0, second_ward_rows = 0, vanishing_first_pivots = 0;
     double action_residual = 0, ward_residual = 0, sector_residual = 0;
 };
 inline std::vector<Index> physical_indices(int cutoff) {
@@ -109,7 +111,17 @@ template <class S> Result<S> pipeline(const Settings &settings) {
     result.timing.outer_ward = outer.ward_seconds;
     result.action_residual = outer.maximum_action_residual;
     result.ward_residual = outer.maximum_ward_residual;
-    std::cerr << "branching: " << result.timing.branching << " s\n";
+    result.direct_boundary_values = outer.direct_boundary_values;
+    result.recursive_branching_values = outer.recursive_values;
+    result.recursive_groups = outer.recursive_groups;
+    result.maximum_local_unknowns = outer.maximum_local_unknowns;
+    result.second_ward_rows = outer.second_ward_rows;
+    result.vanishing_first_pivots = outer.vanishing_first_pivots;
+    std::cerr << "branching: " << result.timing.branching << " s; direct boundary values="
+              << result.direct_boundary_values << ", recursive values="
+              << result.recursive_branching_values << ", largest local relation="
+              << result.maximum_local_unknowns << ", second Ward rows="
+              << result.second_ward_rows << '\n';
     std::unique_ptr<MiddleBranching<S>> middle;
     std::map<std::array<int, 3>, S> middle_values;
     auto pairs = middle_pairs(level);
@@ -282,7 +294,8 @@ template <class S> void encode_result(std::ostream &out, const Settings &s, cons
         << s.momenta[2] << "\"],\"p\":" << s.p << ",\"f\":" << s.f << ",\"etas\":[" << s.eta << ','
         << (s.inserted ? -s.eta : s.eta) << "],\"sector_policy\":\""
         << (s.record_sector ? "record" : "error")
-        << "\",\"exponent_convention\":\"q1^(a/2) q2^l q3^(d/2), stored as "
+        << "\",\"branching_method\":\"stored_recursion\""
+        << ",\"exponent_convention\":\"q1^(a/2) q2^l q3^(d/2), stored as "
            "(a,l,l,d)\",\"timing_seconds\":{\"branching\":"
         << t.branching << ",\"actions\":" << t.actions << ",\"outer_ward\":" << t.outer_ward
         << ",\"middle\":" << t.middle << ",\"ccy\":" << t.ccy << ",\"products\":" << t.products
@@ -292,6 +305,12 @@ template <class S> void encode_result(std::ostream &out, const Settings &s, cons
         << "},\"counts\":{\"branches\":" << r.branch_cases
         << ",\"virasoro_blocks\":" << r.virasoro_blocks
         << ",\"transposed_products_reused\":" << r.transpose_reuse
+        << ",\"direct_boundary_values\":" << r.direct_boundary_values
+        << ",\"recursive_branching_values\":" << r.recursive_branching_values
+        << ",\"recursive_groups\":" << r.recursive_groups
+        << ",\"maximum_local_unknowns\":" << r.maximum_local_unknowns
+        << ",\"second_ward_rows\":" << r.second_ward_rows
+        << ",\"vanishing_first_pivots\":" << r.vanishing_first_pivots
         << "},\"diagnostics\":{\"maximum_action_residual\":" << r.action_residual
         << ",\"maximum_ward_residual\":" << r.ward_residual
         << ",\"maximum_sector_residual\":" << r.sector_residual << "},\"reduced_numerator\":";

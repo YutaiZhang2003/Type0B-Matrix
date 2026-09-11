@@ -13,6 +13,7 @@ CPP = Path(__file__).resolve().parents[1]
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--dps', type=int, default=40)
+    parser.add_argument('--levels', type=int, nargs='+', default=[10, 15])
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     directory = args.output.resolve()
@@ -26,7 +27,7 @@ def main():
               'protocol': 'separate sequential processes; empty numerical caches; no PBW', 'runs': []}
     summary = directory / 'timings.json'
     summary.write_text(json.dumps(report, indent=2) + '\n')
-    for level in [10, 15]:
+    for level in args.levels:
         for mode in ['ordinary', 'inserted']:
             stem = f'{mode}_level{level}_{args.dps}dps'
             output = directory / f'{stem}.json'

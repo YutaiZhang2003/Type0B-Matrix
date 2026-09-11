@@ -33,8 +33,8 @@ The mathematical statements concern generic parameters; numerical solves retain
 rank and residual checks. No arbitrary-genus frontend is claimed for this code.
 
 The computation proceeds in five steps: construct and reuse the finite action
-data; solve the outer Ward systems and, for the insertion, the middle
-recurrence; evaluate the reduced Virasoro factors at branch-dependent cutoffs;
+data; evaluate and store the outer branching recurrence and, for the insertion,
+the middle recurrence; evaluate the reduced Virasoro factors at branch-dependent cutoffs;
 assemble the enlarged coefficients and divide by the direct fermion factor
 in the appropriate parity sector; restore the common Schottky vacuum squared.
 For the inserted graph only equal \emph{total} levels on its two middle
@@ -53,7 +53,7 @@ $\eta_1,\eta_2,\eta_3\in\{\pm1\}$.
 The vertex signs $\eta,\eta'$ are distinct from these spin lifts;
 $f\in\{0,1\}$ labels the three-point form, and $p_1$ is the intrinsic
 parity of the NS primary. We use the conventions of
-\path{Human Notes/SCblock.tex}, with the contour transport specified below.
+\texttt{Human Notes/SCblock.tex}, with the contour transport specified below.
 All contractions are bilinear BPZ contractions, without complex conjugating
 the vertex coefficients. Hermitian norms appear only in numerical conditioning.
 Total level $N$ means retaining $q_1^{a/2}q_2^{l_2}q_3^{l_3}$ with
@@ -68,8 +68,10 @@ Write
 The physical Ramond weights are $c/24-\beta_j^2$.
 The implementation takes real $b\ne0,\pm1$ and permits complex momenta.
 Genericity excludes singular embedding norms, unresolved Virasoro pole
-collisions, and singular Ward pivots. A limiting value at such a point
-requires a separate meromorphic-continuation prescription.
+collisions, and points where neither branching Ward identity determines the
+required coefficient. A vanishing prefactor in the first identity alone is
+handled by the second identity. Genuine singular limits require a separate
+meromorphic-continuation prescription.
 
 The physical Ramond ground conventions and three-point initial data are
 \begin{gather}
@@ -388,37 +390,74 @@ in those supports at the requested parameters. They are not a proof of
 these identities at arbitrary level.
 The ordinary pipeline requires the NS $L_1$ and Ramond $L_{-1}$ data.
 The insertion additionally requires Ramond $L_1$ data on edge 2.
+When the second outer Ward identity is needed, NS $L_{-1}$ and Ramond
+$L_0,L_1$ actions are constructed lazily and stored. Here physical $L_0$
+acts with the physical oscillator level, including the Ramond ground weight;
+it is not replaced by the enlarged conformal weight.
 
-\subsection{Outer Ward system and low anchors}
-The physical $L_1$ identity gives
+\subsection{Outer branching from directly computed boundary values}
+\label{sec:outer-recursion}
+First directly compute and store all allowed coefficients in the boundary box
+\begin{equation}
+ n_1=0,\pm\tfrac12,\qquad n_2,n_3=\pm\tfrac14,\pm\tfrac34.
+\end{equation}
+This is the boundary prescription in \texttt{Human Notes/SCblock.tex}.
+The explicit free-field states are converted to small physical PBW states;
+their physical and auxiliary three-point forms follow from the Ward identities
+with \eqref{eq:vertex-frame}. Only these initial values and low boundary
+conversions use physical PBW. No high-level physical Gram sewing enters.
+
+For higher labels, use the physical conformal Ward identities
 \begin{align}
  \hat\rho(L_1v_{1,n_1},v_{2,n_2},v_{3,n_3})
- =\hat\rho(v_{1,n_1},L_{-1}v_{2,n_2},v_{3,n_3})
-  +\hat\rho(v_{1,n_1},v_{2,n_2},L_{-1}v_{3,n_3}).
- \label{eq:outer-ward}
+ &=\hat\rho(v_{1,n_1},L_{-1}v_{2,n_2},v_{3,n_3})
+  +\hat\rho(v_{1,n_1},v_{2,n_2},L_{-1}v_{3,n_3}),
+ \label{eq:outer-ward}\\
+ \hat\rho(v_{1,n_1},L_1v_{2,n_2},v_{3,n_3})
+ &=\hat\rho(L_{-1}v_{1,n_1},v_{2,n_2},v_{3,n_3})
+   -\hat\rho(v_{1,n_1},L_{-1}v_{2,n_2},v_{3,n_3})\nonumber\\
+ &\quad-2\hat\rho(v_{1,n_1},L_0v_{2,n_2},v_{3,n_3})
+   -\hat\rho(v_{1,n_1},v_{2,n_2},L_1v_{3,n_3}).
+ \label{eq:outer-ward-second}
 \end{align}
-Insert these action expansions and factor each descendant form into its primary
-coefficient and two ordinary Virasoro three-point factors. This is a linear
-system for the raw $\hat\rho_f^{(\eta)}$ at fixed $f,\alpha,\gamma$.
-Start with the candidate primary triples for the branch sum, then close this set
-under every action-label change in \eqref{eq:outer-ward}.
-Keep only $2n_1+\alpha+\gamma\equiv f\pmod2$ in each system.
-This avoids solving on an unnecessarily large rectangular grid.
-The action stage still prepares the edge-label ranges before this closure.
-For the inserted graph, its initial candidate set uses the average of the
-two middle primary levels; the stricter maximum-level condition in
-Section~\ref{sec:truncation} is imposed when assembling the diagonal.
-Thus support closure and target truncation reduce different stages.
+Insert the mode-action decompositions and factor descendant forms into the
+raw primary coefficient and the two ordinary Virasoro three-point factors.
+The first identity usually determines a coefficient from stored lower-label
+values by a scalar division. If its prefactor vanishes, use the second
+identity. Store every computed coefficient immediately and reuse the same
+Ward coefficients for both requested vertex signs.
 
-The system is anchored at $n_1=0,\pm1/2$ and
-$n_2,n_3=\pm1/4,\pm3/4$. Their explicit free-field states are converted
-to small physical PBW states, and their physical and auxiliary three-point
-forms are computed by Ward identities with \eqref{eq:vertex-frame}.
-Only these anchors and the low boundary conversion use physical PBW;
-no high-level physical block or high-level Gram sewing is part of production.
-The matrix is independent of $\eta$ and $p_1$; its right-hand side contains
-the anchor dependence. At fixed run parameters one factorization is reused
-for both $\eta$ signs. The ordinary pipeline requests only its one sign.
+The actual dependency order increases
+\begin{equation}
+ \lfloor |n_1|\rfloor+\lfloor |n_2|-\tfrac14\rfloor
+                         +\lfloor |n_3|-\tfrac14\rfloor.
+\end{equation}
+The boundary action exchanges the pairs $\{1/4,-3/4\}$ and
+$\{-1/4,3/4\}$ on a Ramond leg; the second identity may also exchange
+$\{1/2,-1/2\}$ on the NS leg. These exchanges preserve the displayed order.
+Group such coupled coefficients at fixed order and substitute every stored
+lower-order value first. Outside the directly seeded box, at most four
+unknowns remain in a group. Solve this local relation at the working precision,
+then continue upward. Thus the bulk update is scalar and the small boundary
+couplings never become a global Ward matrix. Every external dependency is
+checked to have smaller order and to be present in the cache.
+
+Pivot tests use the contributions to the local prefactor and the other
+unknowns in its small group. Large already-known lower-label contributions
+are not included in this scaling. If the first identities do not determine
+the group, append the corresponding second identities and retry locally.
+After each update, evaluate all used identities with the stored coefficients.
+An unresolved pivot or failed residual reports the particular labels, parities,
+and, for a residual failure, vertex sign.
+
+Start from the primary triples required by the branch sum and close this set
+under the action-label changes. Retain
+$2n_1+\alpha+\gamma\equiv f\pmod2$. For the inserted graph, initial candidates
+use the average of the two middle primary levels; the stricter maximum-level
+condition in Section~\ref{sec:truncation} is imposed during diagonal assembly.
+The action stage still prepares its edge-label ranges before this closure.
+The ordinary pipeline requests one vertex sign; the inserted pipeline requests
+both, with the same local elimination applied to their two right-hand sides.
 
 For a word $A=(a_1,\ldots,a_k)$, put $s_j=\sum_{t>j}a_t$.
 The normalized single-leg descendant factors are the closed products
@@ -430,7 +469,8 @@ The normalized single-leg descendant factors are the closed products
 \end{align}
 These replace recursive three-point evaluation in the outer and middle
 Ward equations. Products with the same changed labels, slot, copy, and word
-are cached in the outer system.
+are cached in the outer recurrence. The embedded weights are cached by leg,
+label, and Virasoro copy; empty descendant words return one immediately.
 
 \subsection{Middle recurrence}
 Since $[L_m,Q\Theta\psi(1)]=0$ for the physical stress tensor,
@@ -497,11 +537,14 @@ actions on edge 2 share primary and descendant construction before their
 temporary image/suffix caches are released. Solved actions, primaries, and
 interned states remain available to the run. No precomputed numerical file is
 loaded. The two physical momenta and their reflected charts remain distinct.
-\item \textbf{Scaled finite systems.} Columns are normalized once. Native
-action solves use full-column-rank LAPACK least squares. Outer systems and
-multiprecision action systems use pivoted QR of the transposed scaled matrix
-to select independent rows, then an LU factorization of that square restriction.
-The factorization is reused for each applicable right-hand side.
+\item \textbf{Stored branching recurrence.} Each directly evaluated boundary
+value and each subsequently computed coefficient is retained. Ward rows,
+embedded weights, and single-leg descendant factors are reused. The two
+vertex signs share the same local elimination; its dimension is at most four.
+\item \textbf{Scaled action systems.} Columns are normalized once. Native
+action solves use full-column-rank LAPACK least squares. Multiprecision action
+systems use pivoted QR of the transposed scaled matrix to select independent
+rows, then an LU factorization of that square restriction.
 \item \textbf{Multiprecision refinement.} Double precision supplies row choices
 and an LU preconditioner only. Residuals are evaluated using the original
 multiprecision columns, correction equations use the reusable preconditioner,
@@ -839,12 +882,16 @@ coefficient. Only physical triples and their eight parity slots are stored.
 Machine arithmetic uses \texttt{std::complex<double>}; higher precision uses
 an owning MPC type with MPFR/GMP and the same templated mathematical routines.
 At 40 digits it uses 136 bits. This does not mean 40 certified output digits:
-column-rank selection and LU preconditioning are still double precision.
+the mode-action solves still use double-precision column-rank selection and
+LU preconditioning. Outer branching instead uses the stored recursion of
+Section~\ref{sec:outer-recursion}, with local arithmetic at working precision.
 At decimal precision $D$, the selected-system residual target is
 $10^{-\max(20,D-15)}$ and the full-system residual guard is
 $10^{-\max(15,D-20)}$. Sparse pruning uses $10^{-\max(20,D-20)}$.
-Native action residuals are required below $10^{-8}$; selected native Ward
-refinement targets $10^{-12}$ and native sparse pruning uses $10^{-13}$.
+Native action residuals are required below $10^{-8}$, and native sparse
+pruning uses $10^{-13}$. Each outer Ward residual is the absolute value of the sum of its
+terms divided by one plus the sum of their absolute values; its guard is
+$10^{-8}$ at machine precision and $10^{-\max(15,D-20)}$ at $D$ digits.
 At most 30 refinement iterations are attempted. Ill-conditioned rank selection
 or failed convergence raises an error rather than silently changing the basis.
 
@@ -858,22 +905,25 @@ recovery retains its coefficients. The explicit \texttt{record} policy retains
 unprojected coefficients in both modes and records the residual. Timing runs
 below use this policy, so completion alone is not an accuracy certificate.
 
-\subsection{Measurement protocol}
-Fresh runs use
+\subsection{Fresh level-10 measurements with the stored recurrence}
+Both production pipelines use the stored outer recurrence. The parameters are
 \begin{equation}
  b=7/5,\quad(P_1,P_2,P_3)=(11/23,13/29,17/31),\quad p_1=f=0,
  \quad(\eta,\eta')=(+,+)\text{ or }(+,-).
 \end{equation}
-Each level and sector is a separate process with empty numerical caches.
-They run sequentially; within-process reuse remains enabled.
+Each sector and precision is a separate process with empty numerical caches.
+Runs are sequential; within-process reuse remains enabled. The build uses
+Apple clang 17 with \texttt{-O3} on macOS arm64 with Accelerate.
+The exact fermion and Schottky stages use GMP rationals.
 The internal timer includes branching, CCY, products, assembly, direct fermion,
 convolution, and Schottky restoration. A parent timer additionally includes
 process startup, final output serialization, and exit. Compilation is excluded.
 The executable and source hashes, commands, diagnostics, stage times, and full
 physical coefficient arrays are saved under
-\path{C++/results/current_algorithm_2026-09-11/}.
+\path{C++/results/recursive_branching_2026-09-11/}.
 
-\input{ramond_blocks_current_algorithm_timings.tex}
+\input{ramond_blocks_current_algorithm_branching_timings.tex}
+Full level-15 and level-20 timings have not been measured with this recurrence.
 
 \subsection{PBW workload estimate, without running PBW}
 PBW times below refer to the existing physical SCA implementation in Python,
@@ -909,19 +959,20 @@ and reuse in the timing tables.
 From the repository root:
 \begin{verbatim}
 make -C 'C++' -j2
-python3 'C++/tools/time_current_pipelines.py' --dps 40 \
-  --output 'C++/results/current_algorithm_2026-09-11'
+python3 'C++/tools/time_current_pipelines.py' --levels 10 --dps 40 \
+  --output '/tmp/ramond_recursive_level10'
 \end{verbatim}
 The coefficient convention in JSON is $[a,l,l,d]$ for
 $q_1^{a/2}q_2^lq_3^{d/2}$, with $a+2l+d\le2N$ and even $d$.
 Parity slot is $\epsilon_1+2\epsilon_2+4\epsilon_3$.
-Before these timing runs, the C++ migration compared all 728 physical slots
-through level 5 against saved Python results. Maximum scaled differences were
-$1.21\times10^{-11}$ (ordinary machine), $1.59\times10^{-10}$ (inserted machine),
-$1.98\times10^{-25}$ (ordinary 40 digits), and $3.45\times10^{-25}$
-(inserted 40 digits). These are numerical comparisons, not error bounds.
-The present task runs no new physical PBW calculation and no unrequested
-expensive numerical cross-check.
+Directed checks of the stored recurrence cover all 768 ordinary-support and
+880 inserted-support outer coefficients through level 5. Agreement with the
+saved reference coefficients is within $3.76\times10^{-25}$ in scaled
+difference at 40 digits, including equal Ramond momenta. The equal-momentum
+case exercises vanishing first prefactors; each low-level run checks 608
+second Ward identities across both vertex signs and Ramond parities.
+The full level-10 physical comparisons are reported above. All reference
+physical blocks were already stored; no new physical PBW block was computed.
 
 \begin{thebibliography}{9}
 \bibitem{CCY} M. Cho, S. Collier and X. Yin,

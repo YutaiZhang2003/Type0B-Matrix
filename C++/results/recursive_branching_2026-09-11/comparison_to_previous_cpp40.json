@@ -1,0 +1,86 @@
+{
+  "status": "failures",
+  "scope": "Compare newly computed full level-10 pipelines to saved level-10 40-digit C++ results; no PBW or additional block computation",
+  "checks": [
+    {
+      "mode": "ordinary",
+      "dps": 0,
+      "candidate": "C++/results/recursive_branching_2026-09-11/full_pipeline_0dps/ordinary_level10_0dps.json",
+      "reference": "C++/results/current_algorithm_2026-09-11/ordinary_level10_40dps.json",
+      "monomials": 506,
+      "components": 4048,
+      "maximum_scaled_difference": "6.97317243508317407e-7",
+      "maximum_absolute_difference": "5.50901603368382468e-6",
+      "worst_exponents": [
+        14,
+        0,
+        0,
+        6
+      ],
+      "worst_component": 0,
+      "reference_sha256": "069a43c7b0a886886c77e842dc74d7da66a9df137ec8c32e28cd9620d7db9357",
+      "tolerance": "0.00000002",
+      "status": "failed"
+    },
+    {
+      "mode": "inserted",
+      "dps": 0,
+      "candidate": "C++/results/recursive_branching_2026-09-11/full_pipeline_0dps/inserted_level10_0dps.json",
+      "reference": "C++/results/current_algorithm_2026-09-11/inserted_level10_40dps.json",
+      "monomials": 506,
+      "components": 4048,
+      "maximum_scaled_difference": "0.00120239768845334227",
+      "maximum_absolute_difference": "0.0393328808971959028",
+      "worst_exponents": [
+        4,
+        6,
+        6,
+        4
+      ],
+      "worst_component": 0,
+      "reference_sha256": "92038949abb731a56464e405b2e37e1b61cf26ad5077fa7cb481b915b679bc86",
+      "tolerance": "0.00000002",
+      "status": "failed"
+    },
+    {
+      "mode": "ordinary",
+      "dps": 40,
+      "candidate": "C++/results/recursive_branching_2026-09-11/full_pipeline_40dps/ordinary_level10_40dps.json",
+      "reference": "C++/results/current_algorithm_2026-09-11/ordinary_level10_40dps.json",
+      "monomials": 506,
+      "components": 4048,
+      "maximum_scaled_difference": "3.24456990408967643e-24",
+      "maximum_absolute_difference": "1.34313904000717786e-21",
+      "worst_exponents": [
+        5,
+        4,
+        4,
+        6
+      ],
+      "worst_component": 3,
+      "reference_sha256": "069a43c7b0a886886c77e842dc74d7da66a9df137ec8c32e28cd9620d7db9357",
+      "tolerance": "0.00000000000000000001",
+      "status": "passed"
+    },
+    {
+      "mode": "inserted",
+      "dps": 40,
+      "candidate": "C++/results/recursive_branching_2026-09-11/full_pipeline_40dps/inserted_level10_40dps.json",
+      "reference": "C++/results/current_algorithm_2026-09-11/inserted_level10_40dps.json",
+      "monomials": 506,
+      "components": 4048,
+      "maximum_scaled_difference": "4.34762230428252816e-19",
+      "maximum_absolute_difference": "8.61715082305285558e-18",
+      "worst_exponents": [
+        9,
+        2,
+        2,
+        6
+      ],
+      "worst_component": 3,
+      "reference_sha256": "92038949abb731a56464e405b2e37e1b61cf26ad5077fa7cb481b915b679bc86",
+      "tolerance": "0.00000000000000000001",
+      "status": "failed"
+    }
+  ]
+}

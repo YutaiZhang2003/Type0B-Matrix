@@ -1,0 +1,90 @@
+The following branching-only runs are separate fresh processes at the parameters
+listed above, run sequentially with numerical reuse only within each process.
+Ordinary requests one vertex sign; inserted requests both. Times are seconds.
+\begin{center}\small
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Mode & Precision & Actions & Outer & Middle & Total & Wall \\
+\midrule
+Ordinary & Machine & 1.1045 & 0.0123 & 0.0000 & 1.1170 & 1.5163 \\
+Inserted & Machine & 1.0917 & 0.0203 & 0.0002 & 1.1123 & 1.1291 \\
+Ordinary & 40 digits & 8.6929 & 0.0816 & 0.0000 & 8.7747 & 8.7966 \\
+Inserted & 40 digits & 9.2128 & 0.1314 & 0.0122 & 9.3567 & 9.3778 \\
+\bottomrule
+\end{tabular}
+\end{center}
+Total includes initial mode actions, direct boundary values, outer recursion,
+and the inserted middle coefficients. Wall also includes startup, serialization,
+cleanup and exit. No CCY or physical block is computed in these four runs.
+Initial action construction accounts for over 98\% of total branching time.
+Ordinary stores 792 outer values; inserted stores 1,936 outer values and evaluates
+36 middle values. Compilation is excluded.
+\subsubsection*{Fresh full level-10 pipelines}
+\begin{center}\small
+\begin{tabular}{@{}llrrrrr@{}}
+\toprule
+Mode & Precision & Branching & CCY & Other & Total & Wall \\
+\midrule
+Ordinary & Machine & 1.0477 & 0.0914 & 0.0617 & 1.2008 & 1.5959 \\
+Inserted & Machine & 1.0670 & 0.7288 & 0.0810 & 1.8768 & 1.8931 \\
+Ordinary & 40 digits & 8.6019 & 2.0786 & 0.4152 & 11.0958 & 11.1174 \\
+Inserted & 40 digits & 8.8693 & 21.6939 & 0.4958 & 31.0589 & 31.0811 \\
+\bottomrule
+\end{tabular}
+\end{center}
+These complete production runs include CCY, Schottky, the direct fermion
+factor, convolution and vacuum restoration. Branching includes middle
+coefficients; Other contains the remaining stages. Each case is a fresh
+process with \texttt{sector-policy record}; completion alone does not
+certify accuracy. No new physical PBW block was computed.
+\begin{samepage}
+\subsubsection*{Before and after recursive branching}
+This comparison uses level 10 and 40-digit arithmetic; all times are seconds.
+\begin{center}\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Mode & Old outer & New outer & Old wall & New wall \\
+\midrule
+Ordinary & 1.291 & 0.079 & 38.35 & 11.12 \\
+Inserted & 2.336 & 0.127 & 110.41 & 31.08 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{samepage}
+Outer measures only the outer-coefficient stage; wall measures the complete
+process. The former global solver is retained only as a timing baseline.
+These single runs use the same machine and parameters but different sessions.
+Unchanged action and CCY stages also ran faster, so neither ratio isolates
+the effect of the recursion change. The baseline is saved in
+\path{C++/results/current_algorithm_2026-09-11/timings.json}.
+\subsubsection*{Accuracy of the full pipelines}
+\begin{center}\small
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Mode & Precision & Scaled difference & Check \\
+\midrule
+Ordinary & Machine & 6.973e-07 & failed \\
+Ordinary & 40 digits & 2.865e-21 & passed \\
+Inserted & Machine & 1.202e-03 & failed \\
+Inserted & 40 digits & 6.605e-21 & passed \\
+\bottomrule
+\end{tabular}
+\end{center}
+The comparison covers all 4,048 physical components against existing 384-bit
+physical-result files: restricted recovery for ordinary and direct PBW for
+inserted. No PBW was recomputed. The scaled difference is
+$|a-b|/\max(1,|a|,|b|)$; criteria are $2\times10^{-8}$ at machine precision
+and $10^{-20}$ at 40 digits. Both 40-digit runs pass.
+The former global-branching pipeline exhibits essentially the same large
+machine-precision discrepancy. Machine times therefore measure performance;
+they are not accuracy-qualified level-10 results. Use the 40-digit runs
+for the validated full-pipeline measurements at this level.
+\subsubsection*{Level-20 branching diagnostic}
+A separate ordinary-support check at 40 digits requests both vertex signs and
+completes all 4,432 outer coefficients: 192 direct boundary values and 4,240
+recursive values. Initial actions take 150.24~s; outer recursion takes 0.698~s.
+No vanishing local prefactor or second-identity fallback occurs at this point.
+Mode-action reconstruction residuals are below $8.51\times10^{-26}$.
+This is a branching-only validation, not a level-20 physical-block computation.
+All commands, hashes, timing records and computed arrays are saved under
+\path{C++/results/recursive_branching_2026-09-11/}.

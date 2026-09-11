@@ -1,0 +1,68 @@
+{
+  "status": "failures",
+  "dps": 40,
+  "environment": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "binary_sha256": "2ec129ecf8b7dc7bcee141cf7cc0372b7f43fb3ef3145d2eaf1d704fed3b8ec4",
+  "source_sha256": {
+    "include/ramond/anchors.hpp": "f872aa391ff88a74fbbdfb5890c5572f73f438242bba350049c846f07a98ef52",
+    "include/ramond/branching.hpp": "3000404b8ff5bcd9b12ef29a4d491f85da5d85b3eab4795ce71352345446b6e3",
+    "include/ramond/ccy.hpp": "2524a894c677f80d3d3681b94d41eba46bc4d0b3cd81067cc5ffba2daa1113d4",
+    "include/ramond/fermion.hpp": "ee5ffd7affc122c357ce39d398504810f383b7a53e77e98f64c121cd0db6a2c4",
+    "include/ramond/free_field.hpp": "a3a15e49c347c10270dfebb949f23df4cf184be2150c3db9260f7d10fb1fd3c0",
+    "include/ramond/linalg.hpp": "7f581e87d05e27257ecf922c88fff8655fd5e548391fb5a7422782b6fe8cf16a",
+    "include/ramond/number.hpp": "8f2dd10b1750145a21ef0749df933759ae873f9e3d2790eda29b7ebe534b1a2e",
+    "include/ramond/pipeline.hpp": "dd302313427bea122f6a77c38d62e1a68c364da1a06fcbdd1a2a5dc75c83dac5",
+    "include/ramond/schottky.hpp": "7cd10a9f80137b989dbe9bda287277163a783b5717a01256378c9d7cbecf81bd",
+    "include/ramond/storage.hpp": "b873a78be8afd1ef0a81ecfad1d4166fc268a36abd595f61ca1512c82a26c02c",
+    "src/main.cpp": "d65aed7ecc67f7ebcccdab58900922e97edd3faac9b67de14011d2165ba1ee92"
+  },
+  "protocol": "separate sequential processes; empty numerical caches; no PBW",
+  "runs": [
+    {
+      "level": 20,
+      "mode": "ordinary",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--level",
+        "20",
+        "--dps",
+        "40",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/level20_40dps_fresh_2026-09-11/ordinary_level20_40dps.json"
+      ],
+      "pid": 26140,
+      "status": "failed",
+      "result": "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/level20_40dps_fresh_2026-09-11/ordinary_level20_40dps.json",
+      "started_unix": 1789123550.212804,
+      "wall_seconds": 442.63883850000275,
+      "exit_code": 1
+    },
+    {
+      "level": 20,
+      "mode": "inserted",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--level",
+        "20",
+        "--dps",
+        "40",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/level20_40dps_fresh_2026-09-11/inserted_level20_40dps.json"
+      ],
+      "pid": 26248,
+      "status": "failed",
+      "result": "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/level20_40dps_fresh_2026-09-11/inserted_level20_40dps.json",
+      "started_unix": 1789123992.854557,
+      "wall_seconds": 1257.7972883340044,
+      "exit_code": -15
+    }
+  ]
+}

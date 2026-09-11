@@ -1,0 +1,35 @@
+{
+  "level20_status": "failed numerical rank check after adding second Ward identities",
+  "level20_scope": "ordinary support, outer branching only, 40 decimal digits",
+  "parameters": {
+    "b": "7/5",
+    "P1": "11/23",
+    "P2": "13/29",
+    "P3": "17/31",
+    "f": 0,
+    "p": 0
+  },
+  "original": {
+    "rows": 572,
+    "columns": 556,
+    "numerical_rank": 550,
+    "smallest_singular": 4.71485e-15
+  },
+  "augmented": {
+    "rows": 1112,
+    "columns": 556,
+    "numerical_rank": 551,
+    "smallest_singular": 2.9421e-14,
+    "initial_action_seconds": 150.749
+  },
+  "low_level_checks": "passed: make -C C++ all check-branching",
+  "rank_tolerance_changed": false,
+  "full_pipelines_run": false,
+  "source_sha256": {
+    "C++/include/ramond/branching.hpp": "f4e9a3760e7afa83ee0321f37ada4fb5b6b42c2b2cd891907656a20d91fbcede",
+    "C++/include/ramond/free_field.hpp": "2372d473e8f39dcba2e256580f5fe3711179eaced568828ca122bdcf911229df",
+    "C++/include/ramond/linalg.hpp": "dd440804fdb0444b14c595c0950d431ee0c48c331e5a833cb74c2dad68942ec5",
+    "C++/tests/outer_ward_driver.cpp": "e53d891d527bba6b94434793a67716d43c1970e7baacd1792bff895f92cad552",
+    "C++/tests/second_ward_actions.cpp": "4fc81693b22334fd3b0d664fba0bdbaf256ab138ddff85e79d8b84815d480d84"
+  }
+}

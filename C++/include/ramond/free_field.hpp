@@ -292,6 +292,11 @@ template <class S> class FreeField {
     Sparse<S> basis(int kind, int mode, uint32_t id) {
         State state = states.at(id);
         Sparse<S> out;
+        if (kind == 0 && mode == 0) {
+            S h = q * q / S(8) - p * p / S(2) + (ramond ? S(1) / S(16) : S(0));
+            out[id] = h + S(physical_level(state)) / S(ramond ? 1 : 2);
+            return out;
+        }
         if (kind == 0 || kind == 1) {
             for (const auto &[k, v] : physical(kind, mode, state)) {
                 State s = states[k];
@@ -505,6 +510,37 @@ template <class S> struct ActionPair {
     std::vector<ActionTerm<S>> minus, plus;
     Fit minus_fit, plus_fit;
 };
+// The second global Ward identity also needs L0 and L1 on a Ramond leg.
+// Compute these lazily; they use smaller descendant spans than L_{-1}.
+template <class S>
+std::vector<ActionTerm<S>> ramond_nonnegative_action(FreeField<S> &module, int n4,
+                                                    int mode, Fit &fit) {
+    require(n4 > 0 && (mode == 0 || mode == 1), "invalid Ramond nonnegative action");
+    const auto &high = module.primary(n4, 0);
+    if (n4 == 1) {
+        if (mode == 1)
+            return {};
+        S h = module.q * module.q / S(8) - module.p * module.p / S(2) + S(1) / S(16);
+        return {{n4, {}, {}, h}};
+    }
+    const auto &low = module.primary(n4 - 4, 0);
+    auto pairs = partition_pairs(n4 - 2 - mode);
+    std::vector<Sparse<S>> columns;
+    std::vector<ActionTerm<S>> out;
+    if (mode == 0) {
+        columns.push_back(high);
+        out.push_back({n4, {}, {}, S(0)});
+    }
+    for (const auto &[a, b] : pairs) {
+        columns.push_back(module.descendant(1, low, a, b));
+        out.push_back({n4 - 4, a, b, S(0)});
+    }
+    auto values = span_solve(module.apply(0, mode, high), std::move(columns), fit);
+    for (size_t j = 0; j < values.size(); j++)
+        out[j].coefficient = values[j];
+    module.clear_action_cache();
+    return out;
+}
 template <class S> ActionPair<S> ramond_actions(FreeField<S> &module, int n4, bool with_plus) {
     const auto &high = module.primary(n4, 0);
     int neighbor = n4 == 1 ? -3 : n4 - 4, degree = n4 == 1 ? 0 : n4 - 1;
@@ -544,6 +580,35 @@ template <class S> std::vector<ActionTerm<S>> ns_action(FreeField<S> &module, in
     std::vector<ActionTerm<S>> out;
     for (size_t j = 0; j < pairs.size(); j++)
         out.push_back({n4 - 4, pairs[j].first, pairs[j].second, values[j]});
+    module.clear_action_cache();
+    return out;
+}
+template <class S>
+std::vector<ActionTerm<S>> ns_minus_action(FreeField<S> &module, int n4, Fit &fit) {
+    require(n4 >= 0 && n4 % 2 == 0, "invalid NS L-1 action label");
+    if (!n4)
+        return {{0, {1}, {}, S(1)}, {0, {}, {1}, S(1)}};
+    const auto &high = module.primary(n4);
+    Sparse<S> low;
+    if (n4 == 2) {
+        // Reflected v_{-1/2} in the same physical module:
+        // G_{-1/2} v_0 + (Q/2-P) psi_{-1/2} v_0.
+        low = module.apply(1, -1, module.primary(0));
+        State auxiliary{};
+        auxiliary.auxiliary = 1;
+        low[module.intern(auxiliary)] += module.q / S(2) - module.p;
+    } else
+        low = module.primary(n4 - 4);
+    auto pairs = partition_pairs(n4 - 1);
+    std::vector<Sparse<S>> columns;
+    columns.push_back(module.descendant(0, high, {1}, {}));
+    columns.push_back(module.descendant(0, high, {}, {1}));
+    for (const auto &[a, b] : pairs)
+        columns.push_back(module.descendant(1, low, a, b));
+    auto values = span_solve(module.apply(0, -1, high), std::move(columns), fit);
+    std::vector<ActionTerm<S>> out{{n4, {1}, {}, values[0]}, {n4, {}, {1}, values[1]}};
+    for (size_t j = 0; j < pairs.size(); j++)
+        out.push_back({n4 - 4, pairs[j].first, pairs[j].second, values[j + 2]});
     module.clear_action_cache();
     return out;
 }

@@ -1,0 +1,17 @@
+{
+  "scope": "Isolate the machine-precision discrepancy by running the former global-branching pipeline at the same parameters; no PBW calculation",
+  "checks": [
+    {
+      "mode": "ordinary",
+      "global_machine_vs_recursive_40digits": "6.91245968086969709e-7",
+      "recursive_machine_vs_recursive_40digits": "6.97317243508317407e-7",
+      "global_machine_vs_recursive_machine": "8.26665126e-9"
+    },
+    {
+      "mode": "inserted",
+      "global_machine_vs_recursive_40digits": "0.0012024012542043763",
+      "recursive_machine_vs_recursive_40digits": "0.00120239768845334227",
+      "global_machine_vs_recursive_machine": "3.775700578556544e-7"
+    }
+  ]
+}
