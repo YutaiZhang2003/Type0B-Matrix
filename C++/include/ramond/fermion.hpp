@@ -152,7 +152,9 @@ inline int star_sign(int a, int b) {
     return theta_sign(a) * theta_sign(b) * theta_sign(a ^ b);
 }
 template <class S> using ParitySeries = std::unordered_map<Index, std::array<S, 8>, Hash>;
-inline ParitySeries<Rational> fermion_series(int level, bool inserted, bool full_split = false) {
+inline ParitySeries<Rational> fermion_series(int level, bool inserted, bool full_split = false,
+                                            bool box = false) {
+    require(!box || !full_split, "box fermion sewing uses the physical diagonal");
     int cutoff = 2 * level;
     std::vector<std::vector<Part>> ns(cutoff + 1), r(cutoff + 1);
     for (int i = 0; i <= cutoff; i++) {
@@ -163,8 +165,8 @@ inline ParitySeries<Rational> fermion_series(int level, bool inserted, bool full
     ParitySeries<Rational> answer;
     for (int alevel = 0; alevel <= cutoff; alevel++) {
         int a = alevel % 2;
-        for (int r3 = 0; r3 <= (cutoff - alevel) / 2; r3++) {
-            int budget = cutoff - alevel - 2 * r3;
+        for (int r3 = 0; r3 <= (box ? level : (cutoff - alevel) / 2); r3++) {
+            int budget = box ? cutoff : cutoff - alevel - 2 * r3;
             for (int l = 0; l <= budget / 2; l++)
                 for (const auto &A : ns[alevel])
                     for (const auto &C : r[r3])
@@ -206,8 +208,9 @@ inline ParitySeries<Rational> fermion_series(int level, bool inserted, bool full
     return answer;
 }
 template <class S>
-ParitySeries<S> numerical_fermion(int level, bool inserted, S q, bool full_split = false) {
-    auto exact = fermion_series(level, inserted, full_split);
+ParitySeries<S> numerical_fermion(int level, bool inserted, S q, bool full_split = false,
+                                 bool box = false) {
+    auto exact = fermion_series(level, inserted, full_split, box);
     ParitySeries<S> out;
     S factor = inserted ? q / root(S(2)) : S(1);
     for (const auto &[key, v] : exact)

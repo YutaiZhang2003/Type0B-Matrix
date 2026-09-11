@@ -93,6 +93,12 @@ written to a temporary file and renamed after serialization.
    each block. Every branch uses its remaining level budget. Inserted products
    compute the required diagonal targets; opposite middle orientations reuse
    transposed products.
+   In the inserted CCY factors, complete normalized vertex factors are cached
+   by their three incident edge shifts and descendant levels. Spectator-edge
+   choices reuse the same factor. The assembly sum reuses MPC scratch storage.
+   Central-charge differences are inverted once per ordered pair of poles;
+   each transition factors its common residue outside the incoming-amplitude
+   sum. The pole-separation check is retained at the first inverse evaluation.
 4. **Recovery:** direct rational fermion Ward identities and sewing give the
    auxiliary factor. Triangular star division takes place in the recoverable
    parity sector. The exact Schottky vacuum product is squared and restored
@@ -102,6 +108,9 @@ The CCY seed comprises the weight-dependent sl(2) global factors and the
 universal Schottky vacuum. No finite-c Virasoro Gram blocks are evaluated in CCY.
 All reuse is within a fresh process; production runs load no numerical cache
 from disk.
+The directed performance and accuracy checks for complete vertex-factor and
+denominator reuse are in
+[the CCY reuse report](results/ccy_vertex_reuse_2026-09-11/README.md).
 
 ## Precision and residuals
 
@@ -195,9 +204,41 @@ The fresh level-10 measurements, with separate action, outer-recursion, middle,
 and process-wall times, are recorded in
 [the recursion report](results/recursive_branching_2026-09-11/README.md).
 The same report records the successful level-20 branching-only diagnostic.
-These do not include CCY or full physical-block assembly.
+It distinguishes the branching-only measurements from the full level-10 pipelines.
 
 Reproduce the branching benchmark in separate fresh processes:
 
     make -C C++ all bin/outer_ward_driver
     python3 C++/tools/time_branching.py --level 10 --dps 0 40 --output /tmp/branching_level10
+
+## Independent plumbing cutoffs
+
+Use `--truncation per-edge --level 10` to retain every
+`q1^(a/2) q2^l q3^m` with `0 <= a <= 20` and `0 <= l,m <= 10`.
+This gives 2,541 monomials (20,328 parity components), including terms of
+total level 30. The default `--truncation total` retains the original simplex.
+
+The independent limits apply throughout branching support, CCY, products,
+direct fermion sewing, convolution, and Schottky restoration. For each branch,
+subtract its primary level separately on each edge. The ordinary Virasoro
+domain is the resulting three-dimensional box. The inserted domain is a
+four-dimensional box with separate remaining budgets on the two middle
+segments; only their shifted diagonal is multiplied and assembled. Unequal
+middle levels remain available inside each Virasoro factor.
+
+Convolution is ordered by total degree but discards updates outside the box.
+Schottky products are also truncated to the box at every multiplication.
+Primitive walks need length at most half the sum of the three bounds; a walk
+is discarded if twice its edge-visit counts exceed an individual bound.
+The fermion factor enumerates occupation levels independently on the three
+physical edges. No total-level-30 block is computed as an intermediate.
+
+Fresh sequential timings at 40 digits, with empty numerical caches:
+
+    python3 C++/tools/time_current_pipelines.py --levels 10 --truncation per-edge --dps 40 --output /tmp/ramond_per_edge10
+
+Results and stage timings are saved in
+[the independent-cutoff report](results/per_edge_level10_2026-09-11/README.md).
+`make -C C++ bin/per_edge_cutoff && C++/bin/per_edge_cutoff` checks exact
+Schottky and fermion projections and the shifted diagonal product at small
+cutoffs. These checks do not compute physical PBW blocks.

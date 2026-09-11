@@ -24,7 +24,7 @@ inline QSeries qscale(QSeries a, const Rational &v) {
         x *= v;
     return a;
 }
-inline QSeries qmultiply(const QSeries &a, const QSeries &b, int cutoff) {
+inline QSeries qmultiply(const QSeries &a, const QSeries &b, SeriesDomain cutoff) {
     auto r = scalar_product(a, b, cutoff);
     for (auto it = r.begin(); it != r.end();)
         if (it->second == 0)
@@ -33,26 +33,26 @@ inline QSeries qmultiply(const QSeries &a, const QSeries &b, int cutoff) {
             ++it;
     return r;
 }
-inline int qorder(const QSeries &a, int cutoff) {
-    int order = cutoff + 1;
+inline int qorder(const QSeries &a, SeriesDomain cutoff) {
+    int order = cutoff.total + 1;
     for (const auto &[k, v] : a)
         if (v != 0)
             order = std::min(order, degree(k));
     return order;
 }
-inline QSeries qinverse(const QSeries &a, int cutoff) {
+inline QSeries qinverse(const QSeries &a, SeriesDomain cutoff) {
     Rational c = get(a, Index{});
     require(c != 0, "Schottky cycle has nonunit trace at the cusp");
     auto one = qconstant(1), rem = qadd(one, qscale(a, -1 / c));
     auto result = one, p = one;
-    for (int j = 0; j < cutoff / qorder(rem, cutoff); j++) {
+    for (int j = 0; j < cutoff.total / qorder(rem, cutoff); j++) {
         p = qmultiply(p, rem, cutoff);
         result = qadd(std::move(result), p);
     }
     return qscale(std::move(result), 1 / c);
 }
 using QMatrix = std::array<QSeries, 4>;
-inline QMatrix qmatrix(const QMatrix &a, const QMatrix &b, int cutoff) {
+inline QMatrix qmatrix(const QMatrix &a, const QMatrix &b, SeriesDomain cutoff) {
     return {qadd(qmultiply(a[0], b[0], cutoff), qmultiply(a[1], b[2], cutoff)),
             qadd(qmultiply(a[0], b[1], cutoff), qmultiply(a[1], b[3], cutoff)),
             qadd(qmultiply(a[2], b[0], cutoff), qmultiply(a[3], b[2], cutoff)),
@@ -98,9 +98,9 @@ inline void cycles_visit(int start, int vertex, Part &word, int maximum, std::se
         word.pop_back();
     }
 }
-inline QSeries schottky_vacuum(int cutoff) {
+inline QSeries schottky_vacuum(SeriesDomain cutoff) {
     auto one = qconstant(1);
-    if (cutoff < 4)
+    if (cutoff.total < 4)
         return one;
     std::array<QSeries, 3> q;
     for (int j = 0; j < 3; j++) {
@@ -114,9 +114,15 @@ inline QSeries schottky_vacuum(int cutoff) {
     std::set<Part> classes;
     Part word;
     for (int vertex = 0; vertex < 2; vertex++)
-        cycles_visit(vertex, vertex, word, cutoff / 2, classes);
+        cycles_visit(vertex, vertex, word, cutoff.total / 2, classes);
     QSeries logarithm;
     for (const auto &w : classes) {
+        Index visits{};
+        for (int arc : w)
+            visits[arc / 2] += 2;
+        // The first oscillator contributes the square of the multiplier.
+        if (!cutoff.contains(visits))
+            continue;
         QMatrix matrix{one, {}, {}, one};
         QSeries det = one;
         for (int arc : w) {
@@ -127,7 +133,7 @@ inline QSeries schottky_vacuum(int cutoff) {
         auto ratio = qmultiply(det, qmultiply(inv, inv, cutoff), cutoff);
         int order = qorder(ratio, cutoff);
         QSeries multiplier, p = one;
-        for (int j = 1; j <= cutoff / order; j++) {
+        for (int j = 1; j <= cutoff.total / order; j++) {
             p = qmultiply(p, ratio, cutoff);
             mpz_class catalan;
             mpz_bin_uiui(catalan.get_mpz_t(), 2 * j, j);
@@ -135,7 +141,7 @@ inline QSeries schottky_vacuum(int cutoff) {
             multiplier = qadd(std::move(multiplier), qscale(p, Rational(catalan)));
         }
         p = multiplier;
-        for (int s = 2; s <= cutoff / order; s++) {
+        for (int s = 2; s <= cutoff.total / order; s++) {
             p = qmultiply(p, multiplier, cutoff);
             int divisor_sum = 0;
             for (int m = 2; m <= s; m++)
@@ -146,7 +152,7 @@ inline QSeries schottky_vacuum(int cutoff) {
     }
     QSeries result = one, p = one;
     int order = qorder(logarithm, cutoff);
-    for (int j = 1; j <= cutoff / order; j++) {
+    for (int j = 1; j <= cutoff.total / order; j++) {
         p = qscale(qmultiply(p, logarithm, cutoff), Rational(1, j));
         result = qadd(std::move(result), p);
     }

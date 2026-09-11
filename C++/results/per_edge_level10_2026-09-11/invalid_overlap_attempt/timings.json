@@ -1,0 +1,75 @@
+{
+  "status": "invalid_overlap_attempt",
+  "dps": 40,
+  "truncation": "per-edge",
+  "environment": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "binary_sha256": "53998161aaae12c5519147762e471c8418994e5d2c4167566ccb64cc5c08c95f",
+  "source_sha256": {
+    "include/ramond/anchors.hpp": "f872aa391ff88a74fbbdfb5890c5572f73f438242bba350049c846f07a98ef52",
+    "include/ramond/branching.hpp": "dde30b3c7df980d3ee39a75a706ce4d487334d9b6a28725e68114871d7c97bdc",
+    "include/ramond/ccy.hpp": "2fb29b1fd72be202dcb3a29d3e70487afcc5a9523e9d7643ed1594f7ae019131",
+    "include/ramond/fermion.hpp": "7211c7d61cd44d46db0297b0ba96e6a908e2cd88177ad15792c82fee1139208e",
+    "include/ramond/free_field.hpp": "2372d473e8f39dcba2e256580f5fe3711179eaced568828ca122bdcf911229df",
+    "include/ramond/linalg.hpp": "dd440804fdb0444b14c595c0950d431ee0c48c331e5a833cb74c2dad68942ec5",
+    "include/ramond/number.hpp": "8f2dd10b1750145a21ef0749df933759ae873f9e3d2790eda29b7ebe534b1a2e",
+    "include/ramond/pipeline.hpp": "0b94264def9273712a2a83fe6e216995603f4d5f21a441765bc7dda52c2f4abe",
+    "include/ramond/schottky.hpp": "2c155f0e5614c9456ece1f63385a87248fa31d59021688aed45f8d27f22ecca2",
+    "include/ramond/storage.hpp": "12a15d94aa0e446f75a5b4019249040d898655dfb6056cec198ee362f1026301",
+    "src/main.cpp": "0cf7d2f0757395060d3a048dea4da85f73e6907fda374bd5d9874a3b1aea143f"
+  },
+  "protocol": "separate sequential processes; empty numerical caches; no PBW",
+  "runs": [
+    {
+      "level": 10,
+      "mode": "ordinary",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--level",
+        "10",
+        "--dps",
+        "40",
+        "--truncation",
+        "per-edge",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/per_edge_level10_2026-09-11/optimized_full_pipeline_40dps/ordinary_per_edge_level10_40dps.json"
+      ],
+      "pid": 29883,
+      "status": "interrupted",
+      "result": "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/per_edge_level10_2026-09-11/optimized_full_pipeline_40dps/ordinary_per_edge_level10_40dps.json",
+      "started_unix": 1789136217.350407,
+      "wall_seconds": 33.34509833300399,
+      "exit_code": -15,
+      "reason": "Discarded timing attempt after sandbox prevented original stop signal"
+    },
+    {
+      "level": 10,
+      "mode": "inserted",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--level",
+        "10",
+        "--dps",
+        "40",
+        "--truncation",
+        "per-edge",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/per_edge_level10_2026-09-11/optimized_full_pipeline_40dps/inserted_per_edge_level10_40dps.json"
+      ],
+      "pid": 29958,
+      "status": "interrupted",
+      "result": "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/per_edge_level10_2026-09-11/optimized_full_pipeline_40dps/inserted_per_edge_level10_40dps.json",
+      "started_unix": 1789136250.696301,
+      "wall_seconds": 31.62305429099797,
+      "exit_code": -15,
+      "reason": "Discarded timing attempt after sandbox prevented original stop signal"
+    }
+  ]
+}

@@ -42,6 +42,21 @@ inline bool below(const Index &a, const Index &b) {
             return false;
     return true;
 }
+// A downward-closed domain for ordinary (integer-exponent) series.
+struct SeriesDomain {
+    int total;
+    bool box = false;
+    Index limits{};
+    SeriesDomain(int cutoff) : total(cutoff) {}
+    SeriesDomain(Index maxima) : total(degree(maxima)), box(true), limits(maxima) {}
+    bool contains(const Index &k) const {
+        return box ? below(k, limits) : degree(k) <= total;
+    }
+};
+inline bool physical_contains(const Index &k, int level, bool box) {
+    return k[1] == k[2] && (box ? k[0] <= 2 * level && k[1] <= level && k[3] <= 2 * level
+                               : degree(k) <= 2 * level);
+}
 template <class S> using Series = std::unordered_map<Index, S, Hash>;
 template <class K, class S, class H = std::hash<K>>
 S get(const std::unordered_map<K, S, H> &m, const K &k) {

@@ -5,7 +5,7 @@
 namespace ramond {
 struct Settings {
     int level = 3, dps = 0, p = 0, f = 0, eta = 1;
-    bool inserted = true, record_sector = false;
+    bool inserted = true, record_sector = false, box = false;
     std::string b = "7/5";
     std::array<std::string, 3> momenta{"11/23", "13/29", "17/31"};
 };
@@ -16,13 +16,24 @@ struct Timings {
 template <class S> struct Result {
     ParitySeries<S> numerator, auxiliary, physical;
     Timings timing;
-    size_t branch_cases = 0, virasoro_blocks = 0, transpose_reuse = 0;
+    size_t branch_cases = 0, virasoro_blocks = 0, transpose_reuse = 0,
+           ccy_transitions = 0, ccy_seed_terms = 0;
     int direct_boundary_values = 0, recursive_branching_values = 0, recursive_groups = 0,
         maximum_local_unknowns = 0, second_ward_rows = 0, vanishing_first_pivots = 0;
     double action_residual = 0, ward_residual = 0, sector_residual = 0;
 };
-inline std::vector<Index> physical_indices(int cutoff) {
+inline std::vector<Index> physical_indices(int cutoff, bool box = false) {
     std::vector<Index> out;
+    if (box) {
+        for (int a = 0; a <= cutoff; a++)
+            for (int b = 0; b <= cutoff / 2; b++)
+                for (int d = 0; d <= cutoff; d += 2)
+                    out.push_back({a, b, b, d});
+        std::sort(out.begin(), out.end(), [](const auto &a, const auto &b) {
+            return degree(a) != degree(b) ? degree(a) < degree(b) : a < b;
+        });
+        return out;
+    }
     for (int d = 0; d <= cutoff; d++)
         for (int a = 0; a <= d; a++)
             for (int c = 0; c <= d - a; c += 2) {
@@ -34,7 +45,7 @@ inline std::vector<Index> physical_indices(int cutoff) {
 }
 template <class S>
 ParitySeries<S> recover(ParitySeries<S> numerator, const ParitySeries<S> &auxiliary, int cutoff,
-                        bool inserted, bool record, double &maximum) {
+                        bool inserted, bool record, double &maximum, bool box = false) {
     // Triangular star division in the recoverable parity sector. This is a
     // restricted inverse, not an inverse of the auxiliary in the full algebra.
     auto constant = auxiliary.find(Index{});
@@ -50,13 +61,13 @@ ParitySeries<S> recover(ParitySeries<S> numerator, const ParitySeries<S> &auxili
     S scalar = S(2) * ground[0];
     std::vector<Index> positive;
     for (const auto &[key, row] : auxiliary)
-        if (degree(key) > 0 && degree(key) <= cutoff)
+        if (degree(key) > 0 && physical_contains(key, cutoff / 2, box))
             positive.push_back(key);
     std::sort(positive.begin(), positive.end(), [](const auto &a, const auto &b) {
         return degree(a) != degree(b) ? degree(a) < degree(b) : a < b;
     });
     ParitySeries<S> answer;
-    for (auto key : physical_indices(cutoff)) {
+    for (auto key : physical_indices(cutoff, box)) {
         auto &row = answer[key];
         auto found = numerator.find(key);
         if (found != numerator.end()) {
@@ -79,8 +90,10 @@ ParitySeries<S> recover(ParitySeries<S> numerator, const ParitySeries<S> &auxili
         if (!inserted && !record)
             row = std::move(projected);
         for (auto shift : positive) {
-            if (degree(key) + degree(shift) > cutoff)
+            if (degree(key) + degree(shift) > (box ? 3 * cutoff : cutoff))
                 break;
+            if (!physical_contains(key + shift, cutoff / 2, box))
+                continue;
             auto &future = numerator[key + shift];
             const auto &a = auxiliary.at(shift);
             for (int i = 0; i < 8; i++)
@@ -103,8 +116,9 @@ template <class S> Result<S> pipeline(const Settings &settings) {
             "b must be real and different from 0,+/-1");
     double start = seconds(), tick = start;
     int eta = settings.eta, eta_prime = settings.inserted ? -eta : eta;
-    std::cerr << "branching: starting at level " << level << '\n';
-    OuterBranching<S> outer(b, p, level, settings.f, settings.p, settings.inserted);
+    std::cerr << "branching: starting at " << (settings.box ? "per-edge" : "total")
+              << " level " << level << '\n';
+    OuterBranching<S> outer(b, p, level, settings.f, settings.p, settings.inserted, settings.box);
     outer.prepare(eta, eta_prime);
     result.timing.branching = seconds() - tick;
     result.timing.actions = outer.action_seconds;
@@ -124,7 +138,7 @@ template <class S> Result<S> pipeline(const Settings &settings) {
               << result.second_ward_rows << '\n';
     std::unique_ptr<MiddleBranching<S>> middle;
     std::map<std::array<int, 3>, S> middle_values;
-    auto pairs = middle_pairs(level);
+    auto pairs = middle_pairs(level, settings.box);
     if (settings.inserted) {
         tick = seconds();
         middle = std::make_unique<MiddleBranching<S>>(b, p[1], *outer.actions[0]);
@@ -150,10 +164,14 @@ template <class S> Result<S> pipeline(const Settings &settings) {
                 Index shift{n1 * n1 / 4, ramond_level(incoming), ramond_level(outgoing),
                             2 * ramond_level(n3)};
                 int remaining = cutoff - degree(shift);
-                if (remaining < 0)
+                if (settings.box ? shift[0] > cutoff || shift[1] > level ||
+                                       shift[2] > level || shift[3] > cutoff
+                                 : remaining < 0)
                     continue;
-                int budget = (cutoff - shift[0] - shift[3]) / 2, left = budget - shift[1],
+                int budget = settings.box ? level : (cutoff - shift[0] - shift[3]) / 2,
+                    left = budget - shift[1],
                     right = budget - shift[2];
+                int first = (cutoff - shift[0]) / 2, third = (cutoff - shift[3]) / 2;
                 if (std::min(left, right) < 0)
                     continue;
                 tick = seconds();
@@ -188,7 +206,10 @@ template <class S> Result<S> pipeline(const Settings &settings) {
                     result.transpose_reuse++;
                     result.timing.products += seconds() - tick;
                 } else {
-                    auto indices = virasoro_indices(settings.inserted ? 4 : 3,
+                    Index limits = settings.inserted ? Index{first, left, right, third}
+                                                     : Index{first, left, third, 0};
+                    auto indices = settings.box ? virasoro_box_indices(limits)
+                                   : virasoro_indices(settings.inserted ? 4 : 3,
                                                     settings.inserted ? left : remaining / 2,
                                                     settings.inserted ? right : remaining / 2);
                     std::array<Series<S>, 2> blocks;
@@ -203,14 +224,19 @@ template <class S> Result<S> pipeline(const Settings &settings) {
                                       external[copy]);
                         blocks[copy] = engine.reduced(indices);
                         result.virasoro_blocks++;
+                        result.ccy_transitions += engine.transitions;
+                        result.ccy_seed_terms += engine.seed_terms;
                         result.timing.ccy += seconds() - tick;
                     }
                     tick = seconds();
                     if (settings.inserted) {
-                        product = diagonal_product(blocks[0], blocks[1], left, right);
+                        product = diagonal_product(blocks[0], blocks[1], left, right,
+                                                   settings.box ? first : -1,
+                                                   settings.box ? third : -1);
                         products[key] = product;
                     } else {
-                        auto combined = scalar_product(blocks[0], blocks[1], remaining / 2);
+                        auto combined = scalar_product(blocks[0], blocks[1],
+                            settings.box ? SeriesDomain(limits) : SeriesDomain(remaining / 2));
                         for (const auto &[k, v] : combined)
                             product[{2 * k[0], k[1], k[1], 2 * k[2]}] = v;
                     }
@@ -219,7 +245,7 @@ template <class S> Result<S> pipeline(const Settings &settings) {
                 tick = seconds();
                 for (const auto &[k, v] : product) {
                     auto target = k + shift;
-                    require(target[1] == target[2] && degree(target) <= cutoff,
+                    require(physical_contains(target, level, settings.box),
                             "assembled coefficient lies outside physical truncation");
                     auto &row = result.numerator[target];
                     for (const auto &[index, factor] : factors)
@@ -235,14 +261,19 @@ template <class S> Result<S> pipeline(const Settings &settings) {
             }
     }
     tick = seconds();
-    result.auxiliary = numerical_fermion(level, settings.inserted, q);
+    std::cerr << "numerator complete: " << result.branch_cases << " branches, "
+              << result.timing.ccy << " s CCY; computing auxiliary and recovery\n";
+    result.auxiliary = numerical_fermion(level, settings.inserted, q, false, settings.box);
     result.timing.auxiliary = seconds() - tick;
     tick = seconds();
     auto quotient = recover(result.numerator, result.auxiliary, cutoff, settings.inserted,
-                            settings.record_sector, result.sector_residual);
+                            settings.record_sector, result.sector_residual, settings.box);
     result.timing.division = seconds() - tick;
     tick = seconds();
-    auto vacuum = schottky_vacuum(level), squared = qmultiply(vacuum, vacuum, level);
+    SeriesDomain vacuum_domain = settings.box ? SeriesDomain(Index{level, level, level, 0})
+                                               : SeriesDomain(level);
+    auto vacuum = schottky_vacuum(vacuum_domain),
+         squared = qmultiply(vacuum, vacuum, vacuum_domain);
     // Each of the two reduced Virasoro factors omitted one universal vacuum.
     result.timing.schottky = seconds() - tick;
     tick = seconds();
@@ -250,7 +281,7 @@ template <class S> Result<S> pipeline(const Settings &settings) {
         Index shift{2 * k[0], k[1], k[1], 2 * k[2]};
         S scalar = from_rational<S>(exact);
         for (const auto &[n, row] : quotient)
-            if (degree(n) + degree(shift) <= cutoff) {
+            if (physical_contains(n + shift, level, settings.box)) {
                 auto &out = result.physical[n + shift];
                 for (int i = 0; i < 8; i++)
                     out[i] += scalar * row[i];
@@ -288,8 +319,13 @@ template <class S> void encode_result(std::ostream &out, const Settings &s, cons
     const auto &t = r.timing;
     out << std::setprecision(17)
         << "{\"status\":\"computed\",\"implementation\":\"C++17\",\"mode\":\""
-        << (s.inserted ? "inserted" : "ordinary") << "\",\"total_q_level\":" << s.level
-        << ",\"dps\":" << s.dps << ",\"precision_bits\":" << (s.dps ? MP::bits : 53) << ",\"b\":\""
+        << (s.inserted ? "inserted" : "ordinary") << "\",\"truncation\":\""
+        << (s.box ? "per-edge" : "total") << "\",";
+    if (s.box)
+        out << "\"q_level_cutoffs\":[" << s.level << ',' << s.level << ',' << s.level << ']';
+    else
+        out << "\"total_q_level\":" << s.level;
+    out << ",\"dps\":" << s.dps << ",\"precision_bits\":" << (s.dps ? MP::bits : 53) << ",\"b\":\""
         << s.b << "\",\"momenta\":[\"" << s.momenta[0] << "\",\"" << s.momenta[1] << "\",\""
         << s.momenta[2] << "\"],\"p\":" << s.p << ",\"f\":" << s.f << ",\"etas\":[" << s.eta << ','
         << (s.inserted ? -s.eta : s.eta) << "],\"sector_policy\":\""
@@ -304,6 +340,8 @@ template <class S> void encode_result(std::ostream &out, const Settings &s, cons
         << ",\"restoration\":" << t.restoration << ",\"total\":" << t.total
         << "},\"counts\":{\"branches\":" << r.branch_cases
         << ",\"virasoro_blocks\":" << r.virasoro_blocks
+        << ",\"ccy_transitions\":" << r.ccy_transitions
+        << ",\"ccy_seed_terms\":" << r.ccy_seed_terms
         << ",\"transposed_products_reused\":" << r.transpose_reuse
         << ",\"direct_boundary_values\":" << r.direct_boundary_values
         << ",\"recursive_branching_values\":" << r.recursive_branching_values

@@ -35,6 +35,15 @@ inline std::vector<Index> virasoro_indices(int dim, int left, int right) {
     });
     return out;
 }
+inline std::vector<Index> virasoro_box_indices(const Index &limits) {
+    std::vector<Index> out;
+    for (int a = 0; a <= limits[0]; a++)
+        for (int b = 0; b <= limits[1]; b++)
+            for (int c = 0; c <= limits[2]; c++)
+                for (int d = 0; d <= limits[3]; d++)
+                    out.push_back({a, b, c, d});
+    return out;
+}
 template <class S> class CCY {
     struct Pole {
         S central, residue, x;
@@ -47,6 +56,20 @@ template <class S> class CCY {
     std::unordered_map<std::array<int, 7>, S, Hash> fusion_;
     std::unordered_map<std::array<int, 6>, S, Hash> rho_;
     std::unordered_map<std::array<int, 3>, S, Hash> norm_;
+    std::array<std::unordered_map<std::array<int, 6>, S, Hash>, 3> vertices_;
+    std::unordered_map<std::array<int, 2>, S, Hash> inverse_denominators_;
+    const S &inverse_denominator(int incoming, int outgoing) {
+        const std::array<int, 2> key{incoming, outgoing};
+        auto found = inverse_denominators_.find(key);
+        if (found != inverse_denominators_.end())
+            return found->second;
+        const S &a = centers_[incoming], &b = centers_[outgoing];
+        S difference = a - b;
+        double scale = std::max({1., magnitude(a), magnitude(b)});
+        require(!small(difference / S(scale), 64 * 0x1p-52, 10 - digits<S>()),
+                "coincident or unresolved CCY poles; generic limit or more precision required");
+        return inverse_denominators_.emplace(key, S(1) / difference).first->second;
+    }
     S weight(int edge, int shift) const {
         return h_[edge] + S(shift);
     }
@@ -92,14 +115,47 @@ template <class S> class CCY {
             value /= norm(e[0], s[0], i) * norm(e[2], s[2], k);
         return value;
     }
+    const S &vertex_factor(int vertex, int i, int j, int k,
+                           const std::array<int, 5> &shifts) {
+        const std::array<int, 3> edges = vertex < 2 ? std::array<int, 3>{0, 1 + vertex, 3}
+                                                    : std::array<int, 3>{2, 4, 1};
+        const std::array<int, 6> key{shifts[edges[0]], shifts[edges[1]], shifts[edges[2]], i, j, k};
+        auto &cache = vertices_[vertex];
+        auto found = cache.find(key);
+        if (found != cache.end()) {
+            vertex_factor_hits++;
+            return found->second;
+        }
+        vertex_factor_evaluations++;
+        return cache.emplace(key, rho(vertex, i, j, k, shifts, vertex != 1)).first->second;
+    }
     S global(const Index &shift, const Index &n) {
         std::array<int, 5> s{shift[0], shift[1], shift[2], shift[3], 0};
         if (dim_ == 3) {
             S r = rho(0, n[0], n[1], n[2], s, false);
             return r * r / (norm(0, s[0], n[0]) * norm(1, s[1], n[1]) * norm(2, s[2], n[2]));
         }
-        return rho(0, n[0], n[1], n[3], s, true) * rho(1, n[0], n[2], n[3], s, false) *
-               rho(2, n[2], 0, n[1], s, true);
+        return vertex_factor(0, n[0], n[1], n[3], s) * vertex_factor(1, n[0], n[2], n[3], s) *
+               vertex_factor(2, n[2], 0, n[1], s);
+    }
+    void accumulate_global(S &value, S &scratch, const S &amplitude,
+                           const Index &shift, const Index &n) {
+        if (dim_ == 3) {
+            value += amplitude * global(shift, n);
+            return;
+        }
+        const std::array<int, 5> s{shift[0], shift[1], shift[2], shift[3], 0};
+        const S &a = vertex_factor(0, n[0], n[1], n[3], s),
+                &b = vertex_factor(1, n[0], n[2], n[3], s),
+                &c = vertex_factor(2, n[2], 0, n[1], s);
+        if constexpr (std::is_same_v<S, MP>) {
+            // Reuse the allocated MPC mantissas throughout the assembly sum.
+            mpc_mul(scratch.data(), a.data(), b.data(), MPC_RNDNN);
+            mpc_mul(scratch.data(), scratch.data(), c.data(), MPC_RNDNN);
+            mpc_mul(scratch.data(), amplitude.data(), scratch.data(), MPC_RNDNN);
+            mpc_add(value.data(), value.data(), scratch.data(), MPC_RNDNN);
+        } else
+            value += amplitude * (a * b * c);
     }
     const Pole &pole(int edge, int shift, int r, int s) {
         std::array<int, 4> key{edge, shift, r, s};
@@ -175,7 +231,8 @@ template <class S> class CCY {
     }
 
   public:
-    std::size_t transitions = 0, seed_terms = 0;
+    std::size_t transitions = 0, seed_terms = 0,
+                vertex_factor_evaluations = 0, vertex_factor_hits = 0;
     CCY(int dim, S central, const std::vector<S> &weights, S external = S(0))
         : dim_(dim), centers_{central} {
         require((dim == 3 || dim == 4) && int(weights.size()) == dim, "invalid CCY graph weights");
@@ -229,26 +286,22 @@ template <class S> class CCY {
                             continue;
                         S value(0);
                         for (const auto &[id, amplitude] : incoming) {
-                            S c = centers_[id], den = c - p.central;
-                            double scale = std::max({1., magnitude(c), magnitude(p.central)});
-                            require(!small(den / S(scale), 64 * 0x1p-52, 10 - digits<S>()),
-                                    "coincident or unresolved CCY poles; generic limit or more "
-                                    "precision required");
-                            value += amplitude * (res / den);
+                            value += amplitude * inverse_denominator(id, p.id);
                             transitions++;
                         }
-                        amplitudes[changed][p.id] += value;
+                        amplitudes[changed][p.id] += res * value;
                     }
         }
         std::vector<Index> shifts;
         for (const auto &[shift, v] : totals)
             shifts.push_back(shift);
         std::sort(shifts.begin(), shifts.end());
+        S scratch;
         for (auto n : indices) {
             S v(0);
             for (auto shift : shifts)
                 if (below(shift, n)) {
-                    v += totals.at(shift) * global(shift, n - shift);
+                    accumulate_global(v, scratch, totals.at(shift), shift, n - shift);
                     seed_terms++;
                 }
             answer[n] = std::move(v);
@@ -256,22 +309,24 @@ template <class S> class CCY {
         return answer;
     }
 };
-template <class S> Series<S> scalar_product(const Series<S> &a, const Series<S> &b, int cutoff) {
+template <class S>
+Series<S> scalar_product(const Series<S> &a, const Series<S> &b, SeriesDomain cutoff) {
     Series<S> out;
     for (const auto &[ka, x] : a)
         if (x != S(0))
             for (const auto &[kb, y] : b)
-                if (y != S(0) && degree(ka) + degree(kb) <= cutoff)
+                if (y != S(0) && cutoff.contains(ka + kb))
                     out[ka + kb] += x * y;
     return out;
 }
 template <class S>
-Series<S> diagonal_product(const Series<S> &a, const Series<S> &b, int left, int right) {
+Series<S> diagonal_product(const Series<S> &a, const Series<S> &b, int left, int right,
+                           int first = -1, int third = -1) {
     Series<S> out;
     for (int t = 0; t <= std::min(left, right); t++) {
         int l = left - t, r = right - t;
-        for (int x = 0; x <= t; x++)
-            for (int d = 0; d <= t - x; d++) {
+        for (int x = 0; x <= (first < 0 ? t : first); x++)
+            for (int d = 0; d <= (third < 0 ? t - x : third); d++) {
                 S v(0);
                 for (int xx = 0; xx <= x; xx++)
                     for (int ll = 0; ll <= l; ll++)

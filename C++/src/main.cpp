@@ -13,6 +13,7 @@ static void help() {
         << "Usage: ramond --mode ordinary|inserted --level N --dps 0|DIGITS --json FILE\n"
            "  --b 7/5 --P1 11/23 --P2 13/29 --P3 17/31\n"
            "  --p 0|1 --f 0|1 --eta -1|1 --sector-policy error|record\n"
+           "  --truncation total|per-edge (default: total); per-edge limits each q exponent.\n"
            "  --dps 0 uses machine complex arithmetic; higher precision requires >=30.\n"
            "  Complex momenta use real,imaginary (each part may be rational).\n"
            "  Both modes return the physical superconformal block; inserted uses Theta v_1/2.\n";
@@ -32,6 +33,9 @@ int main(int argc, char **argv) {
             if (key == "--mode") {
                 require(value == "ordinary" || value == "inserted", "invalid mode");
                 s.inserted = value == "inserted";
+            } else if (key == "--truncation") {
+                require(value == "total" || value == "per-edge", "invalid truncation");
+                s.box = value == "per-edge";
             } else if (key == "--level")
                 s.level = integer(value);
             else if (key == "--dps")

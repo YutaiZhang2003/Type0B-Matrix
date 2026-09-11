@@ -16,7 +16,7 @@
 \title{Current algorithms for genus-two Ramond blocks\\
 \large Ordinary theta sewing and recovery with a fermion insertion}
 \author{Implementation notes}
-\date{September 11, 2026}
+\date{September 12, 2026}
 \begin{document}
 \maketitle
 
@@ -58,6 +58,12 @@ All contractions are bilinear BPZ contractions, without complex conjugating
 the vertex coefficients. Hermitian norms appear only in numerical conditioning.
 Total level $N$ means retaining $q_1^{a/2}q_2^{l_2}q_3^{l_3}$ with
 $a,l_2,l_3\ge0$ integers and $a+2l_2+2l_3\le2N$.
+The alternative independent-edge cutoff retains
+$0\le a\le2N$ and $0\le l_2,l_3\le N$ without a bound on their sum.
+The command-line choices are \texttt{--truncation total} (the default) and
+\texttt{--truncation per-edge}; the latter applies the same numerical limit
+$N$ independently to all three edges. The fresh timings below use this
+second choice at $N=10$, including the corner $q_1^{10}q_2^{10}q_3^{10}$.
 
 Write
 \begin{equation}
@@ -453,8 +459,12 @@ and, for a residual failure, vertex sign.
 Start from the primary triples required by the branch sum and close this set
 under the action-label changes. Retain
 $2n_1+\alpha+\gamma\equiv f\pmod2$. For the inserted graph, initial candidates
-use the average of the two middle primary levels; the stricter maximum-level
-condition in Section~\ref{sec:truncation} is imposed during diagonal assembly.
+use the average of the two middle primary levels under a total cutoff; the
+stricter maximum-level condition in Section~\ref{sec:truncation} is imposed
+during diagonal assembly. Under an independent-edge cutoff, both middle
+primary levels must already be at most $N$, and the other primary levels
+are bounded on their own edges. The closure may add lower-label coefficients
+needed by the Ward recurrence beyond these initial branch requests.
 The action stage still prepares its edge-label ranges before this closure.
 The ordinary pipeline requests one vertex sign; the inserted pipeline requests
 both, with the same local elimination applied to their two right-hand sides.
@@ -653,6 +663,21 @@ without that index. Rising/falling products are built incrementally rather
 than by repeated products inside the sum. Each global norm is cached separately
 and appears once per internal edge in \eqref{eq:global-seed}.
 
+For the inserted seed, three further caches retain the \emph{complete}
+vertex factors, including the $j$-dependent rising product and their assigned
+norms. The first outer vertex includes the inverse norms of edges $1,3$;
+the second outer vertex carries no inverse norms; the middle vertex includes those
+of $L,R$. Their product is exactly \eqref{eq:global-seed}. Each cache is
+keyed by its three incident weight shifts and three descendant levels;
+the external weight is fixed, with zero recursion shift and descendant level.
+Thus a change on a nonincident edge
+reuses the entire factor, including its normalization. The cache returns
+a reference to the stored value. For MPC arithmetic, the final product of
+these three factors and the incoming amplitude uses one reusable temporary,
+avoiding repeated allocation of multiprecision mantissas in the assembly sum.
+All these numerical caches belong to one Virasoro engine and are released
+when that engine finishes; different branching weights remain separate.
+
 \subsection{One forward pass for all coefficients}
 The transition in \eqref{eq:ccy} depends on accumulated internal shifts and
 the current central charge, but not on the final requested coefficient.
@@ -661,13 +686,18 @@ weights $\boldsymbol h+\boldsymbol s$ at central charge $c_*$.
 Initialize $w_{\boldsymbol0}(c)=1$. In increasing total shift, update
 \begin{equation}
  w_{\boldsymbol s+rs\boldsymbol e_e}(c_{rs}(h_e+s_e))\mathrel{+}=
- \sum_{c_*}w_{\boldsymbol s}(c_*)
- \frac{R_{rs}^{(e)}(\boldsymbol h+\boldsymbol s)}
-      {c_*-c_{rs}(h_e+s_e)}.
+ R_{rs}^{(e)}(\boldsymbol h+\boldsymbol s)
+ \sum_{c_*}\frac{w_{\boldsymbol s}(c_*)}{c_*-c_{rs}(h_e+s_e)}.
  \label{eq:forward}
 \end{equation}
 Keep $c_*$ separate during propagation: summing it away would lose the
-different outgoing denominators. After outgoing transitions have been processed,
+different outgoing denominators. The common residue is multiplied once after
+the incoming sum. The reciprocal of each denominator is computed once and
+stored by the ordered pair of incoming and outgoing central-charge identifiers;
+subsequent uses multiply by that reciprocal. The small-denominator guard is
+applied when the reciprocal is first constructed. This preserves the exact
+recurrence, although factoring out the residue changes floating-point rounding.
+After outgoing transitions have been processed,
 store $\sum_{c_*}w_{\boldsymbol s}(c_*)$ and release that shift's incoming map.
 Finally,
 \begin{equation}
@@ -711,6 +741,12 @@ For the projective matrix $M_\gamma$ of a retained walk,
 The trace is a unit at the theta cusp and the leading determinant degree is
 the walk length. Since the first oscillator is $m=2$, only walks of length
 at most $\lfloor N/2\rfloor$ can contribute through total level $N$.
+For the independent-edge cutoff, a walk traversing edge $i$ a total of
+$v_i$ times can contribute only if $2v_i\le N$ on every edge, hence its
+length is at most $\lfloor3N/2\rfloor$. After enumerating primitive classes
+through this length, the code discards any class exceeding an edge-visit bound
+before computing its multiplier. All multiplier expansions, products,
+logarithms and exponentials are truncated componentwise in this case.
 Multiply the factors using their logarithmic series and a truncated exponential,
 entirely over GMP rationals. This is a cutoff derived from degree, not a
 separate empirical limit on word length.
@@ -748,6 +784,7 @@ The auxiliary diagonal selects precisely the zero-mode action
 factor in \eqref{eq:inserted-sum} are nevertheless required on the domain
 below, before taking the shifted diagonal of their product.
 
+\subsection{Total-level cutoff}
 For a fixed inserted branch define the integer budgets
 \begin{equation}
  K=\left\lfloor N-2n_1^2-(2n_3^2-1/8)\right\rfloor,\qquad
@@ -777,6 +814,50 @@ For ordinary theta sewing, each Virasoro factor instead uses the simplex
 \end{equation}
 Thus there is a different cutoff for every branching triple in either mode.
 
+\subsection{Independent-edge cutoff}
+For an inserted branch, put
+\begin{equation}
+ L=N-(2n^2-1/8),\qquad R=N-(2n'^2-1/8).
+\end{equation}
+Each individual Virasoro factor is evaluated at nonnegative integer
+descendant levels in the box
+\begin{equation}
+ \begin{gathered}
+ 0\le a\le\lfloor N-2n_1^2\rfloor,\qquad
+ 0\le d\le N-(2n_3^2-1/8),\\
+ 0\le b\le L,\qquad 0\le c\le R.
+ \end{gathered}
+ \label{eq:target-box}
+\end{equation}
+Discard a branch if any upper bound is negative. In the product of the two
+factors retain the same first- and third-edge bounds and impose
+\begin{equation}
+ 2n^2-1/8+b=2n'^2-1/8+c\le N.
+ \label{eq:box-diagonal}
+\end{equation}
+Here $a,b,c,d$ in the product are the sums of the two factors' descendant
+indices. Equation~\eqref{eq:target-box} is precisely the downward closure
+of these shifted-diagonal targets: any index in the box can be completed
+by increasing its smaller middle total to the larger one, leaving its first
+and third levels unchanged. Conversely every lower index of an allowed
+target lies in the box. Thus individual factors need unequal middle levels,
+but neither middle cutoff is doubled. Product assembly sums only the
+splittings of the required targets.
+
+For ordinary sewing the corresponding three-dimensional box is
+\begin{equation}
+ 0\le a\le\lfloor N-2n_1^2\rfloor,\qquad
+ 0\le b\le N-(2n_2^2-1/8),\qquad
+ 0\le d\le N-(2n_3^2-1/8).
+\end{equation}
+Every stage uses these componentwise bounds, including branching requests,
+CCY, products, auxiliary sewing, division and vacuum restoration. The code
+does not first compute a total-level-$3N$ block and then discard coefficients.
+The physical box has $(2N+1)(N+1)^2$ monomials: $2{,}541$ at $N=10$,
+compared with $506$ at total level 10. Both truncations are downward closed,
+so the forward recursion and triangular recovery close on their requested sets.
+
+\subsection{Reuse under middle-edge transposition}
 BPZ transposition at the insertion point one gives
 \begin{align}
  &F(h_1,h_L,h_R,h_3;h_\psi;c\mid q_1,q_L,q_R,q_3)\nonumber\\
@@ -817,8 +898,9 @@ Each Fock norm is $(-1)^{\delta_i}$. In ordinary sewing their inverse
 product is one on an allowed even-parity triple. In inserted diagonal sewing
 the additional edge-2 inverse norm cancels the BPZ norm in the middle matrix
 element, leaving $Q(-1)^{\mathsf b}/\sqrt2$.
-The cutoff is simply
-$|\mathsf A|+|\mathsf B|+|\mathsf C|\le N$.
+For a total cutoff retain $|\mathsf A|+|\mathsf B|+|\mathsf C|\le N$;
+for an independent-edge cutoff bound each of $|\mathsf A|,|\mathsf B|,
+|\mathsf C|$ separately by $N$.
 The constant terms are $1+\eta_2\eta_3$ and
 $Q(1-\eta_2\eta_3)/\sqrt2$, respectively.
 
@@ -873,7 +955,8 @@ exact remainder stays there.
 
 The implementation orders monomials by total degree, stores positive-degree
 auxiliary terms in that order, and updates future remainders immediately after
-solving a coefficient. Updates stop at the cutoff and never revisit a solved
+solving a coefficient. Updates stop at the chosen total or componentwise
+cutoff and never revisit a solved
 coefficient. Only physical triples and their eight parity slots are stored.
 
 \section{Precision, timings, and PBW comparison}
@@ -905,7 +988,7 @@ recovery retains its coefficients. The explicit \texttt{record} policy retains
 unprojected coefficients in both modes and records the residual. Timing runs
 below use this policy, so completion alone is not an accuracy certificate.
 
-\subsection{Fresh level-10 measurements with the stored recurrence}
+\subsection{Fresh independent-edge level-10 measurements}
 Both production pipelines use the stored outer recurrence. The parameters are
 \begin{equation}
  b=7/5,\quad(P_1,P_2,P_3)=(11/23,13/29,17/31),\quad p_1=f=0,
@@ -914,16 +997,15 @@ Both production pipelines use the stored outer recurrence. The parameters are
 Each sector and precision is a separate process with empty numerical caches.
 Runs are sequential; within-process reuse remains enabled. The build uses
 Apple clang 17 with \texttt{-O3} on macOS arm64 with Accelerate.
-The exact fermion and Schottky stages use GMP rationals.
+Fermion Ward sums and Schottky series use exact GMP rationals.
 The internal timer includes branching, CCY, products, assembly, direct fermion,
 convolution, and Schottky restoration. A parent timer additionally includes
 process startup, final output serialization, and exit. Compilation is excluded.
 The executable and source hashes, commands, diagnostics, stage times, and full
 physical coefficient arrays are saved under
-\path{C++/results/recursive_branching_2026-09-11/}.
+\path{C++/results/per_edge_level10_2026-09-11/optimized_full_pipeline_40dps/}.
 
-\input{ramond_blocks_current_algorithm_branching_timings.tex}
-Full level-15 and level-20 timings have not been measured with this recurrence.
+\input{ramond_blocks_current_algorithm_per_edge_timings.tex}
 
 \subsection{PBW workload estimate, without running PBW}
 PBW times below refer to the existing physical SCA implementation in Python,
@@ -936,14 +1018,16 @@ hypothetical optimized C++ PBW code. The dimensions used for work counts are
 The NS index is twice the level and the Ramond dimension is per parity.
 Counts of required tensor entries, reused Gram entries, and contractions are
 computed from these generating functions and the actual PBW loop bounds.
-Costs are calibrated against saved logs only. The sign choice does not change
+The cost model uses saved physical-block logs and a short arithmetic-only
+calibration of their backend at 136 and 384 bits. The sign choice does not change
 basis sizes; cached reuse of the same three-point form for identical vertices
 must be accounted for
 separately when comparing the two sectors. A fitted range measures sensitivity
 to the cost model, not a confidence interval or a guaranteed runtime bound.
 
-\input{ramond_blocks_current_algorithm_pbw.tex}
+\input{ramond_blocks_current_algorithm_per_edge_pbw.tex}
 
+\clearpage
 \subsection{Reproduction and evidence}
 Under \path{C++/include/ramond/}, the stages are separated into
 \path{free_field.hpp} and \path{branching.hpp} (actions
@@ -951,19 +1035,25 @@ and branching), \path{ccy.hpp} (reduced Virasoro factors),
 \path{schottky.hpp} (vacuum), \path{fermion.hpp} (direct auxiliary sewing),
 and \path{pipeline.hpp} (branch-specific products, assembly, and recovery).
 Partition lists, solved action data, outer primary coefficients, and auxiliary
-Ward values are reused within a run. Pole, fusion, and global caches belong
+Ward values are reused within a run. Pole, fusion, inverse-denominator,
+global-core and complete inserted-vertex caches belong
 to their individual Virasoro engine; distinct branching weights do not share
 those numerical values. This distinction fixes the meaning of fresh runs
 and reuse in the timing tables.
 
+\begin{samepage}
 From the repository root:
 \begin{verbatim}
 make -C 'C++' -j2
 python3 'C++/tools/time_current_pipelines.py' --levels 10 --dps 40 \
-  --output '/tmp/ramond_recursive_level10'
+  --truncation per-edge --output '/tmp/ramond_per_edge_level10'
 \end{verbatim}
+\end{samepage}
 The coefficient convention in JSON is $[a,l,l,d]$ for
-$q_1^{a/2}q_2^lq_3^{d/2}$, with $a+2l+d\le2N$ and even $d$.
+$q_1^{a/2}q_2^lq_3^{d/2}$, with even $d$. Under the independent-edge
+cutoff, $0\le a,d\le2N$ and $0\le l\le N$; under a total cutoff,
+$a+2l+d\le2N$. The JSON identifies the selected truncation and records
+the independent limits as \texttt{q\_level\_cutoffs}.
 Parity slot is $\epsilon_1+2\epsilon_2+4\epsilon_3$.
 Directed checks of the stored recurrence cover all 768 ordinary-support and
 880 inserted-support outer coefficients through level 5. Agreement with the
@@ -971,8 +1061,13 @@ saved reference coefficients is within $3.76\times10^{-25}$ in scaled
 difference at 40 digits, including equal Ramond momenta. The equal-momentum
 case exercises vanishing first prefactors; each low-level run checks 608
 second Ward identities across both vertex signs and Ramond parities.
-The full level-10 physical comparisons are reported above. All reference
-physical blocks were already stored; no new physical PBW block was computed.
+The independent-edge output checks and their limits are reported above.
+All reference physical blocks were already stored; no new physical PBW
+block was computed. Regenerate the timing and PBW tables from saved records,
+without evaluating blocks, using
+\begin{verbatim}
+python3 'C++/tools/render_per_edge_notes.py'
+\end{verbatim}
 
 \begin{thebibliography}{9}
 \bibitem{CCY} M. Cho, S. Collier and X. Yin,

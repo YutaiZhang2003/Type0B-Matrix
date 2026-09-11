@@ -14,14 +14,15 @@ inline std::vector<int> ns_labels(int level) {
         out.push_back(2 * n);
     return out;
 }
-inline std::vector<std::pair<int, int>> middle_pairs(int level) {
+inline std::vector<std::pair<int, int>> middle_pairs(int level, bool box = false) {
     int bound = 1;
     while (ramond_level(bound) <= 2 * level + 2)
         bound += 2;
     std::vector<std::pair<int, int>> out;
     for (int n = -bound; n <= bound; n += 2)
         for (int changed : {n - 2, n + 2})
-            if (ramond_level(n) + ramond_level(changed) <= 2 * level)
+            if (box ? std::max(ramond_level(n), ramond_level(changed)) <= level
+                    : ramond_level(n) + ramond_level(changed) <= 2 * level)
                 out.emplace_back(n, changed);
     return out;
 }
@@ -352,12 +353,13 @@ template <class S> class OuterBranching {
     int second_ward_rows = 0, vanishing_first_pivots = 0;
     int recursive_values = 0, recursive_groups = 0, maximum_local_unknowns = 0,
         direct_boundary_values = 0;
-    OuterBranching(S b, std::array<S, 3> p, int level, int f, int primary_parity, bool inserted)
+    OuterBranching(S b, std::array<S, 3> p, int level, int f, int primary_parity, bool inserted,
+                   bool box = false)
         : b_(b), p_(p), level_(level), f_(f), primary_parity_(primary_parity),
           anchors_(b, p, primary_parity) {
         double start = seconds();
         ns = ns_labels(level);
-        auto pairs = middle_pairs(level);
+        auto pairs = middle_pairs(level, box);
         int limit = 3;
         if (inserted) {
             for (auto [a, b] : pairs)
@@ -403,7 +405,8 @@ template <class S> class OuterBranching {
             for (int n : ns)
                 for (auto [incoming, outgoing] : pairs)
                     for (int third : r)
-                        if (n * n / 4 + ramond_level(incoming) + ramond_level(outgoing) +
+                        if (box ? n * n / 4 <= 2 * level && ramond_level(third) <= level
+                                : n * n / 4 + ramond_level(incoming) + ramond_level(outgoing) +
                                 2 * ramond_level(third) <=
                             2 * level) {
                             support_.insert({n, incoming, third});
@@ -413,7 +416,9 @@ template <class S> class OuterBranching {
             for (int n : ns)
                 for (int second : r)
                     for (int third : r)
-                        if (n * n / 4 + 2 * ramond_level(second) + 2 * ramond_level(third) <=
+                        if (box ? n * n / 4 <= 2 * level && ramond_level(second) <= level &&
+                                      ramond_level(third) <= level
+                                : n * n / 4 + 2 * ramond_level(second) + 2 * ramond_level(third) <=
                             2 * level)
                             support_.insert({n, second, third});
         std::vector<Triple> pending(support_.begin(), support_.end());

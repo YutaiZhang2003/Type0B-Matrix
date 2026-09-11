@@ -29,6 +29,9 @@ bin/outer_ward_driver: tests/outer_ward_driver.cpp $(HEADERS)
 bin/second_ward_actions: tests/second_ward_actions.cpp $(HEADERS)
 	@mkdir -p bin
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/per_edge_cutoff: tests/per_edge_cutoff.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
 check-branching: bin/outer_ward_driver bin/second_ward_actions
 	bin/second_ward_actions
 	bin/outer_ward_driver 5 40 0

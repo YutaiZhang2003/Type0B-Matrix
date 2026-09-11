@@ -1,0 +1,104 @@
+{
+  "target_precision_bits": 136,
+  "calibration_precision_bits": 384,
+  "new_pbw_evaluations": 0,
+  "new_physical_gram_or_ward_evaluations": 0,
+  "arithmetic_backend": "same complex_arithmetic.F and mm as saved physical PBW",
+  "measured_seconds": {
+    "136": {
+      "scalar_multiply_add": [
+        0.01086491699970793,
+        0.010870166006498039,
+        0.011036500000045635
+      ],
+      "scalar_mixed": [
+        0.02545066699531162,
+        0.024920125004427973,
+        0.024598166994110215
+      ],
+      "matrix_32x32x64": [
+        0.007881541998358443,
+        0.007976917004270945,
+        0.008152916001563426
+      ],
+      "matrix_232x232x64": [
+        0.10492450000310782,
+        0.09567604200128699,
+        0.11358737500268035
+      ]
+    },
+    "384": {
+      "scalar_multiply_add": [
+        0.011853291995066684,
+        0.011799457999586593,
+        0.012104250003176276
+      ],
+      "scalar_mixed": [
+        0.027605625000433065,
+        0.027435416996013373,
+        0.027277875000436325
+      ],
+      "matrix_32x32x64": [
+        0.010974208002153318,
+        0.011598207995120902,
+        0.010948083996481728
+      ],
+      "matrix_232x232x64": [
+        0.214793416998873,
+        0.2056594169989694,
+        0.2055119580036262
+      ]
+    }
+  },
+  "median_136_over_384_ratios": {
+    "scalar_multiply_add": 0.9170588230697582,
+    "scalar_mixed": 0.9083195275671991,
+    "matrix_32x32x64": 0.7268786050625015,
+    "matrix_232x232x64": 0.5101857310216611
+  },
+  "scalar_cost_ratio_range": [
+    0.9083195275671991,
+    1.0
+  ],
+  "matrix_cost_ratio_range": [
+    0.5101857310216611,
+    1.0
+  ],
+  "estimated_136_bit_pbw": [
+    {
+      "model": "lean",
+      "negative_sector_seconds_range": [
+        207405.44024293497,
+        228339.73502522847
+      ],
+      "positive_sector_seconds_range": [
+        103730.92218003522,
+        228339.73502522847
+      ]
+    },
+    {
+      "model": "full",
+      "negative_sector_seconds_range": [
+        429543.05986214476,
+        705449.8366548007
+      ],
+      "positive_sector_seconds_range": [
+        350119.34398839157,
+        705449.8366548007
+      ]
+    }
+  ],
+  "benchmark_wall_seconds": 1.3041548750043148,
+  "limitations": [
+    "These are synthetic arithmetic ratios applied to existing PBW cost models, not measured full-block runtimes.",
+    "The ratio ranges include one because Python, cache, and conversion overhead need not speed up with precision.",
+    "Matrix operands are synthetic and have 64 columns; the largest real contractions have many more columns.",
+    "Feature-fit uncertainty, changing cache misses, BLAS regimes, and memory pressure remain unmeasured.",
+    "The scalar threshold is unchanged; no benchmark operand approaches that threshold."
+  ],
+  "source_sha256": {
+    "C++/tools/calibrate_pbw_40digit_cost.py": "0db8249e8b05cdbff6e413fc28546f0ea9c556c439128bff9bbe88144784ea8f",
+    "Code/ramond_zero_mode_recovery/complex_arithmetic.py": "71146aa2520c385c498e2091f3c7a968bc2bcbb057594a80e1b5f96b46c0398c",
+    "C++/results/per_edge_level10_2026-09-11/work_estimates.json": "fb9a00290f83271c0b2e4fd3eae54d7d17f43d891f454f57ea6e2311ffe6505a"
+  }
+}

@@ -14,13 +14,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--dps', type=int, default=40)
     parser.add_argument('--levels', type=int, nargs='+', default=[10, 15])
+    parser.add_argument('--truncation', choices=['total', 'per-edge'], default='total')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     directory = args.output.resolve()
     directory.mkdir(parents=True, exist_ok=True)
     executable = CPP / 'bin/ramond'
     source_files = sorted([*CPP.glob('include/ramond/*.hpp'), *CPP.glob('src/*.cpp')])
-    report = {'status': 'running', 'dps': args.dps, 'environment': platform.platform(),
+    report = {'status': 'running', 'dps': args.dps, 'truncation': args.truncation,
+              'environment': platform.platform(),
               'binary_sha256': hashlib.sha256(executable.read_bytes()).hexdigest(),
               'source_sha256': {str(p.relative_to(CPP)): hashlib.sha256(p.read_bytes()).hexdigest()
                                 for p in source_files},
@@ -29,10 +31,12 @@ def main():
     summary.write_text(json.dumps(report, indent=2) + '\n')
     for level in args.levels:
         for mode in ['ordinary', 'inserted']:
-            stem = f'{mode}_level{level}_{args.dps}dps'
+            prefix = 'per_edge_' if args.truncation == 'per-edge' else ''
+            stem = f'{mode}_{prefix}level{level}_{args.dps}dps'
             output = directory / f'{stem}.json'
             command = [str(executable), '--mode', mode, '--level', str(level), '--dps',
-                       str(args.dps), '--sector-policy', 'record', '--json', str(output)]
+                       str(args.dps), '--truncation', args.truncation,
+                       '--sector-policy', 'record', '--json', str(output)]
             print(f'Starting {stem}', flush=True)
             start = time.perf_counter()
             with (directory / f'{stem}.log').open('w') as log:
@@ -62,6 +66,11 @@ def main():
             print(f'{stem}: {record["status"]}, {record["wall_seconds"]:.3f} s wall', flush=True)
             if code:
                 print((directory / f'{stem}.log').read_text()[-3000:], flush=True)
+                # A failed or interrupted case must not silently start another
+                # benchmark while its caller is arranging a clean restart.
+                report['status'] = 'failed'
+                summary.write_text(json.dumps(report, indent=2) + '\n')
+                raise SystemExit(code if code > 0 else 128 - code)
     report['status'] = 'completed' if all(r['exit_code'] == 0 for r in report['runs']) else 'failures'
     summary.write_text(json.dumps(report, indent=2) + '\n')
 
