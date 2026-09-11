@@ -1,0 +1,208 @@
+{
+  "level": 20,
+  "scope": "Exact integer workload counts with previously saved level-10 cost fits",
+  "new_numerical_pbw_gram_or_ward_evaluations": 0,
+  "work": {
+    "monomials": 3311,
+    "parity_output_slots": 26488,
+    "ns_dimensions_by_twice_level": [
+      1,
+      1,
+      1,
+      2,
+      3,
+      4,
+      5,
+      7,
+      10,
+      13,
+      16,
+      21,
+      28,
+      35,
+      43,
+      55,
+      70,
+      86,
+      105,
+      130,
+      161,
+      196,
+      236,
+      287,
+      350,
+      420,
+      501,
+      602,
+      722,
+      858,
+      1016,
+      1206,
+      1431,
+      1687,
+      1981,
+      2331,
+      2741,
+      3206,
+      3740,
+      4368,
+      5096
+    ],
+    "ramond_dimensions_per_parity_by_level": [
+      1,
+      2,
+      4,
+      8,
+      14,
+      24,
+      40,
+      64,
+      100,
+      154,
+      232,
+      344,
+      504,
+      728,
+      1040,
+      1472,
+      2062,
+      2864,
+      3948,
+      5400,
+      7336
+    ],
+    "gram_matrices": 125,
+    "gram_entries": 557037444,
+    "gram_inverse_sum_dimension_cubed": 2957820707390,
+    "requested_three_point_tensor_entries": 191747392,
+    "dense_contraction_complex_multiplications": 41007094160,
+    "dense_contraction_complex_additions": 40719466450,
+    "largest_tensor_entries": 114688,
+    "largest_ns_gram_dimension": 5096,
+    "largest_ramond_gram_dimension": 7336,
+    "all_retained_gram_and_inverse_array_bytes": 17825198208,
+    "exclusions": [
+      "Ward recursion cache misses and internal sums",
+      "mode-action recursion used to form Gram entries",
+      "matrix inversion operations (sum d^3 is a work proxy, not an exact FLOP count)",
+      "Python object/cache memory; word construction; result writes"
+    ]
+  },
+  "predictions": {
+    "native": {
+      "precision_bits": 53,
+      "models": [
+        {
+          "name": "lean",
+          "fitted_cost_contributions_seconds_not_measured_stages": {
+            "gram_entries": 9100.37139996521,
+            "requested_tensor_entries": 14963.884518027862,
+            "json_record_writes_proxy": 0.0,
+            "monomials": 0.0
+          },
+          "eta_eta_prime_minus_seconds": 24064.255917993072,
+          "eta_eta_prime_plus_scenarios_seconds": [
+            16582.31365897914,
+            24064.255917993072
+          ],
+          "eta_eta_prime_minus_hours": 6.684515532775853,
+          "eta_eta_prime_plus_scenarios_hours": [
+            4.606198238605317,
+            6.684515532775853
+          ]
+        },
+        {
+          "name": "full_features",
+          "fitted_cost_contributions_seconds_not_measured_stages": {
+            "gram_entries": 2242.5049003376,
+            "requested_tensor_entries": 12623.965258068461,
+            "sum_dimension_cubed": 165139.88403256403,
+            "dense_contraction_products": 22488.90379275814,
+            "json_record_writes_proxy": 0.0,
+            "monomials": 3.2711444724652305
+          },
+          "eta_eta_prime_minus_seconds": 202498.5291282007,
+          "eta_eta_prime_plus_scenarios_seconds": [
+            196186.54649916646,
+            202498.5291282007
+          ],
+          "eta_eta_prime_minus_hours": 56.249591424500196,
+          "eta_eta_prime_plus_scenarios_hours": [
+            54.49626291643513,
+            56.249591424500196
+          ]
+        }
+      ]
+    },
+    "flint_high_precision": {
+      "precision_bits": 384,
+      "models": [
+        {
+          "name": "lean",
+          "fitted_cost_contributions_seconds_not_measured_stages": {
+            "gram_entries": 76787.69563305186,
+            "requested_tensor_entries": 33208.75368939605,
+            "json_record_writes_proxy": 0.0,
+            "monomials": 0.0
+          },
+          "eta_eta_prime_minus_seconds": 109996.44932244791,
+          "eta_eta_prime_plus_scenarios_seconds": [
+            93392.07247774988,
+            109996.44932244791
+          ],
+          "eta_eta_prime_minus_hours": 30.55456925623553,
+          "eta_eta_prime_plus_scenarios_hours": [
+            25.942242354930524,
+            30.55456925623553
+          ]
+        },
+        {
+          "name": "full_features",
+          "fitted_cost_contributions_seconds_not_measured_stages": {
+            "gram_entries": 12514.69051729388,
+            "requested_tensor_entries": 25440.799405962276,
+            "sum_dimension_cubed": 1583301.7383151026,
+            "dense_contraction_products": 85376.4771679455,
+            "json_record_writes_proxy": 0.0,
+            "monomials": 7.254122152698037
+          },
+          "eta_eta_prime_minus_seconds": 1706640.959528457,
+          "eta_eta_prime_plus_scenarios_seconds": [
+            1693920.5598254758,
+            1706640.959528457
+          ],
+          "eta_eta_prime_minus_hours": 474.06693320234916,
+          "eta_eta_prime_plus_scenarios_hours": [
+            470.5334888404099,
+            474.06693320234916
+          ]
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "These predict the saved Python physical SCA PBW implementation, not a C++ PBW port.",
+    "Gram and Ward internal mode recursions are not independently counted or timed.",
+    "The sum of dimension cubes is a dense-inversion work proxy, not an exact FLOP count or a measured inversion speed.",
+    "The lean model omits explicit cubic/inverse and contraction features; it is included to expose model sensitivity, not as an equally established asymptotic model.",
+    "The full model fits per-monomial cost with correlated features, so fitted stage contributions are not measured stage times.",
+    "The models assume unchanged cost per feature; larger basis memory pressure, cache behavior and backend crossover are not captured.",
+    "Saved internal PBW timers include repeatedly rewriting the accumulated JSON result. Fresh C++ internal timers exclude final serialization; parent wall times should be compared where available.",
+    "The spread of models is not a confidence interval or a guaranteed upper/lower runtime bound."
+  ],
+  "precision_comparison": {
+    "fresh_cpp_requested_bits": 136,
+    "pbw_calibrated_bits": [
+      53,
+      384
+    ],
+    "precision_matched": false,
+    "pbw_136_bit_estimate_seconds": null,
+    "explanation": "No saved 136-bit physical PBW timing exists. Native and 384-bit timings use different backends; interpolation by bit count is not justified. The 384-bit estimates can be shown as a higher-precision comparison proxy, never as a measured or fitted 40-digit time."
+  },
+  "source_sha256": {
+    "Code/theta_fermion_ccy/count_level_work.py": "24ba7d8dc446e6ab733c144c378fa74d4826ce1dffea921b1f39328b8846e8ab",
+    "C++/results/current_algorithm_2026-09-11/pbw_estimates.json": "67d52159e33dcd9c090c5d396492894f2c37c2dee988d845de804bbe05024b7e",
+    "C++/results/current_algorithm_2026-09-11/estimate_pbw_level20.py": "ca2bc1fd7a935e662c4e9a81e50e03ddb1375de1101adf0d081d27e4644c21fb"
+  }
+}

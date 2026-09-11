@@ -1,0 +1,75 @@
+{
+  "status": "implemented and timed; targeted recurrence and physical-pipeline checks recorded",
+  "production_defaults": {
+    "ccy_method": "forward",
+    "diagonal_only": true,
+    "auxiliary": "direct"
+  },
+  "level10": {
+    "full_process_seconds": 16.91478066700074,
+    "internal_seconds": 16.586039290999906,
+    "outer_seconds": 10.459636874998978,
+    "middle_seconds": 1.0260479999997187,
+    "ccy_seconds": 4.5632445449518855,
+    "products_seconds": 0.19089581393927801,
+    "auxiliary_seconds": 0.13013724999836995,
+    "division_seconds": 0.01987474999987171,
+    "schottky_seconds": 0.04183604100035154,
+    "restoration_seconds": 0.005771042000560556,
+    "physical_coefficient_vectors": 506,
+    "peak_resident_memory_mib": 340.8125,
+    "work": {
+      "reachable_shift_vectors": 59048,
+      "residue_weight_multiply_adds": 1221008,
+      "global_seed_multiply_adds": 2332072,
+      "total_multiply_adds": 3553080
+    }
+  },
+  "level15": {
+    "status": "sample estimate; complete pipeline not run",
+    "sample_series": 212,
+    "required_series": 1248,
+    "weighted_ccy_seconds": 85.36064586201974,
+    "branching_seconds_estimate": 304.58950020798875,
+    "full_pipeline_rounded_minutes": 7,
+    "work": {
+      "reachable_shift_vectors": 517768,
+      "residue_weight_multiply_adds": 41107800,
+      "global_seed_multiply_adds": 57031560,
+      "total_multiply_adds": 98139360
+    }
+  },
+  "validation": {
+    "recurrence_40digits": "validation_forward_ccy_40digits_reproducible.json",
+    "physical_pipeline_40digits_level5": "validation_forward_diagonal_pipeline_40digits_level5.json",
+    "native_full_level10": "comparison_forward_diagonal_machine_level10.json",
+    "native_worst_coefficients_40digit_checks": "validation_forward_ccy_worst_coefficients_40digits.json"
+  },
+  "source_hashes": {
+    "Code/theta_fermion_ccy/count_diagonal_target_work.py": "159a8e882a241ee150b850730699502e097ccf6e4e22d49be187282c20fedd68",
+    "Code/theta_fermion_ccy/middle_branching.py": "007dd7917e7de843ccb13f7cd3b592e8cf32687a9fee896601e186c6759ce7fc",
+    "Code/theta_fermion_ccy/pbw_reference.py": "31af7ad25689e0a362ad8e5c3e2c038ec2a4f561a2c437c76a322a969236806f",
+    "Code/theta_fermion_ccy/time_diagonal_ccy.py": "c752af7940de609494812d4fa71a8356e74f7c462c46f197ca64c088cd38b02d",
+    "Code/theta_fermion_ccy/count_level_work.py": "24ba7d8dc446e6ab733c144c378fa74d4826ce1dffea921b1f39328b8846e8ab",
+    "Code/theta_fermion_ccy/validate_requested.py": "ece44aff49d7faf1fe4bfa5496c09ae39d028eb049bda886c9a5cfd126d0e32e",
+    "Code/theta_fermion_ccy/outer_branching.py": "5db822b774221cc6575121d54748be3fd7d4eb1e8791a00a48d9f0c28a169b23",
+    "Code/theta_fermion_ccy/ising_fermion.py": "63494bef30eddd76a7da9bc4568277a7dd9f9e2b0f73cecbf362dd74389e767e",
+    "Code/theta_fermion_ccy/schottky_vacuum.py": "65404e098189adc7b7fb37e895507831ef34980494f5da605622ff91544fe1e3",
+    "Code/theta_fermion_ccy/action_optimization.py": "6afdbd667e9af9483fe194b5c08154b4e72a7fb43f59a5b5301d19fbe45fed2b",
+    "Code/theta_fermion_ccy/punctured_ccy.py": "4efa55fa3d01d3c450b63f5769d68abb1f9d9d76a3b0ef6352fc2ef118678ddc",
+    "Code/theta_fermion_ccy/direct_fermion.py": "460cd306e03c7d3bc3802d3e02c002d951c7634f909ff9f74e79f75d7b062145",
+    "Code/theta_fermion_ccy/run_timed_pipeline.py": "a56228654c258ae76d00f6d2bf9191d4c17d955b2a978f9fcde8381935d2761a",
+    "Code/theta_fermion_ccy/series_algebra.py": "43cf3156aedd603da7bf4a73a59cc462d34b187d5a7c26fa7840a050dfaf15ab",
+    "Code/theta_fermion_ccy/compare_saved_pbw.py": "d9e4c7ed0dc0f6091cf376534d16aa4b2465dd4df07df0d7d6ed4a3174349260",
+    "Code/theta_fermion_ccy/pipeline.py": "9eed3b6cdb7ea9da387e119cfb1092945d5e2332eaaff1eaafa58f31cce8185f",
+    "Code/theta_fermion_ccy/profile_ccy.py": "2c581460e5cde4fc77dbec02df6858b6e0fff2539cf5e0e337d394d2cbf276f6",
+    "Code/theta_fermion_ccy/benchmark_direct_fermion.py": "5092ebbbf417e85e7cd9f64e6c1dbbb64535938e0e0ea40b4780c4a200843c5c",
+    "Code/theta_fermion_ccy/compare_saved_precision.py": "be89df32fb8345e47020310601ab532adbbd3ae68547ec747cc609dec25de59c",
+    "Code/theta_fermion_ccy/forward_ccy.py": "af8ad7f63ae4cf9cf564e637665c7c3938aa33e80dd0873ddc1dbe02c33121c0",
+    "Code/theta_fermion_ccy/time_high_branching_actions.py": "49b5ff6d33147becd992ddff512d3f247b1d28d6c6bd39f45a369484e0dc75ee",
+    "Code/theta_fermion_ccy/ising_tangent_derivation.py": "a0d5bab44dc14dbb907d8b38b2295135b07032dbc04b357476ba4953dace90d3",
+    "Code/full_ramond_block_runtime/compute_full_block.py": "10c3cfa5bb4b87a8407cbe35fe7c0530be79bf62f231c93c27868baefff7913c",
+    "Code/ramond_branching_recursion/compute_target.py": "49699fb231101c2bf26135e01b4ad33ece5b1db363e353707b44dc43fc7de93e",
+    "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470"
+  }
+}

@@ -33,19 +33,32 @@ HERE = Path(__file__).resolve().parent
 TOLERANCE = 1.0e-13
 RANK_TOLERANCE = 1.0e-11
 MP_DPS = 0
+_MP_ZERO = mp.mpc(0)
 
 
-def set_multiprecision(dps: int):
+def set_multiprecision(dps: int, *, precision_bits=None):
     global MP_DPS
     MP_DPS = int(dps)
     if MP_DPS:
-        mp.mp.dps = MP_DPS
+        if precision_bits is None:
+            mp.mp.dps = MP_DPS
+        else:
+            mp.mp.prec = int(precision_bits)
+            if mp.mp.dps != MP_DPS:
+                raise ValueError("Decimal precision does not match requested bit precision")
+
+
+@lru_cache(maxsize=32)
+def _mp_arithmetic_tolerance(dps, precision, rounding):
+    # The context is part of the key: changing it must recompute the same
+    # power at the new precision, even when MP_DPS itself is unchanged.
+    return mp.power(10, -max(20, dps - 20))
 
 
 def arithmetic_tolerance():
     if not MP_DPS:
         return TOLERANCE
-    return mp.power(10, -max(20, MP_DPS - 20))
+    return _mp_arithmetic_tolerance(MP_DPS, *mp.mp._prec_rounding)
 
 
 def real_number(value):
@@ -165,7 +178,9 @@ def partition_pairs(level: int):
 
 
 def add_term(expression, state, coefficient):
-    value = expression.get(state, complex_number()) + coefficient
+    # dict.get evaluates its default on every call, including cache hits.
+    # Zero is exact and immutable, so reuse it at every working precision.
+    value = expression.get(state, _MP_ZERO if MP_DPS else 0j) + coefficient
     if abs(value) <= arithmetic_tolerance():
         expression.pop(state, None)
     else:

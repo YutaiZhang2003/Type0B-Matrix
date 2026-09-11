@@ -1,0 +1,56 @@
+{
+  "status": "sample-calibrated time estimates; neither complete modified physical-block pipeline was run",
+  "precision": "native binary64; direct auxiliary and Schottky retained",
+  "level10": {
+    "ccy_all_652_series_measured_seconds": 8.57651164397248,
+    "previous_ccy_seconds": 33.996988873062946,
+    "branching_previously_measured_seconds": 11.21893195800294,
+    "estimate_retaining_all_old_other_stage_costs_seconds": 23.708007061908575,
+    "full_pipeline_working_estimate_seconds": 23,
+    "full_pipeline_planning_range_seconds": [
+      20,
+      25
+    ]
+  },
+  "level15": {
+    "sampled_series": 212,
+    "required_series": 1248,
+    "distinct_budget_pairs_sampled": 106,
+    "actual_sample_recursion_seconds": 92.76056237300872,
+    "weighted_ccy_estimate_seconds": 391.6054853060559,
+    "branching_estimate_seconds": 304.58950020798875,
+    "branching_estimate_formula": "level10 outer+middle + 4*R_minus(11/4) + 4*R_plus(11/4) + 2*NS_plus(5/2); larger Ward-system overhead is included in the other-stage allowance",
+    "ccy_plus_branching_estimate_seconds": 696.1949855140447,
+    "other_stage_allowance_seconds": [
+      10,
+      25
+    ],
+    "full_pipeline_working_estimate_seconds": 720,
+    "full_pipeline_planning_range_seconds": [
+      600,
+      900
+    ],
+    "sample_peak_resident_memory_mib": 1005.3125
+  },
+  "sampling_calibration": {
+    "rule": "one actual branching tuple (middle of enumeration) per budget pair, both Virasoro copies; multiply by actual number of tuples with that pair",
+    "level10_same_rule_estimate_seconds": 8.680202656010806,
+    "level10_measured_seconds": 8.57651164397248,
+    "level10_relative_difference": 0.012090114995786161
+  },
+  "product_pairs": {
+    "level10": 871740,
+    "level15": 13589684
+  },
+  "stored_computations": [
+    "Code/theta_fermion_ccy/results/diagonal_virasoro_series_level10.pkl",
+    "Code/theta_fermion_ccy/results/diagonal_virasoro_series_level15_sample.pkl",
+    "Code/theta_fermion_ccy/results/level15_branching_action_samples.pkl"
+  ],
+  "limitations": [
+    "The 20-25 second and 10-15 minute ranges are planning ranges, not statistical confidence intervals.",
+    "Level15 branching samples use one momentum/sign/parity representative for new action types.",
+    "No physical quotient, coefficient-accuracy comparison, or new PBW run was performed.",
+    "Production pipeline has not yet been switched to the diagonal-target index set."
+  ]
+}

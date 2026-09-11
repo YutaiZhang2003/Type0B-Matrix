@@ -1,0 +1,353 @@
+{
+  "scope": "Exact integer counts and nonnegative fits to saved timing logs only",
+  "new_pbw_gram_ward_or_branching_evaluations": 0,
+  "parameters": {
+    "b": "7/5",
+    "momenta": [
+      "11/23",
+      "13/29",
+      "17/31"
+    ],
+    "p": 0,
+    "f": 0
+  },
+  "levels": {
+    "10": {
+      "pbw": {
+        "monomials": 506,
+        "parity_output_slots": 4048,
+        "ns_dimensions_by_twice_level": [
+          1,
+          1,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          10,
+          13,
+          16,
+          21,
+          28,
+          35,
+          43,
+          55,
+          70,
+          86,
+          105,
+          130,
+          161
+        ],
+        "ramond_dimensions_per_parity_by_level": [
+          1,
+          2,
+          4,
+          8,
+          14,
+          24,
+          40,
+          64,
+          100,
+          154,
+          232
+        ],
+        "gram_matrices": 65,
+        "gram_entries": 450469,
+        "gram_inverse_sum_dimension_cubed": 78765711,
+        "requested_three_point_tensor_entries": 315028,
+        "dense_contraction_complex_multiplications": 7204872,
+        "dense_contraction_complex_additions": 6731318,
+        "largest_tensor_entries": 640,
+        "largest_ns_gram_dimension": 161,
+        "largest_ramond_gram_dimension": 232,
+        "all_retained_gram_and_inverse_array_bytes": 14415008,
+        "exclusions": [
+          "Ward recursion cache misses and internal sums",
+          "mode-action recursion used to form Gram entries",
+          "matrix inversion operations (sum d^3 is a work proxy, not an exact FLOP count)",
+          "Python object/cache memory; word construction; result writes"
+        ]
+      }
+    },
+    "15": {
+      "pbw": {
+        "monomials": 1496,
+        "parity_output_slots": 11968,
+        "ns_dimensions_by_twice_level": [
+          1,
+          1,
+          1,
+          2,
+          3,
+          4,
+          5,
+          7,
+          10,
+          13,
+          16,
+          21,
+          28,
+          35,
+          43,
+          55,
+          70,
+          86,
+          105,
+          130,
+          161,
+          196,
+          236,
+          287,
+          350,
+          420,
+          501,
+          602,
+          722,
+          858,
+          1016
+        ],
+        "ramond_dimensions_per_parity_by_level": [
+          1,
+          2,
+          4,
+          8,
+          14,
+          24,
+          40,
+          64,
+          100,
+          154,
+          232,
+          344,
+          504,
+          728,
+          1040,
+          1472
+        ],
+        "gram_matrices": 95,
+        "gram_entries": 20431839,
+        "gram_inverse_sum_dimension_cubed": 22116449163,
+        "requested_three_point_tensor_entries": 9895892,
+        "dense_contraction_complex_multiplications": 734995948,
+        "dense_contraction_complex_additions": 720149118,
+        "largest_tensor_entries": 9600,
+        "largest_ns_gram_dimension": 1016,
+        "largest_ramond_gram_dimension": 1472,
+        "all_retained_gram_and_inverse_array_bytes": 653818848,
+        "exclusions": [
+          "Ward recursion cache misses and internal sums",
+          "mode-action recursion used to form Gram entries",
+          "matrix inversion operations (sum d^3 is a work proxy, not an exact FLOP count)",
+          "Python object/cache memory; word construction; result writes"
+        ]
+      }
+    }
+  },
+  "calibrations": {
+    "native": {
+      "precision_bits": 53,
+      "saved_signs": [
+        1,
+        -1
+      ],
+      "saved_level10_internal_seconds": 31.402591082998697,
+      "saved_level10_process_wall_seconds": 33.550880582999525,
+      "log_rows": 506,
+      "calibration_log": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/results/pbw_machine_level10.log",
+      "models": [
+        {
+          "features": [
+            "gram_entries",
+            "requested_tensor_entries",
+            "json_record_writes_proxy",
+            "monomials"
+          ],
+          "fitted_seconds_per_feature_unit": [
+            1.6337090976536237e-05,
+            7.803957259574025e-05,
+            0.0,
+            0.0
+          ],
+          "fitted_baseline_seconds": 31.944003510800158,
+          "per_coefficient_residual_rms_seconds": 0.03329779851848384,
+          "predicted_seconds": {
+            "10": 31.944003510800158,
+            "15": 1106.0679946945463
+          },
+          "predicted_equal_sign_seconds": {
+            "10": {
+              "half_tensor_associated_cost": 19.65167827295473,
+              "no_discount": 31.944003510800158
+            },
+            "15": {
+              "half_tensor_associated_cost": 719.9324036277437,
+              "no_discount": 1106.0679946945463
+            }
+          }
+        },
+        {
+          "features": [
+            "gram_entries",
+            "requested_tensor_entries",
+            "sum_dimension_cubed",
+            "dense_contraction_products",
+            "json_record_writes_proxy",
+            "monomials"
+          ],
+          "fitted_seconds_per_feature_unit": [
+            4.025770483640234e-06,
+            6.58364378591833e-05,
+            5.583160724379556e-08,
+            5.484149573001137e-07,
+            0.0,
+            0.000987962691774458
+          ],
+          "fitted_baseline_seconds": 31.402591082998704,
+          "per_coefficient_residual_rms_seconds": 0.028354065622671825,
+          "predicted_seconds": {
+            "10": 31.4025910829987,
+            "15": 2373.121840012937
+          },
+          "predicted_equal_sign_seconds": {
+            "10": {
+              "half_tensor_associated_cost": 21.032430410047304,
+              "no_discount": 31.4025910829987
+            },
+            "15": {
+              "half_tensor_associated_cost": 2047.3667006533424,
+              "no_discount": 2373.121840012937
+            }
+          }
+        }
+      ],
+      "limitation": "Counts are direct. Seconds assume unchanged cost per counted feature. Internal Ward/mode recursion and memory effects are not independently measured; the two models are not a confidence interval."
+    },
+    "flint_high_precision": {
+      "precision_bits": 384,
+      "saved_signs": [
+        1,
+        -1
+      ],
+      "saved_level10_internal_seconds": 110.1898384169981,
+      "saved_level10_process_wall_seconds": 112.82827966600235,
+      "log_rows": 506,
+      "calibration_log": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/results/pbw_level10.log",
+      "models": [
+        {
+          "features": [
+            "gram_entries",
+            "requested_tensor_entries",
+            "json_record_writes_proxy",
+            "monomials"
+          ],
+          "fitted_seconds_per_feature_unit": [
+            0.00013785015075764252,
+            0.00017319011926585187,
+            0.0,
+            0.0
+          ],
+          "fitted_baseline_seconds": 116.65695645372725,
+          "per_coefficient_residual_rms_seconds": 0.17442336466858926,
+          "predicted_seconds": {
+            "10": 116.65695645372725,
+            "15": 4530.402802127869
+          },
+          "predicted_equal_sign_seconds": {
+            "10": {
+              "half_tensor_associated_cost": 89.37708800768586,
+              "no_discount": 116.65695645372725
+            },
+            "15": {
+              "half_tensor_associated_cost": 3673.4674442668743,
+              "no_discount": 4530.402802127869
+            }
+          }
+        },
+        {
+          "features": [
+            "gram_entries",
+            "requested_tensor_entries",
+            "sum_dimension_cubed",
+            "dense_contraction_products",
+            "json_record_writes_proxy",
+            "monomials"
+          ],
+          "fitted_seconds_per_feature_unit": [
+            2.246651576495077e-05,
+            0.00013267872454798382,
+            5.352933443055845e-07,
+            2.0819928579876116e-06,
+            0.0,
+            0.0021909157815457676
+          ],
+          "fitted_baseline_seconds": 110.1898384169981,
+          "per_coefficient_residual_rms_seconds": 0.06778686643855882,
+          "predicted_seconds": {
+            "10": 110.1898384169981,
+            "15": 15144.328522846774
+          },
+          "predicted_equal_sign_seconds": {
+            "10": {
+              "half_tensor_associated_cost": 89.29108179854697,
+              "no_discount": 110.1898384169981
+            },
+            "15": {
+              "half_tensor_associated_cost": 14487.841358434476,
+              "no_discount": 15144.328522846774
+            }
+          }
+        }
+      ],
+      "limitation": "Counts are direct. Seconds assume unchanged cost per counted feature. Internal Ward/mode recursion and memory effects are not independently measured; the two models are not a confidence interval."
+    }
+  },
+  "equal_sign_reuse": {
+    "source": "Code/ramond_zero_mode_recovery/check_level10_modular.py:248",
+    "form_cache_source": "Code/double_virasoro/nsrr/ramond_pbw_generalized_ward.py:622",
+    "reason": "For eta'=eta both vertices use the same cached HumanForm and cached value. Tensor arrays, phases and contractions are still evaluated twice/as usual.",
+    "distinct_requested_top_level_ward_entries": {
+      "10": {
+        "minus": 315028,
+        "plus": 157514
+      },
+      "15": {
+        "minus": 9895892,
+        "plus": 4947946
+      }
+    },
+    "model_rule": "Keep all other fitted features fixed; multiply the tensor-associated fitted contribution by a factor between 1/2 and 1. Internal Ward cache misses and cache-hit overhead are not measured separately."
+  },
+  "precision_comparison": {
+    "fresh_cpp_requested_bits": 136,
+    "pbw_calibrated_bits": [
+      53,
+      384
+    ],
+    "precision_matched": false,
+    "pbw_136_bit_estimate_seconds": null,
+    "explanation": "No saved 136-bit physical PBW timing exists. Native and 384-bit timings use different backends; interpolation by bit count is not justified. The 384-bit estimates can be shown as a higher-precision comparison proxy, never as a measured or fitted 40-digit time."
+  },
+  "limitations": [
+    "These predict the saved Python physical SCA PBW implementation, not a C++ PBW port.",
+    "Gram and Ward internal mode recursions are not independently counted or timed.",
+    "The sum of dimension cubes is a dense-inversion work proxy, not an exact FLOP count or a measured inversion speed.",
+    "The lean model omits explicit cubic/inverse and contraction features; it is included to expose model sensitivity, not as an equally established asymptotic model.",
+    "The full model fits per-monomial cost with correlated features, so fitted stage contributions are not measured stage times.",
+    "The models assume unchanged cost per feature; larger basis memory pressure, cache behavior and backend crossover are not captured.",
+    "Saved internal PBW timers include repeatedly rewriting the accumulated JSON result. Fresh C++ internal timers exclude final serialization; parent wall times should be compared where available.",
+    "The spread of models is not a confidence interval or a guaranteed upper/lower runtime bound."
+  ],
+  "source_sha256": {
+    "Code/theta_fermion_ccy/count_level_work.py": "24ba7d8dc446e6ab733c144c378fa74d4826ce1dffea921b1f39328b8846e8ab",
+    "C++/results/current_algorithm_2026-09-11/estimate_pbw.py": "3680f00ad112164b5a248f68125943f13059045b83ae4bb640436078282dfe3b",
+    "Code/ramond_zero_mode_recovery/check_level10_modular.py": "831cefc20384dc21fa64398a468da2bdb1d9f891910d8e21487c48079879f692",
+    "Code/double_virasoro/nsrr/ramond_pbw_generalized_ward.py": "6f904573e9b323ecc96593afbaac19746bae32ecd319f89448548b7474525ce5",
+    "Code/theta_fermion_ccy/pbw_reference.py": "31af7ad25689e0a362ad8e5c3e2c038ec2a4f561a2c437c76a322a969236806f",
+    "Code/theta_fermion_ccy/results/pbw_machine_level10.log": "bc19ef61c8484e890f6d93f7995cb806491936b3ef6bf56c8705c4286f5f0326",
+    "Code/theta_fermion_ccy/results/pbw_machine_level10_walltime.json": "5a5fd0ed02cb2943b025013f5a8b0c8629faf51496c360f47c1e187f48123acf",
+    "Code/theta_fermion_ccy/results/pbw_level10.log": "a01d8b8c08c587ff3b8989c190614f4dec00da2442e067066c1f34853cde609e",
+    "Code/theta_fermion_ccy/results/pbw_level10_walltime.json": "4732663d12ca14319c628a655d0c5fdd69dbcf3021563124acbe7fbd31988ae7"
+  },
+  "counting_and_fit_seconds": 0.4092272910056636
+}

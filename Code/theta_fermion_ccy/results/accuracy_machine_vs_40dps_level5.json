@@ -1,0 +1,394 @@
+{
+  "status": "passed",
+  "scope": "All saved physical-block coefficients; no component, PBW or split-evaluation checks",
+  "candidate_file": "Code/theta_fermion_ccy/results/ccy_schottky_machine_level5.json",
+  "reference_file": "Code/theta_fermion_ccy/results/ccy_schottky_40dps_level5.json",
+  "candidate_sha256": "e103dcb0647dd45180f0ac959a7a60fed3737080f17548e4d5c3a868a34aafa8",
+  "reference_sha256": "0b57bb66ab273559184b250607fb14fad606c2e726def9bda5eed7c51bca5b80",
+  "candidate_source_hashes": {
+    "Code/theta_fermion_ccy/middle_branching.py": "48415cb2f164d074235fff668cc574c3701b39ec07ed2b1da2698fcb7eee3198",
+    "Code/theta_fermion_ccy/pbw_reference.py": "f7f38250db3d334f5cae65d611cc2034bc54e4a6f6689fe0c2692b8eaa33be02",
+    "Code/theta_fermion_ccy/validate_requested.py": "ece44aff49d7faf1fe4bfa5496c09ae39d028eb049bda886c9a5cfd126d0e32e",
+    "Code/theta_fermion_ccy/outer_branching.py": "ca3765271ea255df29dab2f75c43cec301e9e5cbada7cda26cbde3b166935c8e",
+    "Code/theta_fermion_ccy/ising_fermion.py": "63494bef30eddd76a7da9bc4568277a7dd9f9e2b0f73cecbf362dd74389e767e",
+    "Code/theta_fermion_ccy/schottky_vacuum.py": "65404e098189adc7b7fb37e895507831ef34980494f5da605622ff91544fe1e3",
+    "Code/theta_fermion_ccy/action_optimization.py": "d7ba01a6668576a385ced9b7970c1c3175f634407200d8a4e6a09cf5ea05fc9c",
+    "Code/theta_fermion_ccy/punctured_ccy.py": "e785cbd0721f7155f2c665fe915c907aa3dcfbdfad12d1c787c3783e7bedffa7",
+    "Code/theta_fermion_ccy/direct_fermion.py": "d61b0049544ef1ef283edfdccea8968cf13e0556f38c6887089753115238b076",
+    "Code/theta_fermion_ccy/run_timed_pipeline.py": "a56228654c258ae76d00f6d2bf9191d4c17d955b2a978f9fcde8381935d2761a",
+    "Code/theta_fermion_ccy/series_algebra.py": "b6e5e7778f86503dd82c8fbb6a38b7c60f8c893e0409f7c978ba132f86b824d0",
+    "Code/theta_fermion_ccy/pipeline.py": "6798fa3c11a56b6d201b085efe1456e3f26b720d61ad6f4f16c6e0e194bffa7a",
+    "Code/theta_fermion_ccy/profile_ccy.py": "2c581460e5cde4fc77dbec02df6858b6e0fff2539cf5e0e337d394d2cbf276f6",
+    "Code/theta_fermion_ccy/benchmark_direct_fermion.py": "5092ebbbf417e85e7cd9f64e6c1dbbb64535938e0e0ea40b4780c4a200843c5c",
+    "Code/theta_fermion_ccy/ising_tangent_derivation.py": "a0d5bab44dc14dbb907d8b38b2295135b07032dbc04b357476ba4953dace90d3",
+    "Code/full_ramond_block_runtime/compute_full_block.py": "10c3cfa5bb4b87a8407cbe35fe7c0530be79bf62f231c93c27868baefff7913c",
+    "Code/ramond_branching_recursion/compute_target.py": "3368f697c713860f9c2a8619a29c8a5e1113da54240337dc1ebc65a846390c42",
+    "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470"
+  },
+  "reference_source_hashes": {
+    "Code/theta_fermion_ccy/middle_branching.py": "48415cb2f164d074235fff668cc574c3701b39ec07ed2b1da2698fcb7eee3198",
+    "Code/theta_fermion_ccy/pbw_reference.py": "f7f38250db3d334f5cae65d611cc2034bc54e4a6f6689fe0c2692b8eaa33be02",
+    "Code/theta_fermion_ccy/validate_requested.py": "ece44aff49d7faf1fe4bfa5496c09ae39d028eb049bda886c9a5cfd126d0e32e",
+    "Code/theta_fermion_ccy/outer_branching.py": "48ccd364da06f5db7c0357dbc50ddb9763af29d2db3277136f78e2fb8d5f808e",
+    "Code/theta_fermion_ccy/ising_fermion.py": "63494bef30eddd76a7da9bc4568277a7dd9f9e2b0f73cecbf362dd74389e767e",
+    "Code/theta_fermion_ccy/schottky_vacuum.py": "65404e098189adc7b7fb37e895507831ef34980494f5da605622ff91544fe1e3",
+    "Code/theta_fermion_ccy/action_optimization.py": "2421a937bcd0876d4742294452dc454199ab51d5cd1c29154fded5bda2a2dfad",
+    "Code/theta_fermion_ccy/punctured_ccy.py": "738b5ca2fa47256d948655e5b63894ee0387f985e1656a0202d0de4a1849f0e5",
+    "Code/theta_fermion_ccy/direct_fermion.py": "5bf3eab304bcb0a6e66281217a326d1b4df1e975dd8debdb17431f16550a04bd",
+    "Code/theta_fermion_ccy/run_timed_pipeline.py": "a56228654c258ae76d00f6d2bf9191d4c17d955b2a978f9fcde8381935d2761a",
+    "Code/theta_fermion_ccy/series_algebra.py": "b6e5e7778f86503dd82c8fbb6a38b7c60f8c893e0409f7c978ba132f86b824d0",
+    "Code/theta_fermion_ccy/pipeline.py": "fc3b257e88eaf40c93884e2e3a00a75806d7143570155df142eb795b45815ad0",
+    "Code/theta_fermion_ccy/profile_ccy.py": "2c581460e5cde4fc77dbec02df6858b6e0fff2539cf5e0e337d394d2cbf276f6",
+    "Code/theta_fermion_ccy/benchmark_direct_fermion.py": "5092ebbbf417e85e7cd9f64e6c1dbbb64535938e0e0ea40b4780c4a200843c5c",
+    "Code/theta_fermion_ccy/ising_tangent_derivation.py": "a0d5bab44dc14dbb907d8b38b2295135b07032dbc04b357476ba4953dace90d3",
+    "Code/full_ramond_block_runtime/compute_full_block.py": "10c3cfa5bb4b87a8407cbe35fe7c0530be79bf62f231c93c27868baefff7913c",
+    "Code/ramond_branching_recursion/compute_target.py": "3368f697c713860f9c2a8619a29c8a5e1113da54240337dc1ebc65a846390c42",
+    "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470"
+  },
+  "parameters": {
+    "total_q_level": 5,
+    "b": "7/5",
+    "momenta": [
+      "11/23",
+      "13/29",
+      "17/31"
+    ],
+    "p": 0,
+    "f": 0,
+    "etas": [
+      1,
+      -1
+    ],
+    "auxiliary_backend": "direct",
+    "universal_seed_power_after_recovery": 2
+  },
+  "candidate_precision": {
+    "ward_dps": 0,
+    "ccy_dps": 0
+  },
+  "reference_precision": {
+    "ward_dps": 40,
+    "ccy_dps": 40
+  },
+  "comparison_arithmetic_dps": 70,
+  "scaled_error_definition": "abs(candidate-reference)/max(1,abs(reference))",
+  "tolerance": "0.00000001",
+  "component_slots": 4648,
+  "coefficient_vectors": 581,
+  "keys_only_in_candidate": [],
+  "keys_only_in_reference": [],
+  "failed_slots": 0,
+  "maximum_absolute_error": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403",
+  "maximum_scaled_error": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403",
+  "worst_absolute_slot": {
+    "exponents": [
+      0,
+      7,
+      1,
+      2
+    ],
+    "parity_index": 6,
+    "candidate": {
+      "real": "-0.000000006712442151960701",
+      "imag": "0.000000003170610757301019"
+    },
+    "reference": {
+      "real": "-1.714200827408054094620948558873738122379e-23",
+      "imag": "9.538817282079493076434016362841416342714e-40"
+    },
+    "absolute_error": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403",
+    "scaled_error": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403"
+  },
+  "worst_scaled_slot": {
+    "exponents": [
+      0,
+      7,
+      1,
+      2
+    ],
+    "parity_index": 6,
+    "candidate": {
+      "real": "-0.000000006712442151960701",
+      "imag": "0.000000003170610757301019"
+    },
+    "reference": {
+      "real": "-1.714200827408054094620948558873738122379e-23",
+      "imag": "9.538817282079493076434016362841416342714e-40"
+    },
+    "absolute_error": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403",
+    "scaled_error": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403"
+  },
+  "top_scaled_errors": [
+    {
+      "exponents": [
+        0,
+        7,
+        1,
+        2
+      ],
+      "parity_index": 6,
+      "candidate": {
+        "real": "-0.000000006712442151960701",
+        "imag": "0.000000003170610757301019"
+      },
+      "reference": {
+        "real": "-1.714200827408054094620948558873738122379e-23",
+        "imag": "9.538817282079493076434016362841416342714e-40"
+      },
+      "absolute_error": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403",
+      "scaled_error": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403"
+    },
+    {
+      "exponents": [
+        1,
+        1,
+        6,
+        2
+      ],
+      "parity_index": 3,
+      "candidate": {
+        "real": "0.000000004053216955927037",
+        "imag": "-0.000000002126918062664107"
+      },
+      "reference": {
+        "real": "1.15005527846703634443742909403709972988e-23",
+        "imag": "-7.465090268468176970734958113015971202192e-40"
+      },
+      "absolute_error": "0.000000004577373497662298166818856395097571417183935009921797512169320834464331",
+      "scaled_error": "0.000000004577373497662298166818856395097571417183935009921797512169320834464331"
+    },
+    {
+      "exponents": [
+        0,
+        6,
+        2,
+        2
+      ],
+      "parity_index": 6,
+      "candidate": {
+        "real": "-0.000000004162788296507868",
+        "imag": "0.000000001822927771307389"
+      },
+      "reference": {
+        "real": "-9.434311042004813263107719409649111859644e-24",
+        "imag": "-7.717089816311721317770292206647829121423e-41"
+      },
+      "absolute_error": "0.000000004544433084659353121268688354080307402482878482588102684765082247353205",
+      "scaled_error": "0.000000004544433084659353121268688354080307402482878482588102684765082247353205"
+    },
+    {
+      "exponents": [
+        2,
+        5,
+        1,
+        2
+      ],
+      "parity_index": 6,
+      "candidate": {
+        "real": "-0.0000000033351024684397114",
+        "imag": "0.000000001534137394648414"
+      },
+      "reference": {
+        "real": "-8.982970484138161085230013280164016538903e-24",
+        "imag": "4.952451649844544624506279383305243434206e-40"
+      },
+      "absolute_error": "0.000000003671033372315106020962389426872465961209225465538804954559664053958029",
+      "scaled_error": "0.000000003671033372315106020962389426872465961209225465538804954559664053958029"
+    },
+    {
+      "exponents": [
+        0,
+        7,
+        1,
+        2
+      ],
+      "parity_index": 0,
+      "candidate": {
+        "real": "0.0000000030751362471132144",
+        "imag": "0.00000000036947624819704777"
+      },
+      "reference": {
+        "real": "1.780441581073769320896857738545084986036e-23",
+        "imag": "-9.538817282079493076434016362822315285191e-40"
+      },
+      "absolute_error": "0.000000003097252917714535201332041515715120244375159374606665462812094277017057",
+      "scaled_error": "0.000000003097252917714535201332041515715120244375159374606665462812094277017057"
+    },
+    {
+      "exponents": [
+        0,
+        6,
+        1,
+        2
+      ],
+      "parity_index": 6,
+      "candidate": {
+        "real": "0.00000000203253375705735",
+        "imag": "-0.0000000009427932649002236"
+      },
+      "reference": {
+        "real": "5.28876921068075858143559985320887761974e-24",
+        "imag": "-2.613316209861441495542209217956424592614e-40"
+      },
+      "absolute_error": "0.000000002240547391580653078350393697771886838511235779280353958100814828963001",
+      "scaled_error": "0.000000002240547391580653078350393697771886838511235779280353958100814828963001"
+    },
+    {
+      "exponents": [
+        0,
+        5,
+        1,
+        4
+      ],
+      "parity_index": 6,
+      "candidate": {
+        "real": "-0.0000000019279071817062338",
+        "imag": "0.0000000008522372222750111"
+      },
+      "reference": {
+        "real": "-4.959536210695603271779697711477449359445e-24",
+        "imag": "1.604681759454541665779380464373485244556e-40"
+      },
+      "absolute_error": "0.0000000021078743758358752683164329365875019267718405618140087099482353983358",
+      "scaled_error": "0.0000000021078743758358752683164329365875019267718405618140087099482353983358"
+    },
+    {
+      "exponents": [
+        0,
+        2,
+        6,
+        2
+      ],
+      "parity_index": 0,
+      "candidate": {
+        "real": "-0.0000000019665417431709667",
+        "imag": "-0.000000000013904560375150066"
+      },
+      "reference": {
+        "real": "2.419157902164281857245061712631583449061e-25",
+        "imag": "-6.381861656015030750089756811366116463773e-42"
+      },
+      "absolute_error": "0.000000001966590899102589536407632962696216436876992482507260335142543131867869",
+      "scaled_error": "0.000000001966590899102589536407632962696216436876992482507260335142543131867869"
+    },
+    {
+      "exponents": [
+        1,
+        1,
+        6,
+        2
+      ],
+      "parity_index": 5,
+      "candidate": {
+        "real": "0.0000000019600131805100605",
+        "imag": "0.0000000001201876284343747"
+      },
+      "reference": {
+        "real": "1.174217773988200542317690583745902937327e-23",
+        "imag": "-7.465090268468176970734958113012098543761e-40"
+      },
+      "absolute_error": "0.000000001963694664096685956493596195484867371788232214724272318081566605169033",
+      "scaled_error": "0.000000001963694664096685956493596195484867371788232214724272318081566605169033"
+    },
+    {
+      "exponents": [
+        0,
+        2,
+        6,
+        2
+      ],
+      "parity_index": 6,
+      "candidate": {
+        "real": "0.000000001954432054995185",
+        "imag": "0.000000000021296644058369662"
+      },
+      "reference": {
+        "real": "-2.410488956469868531109429463514388165679e-25",
+        "imag": "6.381861656015030750089756811365927542356e-42"
+      },
+      "absolute_error": "0.000000001954548081946528036950673120907020592743316450586077245545948173570949",
+      "scaled_error": "0.000000001954548081946528036950673120907020592743316450586077245545948173570949"
+    }
+  ],
+  "by_twice_total_level": [
+    {
+      "twice_total_level": 0,
+      "slots": 8,
+      "failed_slots": 0,
+      "max_absolute": "0.0000000000000009999999999999999848459860000000000000000000000000000000018713315945548",
+      "max_scaled": "0.0000000000000009999999999999999848459860000000000000000000000000000000018713315945548"
+    },
+    {
+      "twice_total_level": 1,
+      "slots": 24,
+      "failed_slots": 0,
+      "max_absolute": "0.000000000000007103435772681373910695376257339719467877428290787917419460800644325172",
+      "max_scaled": "0.000000000000007103435772681373910695376257339719467877428290787917419460800644325172"
+    },
+    {
+      "twice_total_level": 2,
+      "slots": 56,
+      "failed_slots": 0,
+      "max_absolute": "0.00000000000003786620579524100826163388188197584466405253237408452259004035161041567",
+      "max_scaled": "0.00000000000003786620579524100826163388188197584466405253237408452259004035161041567"
+    },
+    {
+      "twice_total_level": 3,
+      "slots": 104,
+      "failed_slots": 0,
+      "max_absolute": "0.0000000000001871832234352940614715596041884901565678835986507225330029684525805069",
+      "max_scaled": "0.0000000000001871832234352940614715596041884901565678835986507225330029684525805069"
+    },
+    {
+      "twice_total_level": 4,
+      "slots": 176,
+      "failed_slots": 0,
+      "max_absolute": "0.000000000002262219285579889242339710588057555662249245995562743755968767181106533",
+      "max_scaled": "0.000000000002262219285579889242339710588057555662249245995562743755968767181106533"
+    },
+    {
+      "twice_total_level": 5,
+      "slots": 272,
+      "failed_slots": 0,
+      "max_absolute": "0.000000000007073918174608843815018065747350191442279867624055304045974812682994532",
+      "max_scaled": "0.000000000007073918174608843815018065747350191442279867624055304045974812682994532"
+    },
+    {
+      "twice_total_level": 6,
+      "slots": 400,
+      "failed_slots": 0,
+      "max_absolute": "0.00000000001752551172843982124532993062255696263871292177531809517449302129406883",
+      "max_scaled": "0.00000000001752551172843982124532993062255696263871292177531809517449302129406883"
+    },
+    {
+      "twice_total_level": 7,
+      "slots": 560,
+      "failed_slots": 0,
+      "max_absolute": "0.00000000002592090532982835279339300274121397775478757935079388822659936793548997",
+      "max_scaled": "0.00000000002592090532982835279339300274121397775478757935079388822659936793548997"
+    },
+    {
+      "twice_total_level": 8,
+      "slots": 760,
+      "failed_slots": 0,
+      "max_absolute": "0.0000000004254834172435988795654770552695238701850654439228079418017555119976523",
+      "max_scaled": "0.0000000004254834172435988795654770552695238701850654439228079418017555119976523"
+    },
+    {
+      "twice_total_level": 9,
+      "slots": 1000,
+      "failed_slots": 0,
+      "max_absolute": "0.000000002240547391580653078350393697771886838511235779280353958100814828963001",
+      "max_scaled": "0.000000002240547391580653078350393697771886838511235779280353958100814828963001"
+    },
+    {
+      "twice_total_level": 10,
+      "slots": 1288,
+      "failed_slots": 0,
+      "max_absolute": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403",
+      "max_scaled": "0.00000000742358755708663529562965891350800612673662625066461068370631111841403"
+    }
+  ],
+  "comparison_seconds": 0.13473079200048232,
+  "limitation": "Agreement with the saved 40-digit result is not an independent correctness proof or a guarantee at other levels/parameters"
+}

@@ -1,0 +1,54 @@
+{
+  "scope": "instrumented fresh machine action n=11/4, P=13/29, b=7/5; no C implementation",
+  "total_seconds": 19.511633374997473,
+  "timers": {
+    "basis_images": {
+      "seconds": 6.447327273053816,
+      "calls": 147751
+    },
+    "sparse_products": {
+      "seconds": 0.3814735359264887,
+      "calls": 754
+    },
+    "native_norms": {
+      "seconds": 0.040962084000057075,
+      "calls": 3
+    },
+    "native_lstsq": {
+      "seconds": 0.7994720000060624,
+      "calls": 1
+    },
+    "span_fit_including_assembly": {
+      "seconds": 1.90906291599822,
+      "calls": 1
+    }
+  },
+  "timers_are_inclusive": true,
+  "coefficients": 483,
+  "rank": 483,
+  "relative_residual": 1.5074782158272112e-11,
+  "migration_scenarios": [
+    {
+      "speedup_of_remaining_work": 3,
+      "seconds": 8.030902092948963,
+      "total_speedup": 2.429569324737311
+    },
+    {
+      "speedup_of_remaining_work": 5,
+      "seconds": 5.734755836539262,
+      "total_speedup": 3.4023477077573556
+    },
+    {
+      "speedup_of_remaining_work": 10,
+      "seconds": 4.012646144231985,
+      "total_speedup": 4.862535263181542
+    },
+    {
+      "speedup_of_remaining_work": 20,
+      "seconds": 3.1515912980783467,
+      "total_speedup": 6.191041772102401
+    }
+  ],
+  "scenario_assumption": "Hold complete span fit and existing sparse products fixed; divide all remaining time by the assumed factor. Some remaining work also uses compiled primitives.",
+  "unchanged_span_and_product_seconds": 2.2905364519247087
+}

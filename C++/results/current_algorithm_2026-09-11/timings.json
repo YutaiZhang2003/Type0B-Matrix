@@ -1,0 +1,214 @@
+{
+  "status": "completed",
+  "dps": 40,
+  "environment": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "binary_sha256": "2ec129ecf8b7dc7bcee141cf7cc0372b7f43fb3ef3145d2eaf1d704fed3b8ec4",
+  "source_sha256": {
+    "include/ramond/anchors.hpp": "f872aa391ff88a74fbbdfb5890c5572f73f438242bba350049c846f07a98ef52",
+    "include/ramond/branching.hpp": "3000404b8ff5bcd9b12ef29a4d491f85da5d85b3eab4795ce71352345446b6e3",
+    "include/ramond/ccy.hpp": "2524a894c677f80d3d3681b94d41eba46bc4d0b3cd81067cc5ffba2daa1113d4",
+    "include/ramond/fermion.hpp": "ee5ffd7affc122c357ce39d398504810f383b7a53e77e98f64c121cd0db6a2c4",
+    "include/ramond/free_field.hpp": "a3a15e49c347c10270dfebb949f23df4cf184be2150c3db9260f7d10fb1fd3c0",
+    "include/ramond/linalg.hpp": "7f581e87d05e27257ecf922c88fff8655fd5e548391fb5a7422782b6fe8cf16a",
+    "include/ramond/number.hpp": "8f2dd10b1750145a21ef0749df933759ae873f9e3d2790eda29b7ebe534b1a2e",
+    "include/ramond/pipeline.hpp": "dd302313427bea122f6a77c38d62e1a68c364da1a06fcbdd1a2a5dc75c83dac5",
+    "include/ramond/schottky.hpp": "7cd10a9f80137b989dbe9bda287277163a783b5717a01256378c9d7cbecf81bd",
+    "include/ramond/storage.hpp": "b873a78be8afd1ef0a81ecfad1d4166fc268a36abd595f61ca1512c82a26c02c",
+    "src/main.cpp": "d65aed7ecc67f7ebcccdab58900922e97edd3faac9b67de14011d2165ba1ee92"
+  },
+  "protocol": "separate sequential processes; empty numerical caches; no PBW",
+  "runs": [
+    {
+      "level": 10,
+      "mode": "ordinary",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--level",
+        "10",
+        "--dps",
+        "40",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/current_algorithm_2026-09-11/ordinary_level10_40dps.json"
+      ],
+      "pid": 23860,
+      "status": "completed",
+      "result": "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/current_algorithm_2026-09-11/ordinary_level10_40dps.json",
+      "started_unix": 1789116692.111435,
+      "wall_seconds": 38.352457041997695,
+      "exit_code": 0,
+      "timing_seconds": {
+        "branching": 30.14831375000358,
+        "actions": 28.855808166990755,
+        "outer_ward": 1.2910629169928143,
+        "middle": 0,
+        "ccy": 6.7065330733166775,
+        "products": 0.861173702054657,
+        "assembly": 0.11202238428813871,
+        "auxiliary": 0.11590445799811278,
+        "division": 0.1813164159975713,
+        "schottky": 0.009815708006499335,
+        "restoration": 0.010357708000810817,
+        "total": 38.20900200000324
+      },
+      "diagnostics": {
+        "maximum_action_residual": 8.500963182551842e-26,
+        "maximum_ward_residual": 3.0160962502398414e-28,
+        "maximum_sector_residual": 3.506478467018306e-24
+      },
+      "counts": {
+        "branches": 387,
+        "virasoro_blocks": 774,
+        "transposed_products_reused": 0
+      },
+      "coefficient_vectors": 506
+    },
+    {
+      "level": 10,
+      "mode": "inserted",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--level",
+        "10",
+        "--dps",
+        "40",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/current_algorithm_2026-09-11/inserted_level10_40dps.json"
+      ],
+      "pid": 23877,
+      "status": "completed",
+      "result": "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/current_algorithm_2026-09-11/inserted_level10_40dps.json",
+      "started_unix": 1789116730.476498,
+      "wall_seconds": 110.4145817499957,
+      "exit_code": 0,
+      "timing_seconds": {
+        "branching": 33.323747166999965,
+        "actions": 30.987228500001947,
+        "outer_ward": 2.336090166994836,
+        "middle": 0.03764854199835099,
+        "ccy": 74.99466589167423,
+        "products": 1.058774281933438,
+        "assembly": 0.25273681279213633,
+        "auxiliary": 0.1400840840069577,
+        "division": 0.20345245800854173,
+        "schottky": 0.01307950000045821,
+        "restoration": 0.01436795899644494,
+        "total": 110.32493225000508
+      },
+      "diagnostics": {
+        "maximum_action_residual": 8.905397689950091e-26,
+        "maximum_ward_residual": 6.139801931873987e-27,
+        "maximum_sector_residual": 1.0703970287511424e-19
+      },
+      "counts": {
+        "branches": 634,
+        "virasoro_blocks": 652,
+        "transposed_products_reused": 308
+      },
+      "coefficient_vectors": 506
+    },
+    {
+      "level": 15,
+      "mode": "ordinary",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--level",
+        "15",
+        "--dps",
+        "40",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/current_algorithm_2026-09-11/ordinary_level15_40dps.json"
+      ],
+      "pid": 23930,
+      "status": "completed",
+      "result": "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/current_algorithm_2026-09-11/ordinary_level15_40dps.json",
+      "started_unix": 1789116840.9145951,
+      "wall_seconds": 471.3981104580016,
+      "exit_code": 0,
+      "timing_seconds": {
+        "branching": 437.8261730410013,
+        "actions": 436.0420098750037,
+        "outer_ward": 1.783281000010902,
+        "middle": 0,
+        "ccy": 28.68340926730889,
+        "products": 3.435432885918999,
+        "assembly": 0.12375873119162861,
+        "auxiliary": 0.4835737910034368,
+        "division": 0.48224841699993704,
+        "schottky": 0.07864183299534488,
+        "restoration": 0.034580916006234474,
+        "total": 471.29127479100134
+      },
+      "diagnostics": {
+        "maximum_action_residual": 8.500963182551842e-26,
+        "maximum_ward_residual": 1.0313127403836422e-29,
+        "maximum_sector_residual": 1.300194030726201e-18
+      },
+      "counts": {
+        "branches": 719,
+        "virasoro_blocks": 1438,
+        "transposed_products_reused": 0
+      },
+      "coefficient_vectors": 1496
+    },
+    {
+      "level": 15,
+      "mode": "inserted",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--level",
+        "15",
+        "--dps",
+        "40",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/current_algorithm_2026-09-11/inserted_level15_40dps.json"
+      ],
+      "pid": 24319,
+      "status": "completed",
+      "result": "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/current_algorithm_2026-09-11/inserted_level15_40dps.json",
+      "started_unix": 1789117312.334879,
+      "wall_seconds": 693.835637958,
+      "exit_code": 0,
+      "timing_seconds": {
+        "branching": 138.4606987080042,
+        "actions": 135.74518216699653,
+        "outer_ward": 2.7152020409994293,
+        "middle": 0.03695283300476149,
+        "ccy": 548.8648949431663,
+        "products": 4.522348002748913,
+        "assembly": 0.22121694193629082,
+        "auxiliary": 0.47421674999350216,
+        "division": 0.4716694999951869,
+        "schottky": 0.07775295800820459,
+        "restoration": 0.03374712499498855,
+        "total": 693.7478222909995
+      },
+      "diagnostics": {
+        "maximum_action_residual": 8.905397689950091e-26,
+        "maximum_ward_residual": 1.4152039638152806e-28,
+        "maximum_sector_residual": 9.655381832436741e-19
+      },
+      "counts": {
+        "branches": 1234,
+        "virasoro_blocks": 1248,
+        "transposed_products_reused": 610
+      },
+      "coefficient_vectors": 1496
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "scope": "Exact equality of saved coefficient strings between the original and optimized machine-precision pipelines; no physical PBW or additional CFT check",
+  "files": {
+    "baseline": "Code/theta_fermion_ccy/results/ccy_schottky_machine_complete_level10.json",
+    "optimized": "Code/theta_fermion_ccy/results/ccy_recursion_reuse_machine_level10.json"
+  },
+  "source_sha256": {
+    "Code/theta_fermion_ccy/results/ccy_schottky_machine_complete_level10.json": "647ec2156f06b58ebe8381f3de794aad84f535211c6eebbe7fcfb01bb2b0e2e6",
+    "Code/theta_fermion_ccy/results/ccy_recursion_reuse_machine_level10.json": "02bec28ce064f1e35acc065c7f367b943957688f8908a380659b5a1d02f9db44"
+  },
+  "checks": {
+    "reduced_numerator": {
+      "exactly_identical_saved_coefficients": true,
+      "old_vectors": 5786,
+      "new_vectors": 5786,
+      "different_vectors": 0,
+      "first_different_exponents": []
+    },
+    "full_auxiliary": {
+      "exactly_identical_saved_coefficients": true,
+      "old_vectors": 4793,
+      "new_vectors": 4793,
+      "different_vectors": 0,
+      "first_different_exponents": []
+    },
+    "coefficients": {
+      "exactly_identical_saved_coefficients": true,
+      "old_vectors": 5786,
+      "new_vectors": 5786,
+      "different_vectors": 0,
+      "first_different_exponents": []
+    }
+  },
+  "comparison_seconds": 0.0407255409991194
+}

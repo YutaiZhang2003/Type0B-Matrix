@@ -1,0 +1,94 @@
+The counting script enumerates every retained triple $(a,l_2,l_3)$ with
+$a+2l_2+2l_3\le 2N$, using the preceding character dimensions.  The following
+counts apply to the current physical PBW reference code, before any numerical
+values are computed:
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Quantity & $N=10$ & $N=15$\\
+\midrule
+Physical monomials & 506 & 1,496\\
+Parity output slots & 4,048 & 11,968\\
+Largest NS Gram dimension & 161 & 1,016\\
+Largest R Gram dimension, per parity & 232 & 1,472\\
+Entries in the distinct Gram matrices & 450,469 & 20,431,839\\
+Sum of cubes of Gram dimensions & 78,765,711 & 22,116,449,163\\
+Requested vertex entries, $\eta\eta'=-1$ & 315,028 & 9,895,892\\
+Dense contraction multiplications & 7,204,872 & 734,995,948\\
+\bottomrule
+\end{tabular}
+\end{center}
+For a triple with dimensions $d_1,d_2,d_3$, the two parity sectors and two
+vertices request $4d_1d_2d_3$ entries; the three successive Gram contractions
+and final pairing use $2d_1d_2d_3(d_1+d_2+d_3+1)$ complex multiplications.
+The Gram cache has one matrix at each NS half-level and two parity matrices
+at each level on each Ramond edge.  The cubic sum is a work proxy for dense
+inversion, not an exact operation count.  At level 15, storing only these
+Gram matrices and their inverses as complex128 arrays already takes
+$654$ MB; Python objects, Ward caches, and multiprecision storage are additional.
+
+For $\eta'=\eta$, both vertices call the same cached three-point form.
+The number of distinct requested form entries is therefore halved.  The
+implementation still constructs both tensor arrays, including their phases,
+and performs the same Gram contractions.  Consequently the whole PBW runtime
+must not be halved.  In the estimates below only the fitted cost associated
+with tensor entries is allowed to decrease, by a factor between $1/2$ and $1$.
+The endpoints describe assumptions about the unmeasured division between Ward
+work and tensor/cache overhead; they are not rigorous bounds.
+
+The calibration uses the 506 cumulative records in each of
+\path{Code/theta_fermion_ccy/results/pbw_machine_level10.log} and
+\path{Code/theta_fermion_ccy/results/pbw_level10.log}.
+Differences of successive records give times per monomial.  A nonnegative
+least-squares fit uses newly encountered Gram entries, requested tensor
+entries, newly encountered sums of dimension cubes, dense contraction
+multiplications, monomial count, and cumulative output size.  Evaluating the
+same features at level 15 gives the following \emph{full-feature estimates};
+no PBW calculation was rerun. A leaner model below gives substantially lower
+level-15 estimates, so the table is not a definitive runtime forecast.
+\begin{center}
+\begin{tabular}{clcc}
+\toprule
+Level & PBW arithmetic & $\eta\eta'=1$ & $\eta\eta'=-1$\\
+\midrule
+10 & Native, 53 bits & $21$--$31$ s (estimated) & $31.4$ s (saved)\\
+15 & Native, 53 bits & $34$--$40$ min (estimated) & $40$ min (estimated)\\
+10 & FLINT, 384 bits & $89$--$110$ s (estimated) & $110.2$ s (saved)\\
+15 & FLINT, 384 bits & $241$--$252$ min (estimated) & $252$ min (estimated)\\
+\bottomrule
+\end{tabular}
+\end{center}
+The level-10 saved full-process times are $33.55$ s and $112.83$ s,
+respectively.  Their internal times include repeatedly serializing the growing
+coefficient list; the C++ internal timer excludes final serialization, so the
+parent process times are the appropriate end-to-end comparison.
+
+The time model is substantially less certain than the integer work counts.
+A lean fit omitting explicit cubic and contraction features instead predicts
+$18$ min (native) and $76$ min (384 bits) for the negative sector at level 15;
+with the same form-cache assumptions its positive-sector estimates are
+$12$--$18$ min and $61$--$76$ min.  These alternatives expose model sensitivity,
+especially to matrix and Gram-construction growth.  They do not form a
+statistical confidence interval.  The full-feature fit has per-monomial RMS
+residuals of $0.028$ s (native) and $0.068$ s (384 bits) on the saved level-10
+data, but correlated features and uncounted internal Ward recursion prevent
+interpreting its fitted contributions as measured stage timings.
+
+There is no saved 136-bit PBW calibration.  In particular, the 384-bit figures
+above are a comparison with a higher-precision implementation, not predictions
+for a 40-digit PBW run.  Interpolating between native complex128 and FLINT by
+bit count would mix different arithmetic backends and is not justified.
+Nor do these estimates describe a hypothetical C++ PBW implementation.
+Thus the fresh 40-digit C++ measurements establish that implementation's
+runtime; the table supplies the requested approximate PBW comparison with
+its precision and modelling limits stated explicitly.
+
+\begin{samepage}
+The reproducible integer counts, both fitted models, sector adjustments,
+source hashes, and saved-log provenance are in
+\path{C++/results/current_algorithm_2026-09-11/pbw_estimates.json}.
+Regenerate them, without evaluating any block, using
+\begin{verbatim}
+python3 'C++/results/current_algorithm_2026-09-11/estimate_pbw.py'
+\end{verbatim}
+\end{samepage}

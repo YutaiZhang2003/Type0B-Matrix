@@ -10,7 +10,7 @@
 \numberwithin{equation}{section}
 \title{A fermion insertion on the Ramond tube of the theta block}
 \author{Separate working notes}
-\date{September 10, 2026}
+\date{September 11, 2026}
 \begin{document}
 \maketitle
 
@@ -614,31 +614,60 @@ therefore forget the external puncture and collapse the extra sphere.
 Every sewing and collapsing map is M\"obius, so no Schwarzian term is
 introduced.  Equation \eqref{product} shows that the factor depends
 only on $(q_1,\hat q_{2,1}\hat q_{2,2},q_3)$.
-It is computed by the leading Gaussian contractions of
-$L_{-m}/\sqrt c$, $m\geq2$.  For multiplicities $k_m$ the diagonal norm is
+We compute it from the Schottky product, equation (5.5) of
+\cite{CCY}:
 \ie
- \left\|\prod_{m\geq2}(L_{-m}/\sqrt c)^{k_m}\mathbf1\right\|^2
- \longrightarrow
- \prod_{m\geq2} k_m!\left[\frac{m(m^2-1)}{12}\right]^{k_m}.
+ \lim_{c\to\infty}F_{\mathrm{vac}}
+ =\prod_{\gamma\in\mathcal P}\prod_{m=2}^{\infty}
+ (1-q_\gamma^m)^{-1/2}.
 \fe
-The pair contractions between the ordered slots are
+Here $\mathcal P$ contains primitive conjugacy classes, meaning classes
+which are not proper powers, and $q_\gamma$ is the attracting multiplier.
+The classes of $\gamma$ and $\gamma^{-1}$ are distinct and have the same
+multiplier.  Our enumeration identifies this pair and consequently uses
+exponent $-1$ for each retained class.
+
+The three edges meet $\infty,1,0$, respectively, on each sphere.
+Their crossing maps have projective matrices
 \ie
- C_{\infty,0}(m,n)&=\delta_{mn}\frac{m(m^2-1)}{12},\\
- C_{\infty,1}(m,n)&=\frac{m(m^2-1)}{12}\binom{m-2}{n-2}
- \quad(m\geq n),\\
- C_{1,0}(m,n)&=\frac{(-1)^m(m+n-1)!}{12(m-2)!(n-2)!}.
+ \begin{pmatrix}0&1\\q_1&0\end{pmatrix},\qquad
+ \begin{pmatrix}1&q_2-1\\1&-1\end{pmatrix},\qquad
+ \begin{pmatrix}0&q_3\\1&0\end{pmatrix}.
 \fe
-The second is zero when $m<n$, and same-slot contractions are zero.
-These formulas follow by expanding or differentiating
-$\langle T(z)T(w)\rangle=c/[2(z-w)^4]$ at the three punctures.
-At a fixed triple of vacuum levels, sum the square of the three-slot
-Wick contraction over oscillator partitions and divide by the three
-diagonal norms above.  The code performs this finite sum exactly over
-the rationals.  It uses the large-$c$ algebra, not a finite-$c$ Gram
-inverse.  The reduced double-Virasoro numerator is missing two copies
-of this factor.  The selected direct fermion sum contains its full
-sewing dependence, so division by it must be followed by restoring
-two copies in the physical result.
+These implement $z'=1/(q_1z)$, $z'=1+q_2/(z-1)$, and $z'=q_3/z$.
+Each squares to $q_i$ times the identity, so the same matrix represents
+the inverse crossing.  A closed walk without immediate backtracking
+gives a Schottky element by matrix multiplication.  We retain primitive
+walks modulo cyclic rotation and reversal, recording directed edges so
+that the starting sphere is preserved when testing for proper powers.
+This is equivalent to choosing a spanning tree and enumerating primitive
+classes of the resulting free Schottky group.
+
+Let $M_\gamma$ be the product of crossing matrices along a retained walk.
+For the theta plumbing its trace has nonzero constant term: at the cusp
+each edge matrix has rank one, and successive distinct punctures give
+nonzero pairings, including the cyclic join.  The multiplier can therefore
+be expanded exactly as
+\ie
+ q_\gamma=\sum_{j\geq1}\frac{1}{j+1}\binom{2j}{j}
+ \left(\frac{\det M_\gamma}{(\operatorname{tr}M_\gamma)^2}\right)^j.
+\fe
+Indeed, the ratio in parentheses equals $q_\gamma/(1+q_\gamma)^2$.
+Its leading plumbing degree is the walk length.  Since the first
+oscillator factor starts with $q_\gamma^2$, a total-degree-$N$ expansion
+needs only walks of length at most $N/2$.  The theta graph is bipartite,
+so through level ten only lengths two and four contribute, giving six
+unoriented primitive classes.  Expand their logarithmic products and
+exponentiate in the truncated rational series algebra.  This computes
+every required coefficient without an independent word-length cutoff.
+The same construction applies to supplied sewing graphs whose local
+projective maps have positive-order determinants and unit traces for
+reduced cycles; the implemented wrapper supplies the theta maps above.
+
+The reduced double-Virasoro numerator is missing two copies of this
+factor.  The selected direct fermion sum contains its full sewing
+dependence, so division by it must be followed by restoring two copies
+in the physical result, with $q_2=\hat q_{2,1}\hat q_{2,2}$.
 
 To define a finite physical total-level truncation without placing the
 insertion at an endpoint, write
@@ -670,6 +699,90 @@ no high-level Fock-to-PBW reflection matrix is needed.  The action
 data are stored for each momentum and reused across the outer Ward
 equations.
 
+\subsection{Reusing the same data}
+
+The two orientations of the split tube need not be computed independently.
+In \eqref{punctured-vir}, exchanging $(h_L,\hat q_{2,1})$ with
+$(h_R,\hat q_{2,2})$ interchanges the two outer scalar three-point forms
+and transposes the middle matrix element.  The latter is invariant under
+BPZ transposition at the insertion point one.  The inverse Gram pairings
+are also exchanged.  Equivalently, the global seed is invariant, the two
+split-edge residue sums are interchanged, and the residues on edges one
+and three are separately invariant.  Induction in the descendant level
+therefore gives
+\ie
+ &F(h_1,h_L,h_R,h_3;h_\psi;c\mid
+ q_1,\hat q_{2,1},\hat q_{2,2},q_3)\\
+ &\quad=F(h_1,h_R,h_L,h_3;h_\psi;c\mid
+ q_1,\hat q_{2,2},\hat q_{2,1},q_3).
+\fe
+For each $n_1,n_3$ and unordered pair $\{n,n'\}$, the product of the two
+Virasoro blocks is computed once.  The reverse orientation transposes
+its split exponents.  Both orientations retain their own branching
+coefficients, norms and parity factors in \eqref{full-branching}.
+When both orientations contribute, this halves their ordinary-block
+evaluations without restricting any plumbing exponent.
+
+For the outer Ward system, the Ramond action coefficients need be solved
+for only one parity.  Apply $\Theta$ to a parity-zero descendant identity
+and use
+\eqref{theta-primary}.  For each term changing the primary label from
+$n$ to $n'$, where $n'$ now denotes the target label of the action,
+its parity-one coefficient is its parity-zero coefficient multiplied by
+\ie
+ 2^{\bigl((-1)^{2|n'|-1/2}-(-1)^{2|n|-1/2}\bigr)/2}.
+\fe
+The multiplier is one for a same-primary term and for inward steps with
+$|n|\geq5/4$.  It is $1/2$ for $\pm1/4\to\mp3/4$ and $2$ for the
+reverse move.  The absolute values make the same formula valid on the
+reflected chart.  The outer solver therefore obtains the second parity
+by this identity, rather than repeating its descendant-span solves.
+
+Within each action solve at fixed parameters and precision, descendant
+words with a common suffix use the same intermediate state.  These states
+are cached with their primary
+and both descendant words, then released after the solve.  The ordering
+of the two Virasoro words and every span column are unchanged.  Each
+embedded generator's image of a single oscillator basis state is also
+reused when that state occurs in different columns; linearity then gives
+its action on each sparse expression.  These images are also released
+after the solve.  Each span column is normalized once; multiprecision
+refinement uses its nonzero entries.  The final residual is evaluated
+using the original unnormalized columns on every oscillator row.
+Sparse coefficient accumulation reuses an exact zero and a numerical
+tolerance cached for the active precision and rounding mode.  A change
+of precision recomputes the tolerance; the addition order and pruning
+criterion are unchanged.
+
+For each pair of Ramond parities and each $f$, the outer Ward matrix is
+independent of $\eta$; only its anchor right-hand side depends on that
+label.  One factorization serves both signs.  The retained primary
+triples are the queried triples closed under every action-label change.
+The solver still requires full column rank and checks the residual on
+every retained Ward and anchor equation.  Multiprecision residuals visit
+only the nonzero entries of each row.
+
+Within each CCY calculation, for fixed $(r,s)$ the Kac pole position and
+universal residue factor depend only on the null edge's shifted weight.
+They are reused for different spectator shifts.  At fixed $c$ and
+shifted internal weights, each complete residue divided by $c-c_{rs}$
+is independent of the remaining descendant levels and can also be
+reused.  The three-point factors in the global seed, including
+their assigned inverse norms, are cached separately; each internal norm
+still occurs exactly once.  When all four remaining levels are at most
+one there is no admissible null-state residue, and the recursion returns
+the global seed directly.  Real intermediate quantities use real
+multiprecision arithmetic, with complex promotion whenever required.
+
+Finally, group series terms by total degree so that convolution visits
+only pairs below the cutoff.  The triangular division can update higher
+coefficients as soon as a lower coefficient is known: multiply that
+coefficient by each positive-degree auxiliary term and subtract from
+the corresponding higher residual.  Positive degree guarantees that
+these updates never change a coefficient already solved.  This is the
+same recurrence as \eqref{recovery}; its sector guard is unchanged and
+no unequal split power is removed.
+
 \section{Implementation and numerical status}
 
 The implementation is in \texttt{Code/theta\_fermion\_ccy}.
@@ -677,9 +790,11 @@ The implementation is in \texttt{Code/theta\_fermion\_ccy}.
 \eqref{middle-recurrence-out}--\eqref{middle-recurrence-in};
 \texttt{outer\_branching.py} uses the existing outer $L_1$ Ward system;
 \texttt{punctured\_ccy.py} supplies genuine central-charge residues and
-the global seed; \texttt{direct\_fermion.py} evaluates the full
+the global $SL(2)$ seed; \texttt{schottky\_vacuum.py} supplies the
+universal vacuum factor; \texttt{direct\_fermion.py} evaluates the full
 auxiliary factor by its mode Ward identities and diagonal Fock
-pairing; \texttt{pipeline.py} performs the branch sum and
+pairing; \texttt{action\_optimization.py} supplies reusable action-state
+construction and sparse refinement; \texttt{pipeline.py} performs the branch sum and
 \texttt{series\_algebra.py} performs the sector division.
 The archived outer oracle uses the opposite label for an odd form:
 $\eta_{\mathrm{native}}=(-1)^f\eta_{\mathrm{physical}}$.  The adapter
@@ -697,19 +812,20 @@ pipeline.  No additional component numerical comparison suite is used.
 \textbf{The two requested comparisons pass through level five.}
 The benchmark is $b=7/5$, $(P_1,P_2,P_3)=(11/23,13/29,17/31)$,
 $p_1=f=0$ and $(\eta,\eta')=(+,-)$.  The calculation uses 70 decimal
-digits for the outer Ward system, 100 for the CCY engines, and exact
-rational fermion sewing before restoring its common $Q/\sqrt2$ factor.  The
+digits for the outer Ward system, 100 for the middle recurrence and CCY
+engines, and exact rational fermion sewing before restoring its common
+$Q/\sqrt2$ factor.  The
 independent physical PBW reference uses 384-bit FLINT arithmetic.
 All 4,648 parity-coefficient slots in the four-variable truncation are
 compared, including off-diagonal slots whose physical answer is zero.
-The maximum absolute difference is $4.72\times10^{-52}$; the maximum
+The maximum absolute difference is $3.84\times10^{-52}$; the maximum
 difference divided by $\max(1,|\text{PBW coefficient}|)$ is
-$4.72\times10^{-52}$.
+$3.84\times10^{-52}$.
 
 The split-position comparison uses $(q_1,q_2,q_3)=(0.013,0.007,0.009)$,
 $u=1/2,1,2$, and all eight evaluations of the spin-lift signs.  The
 maximum change, divided by $\max(1,|\mathbb F(u=1)|)$, is
-$2.96\times10^{-60}$.  For example, at $(\eta_1,\eta_2,\eta_3)=(1,-1,1)$
+$1.67\times10^{-58}$.  For example, at $(\eta_1,\eta_2,\eta_3)=(1,-1,1)$
 all three values agree with $2.0178804284272157747114188332429722451467$
 to the digits shown.
 These are numerical differences, not interval error bounds.
@@ -717,24 +833,58 @@ These are numerical differences, not interval error bounds.
 The pipeline timer includes all mathematical stages and intermediate
 checkpoint writes.  It starts after imports and argument parsing and
 ends before encoding and saving the final physical series.
-This level-five run took $82.1968$ seconds in total: $52.1231$ for the
-outer coefficients, $2.6851$ for the middle recurrence, $26.1996$ for
-the two Virasoro blocks in the branch sum, $0.0825$ for the direct
-auxiliary factor, and $0.6678$ for division and the restored vacuum
+This level-five computation took $12.2465$ seconds: $5.7188$ for the
+outer coefficients, $1.0368$ for the middle recurrence, $4.5772$ for
+the Virasoro block products in the branch sum, $0.1144$ for the direct
+auxiliary factor, and $0.3802$ for division and the restored vacuum
 factors.  The balance is
-assembly and intermediate serialization.  This is a \emph{level-five}
+assembly and intermediate serialization.  A separate parent-process
+timer measured $12.6937$ seconds from launching the calculation through
+its successful exit, including imports and all result writes.
+This is a \emph{level-five}
 runtime; it is not a level-ten estimate.  The complete output and the
 two comparisons are saved under \texttt{Code/theta\_fermion\_ccy/results}
-as \texttt{ccy\_direct\_reflected\_level5.json} and
-\texttt{validation\_ccy\_direct\_reflected\_level5.json}.
+as \texttt{ccy\_reused\_constants\_level5.json} and
+\texttt{validation\_ccy\_reused\_constants\_level5.json}; the full-process
+timing is in \texttt{ccy\_reused\_constants\_level5\_walltime.json}.
+
+For a nearby timing comparison, the archived implementation before
+constant reuse was rerun in a fresh process with the same parameters
+and precision.  It took $19.7228$ seconds in full, including $11.7306$
+seconds for the outer stage, versus $12.6937$ and $5.7188$ seconds after
+the edit.  This is a measured factor of about $1.55$ for the whole run
+and $2.05$ for the outer stage.  Both runs took place while an earlier
+level-ten process was active.  The original $89.8903$-second measurement
+also had substantially slower unchanged stages; its full difference
+cannot be attributed to this edit.  The nearby archived timing is saved
+as \texttt{ccy\_pre\_constants\_retimed\_level5\_walltime.json}.
+
+A fresh direct physical PBW calculation at the same parameters and
+level-five truncation took $1.4991$ seconds from process launch through
+exit, including imports and all result writes.  Its internal timer
+recorded $0.7117$ seconds.  Thus the present implementation of the
+branching and CCY construction is about 8.5 times slower by the full
+process measurement at this level.  The PBW run used 384-bit FLINT
+arithmetic and ran while the level-ten CCY process was active; the
+arithmetic backends and precision settings differ.  These timings
+compare the existing implementations and do not establish their
+asymptotic scaling.  The fresh records are
+\texttt{pbw\_level5\_retimed.json} and
+\texttt{pbw\_level5\_retimed\_walltime.json}.
 
 The production calculation retains the input, anchor and Ward-solution
 precision throughout.  Its sector guard raises an error if division
 leaves the required ideal; it does not project the answer to force the
 identity.  The separate level-ten auxiliary benchmark in
 \S\ref{direct-fermion-definition} is not a runtime for the physical
-block.  The full level-ten production timing is being measured with
-the same implementation and precision settings.
+block.  The level-ten process loaded before constant reuse completed
+in $1191.6387$ seconds from launch through exit, with $1189.8001$ seconds
+on its internal timer.  The output and timing are saved as
+\texttt{ccy\_cached\_actions\_level10.json} and
+\texttt{ccy\_cached\_actions\_level10\_walltime.json}.  Its source
+manifest identifies the preceding implementation.  A full level-ten
+timing of the updated sources remains to be measured after the
+level-five checks reported here.
 
 \begin{thebibliography}{9}
 \bibitem{CCY}

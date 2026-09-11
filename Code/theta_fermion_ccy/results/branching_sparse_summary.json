@@ -1,0 +1,104 @@
+{
+  "status": "implemented; targeted branching checks passed",
+  "scope": "branching only; no full level-15 or PBW block run",
+  "current_sources": {
+    "action_optimization.py": "fa4cdd5dcaf924be5cd41c59abfad70e0b0194872ecf3f8720db76bed5b70f61",
+    "middle_branching.py": "dcdf15fd7d5d6af03186fae027eb355a4eecdab525a5312a61d9fef93639d6d9",
+    "outer_branching.py": "36af92de986500e38e586a399c82e8810dd106d5e7c346815cb903dd928726a2",
+    "pipeline.py": "d8443f385764f4b6cefed3f0d462e84abef8b32b534adcbcb9f16d0e8da8637f",
+    "benchmarks/branching_reuse.py": "fa1f9a1c608e6fe0a1dc37d595222f84d67ec07e37c892b80ab79c8ff32a515a",
+    "benchmarks/branching_pipeline.py": "bf2831dab7143539f28edacb435ef57801da8d8b8a57c899608ad50761cdb047",
+    "benchmarks/validate_branching_storage.py": "bc81ecb8426d976a74d086a45faba7682a3330c6e4ef2e4c9c65de135b0520f1"
+  },
+  "measured_seconds": {
+    "level10_machine": 5.2555102500045905,
+    "level5_40dps": 3.7085567500034813,
+    "high_ramond_minus": 19.58366012499755,
+    "high_ramond_minus_plus": 21.48598912500165
+  },
+  "estimated_level15_machine_branching_seconds": 89.26845800000592,
+  "estimate_method": "Measured level10 branching + 2 new second-edge R minus/plus pairs + 2 third-edge R minus actions + 2 saved NS actions; additional high-level outer Ward overhead is not measured.",
+  "estimate_is_full_measurement": false,
+  "evidence": [
+    "branching_sparse_level10_machine.json",
+    "branching_indexed_level5_40dps.json",
+    "branching_sparse_n9over4_machine.json",
+    "branching_sparse_n11over4_machine.json",
+    "branching_sparse_pair_n11over4_machine.json",
+    "comparison_branching_sparse_plus_n11over4_machine.json",
+    "validation_branching_storage.json"
+  ],
+  "comparisons": {
+    "level10": {
+      "reference": "Code/theta_fermion_ccy/results/branching_reuse_level10_machine.json",
+      "arithmetic_digits": 60,
+      "outer": {
+        "coefficients": 1936,
+        "maximum_absolute_difference": "139.623836462348659936433615888950598039496920824917280039737",
+        "maximum_scaled_difference": "0.00000000552813122346947025005587924632154626446153607283471748149979",
+        "worst_scaled_key": [
+          1,
+          1,
+          1,
+          [
+            "-2",
+            "-3/4",
+            "-3/4"
+          ]
+        ]
+      },
+      "middle": {
+        "coefficients": 36,
+        "maximum_absolute_difference": "0.00000000000000963884610819198123337813594893504910906606735475400892430586",
+        "maximum_scaled_difference": "0.00000000000000963884610819198123337813594893504910906606735475400892430586",
+        "worst_scaled_key": [
+          "7/4",
+          "5/4",
+          0
+        ]
+      }
+    },
+    "level5_40dps": {
+      "reference": "Code/theta_fermion_ccy/results/branching_reuse_level5_40dps.json",
+      "arithmetic_digits": 60,
+      "outer": {
+        "coefficients": 880,
+        "maximum_absolute_difference": "0.0",
+        "maximum_scaled_difference": "0.0",
+        "worst_scaled_key": [
+          0,
+          0,
+          -1,
+          [
+            "-1",
+            "-5/4",
+            "-3/4"
+          ]
+        ]
+      },
+      "middle": {
+        "coefficients": 28,
+        "maximum_absolute_difference": "0.0",
+        "maximum_scaled_difference": "0.0",
+        "worst_scaled_key": [
+          "-7/4",
+          "-5/4",
+          0
+        ]
+      }
+    },
+    "high_minus": {
+      "reference": "Code/theta_fermion_ccy/results/branching_reuse_n11over4_machine.json",
+      "coefficients": 483,
+      "maximum_absolute_difference": "0.00000000000846022044925643750574070902115360908060778255715755894238366",
+      "maximum_scaled_difference": "0.00000000000188568256331918445567585406099028090817615102783272941800008"
+    },
+    "high_plus": {
+      "reference": "branching_pair_reuse_n11over4_machine.json",
+      "current": "branching_sparse_pair_n11over4_machine.json",
+      "coefficients": 185,
+      "maximum_absolute_difference": "0.000000000000105163020362980761594248060012698965446708181676533988992041",
+      "maximum_scaled_difference": "0.000000000000105163020362980761594248060012698965446708181676533988992041"
+    }
+  }
+}

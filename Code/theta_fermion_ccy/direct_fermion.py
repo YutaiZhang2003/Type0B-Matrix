@@ -193,11 +193,12 @@ class DirectFermion:
     components and all off-diagonal split-edge coefficients.
     """
 
-    def __init__(self, Q=1, *, arithmetic="exact", dps=80):
+    def __init__(self, Q=1, *, arithmetic="exact", dps=80, precision_bits=None):
         if arithmetic != "exact":
             raise ValueError("This provider uses exact FLINT rational arithmetic")
         self.Q = Q
         self.dps = int(dps)
+        self.precision_bits = precision_bits
         self.form = RationalAuxiliaryThreePoint()
         self.diagnostics = {
             "backend": "direct fermion mode Ward identities and sparse state sewing",
@@ -211,7 +212,7 @@ class DirectFermion:
             "validation": "no additional numerical comparisons performed",
         }
 
-    def normalized_series(self, level, progress=None):
+    def normalized_series(self, level, progress=None, *, diagonal_only=False):
         level = int(level)
         if level < 0:
             raise ValueError("level must be nonnegative")
@@ -220,7 +221,7 @@ class DirectFermion:
         ns_basis = tuple(_strict_partitions(n, n, True)
                          for n in range(cutoff+1))
         r_basis = tuple(_strict_partitions(n, n)
-                        for n in range(cutoff+1))
+                        for n in range((level if diagonal_only else cutoff)+1))
         basis_seconds = perf_counter()-started
         answer = {}
         contractions = zero_contractions = toggle_contractions = 0
@@ -262,6 +263,9 @@ class DirectFermion:
                                     contractions += 1
                                     zero_contractions += 1
 
+                                    if diagonal_only:
+                                        continue
+
                                     # Enumerate an unordered state pair by creation.
                                     # Removal has the same action sign, so it supplies
                                     # the transposed split exponents without redoing rho.
@@ -298,8 +302,11 @@ class DirectFermion:
         result = {key: tuple(value) for key, value in sorted(answer.items(),
                   key=lambda item: (sum(item[0]), item[0])) if any(value)}
         self.diagnostics.update({
+            "insertion": ("equal-power component of Q Theta psi(1): Q Theta psi0" if diagonal_only
+                          else "full ordered Q Theta psi(1), including nonzero modes"),
             "maximum_balanced_level": level,
-            "maximum_split_ramond_level_allowed": cutoff,
+            "maximum_split_ramond_level_allowed": level if diagonal_only else cutoff,
+            "diagonal_only": diagonal_only,
             "basis_generation_seconds": basis_seconds,
             "series_computation_seconds": perf_counter()-started,
             "ns_mode_sets": sum(map(len, ns_basis)),
@@ -317,11 +324,16 @@ class DirectFermion:
         })
         return result
 
-    def series(self, level, progress=None):
+    def series(self, level, progress=None, *, diagonal_only=False):
         """Full un-reduced series with Q/sqrt(2) restored numerically."""
-        normalized = self.normalized_series(level, progress=progress)
-        mp = mpmath.mp.clone()
-        mp.dps = self.dps
+        normalized = self.normalized_series(level, progress=progress, diagonal_only=diagonal_only)
+        mp = mpmath.mp.clone() if self.dps else mpmath.fp
+        if self.dps:
+            if self.precision_bits is None:
+                mp.dps = self.dps
+            else:
+                mp.prec = int(self.precision_bits)
+        self.diagnostics["normalization_precision_bits"] = mp.prec
         factor = mp.mpc(self.Q)/mp.sqrt(2)
         return {key: tuple(factor*mp.mpf(int(value.numerator))
                            /int(value.denominator) for value in row)

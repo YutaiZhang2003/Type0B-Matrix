@@ -1,0 +1,106 @@
+{
+  "status": "completed; all saved coefficients exactly equal to the baseline",
+  "parameters": {
+    "b": "7/5",
+    "momenta": [
+      "11/23",
+      "13/29",
+      "17/31"
+    ],
+    "p": 0,
+    "f": 0,
+    "etas": [
+      1,
+      -1
+    ],
+    "total_q_level": 10,
+    "numerical_backend": "native binary64"
+  },
+  "full_process_seconds": 61.89806162500099,
+  "internal_seconds": 61.44847679200029,
+  "baseline_full_process_seconds": 92.56964104100189,
+  "full_process_speedup": 1.4955176076727492,
+  "full_process_time_reduction_percent": 33.13351879847468,
+  "ccy_speedup": 1.6625397656146825,
+  "segments_seconds": {
+    "outer_branching": 10.338900750000903,
+    "middle_branching": 1.0214604579996376,
+    "ccy_recursion": 46.57380907598417,
+    "virasoro_products": 1.7757509690200095,
+    "direct_fermion": 0.29353954199905274,
+    "convolution_division": 0.6997959170003014,
+    "schottky_vacuum": 0.042365707999124425,
+    "vacuum_restoration": 0.05459195799994632,
+    "other_setup_assembly_imports_saving_exit": 1.0978472469978442
+  },
+  "ccy_series_computed": 804,
+  "transposed_products_reused": 400,
+  "outer_branching_coefficients_saved": 1936,
+  "middle_branching_coefficients_saved": 36,
+  "shared_integer_vectors": 3146,
+  "shared_level_steps": {
+    "hits": 22125946,
+    "misses": 3130,
+    "maxsize": null,
+    "currsize": 3130
+  },
+  "transition_cache_misses": {
+    "old": 6175992,
+    "new": 5358392
+  },
+  "peak_resident_memory_mib": {
+    "old": 451.125,
+    "new": 425.5
+  },
+  "coefficient_comparison": {
+    "reduced_numerator": {
+      "exactly_identical_saved_coefficients": true,
+      "old_vectors": 5786,
+      "new_vectors": 5786,
+      "different_vectors": 0,
+      "first_different_exponents": []
+    },
+    "full_auxiliary": {
+      "exactly_identical_saved_coefficients": true,
+      "old_vectors": 4793,
+      "new_vectors": 4793,
+      "different_vectors": 0,
+      "first_different_exponents": []
+    },
+    "coefficients": {
+      "exactly_identical_saved_coefficients": true,
+      "old_vectors": 5786,
+      "new_vectors": 5786,
+      "different_vectors": 0,
+      "first_different_exponents": []
+    }
+  },
+  "accuracy_statement": "Exactly reproduces the previous machine-precision result, including its previously measured numerical discrepancies; no additional accuracy claim",
+  "source_hashes": {
+    "Code/theta_fermion_ccy/middle_branching.py": "007dd7917e7de843ccb13f7cd3b592e8cf32687a9fee896601e186c6759ce7fc",
+    "Code/theta_fermion_ccy/pbw_reference.py": "31af7ad25689e0a362ad8e5c3e2c038ec2a4f561a2c437c76a322a969236806f",
+    "Code/theta_fermion_ccy/validate_requested.py": "ece44aff49d7faf1fe4bfa5496c09ae39d028eb049bda886c9a5cfd126d0e32e",
+    "Code/theta_fermion_ccy/outer_branching.py": "5db822b774221cc6575121d54748be3fd7d4eb1e8791a00a48d9f0c28a169b23",
+    "Code/theta_fermion_ccy/ising_fermion.py": "63494bef30eddd76a7da9bc4568277a7dd9f9e2b0f73cecbf362dd74389e767e",
+    "Code/theta_fermion_ccy/schottky_vacuum.py": "65404e098189adc7b7fb37e895507831ef34980494f5da605622ff91544fe1e3",
+    "Code/theta_fermion_ccy/action_optimization.py": "6afdbd667e9af9483fe194b5c08154b4e72a7fb43f59a5b5301d19fbe45fed2b",
+    "Code/theta_fermion_ccy/punctured_ccy.py": "7bd039a59a92e929b667970330a18394f0e4dd018d8f93fdc46ee683e23ff0c4",
+    "Code/theta_fermion_ccy/direct_fermion.py": "771a4304e1d475db3ef55d7a0ac4bb99b2d17ddbe8384d3932f79ed8601aee28",
+    "Code/theta_fermion_ccy/run_timed_pipeline.py": "a56228654c258ae76d00f6d2bf9191d4c17d955b2a978f9fcde8381935d2761a",
+    "Code/theta_fermion_ccy/series_algebra.py": "335966d5f235335ad8694d0c038bf5ea3b1c2c72577789dac8b0d58da6cc69f8",
+    "Code/theta_fermion_ccy/compare_saved_pbw.py": "d9e4c7ed0dc0f6091cf376534d16aa4b2465dd4df07df0d7d6ed4a3174349260",
+    "Code/theta_fermion_ccy/pipeline.py": "dc815f127cb021652340c33c9287201c61766dcceb27f74e2a8f0c1351b40383",
+    "Code/theta_fermion_ccy/profile_ccy.py": "2c581460e5cde4fc77dbec02df6858b6e0fff2539cf5e0e337d394d2cbf276f6",
+    "Code/theta_fermion_ccy/benchmark_direct_fermion.py": "5092ebbbf417e85e7cd9f64e6c1dbbb64535938e0e0ea40b4780c4a200843c5c",
+    "Code/theta_fermion_ccy/compare_saved_precision.py": "be89df32fb8345e47020310601ab532adbbd3ae68547ec747cc609dec25de59c",
+    "Code/theta_fermion_ccy/ising_tangent_derivation.py": "a0d5bab44dc14dbb907d8b38b2295135b07032dbc04b357476ba4953dace90d3",
+    "Code/full_ramond_block_runtime/compute_full_block.py": "10c3cfa5bb4b87a8407cbe35fe7c0530be79bf62f231c93c27868baefff7913c",
+    "Code/ramond_branching_recursion/compute_target.py": "49699fb231101c2bf26135e01b4ad33ece5b1db363e353707b44dc43fc7de93e",
+    "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470"
+  },
+  "files": {
+    "block": "Code/theta_fermion_ccy/results/ccy_recursion_reuse_machine_level10.json",
+    "walltime": "Code/theta_fermion_ccy/results/ccy_recursion_reuse_machine_level10_walltime.json",
+    "comparison": "Code/theta_fermion_ccy/results/comparison_recursion_reuse_machine_level10.json"
+  }
+}

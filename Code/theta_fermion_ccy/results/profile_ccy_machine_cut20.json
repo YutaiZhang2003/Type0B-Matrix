@@ -1,0 +1,367 @@
+{
+  "status": "profiled_without_crosschecks",
+  "scope": "One actual maximum-cutoff branch, first Virasoro copy; timings include profiler overhead and are not the full pipeline timing",
+  "labels": [
+    "0",
+    "-1/4",
+    "1/4",
+    "-1/4"
+  ],
+  "copy": 1,
+  "remaining_weighted_cutoff": 20,
+  "numerical_backend": "native binary64",
+  "coefficients": 3146,
+  "profiled_seconds": 3.3284820830012904,
+  "cache": {
+    "precision_bits": 53,
+    "coefficient": {
+      "hits": 1338828,
+      "misses": 556736,
+      "maxsize": null,
+      "currsize": 556736
+    },
+    "global": {
+      "hits": 1124883,
+      "misses": 120211,
+      "maxsize": null,
+      "currsize": 120211
+    },
+    "pole": {
+      "hits": 214794,
+      "misses": 15992,
+      "maxsize": null,
+      "currsize": 15992
+    },
+    "pole_geometry": {
+      "hits": 15178,
+      "misses": 814,
+      "maxsize": null,
+      "currsize": 814
+    },
+    "fusion": {
+      "hits": 22586,
+      "misses": 9398,
+      "maxsize": 32768,
+      "currsize": 9398
+    },
+    "transition": {
+      "hits": 2349990,
+      "misses": 230786,
+      "maxsize": 32768,
+      "currsize": 32768
+    },
+    "rho": {
+      "hits": 109693,
+      "misses": 28772,
+      "maxsize": null,
+      "currsize": 28772
+    },
+    "rho_core": {
+      "hits": 16138,
+      "misses": 12634,
+      "maxsize": null,
+      "currsize": 12634
+    },
+    "rho_normalized": {
+      "hits": 222168,
+      "misses": 18254,
+      "maxsize": 32768,
+      "currsize": 18254
+    },
+    "shifted_weights": {
+      "hits": 134848,
+      "misses": 1355,
+      "maxsize": 32768,
+      "currsize": 1355
+    },
+    "norm": {
+      "hits": 35974,
+      "misses": 534,
+      "maxsize": null,
+      "currsize": 534
+    },
+    "central_charge_states": 815
+  },
+  "source_sha256": "83c8f9a79a6f53879dc21e9baf3025be225044dcc5663aee7babed61d0f88d28",
+  "functions": [
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "reduced_series",
+      "line": 250,
+      "primitive_calls": 1,
+      "calls": 1,
+      "self_seconds": 0.0012152810000000001,
+      "cumulative_seconds": 3.328445292
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "reduced_coefficient",
+      "line": 242,
+      "primitive_calls": 3146,
+      "calls": 3146,
+      "self_seconds": 0.005314014000000001,
+      "cumulative_seconds": 3.327230011
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_coefficient_uncached",
+      "line": 221,
+      "primitive_calls": 3130,
+      "calls": 556736,
+      "self_seconds": 2.4827355730000003,
+      "cumulative_seconds": 3.3192427980000003
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_transition_uncached",
+      "line": 204,
+      "primitive_calls": 230786,
+      "calls": 230786,
+      "self_seconds": 0.264655085,
+      "cumulative_seconds": 0.395093022
+    },
+    {
+      "file": "~",
+      "function": "<built-in method builtins.max>",
+      "line": 0,
+      "primitive_calls": 2815522,
+      "calls": 2815522,
+      "self_seconds": 0.28791394200000003,
+      "cumulative_seconds": 0.28791394200000003
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_global_uncached",
+      "line": 130,
+      "primitive_calls": 120211,
+      "calls": 120211,
+      "self_seconds": 0.097601929,
+      "cumulative_seconds": 0.174238459
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_rho_normalized_uncached",
+      "line": 121,
+      "primitive_calls": 18254,
+      "calls": 18254,
+      "self_seconds": 0.013239588,
+      "cumulative_seconds": 0.060107836000000005
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_rho_uncached",
+      "line": 116,
+      "primitive_calls": 28772,
+      "calls": 28772,
+      "self_seconds": 0.016886708,
+      "cumulative_seconds": 0.059878659
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_pole_uncached",
+      "line": 190,
+      "primitive_calls": 15992,
+      "calls": 15992,
+      "self_seconds": 0.021678421,
+      "cumulative_seconds": 0.046026452
+    },
+    {
+      "file": "~",
+      "function": "<built-in method builtins.abs>",
+      "line": 0,
+      "primitive_calls": 692358,
+      "calls": 692358,
+      "self_seconds": 0.040862398,
+      "cumulative_seconds": 0.040862398
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_rho_core_uncached",
+      "line": 97,
+      "primitive_calls": 12634,
+      "calls": 12634,
+      "self_seconds": 0.028458986000000002,
+      "cumulative_seconds": 0.034950163
+    },
+    {
+      "file": "~",
+      "function": "<method 'get' of 'dict' objects>",
+      "line": 0,
+      "primitive_calls": 230786,
+      "calls": 230786,
+      "self_seconds": 0.023107073000000002,
+      "cumulative_seconds": 0.023107073000000002
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_fusion_uncached",
+      "line": 140,
+      "primitive_calls": 9398,
+      "calls": 9398,
+      "self_seconds": 0.015927591,
+      "cumulative_seconds": 0.015927591
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_pole_geometry_uncached",
+      "line": 158,
+      "primitive_calls": 814,
+      "calls": 814,
+      "self_seconds": 0.0076817510000000006,
+      "cumulative_seconds": 0.008420440000000001
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_rising",
+      "line": 82,
+      "primitive_calls": 29306,
+      "calls": 29306,
+      "self_seconds": 0.008248094000000001,
+      "cumulative_seconds": 0.008248094000000001
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_shifted_weights_uncached",
+      "line": 127,
+      "primitive_calls": 1355,
+      "calls": 1355,
+      "self_seconds": 0.002391458,
+      "cumulative_seconds": 0.003065181
+    },
+    {
+      "file": "~",
+      "function": "<method 'append' of 'list' objects>",
+      "line": 0,
+      "primitive_calls": 37186,
+      "calls": 37186,
+      "self_seconds": 0.003034498,
+      "cumulative_seconds": 0.003034498
+    },
+    {
+      "file": "~",
+      "function": "<built-in method math.comb>",
+      "line": 0,
+      "primitive_calls": 28109,
+      "calls": 28109,
+      "self_seconds": 0.0023164680000000003,
+      "cumulative_seconds": 0.0023164680000000003
+    },
+    {
+      "file": "~",
+      "function": "<built-in method builtins.min>",
+      "line": 0,
+      "primitive_calls": 15780,
+      "calls": 15780,
+      "self_seconds": 0.001695508,
+      "cumulative_seconds": 0.001695508
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "<genexpr>",
+      "line": 243,
+      "primitive_calls": 15730,
+      "calls": 15730,
+      "self_seconds": 0.001540038,
+      "cumulative_seconds": 0.001540038
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "<genexpr>",
+      "line": 128,
+      "primitive_calls": 6775,
+      "calls": 6775,
+      "self_seconds": 0.0006737230000000001,
+      "cumulative_seconds": 0.0006737230000000001
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_norm_uncached",
+      "line": 94,
+      "primitive_calls": 534,
+      "calls": 534,
+      "self_seconds": 0.000185267,
+      "cumulative_seconds": 0.00045310200000000004
+    },
+    {
+      "file": "/opt/homebrew/lib/python3.14/site-packages/mpmath/math2.py",
+      "function": "f",
+      "line": 43,
+      "primitive_calls": 814,
+      "calls": 814,
+      "self_seconds": 0.000275169,
+      "cumulative_seconds": 0.000414292
+    },
+    {
+      "file": "~",
+      "function": "<built-in method builtins.len>",
+      "line": 0,
+      "primitive_calls": 3960,
+      "calls": 3960,
+      "self_seconds": 0.00030495,
+      "cumulative_seconds": 0.00030495
+    },
+    {
+      "file": "~",
+      "function": "<method 'pop' of 'list' objects>",
+      "line": 0,
+      "primitive_calls": 1628,
+      "calls": 1628,
+      "self_seconds": 0.000178795,
+      "cumulative_seconds": 0.000178795
+    },
+    {
+      "file": "~",
+      "function": "<built-in method math.sqrt>",
+      "line": 0,
+      "primitive_calls": 814,
+      "calls": 814,
+      "self_seconds": 0.000130039,
+      "cumulative_seconds": 0.000130039
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "_residue_labels",
+      "line": 301,
+      "primitive_calls": 21,
+      "calls": 21,
+      "self_seconds": 6.595900000000001e-05,
+      "cumulative_seconds": 0.000122332
+    },
+    {
+      "file": "~",
+      "function": "<built-in method math.factorial>",
+      "line": 0,
+      "primitive_calls": 534,
+      "calls": 534,
+      "self_seconds": 6.1529e-05,
+      "cumulative_seconds": 6.1529e-05
+    },
+    {
+      "file": "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/punctured_ccy.py",
+      "function": "<genexpr>",
+      "line": 304,
+      "primitive_calls": 411,
+      "calls": 411,
+      "self_seconds": 5.6373000000000004e-05,
+      "cumulative_seconds": 5.6373000000000004e-05
+    },
+    {
+      "file": "~",
+      "function": "<method 'disable' of '_lsprof.Profiler' objects>",
+      "line": 0,
+      "primitive_calls": 1,
+      "calls": 1,
+      "self_seconds": 1.5917e-05,
+      "cumulative_seconds": 1.5917e-05
+    },
+    {
+      "file": "~",
+      "function": "<built-in method cmath.sqrt>",
+      "line": 0,
+      "primitive_calls": 37,
+      "calls": 37,
+      "self_seconds": 9.084e-06,
+      "cumulative_seconds": 9.084e-06
+    }
+  ]
+}

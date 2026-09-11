@@ -1,0 +1,144 @@
+{
+  "status": "passed",
+  "scaled_difference": "abs(a-b)/max(1,abs(a),abs(b))",
+  "scope": "All physical coefficients through the stated cutoff; saved references only",
+  "limitation": "Agreement with saved numerical results is not a certified error bound",
+  "checks": [
+    {
+      "status": "passed",
+      "candidate": "C++/results/ordinary_level3_machine.json",
+      "reference": "Code/ramond_zero_mode_recovery/restricted_level10.json",
+      "reference_sha256": "43f3befd3b8a25d5e71425514bf8e3d351cdb00b00c6cc3f730f71706236731a",
+      "total_level": 3,
+      "dps": 0,
+      "precision_bits": 53,
+      "monomials": 30,
+      "parity_components": 240,
+      "maximum_absolute_difference": "1.68903786406606238e-13",
+      "maximum_scaled_difference": "1.68903786406606238e-13",
+      "worst_twice_levels": [
+        4,
+        0,
+        2
+      ],
+      "worst_parity": 0,
+      "scaled_tolerance": "0.00000001",
+      "timing_seconds": {
+        "branching": 0.02909587499743793,
+        "actions": 0.012176417003502138,
+        "outer_ward": 0.016832833003718406,
+        "middle": 0,
+        "ccy": 0.0019309571071062237,
+        "products": 0.00015429302584379911,
+        "assembly": 0.0002562500012572855,
+        "auxiliary": 0.000982584009761922,
+        "division": 8.04169976618141e-05,
+        "schottky": 6.954099808353931e-05,
+        "restoration": 7.0829992182552814e-06,
+        "total": 0.03286104199651163
+      }
+    },
+    {
+      "status": "passed",
+      "candidate": "C++/results/ordinary_level3_40dps.json",
+      "reference": "Code/ramond_zero_mode_recovery/restricted_level10.json",
+      "reference_sha256": "43f3befd3b8a25d5e71425514bf8e3d351cdb00b00c6cc3f730f71706236731a",
+      "total_level": 3,
+      "dps": 40,
+      "precision_bits": 136,
+      "monomials": 30,
+      "parity_components": 240,
+      "maximum_absolute_difference": "2.17268837818275712e-28",
+      "maximum_scaled_difference": "2.17268837818275712e-28",
+      "worst_twice_levels": [
+        4,
+        2,
+        0
+      ],
+      "worst_parity": 0,
+      "scaled_tolerance": "0.00000000000000000001",
+      "timing_seconds": {
+        "branching": 0.2943698330054758,
+        "actions": 0.1614402919949498,
+        "outer_ward": 0.13268537500698585,
+        "middle": 0,
+        "ccy": 0.03855695508536883,
+        "products": 0.0018471229705028236,
+        "assembly": 0.011774925049394369,
+        "auxiliary": 0.0011450410092948005,
+        "division": 0.001826499996241182,
+        "schottky": 2.2082997020334005e-05,
+        "restoration": 0.00016083300579339266,
+        "total": 0.3568075420043897
+      }
+    },
+    {
+      "status": "passed",
+      "candidate": "C++/results/inserted_level3_machine.json",
+      "reference": "Code/theta_fermion_ccy/results/forward_diagonal_40dps_level5.json",
+      "reference_sha256": "81bf28a1db9c6a5f4e3f6be468b813f52d06196410b28e6b8fa234be880379c0",
+      "total_level": 3,
+      "dps": 0,
+      "precision_bits": 53,
+      "monomials": 30,
+      "parity_components": 240,
+      "maximum_absolute_difference": "8.96052612293631637e-13",
+      "maximum_scaled_difference": "8.96052612293631637e-13",
+      "worst_twice_levels": [
+        0,
+        4,
+        2
+      ],
+      "worst_parity": 0,
+      "scaled_tolerance": "0.00000001",
+      "timing_seconds": {
+        "branching": 0.035581874995841645,
+        "actions": 0.01232845798949711,
+        "outer_ward": 0.023189250001451,
+        "middle": 8.941600390244275e-05,
+        "ccy": 0.0032338359887944534,
+        "products": 0.00019513005099724978,
+        "assembly": 0.00046020800073165447,
+        "auxiliary": 0.0006850420031696558,
+        "division": 6.183401274029166e-05,
+        "schottky": 9.415991371497512e-06,
+        "restoration": 5.207999492995441e-06,
+        "total": 0.04064520800602622
+      }
+    },
+    {
+      "status": "passed",
+      "candidate": "C++/results/inserted_level3_40dps.json",
+      "reference": "Code/theta_fermion_ccy/results/forward_diagonal_40dps_level5.json",
+      "reference_sha256": "81bf28a1db9c6a5f4e3f6be468b813f52d06196410b28e6b8fa234be880379c0",
+      "total_level": 3,
+      "dps": 40,
+      "precision_bits": 136,
+      "monomials": 30,
+      "parity_components": 240,
+      "maximum_absolute_difference": "8.5658532173459034e-27",
+      "maximum_scaled_difference": "8.5658532173459034e-27",
+      "worst_twice_levels": [
+        1,
+        2,
+        2
+      ],
+      "worst_parity": 3,
+      "scaled_tolerance": "0.00000000000000000001",
+      "timing_seconds": {
+        "branching": 0.39835149999998976,
+        "actions": 0.18194258300354704,
+        "outer_ward": 0.21629758301423863,
+        "middle": 0.004641457999241538,
+        "ccy": 0.05814129488135222,
+        "products": 0.0013639961107401177,
+        "assembly": 0.014869866950903088,
+        "auxiliary": 0.0010340830049244687,
+        "division": 0.0017541249981150031,
+        "schottky": 7.208989700302482e-06,
+        "restoration": 0.00016220899124164134,
+        "total": 0.4813869159988826
+      }
+    }
+  ]
+}

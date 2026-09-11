@@ -1,0 +1,76 @@
+{
+  "status": "timing comparison completed",
+  "total_q_level": 10,
+  "parameters": {
+    "b": "7/5",
+    "momenta": [
+      "11/23",
+      "13/29",
+      "17/31"
+    ],
+    "p": 0,
+    "f": 0,
+    "etas": [
+      1,
+      -1
+    ]
+  },
+  "pbw": {
+    "full_process_seconds": 112.82827966600235,
+    "internal_seconds": 110.1898384169981,
+    "precision_bits": 384,
+    "backend": "FLINT complex midpoints, inherited clipping at 1e-80",
+    "monomials": 506,
+    "parity_slots": 4048,
+    "source_hashes": {
+      "Code/theta_fermion_ccy/pbw_reference.py": "2f8206010ec3d1a87f898c5599aed0f73a10df6952d74be6c6cd4f5be94f0ac1",
+      "Code/ramond_zero_mode_recovery/check_level10_complex.py": "2359ff7bcba80beb283f9884273db74c46de677939fa860cfda579b0d9a73999",
+      "Code/ramond_zero_mode_recovery/check_level10_modular.py": "831cefc20384dc21fa64398a468da2bdb1d9f891910d8e21487c48079879f692",
+      "Code/ramond_zero_mode_recovery/modular_backend.py": "b8488a7125dd6d2169190884f62601f3528134470d0e71088a203d61629bd760",
+      "Code/ramond_zero_mode_recovery/complex_arithmetic.py": "71146aa2520c385c498e2091f3c7a968bc2bcbb057594a80e1b5f96b46c0398c",
+      "Code/ramond_branching_recursion/compute_target.py": "3368f697c713860f9c2a8619a29c8a5e1113da54240337dc1ebc65a846390c42",
+      "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470"
+    }
+  },
+  "ccy": {
+    "full_process_seconds": 92.56964104100189,
+    "internal_seconds": 92.06196366700169,
+    "backend": "native binary64; direct rational fermion and Schottky factors",
+    "monomials_four_variable_representation": 5786,
+    "sector_policy": "record"
+  },
+  "ccy_speed_factor_in_these_runs": 1.21884754436962,
+  "ccy_fraction_less_wall_time": 0.17955284512863878,
+  "pbw_cumulative_internal_seconds_by_integer_level": {
+    "0": 0.0045663749988307245,
+    "1": 0.008140166999510257,
+    "2": 0.02181091699821991,
+    "3": 0.06922900000063237,
+    "4": 0.2228297500005283,
+    "5": 0.6842931249993853,
+    "6": 1.9703420419973554,
+    "7": 5.52037270800065,
+    "8": 15.22487241699855,
+    "9": 41.16620587500074,
+    "10": 110.1898384169981
+  },
+  "precision_matched": false,
+  "new_accuracy_comparison_performed": false,
+  "previous_level6_absolute_errors": {
+    "vanishing_split_coefficient": 2.71353687505145e-06,
+    "nonzero_physical_coefficient": 1.8270253238372103e-07,
+    "ratio": 14.852212717842049,
+    "source": "Code/theta_fermion_ccy/results/comparison_machine_level10_vs_pbw_through_level6.json"
+  },
+  "environment": {
+    "python": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 17.0.0 (clang-1700.6.3.2)]",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "machine": "arm64"
+  },
+  "files": {
+    "pbw": "Code/theta_fermion_ccy/results/pbw_level10.json",
+    "pbw_walltime": "Code/theta_fermion_ccy/results/pbw_level10_walltime.json",
+    "ccy": "Code/theta_fermion_ccy/results/ccy_schottky_machine_complete_level10.json",
+    "ccy_walltime": "Code/theta_fermion_ccy/results/ccy_schottky_machine_complete_level10_walltime.json"
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "status": "completed at machine precision; sector residuals recorded without stopping",
+  "full_process_seconds": 92.56964104100189,
+  "internal_seconds": 92.06196366700169,
+  "segments_seconds": {
+    "outer_branching": 10.095476957998471,
+    "middle_branching": 1.0357965830007743,
+    "ccy_recursion": 77.4308096249697,
+    "virasoro_products": 1.7683383860930917,
+    "direct_fermion": 0.25903358399955323,
+    "convolution_division": 0.7088261249991774,
+    "schottky_vacuum": 0.0411950829984562,
+    "vacuum_restoration": 0.05376541700024973,
+    "other_setup_assembly_imports_saving_exit": 1.1763992799424159
+  },
+  "action_preparation_included_in_outer_seconds": 9.667809042002773,
+  "physical_coefficient_vectors": 5786,
+  "physical_parity_slots": 46288,
+  "outer_branching_coefficients_saved": 1936,
+  "middle_branching_coefficients_saved": 36,
+  "ordinary_ccy_series": 804,
+  "transposed_products_reused": 400,
+  "outer_actions_reused_by_middle": true,
+  "vacuum_provenance": {
+    "backend": "CCY Eq. (5.5), exact Schottky primitive product",
+    "arithmetic": "rational formal power series",
+    "edge_order": [
+      "infinity",
+      "one",
+      "zero"
+    ],
+    "primitive_classes": 6,
+    "classes": [
+      {
+        "directed_arc_word": [
+          0,
+          3
+        ],
+        "multiplier_order": 2
+      },
+      {
+        "directed_arc_word": [
+          0,
+          5
+        ],
+        "multiplier_order": 2
+      },
+      {
+        "directed_arc_word": [
+          2,
+          5
+        ],
+        "multiplier_order": 2
+      },
+      {
+        "directed_arc_word": [
+          0,
+          3,
+          0,
+          5
+        ],
+        "multiplier_order": 4
+      },
+      {
+        "directed_arc_word": [
+          0,
+          3,
+          4,
+          3
+        ],
+        "multiplier_order": 4
+      },
+      {
+        "directed_arc_word": [
+          0,
+          5,
+          2,
+          5
+        ],
+        "multiplier_order": 4
+      }
+    ],
+    "inverse_class_identified": true,
+    "oscillator_product_exponent": -1,
+    "cutoff_rule": "2*multiplier plumbing order <= total cutoff"
+  },
+  "recovery_diagnostics": {
+    "policy": "record",
+    "tolerance": 1e-08,
+    "processed_vectors": 5786,
+    "vectors_above_tolerance": 2466,
+    "maximum_absolute_residual": 0.040660192019849634,
+    "maximum_scaled_residual": 0.040660192019849634,
+    "first_exceedance": {
+      "exponents": [
+        0,
+        6,
+        1,
+        2
+      ],
+      "absolute_residual": 2.0868810380187958e-08,
+      "scaled_residual": 2.0868810380187958e-08
+    },
+    "worst_scaled_exponents": [
+      4,
+      5,
+      3,
+      8
+    ]
+  },
+  "cross_checks": "none for this timing run",
+  "files": {
+    "block": "Code/theta_fermion_ccy/results/ccy_schottky_machine_complete_level10.json",
+    "branching": "Code/theta_fermion_ccy/results/ccy_schottky_machine_complete_level10_branching.json",
+    "walltime": "Code/theta_fermion_ccy/results/ccy_schottky_machine_complete_level10_walltime.json"
+  }
+}

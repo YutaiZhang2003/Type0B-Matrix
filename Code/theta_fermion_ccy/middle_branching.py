@@ -14,11 +14,13 @@ from fractions import Fraction
 from functools import lru_cache
 from pathlib import Path
 import sys
+import mpmath as mp
 
 _BRANCH_DIR = Path(__file__).resolve().parents[1] / "ramond_branching_recursion"
 if str(_BRANCH_DIR) not in sys.path:
     sys.path.insert(0, str(_BRANCH_DIR))
 import compute_target as br
+from action_optimization import CachedActionModule, solve_ramond_lplus, solve_ramond_lminus
 
 
 def _label(value):
@@ -31,45 +33,87 @@ def _label(value):
 class RamondActions:
     """Cached V coefficients, with negative labels evaluated by reflection."""
 
-    def __init__(self, b, momentum):
+    def __init__(self, b, momentum, *, precompute_plus=False):
         self.b, self.momentum = b, momentum
         self.diagnostics = {}
+        self.precompute_plus = (True if precompute_plus is True else
+                                frozenset(map(_label, precompute_plus or ())))
+        self._actions, self._modules = {}, {}
+        self._precision = br.MP_DPS, mp.mp.prec if br.MP_DPS else 53
 
-    @lru_cache(None)
     def module(self, reflected=False):
-        return br.FreeFieldModule("R", self.b,
-                                  -self.momentum if reflected else self.momentum)
+        self._check_precision()
+        if reflected not in self._modules:
+            self._modules[reflected] = CachedActionModule(
+                "R", self.b, -self.momentum if reflected else self.momentum)
+        return self._modules[reflected]
 
-    @lru_cache(None)
-    def plus(self, label, parity):
+    def _check_precision(self):
+        if (br.MP_DPS, mp.mp.prec if br.MP_DPS else 53) != self._precision:
+            raise RuntimeError("Ramond action coefficients cannot be reused at a different precision")
+
+    def _store(self, action, label, terms, fit):
+        sign = 1 if label > 0 else -1
+        self._actions[action, label, 0] = tuple(
+            br.ActionTerm(sign*term.label, term.first, term.second, term.coefficient)
+            for term in terms)
+        self.diagnostics[action, label, 0] = {
+            key: value for key, value in fit.items() if key != "coefficients"}
+
+    def _transport(self, action, label):
+        source = getattr(self, action)(label, 0)
+        source_power = (-1)**int(2*abs(label)-Fraction(1, 2))
+        terms = []
+        for term in source:
+            target_power = (-1)**int(2*abs(term.label)-Fraction(1, 2))
+            ratio = br.scalar_power_of_two(Fraction(target_power-source_power, 2))
+            terms.append(br.ActionTerm(term.label, term.first, term.second,
+                                       term.coefficient*ratio))
+        self._actions[action, label, 1] = tuple(terms)
+        self.diagnostics[action, label, 1] = dict(
+            self.diagnostics.get((action, label, 0), {}),
+            method="exact Theta transport from parity 0",
+            residual_source="parity-0 original-column all-row residual",
+            span_assembly_seconds=0.0, span_factorization_seconds=0.0,
+            span_refinement_seconds=0.0, descendant_cache=None)
+        return self._actions[action, label, 1]
+
+    def _key(self, action, label, parity):
+        self._check_precision()
         label = _label(label)
+        if parity not in (0, 1):
+            raise ValueError("Ramond primary parity must be zero or one")
+        return action, label, int(parity)
+
+    def plus(self, label, parity):
+        key = self._key("plus", label, parity)
+        _, label, parity = key
+        if key in self._actions:
+            return self._actions[key]
         if abs(label) == Fraction(1, 4):
             return ()
-        sign = 1 if label > 0 else -1
-        n = abs(label)
-        module = self.module(sign < 0)
-        high = module.r_branch(n, parity)
-        low = module.r_branch(n - 1, parity)
-        pairs = br.partition_pairs(int(4 * n - 3))
-        columns = [module.descendant(low, first, second)
-                   for first, second in pairs]
-        fit = br.span_fit(module.apply_l(1, high), columns)
-        self.diagnostics[("plus", label, parity)] = {
-            key: value for key, value in fit.items() if key != "coefficients"
-        }
-        return tuple(br.ActionTerm(sign * (n - 1), first, second, value)
-                     for (first, second), value in zip(pairs, fit["coefficients"]))
+        if parity:
+            return self._transport("plus", label)
+        terms, fit = solve_ramond_lplus(self.module(label < 0), abs(label), 0)
+        self._store("plus", label, terms, fit)
+        return self._actions[key]
 
-    @lru_cache(None)
     def minus(self, label, parity):
-        label = _label(label)
-        sign = 1 if label > 0 else -1
-        terms, fit = br.solve_ramond_lminus(self.module(sign < 0), abs(label), parity)
-        self.diagnostics[("minus", label, parity)] = {
-            key: value for key, value in fit.items() if key != "coefficients"
-        }
-        return tuple(br.ActionTerm(sign * term.label, term.first, term.second,
-                                   term.coefficient) for term in terms)
+        key = self._key("minus", label, parity)
+        _, label, parity = key
+        if key in self._actions:
+            return self._actions[key]
+        if parity:
+            return self._transport("minus", label)
+        requested = self.precompute_plus is True or label in self.precompute_plus
+        plus_result = [] if requested and ("plus", label, 0) not in self._actions else None
+        terms, fit = solve_ramond_lminus(self.module(label < 0), abs(label), 0,
+                                       plus_result=plus_result)
+        self._store("minus", label, terms, fit)
+        if plus_result:
+            plus_terms, plus_fit = plus_result[0]
+            self._store("plus", label, plus_terms, plus_fit)
+        return self._actions[key]
 
 
 class MiddleBranching:
@@ -80,9 +124,9 @@ class MiddleBranching:
     No conjugation is taken: all matrix elements and norms are BPZ bilinear.
     """
 
-    def __init__(self, b, momentum, *, dps=None, actions=None):
+    def __init__(self, b, momentum, *, dps=None, actions=None, precision_bits=None):
         if dps is not None:
-            br.set_multiprecision(dps)
+            br.set_multiprecision(dps, precision_bits=precision_bits)
         self.b = br.real_number(b)
         self.momentum = br.complex_number(momentum)
         self.q = self.b + 1 / self.b

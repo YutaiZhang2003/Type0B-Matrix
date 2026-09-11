@@ -1,118 +1,205 @@
-# Completion audit: selected Ramond fermion-insertion algorithm
+# Completion audit: current Ramond fermion-insertion pipeline
 
-Audit date: September 10, 2026. This document audits the current saved
-sources and results. It does not run another conformal-block calculation
-or numerical comparison. The complete physical level-ten timing remains
-pending at this snapshot. The renewed presentation review is closed.
+Audit snapshot: September 11, 2026. **The overall goal remains incomplete.**
+The current Schottky-vacuum implementation has completed N5 production and
+passed both required validations. Its full N5 process takes 12.6089 seconds.
+The active constant-reuse N10 run still uses the preceding Gaussian backend;
+a current Schottky N10 run has not yet been launched.
 
-## Authoritative scope
+This audit uses source inspection, saved metadata and SHA-256 manifests.
+It imports no production module and computes or compares no block coefficients.
 
-The user amended the auxiliary requirement after requesting its direct
-definition and level-ten benchmark: the production denominator now uses
-direct fermion sewing. The enlarged numerator must still use two ordinary
-Virasoro blocks computed by genuine CCY central-charge recursion. This
-selected method does not require an all-level irreducible Ising
-central-charge recursion. The exact Ising decomposition remains useful
-for identifying representations and parity coefficients.
+## Scope and user amendments
 
-The required numerical comparisons are exactly (1) the recovered physical
-superconformal block against an independent physical PBW calculation
-through total level five, and (2) the recovered block at different split
-parameters with fixed product. The level-ten calculation is a production
-calculation and timing, not an additional comparison suite.
+The required pipeline is: derive and recursively compute the middle
+\(\mathbb B(n',1/2,n;\alpha,1-\alpha)\) from the physical \(L_1\) Ward
+identity; combine recursive outer/middle coefficients with genuine CCY
+central-charge recursion for the enlarged \(\Theta v_{1/2}\) block; compute
+the auxiliary; and recover the physical \(\eta\eta'=-1\) superconformal
+block by convolution division. The user explicitly replaced the original
+Ising-recursion auxiliary requirement with **direct fermion sewing**, while
+retaining CCY for the enlarged block and local ingredients usable at arbitrary
+genus. The implemented assembler is the specified subdivided theta graph.
+
+The only prescribed numerical validations are the final physical coefficients
+against independent PBW through total level five and final evaluations at
+several split positions with fixed product. Profiling and timing reruns add
+no coefficient-comparison suite. All four-variable terms must be retained;
+sector projection or removal of unequal split powers must not force success.
+After validation, a complete physical N10 timing remains required. Separate
+detailed Machine Notes and adversarial mathematical/presentation reviews are
+also required. The existing draft and Human Notes remain outside this work.
+
+The zero/tolerance reuse and N5 retiming request was completed. The user
+then required CCY Eq. (5.5) for the universal vacuum factor; that Schottky
+construction and its current N5 validation are complete. The user separately
+authorized a timing crossover for individual Virasoro CCY versus Virasoro
+PBW blocks, which is distinct from the full physical-SCA benchmark.
 
 ## Requirement-by-requirement status
 
-| Requirement | Status | Authoritative evidence and qualification |
-|---|---|---|
-| Derive the subdivided tube geometry and spin transport | Complete | `Machine Notes/theta_fermion_ramond_recovery.tex` derives `q2=qL*qR` and explicitly adopts the transported Ramond spin frame. |
-| Use the human normalization of the external state | Complete | The notes impose the irreducible physical vacuum relation and use `v_(1/2)(Q/2)=Q*psi`; `Q != 0` is stated with the embedding hypotheses. |
-| Derive the full enlarged block as branching coefficients times ordinary Virasoro blocks | Complete | The notes give the raw four-cut contraction, its four internal norms, the normalized middle relation, and the fusion condition `nprime=n+/-1/2`. The omitted native-to-human contour phase is stated explicitly. |
-| Compute the middle primary coefficients recursively | Complete | `middle_branching.py` implements the two orientations of the physical `L1` Ward recurrence, starting from the ground anchors and using reusable `RamondActions`. Higher primary matrix elements are not evaluated by a full physical PBW block. |
-| Reuse action coefficients and handle negative Ramond labels | Complete | The cached positive-chart action data are transported by simultaneous momentum/label reflection. `outer_branching.py` uses this reflected provider. The notes distinguish the middle level-six action bound from the outer level-eight preparatory action at physical level ten. |
-| Compute the full descendants by CCY recursion | Complete | `punctured_ccy.py` uses null-vector residues, fixed external weight, the global `SL(2)` seed, and the exact universal large-central-charge factor. It does not replace the ordinary Virasoro blocks by finite-central-charge Gram contractions. |
-| Evaluate the full auxiliary fermion insertion from its definition | Complete through level ten | `direct_fermion.py` retains all nonzero modes and both split-edge orientations, using exact rational mode Ward forms and sparse Fock sewing. Complete reusable coefficients are in `results/direct_fermion_level10.json`. |
-| Make the auxiliary ingredients generalizable to arbitrary genus/plumbing graphs | Complete at the stated local-construction scope | The direct-definition subsection explains local Fock bases, pairings, three-point forms, insertions, and graph-dependent spin signs. Only the specified theta assembler is implemented. A complete sector-recovery construction on another graph additionally needs that graph's insertion/projector choices and sector identity. |
-| Derive SCA–fermion convolution and recover the physical block | Complete | The notes derive the physical identity contraction, parity cocycle, all-level sector identity, and triangular minus-sector division. `series_algebra.py` retains all four-variable coefficients and raises on a failed sector condition rather than imposing a projected answer. |
-| Restore the correct universal factor | Complete | `pipeline.py` divides the reduced numerator by the full direct auxiliary and then restores the universal factor squared. The saved production metadata records `universal_seed_power_after_recovery=2`. |
-| First authorized comparison: final physical PBW through level five | Passed | The reflected production and validation artifacts below record all 4,648 parity-coefficient slots, including off-diagonal split exponents. Maximum scaled difference: `4.713175155062888e-52`. This sample has `p=f=0`, `(eta,eta')=(+,-)`. |
-| Second authorized comparison: vary the split at fixed product | Passed | The same validation artifact records `u=0.5,1,2` and all eight spin-sign evaluations at `q1=0.013`, `q2=0.007`, `q3=0.009`. Maximum scaled variation: `2.951691834664898e-60`. |
-| Compute and report a complete physical level-ten block and its measured runtime | **Pending** | Parent reports the production run is active in session `22826`. No completed level-ten physical result or runtime is claimed in this audit. The auxiliary-only benchmark and level-five runtime do not discharge this requirement. |
-| Supply separate detailed LaTeX notes | Complete, pending the level-ten timing entry | The main file and its direct-fermion and exact-Ising inputs are in `Machine Notes`. This deliverable does not require modifying the existing draft or Human Notes. The revised 16-page notes compile without warnings. |
-| Renew adversarial mathematical review of the selected algorithm | Complete | `FINAL_MATH_REVIEW.md`, `FINAL_BRANCHING_REVIEW.md`, and `REVIEW_DIRECT_FERMION_SIGNS.md` review the selected direct-denominator construction. The CCY and branching reviewers discussed normalization, seed power, reflection, and the arbitrary-genus scope boundary. No remaining generic-parameter theta inconsistency was found. |
-| Renew adversarial presentation review and revise accordingly | Complete | `FINAL_PRESENTATION_REVIEW.md` and `FINAL_PRESENTATION_DIRECT.md` record the debate, agreed revisions and their application. The middle reviewer independently verified the final edits and closed the review. |
+| Requirement | Status and evidence |
+| --- | --- |
+| Tube geometry and spin convention | Established in `Machine Notes/theta_fermion_ramond_recovery.tex`: `q2=qL*qR` plus the separately specified transported spin frame. |
+| Human external-state normalization | The notes use the irreducible vacuum relation, `v_(1/2)(Q/2)=Q*psi`, and explicit `Q!=0`/generic embedding assumptions. |
+| Full double-Virasoro decomposition | The notes derive the four-cut contraction, all four norms, normalized middle coefficient, fusion support and native-to-human contour phase. |
+| Middle primary recurrence | Implemented in `middle_branching.py`, using both physical-L1 orientations, ground anchors and reusable action coefficients. Reviewed in `FINAL_BRANCHING_REVIEW.md`. |
+| Recursive outer coefficients | `outer_branching.py` retains action-closed support, low anchors, full rank and all-row residual guards. Reflection and Theta parity transport are derived and reviewed. |
+| Genuine CCY blocks | `punctured_ccy.py` retains the global seed, all admissible null residues, fixed external weight and unresolved-pole errors; it does not substitute finite-c Gram contractions. |
+| Full direct auxiliary | `direct_fermion.py` includes zero/nonzero modes and both split orientations. Complete standalone level-ten output is saved in `results/direct_fermion_level10.json`. |
+| Arbitrary-genus flavor | Local Fock spaces, forms, pairings and insertion matrices are graph-independent ingredients. Notes explicitly retain graph-dependent cocycles, insertion choices and sector identities; only the stated theta assembler is claimed. |
+| Detailed convolution and inverse | Notes derive the physical identity factor, parity cocycle, sector identity and triangular division. `series_algebra.py` retains all exponents and raises on a failed sector residual. |
+| Universal normalization | Current production records `universal_seed_power_after_recovery=2`: divide the twice-reduced numerator by the full auxiliary, then restore two universal factors. |
+| Schottky universal factor | `schottky_vacuum.py` implements CCY Eq. (5.5) as an exact primitive graph product. `SCHOTTKY_VACUUM_REVIEW.md` independently audits the sewing maps, inverse-class multiplicity and degree cutoff. |
+| Individual Virasoro timing crossover | In progress under the user's separate authorization; not a comparison of full physical-SCA pipelines. |
+| Speed improvements | Implemented and statically reviewed. The latest nearby archived baseline is 19.7228 s versus 12.6937 s with constant reuse, about 1.55 times faster. |
+| Final-current-source PBW check through N5 | **Passed**, `validation_ccy_schottky_level5.json`: 4,648 slots; maximum scaled error `3.836489189392701e-52`. |
+| Final-current-source split check | **Passed** in the same report: 24 evaluations covering three split positions and all eight spin signs; maximum scaled variation `1.665633005810069e-58`. |
+| Complete current-source N10 block and total runtime | **Pending for Schottky source.** The preceding `ccy_cached_actions_level10` run completed; the active `ccy_reused_constants_level10` still uses its imported Gaussian backend. No Schottky N10 run has launched. |
+| Detailed separate LaTeX notes | Present with current N5 implementation, validations, timing and nearby baseline. Parent records a clean 17-page compilation. Final N10 entry remains pending. |
+| Adversarial mathematical review | Core reviews and independent optimization reviews are complete; see the review list below. |
+| Adversarial presentation review | Core and optimization/N5 debates and revisions are recorded in `FINAL_PRESENTATION_REVIEW.md` and `FINAL_PRESENTATION_DIRECT.md`. Current timing prose is updated; final N10 prose remains pending. |
 
-## Saved numerical evidence
+## Current numerical evidence and timer scopes
 
-The authoritative production file is
-`results/ccy_direct_reflected_level5.json`, and the corresponding two-check
-report is `results/validation_ccy_direct_reflected_level5.json`. The latter
-has status `passed`. The production file retains its literal status
-`computed; validation pending` because validation is written to a separate
-artifact; this is not a failed or unfinished production calculation.
+Authoritative current files:
 
-The benchmark parameters are `b=7/5`,
-`P=(11/23,13/29,17/31)`, `p=f=0`, `(eta,eta')=(1,-1)`. The production
-settings are 100 decimal digits for CCY and 70 for the outer Ward solve,
-with exact rational auxiliary coefficients before restoring the common
-`Q/sqrt(2)` factor. The independent physical reference uses its separate
-384-bit FLINT implementation. These error figures are measured numerical
-differences, not rigorous interval bounds or a claim of coverage of other
-external parity/form choices.
+- `results/ccy_schottky_level5.json`.
+- `results/validation_ccy_schottky_level5.json`.
+- `results/ccy_schottky_level5_walltime.json`.
 
-The level-five computation records `82.19680833300117` seconds: outer
-coefficients `52.123118624998824`, middle recurrence `2.6851382569948328`,
-CCY blocks `26.199639883996497`, auxiliary `0.08250241699897742`, and
-division with seed restoration `0.6678412080000271` seconds. The balance
-is assembly and intermediate serialization. The script's `total_seconds`
-starts after module imports and argument parsing and stops before final
-physical-series encoding and the final JSON save. It measures the complete
-mathematical production stages; a full-process timing should be labeled
-separately if supplied by an external timer.
+The production's literal status remains `computed; validation pending` because
+validation is saved separately. The corresponding validation says `passed`,
+and the wrapper records successful exit. Parameters are `b=7/5`,
+`P=(11/23,13/29,17/31)`, `p=f=0`, `(eta,eta')=(1,-1)`, with 70-digit outer
+Ward arithmetic, 100-digit middle/CCY arithmetic, and exact rational auxiliary
+sewing before normalization. The independent reference uses 384-bit FLINT
+and is `pbw_level5_p0_f0_eta_plus_minus.json`.
 
-The standalone auxiliary level-ten benchmark is
-`results/direct_fermion_level10.json`, with status
-`computed_without_crosschecks`. Its coefficient construction took
-`0.186281209000299` seconds; process time through the initial save was
-`0.2902146670003276` seconds. Peak resident memory was `46.765625 MiB`.
-It stores 4,793 nonzero exponent tuples and 9,586 rational parity entries.
-This establishes the auxiliary cost and reusable data only.
+The current physical output contains 581 four-variable vectors. Validation
+compares all 4,648 parity slots, including unequal split powers expected to
+vanish. Its split evaluations use `u=0.5,1,2` at
+`q1=0.013`, `q2=0.007`, `q3=0.009`, for all eight spin signs. Both errors are
+below the requested `1e-8` tolerance; they are measured differences, not
+interval bounds or a claim of all-parameter numerical coverage.
 
-## Source provenance
+| Current N5 measurement | Seconds |
+| --- | ---: |
+| Full child-process elapsed time | 12.608884041997953 |
+| Internal computation | 12.240286874999583 |
+| Outer branching | 5.731198166999093 |
+| Action preparation, included in outer branching | 5.308157999999821 |
+| Middle recurrence | 1.0206773309728305 |
+| Virasoro block products | 4.571471287981694 |
+| Direct auxiliary | 0.13050362499780022 |
+| Division and two restored vacuum factors | 0.370597249999264 |
+| Schottky factor alone, included in the preceding row | 0.0013366249986574985 |
 
-This audit recomputed SHA-256 digests of the files named in the saved
-manifests, without importing the production modules or running any block
-calculations. All 14 entries in the reflected level-five production
-manifest match the current files. The copied manifest in its validation
-report also matches all 14 current files. Thus the passing checks refer
-to the current reflected outer implementation, not an earlier result.
+The run records 296 branching cases, 300 actual ordinary series, 146 reused
+transposed products and 24 middle recurrence records. Peak memory is
+114.765625 MiB on Python 3.14.3, Darwin arm64. The internal timer excludes imports,
+argument parsing and final physical encoding/save; the child-process clock
+includes all imports and result writes through exit. They are not
+interchangeable clocks.
 
-Both entries in the standalone auxiliary benchmark manifest match the
-current files when its basename keys are resolved relative to
-`Code/theta_fermion_ccy`. In particular, the benchmark and integrated
-production record the identical `direct_fermion.py` digest. These are
-checks of the supplied manifests, not a claim that the manifest records
-every transitive dependency in the Python environment.
+The nearby archived-source baseline is
+`ccy_pre_constants_retimed_level5.json` with its `_walltime.json` companion:
+19.32923983300134 s internally, 19.722815040997375 s in full, and
+11.730626958997163 s for outer branching. It changes only the imported
+`compute_target` source to its archive and records that actual provenance.
+It is a timing-only run, not another coefficient comparison. Both nearby runs
+were concurrent with the old N10 process. The older 89.8903 s N5 measurement
+is retained as history and is not used to attribute the constant-reuse gain.
 
-Selected current/saved digests:
+Direct physical PBW was separately retimed at 1.4991441250022035 s for the
+full process. Its backend, precision, internal clock and three-variable
+representation differ; the current implementation comparison favors PBW by
+about 8.4 times at N5 without establishing asymptotic or precision-matched
+scaling. `LEVEL5_TIMING_COMPARISON.md` records these qualifications.
 
-| Source | SHA-256 |
-|---|---|
-| `pipeline.py` | `8ec42e45ae5f1053256369f575e105fde79f2f3248633873803575698788f59c` |
-| `outer_branching.py` | `f9bcbc679d9799c197d10992850e3c3db9d9d9ac2cfb615d46601a1573d004c9` |
-| `middle_branching.py` | `485a69a36fba4789480ecc3b830ada7767393b50782547c85775dace612a948f` |
-| `punctured_ccy.py` | `1a8b0dfc465e700be9e64be46df450822fb8e24154db594574c7c7b8f4e5d32a` |
-| `direct_fermion.py` | `5bf3eab304bcb0a6e66281217a326d1b4df1e975dd8debdb17431f16550a04bd` |
-| `series_algebra.py` | `3e7c5502b372e1668592dda97c7b060bb372fedcc59b4c3fecbc3e41b46c23e1` |
-| `validate_requested.py` | `ece44aff49d7faf1fe4bfa5496c09ae39d028eb049bda886c9a5cfd126d0e32e` |
+The standalone direct auxiliary N10 benchmark remains 0.186281209000299 s
+for construction and 0.2902146670003276 s through its initial save. It stores
+4,793 nonzero vectors and 9,586 rational parity entries. It is not the complete
+physical-block timing.
 
-## Remaining actions before declaring completion
+The standalone Schottky vacuum benchmark is `schottky_vacuum_level10.json`: 
+0.04323433299941826 s, six inverse-paired primitive classes, and 70 exact
+coefficients. It excludes imports and result writes. Its recorded source
+digest matches `schottky_vacuum.py`. This is a vacuum-only timing, not a
+physical N10 block or another coefficient comparison.
 
-1. Receive the completed physical level-ten artifact and actual timing
-   from the active production run. Record parameters, precision, all
-   production stages, the saved coefficient path, and timing scope.
-2. Add the measured level-ten timing to the notes, then update this audit
-   and the README checklist with the completed result and source provenance.
+## Source provenance and independent reviews
 
-No completion of the overall goal is asserted until the pending items
-have actual supporting evidence.
+All 18 current production hashes and all 18 copied validation hashes match
+their current files. The new `compute_target.py` digest is
+`3368f697c713860f9c2a8619a29c8a5e1113da54240337dc1ebc65a846390c42`.
+The archived pre-constant digest is
+`46ebb1a8bd10b356ee8697637f61ffb62b680258858e95aabbb69ad68b6568ca`, matching
+the preceding `ccy_cached_actions_level5` manifest. Later changes to
+`pipeline.py` and `punctured_ccy.py`, and the new Schottky source, also
+distinguish current production from these historical manifests.
+
+At the archived-baseline audit, all 18 entries matched their named files.
+The subsequent Schottky update changes the live pipeline/CCY sources, so
+that manifest is now historical. Its driver
+loads the archived source as `sys.modules['compute_target']` before importing
+production; ordinary imports consequently bind to that module. Its only
+pipeline override substitutes the actual archive and driver paths in the
+manifest. The archive's different `HERE` affects only unused standalone CLI
+output defaults, not the production calculation. No saved coefficients are
+inputs to either timing. This was verified by source/metadata inspection,
+without running or importing production.
+
+The preceding N10 process imported the old module before the disk edit and
+never reloaded it. It completed in 1189.8001477500002 s internally and
+1191.6387245000005 s from launch through exit. Its captured manifest belongs
+to that preceding implementation; the inherited source must be resolved
+against its archived old hash. The `ccy_reused_constants_level10` run is
+now active but imported the old Gaussian factor before the Schottky change.
+Its eventual result is also historical for the vacuum backend. No full
+Schottky N10 measurement is yet available.
+
+The source manifests name the specified local/inherited files; they are not
+claimed to hash every Python/environment dependency. Both hashes in the
+standalone direct auxiliary benchmark still match its unchanged sources.
+
+Mathematical and implementation audits:
+
+- `FINAL_MATH_REVIEW.md`, `FINAL_BRANCHING_REVIEW.md`, and
+  `REVIEW_DIRECT_FERMION_SIGNS.md` establish insertion, normalization,
+  recurrence, convolution and sector identities.
+- `CCY_SPEED_REVIEW.md` and the independent audit in
+  `ASSEMBLY_SPEED_REVIEW.md` cover Kac/fusion/transition reuse, global seeds,
+  exact charge interning, real/complex promotion, graph transposition and
+  degree-aware triangular operations.
+- `OUTER_SPEED_REVIEW.md`, `ACTION_SPEED_REVIEW.md`, and independent
+  `ACTION_SPEED_STATIC_AUDIT.md` cover Ward support/factorization, action
+  parity transport, ordered suffixes, generator images, precision and
+  all-column/all-row residual guards.
+- `SCHOTTKY_VACUUM_REVIEW.md` independently derives and reviews CCY Eq. (5.5),
+  the theta sewing maps, primitive/inverse classes, exact multipliers and
+  complete degree cutoff. No Gaussian-component comparison was performed.
+- `CONSTANT_REUSE_REVIEW.md` independently checks exact immutable zero,
+  precision/rounding-aware tolerance caching, unchanged summation/pruning,
+  and old/new run provenance.
+- `FINAL_PRESENTATION_REVIEW.md` records the later debate with this auditor:
+  retain detailed derivations but omit low-level cache counters from the
+  notes, explicitly scope parity reuse and precision, normalize columns,
+  and distinguish measured stages and clocks. The applied prose was reread.
+
+## Remaining completion evidence
+
+1. Complete and inspect the required N10 physical calculation and its actual
+   total/runtime artifacts for the Schottky implementation. The completed
+   old-source run and active Gaussian-backend run are historical; no
+   Schottky N10 run has started in this snapshot.
+2. Document the final N10 parameter/precision/support, seed power, stage
+   timings, memory, environment and source provenance. Do not substitute a
+   partial-stage, standalone-auxiliary or N5 timing.
+3. Update the notes, README and this audit from terminal evidence; review
+   the final N10 presentation and compile after the last edits.
+
+4. Complete the separately authorized individual-Virasoro timing crossover
+   and report its actual timing/precision scope.
+
+No overall completion is asserted while this evidence is pending.

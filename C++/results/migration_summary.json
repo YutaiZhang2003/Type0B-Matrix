@@ -1,0 +1,216 @@
+{
+  "implementation": "standalone C++17, machine complex and MPC/MPFR/GMP",
+  "modes": [
+    "ordinary",
+    "inserted"
+  ],
+  "environment": {
+    "system": "Darwin",
+    "machine": "arm64",
+    "compiler": "Apple clang version 17.0.0 (clang-1700.6.3.2)"
+  },
+  "source_sha256": {
+    "Makefile": "27831fb1073843095fa8cf301a8483649e02a0ea9f6da3faa2856f9f1261cbf9",
+    "include/ramond/anchors.hpp": "f872aa391ff88a74fbbdfb5890c5572f73f438242bba350049c846f07a98ef52",
+    "include/ramond/branching.hpp": "3000404b8ff5bcd9b12ef29a4d491f85da5d85b3eab4795ce71352345446b6e3",
+    "include/ramond/ccy.hpp": "2524a894c677f80d3d3681b94d41eba46bc4d0b3cd81067cc5ffba2daa1113d4",
+    "include/ramond/fermion.hpp": "ee5ffd7affc122c357ce39d398504810f383b7a53e77e98f64c121cd0db6a2c4",
+    "include/ramond/free_field.hpp": "a3a15e49c347c10270dfebb949f23df4cf184be2150c3db9260f7d10fb1fd3c0",
+    "include/ramond/linalg.hpp": "7f581e87d05e27257ecf922c88fff8655fd5e548391fb5a7422782b6fe8cf16a",
+    "include/ramond/number.hpp": "8f2dd10b1750145a21ef0749df933759ae873f9e3d2790eda29b7ebe534b1a2e",
+    "include/ramond/pipeline.hpp": "dd302313427bea122f6a77c38d62e1a68c364da1a06fcbdd1a2a5dc75c83dac5",
+    "include/ramond/schottky.hpp": "7cd10a9f80137b989dbe9bda287277163a783b5717a01256378c9d7cbecf81bd",
+    "include/ramond/storage.hpp": "b873a78be8afd1ef0a81ecfad1d4166fc268a36abd595f61ca1512c82a26c02c",
+    "src/main.cpp": "d65aed7ecc67f7ebcccdab58900922e97edd3faac9b67de14011d2165ba1ee92",
+    "tests/action_driver.cpp": "213b88e7a39799ad936c9a437264ea439de844ff12c803b294923068c593ee87",
+    "tests/anchor_driver.cpp": "3b37d14f0c14176ce994ff0b3a84fdd950d73aaded4e2f5ca2b9d40428da0c84",
+    "tests/component_driver.cpp": "5d0bd48749a08ed31d8963660121494f9a5755c583ef7d5b41a469d4073c7e87",
+    "tests/verify_saved.py": "cb69a96630c638a7ee6bae02ea571dad2674e7155f022647e2d1850f97c84c4d"
+  },
+  "validation": {
+    "status": "passed",
+    "scaled_difference": "abs(a-b)/max(1,abs(a),abs(b))",
+    "scope": "All physical coefficients through the stated cutoff; saved references only",
+    "limitation": "Agreement with saved numerical results is not a certified error bound",
+    "checks": [
+      {
+        "status": "passed",
+        "candidate": "C++/results/ordinary_level5_machine.json",
+        "reference": "Code/ramond_zero_mode_recovery/restricted_level10.json",
+        "reference_sha256": "43f3befd3b8a25d5e71425514bf8e3d351cdb00b00c6cc3f730f71706236731a",
+        "total_level": 5,
+        "dps": 0,
+        "precision_bits": 53,
+        "monomials": 91,
+        "parity_components": 728,
+        "maximum_absolute_difference": "1.20588112889062854e-11",
+        "maximum_scaled_difference": "1.20588112889062854e-11",
+        "worst_twice_levels": [
+          4,
+          2,
+          4
+        ],
+        "worst_parity": 0,
+        "scaled_tolerance": "0.00000001",
+        "timing_seconds": {
+          "branching": 0.0817455840006005,
+          "actions": 0.011968249993515201,
+          "outer_ward": 0.06967504200292751,
+          "middle": 0,
+          "ccy": 0.015158754933509044,
+          "products": 0.0015351671463577077,
+          "assembly": 0.0011015340423909947,
+          "auxiliary": 0.006130375011707656,
+          "division": 0.00032654199458193034,
+          "schottky": 0.0005188750074012205,
+          "restoration": 2.491600753273815e-05,
+          "total": 0.10771629199734889
+        }
+      },
+      {
+        "status": "passed",
+        "candidate": "C++/results/ordinary_level5_40dps.json",
+        "reference": "Code/ramond_zero_mode_recovery/restricted_level10.json",
+        "reference_sha256": "43f3befd3b8a25d5e71425514bf8e3d351cdb00b00c6cc3f730f71706236731a",
+        "total_level": 5,
+        "dps": 40,
+        "precision_bits": 136,
+        "monomials": 91,
+        "parity_components": 728,
+        "maximum_absolute_difference": "1.97974052447560452e-25",
+        "maximum_scaled_difference": "1.97974052447560452e-25",
+        "worst_twice_levels": [
+          4,
+          2,
+          4
+        ],
+        "worst_parity": 0,
+        "scaled_tolerance": "0.00000000000000000001",
+        "timing_seconds": {
+          "branching": 0.4933950830018148,
+          "actions": 0.20585445800679736,
+          "outer_ward": 0.28736129199387506,
+          "middle": 0,
+          "ccy": 0.26814704679418355,
+          "products": 0.03218029602430761,
+          "assembly": 0.02597037618397735,
+          "auxiliary": 0.004313416997320019,
+          "division": 0.008868457996868528,
+          "schottky": 0.0003532499977154657,
+          "restoration": 0.0004918339982395992,
+          "total": 0.8379701660014689
+        }
+      },
+      {
+        "status": "passed",
+        "candidate": "C++/results/inserted_level5_machine.json",
+        "reference": "Code/theta_fermion_ccy/results/forward_diagonal_40dps_level5.json",
+        "reference_sha256": "81bf28a1db9c6a5f4e3f6be468b813f52d06196410b28e6b8fa234be880379c0",
+        "total_level": 5,
+        "dps": 0,
+        "precision_bits": 53,
+        "monomials": 91,
+        "parity_components": 728,
+        "maximum_absolute_difference": "1.58268255761441166e-10",
+        "maximum_scaled_difference": "1.58268255761441166e-10",
+        "worst_twice_levels": [
+          0,
+          8,
+          2
+        ],
+        "worst_parity": 0,
+        "scaled_tolerance": "0.00000001",
+        "timing_seconds": {
+          "branching": 0.3285441250045551,
+          "actions": 0.2332362919987645,
+          "outer_ward": 0.09525374999793712,
+          "middle": 0.00037437499850057065,
+          "ccy": 0.044094334938563406,
+          "products": 0.0024840469122864306,
+          "assembly": 0.0018691700388444588,
+          "auxiliary": 0.005000749995815568,
+          "division": 0.00035237500560469925,
+          "schottky": 0.0004936670011375099,
+          "restoration": 2.183300966862589e-05,
+          "total": 0.38596454200160224
+        }
+      },
+      {
+        "status": "passed",
+        "candidate": "C++/results/inserted_level5_40dps.json",
+        "reference": "Code/theta_fermion_ccy/results/forward_diagonal_40dps_level5.json",
+        "reference_sha256": "81bf28a1db9c6a5f4e3f6be468b813f52d06196410b28e6b8fa234be880379c0",
+        "total_level": 5,
+        "dps": 40,
+        "precision_bits": 136,
+        "monomials": 91,
+        "parity_components": 728,
+        "maximum_absolute_difference": "3.44769836305755913e-25",
+        "maximum_scaled_difference": "3.44769836305755913e-25",
+        "worst_twice_levels": [
+          2,
+          2,
+          6
+        ],
+        "worst_parity": 6,
+        "scaled_tolerance": "0.00000000000000000001",
+        "timing_seconds": {
+          "branching": 2.879373415998998,
+          "actions": 2.376638665999053,
+          "outer_ward": 0.5026072499895236,
+          "middle": 0.009709125006338581,
+          "ccy": 1.100185711067752,
+          "products": 0.02552870310319122,
+          "assembly": 0.061884080030722544,
+          "auxiliary": 0.004327417002059519,
+          "division": 0.008405749991652556,
+          "schottky": 0.0003634589957073331,
+          "restoration": 0.0004961670056218281,
+          "total": 4.102529374998994
+        }
+      }
+    ]
+  },
+  "make_check": "passed",
+  "alternate_flags": {
+    "status": "passed",
+    "parameters": {
+      "b": "7/5",
+      "momenta": [
+        "11/23",
+        "13/29",
+        "17/31"
+      ],
+      "p": 1,
+      "f": 1,
+      "etas": [
+        -1,
+        1
+      ]
+    },
+    "total_level": 2,
+    "parity_components": 112,
+    "maximum_absolute_difference": "0.0000000000001731595129836194685049738690064687817522619499213583298417567017278386",
+    "maximum_scaled_difference": "0.0000000000001731595129836194685049738690064687817522619499213583298417567017278386",
+    "worst_twice_levels": [
+      0,
+      2,
+      2
+    ],
+    "worst_parity": 5,
+    "reference_algorithm": "Python forward CCY; no PBW block computed",
+    "reference_sha256": "633aaa0096a683fcab6ddb2378330e9d93f42ef46969e8ed45be923531d6a3c4"
+  },
+  "timing_note": "Single fresh-process computations, all stages included, no numerical input cache; startup and JSON serialization excluded",
+  "not_run": [
+    "full level-15 block",
+    "new physical PBW block"
+  ],
+  "sanitizer": {
+    "status": "startup_timeout",
+    "stdout": "None",
+    "stderr": "None",
+    "elapsed_seconds": 10.006613290999667
+  },
+  "status": "implemented; numerical validation passed through level 5"
+}

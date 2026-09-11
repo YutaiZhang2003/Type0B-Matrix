@@ -1,0 +1,46 @@
+{
+  "status": "failed at unchanged sector tolerance; physical block not recovered",
+  "tolerance": 1e-08,
+  "error": "Numerator leaves the minus ideal at (0, 6, 1, 2): 2.0868810380187958e-08",
+  "fresh_process_wall_seconds": 96.01631708299828,
+  "pipeline_internal_seconds": 95.49225591700088,
+  "segments_seconds": {
+    "outer_branching_including_actions": 10.5588706669987,
+    "action_preparation_included_in_outer": 10.127247583001008,
+    "middle_branching": 1.0271720829987316,
+    "ccy_recursion": 80.75978157710415,
+    "virasoro_products": 1.8026418361041578,
+    "ccy_setup_other": 0.10796369381932891,
+    "direct_fermion": 0.30465137499777484,
+    "convolution_until_failure": 0.3496536249986093,
+    "other_process_work": 1.105582225976832
+  },
+  "schottky_vacuum_separate_seconds": 0.04344200000195997,
+  "vacuum_restoration_status": "not reached; no accepted quotient",
+  "outer_coefficients_saved": 1936,
+  "middle_coefficients_saved": 36,
+  "ordinary_ccy_series": 804,
+  "transposed_products_reused": 400,
+  "outer_actions_reused_by_middle": true,
+  "numerator_coefficient_vectors": 5786,
+  "auxiliary_coefficient_vectors": 4793,
+  "followup_solver_diagnostic": {
+    "method": "Compensated summation of the convolution using math.fsum at native precision on saved inputs",
+    "status": "same sector failure",
+    "exponents": [
+      0,
+      6,
+      1,
+      2
+    ],
+    "scaled_residual": 2.0868810343057392e-08,
+    "seconds": 1.178807208998478
+  },
+  "additional_cross_checks": "none",
+  "files": {
+    "pipeline": "Code/theta_fermion_ccy/results/ccy_schottky_machine_level10.json",
+    "timing": "Code/theta_fermion_ccy/results/ccy_schottky_machine_level10_walltime.json",
+    "branching": "Code/theta_fermion_ccy/results/ccy_schottky_machine_level10_branching.json",
+    "vacuum": "Code/theta_fermion_ccy/results/ccy_schottky_machine_level10_vacuum.json"
+  }
+}

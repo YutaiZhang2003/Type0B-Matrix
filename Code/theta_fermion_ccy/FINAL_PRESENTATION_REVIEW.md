@@ -1,5 +1,7 @@
 # Final presentation review
 
+## Original derivation review
+
 This review concerns the current parent derivation and its direct-fermion
 and Ising inclusions. It follows the completed mathematics reviews. No
 production calculation, numerical comparison, or parent-TeX edit was made.
@@ -206,3 +208,55 @@ by the reordering.
 This closure is a static content review. TeX compilation and the active
 level-ten production computation are owned and reported separately by
 the parent; no numerical work was performed for this closure.
+
+## Later review: optimization and final level-five measurements
+
+The original review above preceded the performance work. A separate final
+presentation review by `/root/speed_review`, debated with `/root/ccy_speed`,
+now covers the added “Reusing the same data” subsection and the revised
+implementation and numerical-status section. This review used source
+inspection and saved-result metadata only. It made no numerical block
+calculation or comparison and changed no Python source.
+
+The reviewers agreed to retain the substantial derivational explanation
+requested by the user: the split-tube transpose identity, exact Theta parity
+transport, action construction, closed Ward support, CCY reuse, and forward
+triangular division each explain why the optimization preserves the sought
+block. They rejected adding individual low-level cache counters to the main
+notes; those remain in the implementation reports. No new mathematical
+notation was needed.
+
+The following small text changes were applied:
+
+- The parity shortcut is explicitly scoped to the outer Ward action table,
+  where the current implementation uses it. The statement now says that
+  only one parity needs an explicit solve, rather than suggesting that the
+  second parity is absent.
+- Action-state reuse is explicitly at fixed parameters and precision. The
+  text states that temporary images are released after the solve.
+- Normalization is correctly assigned to each span column. Refinement uses
+  the nonzero entries, while the final residual uses all original columns
+  and oscillator rows.
+- The precision description includes the middle recurrence at 100 decimal
+  digits, alongside the CCY engines; the outer Ward system uses 70 digits.
+- The timing label is “Virasoro block products in the branch sum,” because
+  that stage includes both CCY series and their scalar products for many
+  primary branches, rather than just two engine calls.
+
+The saved final level-five validation reports `passed`, 4,648 compared parity
+slots, maximum absolute/scaled difference `3.836489...e-52`, and maximum
+scaled split-position change `1.665633...e-58`. The prose rounds these
+correctly. The saved computation time is `88.264166...` seconds; the separate
+launch-through-exit measurement is `89.890251...` seconds. Their distinct
+timer scopes are stated next to the measurements.
+
+The reviewers specifically checked that the notes do not claim an overall
+low-level speed improvement from these figures. The single-branch CCY
+profiling evidence, final level-five runtime, standalone auxiliary timing,
+and eventual full level-ten runtime have different scopes and cannot replace
+one another. The current presentation maintains those distinctions.
+
+This later presentation review is closed for the optimized method and final
+level-five record. The future level-ten runtime paragraph remains owned by
+the parent and must be completed from the actual production result. Final
+TeX compilation and that runtime entry are separate from this static closure.
