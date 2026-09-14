@@ -12,7 +12,10 @@ endif
 HEADERS = $(wildcard include/ramond/*.hpp)
 SOURCES = $(wildcard src/*.cpp)
 OBJECTS = $(SOURCES:src/%.cpp=build/%.o)
-all: bin/ramond
+all: bin/ramond bin/pbw
+bin/pbw: drivers/pbw_main.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
 bin/ramond: $(OBJECTS)
 	@mkdir -p bin
 	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@

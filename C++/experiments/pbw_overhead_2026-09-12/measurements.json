@@ -1,0 +1,114 @@
+{
+  "precision_bits": 136,
+  "dps": 40,
+  "new_physical_gram_ward_or_block_evaluations": 0,
+  "metadata_entries_per_trial": 10000,
+  "metadata_cache_preparation_seconds": 0.0023346250018221326,
+  "metadata_trials": {
+    "current": [
+      0.11009845900116488,
+      0.11250583400396863,
+      0.11105662499903701
+    ],
+    "cached": [
+      0.01568766700074775,
+      0.015898624995315913,
+      0.01677824999933364
+    ]
+  },
+  "matrix_trials": [
+    {
+      "shape": [
+        32,
+        32,
+        64
+      ],
+      "current": [
+        0.00815537499875063,
+        0.008159749995684251,
+        0.008149708002747502
+      ],
+      "native_operands": [
+        0.004108417000679765,
+        0.004197041998850182,
+        0.0040893749974202365
+      ],
+      "speedup": 1.9850407096945781
+    },
+    {
+      "shape": [
+        161,
+        161,
+        64
+      ],
+      "current": [
+        0.06267412500164937,
+        0.052126333001069725,
+        0.054612415995507035
+      ],
+      "native_operands": [
+        0.028047583997249603,
+        0.027185333994566463,
+        0.02796475000650389
+      ],
+      "speedup": 1.9529019920723616
+    },
+    {
+      "shape": [
+        232,
+        232,
+        64
+      ],
+      "current": [
+        0.09839312500116648,
+        0.09232075000181794,
+        0.09433170899865218
+      ],
+      "native_operands": [
+        0.05258029099786654,
+        0.05206091699801618,
+        0.05361670800630236
+      ],
+      "speedup": 1.7940507214476944
+    },
+    {
+      "shape": [
+        232,
+        232,
+        512
+      ],
+      "current": [
+        0.5599817909969715,
+        0.5534564170011436,
+        0.5617956659989432
+      ],
+      "native_operands": [
+        0.344256750002387,
+        0.3363715419982327,
+        0.3388053340022452
+      ],
+      "speedup": 1.6528127948341587
+    }
+  ],
+  "metadata_speedup": 6.985297472690673,
+  "metadata_seconds_saved_per_entry": 9.51580000037211e-06,
+  "box_counts": {
+    "requested_tensor_entries": 1318075412,
+    "current_word_constructions": 3954226236,
+    "cached_words_including_both_ramond_grounds_on_each_edge": 3369,
+    "current_phase_exponentiations": 1318075412,
+    "cached_phase_exponentiations": 3,
+    "gram_entries": 450469,
+    "triangular_gram_entries": 226919,
+    "dense_contraction_products": 254809434024
+  },
+  "metadata_only_box_savings_estimate_seconds": 12542.542006000069,
+  "limitations": [
+    "These are synthetic component timings, not a PBW block profile or whole-block speedup.",
+    "Metadata sample uses words at edge level ten; lower levels have shorter words.",
+    "Native matrix timing excludes layout changes, precision-policy midpoint handling, and final extraction; it is an arithmetic-kernel target.",
+    "No Ward recurrence optimization or compiled PBW implementation was benchmarked.",
+    "No coefficient-accuracy conclusion follows from these timings."
+  ],
+  "wall_seconds": 4.5262797080067685
+}

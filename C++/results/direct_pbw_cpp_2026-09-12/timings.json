@@ -1,0 +1,298 @@
+{
+  "status": "completed",
+  "dps": 40,
+  "precision_bits": 136,
+  "q_level_cutoffs": [
+    5,
+    5,
+    5
+  ],
+  "environment": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "protocol": "sequential fresh C++ processes; no numerical caches loaded; compilation excluded; Python only launches and compares",
+  "source_sha256": {
+    "C++/include/ramond/direct_pbw.hpp": "b26fd4f2fda60921844c35d82c3e79d220322b54a1293c7af7f09be7965379b9",
+    "C++/drivers/pbw_main.cpp": "f8b59a3ccf04f4f5573b3feea6f97caec649a8a8b74d2268fab721a934421a68",
+    "C++/bin/pbw": "f858115651fe2488ea95178598526be19e60f953b0f1c95ef02ba02d952fb64c",
+    "C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/ramond": "90f4111682ca87db6098e76a8c30e843c9d554714d37ef2ee081588a1788a9b5",
+    "C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/include/ramond/ccy.hpp": "5648ad42d8479d4621a71eaca8ece2d5b20cdb78654c2fb72cd1c77133ceab3b"
+  },
+  "runs": [
+    {
+      "algorithm": "pbw_cpp",
+      "mode": "ordinary",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/direct_pbw_cpp_2026-09-12/pbw_cpp_ordinary.json"
+      ],
+      "status": "completed",
+      "wall_seconds": 4.771332791999157,
+      "exit_code": 0,
+      "timing_seconds": {
+        "setup": 6.512500112876296e-05,
+        "metadata": 0.00014212608220987022,
+        "gram_entries": 0.008531374973244965,
+        "gram_inverse": 0.006500457966467366,
+        "vertices": 3.6661126098770183,
+        "contractions": 0.9993312902515754,
+        "total": 4.6942319170047995
+      },
+      "counts": {
+        "monomials": 396,
+        "parity_slots": 3168,
+        "gram_entries": 2167,
+        "gram_matrices": 35,
+        "vertex_entries": 353934,
+        "reused_vertex_tensors": 792,
+        "contractions": 792,
+        "contraction_products": 15344984,
+        "ward_entries": 421470,
+        "ward_hits": 5034422,
+        "ward_action_terms": 4979526,
+        "ward_buckets": 823117,
+        "interned_words": 712,
+        "mode_action_entries": 6972
+      },
+      "memory": {
+        "peak_rss_native_units": 102891520,
+        "peak_rss_unit": "bytes",
+        "scalar_object_bytes": 72,
+        "ward_key_bytes": 12,
+        "ward_entry_pair_bytes": 96
+      }
+    },
+    {
+      "algorithm": "pbw_cpp",
+      "mode": "inserted",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/direct_pbw_cpp_2026-09-12/pbw_cpp_inserted.json"
+      ],
+      "status": "completed",
+      "wall_seconds": 8.608827749994816,
+      "exit_code": 0,
+      "timing_seconds": {
+        "setup": 6.645801477134228e-05,
+        "metadata": 0.00015420990530401468,
+        "gram_entries": 0.008566084987251088,
+        "gram_inverse": 0.006478168012108654,
+        "vertices": 7.412544393941062,
+        "contractions": 0.9991399341088254,
+        "total": 8.453663082997082
+      },
+      "counts": {
+        "monomials": 396,
+        "parity_slots": 3168,
+        "gram_entries": 2167,
+        "gram_matrices": 35,
+        "vertex_entries": 707868,
+        "reused_vertex_tensors": 0,
+        "contractions": 792,
+        "contraction_products": 15344984,
+        "ward_entries": 842940,
+        "ward_hits": 10068844,
+        "ward_action_terms": 9959052,
+        "ward_buckets": 1646234,
+        "interned_words": 712,
+        "mode_action_entries": 6972
+      },
+      "memory": {
+        "peak_rss_native_units": 191315968,
+        "peak_rss_unit": "bytes",
+        "scalar_object_bytes": 72,
+        "ward_key_bytes": 12,
+        "ward_entry_pair_bytes": 96
+      }
+    },
+    {
+      "algorithm": "double_virasoro_cpp",
+      "mode": "ordinary",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/ramond",
+        "--truncation",
+        "per-edge",
+        "--sector-policy",
+        "record",
+        "--mode",
+        "ordinary",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/direct_pbw_cpp_2026-09-12/double_virasoro_cpp_ordinary.json"
+      ],
+      "status": "completed",
+      "wall_seconds": 3.0966798330046004,
+      "exit_code": 0,
+      "timing_seconds": {
+        "branching": 0.08764541702112183,
+        "actions": 0.05250533399521373,
+        "outer_ward": 0.0350010420079343,
+        "middle": 0,
+        "ccy": 2.517817389278207,
+        "products": 0.300612001970876,
+        "assembly": 0.02761741165886633,
+        "auxiliary": 0.030830999981844798,
+        "division": 0.0839392920024693,
+        "schottky": 0.004209792008623481,
+        "restoration": 0.005422834015917033,
+        "total": 3.0797137080226094
+      },
+      "counts": {
+        "branches": 251,
+        "virasoro_blocks": 502,
+        "ccy_transitions": 196498,
+        "ccy_seed_terms": 411280,
+        "transposed_products_reused": 0,
+        "direct_boundary_values": 96,
+        "recursive_branching_values": 408,
+        "recursive_groups": 176,
+        "maximum_local_unknowns": 4,
+        "second_ward_rows": 0,
+        "vanishing_first_pivots": 0
+      }
+    },
+    {
+      "algorithm": "double_virasoro_cpp",
+      "mode": "inserted",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/ramond",
+        "--truncation",
+        "per-edge",
+        "--sector-policy",
+        "record",
+        "--mode",
+        "inserted",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/direct_pbw_cpp_2026-09-12/double_virasoro_cpp_inserted.json"
+      ],
+      "status": "completed",
+      "wall_seconds": 7.321655041996564,
+      "exit_code": 0,
+      "timing_seconds": {
+        "branching": 0.09419612502097152,
+        "actions": 0.05270129200653173,
+        "outer_ward": 0.04139295901404694,
+        "middle": 0.001162166998255998,
+        "ccy": 6.3711185512074735,
+        "products": 0.5614362004853319,
+        "assembly": 0.04710006804089062,
+        "auxiliary": 0.03114704100880772,
+        "division": 0.08430679200682789,
+        "schottky": 0.004335165984230116,
+        "restoration": 0.005481166997924447,
+        "total": 7.3050477920041885
+      },
+      "counts": {
+        "branches": 406,
+        "virasoro_blocks": 420,
+        "ccy_transitions": 1549592,
+        "ccy_seed_terms": 4660416,
+        "transposed_products_reused": 196,
+        "direct_boundary_values": 192,
+        "recursive_branching_values": 816,
+        "recursive_groups": 176,
+        "maximum_local_unknowns": 4,
+        "second_ward_rows": 0,
+        "vanishing_first_pivots": 0
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "mode": "ordinary",
+      "reference": "saved_python_pbw",
+      "monomials": 396,
+      "parity_slots": 3168,
+      "maximum_scaled_difference": "2.8174381906822548774189674728752933704122297283000976415308275023E-38",
+      "maximum_absolute_difference": "1.088058E-33",
+      "worst_scaled_location": {
+        "exponents": [
+          9,
+          3,
+          3,
+          0
+        ],
+        "parity_slot": 3
+      },
+      "criterion": "1e-28",
+      "passed": true
+    },
+    {
+      "mode": "ordinary",
+      "reference": "fresh_cpp_double_virasoro",
+      "monomials": 396,
+      "parity_slots": 3168,
+      "maximum_scaled_difference": "8.5975598258761889643591588590800037809000897616074199448191634058E-21",
+      "maximum_absolute_difference": "3.9512194104037939323300000000000005499407127009836503566194359633E-16",
+      "worst_scaled_location": {
+        "exponents": [
+          9,
+          3,
+          3,
+          10
+        ],
+        "parity_slot": 5
+      },
+      "criterion": "2e-20",
+      "passed": true
+    },
+    {
+      "mode": "inserted",
+      "reference": "saved_python_pbw",
+      "monomials": 396,
+      "parity_slots": 3168,
+      "maximum_scaled_difference": "1.7316706779086159471865117063495574082314940726221249464553323375E-36",
+      "maximum_absolute_difference": "6.6815064E-34",
+      "worst_scaled_location": {
+        "exponents": [
+          7,
+          4,
+          4,
+          10
+        ],
+        "parity_slot": 5
+      },
+      "criterion": "1e-28",
+      "passed": true
+    },
+    {
+      "mode": "inserted",
+      "reference": "fresh_cpp_double_virasoro",
+      "monomials": 396,
+      "parity_slots": 3168,
+      "maximum_scaled_difference": "1.3945647162088464975449536677192089849492817989221680292961840329E-20",
+      "maximum_absolute_difference": "1.7238560475356203906830000000000102378851238975090634924127745249E-16",
+      "worst_scaled_location": {
+        "exponents": [
+          10,
+          4,
+          4,
+          10
+        ],
+        "parity_slot": 0
+      },
+      "criterion": "2e-20",
+      "passed": true
+    }
+  ],
+  "compiler": "Apple clang version 17.0.0 (clang-1700.6.3.2)\nTarget: arm64-apple-darwin25.6.0\nThread model: posix\nInstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+}

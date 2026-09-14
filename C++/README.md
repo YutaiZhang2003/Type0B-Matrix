@@ -1,7 +1,7 @@
 # Native C++ Ramond block pipelines
 
 The C++17 executable computes the **physical genus-two NS–R–R superconformal
-block** through a specified total plumbing level. Both current production paths
+block** through a specified total or independent-edge cutoff. Both production paths
 are implemented:
 
 | Mode | Vertices | Recovery |
@@ -9,8 +9,29 @@ are implemented:
 | `ordinary` | `(eta, eta)` | Ordinary theta double-Virasoro sum and restricted fermion inverse |
 | `inserted` | `(eta, -eta)` | Theta v_(1/2) insertion, diagonal target sum, and fermion convolution |
 
-Python is used only by the optional validation script to read existing reference
-results. The Python implementations remain available under `Code/`.
+Optional Python tools launch benchmarks and compare saved results. The Python
+numerical implementations remain available under `Code/`.
+
+`bin/pbw` is a separate C++ direct physical SCA PBW benchmark. It supports
+machine and MPC precision, caches Ward/mode-action data and Gram inverses,
+and contracts tensors with direct indexing. Its `--level N` always means
+**each of the three edges is cut off at level N**. Parameters are fixed to
+the default benchmark momenta below; `--p`, `--f`, and `--eta` are supported.
+The `--mode inserted` label selects the negative vertex-sign sector; direct
+PBW does not introduce an auxiliary insertion.
+
+```sh
+make -C 'C++' bin/pbw
+'C++/bin/pbw' --mode ordinary --level 5 --dps 40 \
+  --json '/tmp/pbw_cpp_ordinary.json'
+python3 'C++/tools/benchmark_direct_pbw.py'
+python3 'C++/tools/estimate_direct_pbw.py'
+```
+
+The last script counts work and scales measured C++ stages; it does not run
+level-10 PBW. Saved results and comparisons are in
+`C++/results/direct_pbw_cpp_2026-09-12/`. Python only orchestrates the C++
+benchmark and analyzes output; both numerical block calculations are C++/MPC.
 
 ## Build and run
 

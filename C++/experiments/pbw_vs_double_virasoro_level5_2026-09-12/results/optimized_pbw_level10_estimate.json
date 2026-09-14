@@ -1,0 +1,165 @@
+{
+  "precision_bits": 136,
+  "dps": 40,
+  "q_level_cutoffs": [
+    10,
+    10,
+    10
+  ],
+  "implementation": "current optimized Python/FLINT physical PBW",
+  "new_physical_gram_ward_block_evaluations": 0,
+  "counts": {
+    "5": {
+      "ns_dimensions": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10,
+        13,
+        16
+      ],
+      "ramond_dimensions_per_parity": [
+        1,
+        2,
+        4,
+        8,
+        14,
+        24
+      ],
+      "monomials": 396,
+      "vertex_entries_positive": 353934,
+      "vertex_entries_negative": 707868,
+      "gram_triangle_entries": 2167,
+      "gram_cube_proxy": 76475,
+      "contraction_products": 15344984,
+      "basis_metadata_entries": 275,
+      "mean_total_level_per_vertex_entry": 11.710242587601078,
+      "permutation_cache_shapes": 324,
+      "permutation_cache_tuple_slots": 514047,
+      "permutation_cache_estimated_bytes": 14591328,
+      "positive_top_level_ward_key_tuple_bytes": 33977664,
+      "negative_top_level_ward_key_tuple_bytes": 67955328
+    },
+    "10": {
+      "ns_dimensions": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10,
+        13,
+        16,
+        21,
+        28,
+        35,
+        43,
+        55,
+        70,
+        86,
+        105,
+        130,
+        161
+      ],
+      "ramond_dimensions_per_parity": [
+        1,
+        2,
+        4,
+        8,
+        14,
+        24,
+        40,
+        64,
+        100,
+        154,
+        232
+      ],
+      "monomials": 2541,
+      "vertex_entries_positive": 659037706,
+      "vertex_entries_negative": 1318075412,
+      "gram_triangle_entries": 226919,
+      "gram_cube_proxy": 78765711,
+      "contraction_products": 254809434024,
+      "basis_metadata_entries": 3369,
+      "mean_total_level_per_vertex_entry": 25.019499639979628,
+      "permutation_cache_shapes": 2299,
+      "permutation_cache_tuple_slots": 986075865,
+      "permutation_cache_estimated_bytes": 35453331504,
+      "positive_top_level_ward_key_tuple_bytes": 63267619776,
+      "negative_top_level_ward_key_tuple_bytes": 126535239552
+    }
+  },
+  "growth_ratios": {
+    "monomials": 6.416666666666667,
+    "vertex_entries_positive": 1862.0355942068295,
+    "vertex_entries_negative": 1862.0355942068295,
+    "gram_triangle_entries": 104.71573604060913,
+    "gram_cube_proxy": 1029.9537234390323,
+    "contraction_products": 16605.38935876375,
+    "basis_metadata_entries": 12.25090909090909,
+    "mean_total_level_per_vertex_entry": 2.136548363777752
+  },
+  "forecasts": [
+    {
+      "mode": "ordinary",
+      "measured_level5_wall_seconds": 68.85370912499639,
+      "constant_unit_cost_stage_seconds": {
+        "vertices": 124858.96863734318,
+        "gram_entries": 7.8988255620097885,
+        "gram_inverse": 9.896392721343561,
+        "contractions": 16203.55884610934,
+        "metadata": 0.008162670758981468,
+        "setup": 0.32130441699700896,
+        "other_internal": 0.09907871696850634,
+        "process_overhead": 2.569004739561327
+      },
+      "constant_unit_cost_seconds": 141083.32025228016,
+      "level_weighted_ward_sensitivity_seconds": 282991.5767600302,
+      "ward_mean_level_cost_multiplier": 2.136548363777752,
+      "top_level_ward_entries_at_least": 659037706
+    },
+    {
+      "mode": "inserted",
+      "measured_level5_wall_seconds": 139.20038729200314,
+      "constant_unit_cost_stage_seconds": {
+        "vertices": 255154.17025333078,
+        "gram_entries": 7.653568326088872,
+        "gram_inverse": 9.294343615777668,
+        "contractions": 16806.92880397334,
+        "metadata": 0.009044209177081939,
+        "setup": 0.45247841700620484,
+        "other_internal": 0.16495333983099653,
+        "process_overhead": 3.834075168000709
+      },
+      "constant_unit_cost_seconds": 271982.50752038,
+      "level_weighted_ward_sensitivity_seconds": 561977.562232873,
+      "ward_mean_level_cost_multiplier": 2.136548363777752,
+      "top_level_ward_entries_at_least": 1318075412
+    }
+  ],
+  "python_version": "3.14.3 (main, Feb  3 2026, 15:32:20) [Clang 17.0.0 (clang-1700.6.3.2)]",
+  "ward_cache_key_tuple_bytes": 96,
+  "assumptions": [
+    "Baseline holds measured seconds per requested vertex entry and per contraction product fixed.",
+    "Gram inverse scaling uses sum(d^3) as a proxy; Gram costs are negligible in the prediction.",
+    "The sensitivity model increases Ward cost per requested entry by the exact ratio of vertex-weighted mean total levels. This is an assumption, not a measured Ward-operation count.",
+    "Neither scenario is a confidence interval, runtime bound, or a forecast for a future compiled Ward implementation.",
+    "Higher levels may change internal Ward-cache misses, recursion lengths, hash costs, matrix efficiency, and numerical cancellation.",
+    "Both time scenarios assume sufficient RAM without paging. The present unbounded caches retain every top-level Ward key plus additional internal keys and values.",
+    "Memory figures count only key tuples and cached permutation tables; scalar values, dictionary storage, words, action caches, temporary matrices, and allocator overhead are additional.",
+    "Permutation memory estimates assume CPython integer results above 256 are individually allocated, as in the current generator expressions."
+  ],
+  "source_sha256": {
+    "C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/estimate_level10.py": "df5d7b44e609af28c425bb2aaa2cf7d6928b78a2321a7122deb25ee3a1b433c5",
+    "Code/theta_fermion_ccy/optimized_pbw.py": "0f4d7be14a37582eeff65964d523ef7f9cb5d58a21a682d15af8c6abbf84b32a",
+    "C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/results/timings.json": "7570234fdcc8ada67dce0b51720dec94544067f20be3e850086dc9db11b9575b"
+  }
+}

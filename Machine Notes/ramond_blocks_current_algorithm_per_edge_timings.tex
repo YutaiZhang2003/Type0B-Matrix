@@ -64,7 +64,8 @@ Comparing all $20{,}328$ ordinary components with the saved pre-change
 and absolute difference $8.907\times10^{-9}$; coefficients reach
 $4.166\times10^{12}$. Here the scale is $\max(1,|a|,|b|)$.
 This checks the implementation change at the same working precision.
-The full inserted box has no completed pre-change or independent reference.
+The full level-10 inserted box has no completed pre-change or independent
+reference; the new independent level-5 PBW comparison is reported below.
 
 At independent cutoff 2, both physical pipelines were compared with saved
 results on all 45 monomials; after the CCY optimization their scaled
@@ -73,7 +74,7 @@ Individual inserted Virasoro factors at edge cutoffs 6 and 8 agree with
 the former implementation within $8.88\times10^{-32}$ in scaled difference.
 Exact checks compare small Schottky and fermion boxes with projections of
 their total-degree series and check the shifted-diagonal product on an
-asymmetric domain. No additional physical PBW block was computed.
+asymmetric domain. Those checks used stored physical reference blocks.
 
 \begingroup\raggedright
 The directed optimization evidence is saved under

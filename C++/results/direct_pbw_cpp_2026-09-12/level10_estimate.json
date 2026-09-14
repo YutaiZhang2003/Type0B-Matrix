@@ -1,0 +1,172 @@
+{
+  "precision_bits": 136,
+  "dps": 40,
+  "q_level_cutoffs": [
+    10,
+    10,
+    10
+  ],
+  "implementation": "C++17/MPC direct physical SCA PBW",
+  "new_physical_gram_ward_block_evaluations": 0,
+  "counts": {
+    "5": {
+      "ns_dimensions": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10,
+        13,
+        16
+      ],
+      "ramond_dimensions_per_parity": [
+        1,
+        2,
+        4,
+        8,
+        14,
+        24
+      ],
+      "monomials": 396,
+      "vertex_entries_positive": 353934,
+      "vertex_entries_negative": 707868,
+      "gram_triangle_entries": 2167,
+      "gram_cube_proxy": 76475,
+      "contraction_products": 15344984,
+      "basis_metadata_entries": 275,
+      "mean_total_level_per_vertex_entry": 11.710242587601078
+    },
+    "10": {
+      "ns_dimensions": [
+        1,
+        1,
+        1,
+        2,
+        3,
+        4,
+        5,
+        7,
+        10,
+        13,
+        16,
+        21,
+        28,
+        35,
+        43,
+        55,
+        70,
+        86,
+        105,
+        130,
+        161
+      ],
+      "ramond_dimensions_per_parity": [
+        1,
+        2,
+        4,
+        8,
+        14,
+        24,
+        40,
+        64,
+        100,
+        154,
+        232
+      ],
+      "monomials": 2541,
+      "vertex_entries_positive": 659037706,
+      "vertex_entries_negative": 1318075412,
+      "gram_triangle_entries": 226919,
+      "gram_cube_proxy": 78765711,
+      "contraction_products": 254809434024,
+      "basis_metadata_entries": 3369,
+      "mean_total_level_per_vertex_entry": 25.019499639979628
+    }
+  },
+  "growth_ratios": {
+    "monomials": 6.416666666666667,
+    "vertex_entries_positive": 1862.0355942068295,
+    "vertex_entries_negative": 1862.0355942068295,
+    "gram_triangle_entries": 104.71573604060913,
+    "gram_cube_proxy": 1029.9537234390323,
+    "contraction_products": 16605.38935876375,
+    "basis_metadata_entries": 12.25090909090909,
+    "mean_total_level_per_vertex_entry": 2.136548363777752
+  },
+  "forecasts": [
+    {
+      "mode": "ordinary",
+      "measured_level5_wall_seconds": 4.771332791999157,
+      "constant_unit_cost_stage_seconds": {
+        "vertices": 6826.4321719615045,
+        "gram_entries": 0.8933692097617786,
+        "gram_inverse": 6.695170886621983,
+        "contractions": 16594.28517302316,
+        "metadata": 0.0017411737126001917,
+        "setup": 6.512500112876296e-05,
+        "other_internal": 25.228595236092602,
+        "process_overhead": 143.5645735839851
+      },
+      "constant_unit_cost_seconds": 23597.10086019984,
+      "level_weighted_ward_sensitivity_seconds": 31355.67117568249,
+      "ward_mean_level_cost_multiplier": 2.136548363777752,
+      "top_level_ward_entries_at_least": 659037706,
+      "memory_lower_bound": {
+        "top_level_key_bytes": 7908452472,
+        "top_level_key_value_object_bytes": 63267619776,
+        "top_level_mantissa_payload_bytes": 31633809888,
+        "top_level_pair_and_mantissa_bytes": 94901429664,
+        "per_entry_pair_bytes": 96,
+        "per_entry_mantissa_payload_bytes": 48,
+        "tensor_permutation_cache_bytes": 0
+      }
+    },
+    {
+      "mode": "inserted",
+      "measured_level5_wall_seconds": 8.608827749994816,
+      "constant_unit_cost_stage_seconds": {
+        "vertices": 13802.421505156548,
+        "gram_entries": 0.8970038944264096,
+        "gram_inverse": 6.672213265134942,
+        "contractions": 16591.107629766604,
+        "metadata": 0.0018892115307971833,
+        "setup": 6.645801477134228e-05,
+        "other_internal": 49.74210981742221,
+        "process_overhead": 288.9221329130313
+      },
+      "constant_unit_cost_seconds": 30739.764550482712,
+      "level_weighted_ward_sensitivity_seconds": 46426.88412833924,
+      "ward_mean_level_cost_multiplier": 2.136548363777752,
+      "top_level_ward_entries_at_least": 1318075412,
+      "memory_lower_bound": {
+        "top_level_key_bytes": 15816904944,
+        "top_level_key_value_object_bytes": 126535239552,
+        "top_level_mantissa_payload_bytes": 63267619776,
+        "top_level_pair_and_mantissa_bytes": 189802859328,
+        "per_entry_pair_bytes": 96,
+        "per_entry_mantissa_payload_bytes": 48,
+        "tensor_permutation_cache_bytes": 0
+      }
+    }
+  ],
+  "assumptions": [
+    "Baseline keeps measured seconds per requested vertex entry and contraction product fixed.",
+    "Gram inversions scale by sum(d^3), a work proxy, not an exact operation count.",
+    "The longer-Ward scenario multiplies only vertex work by the entry-weighted mean total-level ratio. No level-10 internal Ward-operation count was computed.",
+    "Unassigned internal time and process startup/serialization/cache-destruction overhead scale by the top-level vertex-entry ratio as a proxy.",
+    "Both scenarios assume sufficient RAM without paging, unchanged persistent caches, and unchanged 136-bit arithmetic. They are not runtime bounds or confidence intervals.",
+    "Memory counts cover requested top-level Ward entries only: measured 96-byte key/value objects plus at least 48 bytes of complex mantissa payload at 136 bits with 64-bit GMP limbs.",
+    "Hash-node links, buckets, additional internal Ward entries, allocator overhead, words, action caches, and contraction tensors require further memory. No level-10 peak RSS was measured.",
+    "The C++ implementation uses integer keys and on-the-fly tensor indexing; it stores no tensor-permutation tables.",
+    "No conclusion about achieved level-10 accuracy follows from equal working precision."
+  ],
+  "source_sha256": {
+    "C++/tools/estimate_direct_pbw.py": "bea0efd12b09b3c2e75642fc849814a0d98074e4e6a46b73b79fcee04ebcd22f",
+    "C++/include/ramond/direct_pbw.hpp": "b26fd4f2fda60921844c35d82c3e79d220322b54a1293c7af7f09be7965379b9",
+    "C++/results/direct_pbw_cpp_2026-09-12/timings.json": "e1775b648a9e776e10bff9b2fe6c8ecef0b0f1b6c5fcffe601b0176a50e44e4f"
+  }
+}

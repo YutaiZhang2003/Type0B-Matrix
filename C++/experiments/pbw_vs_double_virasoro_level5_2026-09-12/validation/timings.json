@@ -1,0 +1,193 @@
+{
+  "status": "completed",
+  "precision_bits": 136,
+  "dps": 40,
+  "q_level_cutoffs": [
+    2,
+    2,
+    2
+  ],
+  "environment": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "protocol": "sequential fresh processes; no numerical caches loaded; compilation excluded",
+  "pbw_source_sha256": "0f4d7be14a37582eeff65964d523ef7f9cb5d58a21a682d15af8c6abbf84b32a",
+  "runs": [
+    {
+      "algorithm": "pbw_baseline",
+      "mode": "ordinary",
+      "command": [
+        "/private/tmp/theta_fermion_ccy_env/bin/python",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/optimized_pbw.py",
+        "--implementation",
+        "baseline",
+        "--mode",
+        "ordinary",
+        "--level",
+        "2",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/validation/pbw_baseline_ordinary.json"
+      ],
+      "status": "completed",
+      "pid": 32813,
+      "wall_seconds": 0.8143923329989775,
+      "exit_code": 0,
+      "timing_seconds": {
+        "setup": 0.45349958400038304,
+        "total": 0.5779325420007808
+      },
+      "counts": {
+        "monomials": 45,
+        "parity_slots": 360
+      },
+      "coefficient_vectors": 45
+    },
+    {
+      "algorithm": "pbw_baseline",
+      "mode": "inserted",
+      "command": [
+        "/private/tmp/theta_fermion_ccy_env/bin/python",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/optimized_pbw.py",
+        "--implementation",
+        "baseline",
+        "--mode",
+        "inserted",
+        "--level",
+        "2",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/validation/pbw_baseline_inserted.json"
+      ],
+      "status": "completed",
+      "pid": 32814,
+      "wall_seconds": 0.7302665830065962,
+      "exit_code": 0,
+      "timing_seconds": {
+        "setup": 0.3187247079986264,
+        "total": 0.540149125001335
+      },
+      "counts": {
+        "monomials": 45,
+        "parity_slots": 360
+      },
+      "coefficient_vectors": 45
+    },
+    {
+      "algorithm": "pbw_optimized",
+      "mode": "ordinary",
+      "command": [
+        "/private/tmp/theta_fermion_ccy_env/bin/python",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/optimized_pbw.py",
+        "--implementation",
+        "optimized",
+        "--mode",
+        "ordinary",
+        "--level",
+        "2",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/validation/pbw_optimized_ordinary.json"
+      ],
+      "status": "completed",
+      "pid": 32817,
+      "wall_seconds": 0.604088000000047,
+      "exit_code": 0,
+      "timing_seconds": {
+        "setup": 0.31915816599939717,
+        "total": 0.41645450000214623,
+        "gram_entries": 0.001624290984182153,
+        "gram_inverse": 0.00014712499978486449,
+        "metadata": 0.00011933399218833074,
+        "vertices": 0.09272137200605357,
+        "contractions": 0.0021167099694139324
+      },
+      "counts": {
+        "monomials": 45,
+        "parity_slots": 360,
+        "gram_entries": 68,
+        "gram_matrices": 17,
+        "vertex_entries": 784,
+        "reused_vertex_tensors": 90,
+        "contractions": 90,
+        "ward_cache": {
+          "hits": 4130,
+          "misses": 896,
+          "maxsize": null,
+          "currsize": 896
+        }
+      },
+      "coefficient_vectors": 45
+    },
+    {
+      "algorithm": "pbw_optimized",
+      "mode": "inserted",
+      "command": [
+        "/private/tmp/theta_fermion_ccy_env/bin/python",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/Code/theta_fermion_ccy/optimized_pbw.py",
+        "--implementation",
+        "optimized",
+        "--mode",
+        "inserted",
+        "--level",
+        "2",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/pbw_vs_double_virasoro_level5_2026-09-12/validation/pbw_optimized_inserted.json"
+      ],
+      "status": "completed",
+      "pid": 32818,
+      "wall_seconds": 0.6876886669997475,
+      "exit_code": 0,
+      "timing_seconds": {
+        "setup": 0.31649791700328933,
+        "total": 0.5019227500015404,
+        "gram_entries": 0.0016966680195764638,
+        "gram_inverse": 0.00016062398935901,
+        "metadata": 0.0001396669977111742,
+        "vertices": 0.1806360879636486,
+        "contractions": 0.0021824539871886373
+      },
+      "counts": {
+        "monomials": 45,
+        "parity_slots": 360,
+        "gram_entries": 68,
+        "gram_matrices": 17,
+        "vertex_entries": 1568,
+        "reused_vertex_tensors": 0,
+        "contractions": 90,
+        "ward_cache": {
+          "hits": 8260,
+          "misses": 1792,
+          "maxsize": null,
+          "currsize": 1792
+        }
+      },
+      "coefficient_vectors": 45
+    }
+  ],
+  "comparisons": [
+    {
+      "mode": "ordinary",
+      "monomials": 45,
+      "parity_slots": 360,
+      "maximum_scaled_difference": "0",
+      "maximum_absolute_difference": "0",
+      "worst_scaled_location": null,
+      "criterion": "1e-20",
+      "passed": true
+    },
+    {
+      "mode": "inserted",
+      "monomials": 45,
+      "parity_slots": 360,
+      "maximum_scaled_difference": "0",
+      "maximum_absolute_difference": "0",
+      "worst_scaled_location": null,
+      "criterion": "1e-20",
+      "passed": true
+    }
+  ]
+}
