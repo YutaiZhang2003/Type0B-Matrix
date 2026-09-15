@@ -1,0 +1,66 @@
+[
+  {
+    "name": "ordinary_literal_pbw_L3",
+    "command": [
+      "C++/experiments/unphased_vertex_2026-09-15/literal_pbw",
+      "3",
+      "0",
+      "ordinary",
+      "C++/experiments/unphased_vertex_2026-09-15/results/ordinary_literal_pbw_L3.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.4199190829822328,
+    "stderr": "literal enlarged PBW total: 0.0100124 s\n"
+  },
+  {
+    "name": "ordinary_physical_pbw_L3",
+    "command": [
+      "C++/bin/pbw",
+      "--level",
+      "3",
+      "--f",
+      "0",
+      "--mode",
+      "ordinary",
+      "--dps",
+      "40",
+      "--json",
+      "C++/experiments/unphased_vertex_2026-09-15/results/ordinary_physical_pbw_L3.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.08977579098427668,
+    "stderr": "PBW ordinary: 50/112, 0.00785521 s\nPBW ordinary: 100/112, 0.0433145 s\nPBW total: 0.0789285 s; vertices 0.0655014 s; contractions 0.0116299 s\n"
+  },
+  {
+    "name": "inserted_literal_pbw_L3",
+    "command": [
+      "C++/experiments/unphased_vertex_2026-09-15/literal_pbw",
+      "3",
+      "0",
+      "inserted",
+      "C++/experiments/unphased_vertex_2026-09-15/results/inserted_literal_pbw_L3.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.014124332985375077,
+    "stderr": "literal enlarged PBW total: 0.00785079 s\n"
+  },
+  {
+    "name": "inserted_physical_pbw_L3",
+    "command": [
+      "C++/bin/pbw",
+      "--level",
+      "3",
+      "--f",
+      "0",
+      "--mode",
+      "inserted",
+      "--dps",
+      "40",
+      "--json",
+      "C++/experiments/unphased_vertex_2026-09-15/results/inserted_physical_pbw_L3.json"
+    ],
+    "exit_code": 0,
+    "seconds": 0.12029158399673179,
+    "stderr": "PBW inserted: 50/112, 0.00788696 s\nPBW inserted: 100/112, 0.054142 s\nPBW total: 0.112838 s; vertices 0.101851 s; contractions 0.00940958 s\n"
+  }
+]

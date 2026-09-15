@@ -36,20 +36,21 @@ Cambridge, MA 02138 USA}
 \date{\today}
 
 \begin{abstract}
-We develop an algorithm for numerically computing two-dimensional $\mathcal{N}=1$ superconformal blocks at arbitrary genera, in arbitrary plumbing channels, and for arbitrary spin structures. The algorithm utilizes a Virasoro $\oplus$ Virasoro subalgebra of the tensor product of the $\mathcal{N}=1$ superconformal algebra with a free Majorana fermion, which allows us to reduce the superconformal blocks to Virasoro conformal blocks.
+We develop an algorithm for numerically computing two-dimensional $\mathcal{N}=1$ superconformal blocks at arbitrary genera, in arbitrary plumbing channels, and for arbitrary spin structures. The algorithm utilizes a Virasoro $\oplus$ Virasoro subalgebra of the tensor product of the $\mathcal{N}=1$ superconformal algebra with an auxiliary free fermion, which allows us to reduce the superconformal blocks to Virasoro conformal blocks.
 \end{abstract}
 
 \maketitle
 
 \section{Introduction}
 
-Superconformal blocks are the central objects for computing correlators of superconformal field theories (SCFTs). Given the superconformal block on a spin Riemann surface, together with the conformal data of the SCFT, namely the conformal weights and the structure constants, correlators of a 2-dimensional $\mathcal{N}=1$ SCFT on a spin Riemann surface can be computed through the superconformal block decomposition. These correlators are essential for computing superstring amplitudes and can be used to bootstrap the superconformal data in the modular bootstrap program.
+Superconformal blocks are the central objects for computing correlators of superconformal field theories (SCFTs). Given the superconformal block on a spin Riemann surface, together with the conformal data of the SCFT, namely the conformal weights and the structure constants, correlators of a 2-dimensional $\mathcal{N}=1$ SCFT on that spin Riemann surface can be computed through the superconformal block decomposition. 
+%These correlators are essential for computing superstring amplitudes and can be used to bootstrap the superconformal data in the modular bootstrap program.
 
-On spin Riemann surfaces of genus $g=0$ or $g=1$, algorithms for numerically computing the superconformal blocks are well developed. Analogously to the Zamolodchikov recursion relation for the sphere 4-point Virasoro conformal block \cite{Zamolodchikov:1984eqp,Zamolodchikov:1987avt}, the 4-point superconformal block on a sphere can be computed recursively using recursion relations in the central charge $c$ or in the external conformal weights $h$. These recursion relations have been worked out for both the case with all-NS external states \cite{Hadasz:2006qb,Hadasz:2007nt,Belavin:2007zz} and that with Ramond external states \cite{Hadasz:2008dt,Suchanek:2010kq}. This $c$-recursion relation can be generalized to arbitrary plumbing channels and arbitrary genus as long as all intermediate states are in the NS sector \cite{Cho:2017oxl,Belavin:2018hfm}. Meanwhile, for the blocks that involve Ramond intermediate states, the recursion relations can only be generalized to genus 1 \cite{Hadasz:2012im} due to the fact that the large-$h$ or large-$c$ limit of the Ramond conformal blocks does not exist at genus $g\geq 2$. Algorithms for numerically computing these higher-genus Ramond blocks were not known in the literature.
+On spin Riemann surfaces of genus $g=0$ or $g=1$, algorithms for numerically computing the superconformal blocks are well developed. Analogously to the Zamolodchikov recursion relation for the sphere 4-point Virasoro conformal block \cite{Zamolodchikov:1984eqp,Zamolodchikov:1987avt}, the 4-point superconformal block on a sphere can be computed recursively using recursion relations in the central charge $c$ or in the intermediate conformal weights $h$. These recursion relations have been worked out for both the case with all-NS external states \cite{Hadasz:2006qb,Hadasz:2007nt,Belavin:2007zz} and that with Ramond external states \cite{Hadasz:2008dt,Suchanek:2010kq}. This $c$-recursion relation can be generalized to arbitrary plumbing channels and arbitrary genus as long as all intermediate states are in the NS sector \cite{Cho:2017oxl,Belavin:2018hfm}. Meanwhile, for the blocks that involve Ramond intermediate states, the $h$-recursion relations can only be generalized to genus 1 \cite{Hadasz:2012im} while the $c$-recursion relation does not exist beyond tree level, due to the fact that the large-$h$ or large-$c$ limit of the Ramond conformal blocks does not exist at higher genus. Algorithms for numerically computing these higher-genus Ramond blocks are absent in the literature.
 
-In this Letter, we present the first numerical algorithm for these higher-genus Ramond blocks. The algorithm is based on the fact that the $\mathcal{N}=1$ superconformal algebra $\mathsf{SCA}$, tensored with a free Majorana fermion algebra $\mathsf{F}$, admits two copies of commuting Virasoro subalgebras \cite{Bershtein:2014yia,Bershtein:2016uov}. These subalgebras were first discovered in the context of the AGT relation \cite{Alday:2009aq,Belavin:2011sw} and have been used in the context of the super-Liouville/double Liouville correspondence \cite{Schomerus:2012se,Hadasz:2013dza}. Using this $\mathsf{Vir}\oplus \mathsf{Vir}$ subalgebra, the superconformal block can be decomposed into a sum of products of two Virasoro conformal blocks, which can be computed numerically as a series in the plumbing parameters using the $c$-recursion relation \cite{Cho:2017oxl}.
+In this letter, we present the first numerical algorithm for these higher-genus Ramond blocks. The algorithm is based on the fact that the $\mathcal{N}=1$ superconformal algebra $\mathsf{SCA}$, tensored with a free Majorana fermion algebra $\mathsf{F}$, admits two copies of commuting Virasoro subalgebras \cite{Bershtein:2014yia,Bershtein:2016uov}. These subalgebras were first discovered in the context of the AGT relation \cite{Alday:2009aq,Belavin:2011sw} and have been used in the context of the super-Liouville/double Liouville correspondence \cite{Schomerus:2012se,Hadasz:2013dza}. Using this $\mathsf{Vir}\oplus \mathsf{Vir}$ subalgebra, the superconformal block can be reduced to a sum of products of two Virasoro conformal blocks, which can be computed numerically as a series in the plumbing parameters using the $c$-recursion relation developed in \cite{Cho:2017oxl}.
 
-The rest of this paper is organized as follows. In Section \ref{sec:scblock}, we define the superconformal blocks on a general spin Riemann surface using the plumbing fixture. In Section \ref{sec:2Vir}, we review the details of the $\mathsf{Vir}\oplus \mathsf{Vir}$ subalgebra and the branching rules of $\mathsf{SCA}\otimes \mathsf{F}$ supermultiplets. In Section \ref{sec:blockdecomp}, we derive the relation between arbitrary superconformal blocks and Virasoro blocks. In Section \ref{sec:branching}, we present a recursive algorithm for computing the branching coefficients, defined as three-point functions of $\mathsf{Vir}\oplus \mathsf{Vir}$ primaries. We end with a discussion of our results in Section \ref{sec:disc}.
+The rest of this paper is organized as follows. In Section \ref{sec:scblock}, we define the superconformal blocks using the plumbing fixture. In Section \ref{sec:2Vir}, we review the details of the $\mathsf{Vir}\oplus \mathsf{Vir}$ subalgebra and the branching rules of $\mathsf{SCA}\otimes \mathsf{F}$ supermultiplets. In Section \ref{sec:blockdecomp}, we derive the relation between superconformal blocks and Virasoro blocks for blocks without a certain type of obstruction which we called odd Ramond loops. Section \ref{sec:oddloop} extends the construction to blocks with odd Ramond loops using an auxiliary fermion insertion. We present numerical tests for the algorithm in \ref{sec:numerics} and discuss applications and future directions in Section \ref{sec:disc}.
 
 \section{The superconformal blocks}
 
@@ -59,7 +60,7 @@ An arbitrary punctured Riemann surface can be constructed by gluing 3-punctured 
 \ie 
 z_1z_2=q,\quad |q|\leq 1,
 \fe
-where $q$ is a complex plumbing parameter. A genus-$g$, $n$-punctured Riemann surface can be constructed by plumbing $(3g-3)$ pairs of punctures, and its $(3g-3+n)$ complex moduli are given by those $(3g-3+n)$ plumbing parameters. One can then describe a punctured Riemann surface using a trivalent graph $\Gamma$ together with a $q$-parameter for each internal edge. The vertices of $\Gamma$ correspond to the 3-punctured spheres, while the edges connect pairs of plumbed punctures. 
+where $q$ is a complex plumbing parameter. A genus-$g$, $n$-punctured Riemann surface can be constructed by plumbing $(3g-3+n)$ pairs of punctures, and its $(3g-3+n)$ complex moduli are given by those $(3g-3+n)$ plumbing parameters. One can then describe a punctured Riemann surface using a trivalent graph $\Gamma$ together with a $q$-parameter for each internal edge. The vertices of $\Gamma$ correspond to the 3-punctured spheres, while the edges connect pairs of plumbed punctures. 
 
 To specify a spin structure on the Riemann surface, we assign a sign $\eta_e$ for each internal edge $e$ in $\Gamma$, and additionally label each edge of $\Gamma$ by NS or R. At each vertex, only edges of types (NS, NS, NS) or (NS, R, R) can be connected together. We call this labeled graph $\hat{\Gamma}$ a plumbing channel. The data of the spin Riemann surface is specified by $(\hat{\Gamma}, \{q_e, \eta_e\})$. %The set of all NS internal edges, R internal edges, (NS, NS, NS) vertices and (NS, R, R) vertices in $\hat{\Gamma}$ are denoted by $E_{\NS}(\hat{\Gamma}), E_{\R}(\hat{\Gamma}), V_{\NS}(\hat{\Gamma})$ and $V_{\R}(\hat{\Gamma})$, respectively.
 
@@ -72,35 +73,35 @@ where $\beta$ is defined by $\beta^2 = \frac{c}{24}-h$. We take $w^+$ to be Gras
 &\mathbf{L}_{-A}\phi \equiv L_{-n_1}\cdots L_{-n_\ell} G_{-r_1}\cdots G_{-r_p} \phi,\\
 &\mathbb{L}_{-A} w^\pm \equiv L_{-n_1}\cdots L_{-n_k} G_{-r_1}\cdots G_{-r_\ell} w^\pm
 \fe
-in the NS and R sectors, respectively. Here, $n_i\in \mathbb{Z}, r_j\in \mathbb{Z}+\nu$, and $n_1 \geq ... \geq n_\ell>0, r_1>...>r_p>0$, where $\nu=0$ in the R sector and $\nu=1$ in the NS sector. We further define the total level of $\mathbf{L}_A, \mathbb{L}_A$ by $|A|\equiv \sum_{i=1}^\ell n_i + \sum_{j=1}^{p} r_j$, and their Grassmann parity by $(-1)^A \equiv (-1)^{p}$.  
+in the NS and R sectors, respectively. Here, $n_i\in \mathbb{Z}, r_j\in \mathbb{Z}+\nu$, and $n_1 \geq ... \geq n_\ell>0, r_1>...>r_p>0$, where $\nu=0$ in the R sector and $\nu=\frac{1}{2}$ in the NS sector. We further define the total level of $\mathbf{L}_{-A}, \mathbb{L}_{-A}$ by $|A|\equiv \sum_{i=1}^\ell n_i + \sum_{j=1}^{p} r_j$, and their Grassmann parity by $(-1)^A \equiv (-1)^{p}$.  
 
 After replacing each pair of plumbed punctures by a pair of local operators, the SCFT correlator can be reduced to a product of three-point functions on the sphere. On an (NS, NS, NS) sphere, all these three-point functions of descendants can be reduced to either $\langle \phi_1 \phi_2 \phi_3\rangle $ or $\langle \phi_1 (G_{-\frac{1}{2}}\phi_2) \phi_3\rangle $ by superconformal Ward identities. We define the normalized three-point forms $\rho_a$ by
 \ie
 \rho_0(\phi_1, \phi_2, \phi_3)=1,\quad \rho_1(\phi_1, G_{-\frac{1}{2}}\phi_2, \phi_3)=1,
 \fe
-where the operators $\phi_1, \phi_2, \phi_3$ are inserted at $\infty, 1, 0$, respectively. The normalized three-point forms $\rho_a(\mathbf{L}_{-A}\phi_1, \mathbf{L}_{-B}\phi_2,\mathbf{L}_{-C}\phi_3)$ of descendants are defined by reducing them to $\rho_0(\phi_1, \phi_2, \phi_3)$, $\rho_1(\phi_1, G_{-\frac{1}{2}}\phi_2, \phi_3)$ using superconformal Ward identities. On an (NS, R, R) sphere, there are 4 independent three-point functions, and we define 
+where the operators $\phi_1, \phi_2, \phi_3$ are inserted at $\infty, 1, 0$, respectively. The normalized three-point functions $\rho_a(\mathbf{L}_{-A}\phi_1, \mathbf{L}_{-B}\phi_2,\mathbf{L}_{-C}\phi_3)$ of descendants are defined by reducing them to $\rho_0(\phi_1, \phi_2, \phi_3)$, $\rho_1(\phi_1, G_{-\frac{1}{2}}\phi_2, \phi_3)$ using superconformal Ward identities. On an (NS, R, R) sphere, there are 4 independent three-point functions, and we define 
 \ie
 &\rho^{(\eta)}_0(\phi_1, w^+_2, w_3^+) = 1,\quad \rho^{(\eta)}_0(\phi_1, w^-_2, w_3^-) = \eta,\\
 &\rho^{(\eta)}_1(\phi_1, w^+_2, w_3^-) = 1,\quad \rho^{(\eta)}_1(\phi_1, w^-_2, w_3^+) = i\eta
 \fe
-for $\eta = \pm$. Again, the operators $\phi_1, w_2^\pm, w_3^\pm$ are inserted at $\infty, 1, 0$, respectively, and the normalized three-point forms of descendants are defined through superconformal Ward identities. 
+for $\eta = \pm$. Again, the operators $\phi_1, w_2^\pm, w_3^\pm$ are inserted at $\infty, 1, 0$, respectively, and the normalized three-point functions of descendants are defined through superconformal Ward identities. 
 
 For simplicity, we will focus on the genus-2 theta channel in the rest of this Letter, where we sew together $z_1=z_2=0$, $z_1=z_2=1$ and $z_1=z_2=\infty$ on two Riemann spheres with complex coordinates $z_1, z_2$. The two edges that connect $z_1=z_2=0,1$ are R, while the edge that connects $z_1=z_2=\infty$ is NS. Nevertheless, the algorithm we present here can be easily generalized to arbitrary plumbing channels and arbitrary spin structures, and we leave the details to the appendix. \textbf{[Figure: Theta channel]}
 
-In the aforementioned genus-2 theta channel, the superconformal block with internal weights $h_{1}, \beta_2, \beta_3$ and NS Grassmann parity $p_1$ is defined as
-\begin{widetext}
+In the genus-2 theta channel, the superconformal block with internal weights $h_{1}, \beta_2, \beta_3$ is defined as
 \ie \label{scblock}
-\mathbf{F}^{(f,\eta, \eta')}(h_1, \beta_2, \beta_3) &= \sum_{\substack{|A|=|A'|, |B|=|B'|, |C|=|C'|\\ (-1)^{A+B+C+|\alpha|+|\gamma|}=(-1)^f\\(-1)^{A'+B'+C'+|\alpha'|+|\gamma'|}=(-1)^f}} q_1^{|A|} \eta_1^{A+p_1} q_2^{|B|} \eta_2^{B+|\alpha|} q_3^{|C|} \eta_3^{C+|\gamma|} \mathbf{G}^{AA'}_{h_1} \mathbb{G}^{B\alpha, B\alpha'}_{\beta_2} \mathbb{G}^{C\gamma, C\gamma'}_{\beta_3}\\
-&\quad\quad \times (-1)^{(A+p_1)(B+|\alpha|)+(A+p_1)(C+|\gamma|)+(B+|\alpha|)(C+|\gamma|)}\\
-&\quad\quad \times \rho_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3)\rho_f^{(\eta')}(\mathbf{L}_{-A'}\phi_1, \mathbb{L}_{-B'}w^{\alpha'}_2, \mathbb{L}_{-C'}w^{\gamma'}_3).
+&\mathbf{F}^{(\eta, \eta')}_f(h_1, \beta_2, \beta_3)=\\
+&\sum_{\substack{|A|=|A'|, |B|=|B'|, |C|=|C'|\\ (-1)^{A+B+C+|\alpha|+|\gamma|}=(-1)^f\\(-1)^{A'+B'+C'+|\alpha'|+|\gamma'|}=(-1)^f}} q_1^{|A|} \eta_1^{\epsilon_1} q_2^{|B|} \eta_2^{\epsilon_2} q_3^{|C|} \eta_3^{\epsilon_3} \\
+&\quad\quad \times (-1)^{\epsilon_1\epsilon_2+\epsilon_1\epsilon_3+\epsilon_2\epsilon_3}\mathbf{G}^{AA'}_{h_1} \mathbb{G}^{B\alpha, B'\alpha'}_{\beta_2} \mathbb{G}^{C\gamma, C'\gamma'}_{\beta_3}\\
+&\quad\quad \times \rho_f^{(\eta)}(\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w^\alpha_2, \mathbb{L}_{-C}w^\gamma_3)\\
+&\quad\quad \times \rho_f^{(\eta')}(\mathbf{L}_{-A'}\phi_1, \mathbb{L}_{-B'}w^{\alpha'}_2, \mathbb{L}_{-C'}w^{\gamma'}_3),
 \fe
-\end{widetext}
-where $\eta, \eta'$, and $f$ label the three-point functions on the two (NS, R, R) spheres, and the two $f$ labels are forced to be the same by the Gram matrices. The sum is over the descendant labels $A,B,C,A',B',C'$ on each half-edge and the ground-state labels $\alpha, \alpha', \gamma, \gamma'$ on each R half-edge. $\mathbf{G}, \mathbb{G}$ are inverse Gram matrices in the NS and R sectors, which are defined as the inverse of
+where the sum is over all displayed descendant labels and ground state labels. This will be true throughout this letter. $\eta, \eta'$, and $f$ label the three-point functions on the two (NS, R, R) spheres, and the two $f$ labels are forced to be the same by the Gram matrices. $\epsilon_{1,2,3}$ are defined to be the total Grassmann parity of $\mathbf{L}_{-A}\phi_1, \mathbb{L}_{-B}w_2^\alpha$ and $\mathbb{L}_{-C}w_3^\gamma$, respectively \footnote{The sign on the second line is the Grassmann sign that arises when reordering the operators from the pairwise insertion order $\mathbf{L}_{-A}\phi_1\mathbf{L}_{-A'}\phi_1\mathbb{L}_{-B}w^\alpha_2\mathbb{L}_{-B'}w^{\alpha'}_2\mathbb{L}_{-C}w^\gamma_3\mathbb{L}_{-C'}w^{\gamma'}_3$ to the displayed order in the three-point functions.}. $\mathbf{G}, \mathbb{G}$ are inverse Gram matrices in the NS and R sectors, which are defined as the inverse of
 \ie
 (\mathbf{G}_h)_{AB}&=\langle\langle \mathbf{L}_{-A}\phi_h|\mathbf{L}_{-B}\phi_h\rangle\\
 (\mathbb{G}_\beta)_{A\alpha, B\alpha'}&=\langle\langle \mathbb{L}_{-A}w_\beta^\alpha|\mathbb{L}_{-B}w_\beta^{\alpha'}\rangle
 \fe
-where $\langle \langle \Psi|$ denotes the BPZ conjugate of $|\Psi\rangle$. $h, \beta$ label the conformal weight and $G_0$ eigenvalues of the primaries, which are normalized such that $\langle\langle \phi_h|\phi_h\rangle =1$, $\langle\langle w_\beta^+|w_\beta^{+} \rangle=1$. The sign on the second line is the Grassmann sign that arises when reordering the operators from the pairwise insertion order $\mathbf{L}_{-A}\phi_1\mathbf{L}_{-A'}\phi_1\mathbb{L}_{-B}w^\alpha_2\mathbb{L}_{-B'}w^{\alpha'}_2\mathbb{L}_{-C}w^\gamma_2\mathbb{L}_{-C'}w^{\gamma'}_2$ to the displayed order in the three-point functions.
+where the double left bracket stands for BPZ conjugation. $h, \beta$ label the conformal weight and $G_0$ eigenvalues of the primaries, which are normalized such that $\langle\langle \phi_h|\phi_h\rangle =1$, $\langle\langle w_\beta^+|w_\beta^{+} \rangle=1$.
 
 % Given a parity $a_v=0,1$ for each (NS, NS, NS) vertex and $f_v=0,1, \eta_v=\pm$ for each (NS, R, R) vertex in $\hat{\Gamma}$, The superconformal block on a spin Riemann surface $(\hat{\Gamma}, \{q_e, \eta_e\})$ is defined as
 % \begin{widetext}
@@ -122,7 +123,7 @@ where $\langle \langle \Psi|$ denotes the BPZ conjugate of $|\Psi\rangle$. $h, \
 
 \label{sec:2Vir}
 
-The key fact we utilize is that the enlarged algebra $\mathsf{SCA}_\nu \otimes \mathsf{F}_{\nu}$ constructed from tensoring the $\mathcal{N}=1$ superconformal algebra $\mathsf{SCA}_\nu$ with shift $\nu\in \left\{0,\frac{1}{2}\right\}$ with an auxiliary free fermion algebra
+The key fact we utilize is that the enlarged algebra $\mathsf{SCA}_\nu \otimes \mathsf{F}_{\nu}$ constructed from tensoring the $\mathcal{N}=1$ superconformal algebra $\mathsf{SCA}_\nu$ with shift $\nu\in \left\{0,\frac{1}{2}\right\}$ with an auxiliary free fermion algebra $\mathsf{F}_\nu$
 \ie
 \{\psi_r, \psi_s\} &= \delta_{r+s,0},\quad \{\psi_r, G_s\}=[\psi_r, L_n] = 0
 \fe
@@ -140,9 +141,9 @@ where $b$ is defined by $c= \frac{3}{2}+3\left(b+b^{-1}\right)^2$, and we have a
 \ie
 c^{(1)}=1+\frac{3 Q^2}{1-b^2}, \quad c^{(2)}=1+\frac{3 Q^2}{1-b^{-2}},
 \fe
-where the Liouville background charge $Q$ is defined such that $c=1+6Q^2$.
+where the Liouville background charge $Q$ is defined such that $Q=b+b^{-1}$.
 
-Let $\mathcal{M}_{\NS}(h), \mathcal{M}_{\R}(\beta)$ denote the tensor products of the auxiliary fermion Fock space with the corresponding SCFT Verma module. Denoting the two R-sector ground states for the free fermion by $u^\mathsf{a}$ with $\mathsf{a}=0,1$, the highest weight states in $\mathcal{M}_{\NS}(h), \mathcal{M}_{\R}(\beta)$ are respectively $\phi\otimes \mathbf{1}$ and $w^\alpha \otimes u^{\mathsf{a}}$. For generic momentum $P$, these representations have branching rules \cite{Bershtein:2014yia,Bershtein:2016uov}
+Let $\mathcal{M}_{\NS}(h), \mathcal{M}_{\R}(\beta)$ denote the tensor products of the auxiliary fermion Fock space with the corresponding SCFT Verma module. Denoting the two R-sector ground states for the free fermion by $u^\mathsf{a}$ with $\mathsf{a}=0,1$, the highest weight states in $\mathcal{M}_{\NS}(h), \mathcal{M}_{\R}(\beta)$ are respectively $\mathbf{1}\otimes \phi$ and $u^{\mathsf{a}}\otimes w^\alpha$. For generic momentum $P$, these representations have branching rules \cite{Bershtein:2014yia,Bershtein:2016uov}
 \ie
 \mathcal{M}_{\NS}(h)&\cong\bigoplus_{n\in\frac12\mathbb Z} V_{c^{(1)}}(h_n^{(1)})\otimes V_{c^{(2)}}(h_n^{(2)}),\\
 \mathcal{M}_{\R}(\beta)&\cong\bigoplus_{\alpha=0,1}\ \bigoplus_{n\in\frac12\mathbb Z+\frac14} V_{c^{(1)}}(h_n^{(1)})\otimes V_{c^{(2)}}(h_n^{(2)}).
@@ -152,21 +153,198 @@ Here $V_c(h)$ is a Virasoro Verma module with highest weight $h$ and central cha
 h_n^{(1)}&=\frac{Q^2/4-(P+2nb)^2}{2(1-b^2)},\\
 h_n^{(2)}&=\frac{Q^2/4-(P+2nb^{-1})^2}{2(1-b^{-2})},
 \fe
-where the Liouville momentum $P$ is defined using $P^2=\frac{1}{4}Q^2-2h$ in the NS sector and $P^2=2\beta^2$ in the R sector. The NS $\mathsf{Vir}\oplus \mathsf{Vir}$ primary $v_n$ has Grassmann parity $2n\bmod2$ and level $2n^2$, and the R primary $v^\alpha_n$ has Grassmann parity $\alpha=0,1$ and level $2n^2-\frac18$. 
+where the Liouville momentum $P$ is defined using $P^2=\frac{1}{4}Q^2-2h$ in the NS sector and $P^2=2\beta^2$ in the R sector. The NS $\mathsf{Vir}\oplus \mathsf{Vir}$ primary $v_n$ has Grassmann parity $2n\bmod2$ and level $2n^2$, and the R primary $v^\alpha_n$ has Grassmann parity $\alpha=0,1$ and level $2n^2-\frac18$. These $\mathsf{Vir\oplus Vir}$ primaries $v_n, v_n^\alpha$ can be realized by a free field representation, which we review in appendix \ref{app:freefield}.
 
-These $\mathsf{Vir}\oplus \mathsf{Vir}$ primaries can be directly constructed using a free field realization of the $\mathsf{SCA}_\nu \otimes \mathsf{F}_{\nu}$ algebra \cite{Hadasz:2013dza}. Using free boson operators $\left\{c_n | n\neq 0\right\}$, free fermion operators $\left\{\eta_r| r\in \mathbb{Z}+\nu\right\}$ and the central element $\hat{P}$ that satisfy the algebraic relations
+\section{Reduction of superconformal blocks}
+
+\label{sec:blockdecomp}
+
+To reduce the superconformal block \eqref{scblock} to Virasoro conformal blocks, we first consider an enlarged $\mathsf{SCA}\otimes \mathsf{F}$ block $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)$, defined as
+\begin{widetext}
+\ie 
+\widehat{\mathbf{F}}_f^{(\eta, \eta')}&(h_1, \beta_2, \beta_3) = \sum_{
+\substack{|A|=|A'|, |B|=|B'|, |C|=|C'|\\
+(-1)^{A+B+C+|\alpha|+|\gamma|}=(-1)^f\\
+(-1)^{A'+B'+C'+|\alpha'|+|\gamma'|}=(-1)^f\\
+(-1)^{\mathsf{A+B+C+b+c}}=1}
+} q_1^{|A|+|\mathsf{A}|} \eta_1^{\epsilon_1} q_2^{|B|+|\mathsf{B}|} \eta_2^{\epsilon_2} q_3^{|C|+|\mathsf{C}|} \eta_3^{\epsilon_3}\\
+&\quad \quad \times (-1)^{\epsilon_1\epsilon_2+\epsilon_1\epsilon_3+\epsilon_2\epsilon_3 + A+\mathsf{A}}\mathbf{G}^{AA'}_{h_1} \mathbb{G}^{B\alpha, B'\alpha'}_{\beta_2} \mathbb{G}^{C\gamma, C'\gamma'}_{\beta_3}\\
+&\quad\quad \times \hat{\rho}_f^{(\eta)}(\Psi_{-\mathsf{A}}\mathbf{1}\otimes\mathbf{L}_{-A}\phi_1, \Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
+&\quad\quad \times \hat{\rho}_f^{(\eta')}(\Psi_{-\mathsf{A}}\mathbf{1}\otimes\mathbf{L}_{-A'}\phi_1, \Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B'}w^{\alpha'}_2, \Psi_{-\mathsf{C}}u^{\mathsf{c}} \otimes\mathbb{L}_{-C'}w^{\gamma'}_3),
+\fe
+\end{widetext}
+where $\Psi_{-\mathsf{A}}$ denotes a chain of fermion creation operators, with $|\mathsf{A}|$ being its total level and $(-1)^{\mathsf{A}}$ being its total Grassmann parity. $\epsilon_{1,2,3}$ are defined to be the total Grassmann parities of $\Psi_{-\mathsf{A}}\mathbf{1}\otimes\mathbf{L}_{-A}\phi_1, \Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2$ and $\Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3$, respectively. The enlarged 3-point function $\hat{\rho}_f^{(\eta)}$ is defined by the Ward identities and the normalization 
+\ie
+\hat{\rho}_f^{(\eta)}(\mathbf{1} \otimes \phi_1, u^0 \otimes w_2^\alpha, u^0 \otimes w_3^\gamma)=\rho_f^{((-1)^f \eta)}(\phi_1, w_2^\alpha, w_3^\gamma).
+\fe
+
+This enlarged block can be computed in two ways. One can take the basis $\Psi_{-\mathsf{A}}\mathbf{1}\otimes \mathbf{L}_{-A}\phi$ for states in $\mathcal{M}_\NS(h)$ and $\Psi_{-\mathsf{A}}u^{\mathsf{a}}\otimes \mathbb{L}_{-A}w^\alpha$ for $\mathcal{M}_{\R}(\beta)$. This allows us to express the enlarged block in terms of the superconformal block \eqref{scblock} and the free fermion block. Namely,
+\ie \label{FconvF}
+\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3) = \mathbf{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3) \star \mathbf{F}_{\mathsf{F}},
+\fe
+where we view the blocks as formal series in $q_e, \eta_e$, and the convolution $\star$ acts on monomials as
+\ie \label{conv}
+&q_1^{r_1}q_2^{r_2}q_3^{r_3}\eta_1^{\epsilon_1}\eta_2^{\epsilon_2}\eta_3^{\epsilon_3} \star q_1^{s_1}q_2^{s_2}q_3^{s_3}\eta_1^{\delta_1}\eta_2^{\delta_2}\eta_3^{\delta_3}\\
+&=(-1)^{\sum_{i<j} (\epsilon_i \delta_j + \delta_i \epsilon_j)}q_1^{r_1+s_1}q_2^{r_2+s_2}q_3^{r_3+s_3}\eta_1^{\epsilon_1+\delta_1}\eta_2^{\epsilon_2+\delta_2}\eta_3^{\epsilon_3+\delta_3}.
+\fe
+The free fermion block $\mathbf{F}_{\mathsf{F}}$ is defined as
+\begin{widetext}
+\ie
+\mathbf{F}_{\mathsf{F}} = \sum_{\substack{(-1)^{\mathsf{A+B+C+b+c}}=1}} &(-1)^{\mathsf{A}}q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}}\\
+&\times (-1)^{\mathsf{A(B+b)+A(C+c)+(B+b)(C+c)}} [\rho_{\mathsf{F}}(\Psi_{-\mathsf{A}}\mathbf{1}, \Psi_{-\mathsf{B}}u^{\mathsf{b}},\Psi_{-\mathsf{C}}u^{\mathsf{c}})]^2.
+\fe
+\end{widetext}
+and the fermion three-point function is normalized by $\rho_{\mathsf{F}}(\mathbf{1},u^0,u^0)=1$ and $\rho_{\mathsf{F}}(\mathbf{1},u^1,u^1)=i$.
+
+We should point out that the convolution \eqref{conv} differs from channel to channel. The one presented here is specific to the genus-2 theta channel with NS-R-R internal legs. Nevertheless, an analogous convolution formula for the enlarged block exists for arbitrary plumbing channels. 
+
+As is, in the genus-2 theta channel, the enlarged block $\hat{\mathbf{F}}^{(\eta, \eta')}_f$ vanishes for $\eta\eta'=-1$, due to the fact that the contributions from descendents of $u^{0}\otimes w^0$ cancel those of descendants of $u^{1}\otimes w^1$. More generally, this cancellation occurs whenever the three-point signs $\eta$ in $\rho_f^{(\eta)}$ around a closed Ramond loop in $\hat{\Gamma}$ have product $-1$. We call such a loop an odd Ramond loop, and the algorithm for computing superconformal blocks with odd Ramond loops will be presented in Section \ref{sec:oddloop}. In the rest of this section, we assume that there are no such odd Ramond loops.
+
+The enlarged block can also be computed using the basis $L_{-A}^{(1)}L_{-B}^{(2)}v_n$ for $\mathcal{M}_{\NS}(h)$ and $L_{-A}^{(1)}L_{-B}^{(2)}v_n^\alpha$ for $\mathcal{M}_{\R}(\beta)$. This leads to the following decomposition of $\widehat{\mathbf{F}}_f^{(\eta, \eta')}$:
+\begin{widetext}
+\ie
+\widehat{\mathbf{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3) &= \sum_{\substack{n_1 \in \frac{1}{2} \mathbb{Z}, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1+p_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
+&\quad \times (-1)^{2n_1+(2n_1+p_1)\alpha_2+(2n_1+p_1) \alpha_3+\alpha_2\alpha_3} \\
+&\quad \times\mathbb{B}^{(\eta)}_f(n_1, n_2, n_3,\alpha_2, \alpha_3) \mathbb{B}^{(\eta')}_f(n_1, n_2, n_3, \alpha_2, \alpha_3)\\
+&\quad \times F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}),
+\fe
+\end{widetext}
+where $F(h_1, h_2, h_3; c)$ denotes the Virasoro conformal block in the genus-2 theta channel with intermediate weights $h_1, h_2, h_3$ and central charge $c$. $p_1$ is the Grassmann parity of $\phi_1$. $\mathbb{B}^{(\eta)}_f$ is the (NS, R, R) branching coefficient, defined as
+\ie \label{Rbranch}
+\mathbb{B}^{(\eta)}_f(n_1, n_2, n_3,\alpha_2, \alpha_3) = \frac{\hat{\rho}_f^{(\eta)}(v_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})}{\|v_{1,n_1}\|\|v_{2,n_2}^{\alpha_2}\|\|v_{3,n_3}^{\alpha_3}\|}.
+\fe
+These branching coefficients will depend on the weights $h_1, \beta_2, \beta_3$. 
+
+In general plumbing channels, there are two types of branching coefficients that can appear in the decomposition of the enlarged block, corresponding to the (NS, NS, NS) sphere and the (NS, R, R) sphere, respectively. The (NS, R, R) branching coefficient is defined in \eqref{Rbranch}, while the (NS, NS, NS) one is defined by
+\ie
+\mathbf{B}_a(n_1, n_2, n_3) = \frac{\hat{\rho}_a(v_{1,n_1}, v_{2,n_2}, v_{3,n_3})}{\|v_{1,n_1}\|\|v_{2,n_2}\|\|v_{3,n_3}\|}.
+\fe
+
+The (NS, NS, NS) branching coefficients have been worked out in \cite{Hadasz:2013dza}, while the (NS, R, R) coefficients have never been computed analytically. We now present a recursive algorithm for determining both numerically. It can be proved that, for $n> 0$, $L_1 v_n, L_{1}v_n^\alpha$ both only contain level-$(4n-3)$ states in the $\mathsf{Vir\oplus Vir}$ module generated by $v_{n-1}, v_{n-1}^\alpha$, while $L_{-1}v_n, L_{-1}v_n^\alpha$ only contain level-1 states in the $v_n, v_n^\alpha$ module as well as level-$(4n-1)$ states in the $v_{n-1}, v_{n-1}^\alpha$ module. Namely, there exist coefficients $\mathbf{V}_n^{(1,2)}, \mathbf{V}_{\pm 1, n}^{AB}, \mathbb{V}_n^{(1,2)}, \mathbb{V}_{\pm 1, n}^{AB}$ such that
+\ie \label{Vcoeffs}
+L_1 v_n^\alpha &= \sum_{|A|+|B|=4n-3} \mathbb{V}_{1,n,\alpha}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}^\alpha,\\
+L_{-1} v_n^\alpha &= \mathbb{V}_{n,\alpha}^{(1)} L_{-1}^{(1)}v_n^\alpha + \mathbb{V}_{n,\alpha}^{(2)} L_{-1}^{(2)}v_n^\alpha\\
+&\quad + \sum_{|A|+|B|=4n-1} \mathbb{V}_{-1,n,\alpha}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}^\alpha,\\
+L_1 v_n &= \sum_{|A|+|B|=4n-3} \mathbf{V}_{1,n}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1},\\
+L_{-1} v_n &= \mathbf{V}_{n}^{(1)} L_{-1}^{(1)}v_n + \mathbf{V}_{n}^{(2)} L_{-1}^{(2)}v_n \\
+&\quad + \sum_{|A|+|B|=4n-1} \mathbf{V}_{-1,n}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}.
+\fe
+These coefficients $\mathbf{V}_n^{(1,2)}, \mathbf{V}_{\pm 1, n}^{AB}, \mathbb{V}_n^{(1,2)}, \mathbb{V}_{\pm 1, n}^{AB}$ can be determined directly by applying the free-field realization of $L_{\pm 1}$ on \eqref{vNS}, \eqref{vR}. A similar relation exists for $n< 0$, where $L_{\pm 1}v_n, L_{\pm 1}v_n^\alpha$ include states in the $v_{n+1}, v_{n+1}^\alpha$ module.
+
+After determining the coefficients $\mathbb{V}$ and $\mathbf{V}$, one can use the $L_1$ conformal Ward identities:
+\ie
+&\hat{\rho}_f^{(\eta)}(L_1v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})=\\
+&\quad \hat{\rho}_f^{(\eta)}(v_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})+\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},L_{-1}v_{3,n_3}^{\alpha_3}),\\
+&\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_1v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})=\\
+&\quad \hat{\rho}_f^{(\eta)}(L_{-1}v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
+&\quad -2\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_0v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},L_1v_{3,n_3}^{\alpha_3}),
+\fe
+which yield recursion relations that relate $\mathbb{B}(n_1, n_2, n_3)$ to coefficients with lower $n_1+n_2+n_3$. Given the boundary values $\mathbb{B}(n_1, n_2, n_3)$ with $-\frac{3}{4}\leq n_i \leq \frac{3}{4}$, which can be computed analytically, one can solve for $\mathbb{B}(n_1, n_2, n_3)$ recursively. 
+
+Once one knows the branching coefficients, one can use the $c$-recursion relation to compute the Virasoro conformal blocks \cite{Cho:2017oxl}, which computes $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)$ as a $q$-series. The free fermion block $\mathbf{F}_{\mathsf{F}}$ can be computed from its definition efficiently due to the small size of the space of fermion descendants. The superconformal block $\mathbf{F}_f^{(\eta, \eta')}$, as a series in $\{\eta_e, q_e\}$, can be extracted coefficient-by-coefficient from \eqref{FconvF}.
+
+\section{Blocks with odd Ramond loops}
+
+\label{sec:oddloop}
+
+We now turn to the case where the block contains odd Ramond loops, focusing on the genus-2 theta channel with $\eta\eta'=-1$. In this case, we define a new, non-vanishing enlarged block $\mathbf{F}^{(\eta, \eta')}_f[\Theta\psi]$ by splitting the edge 2 that connects $z_1=1,z_2=1$: We introduce a new Riemann sphere $w$, and glue the two punctures $w=0, w=\infty$ with the two original spheres $z_1, z_2$ by
+\ie 
+(z_1-1)w={q}_{L},\quad (z_2-1)w^{-1}=q_R.
+\fe
+The two new edges $L, R$ formed are all Ramond. This procedure defines a new plumbing channel as shown in figure \ref{insertw}, whose plumbing parameters are given by $q_1, q_L, q_R, q_3$. The original parameter $q_2$ can be related to $q_L, q_R$ by $q_2=q_Lq_R$. Similarly, the spin sign $\eta_2$ can be recovered by $\eta_2=\eta_L\eta_R$.
+
+On this new sphere, we insert the operator $\Theta \psi$ at $w=1$, where the operator $\Theta$ acts on the fermion ground states as
+\ie
+\Theta u^{\mathsf{b}} = (-1)^{\mathsf{b}+1}u^{1-\mathsf{b}},
+\fe
+and it anticommutes with $\psi_r, G_r$ while commuting with $L_n$. The new enlarged block $\mathbf{F}^{(\eta, \eta')}_f[\Theta\psi]$ is defined to be
+\begin{widetext}
+\ie
+\widehat{\mathbf{F}}_f^{(\eta, \eta')}[\Theta \psi]&= \sum_{\substack{|A|=|A'|, |B_L|=|B'_L|, |B_R|=|B'_R|, |C|=|C'|\\
+(-1)^{A+B_L+C+|\alpha_L|+|\gamma|}=(-1)^f\\
+(-1)^{A'+B_R+C'+|\alpha_R|+|\gamma'|}=(-1)^f\\
+(-1)^{\mathsf{A+B_L+C+b_L+c}}=(-1)^{\mathsf{A+B_R+C+b_R+c}}=1}
+} q_1^{|A|+|\mathsf{A}|} \eta_1^{\epsilon_1} q_L^{|B_L|+|\mathsf{B}_L|} \eta_L^{\epsilon_L} q_R^{|B_R|+|\mathsf{B}_R|} \eta_R^{\epsilon_R} q_3^{|C|+|\mathsf{C}|} \eta_3^{\epsilon_3}\\
+&\quad\quad \times (-1)^{\epsilon_1\epsilon_L+\epsilon_1\epsilon_3+\epsilon_L\epsilon_3+A+\mathsf{A}+\mathsf{B}_R+\mathsf{b}_R} \mathbf{G}^{AA'}_{h_1} \mathbb{G}^{B_L\alpha_L, B'_L\alpha'_L}_{\beta_2} \mathbb{G}^{B_R\alpha_R, B'_R\alpha'_R}_{\beta_2} \mathbb{G}^{C\gamma, C'\gamma'}_{\beta_3}\\
+&\quad \quad \times \langle \langle \Psi_{-\mathsf{B}_R}u^{\mathsf{b}_R}\otimes \mathbb{L}_{-B'_R}w^{\alpha_R'}_2|\Theta \psi(1)|\Psi_{-\mathsf{B}_L}u^{\mathsf{b}_L}\otimes \mathbb{L}_{-B'_L}w^{\alpha_L'}_2\rangle \\
+&\quad\quad \times \hat{\rho}_f^{(\eta)}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \Psi_{-\mathsf{B}_L}u^{\mathsf{b}_L}\otimes \mathbb{L}_{-B_L}w^{\alpha_L}_2, \Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
+&\quad\quad \times \hat{\rho}_f^{(\eta')}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'}\phi_1, \Psi_{-\mathsf{B}_R}u^{\mathsf{b}_R}\otimes \mathbb{L}_{-B_R}w^{\alpha_R}_2, \Psi_{-\mathsf{C}}u^{\mathsf{c}} \otimes\mathbb{L}_{-C'}w^{\gamma'}_3),
+\fe
+\end{widetext}
+where $\epsilon_{1,L,R,3}$ stand for the total Grassmann parities of the corresponding descendants. This enlarged block is non-vanishing, and can be expressed as a convolution of the ordinary superconformal block and the free fermion block $\mathbf{F}_{\mathsf{F}}[\Theta \psi]$ with the same insertion $\Theta \psi(1)$ on the $w$-sphere. Namely,
+\ie \label{Insconv}
+\widehat{\mathbf{F}}_f^{(\eta, \eta')}[\Theta \psi] = \mathbf{F}_f^{(\eta, \eta')} \star \mathbf{F}_{\mathsf{F}}[\Theta \psi]
+\fe
+
+On the other hand, since the operator $\psi$ can be regarded as $v_{1/2}(P)$ with Liouville momentum $P=\frac{Q}{2}$, and the operator $\Theta$ commutes with the two copies of Virasoro algebras, one can decompose $\widehat{\mathbf{F}}_f^{(\eta, \eta')}[\Theta \psi]$ into genus-2 1-point Virasoro blocks as
+\begin{widetext}
+ \ie
+\hat{\mathbf{F}}^{(\eta, \eta')}_f[\Theta \psi] = \sum_{\substack{n_1\in \frac{1}{2}\mathbb{Z}, n_L, n_R, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\ n_R = n_L \pm \frac{1}{2}\\(-1)^{2n_1+\alpha+\gamma}=(-1)^f}}& q_1^{2n_1^2} q_L^{2n^2_L-\frac{1}{8}} q_R^{2n^2_R-\frac{1}{8}} q_3^{2n_3^2-\frac{1}{8}} \eta_1^{2n_1+p_1} \eta_2^{\alpha}\eta_3^{\gamma} (-1)^{2n_1+(2n_1+p_1)(\alpha+\gamma)+\alpha\gamma}\\
+&\times \mathbb{B}_f^{(\eta)}(n_1, n_L,n_3;\alpha, \gamma)\mathbb{B}_f^{(\eta')}(n_1, n_R,n_3;\alpha, \gamma)\mathbb{B}(n_R,n_L,\alpha)\\
+&\times \prod_{i=1}^2 F(h_{1,n_1}^{(i)}, h_{2,n_L}^{(i)}, h_{2,n_R}^{(i)}, h_{3,n_3}^{(i)},h_{\psi}^{(i)},c^{(i)})
+\fe   
+\end{widetext}
+where the $F$ in the last line stands for genus-2 1-point Virasoro conformal blocks in the new channel with external conformal weight
+\ie 
+h_\psi^{(1)}=-\frac{1+2 b^2}{2\left(1-b^2\right)}, \quad h_\psi^{(2)}=\frac{b^2+2}{2\left(1-b^2\right)} .
+\fe
+The splitting coefficient $\mathbb{B}(n_R,n_L,\alpha)$ is defined as
+\ie
+\mathbb{B}(n_R, n_L,\alpha) = \frac{\langle \langle v_{n_R}^\alpha|\Theta \psi(1)|v_{n_L}^{\alpha}\rangle}{\|v_{n_L}^{\alpha}\|\|v_{n_R}^{\alpha}\|}.
+\fe
+After knowing the coefficients $\mathbb{V}_{n,\alpha}^{1,2}, \mathbb{V}_{\pm 1,n,\alpha}^{AB}$ in \eqref{Vcoeffs}, the splitting coefficients can be solved for using the $L_1$ conformal Ward identity 
+\ie
+\langle\langle L_1 v_{n_R}^\alpha| \Theta \psi(1)|v_{n_L}^\alpha\rangle=\langle\langle v_{n_R}^\alpha| \Theta \psi(1)|L_{-1}v_{n_L}^\alpha\rangle,
+\fe
+which becomes a recursion relation for the splitting coefficients after plugging in \eqref{Vcoeffs}. After solving for the splitting coefficients and the branching coefficients, one can compute $\widehat{\mathbf{F}}_f^{(\eta, \eta')}[\Theta \psi]$ as a $q$-series using this decomposition, and the physical superconformal block $\mathbf{F}^{(\eta, \eta')}_f$ can be extracted from \eqref{Insconv}. 
+
+This algorithm can be generalized to arbitrary plumbing channels for blocks with odd Ramond loops. Whenever such a loop is present, one can split one of its Ramond edges and insert $\Theta \psi$ in the intermediate sphere to define a non-vanishing enlarged block, which can be decomposed into Virasoro blocks with external punctures on the intermediate spheres. 
+
+\section{Numerical Tests}
+
+\label{sec:numerics}
+
+Using the algorithm presented in Sections \ref{sec:blockdecomp} and \ref{sec:oddloop}, one can compute arbitrary superconformal blocks as a series in the plumbing parameters. The results of our algorithm pass many cross-checks: The low-level coefficients of $q_1^{n_1}q_2^{n_2}q_3^{n_3}$ in $\mathbf{F}_f^{(\eta, \eta')}$ agree with direct computations from the definition \eqref{scblock} up to level $n_1, n_2, n_3\leq 5$. The superconformal block in the same genus-2 theta channel but with all NS internal edges agrees with the result from $c$-recursion \cite{Belavin:2018hfm} up to total level 10. On a laptop and using 40-digit working precision, computing the genus-2 theta block $\mathbf{F}_0^{(\eta, \eta')}$ up to level $n_1, n_2, n_3\leq 10$ takes 7 minutes with $\eta \eta'=1$, and 27 minutes with $\eta \eta'=-1$. A direct computation using the definition \eqref{scblock} is estimated to take more than 6 hours for the same block.
+
+Moreover, there are plumbing data $\{q_e, \eta_e\}$ in the all-NS theta channel and the NS-R-R theta channel that describe the same spin Riemann surface, and we have checked that the ratio
+\ie 
+\frac{Z_\text{super-Liouville}}{(Z_{\text{free boson+fermion}})^{1+2Q^2}}
+\fe
+of super-Liouville and free theory partition functions agrees in the two plumbing channels when evaluated using our superconformal blocks. The details of these cross-checks are included in the supplemental materials \footnote{Supplemental materials}.
+
+\section{Discussion}
+
+\label{sec:disc}
+
+In this work, we develop the algorithm for numerically computing superconformal blocks at arbitrary genus, in arbitrary plumbing channels, for arbitrary spin structures. The double Virasoro subalgebra allows us to decompose the enlarged $\mathsf{SCA}_\nu \otimes \mathsf{F}_\nu$ block into Virasoro conformal blocks, with the coefficients given by branching coefficients, which are known on an (NS, NS, NS) sphere and can be solved numerically using a recursion relation on an (NS, R, R) sphere.
+
+Our algorithm provides new tools for higher-loop superstring amplitudes. For 2-dimensional Type 0B and Type 0A string theory, such amplitudes can be used to further test the duality with matrix quantum mechanics \cite{Takayanagi:2003sm,Douglas:2003up,Balthazar:2022atu,Balthazar:2022apu}, as well as the T-duality between the two theories \cite{Yin:2003iv}. They also permit direct worldsheet tests of matrix-integral predictions for recently proposed super Virasoro minimal strings \cite{Johnson:2024fkm,Johnson:2025vyz,Johnson:2026ugu,Rangamani:2025wfa,Eberhardt:2026hfh}. One particularly interesting direction is the 2-dimensional SO(23) heterotic string \cite{Davis:2005qe}, where the matrix quantum mechanical dual remains unknown, and the higher-loop or higher-point amplitudes can be used to find it. In these applications of string amplitudes, our algorithm can be used to compute the integrand on moduli space. The integration can be performed using a similar method to \footnote{c=1 paper}: For genus $g\leq 3$, one samples the moduli space parametrized by the period matrix and converts the period matrix into plumbing parameters using a similar algorithm to \footnote{ribbon paper}. 
+
+Beyond string amplitudes, modular covariance of higher-genus partition functions can be used to constrain the spectrum and the structure constants of $\mathcal{N}=1$ SCFTs, extending the analysis of \cite{Cho:2017fzo}. The superconformal blocks themselves are conjectured to be the wavefunctions of 3D  supergravity in AdS${}_3$ \cite{Eberhardt:2026hfh}, and the numerical values of the blocks obtained from our algorithm can be used to comput gravitational path integrals in this theory \cite{Bhattacharyya:2024vnw}.
+
+\section*{Acknowledgments}
+
+We are grateful to Ben Mazel, Sounak Pal, Victor A. Rodriguez, and Jaroslav Scheinpflug for discussions. This work is supported by DOE grant DE-SC0007870. YW and XY thank the Yukawa Institute for Theoretical Physics for its hospitality during the course of this work. ChatGPT 5.6 Sol and 6 Astra were used in this work for drafting and editing, literature searches, algorithm implementation, and conducting numerical tests. 
+
+\begin{appendix}
+
+\section{Free field representation of $\mathsf{Vir}\oplus \mathsf{Vir}$ primaries}
+
+\label{app:freefield}
+
+The $\mathsf{Vir}\oplus \mathsf{Vir}$ primaries can be directly constructed using a free field realization of the $\mathsf{SCA}_\nu \otimes \mathsf{F}_{\nu}$ algebra \cite{Hadasz:2013dza}. Using free boson operators $\left\{c_n | n\neq 0\right\}$, free fermion operators $\left\{\eta_r| r\in \mathbb{Z}+\nu\right\}$ and the central element $\hat{P}$ that satisfy the algebraic relations
 \ie
 [c_n,c_m] =n\delta_{m+n,0}, ~\left\{\eta_r,\eta_s\right\}= \delta_{r+s,0},
 \fe
 the generators of the superconformal algebra $\mathsf{SCA}_\nu$ can be realized as
 \ie
 L_{n\neq 0} & =\frac{1}{2} \sum_{k \neq 0, n} c_k c_{n-k}+\frac{1}{2} \sum_r r \eta_{n-r} \eta_r+\frac{i}{2}(Q n - 2 \hat{P}) c_n, \\
-L_0 & =\sum_{k>0} c_{-k} c_k+\sum_{r>0} r \eta_{-r} \eta_r+\frac{1}{2}\left(\frac{Q^2}{4}-\hat{P}^2\right), \\
+L_0 & =\sum_{k>0} c_{-k} c_k+\sum_{r>0} r \eta_{-r} \eta_r+\frac{1}{2}\left(\frac{Q^2}{4}-\hat{P}^2\right)+\frac{1-2\nu}{16}, \\
 G_r & =\sum_{n \neq 0} c_n \eta_{r-n}+i(Q r - \hat{P}) \eta_r.
 \fe
 Each free boson mode $c_n$ and free fermion mode $\eta$ can be expressed directly in terms of $G_{-r}, L_{-n}$ and $\hat{P}$. 
 
-It can be proved that $\mathcal{M}_{\NS}(h)$ is isomorphic to the Fock space generated by acting with $c_{n<0}, \psi_{r<0}$ on a ground state $\phi(P)$ that satisfies $\hat{P}\phi(P)=P\phi(P)$ \footnote{We take the branch of $P$ as follows: For $h$ smaller than $Q^2/8$, $P$ is taken to be the positive root of $\frac{1}{4}Q^2-2h$. For $h$ greater than $Q^2/8$, we take $P=ip$ such that $p>0$. In the R-sector, $P$ is taken to be the positive root of $2\beta^2$ for $\beta^2 >0$ and the root with positive imaginary part for $\beta^2 <0$}, and the $\mathsf{Vir}\oplus\mathsf{Vir}$ primaries in $\mathcal{M}_{\NS}(h)$ can be constructed using the free field operators $\chi_{r}(P) = \psi_r - i\eta_r(P)$ as
+It can be proved that $\mathcal{M}_{\NS}(h)$ is isomorphic to the Fock space generated by acting with $c_{n<0}, \psi_{r<0}, \eta_{r<0}$ on a ground state $\phi(P)$ that satisfies $\hat{P}\phi(P)=P\phi(P)$ \footnote{We take the branch of $P$ as follows: For $h$ smaller than $Q^2/8$, $P$ is taken to be the positive root of $\frac{1}{4}Q^2-2h$. For $h$ greater than $Q^2/8$, we take $P=ip$ such that $p>0$. In the R-sector, $P$ is taken to be the positive root of $2\beta^2$ for $\beta^2 >0$ and the root with positive imaginary part for $\beta^2 <0$}, and the $\mathsf{Vir}\oplus\mathsf{Vir}$ primaries in $\mathcal{M}_{\NS}(h)$ can be constructed using the free field operators $\chi_{r}(P) = \psi_r - i\eta_r(P)$ as
 \ie \label{vNS}
 v_n(P) = \chi_{-\frac{4n-1}{2}}(P)\chi_{-\frac{4n-3}{2}}(P)\cdots \chi_{-\frac{1}{2}}(P)\phi(P)
 \fe
@@ -185,123 +363,7 @@ for $n>0$, and by the reflection formula
 \fe
 for $n<0$. The subscripts $\pm$ denote the components ending in \(w_\beta^+\) and \(w_\beta^-\), respectively. 
 
-\section{Reduction of superconformal blocks}
-
-\label{sec:blockdecomp}
-
-To reduce the superconformal block \eqref{scblock} to Virasoro conformal blocks, we first consider an enlarged $\mathsf{SCA}\otimes \mathsf{F}$ block $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)$, defined analogously to \eqref{scblock}, but with the descendant sum replaced by the sum over all states in $\mathcal{M}_{\NS}$ or $\mathcal{M}_{\R}$. The inverse Gram matrices and the Grassmann signs are also replaced by those of the new $\mathsf{SCA}\otimes \mathsf{F}$ descendants.  
-% Namely,
-% \begin{widetext}
-% \ie 
-% \widehat{\mathbf{F}}_f^{(\eta, \eta')}&(h_1, \beta_2, \beta_3) = \sum_{
-% \substack{|A|=|A'|, |B|=|B'|, |C|=|C'|\\
-% (-1)^{A+B+C+|\alpha|+|\gamma|}=(-1)^f\\
-% (-1)^{A'+B'+C'+|\alpha'|+|\gamma'|}=(-1)^f\\
-% (-1)^{\mathsf{A+B+C+b+c}}=1}
-% } q_1^{|A|} \eta_1^{A+p_1} q_2^{|B|} \eta_2^{B+|\alpha|} q_3^{|C|} \eta_3^{C+|\gamma|} \mathbf{G}^{AA'}_{h_1} \mathbb{G}^{B\alpha, B'\alpha'}_{\beta_2} \mathbb{G}^{C\gamma, C'\gamma'}_{\beta_3}\\
-% &\quad\quad \times (-1)^{\text{sgn}(A)\text{sgn}(B)+\text{sgn}(A)\text{sgn}(C)+\text{sgn}(B)\text{sgn}(C)+A+\mathsf{A}} q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}}\\
-% &\quad\quad \times \hat{\rho}_f^{(\eta)}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A}\phi_1, \Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w^\alpha_2, \Psi_{-\mathsf{C}}u^{\mathsf{c}}\otimes \mathbb{L}_{-C}w^\gamma_3)\\
-% &\quad\quad \times \hat{\rho}_f^{(\eta')}(\Psi_{-\mathsf{A}}\mathbf{L}_{-A'}\phi_1, \Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B'}w^{\alpha'}_2, \Psi_{-\mathsf{C}}u^{\mathsf{c}} \otimes\mathbb{L}_{-C'}w^{\gamma'}_3),
-% \fe
-% \end{widetext}
-% where $\Psi_{-\mathsf{A}}$ denotes a chain of fermion creation operators. The sum is over the $\mathsf{SCA}$ descendant label $A,B,C,A',B',C'$, the fermion descendant label $\mathsf{A,B,C}$. The shorthand $\text{sgn}$ is defined such that ${\text{sgn}(A)}=p_1+A+\mathsf{A} \mod 2$ for NS sector and ${\text{sgn}(B)}=B+\mathsf{B}+\mathsf{b}+|\alpha| \mod 2$ for R sector. The 3-point function $\hat{\rho}_f^{(\eta)}$ is defined such that 
-
-This enlarged block can be computed in two ways. One can take the basis $\Psi_{-\mathsf{A}}\mathbf{1}\otimes \mathbf{L}_{-A}\phi$ for states in $\mathcal{M}_\NS$ and $\Psi_{-\mathsf{A}}u^{\mathsf{a}}\otimes \mathbb{L}_{-A}w^\alpha$ for $\mathcal{M}_{\R}$, where $\Psi_{-\mathsf{A}}$ stands for a chain of free fermion creation operators. This allows us to express the enlarged block in terms of superconformal blocks \eqref{scblock} and free fermion blocks. The auxiliary block is defined as
-\begin{widetext}
-\ie
-\mathbf{F}_{\mathsf{F}} = \sum_{\mathsf{A+B+C+b+c}\equiv 0 \text{ mod } 2} &(-1)^{\mathsf{A}}q_1^{|\mathsf{A}|} \eta_1^{\mathsf{A}} q_2^{|\mathsf{B}|} \eta_2^{\mathsf{B}+\mathsf{b}} q_3^{|\mathsf{C}|} \eta_3^{\mathsf{C}+\mathsf{c}} (-1)^{\mathsf{A(B+b)+A(C+c)+(B+b)(C+c)}}\\
-& \times [\rho_{\mathsf{F}}(\Psi_{-\mathsf{A}}\mathbf{1}, \Psi_{-\mathsf{B}}u^{\mathsf{b}},\Psi_{-\mathsf{C}}u^{\mathsf{c}})]^2,
-\fe
-\end{widetext} 
-where the free fermion (NS, R, R) three-point function is normalized such that $\rho(\mathbf{1}, u^0, u^0)=1,\rho(\mathbf{1}, u^1, u^1)=i$. Given a plumbing channel, the free fermion block can be written as a sum of Virasoro conformal blocks with intermediate weights $0, \frac{1}{2}$ for NS edges and $\frac{1}{16}$ for R edges. The enlarged block can be written as
-\ie \
-\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3) = \mathbf{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3) \star \mathbf{F}_{\mathsf{F}},
-\fe
-where we view the blocks as formal series in $q_e, \eta_e$, and the convolution $\star$ acts on monomials as
-\ie \label{conv}
-&q_1^{r_1}q_2^{r_2}q_3^{r_3}\eta_1^{\epsilon_1}\eta_2^{\epsilon_2}\eta_3^{\epsilon_3} \star q_1^{s_1}q_2^{s_2}q_3^{s_3}\eta_1^{\delta_1}\eta_2^{\delta_2}\eta_3^{\delta_3}\\
-&=(-1)^{\sum_{i<j} (\epsilon_i \delta_j + \delta_i \epsilon_j)}q_1^{r_1+s_1}q_2^{r_2+s_2}q_3^{r_3+s_3}\eta_1^{\epsilon_1+\delta_1}\eta_2^{\epsilon_2+\delta_2}\eta_3^{\epsilon_3+\delta_3}.
-\fe
-We should point out that the convolution \eqref{conv} differs from channel to channel. The one presented here is specific to the genus-2 theta channel with NS-R-R internal legs. Nevertheless, an analogous convolution formula for the enlarged block exists for arbitrary plumbing channels. 
-
-As is, the free fermion block $\mathbf{F}_{\mathsf{F}}$ cannot be inverted under convolution. Moreover, in the genus-2 theta channel, the enlarged block $\hat{\mathbf{F}}^{(\eta, \eta')}_f$ vanishes for $\eta\eta'=-1$. More generally, this cancellation occurs whenever the three-point signs $\eta$ in $\rho_f^{(\eta)}$ around a closed Ramond loop have product $-1$. These problems obstruct us from solving $\mathbf{F}^{(\eta, \eta')}_f$ from $\hat{\mathbf{F}}^{(\eta, \eta')}_f$.
-
-To fix these problems, we define $\hat{\mathbf{F}}_f^{(\eta, \eta')}|_{\mathsf{b}=0}$ by fix one of the free fermion ground state label $\mathsf{b}$ to be 0 in the enlarged block. This resticted enlarged block can be computed as
-\ie
-\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)|_{\mathsf{b}=0} = \mathbf{F}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3) \star \mathbf{F}_{\mathsf{F}}|_{\mathsf{b}=0}.
-\fe
-Now, the restricted free fermion block $\mathbf{F}_{\mathsf{F}}|_{\mathsf{b}=0}$ does have a constant term and can be inverted, and $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)|_{\mathsf{b}=0}$ is nonzero for all choices of $\eta, \eta', f$.
-
-On the other hand, one can choose the basis $L_{-A}^{(1)}L_{-B}^{(2)}v_n$ for $\mathcal{M}_{\NS}$ and $L_{-A}^{(1)}L_{-B}^{(2)}v_n^\alpha$ for $\mathcal{M}_{\R}$. which leads to the following decomposition of $\widehat{\mathbf{F}}_f^{(\eta, \eta')}$:
-\begin{widetext}
-\ie
-\widehat{\mathbf{F}}_f^{(\eta,\eta')}(h_1, \beta_2, \beta_3) &= \sum_{\substack{n_1 \in \frac{1}{2} \mathbb{Z}, n_2, n_3\in \frac{1}{2}\mathbb{Z}+\frac{1}{4}\\(-1)^{2n_1+\alpha_2+\alpha_3}=(-1)^f}} q_1^{2n_1^2}q_2^{2n_2^2-\frac{1}{8}}q_3^{2n_3^2-\frac{1}{8}}\eta_1^{2n_1+p_1}\eta_2^{\alpha_2}\eta_3^{\alpha_3}\\
-&\quad \times (-1)^{2n_1+(2n_1+p_1)\alpha_2+(2n_1+p_1) \alpha_3+\alpha_2\alpha_3} \\
-&\quad \times\mathbb{B}^{(\eta)}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3) \mathbb{B}^{(\eta')}_f(h_1, \beta_2, \beta_3;n_1, n_2, n_3)\\
-&\quad \times F(h_{1,n_1}^{(1)},h_{2,n_2}^{(1)},h_{3,n_3}^{(1)},c^{(1)})F(h_{1,n_1}^{(2)},h_{2,n_2}^{(2)},h_{3,n_3}^{(2)},c^{(2)}),
-\fe
-\end{widetext}
-where $F(h_1, h_2, h_3; c)$ denotes the Virasoro conformal block with intermediate weights $h_1, h_2, h_3$ and central charge $c$. $\mathbb{B}^{(\eta)}_f$ is the (NS, R, R) branching coefficient, defined as
-\ie \label{Rbranch}
-\mathbb{B}^{(\eta)}_f(n_1, n_2, n_3,\alpha_2, \alpha_3) = \frac{\hat{\rho}_f^{(\eta)}(v^{p_1}_{1,n_1}, v_{2,n_2}^{\alpha_2}, v_{3,n_3}^{\alpha_3})}{\|v^{p_1}_{1,n_1}\|\|v_{2,n_2}^{\alpha_2}\|\|v_{3,n_3}^{\alpha_3}\|}.
-\fe
-Once one knows the branching coefficients, one can use the $c$-recursion relation to compute the Virasoro conformal blocks \cite{Cho:2017oxl}, which computes both $\mathbf{F}_{\mathsf{F}}$ and $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)$ as a $q$-series. 
-
-For the restricted block $\widehat{\mathbf{F}}_f^{(\eta, \eta')}(h_1, \beta_2, \beta_3)|_{\mathsf{b}=0}$, one can realize the restriction as the insertion of a projector 
-
-One can then use \eqref{convo} to compute the superconformal block.
-
-\section{The branching coefficients}
-
-In general plumbing channels, there are two types of branching coefficients that can appear in the decomposition of the enlarged block, corresponding to the (NS, NS, NS) sphere and the (NS, R, R) sphere, respectively. The (NS, R, R) branching coefficient is defined in \eqref{Rbranch}, while the (NS, NS, NS) one is defined by
-\ie
-\mathbf{B}_a(n_1, n_2, n_3) = \frac{\hat{\rho}_a(v^{p_1}_{1,n_1}, v^{p_2}_{2,n_2}, v^{p_3}_{3,n_3})}{\|v^{p_1}_{1,n_1}\|\|v^{p_2}_{2,n_2}\|\|v^{p_3}_{3,n_3}\|}.
-\fe
-
-The (NS, NS, NS) branching coefficients have been worked out in \cite{Hadasz:2013dza}, while the (NS, R, R) coefficients have never been computed analytically. We now present a recursive algorithm for determining both numerically. It can be proved that, for $n> 0$, $L_1 v_n, L_{1}v_n^\alpha$ both only contain level-$(4n-3)$ states in the $\mathsf{Vir\oplus Vir}$ module generated by $v_{n-1}, v_{n-1}^\alpha$, while $L_{-1}v_n, L_{-1}v_n^\alpha$ only contain level-1 states in the $v_n, v_n^\alpha$ module as well as level-$(4n-1)$ states in the $v_{n-1}, v_{n-1}^\alpha$ module. Namely, there exist coefficients $\mathbf{V}_n^{(1,2)}, \mathbf{V}_{\pm 1, n}^{AB}, \mathbb{V}_n^{(1,2)}, \mathbb{V}_{\pm 1, n}^{AB}$ such that
-\ie
-L_1 v_n^\alpha &= \sum_{|A|+|B|=4n-3} \mathbb{V}_{1,n,\alpha}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}^\alpha,\\
-L_{-1} v_n^\alpha &= \mathbb{V}_{n,\alpha}^{(1)} L_{-1}^{(1)}v_n^\alpha + \mathbb{V}_{n,\alpha}^{(2)} L_{-1}^{(2)}v_n^\alpha\\
-&\quad + \sum_{|A|+|B|=4n-1} \mathbb{V}_{-1,n,\alpha}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}^\alpha,\\
-L_1 v_n &= \sum_{|A|+|B|=4n-3} \mathbf{V}_{1,n}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1},\\
-L_{-1} v_n &= \mathbf{V}_{n}^{(1)} L_{-1}^{(1)}v_n + \mathbf{V}_{n}^{(2)} L_{-1}^{(2)}v_n \\
-&\quad + \sum_{|A|+|B|=4n-1} \mathbf{V}_{-1,n}^{AB} L_{-A}^{(1)}L_{-B}^{(2)} v_{n-1}.
-\fe
-These coefficients $\mathbf{V}_n^{(1,2)}, \mathbf{V}_{\pm 1, n}^{AB}, \mathbb{V}_n^{(1,2)}, \mathbb{V}_{\pm 1, n}^{AB}$ can be determined directly by applying the free-field realization of $L_{\pm 1}$ on \eqref{vNS}, \eqref{vR}. A similar relation exists for $n< 0$, where $L_{\pm 1}v_n, L_{\pm 1}v_n^\alpha$ include states in the $v_{n+1}, v_{n+1}^\alpha$ module.
-
-After determining the coefficients $\mathbb{V}$ and $\mathbf{V}$, one can use the $L_1$ conformal Ward identities:
-\ie
-&\hat{\rho}_f^{(\eta)}(L_1v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})=\\
-&\quad \hat{\rho}_f^{(\eta)}(v_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})+\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},L_{-1}v_{3,n_3}^{\alpha_3}),\\
-&\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_1v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})=\\
-&\quad \hat{\rho}_f^{(\eta)}(L_{-1}v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_{-1}v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})\\
-&\quad -2\hat{\rho}_f^{(\eta)}(v_{1,n_1},L_0v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})-\hat{\rho}_f^{(\eta)}(v_{1,n_1},v_{2,n_2}^{\alpha_2},L_1v_{3,n_3}^{\alpha_3}),
-\fe
-which yield recursion relations that relate $\mathbb{B}(n_1, n_2, n_3)$ to coefficients at a total level one lower. Given the boundary values $\mathbb{B}(n_1, n_2, n_3)$ with $-\frac{3}{4}\leq n_i \leq \frac{3}{4}$, which can be computed analytically, one can solve for $\mathbb{B}(n_1, n_2, n_3)$ recursively. Computing the branching coefficients $\mathbb{B}_f^{(\eta')}(2,\frac{7}{4}, \frac{5}{4},\alpha_2, \alpha_3)$ for all eight sign configurations takes around one second in total on a laptop, and the results for (NS, NS, NS) branching coefficients are also checked against the analytic results in \cite{Hadasz:2013dza}.
-
-Using the algorithm presented in Secs. \ref{sec:blockdecomp} and \ref{sec:branching}, one can compute arbitrary superconformal blocks as a series in the plumbing parameters. The results of our algorithm pass many cross-checks: The low-level coefficients of $q_1^{n_1}q_2^{n_2}q_3^{n_3}$ in $\mathbf{F}_f^{(\eta, \eta')}$ agree with direct computations from the definition \eqref{scblock} up to total level $n_1+n_2+n_3=6$. The superconformal block in the same genus-2 theta channel but with all NS internal edges agrees with the result from $c$-recursion \cite{Belavin:2018hfm} up to total level 10. On a laptop, computing the block $\mathbf{F}^{(+,+)}_0$ up to total level 10 takes less than 2 minutes.
-
-Moreover, there are plumbing data $\{q_e, \eta_e\}$ in the all-NS theta channel and the NS-R-R theta channel that describe the same spin Riemann surface, and we have checked that the ratio
-\ie 
-\frac{Z_\text{super-Liouville}}{(Z_{\text{free boson+fermion}})^{1+2Q^2}}
-\fe
-of super-Liouville and free theory partition functions agrees in the two plumbing channels when evaluated using our superconformal blocks. The details of these cross-checks are included in the supplemental materials \footnote{Supplemental materials}.
-
-\label{sec:branching}
-
-\section{Discussion}
-
-\label{sec:disc}
-
-In this work, we develop the algorithm for numerically computing superconformal blocks at arbitrary genus, in arbitrary plumbing channels, for arbitrary spin structures. The double Virasoro subalgebra allows us to decompose the enlarged $\mathsf{SCA}_\nu \otimes \mathsf{F}_\nu$ block into Virasoro conformal blocks, with the coefficients given by branching coefficients, which are known on an (NS, NS, NS) sphere and can be solved numerically using a recursion relation on an (NS, R, R) sphere.
-
-Our algorithm provides new tools for higher-loop superstring amplitudes. For 2-dimensional Type 0B and Type 0A string theory, such amplitudes can be used to further test the duality with matrix quantum mechanics \cite{Takayanagi:2003sm,Douglas:2003up,Balthazar:2022atu,Balthazar:2022apu}, as well as the T-duality between the two theories \cite{Yin:2003iv}. They also permit direct worldsheet tests of matrix-integral predictions for recently proposed super Virasoro minimal strings \cite{Johnson:2024fkm,Johnson:2025vyz,Johnson:2026ugu,Rangamani:2025wfa,Eberhardt:2026hfh}. One particularly interesting direction is the 2-dimensional SO(23) heterotic string \cite{Davis:2005qe}, where the matrix quantum mechanical dual remains unknown, and the higher-loop or higher-point amplitudes can be used to find it. In these applications of string amplitudes, our algorithm can be used to compute the integrand on moduli space. The integration can be performed using a similar method to \footnote{c=1 paper}: For genus $g\leq 3$, one samples the moduli space parametrized by the period matrix and converts the period matrix into plumbing parameters using a similar algorithm to \footnote{ribbon paper}. 
-
-Beyond string amplitudes, modular covariance of higher-genus partition functions can be used to constrain the spectrum and the structure constants of $\mathcal{N}=1$ SCFTs, extending the analysis of \cite{Cho:2017fzo}. 
-
-\section*{Acknowledgments}
-
-We are grateful to Ben Mazel, Victor A. Rodriguez, and Jaroslav Scheinpflug for discussions. This work is supported by DOE grant DE-SC0007870. YW and XY thank the Yukawa Institute for Theoretical Physics for its hospitality during the course of this work. ChatGPT 5.6 Sol and 6 Astra was used in this work for drafting and editing, literature searches, algorithm implementation, and conducting numerical tests. 
+\end{appendix}
 
 \bibliographystyle{apsrev4-2}
 \bibliography{references}

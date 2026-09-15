@@ -1,0 +1,563 @@
+{
+  "scope": "total physical level <=3, p=f=0, eta=1, eta_prime=+/-1",
+  "dps": 40,
+  "runs": [
+    {
+      "name": "ordinary_production_keep_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/ramond_unphased",
+        "--mode",
+        "ordinary",
+        "--level",
+        "3",
+        "--dps",
+        "40",
+        "--truncation",
+        "total",
+        "--vertex",
+        "production",
+        "--ns-branch-sign",
+        "keep",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/ordinary_production_keep_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.5146932920033578,
+      "stderr": "branching: starting at total level 3\nbranching: 0.0846882 s; direct boundary values=96, recursive values=96, largest local relation=4, second Ward rows=0\nnumerator complete: 79 branches, 0.00930963 s CCY; computing auxiliary and recovery\ntotal computation: 0.0990321 s; saved /Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/ordinary_production_keep_L3.json\n"
+    },
+    {
+      "name": "ordinary_unphased_keep_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/ramond_unphased",
+        "--mode",
+        "ordinary",
+        "--level",
+        "3",
+        "--dps",
+        "40",
+        "--truncation",
+        "total",
+        "--vertex",
+        "unphased",
+        "--ns-branch-sign",
+        "keep",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/ordinary_unphased_keep_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.08178458298789337,
+      "stderr": "branching: starting at total level 3\nbranching: 0.059612 s; direct boundary values=96, recursive values=96, largest local relation=4, second Ward rows=0\nnumerator complete: 79 branches, 0.00913004 s CCY; computing auxiliary and recovery\ntotal computation: 0.0736461 s; saved /Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/ordinary_unphased_keep_L3.json\n"
+    },
+    {
+      "name": "ordinary_unphased_remove_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/ramond_unphased",
+        "--mode",
+        "ordinary",
+        "--level",
+        "3",
+        "--dps",
+        "40",
+        "--truncation",
+        "total",
+        "--vertex",
+        "unphased",
+        "--ns-branch-sign",
+        "remove",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/ordinary_unphased_remove_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.081613832997391,
+      "stderr": "branching: starting at total level 3\nbranching: 0.0600108 s; direct boundary values=96, recursive values=96, largest local relation=4, second Ward rows=0\nnumerator complete: 79 branches, 0.00883904 s CCY; computing auxiliary and recovery\ntotal computation: 0.0737897 s; saved /Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/ordinary_unphased_remove_L3.json\n"
+    },
+    {
+      "name": "ordinary_literal_pbw_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/literal_pbw",
+        "3",
+        "0",
+        "ordinary",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/ordinary_literal_pbw_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.355296833004104,
+      "stderr": "literal enlarged PBW total: 0.00929042 s\n"
+    },
+    {
+      "name": "ordinary_physical_pbw_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--level",
+        "3",
+        "--f",
+        "0",
+        "--mode",
+        "ordinary",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/ordinary_physical_pbw_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.08981133397901431,
+      "stderr": "PBW ordinary: 50/112, 0.00840842 s\nPBW ordinary: 100/112, 0.0428444 s\nPBW total: 0.0789568 s; vertices 0.0651283 s; contractions 0.0115092 s\n"
+    },
+    {
+      "name": "inserted_production_keep_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/ramond_unphased",
+        "--mode",
+        "inserted",
+        "--level",
+        "3",
+        "--dps",
+        "40",
+        "--truncation",
+        "total",
+        "--vertex",
+        "production",
+        "--ns-branch-sign",
+        "keep",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/inserted_production_keep_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.12428120800177567,
+      "stderr": "branching: starting at total level 3\nbranching: 0.0921608 s; direct boundary values=192, recursive values=256, largest local relation=4, second Ward rows=0\nnumerator complete: 105 branches, 0.0156401 s CCY; computing auxiliary and recovery\ntotal computation: 0.115962 s; saved /Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/inserted_production_keep_L3.json\n"
+    },
+    {
+      "name": "inserted_unphased_keep_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/ramond_unphased",
+        "--mode",
+        "inserted",
+        "--level",
+        "3",
+        "--dps",
+        "40",
+        "--truncation",
+        "total",
+        "--vertex",
+        "unphased",
+        "--ns-branch-sign",
+        "keep",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/inserted_unphased_keep_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.10344812498078682,
+      "stderr": "branching: starting at total level 3\nbranching: 0.0702333 s; direct boundary values=192, recursive values=256, largest local relation=4, second Ward rows=0\nnumerator complete: 113 branches, 0.0160491 s CCY; computing auxiliary and recovery\ntotal computation: 0.094892 s; saved /Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/inserted_unphased_keep_L3.json\n"
+    },
+    {
+      "name": "inserted_unphased_remove_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/ramond_unphased",
+        "--mode",
+        "inserted",
+        "--level",
+        "3",
+        "--dps",
+        "40",
+        "--truncation",
+        "total",
+        "--vertex",
+        "unphased",
+        "--ns-branch-sign",
+        "remove",
+        "--sector-policy",
+        "record",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/inserted_unphased_remove_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.09804904201882891,
+      "stderr": "branching: starting at total level 3\nbranching: 0.0669115 s; direct boundary values=192, recursive values=256, largest local relation=4, second Ward rows=0\nnumerator complete: 113 branches, 0.0153865 s CCY; computing auxiliary and recovery\ntotal computation: 0.0904427 s; saved /Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/inserted_unphased_remove_L3.json\n"
+    },
+    {
+      "name": "inserted_literal_pbw_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/literal_pbw",
+        "3",
+        "0",
+        "inserted",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/inserted_literal_pbw_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.01512929200544022,
+      "stderr": "literal enlarged PBW total: 0.00776004 s\n"
+    },
+    {
+      "name": "inserted_physical_pbw_L3",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--level",
+        "3",
+        "--f",
+        "0",
+        "--mode",
+        "inserted",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/inserted_physical_pbw_L3.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.12108112499117851,
+      "stderr": "PBW inserted: 50/112, 0.00779071 s\nPBW inserted: 100/112, 0.0538294 s\nPBW total: 0.112892 s; vertices 0.101993 s; contractions 0.00932616 s\n"
+    },
+    {
+      "name": "vertex_ward",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/vertex_probe",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/experiments/unphased_vertex_2026-09-15/results/vertex_ward.json"
+      ],
+      "exit_code": 0,
+      "wall_seconds": 0.345967750006821,
+      "stderr": ""
+    }
+  ],
+  "comparisons": [
+    {
+      "candidate": "ordinary_production_keep_L3.json",
+      "reference": "ordinary_physical_pbw_L3.json",
+      "total_level": 3,
+      "components": 240,
+      "max_absolute": "6.72312399401985E-28",
+      "max_scaled": "6.72312399401985E-28",
+      "failed_components": 0,
+      "first_failure": null,
+      "worst": {
+        "exponents": [
+          4,
+          1,
+          1,
+          0
+        ],
+        "parity_index": 0,
+        "candidate": [
+          "0.299444414508797580821700717127667968872897",
+          "0"
+        ],
+        "reference": [
+          "0.299444414508797580821700716455355569470912",
+          "0"
+        ],
+        "absolute": "6.72312399401985E-28",
+        "scaled": "6.72312399401985E-28"
+      }
+    },
+    {
+      "candidate": "ordinary_unphased_keep_L3.json",
+      "reference": "ordinary_physical_pbw_L3.json",
+      "total_level": 3,
+      "components": 240,
+      "max_absolute": "59.281250296802485021008116378203786648938240300655518482978235099",
+      "max_scaled": "1.0451213494787592150215674916148820952354513957088820973581576604",
+      "failed_components": 40,
+      "first_failure": {
+        "exponents": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "parity_index": 3,
+        "candidate": [
+          "-0.00563797327674057541635641353810501482289143",
+          "1.12158904111798241152506854359315470731139E-83"
+        ],
+        "reference": [
+          "0.00563797327674057541635641353810179993450578",
+          "-0"
+        ],
+        "absolute": "0.011275946553481150832712827076206814757397210000000000000000000000",
+        "scaled": "0.011275946553481150832712827076206814757397210000000000000000000000"
+      },
+      "worst": {
+        "exponents": [
+          1,
+          1,
+          1,
+          0
+        ],
+        "parity_index": 5,
+        "candidate": [
+          "-3.88509908765060093711284143065073575054906",
+          "-0.944924784590992040156688637656086670037089"
+        ],
+        "reference": [
+          "0.185434314928779318034689723481829376403807",
+          "-0"
+        ],
+        "absolute": "4.1787707558621590021630425144274165292119757556222753566014739618",
+        "scaled": "1.0451213494787592150215674916148820952354513957088820973581576604"
+      }
+    },
+    {
+      "candidate": "ordinary_unphased_remove_L3.json",
+      "reference": "ordinary_physical_pbw_L3.json",
+      "total_level": 3,
+      "components": 240,
+      "max_absolute": "57.688541014201930053022180202250996720377829937511653330609968568",
+      "max_scaled": "1.0100820936969639694680598647991151211380006314472831860471958069",
+      "failed_components": 40,
+      "first_failure": {
+        "exponents": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "parity_index": 3,
+        "candidate": [
+          "1.00563797327674057541635641353809916185219",
+          "-1.12158904111798241152506854359315470731139E-83"
+        ],
+        "reference": [
+          "0.00563797327674057541635641353810179993450578",
+          "-0"
+        ],
+        "absolute": "0.99999999999999999999999999999999736191768422000000000000000000000",
+        "scaled": "0.99439363525785529698606427247969963536283824239331576674566291339"
+      },
+      "worst": {
+        "exponents": [
+          2,
+          0,
+          0,
+          4
+        ],
+        "parity_index": 0,
+        "candidate": [
+          "-10.7344269005651340681663294633366536448889",
+          "13.6861411543262761657905884865673789784365"
+        ],
+        "reference": [
+          "0.281884373645560181821213088105614133538368",
+          "0"
+        ],
+        "absolute": "17.568994672047829640879460770166806636926376494334846044926372244",
+        "scaled": "1.0100820936969639694680598647991151211380006314472831860471958069"
+      }
+    },
+    {
+      "candidate": "ordinary_literal_pbw_L3.json",
+      "reference": "ordinary_physical_pbw_L3.json",
+      "total_level": 3,
+      "components": 240,
+      "max_absolute": "1.8E-40",
+      "max_scaled": "6.3892934026331485512466406549458652503438117951515896840218110569E-41",
+      "failed_components": 0,
+      "first_failure": null,
+      "worst": {
+        "exponents": [
+          0,
+          2,
+          2,
+          2
+        ],
+        "parity_index": 0,
+        "candidate": [
+          "2.81721293196237628556077391194740315817845",
+          "0"
+        ],
+        "reference": [
+          "2.81721293196237628556077391194740315817863",
+          "0"
+        ],
+        "absolute": "1.8E-40",
+        "scaled": "6.3892934026331485512466406549458652503438117951515896840218110569E-41"
+      }
+    },
+    {
+      "candidate": "inserted_production_keep_L3.json",
+      "reference": "inserted_physical_pbw_L3.json",
+      "total_level": 3,
+      "components": 240,
+      "max_absolute": "7.31322294186577E-28",
+      "max_scaled": "7.31322294186577E-28",
+      "failed_components": 0,
+      "first_failure": null,
+      "worst": {
+        "exponents": [
+          4,
+          1,
+          1,
+          0
+        ],
+        "parity_index": 0,
+        "candidate": [
+          "0.560562248827355107860034100875066834733817",
+          "0"
+        ],
+        "reference": [
+          "0.560562248827355107860034101606389128920394",
+          "0"
+        ],
+        "absolute": "7.31322294186577E-28",
+        "scaled": "7.31322294186577E-28"
+      }
+    },
+    {
+      "candidate": "inserted_unphased_keep_L3.json",
+      "reference": "inserted_physical_pbw_L3.json",
+      "total_level": 3,
+      "components": 240,
+      "max_absolute": "226.47616209843243033165146172046986572281050920313079575367351981",
+      "max_scaled": "1.0233801541296201754000459817651888710026244649024132139969595881",
+      "failed_components": 40,
+      "first_failure": {
+        "exponents": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "parity_index": 3,
+        "candidate": [
+          "0.0561291561773283952561705170015496498214081",
+          "-2.80397260279495602881267135898288676827844E-83"
+        ],
+        "reference": [
+          "-0.0561291561773283952561705170015468082368568",
+          "0"
+        ],
+        "absolute": "0.11225831235465679051234103400309645805826490000000000000000000000",
+        "scaled": "0.11225831235465679051234103400309645805826490000000000000000000000"
+      },
+      "worst": {
+        "exponents": [
+          1,
+          0,
+          0,
+          2
+        ],
+        "parity_index": 3,
+        "candidate": [
+          "-9.77752660420175364998626830054900742152893",
+          "2.30520571210088440169635865344830880132117"
+        ],
+        "reference": [
+          "0.241153898710977723223221690677651643040286",
+          "-0"
+        ],
+        "absolute": "10.280463627412250397937855950917187819114410639379261810647513960",
+        "scaled": "1.0233801541296201754000459817651888710026244649024132139969595881"
+      }
+    },
+    {
+      "candidate": "inserted_unphased_remove_L3.json",
+      "reference": "inserted_physical_pbw_L3.json",
+      "total_level": 3,
+      "components": 240,
+      "max_absolute": "227.07545739468942575550141349761406707282171116611966445648565072",
+      "max_scaled": "1.1536235630059447354558742507304167046624799955324146085380608497",
+      "failed_components": 40,
+      "first_failure": {
+        "exponents": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "parity_index": 3,
+        "candidate": [
+          "-1.05612915617732839525617051700154379685067",
+          "2.80397260279495602881267135898288676827844E-83"
+        ],
+        "reference": [
+          "-0.0561291561773283952561705170015468082368568",
+          "0"
+        ],
+        "absolute": "0.99999999999999999999999999999999698861381320000000000000000000000",
+        "scaled": "0.94685389012411273600160763592038953738994361327688555194677873956"
+      },
+      "worst": {
+        "exponents": [
+          2,
+          0,
+          0,
+          2
+        ],
+        "parity_index": 0,
+        "candidate": [
+          "-3.0683226493460339691091530533786825709855",
+          "1.15260285605044220084817932672415440066052"
+        ],
+        "reference": [
+          "0.532917256668197813406501256263084940585173",
+          "0"
+        ],
+        "absolute": "3.7811932249549254353140818677427967669892879951276340570291496886",
+        "scaled": "1.1536235630059447354558742507304167046624799955324146085380608497"
+      }
+    },
+    {
+      "candidate": "inserted_literal_pbw_L3.json",
+      "reference": "inserted_physical_pbw_L3.json",
+      "total_level": 3,
+      "components": 240,
+      "max_absolute": "9E-41",
+      "max_scaled": "8.8332275757925591402521081112643420119257549881133219638034097281E-41",
+      "failed_components": 0,
+      "first_failure": null,
+      "worst": {
+        "exponents": [
+          3,
+          1,
+          1,
+          0
+        ],
+        "parity_index": 3,
+        "candidate": [
+          "-1.01888012312333946016299755755808714607793",
+          "0"
+        ],
+        "reference": [
+          "-1.01888012312333946016299755755808714607784",
+          "0"
+        ],
+        "absolute": "9E-41",
+        "scaled": "8.8332275757925591402521081112643420119257549881133219638034097281E-41"
+      }
+    }
+  ],
+  "source_sha256": {
+    "experiments/unphased_vertex_2026-09-15/include/ramond/anchors.hpp": "9c07fdebfd1f427d3d19718e37e84650b5f59cc6dab4f8b665e04cf5485427dc",
+    "experiments/unphased_vertex_2026-09-15/include/ramond/literal_enlarged.hpp": "cf4dd792cefe61ae6c0939f2761926eacfc6bd719ff0ddbcfda39cc2aa658a24",
+    "experiments/unphased_vertex_2026-09-15/include/ramond/pipeline.hpp": "b531e588557b98862cf60715f5d88d6ff1dfe0b4198fb0914e7b8ac73655b569",
+    "experiments/unphased_vertex_2026-09-15/include/ramond/branching.hpp": "390cee96f2da239cc376bed942ba8e319f6aa14d32dce936ab865b53c31d8cc2",
+    "experiments/unphased_vertex_2026-09-15/literal_pbw.cpp": "fc2815a494d80d8a4325da1c94d0e1404640fce6114eb02b0745fc0a486df601",
+    "experiments/unphased_vertex_2026-09-15/vertex_probe.cpp": "c0c6388dd6b44108baf2994e72d455e754241a51a355f7ba462e6399f9d2e1c3",
+    "experiments/unphased_vertex_2026-09-15/main.cpp": "3de5a07980cc9adb301c78f8098ce65d5540fbcf656a56c1ca4a6f5e9e168cff",
+    "experiments/unphased_vertex_2026-09-15/run_probes.py": "e453717152e335d25588a618148708659e531895f2c4ee33f5e4f235c166656d",
+    "experiments/unphased_vertex_2026-09-15/compare.py": "05f1d6bdfb89060718e7c6d472424803197bf339e6aa32ba0f8cecd7d1ca7ae6",
+    "include/ramond/anchors.hpp": "f872aa391ff88a74fbbdfb5890c5572f73f438242bba350049c846f07a98ef52",
+    "include/ramond/number.hpp": "8f2dd10b1750145a21ef0749df933759ae873f9e3d2790eda29b7ebe534b1a2e",
+    "include/ramond/fermion.hpp": "7211c7d61cd44d46db0297b0ba96e6a908e2cd88177ad15792c82fee1139208e",
+    "include/ramond/direct_pbw.hpp": "b26fd4f2fda60921844c35d82c3e79d220322b54a1293c7af7f09be7965379b9",
+    "include/ramond/schottky.hpp": "2c155f0e5614c9456ece1f63385a87248fa31d59021688aed45f8d27f22ecca2",
+    "include/ramond/pipeline.hpp": "0b94264def9273712a2a83fe6e216995603f4d5f21a441765bc7dda52c2f4abe",
+    "include/ramond/storage.hpp": "12a15d94aa0e446f75a5b4019249040d898655dfb6056cec198ee362f1026301",
+    "include/ramond/free_field.hpp": "2372d473e8f39dcba2e256580f5fe3711179eaced568828ca122bdcf911229df",
+    "include/ramond/ccy.hpp": "2fb29b1fd72be202dcb3a29d3e70487afcc5a9523e9d7643ed1594f7ae019131",
+    "include/ramond/branching.hpp": "dde30b3c7df980d3ee39a75a706ce4d487334d9b6a28725e68114871d7c97bdc",
+    "include/ramond/linalg.hpp": "dd440804fdb0444b14c595c0950d431ee0c48c331e5a833cb74c2dad68942ec5",
+    "drivers/pbw_main.cpp": "f8b59a3ccf04f4f5573b3feea6f97caec649a8a8b74d2268fab721a934421a68",
+    "experiments/unphased_vertex_2026-09-15/Makefile": "3bb94b1ffb8638bb6aa5463bcd18d237d8f2a24616c99556603fde41b3d05c13"
+  },
+  "definition_check_passes": true,
+  "production_control_passes": true,
+  "unphased_DV_candidate_passes": false
+}

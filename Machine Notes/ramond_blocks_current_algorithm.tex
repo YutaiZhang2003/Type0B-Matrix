@@ -16,7 +16,7 @@
 \title{Current algorithms for genus-two Ramond blocks\\
 \large Ordinary theta sewing and recovery with a fermion insertion}
 \author{Implementation notes}
-\date{September 12, 2026}
+\date{September 14, 2026}
 \begin{document}
 \maketitle
 
@@ -226,12 +226,15 @@ $\eta_{\rm native}=(-1)^f\eta$.
 After transporting these coordinates, the implemented enlarged vertex is
 the following tensor-product form. Let $A,B$ be the physical descendant
 words in the first two slots and $\mathsf A,\mathsf B,\mathsf C$ the auxiliary
-words; $\alpha$ is the physical second-slot ground parity:
+words; $\alpha\in\{+,-\}$ is the physical second-slot ground label,
+with $|+|=0$ and $|-|=1$. As in the SCblock notes, in sign exponents
+$A,B$ denote the numbers of physical $G$ modes and
+$\mathsf A,\mathsf B,\mathsf C$ the numbers of auxiliary $\psi$ modes:
 \begin{align}
  \hat\rho_f^{(\eta)}=
- &(-i)^{\#G(A)\bmod2}
- (-1)^{f(\#G(A)+\#G(B)+\alpha)+\#G(A)\#\mathsf A}\nonumber\\
- &\times(-1)^{(\#G(B)+\alpha+p_1)(\#\mathsf C+\mathsf c)}
+ &(-i)^{A\bmod2}
+ (-1)^{f(A+B+|\alpha|)+A\mathsf A}\nonumber\\
+ &\times(-1)^{(B+|\alpha|+p_1)(\mathsf C+\mathsf c)}
  \rho_{\mathsf F}\rho_f^{(\eta)}.
  \label{eq:vertex-frame}
 \end{align}
@@ -243,7 +246,7 @@ Here the unhatted physical form uses the human ground and contour conventions
 specified above; the powers of $-i$ and the $f$-dependent sign implement its
 transport, rather than redefine its ground data.
 These are parts of the definition, not adjustable phases in the final sum:
-the two $(-i)^{\#G(A)\bmod2}$ factors cancel the physical NS contour sign.
+the two $(-i)^{A\bmod2}$ factors cancel the physical NS contour sign.
 
 \subsection{Ordinary theta block}
 All Virasoro blocks $F$ below have leading coefficient one, with primary
@@ -285,7 +288,7 @@ $G_{-1/2}\mathbf1=0$, so $v_{1/2}(Q/2)=Q\psi_{-1/2}\mathbf1$.
 At $z_3=1$ insert the ordered operator $Q\Theta\psi(1)$, where
 \begin{equation}
  \Theta\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}
- =(-1)^{\#\mathsf B+\mathsf b+1}
+ =(-1)^{\mathsf B+\mathsf b+1}
     \boldsymbol\Psi_{-\mathsf B}u^{1-\mathsf b}.
  \label{eq:Theta}
 \end{equation}
@@ -302,6 +305,178 @@ In particular
 The extra sign between Ramond grounds removes the cancellation in
 \eqref{eq:cancellation}.
 
+\paragraph{Definition in the PBW basis.}
+Use the PBW notation of the SCblock notes. The enlarged NS and Ramond
+basis states are, respectively,
+\begin{align}
+ &\Psi_{-\mathsf A}\mathbf L_{-A}\phi_1,\qquad
+ \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}
+              \otimes\mathbb L_{-B}w_j^\alpha,
+ \qquad j=2,3.
+ \label{eq:inserted-pbw-bases}
+\end{align}
+Here $\mathbf L_{-A}$ and $\mathbb L_{-B}$ are ordered physical PBW
+words in $L_{-m}$ and $G_{-r}$, with no $G_0$ in a Ramond word.
+The auxiliary words $\Psi_{-\mathsf A}$ and
+$\boldsymbol\Psi_{-\mathsf B}$ contain distinct negative modes,
+half-integer in NS and integer in R, with no $\psi_0$.
+The NS notation suppresses $\mathbf1_{\mathsf F}\otimes$.
+All physical ground labels run over $\{+,-\}$ and auxiliary ground
+labels over $\{0,1\}$. Absolute values of words, such as $|A|$ and
+$|\mathsf A|$, denote their levels. The parity shorthand is
+\begin{gather}
+ \mathrm{sgn}(A)=p_1+A+\mathsf A,\qquad
+ \mathrm{sgn}(B)=B+|\alpha|+\mathsf B+\mathsf b,\nonumber\\
+ \mathrm{sgn}(C)=C+|\gamma|+\mathsf C+\mathsf c
+ \pmod2.
+ \label{eq:inserted-pbw-grading}
+\end{gather}
+The physical inverse Gram matrices are
+$\mathbf G_{h_1}^{AA'}$ and
+$\mathbb G_{\beta_j}^{B\alpha,B'\alpha'}$.
+The auxiliary Gram matrices are diagonal:
+\begin{align}
+ \langle\Psi_{-\mathsf A}\mathbf1_{\mathsf F}
+   |\Psi_{-\mathsf A'}\mathbf1_{\mathsf F}\rangle
+ &=(-1)^{\mathsf A}\delta_{\mathsf A,\mathsf A'},\nonumber\\
+ \langle\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}
+   |\boldsymbol\Psi_{-\mathsf B'}u^{\mathsf b'}\rangle
+ &=(-1)^{\mathsf B+\mathsf b}
+       \delta_{\mathsf B,\mathsf B'}\delta_{\mathsf b,\mathsf b'}.
+ \label{eq:inserted-pbw-grams}
+\end{align}
+The Kronecker symbols equate complete mode words. Tensor-product BPZ
+pairings are products of the two pairings, without an extra graded sign.
+We therefore sum out the primed auxiliary labels below and display their
+inverse norms as signs.
+
+Keep $A,A'$ on edge 1 and $C,C'$ on edge 3. On the two halves of
+edge 2 use $B,B'$ and $D,D'$, with auxiliary words $\mathsf B,\mathsf D$
+and grounds $(\alpha,\mathsf b),(\delta,\mathsf d)$, respectively;
+$\mathrm{sgn}(D)=D+|\delta|+\mathsf D+\mathsf d\pmod2$.
+With fixed ground-state plumbing powers suppressed, the full inserted
+enlarged block is
+\begin{align}
+ &\hFF_f^{(\eta,\eta')}[\Theta v_{1/2}]
+ =\sum
+ q_1^{|A|+|\mathsf A|}
+ \hat q_{2,1}^{|B|+|\mathsf B|}
+ \hat q_{2,2}^{|D|+|\mathsf D|}
+ q_3^{|C|+|\mathsf C|}\nonumber\\
+ &\quad\times\eta_1^{\mathrm{sgn}(A)}
+ \hat\eta_{2,1}^{\mathrm{sgn}(B)}
+ \hat\eta_{2,2}^{\mathrm{sgn}(D)}
+ \eta_3^{\mathrm{sgn}(C)}
+ (-1)^{A+\mathsf A}
+ (-1)^{\mathsf A+\mathsf B+\mathsf b+\mathsf D+\mathsf d+\mathsf C+\mathsf c}
+ \nonumber\\
+ &\quad\times
+ (-1)^{\mathrm{sgn}(A)\mathrm{sgn}(B)+
+        \mathrm{sgn}(A)\mathrm{sgn}(C)+\mathrm{sgn}(B)\mathrm{sgn}(C)}
+ \mathbf G_{h_1}^{AA'}\mathbb G_{\beta_2}^{B\alpha,B'\alpha'}
+ \mathbb G_{\beta_2}^{D\delta,D'\delta'}
+ \mathbb G_{\beta_3}^{C\gamma,C'\gamma'}\nonumber\\
+ &\quad\times\hat\rho_f^{(\eta)}\bigl(
+ \Psi_{-\mathsf A}\mathbf L_{-A}\phi_1,
+ \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}\otimes\mathbb L_{-B}w_2^\alpha,
+ \boldsymbol\Psi_{-\mathsf C}u^{\mathsf c}\otimes\mathbb L_{-C}w_3^\gamma\bigr)
+ \nonumber\\
+ &\quad\times\hat\rho_f^{(\eta')}\bigl(
+ \Psi_{-\mathsf A}\mathbf L_{-A'}\phi_1,
+ \boldsymbol\Psi_{-\mathsf D}u^{\mathsf d}\otimes\mathbb L_{-D}w_2^\delta,
+ \boldsymbol\Psi_{-\mathsf C}u^{\mathsf c}\otimes\mathbb L_{-C'}w_3^{\gamma'}\bigr)
+ \nonumber\\
+ &\quad\times(\mathbb G_{\beta_2})_{D'\delta',B'\alpha'}
+ \langle\boldsymbol\Psi_{-\mathsf D}u^{\mathsf d}|
+ Q\Theta\psi(1)|\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}\rangle.
+ \label{eq:inserted-pbw-definition}
+\end{align}
+The sum runs over all displayed descendant and ground labels, with
+$|A|=|A'|$, $|B|=|B'|$, $|D|=|D'|$, $|C|=|C'|$, and
+\begin{gather}
+ A+B+C+|\alpha|+|\gamma|\equiv f,\qquad
+ A'+D+C'+|\delta|+|\gamma'|\equiv f,\nonumber\\
+ \mathsf A+\mathsf B+\mathsf C+\mathsf b+\mathsf c\equiv0,\qquad
+ \mathsf A+\mathsf D+\mathsf C+\mathsf d+\mathsf c\equiv0\pmod2.
+ \label{eq:inserted-pbw-parities}
+\end{gather}
+Both outer forms use the transported convention \eqref{eq:vertex-frame}.
+The signs on the second line of \eqref{eq:inserted-pbw-definition} are
+the NS contour factor and the four auxiliary inverse norms; the next line
+contains the theta sewing sign. The middle bra and ket are at
+$z_3=\infty$ and $z_3=0$. Since the insertion acts only on the auxiliary
+factor, their physical pairing is the Gram matrix with lower indices
+displayed on the last line. In particular,
+\begin{equation}
+ \sum_{B',\alpha',D',\delta'}
+ \mathbb G_{\beta_2}^{B\alpha,B'\alpha'}
+ (\mathbb G_{\beta_2})_{D'\delta',B'\alpha'}
+ \mathbb G_{\beta_2}^{D\delta,D'\delta'}
+ =\mathbb G_{\beta_2}^{B\alpha,D\delta}.
+ \label{eq:inserted-pbw-collapse}
+\end{equation}
+Thus the two halves have equal physical levels and parities.
+The even insertion also gives $\mathrm{sgn}(B)=\mathrm{sgn}(D)$, so the
+two spin lifts combine into $\eta_2^{\mathrm{sgn}(B)}$.
+There is no restriction on their total levels in the full block:
+$\psi(1)=\sum_{r\in\mathbb Z}\psi_r$ can change the auxiliary level.
+
+For the diagonal used in production, retain
+$|B|+|\mathsf B|=|D|+|\mathsf D|$ and replace the two middle plumbing
+powers by $q_2^{|B|+|\mathsf B|}$. Equal physical levels then imply
+equal auxiliary levels, selecting only $\psi_0$. Equation~\eqref{eq:diagonal-insertion}
+gives
+\begin{equation}
+ \langle\boldsymbol\Psi_{-\mathsf D}u^{\mathsf d}|
+ Q\Theta\psi_0|\boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}\rangle
+ =\frac Q{\sqrt2}(-1)^{\mathsf b}(-1)^{\mathsf B+\mathsf b}
+ \delta_{\mathsf D,\mathsf B}\delta_{\mathsf d,\mathsf b}.
+ \label{eq:inserted-pbw-middle}
+\end{equation}
+The surviving auxiliary inverse norms multiply to one by the even
+auxiliary parity condition. Contracting the physical middle Gram matrix
+and relabeling $D,\delta$ as $B',\alpha'$ therefore gives
+\begin{align}
+ &\operatorname{Diag}\hFF_f^{(\eta,\eta')}[\Theta v_{1/2}]
+ =\sum
+ q_1^{|A|+|\mathsf A|}q_2^{|B|+|\mathsf B|}q_3^{|C|+|\mathsf C|}
+ \eta_1^{\mathrm{sgn}(A)}\eta_2^{\mathrm{sgn}(B)}\eta_3^{\mathrm{sgn}(C)}
+ \nonumber\\
+ &\quad\times
+ \frac Q{\sqrt2}(-1)^{\mathsf b}
+ (-1)^{\mathrm{sgn}(A)\mathrm{sgn}(B)+\mathrm{sgn}(A)\mathrm{sgn}(C)+
+                  \mathrm{sgn}(B)\mathrm{sgn}(C)+A+\mathsf A}
+ \mathbf G_{h_1}^{AA'}\mathbb G_{\beta_2}^{B\alpha,B'\alpha'}
+ \mathbb G_{\beta_3}^{C\gamma,C'\gamma'}\nonumber\\
+ &\quad\times\hat\rho_f^{(\eta)}\bigl(
+ \Psi_{-\mathsf A}\mathbf L_{-A}\phi_1,
+ \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}\otimes\mathbb L_{-B}w_2^\alpha,
+ \boldsymbol\Psi_{-\mathsf C}u^{\mathsf c}\otimes\mathbb L_{-C}w_3^\gamma\bigr)
+ \nonumber\\
+ &\quad\times\hat\rho_f^{(\eta')}\bigl(
+ \Psi_{-\mathsf A}\mathbf L_{-A'}\phi_1,
+ \boldsymbol\Psi_{-\mathsf B}u^{\mathsf b}\otimes\mathbb L_{-B'}w_2^{\alpha'},
+ \boldsymbol\Psi_{-\mathsf C}u^{\mathsf c}\otimes\mathbb L_{-C'}w_3^{\gamma'}\bigr).
+ \label{eq:inserted-pbw-diagonal}
+\end{align}
+Here the sum has $|A|=|A'|$, $|B|=|B'|$, $|C|=|C'|$ and the parity
+conditions \eqref{eq:inserted-pbw-parities} with
+$D,\delta,\mathsf D,\mathsf d$ replaced by
+$B',\alpha',\mathsf B,\mathsf b$.
+Omitting $Q(-1)^{\mathsf b}/\sqrt2$ gives the ordinary enlarged theta
+PBW sum of the SCblock notes, with the vertex transport
+\eqref{eq:vertex-frame} understood.
+The code evaluates the enlarged coefficients using the double-Virasoro
+sum below. Substituting
+\eqref{eq:vertex-frame} into \eqref{eq:inserted-pbw-diagonal} gives the
+auxiliary factor $Q(-1)^{\mathsf b}/\sqrt2$ in
+\eqref{eq:fermion-sum} and the convolution
+\eqref{eq:diagonal-convolution}. Replacing $Q\Theta\psi(1)$ by the
+identity in \eqref{eq:inserted-pbw-definition} instead collapses both
+halves to the ordinary enlarged theta block at
+$q_2=\hat q_{2,1}\hat q_{2,2}$.
+
+\paragraph{Double-Virasoro decomposition.}
 The inserted double-Virasoro field has weights
 \begin{equation}
  h_\psi^{(1)}=-\frac{1+2b^2}{2(1-b^2)},\qquad
