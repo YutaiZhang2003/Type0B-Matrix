@@ -1,0 +1,1758 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,amsmath,amssymb,bm,geometry,booktabs,longtable,hyperref}
+\geometry{margin=24mm}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\emergencystretch}{3em}
+\newcommand{\NS}{\mathrm{NS}}
+\newcommand{\R}{\mathrm R}
+\newcommand{\F}{\mathsf F}
+\numberwithin{equation}{section}
+\title{Superconformal blocks on a plumbing graph}
+\author{Supplementary implementation notes}
+\date{September 16, 2026}
+\begin{document}
+\maketitle
+
+A superconformal block is a sum of three-point forms sewn with inverse
+Gram matrices. We compute it by adjoining a free fermion, reducing the
+enlarged block to a sum of products of two Virasoro blocks, and removing
+the fermion factor by convolution. The challenge is to keep the operator order and local
+normalizations consistent through those three steps.
+
+We first specify the PBW sewing. We then derive the local fermion signs,
+separate them into physical, auxiliary, and mixed factors, and obtain the
+convolution. The double-Virasoro formula evaluates its enlarged side.
+Finally, the Ramond cycle identities identify the sector on which recovery
+is possible; one external $\Theta\psi$ insertion supplies a missing sector.
+For Mercedes with NS spokes and a Ramond rim, this requires at most one
+inserted sphere, while the central all-NS sphere stays sewn in place.
+
+We keep the notation of the SCblock notes and the draft. In particular,
+$K$ denotes the operator-reordering exponent and $\star$ its associated
+convolution. The formulas below display the state arguments and local
+signs explicitly; no separate state aliases or parity-transformation
+operators are needed.
+
+\section{States, three-point forms, and physical sewing}
+
+\subsection{The channel and its labels}
+
+A plumbing channel $\hat\Gamma$ specifies the NS/R edges, local coordinates,
+and spin lifts $\eta_e=\pm1$. Each trivalent sphere is either all-NS or
+NS--R--R. Fix the slots $(\infty,1,0)$, numbered $1,2,3$; at an NS--R--R
+sphere slot 1 is NS. Also fix an order of the spheres, the internal edges,
+the two ends of each edge, and the external punctures. These choices
+specify the operator order as well as the sewing. Changing a slot order
+requires transporting its states, coordinates, and plumbing maps together.
+A self-loop has two distinct ends at the same vertex.
+
+Subscripts $(e,1),(e,2)$ label the ends of an internal edge, while
+$(v,1),(v,2),(v,3)$ label the slots of a sphere. They refer to the same
+punctures: for example, $A_{v,i}$ is the PBW word at the end of the edge
+incident to that slot. Throughout, edge products and internal-state sums
+run only over internal edges unless stated otherwise. External states are
+fixed. Products restricted by $e:\NS$, $e:\R$, or
+$v:\NS,\R,\R$ specify the corresponding edge or vertex types, without
+introducing separate sets for each type.
+
+For a connected trivalent channel the genus is the number of internal
+edges minus the number of vertices plus one. The elementary unstable
+sphere pairings are treated separately; an unpunctured torus can first
+be given an identity puncture. Equivalent local spin frames do not count
+as additional spin structures.
+
+\subsection{The PBW basis and local forms}
+
+An NS PBW state is $\mathbf L_{-A}\phi$, and a Ramond state is
+$\mathbb L_{-A}w^\alpha$, where the word contains ordered $L_{-n}$ and
+$G_{-r}$ with positive mode indices. The $G$ indices are half-integer in
+NS and integer in R. As in the draft, $|A|$ is the sum of the mode indices,
+whereas $A$ in a sign counts the $G$ operators modulo two. The NS primary
+parity is $p$; the two physical Ramond grounds are $w^+$ even and $w^-$
+odd. Thus
+\begin{equation}
+ \epsilon=\begin{cases}A+p,&\NS,\\A+|\alpha|,&\R,\end{cases}
+ \qquad |+|=0,\quad|-|=1.
+ \label{eq:physical-states}
+\end{equation}
+Every parity is represented by zero or one. Parity sums are modulo two
+unless a different meaning is explicitly specified.
+The Ramond parameter obeys $\beta^2=c/24-h$, where $c$ is the physical
+superconformal central charge, and
+$G_0w^\pm=i\beta e^{\mp i\pi/4}w^\mp$.
+Normalize the NS primary to BPZ norm one and use the physical Ramond
+ground metric $\operatorname{diag}(1,i)$.
+
+Lower Gram indices denote pairings and upper indices their inverses:
+\begin{align}
+ (\mathbf G_h)_{AB}
+ &=\langle\!\langle\mathbf L_{-A}\phi_h|
+                                     \mathbf L_{-B}\phi_h\rangle,
+ \nonumber\\
+ (\mathbb G_\beta)_{A\alpha,B\gamma}
+ &=\langle\!\langle\mathbb L_{-A}w_\beta^\alpha|
+                                     \mathbb L_{-B}w_\beta^\gamma\rangle.
+ \label{eq:physical-metric}
+\end{align}
+They pair equal levels and equal parities, so a nonzero edge contraction
+has one common level and one common $\epsilon_e$ at its two ends.
+These are bilinear BPZ pairings, without complex conjugating coefficients.
+We assume generic weights for which the inverse Gram matrices exist.
+Degenerate modules require their null-state quotient or a specified
+regular limit.
+
+At a vertex the label is $a_v=0,1$ for all-NS, or
+$f_v=0,1$ and $\eta_v=\pm1$ for NS--R--R. The vertex sign $\eta_v$
+labels a three-point form; the edge sign $\eta_e$ labels sewing.
+The forms at $(\infty,1,0)$ are normalized by
+\begin{align}
+ \rho_0(\phi_1,\phi_2,\phi_3)
+ &=\rho_1(\phi_1,G_{-1/2}\phi_2,\phi_3)=1,\nonumber\\
+ \rho_0^{(\eta)}(\phi_1,w_2^+,w_3^+)
+ &=\rho_1^{(\eta)}(\phi_1,w_2^+,w_3^-)=1,\nonumber\\
+ \rho_0^{(\eta)}(\phi_1,w_2^-,w_3^-)&=\eta,
+ \qquad\rho_1^{(\eta)}(\phi_1,w_2^-,w_3^+)=i\eta.
+ \label{eq:physical-vertices}
+\end{align}
+Unlisted Ramond ground components vanish. Superconformal Ward identities
+in this slot order determine their descendants. Nonzero components obey
+\begin{equation}
+ \sum_i\epsilon_{v,i}
+ =\begin{cases}a_v+\sum_i p_{v,i},&(\NS,\NS,\NS),\\
+                f_v+p_{v,1},&(\NS,\R,\R).
+   \end{cases}
+ \label{eq:vertex-selection}
+\end{equation}
+Equivalently, the descendant and ground labels obey $A+B+C=a$ in all-NS
+and $A+B+C+|\alpha|+|\gamma|=f$ in NS--R--R. These constraints are
+used below to simplify the signs.
+
+\subsection{The operator-reordering sign and the block}
+
+PBW sewing initially gives consecutive pairs of operators, one pair per
+internal edge, followed by the external operators. To evaluate the local
+three-point forms, reorder them into consecutive vertex triples.
+The exponent $K$ records the odd exchanges:
+\begin{equation}
+ K(\epsilon)=\sum_{\substack{
+ (v,i)\text{ precedes }(w,j)\text{ in edge-pair order}\\
+ (w,j)\text{ precedes }(v,i)\text{ in vertex order}}}
+                         \epsilon_{v,i}\epsilon_{w,j}.
+ \label{eq:graph-sign}
+\end{equation}
+The external punctures are included in the first order after all internal
+pairs. Each reversed pair is counted once. For example, in theta the
+orders $(1_L,1_R,2_L,2_R,3_L,3_R)$ and
+$(1_L,2_L,3_L,1_R,2_R,3_R)$ give
+$K=\epsilon_1\epsilon_2+\epsilon_1\epsilon_3+\epsilon_2\epsilon_3$.
+The same prescription includes self-loops and external odd states without
+referring to crossings in a drawing.
+
+The physical block now follows by inserting each inverse Gram matrix
+between its two vertex forms:
+\begin{align}
+ \mathbf F_{\hat\Gamma}={}&\sum_{\{A,\alpha\}}(-1)^{K(\epsilon)}
+ \prod_{e:\NS}q_e^{|A_{e,1}|}\eta_e^{\epsilon_e}
+            \mathbf G_{h_e}^{A_{e,1}A_{e,2}}
+ \prod_{e:\R}q_e^{|A_{e,1}|}\eta_e^{\epsilon_e}
+            \mathbb G_{\beta_e}^{A_{e,1}\alpha_{e,1},A_{e,2}\alpha_{e,2}}
+ \nonumber\\
+ &\times\prod_{v:\NS,\NS,\NS}
+ \rho_{a_v}(\mathbf L_{-A_{v,1}}\phi_{v,1},
+            \mathbf L_{-A_{v,2}}\phi_{v,2},
+            \mathbf L_{-A_{v,3}}\phi_{v,3})\nonumber\\
+ &\times\prod_{v:\NS,\R,\R}
+ \rho_{f_v}^{(\eta_v)}(\mathbf L_{-A_{v,1}}\phi_{v,1},
+            \mathbb L_{-A_{v,2}}w_{v,2}^{\alpha_{v,2}},
+            \mathbb L_{-A_{v,3}}w_{v,3}^{\alpha_{v,3}}).
+ \label{eq:physical-block}
+\end{align}
+The sum includes both physical endpoint words on every internal edge and
+both Ramond ground labels where applicable. Equal-level and equal-parity
+constraints are enforced by the inverse Gram entries. The local
+constraints are enforced by the vertex forms. The powers $q_e^{h_e}$
+are excluded from this descendant-normalized block and restored in a
+correlator. External finite linear combinations are treated by linearity.
+
+\section{The local signs and the enlarged block}
+\label{sec:local-signs}
+
+\subsection{The auxiliary basis and its BPZ pairing}
+
+Adjoin an auxiliary fermion, with
+$\{\psi_r,\psi_s\}=\delta_{r+s,0}$ and
+$\psi_r^\dagger=-\psi_{-r}$. The minus sign in this BPZ conjugation is
+required for the two Virasoro generators to obey
+$(L_n^{(j)})^\dagger=L_{-n}^{(j)}$. Write
+$\Psi_{-\mathsf A}=\psi_{-r_1}\cdots\psi_{-r_m}$ with
+$r_1>\cdots>r_m>0$. The modes are half-integer in NS and integer in R;
+$\mathsf A$ in a sign counts these modes, and $|\mathsf A|$ is their
+sum. Zero modes are represented by the ground labels, not included in
+$\Psi_{-\mathsf A}$. The auxiliary states and parities are
+\begin{equation}
+ \begin{array}{c|c|c}
+ &\text{state}&\epsilon'\\ \hline
+ \NS&\Psi_{-\mathsf A}\mathbf1&\mathsf A\bmod2\\
+ \R&\Psi_{-\mathsf A}u^{\mathsf a}&(\mathsf A+\mathsf a)\bmod2
+ \end{array}
+ \qquad \mathsf a\in\{0,1\}.
+ \label{eq:aux-states}
+\end{equation}
+Here $\epsilon$ continues to denote physical parity, and $\epsilon'$
+denotes auxiliary parity; the tensor state has parity $\epsilon+\epsilon'$.
+Choose $\psi_0u^{\mathsf a}=u^{1-\mathsf a}/\sqrt2$ and ground norms
+$1,-1$. The oscillator anticommutators then give
+\begin{equation}
+ \langle\!\langle\Psi_{-\mathsf A}u^{\mathsf a}|
+                         \Psi_{-\mathsf B}u^{\mathsf b}\rangle
+ =\begin{cases}(-1)^{\mathsf A+\mathsf a},
+                    &(\mathsf A,\mathsf a)=(\mathsf B,\mathsf b),\\
+                0,&\text{otherwise}.
+   \end{cases}
+ \label{eq:aux-metric}
+\end{equation}
+For NS replace the grounds by $\mathbf1$ and set $\mathsf a=0$.
+Thus the inverse auxiliary Gram entry is also $(-1)^{\epsilon'}$.
+On the tensor basis we use the product of the physical and auxiliary BPZ
+pairings, without an additional crossing sign. This local convention is
+separate from the global operator permutation counted by $K$.
+
+The normalized auxiliary three-point form is fixed by
+\begin{equation}
+ \rho_{\F}(\mathbf1,\mathbf1,\mathbf1)
+ =\rho_{\F}(\mathbf1,u^0,u^0)=1,
+ \qquad \rho_{\F}(\mathbf1,u^1,u^1)=i,
+ \label{eq:aux-ground}
+\end{equation}
+and the fermion Ward identities. It vanishes unless the three auxiliary
+parities sum to zero. The BPZ signs of bra descendants are already included
+in $\rho_{\F}$; they must not be added a second time.
+
+\subsection{Why the local three-point forms carry signs}
+
+There are two distinct operations: exchanging odd operators, and converting
+between the normalization of the physical forms and that of the
+Virasoro branching states. An ordinary graded rearrangement from three
+auxiliary--physical pairs to three auxiliary states followed by three
+physical states would give
+\begin{equation}
+ (-1)^{\epsilon_1(\epsilon'_2+\epsilon'_3)+\epsilon_2\epsilon'_3}.
+ \label{eq:literal-moving}
+\end{equation}
+The first physical state passes the second and third auxiliary states;
+the second physical state passes the third auxiliary state. This accounts
+for each term in the exponent. The enlarged forms below also incorporate
+the fixed BPZ and contour conventions used for double Virasoro. They are
+therefore not defined by this permutation sign alone.
+
+For even NS primaries, \eqref{eq:literal-moving} becomes
+$(-1)^{A\mathsf A+B\mathsf C}$. The product BPZ pairing removes the
+crossing of the two factors in the bra, supplying a second
+$(-1)^{A\mathsf A}$. Their product leaves $(-1)^{B\mathsf C}$.
+It is the crossing of the middle-slot supercurrent modes with the ket
+fermions, expressed directly by
+\begin{equation}
+ \mathbf L_{-B}\Psi_{-\mathsf C}
+       =(-1)^{B\mathsf C}\Psi_{-\mathsf C}\mathbf L_{-B}.
+ \label{eq:middle-ket-crossing}
+\end{equation}
+The intrinsic primary parities require
+one further conversion. At fixed weights and descendant words, the
+physical Ward convention obeys
+\begin{align}
+ &\rho_a(\mathbf L_{-A}\phi_1,\mathbf L_{-B}\phi_2,
+                                      \mathbf L_{-C}\phi_3)
+ \nonumber\\
+ &\qquad=(-1)^{p_1A+p_2C}
+ \left.\rho_a(\mathbf L_{-A}\phi_1,\mathbf L_{-B}\phi_2,
+                                      \mathbf L_{-C}\phi_3)
+                  \right|_{p_1=p_2=p_3=0}.
+ \label{eq:ns-primary-phase}
+\end{align}
+The restriction on the right changes only the intrinsic primary parities.
+It expresses the signs from moving odd supercurrent contours past those
+primaries. The branch convention removes this dependence from the local
+component values. Multiplying by the same sign undoes it. Consequently,
+\begin{align}
+ &\hat\rho_a\bigl(
+ \Psi_{-\mathsf A}\mathbf1\otimes\mathbf L_{-A}\phi_1,
+ \Psi_{-\mathsf B}\mathbf1\otimes\mathbf L_{-B}\phi_2,
+ \Psi_{-\mathsf C}\mathbf1\otimes\mathbf L_{-C}\phi_3\bigr)
+ \nonumber\\
+ &\quad=(-1)^{B\mathsf C}(-1)^{p_1A+p_2C}
+ \rho_{\F}(\Psi_{-\mathsf A}\mathbf1,
+           \Psi_{-\mathsf B}\mathbf1,\Psi_{-\mathsf C}\mathbf1)
+ \nonumber\\
+ &\qquad\times
+ \rho_a(\mathbf L_{-A}\phi_1,\mathbf L_{-B}\phi_2,
+                                      \mathbf L_{-C}\phi_3).
+ \label{eq:ns-vertex}
+\end{align}
+In particular, for even primaries only the middle-to-ket crossing remains.
+This is the all-NS convention of the SCblock notes, with every argument
+and both sources of its sign displayed.
+
+At an NS--R--R vertex, let the physical arguments be
+$(\mathbf L_{-A}\phi_1,\mathbb L_{-B}w_2^\alpha,
+\mathbb L_{-C}w_3^\gamma)$. The contour normalization relative to the
+physical form contributes
+$(-i)^{A\bmod2}(-1)^{f(A+B+|\alpha|)}$.
+The factor $-i$ accompanies odd NS supercurrent parity at infinity.
+The $f$-dependent sign fixes the Ramond ground convention: when both
+auxiliary grounds are $u^0$, the odd physical form requires
+$\eta\mapsto(-1)^f\eta$. Starting from the ground values, an NS
+supercurrent step changes this contour factor by $-i(-1)^{A+f}$,
+and changing the second Ramond parity changes it by $(-1)^f$.
+These are the phase ratios in the transported supercurrent Ward
+identities. The auxiliary fermion contour at infinity has multiplier
+$+i$, so the product with the physical $-i$ is one for the even field
+$\psi G$ entering both Virasoro generators. This explains why the phase
+must accompany the chosen Virasoro embedding.
+
+For an odd NS primary the normalization conversion also contributes
+$(-1)^{p_1\epsilon'_2}$ relative to the literal rearrangement
+\eqref{eq:literal-moving}. Using
+$\epsilon_1=A+p_1$ and
+$\epsilon'_1+\epsilon'_2+\epsilon'_3=0$, the combined sign is
+\begin{equation}
+ \epsilon_1(\epsilon'_2+\epsilon'_3)+\epsilon_2\epsilon'_3
+                 +p_1\epsilon'_2
+ =A\epsilon'_1+(\epsilon_2+p_1)\epsilon'_3\pmod2.
+ \label{eq:ramond-moving}
+\end{equation}
+The complete local definition is therefore
+\begin{align}
+ &\hat\rho_f^{(\eta)}\bigl(
+ \Psi_{-\mathsf A}\mathbf1\otimes\mathbf L_{-A}\phi_1,
+ \Psi_{-\mathsf B}u^{\mathsf b}\otimes\mathbb L_{-B}w_2^\alpha,
+ \Psi_{-\mathsf C}u^{\mathsf c}\otimes\mathbb L_{-C}w_3^\gamma\bigr)
+ \nonumber\\
+ &\quad=(-i)^{A\bmod2}(-1)^{f(A+B+|\alpha|)}
+        (-1)^{A\mathsf A+(B+|\alpha|+p_1)(\mathsf C+\mathsf c)}
+ \nonumber\\
+ &\qquad\times\rho_{\F}(\Psi_{-\mathsf A}\mathbf1,
+                 \Psi_{-\mathsf B}u^{\mathsf b},
+                 \Psi_{-\mathsf C}u^{\mathsf c})
+ \rho_f^{(\eta)}(\mathbf L_{-A}\phi_1,
+                     \mathbb L_{-B}w_2^\alpha,\mathbb L_{-C}w_3^\gamma).
+ \label{eq:ramond-vertex}
+\end{align}
+Both sides vanish when the physical or auxiliary parity constraint fails.
+The powers of $i$ always use a parity in $\{0,1\}$; the powers of $-1$
+may be reduced modulo two.
+
+\subsection{Sewing the enlarged block}
+
+The enlarged PBW sum uses the physical inverse Gram entries in
+\eqref{eq:physical-block}, the tensor states in
+\eqref{eq:ns-vertex} and \eqref{eq:ramond-vertex}, and sums over both
+physical and auxiliary internal labels. Its edge factor is obtained by
+\begin{equation}
+ q_e^{|A_{e,1}|}\eta_e^{\epsilon_e}
+ \longmapsto q_e^{|A_{e,1}|+|\mathsf A_e|}
+                         \eta_e^{\epsilon_e}(-\eta_e)^{\epsilon'_e},
+ \qquad K(\epsilon)\longmapsto K(\epsilon+\epsilon').
+ \label{eq:enlarged-block}
+\end{equation}
+The minus in $-\eta_e$ is exactly the inverse auxiliary Gram sign
+\eqref{eq:aux-metric}; it is not a change of the physical spin structure.
+Auxiliary words and ground labels agree at the two ends of an unsplit
+edge. Replace each physical vertex by its fully specified enlarged form
+above, and multiply by
+\begin{equation}
+ \prod_{v:\NS,\R,\R}i^{(A_{v,1}+\mathsf A_{v,1})\bmod2}.
+ \label{eq:vertex-weight}
+\end{equation}
+This last factor defines the enlarged sewing convention used here. It
+measures the total NS descendant parity, so it is constant on a double
+Virasoro module. For theta the NS inverse Gram matrix identifies the two
+physical parities and the auxiliary words agree, giving
+$i^{(A+\mathsf A)\bmod2}i^{(A+\mathsf A)\bmod2}=(-1)^{A+\mathsf A}$,
+as in the draft. On a general graph the vertex weight remains explicit;
+it is a linear combination of parity sewings, rather than a single spin
+lift. Equations \eqref{eq:physical-block}, \eqref{eq:enlarged-block},
+and \eqref{eq:vertex-weight}, with the displayed local forms, specify
+every factor and every summed index of $\widehat{\mathbf F}_{\hat\Gamma}$.
+
+\subsection{Deriving the fermion factor}
+
+To separate the two factors, combine the Ramond vertex with its sewing
+weight first. The apparently complicated NS-slot signs cancel:
+\begin{equation}
+ i^{(A+\mathsf A)\bmod2}(-i)^{A\bmod2}(-1)^{A\mathsf A}
+       =i^{\mathsf A\bmod2}.
+ \label{eq:phase-cancellation}
+\end{equation}
+The remaining signs split into three parts:
+\begin{align}
+ (-1)^{f(A+B+|\alpha|)+(B+|\alpha|+p_1)(\mathsf C+\mathsf c)}
+ &=\underbrace{(-1)^{f(1+\epsilon_3)}}_{\text{physical}}
+   \underbrace{(-1)^{p_1\epsilon'_3}}_{\text{auxiliary}}
+   \underbrace{(-1)^{\epsilon_2\epsilon'_3}}_{\text{mixed}},
+ \label{eq:ramond-separation}\\
+ (-1)^{B\mathsf C+p_1A+p_2C}
+ &=\underbrace{(-1)^{p_1A+p_2C}}_{\text{physical}}
+   \underbrace{(-1)^{p_2\epsilon'_3}}_{\text{auxiliary}}
+   \underbrace{(-1)^{\epsilon_2\epsilon'_3}}_{\text{mixed}}.
+ \label{eq:ns-separation}
+\end{align}
+The first line uses the nonzero-component condition
+$A+B+C+|\alpha|+|\gamma|=f$ and
+$\epsilon_3=C+|\gamma|$. Thus
+$f(A+B+|\alpha|)=f(f+\epsilon_3)=f(1+\epsilon_3)$ modulo two.
+The second line uses $\epsilon_2=B+p_2$. These identities remove the
+need to track several separate Ramond signs in the graph contraction.
+
+Collect the auxiliary factors just derived, together with their edge
+weights and operator-reordering sign. This gives the following explicit
+fermion block:
+\begin{align}
+ \mathbf F_{\F,\hat\Gamma}
+ =\sum_{\{\mathsf A_e,\mathsf a_e\}}{}&(-1)^{K(\epsilon')}
+     \prod_e q_e^{|\mathsf A_e|}(-\eta_e)^{\epsilon'_e}
+ \nonumber\\
+ &\times\prod_{v:\NS,\NS,\NS}
+ \Bigl[(-1)^{p_{v,2}\mathsf A_{v,3}}
+ \rho_{\F}(\Psi_{-\mathsf A_{v,1}}\mathbf1,
+           \Psi_{-\mathsf A_{v,2}}\mathbf1,
+           \Psi_{-\mathsf A_{v,3}}\mathbf1)\Bigr]
+ \nonumber\\
+ &\times\prod_{v:\NS,\R,\R}
+ \Bigl[i^{\mathsf A_{v,1}\bmod2}
+       (-1)^{p_{v,1}(\mathsf A_{v,3}+\mathsf a_{v,3})}
+ \rho_{\F}(\Psi_{-\mathsf A_{v,1}}\mathbf1,
+           \Psi_{-\mathsf A_{v,2}}u^{\mathsf a_{v,2}},
+           \Psi_{-\mathsf A_{v,3}}u^{\mathsf a_{v,3}})\Bigr].
+ \label{eq:fermion-block}
+\end{align}
+There is one independent auxiliary word on each internal edge and one
+additional binary ground label on each Ramond edge; these are the summed
+indices. The labels $\mathsf A_{v,i},\mathsf a_{v,i}$ are the labels of
+the edge incident at that slot. External labels are held fixed. Terms
+with $\sum_i\epsilon'_{v,i}\ne0$ vanish. The signs $p_{v,i}$ are fixed
+physical primary parities, not extra fermion summation variables.
+For recovery use $\mathbf1$ at each original external NS puncture and
+$u^0$ at each original external R puncture. This choice normalizes open
+Ramond paths to one at level zero and places no restriction on the physical
+external state.
+
+In the NS--R--R theta channel this formula provides an immediate check on
+all three sources of signs. Auxiliary parity conservation gives
+$\epsilon'_1+\epsilon'_2+\epsilon'_3=0$, so the three edge-metric signs
+multiply to one. The two local primary-parity signs cancel, while the
+two factors $i^{\mathsf A\bmod2}$ give $(-1)^{\mathsf A}$. Hence
+\begin{align}
+ \mathbf F_{\F,\theta}
+ =\sum_{\substack{\mathsf A,\mathsf B,\mathsf C,\mathsf b,\mathsf c\\
+       \mathsf A+\mathsf B+\mathsf C+\mathsf b+\mathsf c=0\ (\mathrm{mod}\ 2)}}{}
+ &(-1)^{\mathsf A+\epsilon'_1\epsilon'_2+
+                   \epsilon'_1\epsilon'_3+\epsilon'_2\epsilon'_3}
+ q_1^{|\mathsf A|}q_2^{|\mathsf B|}q_3^{|\mathsf C|}
+ \eta_1^{\epsilon'_1}\eta_2^{\epsilon'_2}\eta_3^{\epsilon'_3}
+ \nonumber\\
+ &\times\bigl[\rho_{\F}(\Psi_{-\mathsf A}\mathbf1,
+           \Psi_{-\mathsf B}u^{\mathsf b},
+           \Psi_{-\mathsf C}u^{\mathsf c})\bigr]^2,
+ \label{eq:fermion-theta}
+\end{align}
+where $(\epsilon'_1,\epsilon'_2,\epsilon'_3)
+=(\mathsf A,\mathsf B+\mathsf b,\mathsf C+\mathsf c)$ modulo two.
+This is the fermion factor in the draft.
+\section{Convolution and recovery of the physical parity convention}
+
+A term in the physical block has powers $r_e$ and parities $\epsilon_e$;
+a term in the auxiliary block has powers $s_e$ and parities $\epsilon'_e$.
+Their product adds levels on each edge and adds parities modulo two.
+There are only two sources of a mixed sign. At a reversed pair of
+punctures, subtracting the separate physical and auxiliary signs from the
+tensor-state sign leaves
+\begin{equation}
+ (\epsilon_{v,i}+\epsilon'_{v,i})(\epsilon_{w,j}+\epsilon'_{w,j})
+ -\epsilon_{v,i}\epsilon_{w,j}-\epsilon'_{v,i}\epsilon'_{w,j}
+ =\epsilon_{v,i}\epsilon'_{w,j}+\epsilon'_{v,i}\epsilon_{w,j}.
+ \label{eq:mixed-crossing}
+\end{equation}
+Summing over the reversed pairs gives
+$K(\epsilon+\epsilon')-K(\epsilon)-K(\epsilon')$.
+The local vertex identities \eqref{eq:ramond-separation} and
+\eqref{eq:ns-separation} supply the remaining
+$\sum_v\epsilon_{v,2}\epsilon'_{v,3}$. Thus the required convolution is
+\begin{align}
+ \left(\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right)\star
+ \left(\prod_e q_e^{s_e}\eta_e^{\epsilon'_e}\right)
+ ={}&(-1)^{K(\epsilon+\epsilon')-K(\epsilon)-K(\epsilon')
+                    +\sum_v\epsilon_{v,2}\epsilon'_{v,3}}
+ \prod_e q_e^{r_e+s_e}\eta_e^{\epsilon_e+\epsilon'_e}.
+ \label{eq:star}
+\end{align}
+Internal edge parities determine the corresponding vertex-slot
+parities. External parities are fixed labels of the two inputs; the
+result carries their sum. The sign is
+bilinear in the two parity assignments. This proves associativity by
+expanding either parenthesization of a product of three monomials.
+Keep the physical factor on the left, since the product need not be
+commutative. The $\eta_e$ are formal parity labels with ordinary
+relation $\eta_e^2=1$; a convolution square may carry an additional
+minus sign from \eqref{eq:star}. Evaluate the final physical block at
+$\eta_e=\pm1$ after the coefficient calculation. Substitution before
+convolution would lose these signs.
+
+The purely physical factors in \eqref{eq:ramond-separation} and
+\eqref{eq:ns-separation} remain to be included. Their product, written
+entirely in terms of the retained parities, is
+\begin{equation}
+ (-1)^{\sum_{v:\NS,\R,\R}f_v(1+\epsilon_{v,3})
+       +\sum_{v:\NS,\NS,\NS}
+       [p_{v,1}(\epsilon_{v,1}+p_{v,1})+
+        p_{v,2}(\epsilon_{v,3}+p_{v,3})]}.
+ \label{eq:transport}
+\end{equation}
+No descendant word is needed to evaluate it. For even NS primaries only
+$(-1)^{\sum_{v:\NS,\R,\R}f_v(1+\epsilon_{v,3})}$ remains.
+This is a fixed conversion between the physical and enlarged conventions,
+not another sum over spin structures.
+
+For any series, $[\prod_e q_e^{r_e}\eta_e^{\epsilon_e}]$ denotes its
+scalar coefficient, whereas $[\prod_e q_e^{r_e}]$ retains the entire
+parity polynomial at those levels. With the vertex labels and external
+states held fixed, the full relation is
+\begin{align}
+ \widehat{\mathbf F}_{\hat\Gamma}
+ =\sum_{\{r,\epsilon\}}{}&
+ (-1)^{\sum_{v:\NS,\R,\R}f_v(1+\epsilon_{v,3})
+       +\sum_{v:\NS,\NS,\NS}
+        [p_{v,1}(\epsilon_{v,1}+p_{v,1})+
+         p_{v,2}(\epsilon_{v,3}+p_{v,3})]}
+ \nonumber\\
+ &\times\mathbf F_{\hat\Gamma}
+       \left[\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right]
+       \left(\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right)
+                                  \star\mathbf F_{\F,\hat\Gamma}.
+ \label{eq:convolution}
+\end{align}
+The sum is over the physical levels and parity components allowed by
+\eqref{eq:vertex-selection}; equivalently one may include all components
+and set forbidden coefficients to zero. The displayed sign is applied
+once per physical coefficient. After solving the convolution it is undone
+by multiplying by the same sign. In theta the equal vertex labels make
+these signs cancel in pairs, so
+$\widehat{\mathbf F}_{\theta}=\mathbf F_{\theta}\star\mathbf F_{\F,\theta}$.
+On other graphs the conversion must be retained. The preceding derivation
+identifies every factor with a PBW edge or vertex contribution, rather
+than assuming a factorization of the final numerical series.
+\section{Reduction to double Virasoro}
+
+Each enlarged internal module is a direct sum of modules for the two
+commuting Virasoro algebras. Their primaries are the $v_n$ and
+$v_n^\alpha$ of the draft. The label ranges and parameters are
+\begin{gather}
+ n\in\tfrac12\mathbb Z\quad(\NS),\qquad
+ n\in\tfrac12\mathbb Z+\tfrac14\quad(\R),\qquad
+ \alpha=0,1,\nonumber\\
+ Q=b+b^{-1},\qquad c=\tfrac32+3Q^2,\qquad b\ne0,\pm1,
+ \nonumber\\
+ c^{(1)}=1+\frac{3Q^2}{1-b^2},\qquad
+ c^{(2)}=1+\frac{3Q^2}{1-b^{-2}},\nonumber\\
+ h_{e,n}^{(1)}=\frac{Q^2/4-(P_e+2nb)^2}{2(1-b^2)},\qquad
+ h_{e,n}^{(2)}=\frac{Q^2/4-(P_e+2n/b)^2}{2(1-b^{-2})}.
+ \label{eq:weights}
+\end{gather}
+For an NS module $P_e^2=Q^2/4-2h_e$; for a Ramond module
+$P_e^2=2\beta_e^2$ and $h_e=c/24-\beta_e^2$.
+The label on $v_n^0,v_n^1$ is the total even or odd parity of an enlarged
+primary, which mixes auxiliary and physical Ramond grounds. The states
+$w^\pm$ used in the PBW sum are the physical grounds before this change
+of basis.
+
+Subtracting the enlarged ground weight gives the starting level of each
+branch. The NS auxiliary ground has weight zero, and the Ramond auxiliary
+ground has weight $1/16$. Therefore
+\begin{equation}
+ \begin{array}{c|c|c}
+ &\text{branch starting level}&\text{total parity }\epsilon_e\\ \hline
+ \NS& h_{e,n}^{(1)}+h_{e,n}^{(2)}-h_e=2n^2
+                                      &(2n+p_e)\bmod2\\
+ \R& h_{e,n}^{(1)}+h_{e,n}^{(2)}-h_e-\tfrac1{16}=2n^2-\tfrac18
+                                      &\alpha_e
+ \end{array}
+ \label{eq:branches}
+\end{equation}
+Thus $\epsilon$ in this section is the parity of the sewn branch state;
+in the PBW convolution it was the parity of the physical factor.
+All states within a fixed double-Virasoro module have the same parity.
+
+The two types of normalized branching coefficient are
+\begin{align}
+ \mathbf B_a(n_1,n_2,n_3)
+ &=\frac{\hat\rho_a(v_{1,n_1},v_{2,n_2},v_{3,n_3})}
+         {\|v_{1,n_1}\|\|v_{2,n_2}\|\|v_{3,n_3}\|},\nonumber\\
+ \mathbb B_f^{(\eta)}(n_1,n_2,n_3;\alpha_2,\alpha_3)
+ &=\frac{\hat\rho_f^{(\eta)}
+             (v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})}
+         {\|v_{1,n_1}\|\|v_{2,n_2}^{\alpha_2}\|\|v_{3,n_3}^{\alpha_3}\|}.
+ \label{eq:branching-definitions}
+\end{align}
+Here $\|v\|^2=\langle\!\langle v|v\rangle$ is a bilinear BPZ norm,
+not an absolute square. Choose its roots consistently for all vertices
+and edges. We suppress only the fixed representation parameters in
+$\mathbf B,\mathbb B$; the branch labels and Ramond parities are displayed.
+
+First take normalized branch primaries at the external punctures. The
+enlarged block is then
+\begin{align}
+ \widehat{\mathbf F}_{\hat\Gamma}
+ =\sum_{\{n_e,\alpha_e\}}{}&(-1)^{K(\epsilon)}
+ \prod_{e:\NS}q_e^{2n_e^2}\eta_e^{2n_e+p_e}
+ \prod_{e:\R}q_e^{2n_e^2-1/8}\eta_e^{\alpha_e}
+ \prod_{v:\NS,\R,\R}i^{(2n_{v,1})\bmod2}
+ \nonumber\\
+ &\times\prod_{v:\NS,\NS,\NS}
+             \mathbf B_{a_v}(n_{v,1},n_{v,2},n_{v,3})
+ \nonumber\\
+ &\times\prod_{v:\NS,\R,\R}
+             \mathbb B_{f_v}^{(\eta_v)}
+                  (n_{v,1},n_{v,2},n_{v,3};\alpha_{v,2},\alpha_{v,3})
+ \prod_{j=1}^2F_{\hat\Gamma}(\{h_{e,n_e}^{(j)}\};c^{(j)}).
+ \label{eq:double-virasoro}
+\end{align}
+The sum and edge products run over internal edges; external branch labels
+are fixed. The argument list of each Virasoro block includes both the
+internal weights and the fixed external weights. A slot label $n_{v,i}$
+is the label of its incident edge, so a self-loop has one branching sum
+shared by its two slots. Keep only the local parity components allowed by
+\eqref{eq:vertex-selection}, now applied to total branch parities.
+
+To see the reduction, change basis separately on every internal edge.
+The BPZ form becomes the product of the two Virasoro Gram matrices and
+the primary norm. The two adjacent normalized branching coefficients
+supply the inverse primary norm once per edge. The Virasoro Ward
+identities then reduce descendants independently in the two copies.
+For example, at an NS--R--R vertex,
+\begin{align}
+ &\hat\rho_f^{(\eta)}
+ (L_{-1}^{(j)}v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3})
+ \nonumber\\
+ &\qquad=(h_{1,n_1}^{(j)}+h_{2,n_2}^{(j)}-h_{3,n_3}^{(j)})
+ \hat\rho_f^{(\eta)}
+ (v_{1,n_1},v_{2,n_2}^{\alpha_2},v_{3,n_3}^{\alpha_3}),
+ \qquad j=1,2.
+ \label{eq:local-virasoro-ward}
+\end{align}
+This identity uses the full local form \eqref{eq:ramond-vertex}; deleting
+its contour phase while keeping the embeddings would spoil the reduction.
+The sewing weight \eqref{eq:vertex-weight} is constant on each branch
+and becomes $i^{(2n_{v,1})\bmod2}$ in \eqref{eq:double-virasoro}.
+An external tensor-PBW state is handled by the finite expansion in
+Sec.~\ref{sec:external}, followed by the same Ward reduction.
+
+In computation, evaluate the Virasoro factors by CCY $c$-recursion.
+Its large-$c$ seed contains the $L_{-1}$ global block and the universal
+Schottky vacuum factor. Store pole geometry, fusion polynomials, residue
+normalizations, global vertices, and repeated recursion states. At
+NS--R--R vertices obtain the outer branching coefficients recursively
+from $n_{\NS}=0,\pm\tfrac12$ and
+$n_{\R}=\pm\tfrac14,\pm\tfrac34$, reusing intermediate coefficients
+and the coefficients of the $L_{\pm1}$ descendant expansions.
+When a Ward equation has a zero leading coefficient, use the alternative
+with $L_1$ at a Ramond slot. The validation driver obtains its all-NS
+coefficients from free-field primary vectors and caches those local
+values. The remaining Virasoro cutoff depends on the branch: subtract
+its starting level in \eqref{eq:branches} before evaluating descendants.
+This prevents computing blocks beyond the requested physical degree.
+
+\section{Ramond loops, cancellation, and the constant term}
+
+Every vertex meets zero or two Ramond edges. The Ramond subgraph therefore
+consists of disjoint closed cycles and paths with external Ramond ends.
+A self-loop is a closed cycle with one vertex. Let $C$ be any closed
+Ramond cycle. We write $K(C)$ for the already defined inversion count
+$K$, evaluated with parity one on that cycle and zero on all other
+internal and external punctures. No new sign rule is involved.
+
+The physical coefficients on the cycle are related by
+\begin{equation}
+ \left(\prod_{e\in C}\eta_e\right)\star\mathbf F_{\hat\Gamma}
+ =(-1)^{K(C)}\left(\prod_{v\in C}i\eta_v\right)
+                                      \mathbf F_{\hat\Gamma}.
+ \label{eq:physical-sector}
+\end{equation}
+The left side flips the retained parity on every edge of $C$, with the
+convolution signs of \eqref{eq:star}. The right side fixes the relative
+coefficients of those components. It is a sector identity for the formal
+series; it does not assign complex values to the spin lifts.
+
+Locally this identity follows from the odd ground map
+$w^+\mapsto e^{-i\pi/4}w^-$ and
+$w^-\mapsto-e^{i\pi/4}w^+$, extended to a Ramond PBW word with the
+factor $(-1)^A$. This map preserves the ground BPZ form
+$\operatorname{diag}(1,i)$. Acting on both Ramond slots multiplies the
+physical form by $-i\eta_v(-1)^{\epsilon_{v,2}}$; the ground values
+\eqref{eq:physical-vertices} verify it, and the supercurrent Ward
+identities extend it to descendants. Combining these local identities
+around the cycle and reordering the odd maps gives
+\eqref{eq:physical-sector}. Crossing the NS slot twice contributes
+$(-1)^{2\epsilon_{v,1}}=1$, including for an odd NS primary.
+
+The cycle monomial commutes with admissible factors of the convolution:
+its commutator exponent is
+\begin{equation}
+ \sum_{v\in C}(\epsilon_{v,2}+\epsilon_{v,3})
+                  =2\sum_{e\in C}\epsilon_e=0\pmod2.
+ \label{eq:loop-centrality}
+\end{equation}
+Each Ramond edge is counted once at each end. The global terms from
+$K$ cancel in the commutator because they are symmetric in its two inputs.
+Multiplying physical coefficients by \eqref{eq:transport} changes the
+cycle eigenvalue in \eqref{eq:physical-sector} by
+$(-1)^{\sum_{v\in C}f_v}$: the parity in slot 3 is flipped once at each
+vertex of $C$. Applying the same ground-map argument to the auxiliary
+form gives
+\begin{equation}
+ \left(\prod_{e\in C}\eta_e\right)\star\mathbf F_{\F,\hat\Gamma}
+ =(-1)^{K(C)+\sum_{v\in C}p_{v,1}}
+       \left(\prod_{v\in C}i\right)\mathbf F_{\F,\hat\Gamma}.
+ \label{eq:aux-sector}
+\end{equation}
+Move this commuting monomial between the two factors of
+\eqref{eq:convolution} and cancel the common phase. In one line,
+\begin{equation}
+ \left[(-1)^{\sum_{v\in C}f_v}\prod_{v\in C}\eta_v
+                  -(-1)^{\sum_{v\in C}p_{v,1}}\right]
+                               \widehat{\mathbf F}_{\hat\Gamma}=0.
+ \label{eq:loop-cancellation}
+\end{equation}
+Thus the enlarged block vanishes whenever
+\begin{equation}
+ (-1)^{\sum_{v\in C}(f_v+p_{v,1})}\prod_{v\in C}\eta_v=-1.
+ \label{eq:odd-cycle}
+\end{equation}
+Its two factors belong to incompatible cycle sectors; the physical block
+itself can be nonzero. In theta the two equal $f$ labels and primary
+parities cancel, leaving $\eta\eta'=-1$.
+
+The auxiliary constant term makes both the obstruction and the restricted
+inverse concrete. With the external ground states chosen in
+Sec.~\ref{sec:local-signs}, all NS auxiliary slots are vacuum at level zero. Around a closed
+Ramond cycle the auxiliary grounds must then be either all $u^0$ or all
+$u^1$. The first choice contributes one. The second contributes $i$ from
+each vertex, $-1$ from each inverse ground metric, its spin lifts, and the
+ordering and primary-parity signs. Consequently,
+\begin{equation}
+ \left.\mathbf F_{\F,\hat\Gamma}\right|_{q_e=0}
+ =\prod_{C}^{\star}
+ \left[1+(-1)^{K(C)+\sum_{v\in C}p_{v,1}}
+              \left(\prod_{v\in C}(-i)\right)
+              \left(\prod_{e\in C}\eta_e\right)\right].
+ \label{eq:constant-projectors}
+\end{equation}
+The product runs over the closed Ramond cycles and is taken using $\star$;
+its factors commute. The empty product is one, and open paths with
+$u^0$ ends contribute one. Each term after the $1$ in a bracket has
+convolution square one: the cycle monomial has square
+$(-1)^{\text{number of vertices on }C}$, canceled by the squared
+factors $-i$. Hence each bracket acts by two on its matching sector and
+by zero on the other sector. The constant is invertible on the matching
+simultaneous sector, but not on the full coefficient space if a closed
+Ramond cycle is present.
+
+\section{Splitting an obstructed edge and recovering the block}
+
+\subsection{The inserted sphere and its PBW matrix element}
+
+Choose one edge on each cycle satisfying \eqref{eq:odd-cycle}. On a chosen
+edge $e$, insert a new sphere with coordinate $w$, sew its punctures
+$0,\infty$ to the original ends, and place $\Theta\psi$ at $w=1$.
+If $z_L,z_R$ are the original local coordinates, the two sewing equations
+are $z_Lw=q_{e_L}$ and $z_R/w=q_{e_R}$. Multiplying them gives
+\begin{equation}
+ q_e=q_{e_L}q_{e_R},\qquad \eta_e=\eta_{e_L}\eta_{e_R}.
+ \label{eq:split-map}
+\end{equation}
+The spin lifts multiply in the aligned Ramond frames, with no extra odd
+insertion sign because $\Theta\psi$ is even. The operator is defined by
+\begin{equation}
+ \Theta u^{\mathsf a}=(-1)^{\mathsf a+1}u^{1-\mathsf a},
+ \qquad\{\Theta,\psi_r\}=\{\Theta,G_r\}=0,
+ \qquad[\Theta,L_n]=0.
+ \label{eq:theta}
+\end{equation}
+Both factors anticommute with physical $G_r$, so their product commutes
+with the physical SCA. Also $\Theta$ commutes with $L^{(1,2)}$:
+it commutes with the even fermion bilinears and with $\psi G$.
+The inserted vertex is a radial matrix element, without the additional
+outer-vertex weight \eqref{eq:vertex-weight}.
+
+The physical descendant words at the inserted sphere are $B_L,B_R$.
+Their auxiliary words are $\mathsf B_L,\mathsf B_R$, with ground labels
+$\mathsf b_L,\mathsf b_R$. The matrix element is
+\begin{align}
+ &\Big\langle\!\Big\langle
+ \Psi_{-\mathsf B_R}u^{\mathsf b_R}\otimes\mathbb L_{-B_R}w^{\alpha_R}
+ \Big|\Theta\psi(1)\Big|
+ \Psi_{-\mathsf B_L}u^{\mathsf b_L}\otimes\mathbb L_{-B_L}w^{\alpha_L}
+ \Big\rangle
+ \nonumber\\
+ &\qquad=\langle\!\langle\Psi_{-\mathsf B_R}u^{\mathsf b_R}|
+                 \Theta\psi(1)|\Psi_{-\mathsf B_L}u^{\mathsf b_L}\rangle
+                (\mathbb G_{\beta_e})_{B_R\alpha_R,B_L\alpha_L}.
+ \label{eq:split-pbw}
+\end{align}
+The order fixes $\Theta$ next to the outgoing bra. Each new segment has
+its own physical inverse Gram matrix, auxiliary inverse metric, and
+factor $q^{|B|+|\mathsf B|}\eta^{\epsilon}(-\eta)^{\epsilon'}$ as in
+\eqref{eq:enlarged-block}. All endpoint indices are summed as before.
+Using the symmetry of the physical BPZ Gram matrix, its contraction reduces to
+\begin{align}
+ &\sum_{B_L,B_R,\alpha'_L,\alpha'_R}
+ \mathbb G_{\beta_e}^{A_L\alpha_L,B_L\alpha'_L}
+ (\mathbb G_{\beta_e})_{B_L\alpha'_L,B_R\alpha'_R}
+ \mathbb G_{\beta_e}^{B_R\alpha'_R,A_R\alpha_R}
+ =\mathbb G_{\beta_e}^{A_L\alpha_L,A_R\alpha_R}.
+ \label{eq:split-gram}
+\end{align}
+This contracts the identity operator on the physical line. Its levels and
+parities agree on the two segments. Auxiliary parities agree because
+$\Theta\psi$ is even, but auxiliary levels may differ through the
+nonzero modes of $\psi(1)$. Using only the auxiliary matrix element in
+\eqref{eq:split-pbw} defines
+$\mathbf F_{\F,\hat\Gamma}[\Theta\psi]$ with the same outer vertices
+as \eqref{eq:fermion-block}.
+
+\subsection{The inserted double-Virasoro sum}
+
+The field $\psi$ is proportional to the NS branch primary
+$v_{1/2}$ at $P=Q/2$. Its two Virasoro weights are
+\begin{equation}
+ h_\psi^{(1)}=-\frac{1+2b^2}{2(1-b^2)},\qquad
+ h_\psi^{(2)}=\frac{b^2+2}{2(1-b^2)},\qquad
+ h_\psi^{(1)}+h_\psi^{(2)}=\tfrac12.
+ \label{eq:psi-weights}
+\end{equation}
+Their degenerate fusion rules give $n_{e_R}=n_{e_L}\pm\tfrac12$.
+The odd $\psi$ reverses the total Ramond parity and $\Theta$ reverses it
+back, so the two segments carry the same $\alpha_e$. The normalized
+middle coefficient is
+\begin{equation}
+ \mathbb B(n_{e_R},n_{e_L},\alpha_e)
+ =\frac{\langle\!\langle v_{e,n_{e_R}}^{\alpha_e}|
+                    \Theta\psi(1)|v_{e,n_{e_L}}^{\alpha_e}\rangle}
+        {\|v_{e,n_{e_R}}^{\alpha_e}\|\|v_{e,n_{e_L}}^{\alpha_e}\|}.
+ \label{eq:middle-branching}
+\end{equation}
+It is zero outside the stated fusion rule. Since $\Theta$ commutes with
+both Virasoro copies, the descendant dependence is entirely in their
+ordinary punctured blocks.
+
+With normalized branch primaries at the original external punctures,
+the full sum is
+\begin{align}
+ \widehat{\mathbf F}_{\hat\Gamma}[\Theta\psi]
+ =\sum_{\{n,\alpha\}}{}&(-1)^{K(\epsilon)}
+ \prod_{v:\NS,\R,\R}i^{(2n_{v,1})\bmod2}
+ \prod_{e:\NS}q_e^{2n_e^2}\eta_e^{2n_e+p_e}
+ \prod_{\substack{e:\R\\e\text{ unsplit}}}
+                       q_e^{2n_e^2-1/8}\eta_e^{\alpha_e}
+ \nonumber\\
+ &\times\prod_{e\text{ split}}
+       q_{e_L}^{2n_{e_L}^2-1/8}q_{e_R}^{2n_{e_R}^2-1/8}
+       (\eta_{e_L}\eta_{e_R})^{\alpha_e}
+       \mathbb B(n_{e_R},n_{e_L},\alpha_e)
+ \nonumber\\
+ &\times\prod_{v:\NS,\NS,\NS}
+               \mathbf B_{a_v}(n_{v,1},n_{v,2},n_{v,3})
+ \nonumber\\
+ &\times\prod_{v:\NS,\R,\R}
+               \mathbb B_{f_v}^{(\eta_v)}
+                  (n_{v,1},n_{v,2},n_{v,3};\alpha_{v,2},\alpha_{v,3})
+ \nonumber\\
+ &\times\prod_{j=1}^2F_{\hat\Gamma}[\psi]
+                   (\{h_{e,n_e}^{(j)}\};\{h_\psi^{(j)}\};c^{(j)}).
+ \label{eq:split-double-virasoro}
+\end{align}
+Vertex products here include only the original spheres; the middle
+coefficients account for the new spheres once each. The internal branch
+sum includes both labels $n_{e_L},n_{e_R}$ on a split edge, constrained
+by the fusion rule, and one common parity $\alpha_e$. In an outer
+branching coefficient, $n_{v,i}$ is the label of the segment adjacent to
+that original vertex. The function $F_{\hat\Gamma}[\psi]$ denotes the
+ordinary Virasoro block on this expanded channel, with those segment
+weights, the original external weights, and one additional external weight
+$h_\psi^{(j)}$ for each inserted sphere. It is computed by the same CCY
+recursion. The original graph's $K$ applies because the inserted operator
+is even and the segment parities agree. Outer and middle coefficients
+use the same BPZ norm roots.
+
+\subsection{Convolution before and after the diagonal restriction}
+
+Equation \eqref{eq:split-gram} shows that the full physical monomial is
+replaced by
+\begin{equation}
+ \prod_e q_e^{r_e}\eta_e^{\epsilon_e}
+ \longmapsto
+ \prod_{e\text{ unsplit}}q_e^{r_e}\eta_e^{\epsilon_e}
+ \prod_{e\text{ split}}
+       (q_{e_L}q_{e_R})^{r_e}(\eta_{e_L}\eta_{e_R})^{\epsilon_e}.
+ \label{eq:split-monomial}
+\end{equation}
+Thus the complete unprojected convolution is
+\eqref{eq:convolution} with
+$\widehat{\mathbf F}_{\hat\Gamma}$ and
+$\mathbf F_{\F,\hat\Gamma}$ replaced by their inserted blocks, and
+every physical monomial replaced by \eqref{eq:split-monomial}. The
+physical coefficient itself is still that of the original graph.
+This is an exact substitution in the displayed formula, including its
+physical correction and mixed sign. In particular, a physical power
+$r_e$ and auxiliary powers $(s_{e_L},s_{e_R})$ produce
+$(r_e+s_{e_L},r_e+s_{e_R})$; unequal split powers remain included.
+
+To recover the physical block it suffices to keep the terms with equal
+powers on each split pair. Define the subscript $\mathrm{diag}$ precisely
+by coefficient extraction:
+\begin{align}
+ &\widehat{\mathbf F}_{\hat\Gamma}[\Theta\psi]_{\mathrm{diag}}
+                  \left[\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right]
+ \nonumber\\
+ &\quad=\widehat{\mathbf F}_{\hat\Gamma}[\Theta\psi]
+ \left[\prod_{e\text{ unsplit}}q_e^{r_e}\eta_e^{\epsilon_e}
+       \prod_{e\text{ split}}
+          (q_{e_L}q_{e_R})^{r_e}(\eta_{e_L}\eta_{e_R})^{\epsilon_e}
+ \right].
+ \label{eq:diagonal-definition}
+\end{align}
+Use the identical definition for the fermion factor. Since the physical
+powers on a split pair already agree, equality of the final powers is
+equivalent to equality of the auxiliary powers. Hence the diagonal
+restriction commutes with the convolution.
+
+On the fermion side this keeps $\Theta\psi_0$. Its action is particularly
+simple:
+\begin{equation}
+ \Theta\psi_0\Psi_{-\mathsf A}u^{\mathsf a}
+   =\Psi_{-\mathsf A}\Theta\psi_0u^{\mathsf a}
+   =\frac{(-1)^{\mathsf a}}{\sqrt2}\Psi_{-\mathsf A}u^{\mathsf a}.
+ \label{eq:zero-mode}
+\end{equation}
+Moving each of $\Theta$ and $\psi_0$ through the nonzero fermions gives
+$(-1)^{\mathsf A}$, so those two signs cancel. Only the ground label
+remains. The ground factor on the affected cycle changes from the bracket
+in \eqref{eq:constant-projectors} to
+\begin{equation}
+ \frac1{\sqrt2}
+ \left[1-(-1)^{K(C)+\sum_{v\in C}p_{v,1}}
+              \left(\prod_{v\in C}(-i)\right)
+              \left(\prod_{e\in C}\eta_e\right)\right].
+ \label{eq:inserted-ground}
+\end{equation}
+It now selects the previously missing sector. Each closed cycle acts by
+two on its selected sector, with an additional $1/\sqrt2$ for each
+insertion. No inverse on the unrestricted coefficient space is asserted.
+
+The Virasoro calculation can enforce the same restriction before summing:
+\begin{equation}
+ 2n_{e_L}^2-\tfrac18+k_{e_L}^{(1)}+k_{e_L}^{(2)}
+ =2n_{e_R}^2-\tfrac18+k_{e_R}^{(1)}+k_{e_R}^{(2)}.
+ \label{eq:diagonal-cutoff}
+\end{equation}
+Here $k^{(1)},k^{(2)}$ are the nonnegative integer descendant levels in
+the two copies. The restriction concerns their combined power together
+with the branch starting level. It does not set $n_{e_L}=n_{e_R}$ or
+match the descendant levels separately in each copy. Use it together with
+the physical cutoff to discard unneeded branch tuples and recursion
+states, and reuse the middle and outer branching coefficients.
+
+\subsection{The coefficient recursion}
+
+After inserting once on every obstructed cycle, the diagonal auxiliary
+constant is nonzero on the required sector. The following coefficient
+equation makes the triangular solve explicit without introducing a new
+name for a rephased physical block. The level indices $r_e,s_e,t_e$ are
+nonnegative half-integers on NS edges and integers on Ramond edges;
+coefficients absent from the corresponding series are zero. Here
+$\prod_C2$ runs over the original closed Ramond cycles, and the other
+constant factor runs over the edges split by insertions:
+\begin{align}
+ &\widehat{\mathbf F}_{\hat\Gamma}[\Theta\psi]_{\mathrm{diag}}
+                    \left[\prod_e q_e^{r_e}\right]
+ \nonumber\\
+ &\quad=\sum_{\epsilon}
+ (-1)^{\sum_{v:\NS,\R,\R}f_v(1+\epsilon_{v,3})
+       +\sum_{v:\NS,\NS,\NS}
+        [p_{v,1}(\epsilon_{v,1}+p_{v,1})+
+         p_{v,2}(\epsilon_{v,3}+p_{v,3})]}
+ \nonumber\\
+ &\qquad\times\Bigg\{
+     \left(\prod_C2\right)\left(\prod_{e\text{ split}}\frac1{\sqrt2}\right)
+     \mathbf F_{\hat\Gamma}
+                    \left[\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right]
+     \prod_e\eta_e^{\epsilon_e}
+ \nonumber\\
+ &\qquad\quad+
+ \sum_{\substack{s_e+t_e=r_e\ \text{for all }e\\s_e,t_e\ge0,\ \sum_e t_e>0}}
+     \mathbf F_{\hat\Gamma}
+                    \left[\prod_e q_e^{s_e}\eta_e^{\epsilon_e}\right]
+     \left(\prod_e\eta_e^{\epsilon_e}\right)\star
+     \mathbf F_{\F,\hat\Gamma}[\Theta\psi]_{\mathrm{diag}}
+                    \left[\prod_e q_e^{t_e}\right]\Bigg\}.
+ \label{eq:recovery}
+\end{align}
+This is an equality of parity polynomials. The second sum uses only lower
+total physical levels because $\sum_e t_e>0$. Subtract it from the known
+enlarged coefficient, divide by the displayed constant, and multiply each
+parity component by \eqref{eq:transport} to obtain the desired physical
+coefficient. At level zero the second sum is empty. For an unobstructed
+calculation omit the insertion brackets, the diagonal restriction, and
+the product over split edges.
+
+The equations above use the canonical fermion normalization
+\eqref{eq:aux-metric}. The implementation inserts $Q\Theta\psi$ in both
+the enlarged numerator and the auxiliary factor. For that convention,
+replace each $1/\sqrt2$ in the constant by $Q/\sqrt2$ and multiply each
+middle coefficient by $Q$. The factors cancel from the recovered block.
+At no stage is the physical PBW result an input to this recursion; it
+enters only as an independent reference in the validation section.
+
+\section{Theta, glasses, and Mercedes}
+
+\subsection{Theta}
+
+Use the two orders given after \eqref{eq:graph-sign}. The resulting signs
+are
+\begin{equation}
+ K(\epsilon)=\epsilon_1\epsilon_2+\epsilon_1\epsilon_3+
+              \epsilon_2\epsilon_3,
+ \qquad
+ (-1)^{\sum_{i<j}(\epsilon_i\epsilon'_j+\epsilon'_i\epsilon_j)}
+ \quad\text{in the convolution}.
+ \label{eq:theta-specialization}
+\end{equation}
+The two local mixed terms in \eqref{eq:star} cancel. The physical
+correction \eqref{eq:transport} is one because the two vertices have equal
+labels and share their corresponding parities. The cycle identity and
+auxiliary ground factors become
+\begin{align}
+ (\eta_2\eta_3)\star\mathbf F_\theta
+    &=\eta\eta'\,\mathbf F_\theta,\nonumber\\
+ \left.\mathbf F_{\F,\theta}\right|_{q=0}
+    &=1+\eta_2\eta_3,\qquad
+ \left.\mathbf F_{\F,\theta}[\Theta\psi]_{\mathrm{diag}}\right|_{q=0}
+    =\frac{1-\eta_2\eta_3}{\sqrt2}.
+ \label{eq:theta-ground}
+\end{align}
+The ordinary factor selects $\eta\eta'=1$; the inserted factor selects
+$\eta\eta'=-1$. Splitting either Ramond edge supplies the missing sector.
+The local and sewing definitions reduce to the theta formulas in the draft.
+
+\subsection{Glasses}
+
+Use edge 1 as the NS bridge and edges 2,3 as Ramond self-loops, with vertex
+triples $(1_L,2_L,2_R)$ and $(1_R,3_L,3_R)$. Take an even bridge primary.
+Parity conservation fixes the same $f$ at both vertices. Now
+\begin{equation}
+ K(\epsilon)=0,
+ \qquad (-1)^{\epsilon_2\epsilon'_2+\epsilon_3\epsilon'_3}
+                 \quad\text{in the convolution},
+ \qquad (-1)^{f(\epsilon_2+\epsilon_3)}
+                 \quad\text{for \eqref{eq:transport}}.
+ \label{eq:glasses-specialization}
+\end{equation}
+In particular $\eta_2\star\eta_2=\eta_3\star\eta_3=-1$.
+The physical cycle identities are
+\begin{equation}
+ \eta_2\star\mathbf F_{\mathrm{gl}}
+       =i\eta_{v_1}\mathbf F_{\mathrm{gl}},\qquad
+ \eta_3\star\mathbf F_{\mathrm{gl}}
+       =i\eta_{v_2}\mathbf F_{\mathrm{gl}}.
+ \label{eq:glasses-sector}
+\end{equation}
+The ordinary auxiliary constant is $(1-i\eta_2)(1-i\eta_3)$.
+Inserting on edge 2 replaces its factor by $(1+i\eta_2)/\sqrt2$, and
+similarly for edge 3. The loop at vertex $v$ needs an insertion when
+$(-1)^f\eta_v=-1$. Thus for $f=1$ the obstructed sign is $\eta_v=+1$.
+There can be zero, one, or two inserted spheres; each loop is treated
+independently. After undoing \eqref{eq:transport}, recovery returns the
+physical block with the original vertex labels.
+
+\subsection{Mercedes: one external insertion}
+
+The genus-three Mercedes channel has a triangular rim and three spokes
+meeting at a central vertex. Its four vertices and six internal edges
+give $g=6-4+1=3$. Take spokes $1,2,3$ to be NS and rim $4,5,6$ to be
+Ramond, with slots
+\begin{equation}
+\begin{array}{c|c|c}
+\text{vertex}&(\infty,1,0)\text{ edges}&\text{form}\\ \hline
+\text{center}&(1,2,3)&\rho_a\\
+v_1&(1,4,6)&\rho_{f_1}^{(\eta_{v_1})}\\
+v_2&(2,5,4)&\rho_{f_2}^{(\eta_{v_2})}\\
+v_3&(3,6,5)&\rho_{f_3}^{(\eta_{v_3})}
+\end{array}
+\label{eq:mercedes-vertices}
+\end{equation}
+Order edges by number, orient each spoke from the center outwards, and
+orient the rim $v_1\to v_2\to v_3\to v_1$. Take even intrinsic primary
+parities, as in the saved Mercedes tests. Summing the local parity
+constraints gives $a=f_1+f_2+f_3$ modulo two. The physical correction
+\eqref{eq:transport} is simply
+\begin{equation}
+ (-1)^{f_1(1+\epsilon_6)+f_2(1+\epsilon_4)+f_3(1+\epsilon_5)}.
+ \label{eq:mercedes-specialization}
+\end{equation}
+Only the parity of the third slot at each outer sphere appears.
+There is one Ramond cycle, $(4,5,6)$, for which $K(C)=0$. Its physical
+sector identity and obstruction are
+\begin{align}
+ (\eta_4\eta_5\eta_6)\star\mathbf F_{\hat\Gamma}
+   &=-i\eta_{v_1}\eta_{v_2}\eta_{v_3}\mathbf F_{\hat\Gamma},
+ \nonumber\\
+ (-1)^{f_1+f_2+f_3}\eta_{v_1}\eta_{v_2}\eta_{v_3}&=-1
+                           \quad\text{for an obstructed loop}.
+ \label{eq:mercedes-obstruction}
+\end{align}
+The edge spin lifts and the three-point-form signs remain distinct.
+For the ordinary and inserted calculations the auxiliary constants are
+\begin{equation}
+ \left.\mathbf F_{\F,\hat\Gamma}\right|_{q=0}
+       =1+i\eta_4\eta_5\eta_6,\qquad
+ \left.\mathbf F_{\F,\hat\Gamma}[\Theta\psi]_{\mathrm{diag}}
+                                   \right|_{q=0}
+       =\frac{1-i\eta_4\eta_5\eta_6}{\sqrt2}.
+ \label{eq:mercedes-ground}
+\end{equation}
+This displays the switch of sector using a single insertion.
+
+If the obstruction holds, split edge 4 with its original ket end at
+$v_1$ and bra end at $v_2$, and place one external $\Theta\psi$ on the
+new sphere. All three NS spokes remain sewn to the central sphere.
+The enlarged calculation is a genus-three one-point block; its convolution
+recovers the original physical block without an external insertion.
+There are no additional external NS legs at the three outer vertices.
+If the loop is unobstructed, use the original four spheres without the
+insertion. These are the two Mercedes constructions tested below.
+
+\section{External states and the full correlator}
+\label{sec:external}
+
+\subsection{Projecting an external state onto the branches}
+
+An external tensor-PBW state need not be a branch primary. Expand it in
+the same orthogonal double-Virasoro basis used on the internal edges.
+At a Ramond puncture, its physical and auxiliary parities are
+$\epsilon=A+|\alpha|$ and $\epsilon'=\mathsf A+\mathsf a$ modulo two.
+Only branch primaries of total parity $\epsilon+\epsilon'$ can occur.
+Using $G^{BB'}_h$ for the inverse Virasoro Gram matrix at weight $h$,
+the BPZ expansion is
+\begin{align}
+ &\Psi_{-\mathsf A}u^{\mathsf a}\otimes\mathbb L_{-A}w^\alpha
+ \nonumber\\
+ &\quad=\sum_{n,B,C,B',C'}
+ (G_{h_n^{(1)}})^{BB'}(G_{h_n^{(2)}})^{CC'}
+ \Big\langle\!\Big\langle
+ \frac{L_{-B'}^{(1)}L_{-C'}^{(2)}v_n^{\epsilon+\epsilon'}}
+      {\|v_n^{\epsilon+\epsilon'}\|}
+ \Big|\Psi_{-\mathsf A}u^{\mathsf a}\otimes\mathbb L_{-A}w^\alpha
+ \Big\rangle
+ \nonumber\\
+ &\qquad\times
+ \frac{L_{-B}^{(1)}L_{-C}^{(2)}v_n^{\epsilon+\epsilon'}}
+      {\|v_n^{\epsilon+\epsilon'}\|}.
+ \label{eq:external-descendants}
+\end{align}
+The superscript $\epsilon+\epsilon'$ is reduced to zero or one.
+The finite sum is restricted by
+$2n^2-1/8+|B|+|C|=|A|+|\mathsf A|$ and
+$|B|=|B'|$, $|C|=|C'|$. This is the usual basis-expansion formula:
+the overlap supplies a covariant component and the inverse Gram matrices
+convert it to a basis coefficient. It does not require fitting the state
+to an unknown linear combination.
+
+For NS, replace the physical and auxiliary Ramond grounds by $\phi$ and
+$\mathbf1$, replace $\mathbb L$ by $\mathbf L$, and use $v_n$ with
+starting level $2n^2$. Its parity $2n+p$ must equal $\epsilon+\epsilon'$.
+A ground tensor therefore involves only $n=0$ in NS or $n=\pm1/4$ in R,
+with no Virasoro descendants. Insert the expansion at each external
+puncture in \eqref{eq:double-virasoro} or
+\eqref{eq:split-double-virasoro}. Whenever $B$ or $C$ is nonempty, the
+corresponding Virasoro factor has that external descendant, which is
+reduced by its own Ward identities. The primary norm roots must match
+those in the branching coefficients.
+
+\subsection{Combining holomorphic and antiholomorphic blocks}
+
+Tildes denote the independent antiholomorphic data. For each choice of
+local form labels, let $C_v$ be the full three-point structure constant
+with the three holomorphic operators ordered before the three
+antiholomorphic operators. The normalized chiral forms and BPZ metrics
+are those already specified. Write $\mathcal O_a$ for the external full
+fields in their prescribed order; $a,b$ below index these punctures,
+not the form label $a_v$. The correlator in the plumbing
+trivialization is
+\begin{align}
+ \left\langle\prod_a\mathcal O_a\right\rangle
+ =\sum_{\substack{\text{internal representations and}\\
+               \text{holomorphic/antiholomorphic vertex labels}}}{}&
+ (-1)^{\sum_{v<w}(\sum_i\widetilde\epsilon_{v,i})
+                         (\sum_j\epsilon_{w,j})
+                +\sum_{a<b}\widetilde\epsilon_a\epsilon_b}
+ \left(\prod_v C_v\right)
+ \nonumber\\
+ &\times\left(\prod_e q_e^{h_e}\bar q_e^{\widetilde h_e}\right)
+             \mathbf F_{\hat\Gamma}\widetilde{\mathbf F}_{\hat\Gamma}.
+ \label{eq:correlator}
+\end{align}
+The first sign moves the antiholomorphic operators at a vertex
+past the holomorphic operators at later vertices. The second restores
+the prescribed ordering of the external full fields. Each vertex's total
+parity is fixed by \eqref{eq:vertex-selection}, so the sign can be taken
+outside the descendant sums. For an even full three-point tensor the
+holomorphic and antiholomorphic total parities agree; forbidden label
+choices have $C_v=0$.
+
+One can verify the sign directly before doing the descendant sums.
+Graded factorization of the inverse pairings and three-point forms gives
+\begin{align}
+ &K(\epsilon+\widetilde\epsilon)-K(\epsilon)-K(\widetilde\epsilon)
+ +\sum_e\epsilon_e\widetilde\epsilon_e
+ +\sum_v\sum_{i<j}\widetilde\epsilon_{v,i}\epsilon_{v,j}
+ \nonumber\\
+ &\qquad=\sum_{v<w}\Bigl(\sum_i\widetilde\epsilon_{v,i}\Bigr)
+                    \Bigl(\sum_j\epsilon_{w,j}\Bigr)
+          +\sum_{a<b}\widetilde\epsilon_a\epsilon_b\pmod2.
+ \label{eq:correlator-sign}
+\end{align}
+Each internal edge appears twice with equal parities. Moving these even
+pairs as units cancels their internal contributions and leaves the vertex
+and external-operator exchanges on the right. This accounts for the sign
+in \eqref{eq:correlator} without assuming Ramond forms are absolute squares.
+
+Sums over a continuous spectrum become integrals. A nontrivial primary
+multiplicity metric contributes its inverse to the representation sum;
+the physical Ramond ground metric is already in $\mathbb G$. A choice
+of surface metric also supplies the common conformal-anomaly factor.
+The block construction determines the chiral sewing coefficients, while
+the spectrum and the $C_v$ are additional data of the SCFT.
+
+\section{Directed numerical validation}
+\label{sec:validation}
+
+This section records all directed tests supporting these notes, including
+the complete total-level-six extension in
+Sec.~\ref{sec:total-six}. The tests distinguish
+physical SCA PBW sewing, enlarged PBW sewing,
+double Virasoro assembly, direct fermion sewing, and physical recovery.
+The double Virasoro numerators are constructed from branching coefficients
+and Virasoro blocks, without using the physical PBW answers. Numerical
+discrepancies are reported as $|x-y|/\max(1,|x|,|y|)$; constrained zero
+components are included. A vanishing test reports the absolute residual.
+All results below are from saved computations; documentation changes do
+not entail rerunning the numerical suites.
+
+\subsection{Complete total level six: all 96 channel cases}
+\label{sec:total-six}
+
+Every channel in the following table was tested through total level six:
+\begin{equation}
+ r_e\ge0,\qquad \sum_e r_e\le6,
+ \qquad r_e\in\tfrac12\mathbb Z\ (\NS),\quad
+ r_e\in\mathbb Z\ (\R).
+ \label{eq:total-six-domain}
+\end{equation}
+Thus an individual edge can reach level 6. The momenta and vertex-label
+choices are specified in the channel descriptions below. Both NS primary parities
+are included for NS--R--R theta; the other closed-block tests have even
+intrinsic primary parities. All formal parity components, including
+constrained zeros, are retained. These complete-domain calculations all use
+40-digit arithmetic. Every one of the 96 cases passes.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Channel & Cases & Multidegrees/case & Recovery error & Time (s)\\
+\midrule
+Theta NS--R--R & 16 & 140 & $2.09\times10^{-25}$ & 188.57\\
+Theta all-NS & 2 & 455 & $9.29\times10^{-29}$ & 1.27\\
+Glasses R/R & 8 & 140 & $2.87\times10^{-25}$ & 27.17\\
+Glasses NS/R & 4 & 252 & $1.34\times10^{-25}$ & 4.73\\
+Glasses NS/NS & 2 & 455 & $1.27\times10^{-29}$ & 0.58\\
+Mercedes & 64 & 3906 & $4.81\times10^{-24}$ & 636.82\\
+\bottomrule
+\end{tabular}
+\end{center}
+Recovery errors compare the extracted physical block with independent
+physical SCA PBW sewing. The times include the independent references,
+comparisons, and coefficient output; they are validation-suite wall times,
+not production block benchmarks. Some channels ran concurrently.
+
+This extension includes the full CCY residues and the nonconstant
+Schottky vacuum. The graph implementation caches pole geometry, fusion
+polynomials, global vertices, and repeated recursion states. The universal
+vacuum is evaluated from primitive Schottky cycles of the ordered graph.
+NS--R--R vertices reuse the existing recursive branching tables, and
+inserted vertices reuse the middle branching coefficients. The all-NS
+vertices additionally require $n=\pm1,\pm\frac32$: their primary vectors
+are constructed in free fields, converted to physical-PBW/auxiliary
+coordinates, and evaluated by the local three-point form. These local
+coefficients are cached. The physical reference uses full inverse Gram
+matrices; in particular, all three Mercedes spoke metrics act on the
+central tensor, including their off-diagonal entries.
+
+For glasses and Mercedes, full split powers are retained in the domain
+\begin{equation}
+ \sum_{e:\text{unsplit}}r_e+
+ \sum_{e:\text{split}}\max(r_{e_L},r_{e_R})\le6.
+ \label{eq:total-six-split-domain}
+\end{equation}
+Its diagonal is exactly \eqref{eq:total-six-domain}, and it also contains
+every expanded-graph multidegree whose ordinary total level is at most 6.
+The unequal-power comparisons include nonzero modes of $\psi(1)$.
+Theta retains its established split domain
+$2r_1+r_L+r_R+2r_3\le12$ for
+$q_1^{r_1}q_L^{r_L}q_R^{r_R}q_3^{r_3}$, with half-integer NS powers
+and integer Ramond powers.
+
+All 136 NS--R--R theta comparisons pass tolerance $10^{-20}$. Each
+diagonal comparison covers 17920 components. The recovered-block error
+is tabulated above; the restored double Virasoro numerator agrees with
+direct enlarged PBW within $3.24\times10^{-25}$. Direct enlarged recovery
+agrees with physical PBW within $6.83\times10^{-38}$, and the graph
+convolution agrees with enlarged PBW within $9.80\times10^{-39}$.
+All spin-lift evaluations agree within $2.50\times10^{-25}$ and the
+physical loop-sector identity within $1.51\times10^{-37}$.
+The 66304 full-split components agree with directly sewn split PBW within
+$4.02\times10^{-22}$ for double Virasoro and $1.30\times10^{-38}$ for
+the explicit convolution. The split fermion and enlarged diagonals agree
+exactly with their zero-mode counterparts (7616 and 8960 components,
+respectively). The 8960 uninserted obstructed components vanish within
+$1.37\times10^{-37}$.
+
+The other graph suites pass tolerance $10^{-18}$. Their forward
+convolution, spin-lift, and independent split checks are:
+\begin{center}
+\small
+\begin{tabular}{@{}lrrr@{}}
+\toprule
+Channel & Diagonal convolution & All spin lifts & Unequal split powers\\
+\midrule
+Theta all-NS & $4.34\times10^{-29}$ & $9.29\times10^{-29}$ & ---\\
+Glasses R/R & $1.83\times10^{-24}$ & $5.73\times10^{-25}$ & $9.84\times10^{-24}$\\
+Glasses NS/R & $8.75\times10^{-26}$ & $1.77\times10^{-25}$ & $4.35\times10^{-24}$\\
+Glasses NS/NS & $3.93\times10^{-30}$ & $1.27\times10^{-29}$ & ---\\
+Mercedes & $1.44\times10^{-23}$ & $6.79\times10^{-24}$ & $2.66\times10^{-23}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Each diagonal or spin-lift comparison covers 7280, 8960, 8064, 7280,
+and 15998976 components, respectively. Unequal split powers add 36736
+glasses R/R, 10752 glasses NS/R, and 11845632 Mercedes components.
+In Mercedes each inserted case has 9690 full-split multidegrees, of which
+5784 are off the diagonal. The 32 ordinary and 32 inserted Mercedes cases
+both have maximum recovery error below $4.81\times10^{-24}$.
+Uninserted obstructed numerators vanish within $1.40\times10^{-36}$,
+$3.90\times10^{-37}$, and $1.96\times10^{-36}$ for glasses R/R,
+glasses NS/R, and Mercedes, respectively.
+
+A separate audit of the saved physical coefficients checks both the full
+multidegree sets and the physical loop-sector identity, without recomputing
+any block. It finds no missing or duplicated diagonal multidegree and
+verifies the independent split-domain counts. The loop identities agree
+within $1.78\times10^{-36}$ for glasses R/R, $1.47\times10^{-36}$ for
+glasses NS/R, and $1.06\times10^{-38}$ for Mercedes. To verify the new
+40-digit NS Ward implementation against its existing independent Python
+implementation, all 910 all-NS theta case/multidegree pairs are also
+compared with \texttt{DirectThetaOracle}. This separate machine-precision
+reference agrees within $5.78\times10^{-12}$, at tolerance $10^{-9}$;
+it does not determine the errors in the 40-digit tables above.
+
+Before the complete runs, the extended implementation also passed
+total-level-two checks for all-NS theta (two cases, 35 multidegrees each),
+glasses R/R (four cases, 14 multidegrees each), and Mercedes (four cases,
+71 multidegrees each). Their saved results are retained with the extension.
+
+The extension exposed a sign error in the new graph CCY driver that the
+initial cutoff could not detect. For a self-loop sewn between local slots
+$(1,0)$, the residue at null level $rs$ needs the factor $(-1)^{rs}$ from
+the middle-slot Virasoro Ward normalization. Omitting it first produces
+a discrepancy at physical multidegree $(0,0,3)$ in glasses. All glasses
+results above are from fresh runs after correcting that factor. The
+Mercedes graph has no self-loops, so its concurrent run does not execute
+the corrected branch. No production header or manuscript formula was
+changed by this test-driver correction.
+
+The Mercedes run sums 29240 branching tuples and makes 896784 CCY
+recursion transitions. Its double Virasoro stage took 371.45 seconds,
+direct auxiliary sewing 0.20 seconds, and physical PBW sewing 29.80 seconds
+across all cases. The remaining time is coefficient comparisons, recovery,
+spin evaluations, and output. It saves all 249984 diagonal coefficient
+rows, with physical, enlarged, and recovered values.
+
+All extension sources, results, coefficients, and reproduction commands
+are in \path{C++/experiments/total_level6_2026-09-16/}.
+The \path{README.md} gives the cutoffs and implementation details;
+\path{manifest.json} summarizes the results and source hashes.
+The script \path{run_all.py} performs a fresh sequential reproduction.
+The saved-data audit is \path{coverage_and_sector_results.json};
+the separate NS Ward-port check is \path{ns_physical_port_results.json}.
+The diagnostic self-loop failures are retained separately and are not
+counted as passing results. These tests use the NS/R assignments
+and primary-parity cases listed below, at the same generic momenta; they do
+not add the inequivalent four-edge Ramond cycle on the Mercedes graph or singular limits.
+
+
+
+\subsection{Initial NS--R--R theta tests, including independent split powers}
+
+The NS--R--R theta tests use 40-digit arithmetic. We take $b=7/5$ and
+graph momenta $(11/23,13/29,17/31)$. Both $p_1,f=0,1$, all four vertex-sign
+pairs, every formal parity component, and all eight evaluations of the
+spin lifts are covered, giving 16 cases. The diagonal physical cutoff is
+total level 3: 30 multidegrees and 240 parity components per case.
+The independent split series retains
+$q_1^{r_1}q_L^{r_L}q_R^{r_R}q_3^{r_3}$ with
+$2r_1+r_L+r_R+2r_3\le6$, half-integer NS powers, and integer Ramond
+powers; its diagonal is the same physical cutoff. There are 130 multidegrees and
+1040 components per inserted case. The full split numerator is
+checked against an independently sewn enlarged PBW numerator, including
+the modes of $\psi(1)$ that change the middle level. The double Virasoro
+calculation uses both CCY recursions and the Schottky vacuum. The numerical
+insertion is $Q\Theta\psi$ in both the numerator and auxiliary factor.
+
+{\small
+\begin{longtable}{@{}p{0.60\linewidth}rr@{}}
+\toprule
+Comparison & Components & Maximum discrepancy\\
+\midrule
+\endhead
+Recovered double Virasoro vs physical PBW & 3840 & $7.32\times10^{-28}$\\
+Double Virasoro numerator vs enlarged PBW & 3840 & $2.20\times10^{-27}$\\
+Recovery from enlarged PBW vs physical PBW & 3840 & $1.01\times10^{-40}$\\
+Graph convolution vs enlarged PBW & 3840 & $7.73\times10^{-41}$\\
+Recovered block vs PBW at all spin lifts & 3840 & $1.35\times10^{-27}$\\
+Physical loop-sector identity & 3840 & $1.04\times10^{-40}$\\
+Split fermion diagonal vs zero-mode factor & 1536 & $0$\\
+Split enlarged diagonal vs zero-mode enlarged PBW & 1920 & $0$\\
+Full split double Virasoro vs split enlarged PBW & 8320 & $7.06\times10^{-26}$\\
+Full split convolution vs split enlarged PBW & 8320 & $6.29\times10^{-41}$\\
+Uninserted enlarged PBW in obstructed cases vs zero & 1920 & $4.34\times10^{-40}$\\
+\bottomrule
+\end{longtable}}
+All 136 comparisons pass tolerance $10^{-20}$. The two diagonal/zero-mode
+identities agree exactly in the saved arithmetic. The 16 fresh numerical
+processes took 3.61 seconds together; this is a validation-suite time,
+not a high-level block benchmark.
+
+\subsection{Initial all-NS theta and local all-NS vertices}
+
+Exact rational tests cover all eight intrinsic-primary-parity assignments
+and all eight branch-label tuples $n_i\in\{0,\frac12\}$. All 64 local
+vertex comparisons and all 384 $L_{-1}$ Ward identities (three slots in
+each Virasoro copy) pass. They use the all-NS enlarged-vertex convention
+stated above, including its operator-moving signs.
+
+The independent closed all-NS theta calculation has even primaries and
+total level 2. All 35 coefficients agree with physical PBW within
+$4.67\times10^{-15}$. All eight spin-lift choices in both vertex-parity
+sectors give 16 evaluation checks, with maximum discrepancy
+$5.56\times10^{-17}$. The tolerance is $10^{-10}$. The series backend
+uses machine arithmetic, with 40-digit branching-polynomial evaluation;
+this is not a 40-digit end-to-end calculation.
+
+\subsection{Initial glasses tests with zero, one, or two insertions}
+
+The glasses tests use the same momenta (bridge, left handle, right handle),
+machine arithmetic, even intrinsic primary parities, and individual edge
+level 1. They cover R/R, NS/R,
+and NS/NS handles; R/NS is the isomorphic assignment obtained by exchanging
+the named handles, rather than a separate numerical run.
+Both vertex-form parities, all Ramond signs, and every spin-parity slot
+are included: eight R/R cases, four NS/R cases, and two NS/NS cases.
+The R/R tests include zero, one, and two inserted loops;
+960 of the full-split components have unequal powers on a split pair.
+At this cutoff every Virasoro edge has descendant level at most one, so
+the exact CCY answer equals its global term. These glasses tests do not
+test higher-level residues or nonconstant Schottky corrections.
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.60\linewidth}rr@{}}
+\toprule
+Comparison & Components & Maximum discrepancy\\
+\midrule
+R/R diagonal numerator vs PBW convolution & 768 & $7.02\times10^{-13}$\\
+R/R recovery vs physical PBW & 768 & $8.71\times10^{-14}$\\
+R/R full split numerator vs PBW convolution & 1728 & $8.30\times10^{-13}$\\
+NS/R numerator vs PBW convolution & 576 & $3.17\times10^{-14}$\\
+NS/R recovery vs physical PBW & 576 & $2.79\times10^{-14}$\\
+NS/NS numerator vs PBW convolution & 432 & $1.45\times10^{-15}$\\
+NS/NS recovery vs physical PBW & 432 & $1.90\times10^{-15}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The uninserted enlarged block is separately checked to vanish in every
+obstructed R/R case, with maximum absolute residual
+$1.17\times10^{-13}$. All checks pass tolerance $10^{-9}$.
+The R/R diagonal, full-split, and NS-assignment tests record runtimes of
+0.079, 0.105, and 0.042 seconds, respectively, excluding compilation.
+
+\subsection{Initial Mercedes tests: ordinary and obstructed sectors}
+
+For the graph in \eqref{eq:mercedes-vertices}, take $b=7/5$ and edge
+momenta $(11/23,13/29,17/31,19/37,23/41,29/43)$. Every original edge has
+an independent physical cutoff of level 1. The three NS powers are
+$0,\frac12,1$, and the three Ramond powers are $0,1$, giving
+$3^3 2^3=216$ multidegrees per case, including total level 6.
+The inserted test also retains unequal split powers $(0,1)$ and $(1,0)$,
+with each segment independently bounded by level 1. Thus each inserted
+case has 432 full-split multidegrees, half of them diagonal.
+
+All eight choices of $(f_1,f_2,f_3)$ and all eight choices of
+$(\eta_{v_1},\eta_{v_2},\eta_{v_3})$ are tested. Equation
+\eqref{eq:mercedes-obstruction} gives 32 ordinary and 32 obstructed cases.
+Every case retains all 64 formal parity components and compares all 64
+evaluations of the edge spin lifts. Intrinsic primary parities are even.
+Arithmetic is complex machine precision; the central NS branching
+polynomials are evaluated at 40 digits before conversion.
+
+The physical reference contracts SCA PBW vertices and inverse SCA Gram
+matrices. Its Ramond vertices use \texttt{ScaWard}, and its central NS
+vertex uses the independent \texttt{NSDescendantThreeForm}; it does not
+use branching data. The enlarged numerator instead uses
+\texttt{LowAnchors} at the three NS--R--R vertices,
+\texttt{ns\_fusion\_data} at the center, and \texttt{MiddleBranching} on
+the split edge, followed by two Virasoro graph contractions. Local vertex
+and branching values are reused within the run. At this cutoff every
+Virasoro descendant edge has level at most one, so its exact CCY answer
+is the global term, evaluated with the $L_{-1}$ Ward formulas.
+No higher Kac residue or nonconstant Schottky correction enters this test.
+
+The auxiliary factor is sewn directly from fermion Fock states and Ward
+forms. Recovery uses only the double Virasoro numerator and this factor:
+it subtracts lower-level convolutions, divides by the matching-sector
+constant, and undoes the parity correction \eqref{eq:transport}. Physical PBW coefficients
+are used only for comparison. Unequal split powers are compared with the
+independent physical-PBW/fermion convolution, including nonzero fermion
+modes. Both inserted factors use $Q\Theta\psi$, so the normalization
+cancels upon recovery.
+
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.53\linewidth}rr@{}}
+\toprule
+Comparison & Ordinary & Inserted\\
+\midrule
+Recovered physical block vs PBW & $1.55\times10^{-12}$ & $1.60\times10^{-12}$\\
+Diagonal numerator vs PBW convolution & $1.26\times10^{-12}$ & $2.31\times10^{-12}$\\
+Physical loop-sector identity & $6.67\times10^{-16}$ & $6.67\times10^{-16}$\\
+Recovered block vs PBW at all spin lifts & $2.14\times10^{-12}$ & $2.20\times10^{-12}$\\
+Unequal split powers vs PBW convolution & --- & $2.03\times10^{-12}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Each of the first four rows covers 442368 components per column:
+$32\times216\times64$. The recovery comparisons contain 6912 nonzero
+formal components per column; constrained zeros are retained.
+The unequal-split check adds 442368 components. The uninserted enlarged
+blocks in all 32 obstructed cases vanish with maximum absolute residual
+$9.14\times10^{-13}$, while their physical blocks are generally nonzero.
+All checks pass tolerance $10^{-8}$.
+
+The new central-fermion adapter initially omitted the bra-slot BPZ sign.
+The raw sphere Pfaffian needs the factor $(-1)^{\epsilon^{\prime}_1}$, consistently
+with the auxiliary $\psi_{-1/2}$ norm $-1$ used above. Correcting that
+adapter resolved the mismatch; the graph formulas and production headers
+were unchanged. The results tabulated here use the corrected convention.
+
+The C++ test process took 1.93 seconds of wall time, including coefficient
+output; its internal timer recorded 1.59 seconds. Central-data export took
+0.098 seconds and compilation 3.29 seconds, for a fresh total of
+5.32 seconds. These are low-level validation timings. The run saves all
+13824 diagonal coefficient rows, each with the physical PBW, enlarged
+double Virasoro, and recovered parity arrays.
+
+\subsection{Local Ramond identity and external-state projections}
+
+The Ramond odd-ground identity used in \eqref{eq:physical-sector} passes
+864 local Ward tests at 40 digits. These cover $p,f=0,1$, both vertex
+signs, the NS primary and its $G_{-1/2}$ and $L_{-1}$ descendants, and
+both Ramond grounds and their $G_{-1}$ and $L_{-1}$ descendants in each
+Ramond slot. The maximum discrepancy is $2.90\times10^{-41}$.
+
+At $b=7/5$, $P=13/29$, 40-digit external-state BPZ projections reconstruct
+every tensor-PBW input at NS levels $0,\frac12,1$ and R levels $0,1$:
+\begin{center}
+\small
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Sector, level & Inputs & Gram entries & Gram error & Reconstruction error\\
+\midrule
+NS, $0$ & 1 & 1 & $0$ & $0$\\
+NS, $\frac12$ & 2 & 4 & $1.40\times10^{-32}$ & $5.68\times10^{-33}$\\
+NS, $1$ & 2 & 4 & $1.42\times10^{-32}$ & $3.62\times10^{-33}$\\
+R, $0$ & 4 & 16 & $5.86\times10^{-33}$ & $2.93\times10^{-33}$\\
+R, $1$ & 12 & 144 & $1.27\times10^{-30}$ & $1.29\times10^{-30}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+This gives 21 independent inputs and 169 branch-Gram entries, including
+all four Ramond ground tensors. Branch vectors are obtained from
+free-field primary and generator actions. Their coordinate conversion to
+the physical-PBW/auxiliary basis has maximum residual
+$2.70\times10^{-32}$ and is used only to evaluate BPZ overlaps.
+The final reconstruction uses independently known inverse Virasoro Gram
+matrices, not a fit of the input to the branch basis. This checks the
+external-state expansion locally, not a full correlator with external
+insertions.
+
+\subsection{Exact graph-sign and parity-algebra checks}
+
+Exact operator-order permutations verify \eqref{eq:correlator-sign}, while
+independent parity enumeration checks the associativity of the graph
+convolution:
+\begin{center}
+\small
+\begin{tabular}{@{}p{0.52\linewidth}rr@{}}
+\toprule
+Graph & Parity pairs & Associativity triples\\
+\midrule
+Theta & 64 & 512\\
+Glasses & 64 & 512\\
+Local ordering with external states & 4096 & 262144\\
+\bottomrule
+\end{tabular}
+\end{center}
+The theta driver also checks all eight half-edge parity assignments and
+all 64 explicit convolution-sign pairs. Four loop cases check commutation of the cycle monomials
+and the squares of the normalized cycle terms in \eqref{eq:constant-projectors}, and 64 local NS--R--R cases check phase
+factorization. All finite checks pass exactly. The external-state row is a local
+ordering check before sewing the NS slots; it is not a separate recovery
+construction. The Mercedes calculation retains its central sphere and
+uses the single external insertion described above.
+
+\subsection{All-NS Mercedes: comparison with NS \texorpdfstring{$c$}{c}-recursion}
+
+We also compare the all-NS Mercedes block with the NS $c$-recursion in
+the SCblock notes, independently of physical PBW sewing. All six edges
+are NS, with even intrinsic primary parities. Use the vertex orders in
+\eqref{eq:mercedes-vertices}, $b=7/5$, and momenta
+$(11/23,13/29,17/31,19/37,23/41,29/43)$. Both calculations use 40-digit
+arithmetic and retain every nonnegative half-integer multidegree with
+total level at most 6: 18564 multidegrees. All eight allowed vertex-form
+assignments are included. At fixed NS multidegree the edge parities are
+fixed, so coefficientwise agreement also covers all 64 spin-lift choices.
+
+The double-Virasoro side uses both full CCY recursions and Schottky vacuum
+factors, then removes the directly sewn auxiliary fermion factor. The
+independent NS recursion uses the Kac poles, inverse null slopes, fusion
+polynomials, and explicit global $\mathfrak{osp}(1|2)$ vertices. Its vacuum
+seed is expanded from the primitive Schottky cycles of this graph. Through
+level 6, the four triangles contribute supercurrent terms at levels
+$9/2,11/2$ and stress-tensor terms at level 6; the three four-edge cycles
+first contribute at level 6. Thus this comparison includes the nonconstant
+vacuum seed.
+
+The vacuum/global product requires the full sign in \eqref{eq:star}, with
+$\epsilon$ the global parity and $\epsilon'$ the vacuum parity. In
+particular, moving the middle-slot odd global operators past the ket-slot
+odd vacuum operators contributes
+$(-1)^{\sum_v\epsilon_{v,2}\epsilon'_{v,3}}$ in addition to the graph
+permutation sign. This term cancels in theta but survives in Mercedes.
+Omitting it gives 130 discrepant coefficients, beginning at total level 5;
+including it gives agreement throughout the requested domain. The maximum
+scaled error is $1.05\times10^{-28}$ and the maximum absolute error is
+$1.18\times10^{-28}$.
+
+The fresh run takes 15.78 seconds: 10.03 seconds for the enlarged
+double-Virasoro blocks, 0.013 seconds for the auxiliary factor, 0.162 seconds
+for recovery, and 5.58 seconds for NS recursion, comparisons, and output.
+Compilation is excluded. Sources, coefficients, the diagnostic with the
+omitted sign, and reproduction instructions are saved in
+\path{C++/experiments/mercedes_all_ns_c_recursion_2026-09-16/}.
+This additional test covers the all-NS assignment with even intrinsic
+primaries; it does not extend the tested mixed NS/R assignments.
+
+\paragraph{Extension to total level 10.}
+At the same parameters and precision, the two methods also agree on all
+230230 multidegrees through total level 10. The all-even vertex-form sector
+contains 29029 multidegrees, and each of the other seven sectors contains
+28743. The maximum scaled error is $2.05\times10^{-25}$ and the maximum
+absolute error is $4.00\times10^{-25}$; no coefficient fails the
+$10^{-18}$ tolerance. No additional physical PBW block is computed.
+
+This extension uses the full truncated Schottky product: 13 primitive
+unoriented cycles of lengths at most six and 20 fermionic oscillator
+factors, including their products. The lift phases are transported under
+cycle composition, and each half-multiplier is checked to square to the
+corresponding multiplier in the cycle convolution algebra. The chosen
+coordinate matrices give edge-map determinant $+q_e$ when exactly one
+endpoint is an infinity slot, and $-q_e$ otherwise. This replaces the old
+generic helper's uniform $-q_e$ assumption; its first effect on the
+bosonic vacuum is at total level 9, so the level-six result is unaffected.
+
+The fresh calculation retains 45405 branch tuples and performs 10921308
+CCY residue transitions. It generates the residual Virasoro level domain
+directly after subtracting each branch's starting levels, and convolves
+only pairs within that domain. Branching data and local recursion data
+are reused. Recovery updates only the higher coefficients that receive
+a nonconstant auxiliary contribution. On the NS recursion side, the
+full-block cache is cleared between target multidegrees: accumulated
+shifts plus remaining levels equal the target, so those entries cannot
+be shared by different targets. The reusable local caches are retained.
+
+\begin{center}
+\small
+\begin{tabular}{@{}lr@{}}
+\toprule
+Stage, 40-digit arithmetic & Time (s)\\
+\midrule
+Double-Virasoro enlarged blocks & 681.135\\
+Direct auxiliary factor & 0.183\\
+Collect enlarged coefficients & 0.071\\
+Recovery and coefficient output & 1.892\\
+\midrule
+Full double-Virasoro pipeline & 683.282\\
+NS Schottky seed & 0.178\\
+NS recursion and coefficient output & 270.148\\
+Full NS recursion stage & 270.326\\
+\bottomrule
+\end{tabular}
+\end{center}
+The two sequential computational stages take 953.61 seconds in total,
+excluding compilation and the subsequent comparison of saved coefficients.
+Both coefficient sets, errors at each total half-level, source hashes, and
+reproduction instructions are saved in
+\path{C++/experiments/mercedes_all_ns_level10_2026-09-16/}.
+
+\subsection{Saved evidence, reproduction, and scope}
+
+The theta, glasses, local Ward, external-state, and finite graph scripts,
+commands, source hashes, and results are saved in
+\path{C++/experiments/arbitrary_plumbing_2026-09-16/}.
+The reproduction guides are \path{theta_README.md} and
+\path{glasses_README.md}; the directory's \path{README.md} maps the formulas
+to their checks. The result files are \path{theta_summary.json},
+\path{theta_all_ns_results.json}, \path{theta_ramond_local_results.json},
+\path{external_state_results.json}, \path{glasses_results.json},
+\path{glasses_full_split_results.json},
+\path{glasses_ns_assignments_results.json}, and
+\path{graph_sign_results.json}.
+
+The Mercedes sources and results are saved separately in
+\path{C++/experiments/genus3_mercedes_2026-09-16/}.
+Running \texttt{python3 run.py} from that directory exports the central
+data, compiles the C++ driver, and executes the complete 64-case suite.
+The \path{manifest.json} records parameters, graph ordering, source and
+result hashes, timings, and aggregate errors. The \path{results.json}
+records every case and its worst discrepancies; \path{coefficients.jsonl}
+contains the diagonal coefficient arrays, and \path{central_manifest.json}
+records the independent central-vertex data. Its \path{README.md} explains
+the conventions and reproduction commands.
+
+These checks concern generic momenta at the stated cutoffs. For Mercedes
+they cover the all-NS and triangular Ramond assignments, excluding the
+inequivalent four-edge Ramond cycle and intrinsic-odd NS primaries. They do not test singular
+weights, full external-Ramond correlators, or a SCFT spectral sum or moduli
+integral. No arbitrary-genus numerical frontend is claimed: the general
+argument uses the local identities and graph contractions above.
+
+
+\end{document}

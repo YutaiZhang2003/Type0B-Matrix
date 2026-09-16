@@ -1,0 +1,2 @@
+#include "glasses_low.cpp"
+int main(){FermionForm f;S q=1.4+1/1.4;bool first=true;std::cout<<std::setprecision(17)<<"[";for(int insert=0;insert<2;insert++)for(int lev:{0,2})for(int ground=0;ground<2;ground++){AuxState aa{},a{lev?Part{1}:Part{},ground};int parity=aux_parity(1,a);S v=S(sign(parity))*f.complex_value<S>({aa,a,a});if(insert)v*=q/root(S(2))*S(sign(ground));if(!first)std::cout<<",";first=false;std::cout<<"["<<insert<<","<<lev<<","<<parity<<",";complex_json(v);std::cout<<"]";}std::cout<<"]\n";}

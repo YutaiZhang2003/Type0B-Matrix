@@ -1,0 +1,7 @@
+CXX = clang++
+CPPFLAGS += -I../../include -I/opt/homebrew/include
+CXXFLAGS ?= -O2 -std=c++17 -Wall -Wextra
+LDFLAGS += -L/opt/homebrew/lib
+LDLIBS += -lmpc -lmpfr -lgmpxx -lgmp -lm -framework Accelerate
+external_state: external_state.cpp $(wildcard ../../include/ramond/*.hpp)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@

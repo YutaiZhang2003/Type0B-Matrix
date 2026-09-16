@@ -1,0 +1,17 @@
+CXX = clang++
+CPPFLAGS += -I../unphased_vertex_2026-09-15/include -I../../include/ramond -I../../include -I/opt/homebrew/include
+CXXFLAGS ?= -O2 -std=c++17 -Wall -Wextra
+LDFLAGS += -L/opt/homebrew/lib
+LDLIBS += -lmpc -lmpfr -lgmpxx -lgmp -lm
+ifeq ($(shell uname -s),Darwin)
+LDLIBS += -framework Accelerate
+else
+LDLIBS += -llapack -lblas
+endif
+HEADERS = theta_literal_split.hpp theta_full_split_dv.hpp $(wildcard ../unphased_vertex_2026-09-15/include/ramond/*.hpp ../../include/ramond/*.hpp)
+theta_validate: theta_validate.cpp $(HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+theta_ramond_local: theta_ramond_local.cpp $(HEADERS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+.PHONY: all
+all: theta_validate theta_ramond_local

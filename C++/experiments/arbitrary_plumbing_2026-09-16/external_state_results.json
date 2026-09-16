@@ -1,0 +1,73 @@
+{
+  "dps": 40,
+  "method": "BPZ overlaps evaluated in physical PBW times auxiliary Gram, followed by normalized double-Virasoro inverse Gram; no final branching-basis fit",
+  "cases": [
+    {
+      "sector": "NS",
+      "twice_level": 0,
+      "states": 1,
+      "branches": 1,
+      "Gram_entries": 1,
+      "max_Gram_error": 0,
+      "max_reconstruction_error": 0,
+      "PBW_coordinate_conversion_error": 0
+    },
+    {
+      "sector": "NS",
+      "twice_level": 1,
+      "states": 2,
+      "branches": 2,
+      "Gram_entries": 4,
+      "max_Gram_error": 1.3982283175924778e-32,
+      "max_reconstruction_error": 5.677789268207923e-33,
+      "PBW_coordinate_conversion_error": 3.4951041406247695e-33
+    },
+    {
+      "sector": "NS",
+      "twice_level": 2,
+      "states": 2,
+      "branches": 2,
+      "Gram_entries": 4,
+      "max_Gram_error": 1.4160195543098114e-32,
+      "max_reconstruction_error": 3.61389153754543e-33,
+      "PBW_coordinate_conversion_error": 2.9408169099703407e-33
+    },
+    {
+      "sector": "R",
+      "twice_level": 0,
+      "states": 4,
+      "branches": 4,
+      "Gram_entries": 16,
+      "max_Gram_error": 5.852970755461581e-33,
+      "max_reconstruction_error": 2.9264853662513533e-33,
+      "PBW_coordinate_conversion_error": 2.9264854013163493e-33
+    },
+    {
+      "sector": "R",
+      "twice_level": 2,
+      "states": 12,
+      "branches": 12,
+      "Gram_entries": 144,
+      "max_Gram_error": 1.2663094977717913e-30,
+      "max_reconstruction_error": 1.288232001693867e-30,
+      "PBW_coordinate_conversion_error": 2.698543794898241e-32
+    }
+  ],
+  "passed": true,
+  "parameters": {
+    "b": "7/5",
+    "P": "13/29"
+  },
+  "command": [
+    "./external_state",
+    "external_state_results.json"
+  ],
+  "scope": "All tensor-PBW states at NS levels 0,1/2,1 and R levels 0,1. 21 independent inputs,169 branching Gram entries. Includes all four R grounds and R level-one descendants. Does not test a full correlator with external insertions.",
+  "source_sha256": {
+    "C++/experiments/arbitrary_plumbing_2026-09-16/external_state.cpp": "403084f9db6b2405d8334b943f77899f0f79de47ca64b30f0e9002f4eee168bc",
+    "C++/experiments/arbitrary_plumbing_2026-09-16/external_state_makefile": "39c66ea06328ff8e9909a688dd833003a1ef4626c15880f4be5f231486adfad9",
+    "C++/include/ramond/free_field.hpp": "2372d473e8f39dcba2e256580f5fe3711179eaced568828ca122bdcf911229df",
+    "C++/include/ramond/direct_pbw.hpp": "b26fd4f2fda60921844c35d82c3e79d220322b54a1293c7af7f09be7965379b9",
+    "C++/include/ramond/linalg.hpp": "dd440804fdb0444b14c595c0950d431ee0c48c331e5a833cb74c2dad68942ec5"
+  }
+}
