@@ -70,7 +70,7 @@ class RefinementBlockTests(unittest.TestCase):
 
     def test_all_eight_components_through_level_three(self):
         self.assertEqual(set(self.blocks), set(trial.CHANNELS))
-        self.assertEqual(self.checks["explicit_PBW_completion_calls"], 4)
+        self.assertEqual(self.checks["explicit_PBW_completion_calls"], 0)
         self.assertLess(self.checks["analytic_ground_half_level_max_error"], 1e-11)
         for vectors in self.blocks.values():
             self.assertEqual(set(vectors), set(level_triples(6)))

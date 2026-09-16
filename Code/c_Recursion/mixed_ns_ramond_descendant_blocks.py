@@ -25,44 +25,16 @@ from __future__ import annotations
 import cmath
 from functools import lru_cache
 import math
-from typing import Dict, Iterable, Literal, Sequence, Tuple
+from typing import Dict, Literal, Sequence, Tuple
 
 import mpmath
+
+from ns_pbw_basis import ns_pbw_basis
 
 
 Mode = Tuple[Literal["L", "G"], int]
 State = Tuple[Mode, ...]
 Matrix2 = Tuple[Tuple[complex, complex], Tuple[complex, complex]]
-
-
-def _integer_partitions(
-    total: int, maximum: int | None = None
-) -> Iterable[Tuple[int, ...]]:
-    if total == 0:
-        yield ()
-        return
-    if maximum is None or maximum > total:
-        maximum = total
-    for first in range(maximum, 0, -1):
-        for tail in _integer_partitions(total - first, first):
-            yield (first,) + tail
-
-
-def _strict_odd_partitions(
-    total: int, maximum: int | None = None
-) -> Iterable[Tuple[int, ...]]:
-    """Partition ``total`` into distinct positive odd integers."""
-
-    if total == 0:
-        yield ()
-        return
-    if maximum is None or maximum > total:
-        maximum = total
-    if maximum % 2 == 0:
-        maximum -= 1
-    for first in range(maximum, 0, -2):
-        for tail in _strict_odd_partitions(total - first, first - 2):
-            yield (first,) + tail
 
 
 def state_twice_level(state: State) -> int:
@@ -131,43 +103,19 @@ class NSVermaModule:
 
         G_{-k_i} ... G_{-k_1} L_{-m_j} ... L_{-m_1}|h>,
 
-    where ``k_1 > ... > k_i`` and ``m_1 >= ... >= m_j``.
+    where ``k_1 > ... > k_i`` and ``m_1 >= ... >= m_j``. The basis vectors
+    follow the displayed Belavin--Geiko Gram-matrix order; at level two:
+    ``(L_-1**2, L_-2, G_-1/2 G_-3/2)``.
     """
 
     def __init__(self, *, c: complex, weight: complex) -> None:
         self.c = complex(c)
         self.weight = complex(weight)
-        self._basis_cache: Dict[int, Tuple[State, ...]] = {}
         self._gram_cache: Dict[int, Tuple[Tuple[complex, ...], ...]] = {}
         self._action_cache: Dict[tuple[Mode, State], Dict[State, complex]] = {}
 
     def basis(self, twice_level: int) -> Tuple[State, ...]:
-        if not isinstance(twice_level, int) or twice_level < 0:
-            raise ValueError("twice_level must be a nonnegative integer")
-        if twice_level in self._basis_cache:
-            return self._basis_cache[twice_level]
-
-        states = []
-        for g_twice_level in range(twice_level + 1):
-            remainder = twice_level - g_twice_level
-            if remainder % 2:
-                continue
-            for g_parts in _strict_odd_partitions(g_twice_level):
-                for l_parts in _integer_partitions(remainder // 2):
-                    word: State = tuple(
-                        [("G", -part) for part in reversed(g_parts)]
-                        + [("L", -2 * part) for part in reversed(l_parts)]
-                    )
-                    states.append(word)
-
-        states.sort(
-            key=lambda state: (
-                sum(1 for kind, _ in state if kind == "G"),
-                state,
-            )
-        )
-        self._basis_cache[twice_level] = tuple(states)
-        return self._basis_cache[twice_level]
+        return ns_pbw_basis(twice_level)
 
     @staticmethod
     def bpz(state: State) -> State:

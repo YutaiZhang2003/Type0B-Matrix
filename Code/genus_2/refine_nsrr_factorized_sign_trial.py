@@ -2,8 +2,7 @@
 """Raise numerical accuracy of the UNCHANGED, explicitly hypothetical NSRR trial.
 
 The original trial, its archived data, and all checked kernels stay untouched.
-Equal-sign blocks use branching and Virasoro c-recursions. Mixed signs retain
-the explicit PBW diagnostic completion, here bounded to chiral level three.
+Every NSRR channel uses the native double-Virasoro implementation.
 This runner makes no new physical spin or antiholomorphic identification.
 """
 from __future__ import annotations
@@ -19,7 +18,6 @@ from pathlib import Path
 import subprocess
 import sys
 import time
-from unittest.mock import patch
 
 import numpy as np
 
@@ -85,31 +83,7 @@ def validate_config(config):
 
 
 def block_components(b, momenta_slots, cutoff):
-    if cutoff not in (2, 3):
-        raise ValueError("the refined diagnostic completion is bounded to level two or three")
-    if cutoff == 2:
-        return trial.block_components(b, momenta_slots, cutoff)
-    with patch.object(trial.dv, "HumanNSRRThetaOracle", wraps=trial.dv.HumanNSRRThetaOracle) as oracle:
-        runtime = trial.dv.NSRRDoubleVirasoroTheta(
-            b=b, physical_momenta=momenta_slots, cutoff=cutoff,
-            completion="pbw_diagnostic", pbw_completion_max_level=3)
-        components = {channel: runtime.physical_components(*channel) for channel in trial.CHANNELS}
-        calls = oracle.call_count
-    if calls != 4:
-        raise ArithmeticError("expected exactly four explicitly requested PBW completions")
-    error = 0.
-    for channel, vectors in components.items():
-        for lifts in product((1, -1), repeat=3):
-            k = trial.dv.spin_character_index(lifts)
-            expected = trial.low_level_coefficients(b, momenta_slots, *channel, lifts)
-            for exponent, target in zip(((0, 0, 0), (1, 0, 0)), expected):
-                actual = trial.fwht(vectors[exponent])[k]
-                error = max(error, abs(actual-target)/max(1., abs(target)))
-    if error > 1e-10 or runtime.ward_residual_maximum > 1e-8:
-        raise ArithmeticError("low-level or branching Ward check failed")
-    return components, {"explicit_PBW_completion_calls": calls,
-                        "analytic_ground_half_level_max_error": error,
-                        "branching_ward_residual": runtime.ward_residual_maximum}
+    return trial.block_components(b, momenta_slots, cutoff)
 
 
 def baseline_node_check(config, shard):

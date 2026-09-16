@@ -1,0 +1,584 @@
+{
+  "reason": "Separate numerical kernel fingerprint from report-only driver code after correcting free-frame lookup in reporting. All 27 numerical payloads unchanged.",
+  "original_design": {
+    "config": {
+      "schema": "nsrr-bilinear-quadrature-v1",
+      "b": 1.4,
+      "parameters": {
+        "b": 1.4,
+        "mu": "1+0j",
+        "include_cosmological_prefactor": false
+      },
+      "point": {
+        "t": 0.6,
+        "spin_rows": [
+          {
+            "source_marked": [
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "target_marked": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "target_charge": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ]
+            ],
+            "target_raw_lift": [
+              -1,
+              1,
+              1
+            ],
+            "majorana_source": [
+              0.9899954597130511,
+              0.08409223732332471
+            ],
+            "majorana_target": [
+              0.9864571237891743,
+              0.08622193664124848
+            ],
+            "chiral_frame_ratio": [
+              1.0033724450455666,
+              -0.0024537083291275596
+            ],
+            "free_frame_ratio": 1.0204243472091914
+          },
+          {
+            "source_marked": [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "target_marked": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ]
+            ],
+            "target_charge": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "target_raw_lift": [
+              1,
+              1,
+              1
+            ],
+            "majorana_source": [
+              0.9333410717768206,
+              -0.09118988195114842
+            ],
+            "majorana_target": [
+              0.9304206974735543,
+              -0.08860807506851204
+            ],
+            "chiral_frame_ratio": [
+              1.0033724450497985,
+              -0.002453708332906373
+            ],
+            "free_frame_ratio": 1.0204243472178176
+          }
+        ],
+        "measured_relative_spin_phase": [
+          1.000000000004227,
+          -3.755775302357524e-12
+        ],
+        "transport_relative_phase": [
+          1.0,
+          0.0
+        ],
+        "source_free": 0.5754095923717206,
+        "target_free": 0.5638924570404817,
+        "q_source": [
+          "(-0.03938929794343916-0.02508339199638473j)",
+          "(-0.04059269805965829+0.02978808739157108j)",
+          "(-0.03515917339490496+0.025344924433414715j)"
+        ],
+        "q_target": [
+          "(0.034728649738917886-0.02512904810285939j)",
+          "(-0.024917675594662316-0.0014728712197212173j)",
+          "(-0.08055905018198473-7.808926020263012e-05j)"
+        ]
+      },
+      "source_envelope": [
+        0.04779213238222936,
+        0.0520035772489429,
+        0.04349541543013214
+      ],
+      "target_envelope": [
+        0.04677899744906184,
+        0.03806246230229872,
+        0.1332848304670786
+      ],
+      "source_levels": [
+        3,
+        5
+      ],
+      "target_order": 16,
+      "native_precision": 40,
+      "block_precision": 50,
+      "structure_precision": 40,
+      "global_tolerance": 2e-09,
+      "global_max_occupation": 60,
+      "quadrature_orders": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "relative_stability_tolerance": 0.0001,
+      "required_successive_steps": 2,
+      "stability_observables": "source Z, target Z, and their normalized ratio for both s signs, both resolved spins, and the spin sum",
+      "primary_policy": "Independent channel q^h outside descendant blocks and pairing matrices",
+      "transport_policy": "Transport each raw spin separately; relative phase fixed by independent continued Majorana roots. Test the corresponding minimal interacting spin-basis proposal; no fitted normalization.",
+      "implementation_sha256": {
+        "Code/genus_2/refine_nsrr_bilinear_quadrature.py": "a43563e609abc5b154baab7b6e4bd055df3ab26ed9974e2aa08b2b714a3f20d5",
+        "Code/genus_2/nsrr_bilinear_sewing.py": "6ece2d3aa948a28458cfabb231a87d7143e400c78a9be30c90a5ce9e6c124977",
+        "Code/genus_2/all_ns_reflected_sewing.py": "88f9566586ff1e2d7c3522f66ee211b7ff53943167babba4d86df701ac950a4f",
+        "Code/genus_2/nsrr_plumbing_adapter.py": "244556f8a520623d7e41e2f1d8e6e45b914230f9fc7ed49e84a4d9b229f7c569",
+        "Code/c_Recursion/ns_genus2_partition.py": "56499bf06d3f12809ffc44331ececd40966cf974c65606edab9c332b964ffd2c",
+        "Code/c_Recursion/generic_super_liouville_structure_constants.py": "80ee3d719fe87f9da5f2c18ca03e6f2449afd455a897cb63ab7b6d1594d52781",
+        "Code/full_ramond_block_runtime/nsrr_cpp_backend.py": "6e79367fb80019f7645fcebcba7cf0bfd92b7e25b5abc541cfa0ad332746360a",
+        "C++/bin/ramond": "8bec4a5a9de182a0df276239a0908966c7837bc34efce880eaaee3bba6324bb7",
+        "C++/include/ramond/anchors.hpp": "f872aa391ff88a74fbbdfb5890c5572f73f438242bba350049c846f07a98ef52",
+        "C++/include/ramond/branching.hpp": "dde30b3c7df980d3ee39a75a706ce4d487334d9b6a28725e68114871d7c97bdc",
+        "C++/include/ramond/ccy.hpp": "9826d3df0c4612eb1d67e9f6a432a1b8c83025d0381fd993c5f90803761f5c35",
+        "C++/include/ramond/fermion.hpp": "7211c7d61cd44d46db0297b0ba96e6a908e2cd88177ad15792c82fee1139208e",
+        "C++/include/ramond/free_field.hpp": "2372d473e8f39dcba2e256580f5fe3711179eaced568828ca122bdcf911229df",
+        "C++/include/ramond/linalg.hpp": "dd440804fdb0444b14c595c0950d431ee0c48c331e5a833cb74c2dad68942ec5",
+        "C++/include/ramond/number.hpp": "8f2dd10b1750145a21ef0749df933759ae873f9e3d2790eda29b7ebe534b1a2e",
+        "C++/include/ramond/pipeline.hpp": "0b94264def9273712a2a83fe6e216995603f4d5f21a441765bc7dda52c2f4abe",
+        "C++/include/ramond/resummed_global.hpp": "32a2c5822b0cc54d2672afe5b5a951929cbbb7ec35ddde01cab55df6ef7b48fb",
+        "C++/include/ramond/resummed_pipeline.hpp": "ed53099046d8441fa77d9d5532b166d248ca1697e059b7de2f61db067cf4d498",
+        "C++/include/ramond/schottky.hpp": "2c155f0e5614c9456ece1f63385a87248fa31d59021688aed45f8d27f22ecca2",
+        "C++/include/ramond/storage.hpp": "12a15d94aa0e446f75a5b4019249040d898655dfb6056cec198ee362f1026301",
+        "C++/src/main.cpp": "0cf7d2f0757395060d3a048dea4da85f73e6907fda374bd5d9874a3b1aea143f"
+      },
+      "baseline_sha256": {
+        "Data Set/nsrr_bilinear_cross_channel_20260915/config.json": "81bef82619110e6e64f0ff8b1bc7c87914aa041b98c7b9b8aebe0df67b9f58b9",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/source.json": "2a7901ed70044075a20dc607e8f2b7bf73284555acedc0aec82b4859cc3f20f6",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/target_summary.json": "88b1c33c8c6a5e92b0aad3052d20cc9bb52c19d09ced270f56e100df18447e67",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/provenance.json": "cdfb33e83fcbc90585fe757f7751472890e76612b44eece6f39077ea9523f0ab",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/target_provenance.json": "548cef50bd44e71c647e53dd5d6eb46088a1bde7b5625083c19c2b9e610a9017",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/report_provenance.json": "761174d22aaec932def9bcc74741fa6b2f252974eb7e837250dfb6a75f62513a"
+      }
+    },
+    "implementation_sha256": {
+      "Code/genus_2/check_nsrr_factor4_convergence.py": "a2115c177e70c7601da01888241eb2b26592d479d231d0e7c7955d0b5c3bc1fc",
+      "Code/genus_2/refine_nsrr_bilinear_quadrature.py": "a43563e609abc5b154baab7b6e4bd055df3ab26ed9974e2aa08b2b714a3f20d5",
+      "Code/c_Recursion/ns_genus2_partition.py": "56499bf06d3f12809ffc44331ececd40966cf974c65606edab9c332b964ffd2c",
+      "Code/genus_2/all_ns_reflected_sewing.py": "88f9566586ff1e2d7c3522f66ee211b7ff53943167babba4d86df701ac950a4f"
+    }
+  },
+  "current_design": {
+    "config": {
+      "schema": "nsrr-bilinear-quadrature-v1",
+      "b": 1.4,
+      "parameters": {
+        "b": 1.4,
+        "mu": "1+0j",
+        "include_cosmological_prefactor": false
+      },
+      "point": {
+        "t": 0.6,
+        "spin_rows": [
+          {
+            "source_marked": [
+              [
+                1,
+                1
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "target_marked": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "target_charge": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ]
+            ],
+            "target_raw_lift": [
+              -1,
+              1,
+              1
+            ],
+            "majorana_source": [
+              0.9899954597130511,
+              0.08409223732332471
+            ],
+            "majorana_target": [
+              0.9864571237891743,
+              0.08622193664124848
+            ],
+            "chiral_frame_ratio": [
+              1.0033724450455666,
+              -0.0024537083291275596
+            ],
+            "free_frame_ratio": 1.0204243472091914
+          },
+          {
+            "source_marked": [
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "target_marked": [
+              [
+                0,
+                0
+              ],
+              [
+                1,
+                0
+              ]
+            ],
+            "target_charge": [
+              [
+                0,
+                0
+              ],
+              [
+                0,
+                0
+              ]
+            ],
+            "target_raw_lift": [
+              1,
+              1,
+              1
+            ],
+            "majorana_source": [
+              0.9333410717768206,
+              -0.09118988195114842
+            ],
+            "majorana_target": [
+              0.9304206974735543,
+              -0.08860807506851204
+            ],
+            "chiral_frame_ratio": [
+              1.0033724450497985,
+              -0.002453708332906373
+            ],
+            "free_frame_ratio": 1.0204243472178176
+          }
+        ],
+        "measured_relative_spin_phase": [
+          1.000000000004227,
+          -3.755775302357524e-12
+        ],
+        "transport_relative_phase": [
+          1.0,
+          0.0
+        ],
+        "source_free": 0.5754095923717206,
+        "target_free": 0.5638924570404817,
+        "q_source": [
+          "(-0.03938929794343916-0.02508339199638473j)",
+          "(-0.04059269805965829+0.02978808739157108j)",
+          "(-0.03515917339490496+0.025344924433414715j)"
+        ],
+        "q_target": [
+          "(0.034728649738917886-0.02512904810285939j)",
+          "(-0.024917675594662316-0.0014728712197212173j)",
+          "(-0.08055905018198473-7.808926020263012e-05j)"
+        ]
+      },
+      "source_envelope": [
+        0.04779213238222936,
+        0.0520035772489429,
+        0.04349541543013214
+      ],
+      "target_envelope": [
+        0.04677899744906184,
+        0.03806246230229872,
+        0.1332848304670786
+      ],
+      "source_levels": [
+        3,
+        5
+      ],
+      "target_order": 16,
+      "native_precision": 40,
+      "block_precision": 50,
+      "structure_precision": 40,
+      "global_tolerance": 2e-09,
+      "global_max_occupation": 60,
+      "quadrature_orders": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "relative_stability_tolerance": 0.0001,
+      "required_successive_steps": 2,
+      "stability_observables": "source Z, target Z, and their normalized ratio for both s signs, both resolved spins, and the spin sum",
+      "primary_policy": "Independent channel q^h outside descendant blocks and pairing matrices",
+      "transport_policy": "Transport each raw spin separately; relative phase fixed by independent continued Majorana roots. Test the corresponding minimal interacting spin-basis proposal; no fitted normalization.",
+      "implementation_sha256": {
+        "Code/genus_2/refine_nsrr_bilinear_quadrature.py": "a43563e609abc5b154baab7b6e4bd055df3ab26ed9974e2aa08b2b714a3f20d5",
+        "Code/genus_2/nsrr_bilinear_sewing.py": "6ece2d3aa948a28458cfabb231a87d7143e400c78a9be30c90a5ce9e6c124977",
+        "Code/genus_2/all_ns_reflected_sewing.py": "88f9566586ff1e2d7c3522f66ee211b7ff53943167babba4d86df701ac950a4f",
+        "Code/genus_2/nsrr_plumbing_adapter.py": "244556f8a520623d7e41e2f1d8e6e45b914230f9fc7ed49e84a4d9b229f7c569",
+        "Code/c_Recursion/ns_genus2_partition.py": "56499bf06d3f12809ffc44331ececd40966cf974c65606edab9c332b964ffd2c",
+        "Code/c_Recursion/generic_super_liouville_structure_constants.py": "80ee3d719fe87f9da5f2c18ca03e6f2449afd455a897cb63ab7b6d1594d52781",
+        "Code/full_ramond_block_runtime/nsrr_cpp_backend.py": "6e79367fb80019f7645fcebcba7cf0bfd92b7e25b5abc541cfa0ad332746360a",
+        "C++/bin/ramond": "8bec4a5a9de182a0df276239a0908966c7837bc34efce880eaaee3bba6324bb7",
+        "C++/include/ramond/anchors.hpp": "f872aa391ff88a74fbbdfb5890c5572f73f438242bba350049c846f07a98ef52",
+        "C++/include/ramond/branching.hpp": "dde30b3c7df980d3ee39a75a706ce4d487334d9b6a28725e68114871d7c97bdc",
+        "C++/include/ramond/ccy.hpp": "9826d3df0c4612eb1d67e9f6a432a1b8c83025d0381fd993c5f90803761f5c35",
+        "C++/include/ramond/fermion.hpp": "7211c7d61cd44d46db0297b0ba96e6a908e2cd88177ad15792c82fee1139208e",
+        "C++/include/ramond/free_field.hpp": "2372d473e8f39dcba2e256580f5fe3711179eaced568828ca122bdcf911229df",
+        "C++/include/ramond/linalg.hpp": "dd440804fdb0444b14c595c0950d431ee0c48c331e5a833cb74c2dad68942ec5",
+        "C++/include/ramond/number.hpp": "8f2dd10b1750145a21ef0749df933759ae873f9e3d2790eda29b7ebe534b1a2e",
+        "C++/include/ramond/pipeline.hpp": "0b94264def9273712a2a83fe6e216995603f4d5f21a441765bc7dda52c2f4abe",
+        "C++/include/ramond/resummed_global.hpp": "32a2c5822b0cc54d2672afe5b5a951929cbbb7ec35ddde01cab55df6ef7b48fb",
+        "C++/include/ramond/resummed_pipeline.hpp": "ed53099046d8441fa77d9d5532b166d248ca1697e059b7de2f61db067cf4d498",
+        "C++/include/ramond/schottky.hpp": "2c155f0e5614c9456ece1f63385a87248fa31d59021688aed45f8d27f22ecca2",
+        "C++/include/ramond/storage.hpp": "12a15d94aa0e446f75a5b4019249040d898655dfb6056cec198ee362f1026301",
+        "C++/src/main.cpp": "0cf7d2f0757395060d3a048dea4da85f73e6907fda374bd5d9874a3b1aea143f"
+      },
+      "baseline_sha256": {
+        "Data Set/nsrr_bilinear_cross_channel_20260915/config.json": "81bef82619110e6e64f0ff8b1bc7c87914aa041b98c7b9b8aebe0df67b9f58b9",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/source.json": "2a7901ed70044075a20dc607e8f2b7bf73284555acedc0aec82b4859cc3f20f6",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/target_summary.json": "88b1c33c8c6a5e92b0aad3052d20cc9bb52c19d09ced270f56e100df18447e67",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/provenance.json": "cdfb33e83fcbc90585fe757f7751472890e76612b44eece6f39077ea9523f0ab",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/target_provenance.json": "548cef50bd44e71c647e53dd5d6eb46088a1bde7b5625083c19c2b9e610a9017",
+        "Data Set/nsrr_bilinear_cross_channel_20260915/report_provenance.json": "761174d22aaec932def9bcc74741fa6b2f252974eb7e837250dfb6a75f62513a"
+      }
+    },
+    "method": "refine_nsrr_bilinear_quadrature.target_node; N=3, R=16",
+    "implementation_sha256": {
+      "Code/genus_2/refine_nsrr_bilinear_quadrature.py": "a43563e609abc5b154baab7b6e4bd055df3ab26ed9974e2aa08b2b714a3f20d5",
+      "Code/c_Recursion/ns_genus2_partition.py": "56499bf06d3f12809ffc44331ececd40966cf974c65606edab9c332b964ffd2c",
+      "Code/genus_2/all_ns_reflected_sewing.py": "88f9566586ff1e2d7c3522f66ee211b7ff53943167babba4d86df701ac950a4f"
+    }
+  },
+  "original_driver_snapshot_sha256": "a2115c177e70c7601da01888241eb2b26592d479d231d0e7c7955d0b5c3bc1fc",
+  "nodes": [
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0000.json",
+      "old_sha256": "45196d108a0ab0c700834f2a51904e54ee29401ecd02b5409768706a89d3c4cc",
+      "new_sha256": "ecddfc7ef96c293de1956032e9218268c18e17787013bd3bdac78eafa656a29c",
+      "numerical_payload_sha256": "87c66acce5f868692a579613d1bdc8ddc9cb35b400acb14487c22d1e82e4e189"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0001.json",
+      "old_sha256": "22e28d87eb82ddead3100823524f6c6a5967ab8d377483528b2b694e5b21bf34",
+      "new_sha256": "4dfb918dfb38d8cf4a2b6b6381e878170ebcb5c981a86e86793ddcf7800bda9b",
+      "numerical_payload_sha256": "914e3a90da79ecd07b8b2f00eef123e2c78e5ebe16d0ad5bd477275c2fbb2ae1"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0002.json",
+      "old_sha256": "f022653703d3113ef4255ce78a478715d853cbd433678ddbac4c8415712cc4dc",
+      "new_sha256": "c7f5cea8ddd04e5635300b6ab14a71bf21695982d4d788bd72acc7d3c8f29c80",
+      "numerical_payload_sha256": "834bb62d462152eba9f9c35efe3c6fb830655e3698ca90466c8b1d7b6340fb98"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0003.json",
+      "old_sha256": "39cc1b0d2caab990f564699c09a74ea9c16c8d7942afecf37a08b6ce462b9e26",
+      "new_sha256": "2d305a3846d07ff3c4d9b4b6ad0953f2408a140cb8ae71f5594eb51697b62deb",
+      "numerical_payload_sha256": "9be8ca7b8fffd7a8ddba373986aebbf5337f5895bdae4218f6c2db1da40fd071"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0004.json",
+      "old_sha256": "b79ddaf62acc14578c2478dfec7d41fdf2e530f7f64025883b17a47cf907ec2c",
+      "new_sha256": "f6bd56f917dc6f64af0d4f51a9b1a4afb8c35c91c016b1755531d6e31d4c5cf2",
+      "numerical_payload_sha256": "238eb9fe811dfb3d368fa3b0773bde85bd0755751162ada07c110005e25813bb"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0005.json",
+      "old_sha256": "362f703ab3a60cc6c0212506ebedc3877d0c6029ec2a3f72abe6dd6f2a043499",
+      "new_sha256": "2565122c5d89e045e94cb8f8e4713b49df29c229bd5bea5f93839d4f2460ed2f",
+      "numerical_payload_sha256": "e5d73e8fd237059bb4d25bd07d8dc1495198acb122b1aac2d1e33fcad2d56095"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0006.json",
+      "old_sha256": "d4b8721d44696b0795f198cc3a0cd746645d1912577458eccf06638061b36e69",
+      "new_sha256": "f68e6b5f6853705c97128747324073c03f9a31a54aba7d819d5ca12eff0d1f13",
+      "numerical_payload_sha256": "13c59e89eff312dfa86337307f0dcdfcab9dd60c57faa02e972759535ec8b327"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0007.json",
+      "old_sha256": "370133c707441c11f55e18876d782db37052388bca6ed925eceb5186a400dd44",
+      "new_sha256": "266db97bdbb3a1c070629ffbfebda2abf5d4277080a7fbe302a8e8088be70f42",
+      "numerical_payload_sha256": "a1c56ebd6c7693c7ba20429f357883f5b53cd7e9024673d8c3c40d1b5f848bd9"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0008.json",
+      "old_sha256": "1af74b01cc3b6cc1f4794bcb9c5cdfbc9e89b8ce11c5c6674bad0bb85640de31",
+      "new_sha256": "eb3ac0d3f576e7991b59ecbaed0e14a64328cb268bc70b185333b5c58a3e0a6f",
+      "numerical_payload_sha256": "0c7aa27327e6ba92adb0c018ac69bf8349a1dc98edac6a5c4158f901a4b3dccb"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0009.json",
+      "old_sha256": "f354623e60b538d70163aad6a46aa4effe83451dcebd775085af7a59fae5bb00",
+      "new_sha256": "62f578b12ab7870fd2855bc9306cc628bd40850e2c8c866ed7d5c7b5da98d88d",
+      "numerical_payload_sha256": "81d3a7f06655ce8d3a4ab74972afc055d02b4f5c3c645e2c58012c60a0e53f5f"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0010.json",
+      "old_sha256": "87087c4769fdf3147f5a5fe4030f34f96c9dbfb03ebecff0e46e32d4a3c360be",
+      "new_sha256": "ef3107ca5ec419f9547f7da73e4ddd01d4dc5d85683060cc1d77161cdb2d52fa",
+      "numerical_payload_sha256": "6a014529d1f7de2952aeee47ff8b9883a1d3655b1eb6ed34e57328b843a07ce5"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0011.json",
+      "old_sha256": "cae4132408a851cfbfd81e3ef6c53a0c40b2544df223bd2068d43c6979f9a172",
+      "new_sha256": "bb6dd4689d95a93472385b8d5ee07d17ee9f44fd80b22891ab3bef33445f3291",
+      "numerical_payload_sha256": "73fca7972bb6717d39bd0260d296084bec692949e68c912b55152f12c5a8f5e0"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0012.json",
+      "old_sha256": "175121472d89879ed2f3c11fcc568f43efd0e2b1bafebb670c22ffc7832ce044",
+      "new_sha256": "14df42fcea75ffe703da6cc34b5efffa91d08ab15f5c1b15ac526923e74fa1ee",
+      "numerical_payload_sha256": "7f99e201c4a876ac2784f02e4c3ad1e3a764d4cc437dbb7a8ebc6ec6d4a01274"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0013.json",
+      "old_sha256": "f924b10585cebdbc1dd304496e66784e8bd40546a380a002d0010806884f30eb",
+      "new_sha256": "9b6b1efd9f3478869986fd105d2ead77105c4dff63763d8a1d45eedf474ec9c2",
+      "numerical_payload_sha256": "9d560c918543bfee29ade22c31f61c352f3319f6691879363e3b02ddddc4a7ab"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0014.json",
+      "old_sha256": "f0131d883cdfb7642290bca449638de8210425b22dc5f491f8e56761abd2095f",
+      "new_sha256": "deb411f5c2b04a1697ecc357dccb18743dd234d3c21b0115a4969a92453759b3",
+      "numerical_payload_sha256": "7b329185578db1ca33ea328a170d1cb984c8a626133ee65c1b96d3f234480d12"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0015.json",
+      "old_sha256": "0aba04d984de713a99488b2f1e81dd2d8df814693a5bee528749cc02a1957856",
+      "new_sha256": "f0c49fd39ba46e10077cd3a6772ed20c3970679c7a404a51e5abe7d6096e3405",
+      "numerical_payload_sha256": "494b46a3f912539efdb5e56a399c2ef9456c8e18930916400498edfdf23550e3"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0016.json",
+      "old_sha256": "9fae1fbfbe9bcb1ed8a9dfd71e7da6debcc8be0f47cb3d9d6934d812951db6f0",
+      "new_sha256": "3ec4282f7b4b3935ae799839585d6298460e3437e02854c61a79c261c50eb638",
+      "numerical_payload_sha256": "827a7bb2cd1df1935fe10c92d8daa8746a02d6a159a37ed1c1631a7250c68e06"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0017.json",
+      "old_sha256": "e5c5109458c875b503e487a9efd30cfcac125457cf51abfa56efa08efc984d9c",
+      "new_sha256": "c5f6f74c663216bd22986132220544812db336c718ae6fccbf8689d3fb8072e9",
+      "numerical_payload_sha256": "f6d57bb74b0da7903e989996e18fc3f5b4db7e0f1ae42cf83556673dcc8ebc03"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0018.json",
+      "old_sha256": "eed0c8910b1e215224c91e132fdb36889586ab883a4ffa1053e43673a02f6a5a",
+      "new_sha256": "c067ff12d0520cb531d5ff31c523e769751794a24713689ff16f0c476fe35034",
+      "numerical_payload_sha256": "46e9a617c2fa6cebf96882fc706f512f01ae6a2f645beab2fe121be38fb9f35d"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0019.json",
+      "old_sha256": "616479481d090e712087a5d1e3571a7bdc36925f807c6b540cfc7c6889b7421b",
+      "new_sha256": "98d12abca0780a299d67d1f95c7d4a772b3c4a29a65bf03ec226acdc5c676318",
+      "numerical_payload_sha256": "4294bb30347d64f24be25bb9e8a833d35e129a7c59b2d7dad48ab4e4280e6fe9"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0020.json",
+      "old_sha256": "11d5d8b69bdf7fe3b6d34c157dfef8ef6a33905600cedbac0a03c2f3ff93c5e7",
+      "new_sha256": "ea1356584e07c1ad254bb2d0f7a30b8e0552a2f69106dbb0410072bb2c86f76a",
+      "numerical_payload_sha256": "b8712a45f245af00c01854d684a498298ef882e88c2280defc54fb180b305497"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0021.json",
+      "old_sha256": "e34f0f2b8e22b6c93b769b07299ac1a6aa0a2960c0f0b3e805bcd48e8aea0eae",
+      "new_sha256": "2730faea79e36925f9cd2169e7de7cc5355cf583d32ee337c1a11a5df8a6e920",
+      "numerical_payload_sha256": "a56d087d2c0010c7ea02309513b6d4c37d335c6350f8a22127c06eff76b97ff4"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0022.json",
+      "old_sha256": "745ccaa08d2e6ec0eb906e90372cb7f5d0a62e6473b5e60e0ff9e9e78395fc5e",
+      "new_sha256": "b0b54198c105539ea7e725d37c8e9a878806bae229ffbd2e5d4080b2759b1079",
+      "numerical_payload_sha256": "91569f09b811ca7a1faa7f5e8ef8101bac7934df68d401bd26b2d4a255fff576"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0023.json",
+      "old_sha256": "d4850c610d9fa6c8a5bfda43d8add6db19949201d0d0937261591a4d52cec2b7",
+      "new_sha256": "a74b84b9b14b7807e16ec669d2fa8881803dd807e63fcb0167fdf4d5bc225a69",
+      "numerical_payload_sha256": "37a5b4af608ef974915004ae74e34516762ff47e2b42140a594d1d60583d0947"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0024.json",
+      "old_sha256": "e4dbdb5e3cdaf45f89e3d41d2eca79fdc129493f7aa4c97ab7fbf761d8dbf822",
+      "new_sha256": "1ce96b6b05802f98c670a3814ea5176d7a6d0a2729c9e2e4f68f4d9936b9ae68",
+      "numerical_payload_sha256": "6a82f4c1c1fe4a21fa561ee55ebe627ff2aa972709a71fbffa25ebe79a099012"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0025.json",
+      "old_sha256": "5557da0c1b7a7a9f60557bb500d1b6bd821539025edb2fdf4787347928880416",
+      "new_sha256": "115ce677acf8f5654defc5652473bfb118942584dc9af660477513e2bc74b4cd",
+      "numerical_payload_sha256": "82dd6b3d7714902bcd508a38decc47069f8dccbe618d25d0888bddf5588a4af6"
+    },
+    {
+      "path": "Data Set/nsrr_provisional_factor4_20260916/target_R16_N3/node-0026.json",
+      "old_sha256": "811125e5e87186c492911d32982203a6bf54d898dce74bfb2e0f27ab588202e1",
+      "new_sha256": "c908f9f307181c8923aed98fb3a9e0021d779f0bac4799e1544b6b52ab46552a",
+      "numerical_payload_sha256": "a9f6d1311e615d24a89fdca3e266bf129923305c8c7fb0cc88d178bc0845aa3b"
+    }
+  ]
+}

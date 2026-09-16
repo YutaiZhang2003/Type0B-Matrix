@@ -473,13 +473,6 @@ class RamondThreePointWardMatrix:
         )
 
     @staticmethod
-    def _last_creation_index(state: State) -> int | None:
-        for index in range(len(state) - 1, -1, -1):
-            if state[index][1] < 0:
-                return index
-        return None
-
-    @staticmethod
     def _first_creation_index(state: State) -> int | None:
         for index, mode in enumerate(state):
             if mode[1] < 0:
@@ -506,7 +499,10 @@ class RamondThreePointWardMatrix:
         if key in self._cache:
             return self._cache[key]
 
-        left_index = self._last_creation_index(left_state)
+        # For |left>=A_1 ... A_k|w>, the bra is <w|A_k^dagger ...
+        # A_1^dagger. Thus A_1^dagger, not A_k^dagger, meets the vertex.
+        # Removing the last mode silently reverses noncommuting descendants.
+        left_index = self._first_creation_index(left_state)
         if left_index is not None:
             mode = left_state[left_index]
             rest = left_state[:left_index] + left_state[left_index + 1 :]

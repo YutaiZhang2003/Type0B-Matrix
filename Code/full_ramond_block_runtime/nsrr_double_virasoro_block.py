@@ -8,15 +8,16 @@ projections: the latter are ordinary Walsh sums of parity coefficients,
 which already include the Human-Note quadratic sewing sign. We divide only
 supported star characters and apply the physical projection last.
 
-For equal HJS signs the Ramond Ward identities put the physical series in
-the supported ideal. Opposite HJS signs lie in the complementary ideal and
-are annihilated by this auxiliary block. Production calls reject those
-components. An explicitly requested ``pbw_diagnostic`` completion is available
-for tests only; it is never selected automatically.
-The odd form follows from the exact ground-partner Ward identity applied
-to the certified even double-Virasoro series; the old odd branching-grid
-extension is not used. These are chiral blocks, not a nonchiral Ramond
-ground-state projector or a partition function by themselves.
+Physical components now come from the native C++ double-Virasoro pipeline.
+Equal HJS signs use ordinary recovery; opposite signs use the inserted
+Theta v_(1/2) pipeline. No physical PBW completion is performed. The older
+ordinary enlarged-series implementation remains available for algebraic
+identity audits only and is initialized lazily.
+
+Pointwise ``block()`` calls use independently resummed global descendants by
+default. Coefficient/series APIs retain their explicit finite-polynomial
+meaning. See GLOBAL_RESUMMATION.md for the separate primary, residue and
+global accuracy controls.
 
 An exponent ``(e0,e1,e2)`` denotes
 ``q_NS**(e0/2) q_R1**(e1/2) q_R2**(e2/2)``.
@@ -64,6 +65,7 @@ from nsrr_genus2_block import (  # noqa: E402
     auxiliary_majorana_nsrr_series,
     level_triples,
 )
+from nsrr_cpp_backend import NativeNSRR, METHOD
 from theta_star_algebra import from_star_spectrum, fwht, star_spectrum  # noqa: E402
 
 
@@ -147,6 +149,8 @@ class PhysicalNSRRBlockResult:
     auxiliary_ground: complex
     coefficient_count: int
     completion_method: str
+    recursion_order: int | None = None
+    global_tolerance: float | None = None
 
 
 class NSRRDoubleVirasoroTheta:
@@ -162,17 +166,24 @@ class NSRRDoubleVirasoroTheta:
         branching_mp_dps: int = 0,
         completion: str = "none",
         pbw_completion_max_level: int = 3,
+        native_dps: int = 40,
+        global_method: str = "resummed",
+        recursion_order: int | None = None,
+        global_tolerance: float = 1e-13,
+        global_max_shell: int = 64,
     ) -> None:
         if len(physical_momenta) != 3:
             raise ValueError("momenta must be ordered as (P_NS,P_R1,P_R2)")
         self.b = float(b)
-        if not math.isfinite(self.b) or self.b <= 0:
-            raise ValueError("b must be finite and positive")
+        if not math.isfinite(self.b) or self.b <= 0 or self.b == 1:
+            raise ValueError("b must be finite, positive, and different from one")
         self.physical_momenta = tuple(float(value) for value in physical_momenta)
         if any(not math.isfinite(value) or value < 0 for value in self.physical_momenta):
             raise ValueError("continuum momenta must be finite and nonnegative")
         self.note_momenta = tuple(1j * value for value in self.physical_momenta)
         self.cutoff = int(cutoff)
+        if self.cutoff != cutoff:
+            raise ValueError("cutoff must be an integer total order")
         self.cutoff_twice = 2 * self.cutoff
         self.primary_parity = int(primary_parity)
         if completion not in ("none", "pbw_diagnostic"):
@@ -181,6 +192,42 @@ class NSRRDoubleVirasoroTheta:
             raise ValueError("cutoff must be nonnegative and primary_parity must be 0 or 1")
         self.completion = completion
         self.pbw_completion_max_level = int(pbw_completion_max_level)
+        # Legacy completion keywords remain accepted for callers with old configs;
+        # they never select PBW. Both sign combinations always use native CCY.
+        self.native = NativeNSRR(self.b, self.physical_momenta, self.cutoff,
+                                 self.primary_parity,
+                                 max(native_dps, int(branching_mp_dps)))
+        if global_method not in ("resummed", "polynomial"):
+            raise ValueError("global_method must be 'resummed' or 'polynomial'")
+        self.global_method = global_method
+        self._resummed_options = dict(
+            branch_level=self.cutoff, branch_truncation="total",
+            recursion_order=self.cutoff if recursion_order is None else recursion_order,
+            global_tolerance=global_tolerance, global_max_shell=global_max_shell,
+            primary_parity=self.primary_parity, dps=max(native_dps, int(branching_mp_dps)))
+        self._legacy_ready = False
+        self._branching_mp_dps = int(branching_mp_dps)
+
+    @property
+    def ward_residual_maximum(self):
+        return max(self.native.ward_residual_maximum,
+                   getattr(self, "_legacy_ward_residual", 0.0),
+                   max((record["diagnostics"]["ward_residual"]
+                        for record in getattr(getattr(self, "_resummed", None), "records", {}).values()),
+                       default=0.0))
+
+    @property
+    def auxiliary(self):
+        if not hasattr(self, "_auxiliary"):
+            self._auxiliary = auxiliary_majorana_nsrr_series(
+                maximum_total_twice_level=self.cutoff_twice)
+        return self._auxiliary
+
+    def _initialize_legacy_enlarged(self):
+        """Original ordinary double-Virasoro identity audit; never physical PBW."""
+        if self._legacy_ready:
+            return
+        branching_mp_dps = self._branching_mp_dps
         self.branching = BranchingGrid(
             self.b,
             self.note_momenta,
@@ -193,7 +240,7 @@ class NSRRDoubleVirasoroTheta:
             tuple[int, int, int, int],
             dict[tuple[Fraction, Fraction, Fraction], complex],
         ] = {}
-        self.ward_residual_maximum = 0.0
+        self._legacy_ward_residual = 0.0
         # Use ONLY the package's certified f=0, eta=+ interface. In the
         # Human-Note reflected Ramond basis,
         # B_raw^-(P2;n2) = B_raw^+(-P2;-n2).
@@ -215,8 +262,8 @@ class NSRRDoubleVirasoroTheta:
                     values = {(n1, -n2, n3): value
                               for (n1, n2, n3), value in values.items()}
                 self.raw_grids[(0, eta, alpha2, alpha3)] = values
-                self.ward_residual_maximum = max(
-                    self.ward_residual_maximum,
+                self._legacy_ward_residual = max(
+                    self._legacy_ward_residual,
                     float(diagnostic["relative_residual"]),
                 )
         self.triples = tuple(
@@ -246,14 +293,14 @@ class NSRRDoubleVirasoroTheta:
             )
         vacuum, _ = large_c_vacuum_series(self.cutoff)
         self.vacuum_squared = series_multiply(vacuum, vacuum, self.cutoff)
-        self.auxiliary = auxiliary_majorana_nsrr_series(
-            maximum_total_twice_level=self.cutoff_twice
-        )
+        self._legacy_ready = True
 
     @lru_cache(maxsize=None)
     def enlarged_series(
         self, form_parity: int, eta_left: int, eta_right: int
     ) -> BlockSeries:
+        if hasattr(self, "native"):
+            self._initialize_legacy_enlarged()
         form_parity = int(form_parity)
         eta_left = int(eta_left)
         eta_right = int(eta_right)
@@ -365,69 +412,9 @@ class NSRRDoubleVirasoroTheta:
             maximum_total_twice_level=self.cutoff_twice,
         )
 
-    @lru_cache(maxsize=None)
     def physical_components(self, form_parity: int, eta_left: int, eta_right: int):
-        """Recover the literal parity-resolved Human-Note ``Rblock``.
-
-        The equal-sign Ward relation is ``spectrum[k]=0`` for k=0,1,6,7.
-        It follows by simultaneously exchanging the Ramond ground partners;
-        it is independently tested on every coefficient, not inferred from
-        modular agreement. Opposite-sign data cannot be recovered from the
-        enlarged series; only their missing channels are supplied by PBW.
-        """
-        if form_parity not in (0, 1) or eta_left not in (-1, 1) or eta_right not in (-1, 1):
-            raise ValueError("invalid form parity or HJS sign")
-        ground = star_spectrum(self.auxiliary[(0, 0, 0)])
-        supported = tuple(k for k in range(8) if abs(ground[k]) > 1e-12)
-        missing = tuple(k for k in range(8) if k not in supported)
-        for vector in self.auxiliary.values():
-            spectrum = star_spectrum(vector)
-            if any(abs(spectrum[k]) > 1e-10 for k in missing):
-                raise ArithmeticError("auxiliary support changed; rederive the completion")
-        quotients = {k: self.star_character_series(form_parity, eta_left, eta_right, k)
-                     for k in supported}
-        oracle = None
-        if eta_left != eta_right:
-            if self.completion != "pbw_diagnostic":
-                raise NotImplementedError(
-                    "The checked auxiliary-star identity does not determine "
-                    "opposite-HJS-sign physical components. Production must "
-                    "not replace them with zero or silently use PBW. Request "
-                    "completion='pbw_diagnostic' only for an explicitly "
-                    "labelled low-order diagnostic."
-                )
-            if self.cutoff > self.pbw_completion_max_level:
-                raise NotImplementedError(
-                    "Opposite-HJS-sign physical blocks are annihilated by the "
-                    "Human-Note auxiliary star product. Their PBW completion "
-                    f"is capped at level {self.pbw_completion_max_level}; "
-                    "raise pbw_completion_max_level explicitly to permit the cost."
-                )
-            b = sp.Rational(str(self.b))
-            q_background = b + 1 / b
-            p = tuple(sp.Rational(str(value)) for value in self.physical_momenta)
-            oracle = HumanNSRRThetaOracle(
-                central_charge=sp.Rational(3, 2) + 3*q_background**2,
-                h_ns=q_background**2/8 + p[0]**2/2,
-                beta_r1=sp.I*p[1]/sp.sqrt(2),
-                beta_r2=sp.I*p[2]/sp.sqrt(2),
-                form_parity=form_parity, primary_parity=self.primary_parity,
-                etas=(eta_left, eta_right),
-            )
-        answer = {}
-        for exponent in level_triples(self.cutoff_twice):
-            spectrum = [quotients[k].get(exponent, 0j) if k in supported else 0j
-                        for k in range(8)]
-            if oracle is not None:
-                reference = star_spectrum(oracle.coefficient_components(
-                    exponent[0], exponent[1]//2, exponent[2]//2))
-                for k in supported:
-                    if abs(spectrum[k]-reference[k]) > 2e-8*max(1., abs(reference[k])):
-                        raise ArithmeticError("double-Virasoro/PBW supported-channel mismatch")
-                for k in missing:
-                    spectrum[k] = reference[k]
-            answer[exponent] = tuple(from_star_spectrum(spectrum))
-        return answer
+        """Literal physical Human-Note coefficients, entirely from native CCY."""
+        return self.native.physical_components(form_parity, eta_left, eta_right)
 
     @lru_cache(maxsize=None)
     def physical_series(self, form_parity: int, eta_left: int, eta_right: int,
@@ -450,6 +437,19 @@ class NSRRDoubleVirasoroTheta:
         eta_right: int,
     ) -> PhysicalNSRRBlockResult:
         character = spin_character_index(lifts)
+        if self.global_method == "resummed":
+            from nsrr_resummed_backend import ResummedNSRR, METHOD as RESUMMED_METHOD
+            if not hasattr(self, "_resummed"):
+                self._resummed = ResummedNSRR(self.b, self.physical_momenta, **self._resummed_options)
+            values = self._resummed.physical_values(q_values, form_parity, eta_left, eta_right)
+            return PhysicalNSRRBlockResult(
+                form_parity=int(form_parity), eta_left=int(eta_left), eta_right=int(eta_right),
+                spin_character=character, cutoff=self.cutoff,
+                value=self._resummed.project(values, lifts),
+                auxiliary_ground=complex(star_spectrum(self.auxiliary[(0,0,0)])[character]),
+                coefficient_count=0, completion_method=RESUMMED_METHOD,
+                recursion_order=self._resummed_options["recursion_order"],
+                global_tolerance=self._resummed_options["global_tolerance"])
         series = self.physical_series(
             form_parity, eta_left, eta_right, character
         )
@@ -465,7 +465,5 @@ class NSRRDoubleVirasoroTheta:
             value=evaluate_twice_level_series(series, q_values),
             auxiliary_ground=complex(auxiliary_ground),
             coefficient_count=len(series),
-            completion_method=("double-Virasoro plus equal-sign Ward support"
-                               if eta_left == eta_right else
-                               "PBW diagnostic nullspace completion; not pure double-Virasoro"),
+            completion_method=METHOD,
         )

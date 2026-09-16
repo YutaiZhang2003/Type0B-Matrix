@@ -16,7 +16,7 @@ class NSRRSignTrialTests(unittest.TestCase):
         cls.components, cls.checks = trial.block_components(cls.b, cls.momenta, 2)
 
     def test_explicit_completion_and_analytic_check(self):
-        self.assertEqual(self.checks["explicit_PBW_completion_calls"], 4)
+        self.assertEqual(self.checks["explicit_PBW_completion_calls"], 0)
         self.assertLess(self.checks["analytic_ground_half_level_max_error"], 1e-12)
 
     def test_equal_sign_double_virasoro_against_independent_pbw(self):
@@ -79,7 +79,7 @@ class NSRRSignTrialTests(unittest.TestCase):
 
     def test_unsupported_accuracy_is_rejected(self):
         with self.assertRaises(ValueError):
-            trial.block_components(self.b, self.momenta, 3)
+            trial.block_components(self.b, self.momenta, -1)
 
     def test_truncation_and_ordinary_lift_sum(self):
         q = (.01+.02j, -.02+.01j, .03-.01j)

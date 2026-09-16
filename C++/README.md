@@ -1,6 +1,13 @@
 # Native C++ Ramond block pipelines
 
-The C++17 executable computes the **physical genus-two NS–R–R superconformal
+`make -C C++` builds `ramond` for finite coefficients and `ramond_resummed`
+for pointwise evaluation with independently converged global descendants.
+The separate `pbw` target remains available for direct SCA benchmarks.
+The resummed ordinary and punctured paths, separate primary/recursion/global
+controls, and validation commands are documented in
+[GLOBAL_RESUMMATION.md](../Code/full_ramond_block_runtime/GLOBAL_RESUMMATION.md).
+
+The coefficient executable computes the **physical genus-two NS–R–R superconformal
 block** through a specified total or independent-edge cutoff. Both production paths
 are implemented:
 
@@ -9,8 +16,8 @@ are implemented:
 | `ordinary` | `(eta, eta)` | Ordinary theta double-Virasoro sum and restricted fermion inverse |
 | `inserted` | `(eta, -eta)` | Theta v_(1/2) insertion, diagonal target sum, and fermion convolution |
 
-Optional Python tools launch benchmarks and compare saved results. The Python
-numerical implementations remain available under `Code/`.
+The native numerical cores require no Python. Python validation and plumbing
+adapters remain available under `Code/`.
 
 `bin/pbw` is a separate C++ direct physical SCA PBW benchmark. It supports
 machine and MPC precision, caches Ward/mode-action data and Gram inverses,
@@ -52,8 +59,8 @@ make -C 'C++' -j2
 `--dps 0` selects `std::complex<double>`; `--dps D` selects MPC complex arithmetic
 for `D >= 30`. Both instantiate the same mathematical code. At 40 decimal digits,
 the working precision is 136 bits, matching the saved mpmath reference. Actual
-working bits are recorded in the output. Fermion and Schottky computations use
-exact GMP rationals in both modes.
+working bits are recorded in coefficient output. In the coefficient executable,
+fermion and Schottky computations use exact GMP rationals in both modes.
 
 The Makefile supplies a Linux LAPACK/BLAS link configuration as well; only the
 macOS arm64 build has been tested. Compiler and include/library paths can be
@@ -218,6 +225,40 @@ make -C 'C++' check PYTHON=/path/to/python
 The checks read saved references and never run PBW. Component drivers in `tests/`
 provide branching-action, low-anchor, and exact-factor output.
 See [MIGRATION.md](MIGRATION.md) for the source map.
+
+### Fresh direct PBW smoke test
+
+`make check-pbw` recomputes an independent physical SCA PBW reference and compares
+the recovered physical C++ coefficients at every total order strictly below 5,
+including half-integer NS orders through 9/2. It checks both production modes,
+all `p,f=0,1` and `eta=+/-1`, and both machine and 40-digit arithmetic. The C++
+executable uses its integer cutoff 5; order-5 coefficients are excluded from the
+comparison, and the PBW computation stops at order 9/2.
+
+The Python environment needs NumPy, SciPy, SymPy, mpmath, and python-flint 0.9.0:
+
+```sh
+make -C C++ check-pbw PYTHON=/path/to/python
+```
+
+From inside `C++`, use `make check-pbw PYTHON=/path/to/python` instead.
+The [fresh comparison report](results/fresh_pbw_smoke_2026-09-11/README.md)
+records 32 passing checks at the default rational parameters, with maximum
+scaled errors approximately `6.95e-11` at machine precision and `1.88e-26` at 40 digits.
+The script does not load saved reference coefficients or use an auxiliary
+block to construct the PBW reference.
+
+For an **inclusive level-5** comparison of the opposite-sign HJS channel at
+physical Liouville momenta, use:
+
+```sh
+python C++/tests/verify_fresh_pbw.py --through-order 5 --modes inserted --all-parities --dps 40 --b 7/5 --momenta 0,21/100 0,37/100 0,52/100 --results C++/results/inserted_pbw_level5_2026-09-11
+```
+
+Run this command from the repository root. The
+[inclusive comparison report](results/inserted_pbw_level5_2026-09-11/README.md)
+records eight passing cases with maximum scaled coefficient error `9.10e-27`.
+This includes the level-5 coefficients excluded from `make check-pbw`.
 
 ## Current recursive branching timings
 

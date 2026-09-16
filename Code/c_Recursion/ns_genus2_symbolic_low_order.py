@@ -31,6 +31,7 @@ from ns_human_convention import (
     normalize_parity_triple,
     theta_orientation_sign as human_theta_orientation_sign,
 )
+from ns_pbw_basis import ns_pbw_basis
 
 
 Mode = tuple[str, int]
@@ -39,97 +40,20 @@ State = tuple[Mode, ...]
 C, H0, H1, HINF = sp.symbols("c h_0 h_1 h_infinity")
 
 
-# These are the complete NS PBW bases needed at this cutoff, in the same
-# HJS ordering used by the finite-level oracle.
+# Preserve the exported low-order table, now sourced from the canonical
+# literature basis shared with the numerical oracle.
 PBW_BASES: Mapping[int, tuple[State, ...]] = {
-    0: ((),),
-    1: ((('G', -1),),),
-    2: ((('L', -2),),),
-    3: ((('G', -3),), (('G', -1), ('L', -2))),
-    4: (
-        (('L', -4),),
-        (('L', -2), ('L', -2)),
-        (('G', -1), ('G', -3)),
-    ),
-    5: (
-        (('G', -5),),
-        (('G', -3), ('L', -2)),
-        (('G', -1), ('L', -4)),
-        (('G', -1), ('L', -2), ('L', -2)),
-    ),
-    6: (
-        (('L', -6),),
-        (('L', -2), ('L', -4)),
-        (('L', -2), ('L', -2), ('L', -2)),
-        (('G', -1), ('G', -5)),
-        (('G', -1), ('G', -3), ('L', -2)),
-    ),
+    level: ns_pbw_basis(level) for level in range(7)
 }
 
 
-def _integer_partitions(
-    total: int, maximum: int | None = None
-) -> Iterable[tuple[int, ...]]:
-    if total == 0:
-        yield ()
-        return
-    if maximum is None or maximum > total:
-        maximum = total
-    for first in range(maximum, 0, -1):
-        for tail in _integer_partitions(total - first, first):
-            yield (first,) + tail
-
-
-def _strict_odd_partitions(
-    total: int, maximum: int | None = None
-) -> Iterable[tuple[int, ...]]:
-    if total == 0:
-        yield ()
-        return
-    if maximum is None or maximum > total:
-        maximum = total
-    if maximum % 2 == 0:
-        maximum -= 1
-    for first in range(maximum, 0, -2):
-        for tail in _strict_odd_partitions(total - first, first - 2):
-            yield (first,) + tail
-
-
-@lru_cache(maxsize=None)
 def exact_pbw_basis(twice_level: int) -> tuple[State, ...]:
-    """Return the complete HJS-ordered NS PBW basis at any finite level.
+    """Return the shared literature basis at any finite level.
 
-    ``PBW_BASES`` keeps the explicit twice-level-zero-through-six oracle used
-    by the genus-two coefficient tests.  Ward reductions can temporarily visit
-    a higher level than their final matrix element, however, so the exact
-    module must not silently turn such an action into zero at that cutoff.
+    Ward reductions can temporarily visit a higher level than their final
+    matrix element, so this is not truncated to ``PBW_BASES``.
     """
-
-    if not isinstance(twice_level, int) or twice_level < 0:
-        raise ValueError("twice_level must be a nonnegative integer")
-    if twice_level in PBW_BASES:
-        return PBW_BASES[twice_level]
-
-    states: list[State] = []
-    for g_twice_level in range(twice_level + 1):
-        remainder = twice_level - g_twice_level
-        if remainder % 2:
-            continue
-        for g_parts in _strict_odd_partitions(g_twice_level):
-            for l_parts in _integer_partitions(remainder // 2):
-                states.append(
-                    tuple(
-                        [("G", -part) for part in reversed(g_parts)]
-                        + [("L", -2 * part) for part in reversed(l_parts)]
-                    )
-                )
-    states.sort(
-        key=lambda state: (
-            sum(kind == "G" for kind, _ in state),
-            state,
-        )
-    )
-    return tuple(states)
+    return ns_pbw_basis(twice_level)
 
 
 def state_twice_level(state: State) -> int:
