@@ -240,7 +240,9 @@ template <class S> class CCY {
             h_[j] = weights[j];
         h_[4] = external;
     }
-    Series<S> reduced(std::vector<Index> indices) {
+    // Residue paths end at global seeds. The allowed null shifts, unlike the
+    // descendant sum in those seeds, define the pole-recursion truncation.
+    Series<S> pole_amplitudes(std::vector<Index> indices) {
         std::sort(indices.begin(), indices.end(), [](const Index &a, const Index &b) {
             return degree(a) != degree(b) ? degree(a) < degree(b) : a < b;
         });
@@ -262,7 +264,7 @@ template <class S> class CCY {
                 }
         std::unordered_map<Index, std::map<int, S>, Hash> amplitudes;
         amplitudes[Index{}][0] = S(1);
-        Series<S> totals, answer;
+        Series<S> totals;
         for (auto shift : indices) {
             auto found = amplitudes.find(shift);
             if (found == amplitudes.end())
@@ -292,6 +294,14 @@ template <class S> class CCY {
                         amplitudes[changed][p.id] += res * value;
                     }
         }
+        return totals;
+    }
+    S global_coefficient(const Index &shift, const Index &n) {
+        return global(shift, n);
+    }
+    Series<S> reduced(std::vector<Index> indices) {
+        const auto totals = pole_amplitudes(indices);
+        Series<S> answer;
         std::vector<Index> shifts;
         for (const auto &[shift, v] : totals)
             shifts.push_back(shift);

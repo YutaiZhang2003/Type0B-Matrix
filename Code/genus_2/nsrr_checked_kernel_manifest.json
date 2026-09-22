@@ -1,13 +1,28 @@
 {
-  "scope": "Read-only kernel snapshot at the start of the user's 2026-08-30 adapter-only repair request. Existing uncommitted changes are preserved, not reverted.",
+  "scope": "2026-09-11: refreshed after upstream commit 0a4c344 and the user-authorized migration of all physical NSRR blocks to native double-Virasoro. The earlier snapshot is retained below. Native sources are additionally fingerprinted by nsrr_cpp_backend.",
   "sha256": {
     "Code/full_ramond_block_runtime/compute_full_block.py": "10c3cfa5bb4b87a8407cbe35fe7c0530be79bf62f231c93c27868baefff7913c",
-    "Code/full_ramond_block_runtime/compute_q_expansion.py": "a3d9bb8f305469354ce25d494163b1a01f6fbecd7587f3be3bcbf5e075fb3a3e",
-    "Code/ramond_branching_recursion/compute_target.py": "46ebb1a8bd10b356ee8697637f61ffb62b680258858e95aabbb69ad68b6568ca",
+    "Code/full_ramond_block_runtime/compute_q_expansion.py": "baea7d92047285710fcd499736b8ed5e491aa7dfbd4118f87bcd57d418f2efdb",
+    "Code/ramond_branching_recursion/compute_target.py": "49699fb231101c2bf26135e01b4ad33ece5b1db363e353707b44dc43fc7de93e",
     "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470",
-    "Code/double_virasoro/nsrr/nsrr_genus2_block.py": "f9448f5393898d1fcd8957b83b4c94dd5084a4728100f0eb5d027097fa25869d",
+    "Code/double_virasoro/nsrr/nsrr_genus2_block.py": "62a6523d5d0932058289c17a6bebdf2e67ae67d973ea818b82a49aaf67e31eec",
     "Code/double_virasoro/nsrr/ramond_pbw_generalized_ward.py": "6f904573e9b323ecc96593afbaac19746bae32ecd319f89448548b7474525ce5",
     "Code/c_Recursion/ns_genus2_partition.py": "56499bf06d3f12809ffc44331ececd40966cf974c65606edab9c332b964ffd2c",
     "Code/c_Recursion/theta_star_algebra.py": "57de475cc566c00984578945aedfba621d33e94056d0a3a5a29e08bfccd2c017"
-  }
+  },
+  "previous_snapshots": [
+    {
+      "scope": "Read-only kernel snapshot at the start of the user's 2026-08-30 adapter-only repair request. Existing uncommitted changes are preserved, not reverted.",
+      "sha256": {
+        "Code/full_ramond_block_runtime/compute_full_block.py": "10c3cfa5bb4b87a8407cbe35fe7c0530be79bf62f231c93c27868baefff7913c",
+        "Code/full_ramond_block_runtime/compute_q_expansion.py": "a3d9bb8f305469354ce25d494163b1a01f6fbecd7587f3be3bcbf5e075fb3a3e",
+        "Code/ramond_branching_recursion/compute_target.py": "46ebb1a8bd10b356ee8697637f61ffb62b680258858e95aabbb69ad68b6568ca",
+        "Code/ramond_branching_recursion/direct_state_check.py": "b24ed524eec52871838c5b29f8c2b652a63dbaca2e30d566a5a2b83698699470",
+        "Code/double_virasoro/nsrr/nsrr_genus2_block.py": "f9448f5393898d1fcd8957b83b4c94dd5084a4728100f0eb5d027097fa25869d",
+        "Code/double_virasoro/nsrr/ramond_pbw_generalized_ward.py": "6f904573e9b323ecc96593afbaac19746bae32ecd319f89448548b7474525ce5",
+        "Code/c_Recursion/ns_genus2_partition.py": "56499bf06d3f12809ffc44331ececd40966cf974c65606edab9c332b964ffd2c",
+        "Code/c_Recursion/theta_star_algebra.py": "57de475cc566c00984578945aedfba621d33e94056d0a3a5a29e08bfccd2c017"
+      }
+    }
+  ]
 }

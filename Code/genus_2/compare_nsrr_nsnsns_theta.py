@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 r"""Historical NSRR/NSNSNS comparison and supported all-NS evaluation.
 
-The NSRR nonchiral assembler is disabled pending a certified Ramond ground
-projector and compatible free-spin conversion. The old factor-four
-prescription is retired; archived data remain available for provenance.
+This file preserves the historical one-point driver and its obsolete marked
+chart, so its NSRR entry point remains disabled. ``physical_nsrr_sewing.py``
+also contains a legacy candidate, not a verified Human-Note bilinear NSRR
+contraction. The radial-reflection diagnostic is a separate convention.
+Archived data remain available for provenance.
 The repaired literal chiral NSRR blocks live in nsrr_double_virasoro_block.
 
 The historical source chart and scalar-star projection must not be reused
@@ -56,8 +58,8 @@ from generic_super_liouville_structure_constants import (  # noqa: E402
 from ns_genus2_partition import NSGenus2CRecursion  # noqa: E402
 from theta_partition import (  # noqa: E402
     TYPE0B_NS_PRIMARY_PARITIES,
-    theta_diagonal_sector_contribution,
 )
+from human_bilinear_sewing import all_ns_theta_matrix, contract_bilinear  # noqa: E402
 from nsrr_double_virasoro_block import NSRRDoubleVirasoroTheta  # noqa: E402
 from physical_free_plumbing_resummation import (  # noqa: E402
     physical_superfield_plumbing_partition,
@@ -148,6 +150,7 @@ def all_ns_node(
     primary = _primary(q_values, weights)
     c_bottom, c_top = constants.ns_constants(*momenta)
     human_coefficients = (c_bottom, 1j * c_top)
+    pairing = all_ns_theta_matrix(human_coefficients, human_coefficients)
     sectors = []
     for sector in (0, 1):
         structure_weight = human_coefficients[sector] ** 2
@@ -180,15 +183,16 @@ def all_ns_node(
             raise ValueError(
                 "all-NS block_method must be 'direct' or 'collision_aware_mp'"
             )
-        sectors.append(
-            theta_diagonal_sector_contribution(
-                sector=sector,
-                measure=measure,
-                structure_weight=float(structure_weight.real),
-                primary_times_block=primary * block,
-                primary_parities=TYPE0B_NS_PRIMARY_PARITIES,
-            )
-        )
+        # At these real c,h the NS descendant coefficients are real, so the
+        # independently defined anti block evaluated at qbar equals bar(F).
+        # This specialization does not conjugate the second pant's C^(a).
+        value = measure * contract_bilinear(
+            matrix=[[pairing[sector, sector]]],
+            holomorphic_blocks=[block], antiholomorphic_blocks=[complex(block).conjugate()],
+            holomorphic_primary=primary, antiholomorphic_primary=primary.conjugate())
+        if abs(value.imag) > 2e-8 * max(1, abs(value.real)):
+            raise ArithmeticError(f"all-NS bilinear contribution is unexpectedly complex: {value}")
+        sectors.append(value.real)
     return float(sectors[0]), float(sectors[1])
 
 
@@ -238,14 +242,12 @@ def all_ns_partition(
 
 def require_certified_nsrr_partition_sewing():
     raise NotImplementedError(
-        "The old NSRR partition assembler used an unproved Ramond ground "
-        "multiplicity and conflated a star character with a physical spin "
-        "projection. Literal chiral blocks are repaired and PBW-tested; "
-        "nonchiral Ramond sewing and its marked spin-lift dictionary must "
-        "be certified before producing another Q comparison. The newly "
-        "introduced theta-ratio free-factor conversion also fails its "
-        "all-NS compatibility check. None of these are changes to the "
-        "PBW-checked double-Virasoro kernel."
+        "This historical driver has an obsolete marked chart and remains "
+        "disabled. physical_nsrr_sewing.py is a legacy candidate, not the "
+        "Human-Note bilinear pairing. Use nsrr_bilinear_sewing.py or the "
+        "resummed assembler with explicit physical tube signs for the now "
+        "derived physical Ramond BPZ matrix. This obsolete chart still "
+        "lacks the marked source/target spin transport."
     )
 
 

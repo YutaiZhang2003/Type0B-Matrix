@@ -15,6 +15,7 @@ declare that overall factor to be the final CFT normalization.
 from __future__ import annotations
 
 import argparse
+import copy
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import hashlib
@@ -34,6 +35,7 @@ import nsrr_human_note_geometry as human_geometry
 import nsrr_nsnsns_theta_omega_scan as scan
 import recompute_all_ns_reference as all_ns
 import refine_nsrr_factorized_sign_trial as refined_source
+from nsrr_cpp_backend import METHOD as NSRR_METHOD, implementation_hashes as nsrr_native_hashes
 from fixed_spin_free_plumbing import charged_frame, fixed_spin_partition
 from physical_nsrr_sewing import (
     CHANNELS,
@@ -237,6 +239,8 @@ def prepare_config(
         "kappa": 1.0 + 2.0 * (b + 1.0 / b) ** 2,
         "orders": list(orders),
         "source_level": 3.0,
+        "source_block_method": NSRR_METHOD,
+        "source_backend_hashes": nsrr_native_hashes(),
         "target_recursion_twice_level": 16,
         "source_contraction": (
             "amplitude-level [11|00] projection followed by the unscaled Human M kernel; "
@@ -269,10 +273,15 @@ def prepare_config(
 def validate_config(config: dict) -> None:
     if config["schema"] != SCHEMA or config["orders"] != sorted(set(config["orders"])):
         raise ValueError("invalid off-axis scan configuration")
-    if not config["orders"] or any(order not in (2, 3, 4, 5) for order in config["orders"]):
-        raise ValueError("this bounded audit supports momentum orders 2 through 5")
-    if config["source_level"] != 3.0:
-        raise ValueError("this bounded audit requires source L=3")
+    if not config["orders"] or any(type(order) is not int or order not in range(2, 8) for order in config["orders"]):
+        raise ValueError("this bounded audit supports integer momentum orders 2 through 7")
+    if config["source_level"] not in range(1, 9):
+        raise ValueError("source total level must be an integer in 1..8")
+    if "source_backend_hashes" in config and config["source_backend_hashes"] != nsrr_native_hashes():
+        raise ValueError("native NSRR implementation changed")
+    for relative, expected in config.get("evaluation_implementation_sha256", {}).items():
+        if hashlib.sha256((ROOT / relative).read_bytes()).hexdigest() != expected:
+            raise ValueError(f"momentum-evaluation implementation changed: {relative}")
     point_design = config.get("point_design")
     expected_point_ids = (
         [str(value) for value in point_design["point_ids"]]
@@ -311,6 +320,47 @@ def validate_config(config: dict) -> None:
                 raise ValueError(f"{point['point_id']}: target lift continuation mismatch")
 
 
+def prepare_native_momentum_config(base_path: Path, orders: tuple[int, ...], source_level: int) -> dict:
+    """Reuse fixed marked geometry, then recompute both channels on a new grid."""
+
+    base = load(base_path)
+    if not base.get("normalization_policy", "").startswith("fixed by sewing:"):
+        raise ValueError("a fixed-normalization baseline is required")
+    current_protected = all_ns.protected_hashes()
+    for relative in ("Code/c_Recursion/ns_genus2_partition.py", "Code/c_Recursion/theta_star_algebra.py"):
+        if base["protected_kernel_hashes"][relative] != current_protected[relative]:
+            raise ValueError(f"baseline all-NS kernel changed: {relative}")
+    config = copy.deepcopy(base)
+    config.pop("reuse_parent_output", None)
+    config["orders"] = list(orders)
+    config["source_level"] = source_level
+    config["source_block_method"] = NSRR_METHOD
+    config["source_backend_hashes"] = nsrr_native_hashes()
+    config["protected_kernel_hashes"] = current_protected
+    config["created_at_utc"] = datetime.now(timezone.utc).isoformat()
+    config["parent_config_path"] = str(base_path.resolve())
+    config["parent_config_digest"] = digest(base)
+    config["parent_protected_kernel_hashes"] = base["protected_kernel_hashes"]
+    config["input_policy"] = (
+        "Reuse the marked geometry, spin lifts, free factors, quadrature envelopes and fixed normalization; "
+        "compute every source and target momentum node afresh."
+    )
+    paths = {Path(__file__).resolve(), Path(trial.__file__).resolve(),
+             Path(refined_source.__file__).resolve(), Path(scan.__file__).resolve(),
+             Path(all_ns.__file__).resolve()}
+    # Include all local implementations reachable by the two numerical paths,
+    # as well as the native source/binary hashes recorded separately above.
+    for directory in ("Code/c_Recursion", "Code/genus_2_cross_channel", "Code/full_ramond_block_runtime"):
+        paths.update((ROOT / directory).glob("*.py"))
+    paths.update(HERE / name for name in (
+        "physical_nsrr_sewing.py", "nsrr_plumbing_adapter.py", "compare_nsrr_nsnsns_theta.py"))
+    config["evaluation_implementation_sha256"] = {
+        str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(paths)
+    }
+    validate_config(config)
+    return config
+
+
 def tasks(config: dict) -> list[tuple[int, int]]:
     return [(order, node) for order in config["orders"] for node in range(order**3)]
 
@@ -343,6 +393,13 @@ def reusable_parent(config: dict, channel: str, task_index: int):
         raise ValueError(f"parent does not contain unique task {(order, node)}")
     parent_index = matches[0]
     shard = load(parent_dir / channel / "shards" / f"node-{parent_index:03d}.json")
+    if channel == "source" and (
+        shard.get("checks", {}).get("method") != NSRR_METHOD
+        or shard.get("checks", {}).get("physical_PBW_used") is not False
+        or parent_config.get("source_backend_hashes") != config.get("source_backend_hashes")
+        or parent_config["source_level"] != config["source_level"]
+    ):
+        return None
     if shard["quadrature_order"] != order or shard["node"] != node:
         raise ValueError("parent shard order/node mismatch")
     if not np.allclose(shard["momenta"], momenta, rtol=0, atol=0) or shard["measure"] != measure:
@@ -371,7 +428,8 @@ def source_worker(config_path: Path, output_dir: Path, task_index: int) -> None:
         return
     constants = trial.GenericSuperLiouvilleConstants(config["b"], dps=30)
     bry = constants.rr_ns_constants(momenta[1], momenta[0], momenta[2])
-    components, checks = refined_source.block_components(config["b"], momenta[::-1], 3)
+    source_level = int(config["source_level"])
+    components, checks = refined_source.block_components(config["b"], momenta[::-1], source_level)
     values = []
     for point in config["points"]:
         q = tuple(complex(value) for value in point["source"]["q_values"])
@@ -379,7 +437,7 @@ def source_worker(config_path: Path, output_dir: Path, task_index: int) -> None:
         for lift in SOURCE_FIXED_SPIN_LIFTS:
             plumbing = trial.NSRRPlumbingInputs(q, lift, trial.GEOMETRY_SECTORS)
             primary = plumbing.primary(config["b"], momenta)
-            blocks = trial.evaluate_blocks(components, plumbing.q_slots, plumbing.lifts_slots, 3.0)
+            blocks = trial.evaluate_blocks(components, plumbing.q_slots, plumbing.lifts_slots, source_level)
             amplitudes[lift] = {channel: primary * blocks[channel] for channel in CHANNELS}
         projected = project_source_fixed_spin(amplitudes)
         local = contract_physical_blocks(projected, bry)
@@ -497,6 +555,11 @@ def validate_shard(config: dict, channel: str, task_index: int, shard: dict) -> 
         raise ValueError("quadrature node changed")
     if [row["point_id"] for row in shard["values"]] != [point["point_id"] for point in config["points"]]:
         raise ValueError("off-axis values are missing or reordered")
+    if channel == "source" and config.get("source_block_method") == NSRR_METHOD:
+        checks = shard.get("checks", {})
+        if (checks.get("method") != NSRR_METHOD or checks.get("physical_PBW_used") is not False
+                or checks.get("explicit_PBW_completion_calls") != 0 or checks.get("native_pipeline_calls") != 8):
+            raise ValueError("source shard did not compute all eight channels with native double-Virasoro")
 
 
 def reduce(config_path: Path, output_dir: Path) -> dict:
@@ -685,6 +748,11 @@ def main() -> None:
     prepare_order_parser.add_argument("--base-config", type=Path, required=True)
     prepare_order_parser.add_argument("--orders", type=int, nargs="+", required=True)
     prepare_order_parser.add_argument("--output-dir", type=Path, required=True)
+    native_order_parser = subparsers.add_parser("prepare-native-order")
+    native_order_parser.add_argument("--base-config", type=Path, required=True)
+    native_order_parser.add_argument("--orders", type=int, nargs="+", required=True)
+    native_order_parser.add_argument("--source-level", type=int, default=5)
+    native_order_parser.add_argument("--output-dir", type=Path, required=True)
     for command in ("source-worker", "target-worker"):
         worker_parser = subparsers.add_parser(command)
         worker_parser.add_argument("--config", type=Path, required=True)
@@ -715,6 +783,13 @@ def main() -> None:
         config["parent_config_digest"] = digest(base)
         validate_config(config)
         save(args.output_dir / "config.json", config)
+    elif args.command == "prepare-native-order":
+        path = args.output_dir / "config.json"
+        if path.exists():
+            parser.error("output config already exists; use run to resume it")
+        config = prepare_native_momentum_config(
+            args.base_config, tuple(sorted(set(args.orders))), args.source_level)
+        save(path, config)
     elif args.command == "source-worker":
         source_worker(args.config, args.output_dir, args.task_index)
     elif args.command == "target-worker":

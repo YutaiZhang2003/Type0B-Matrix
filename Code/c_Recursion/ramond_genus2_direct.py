@@ -182,10 +182,10 @@ class RRNSDescendantThreeForm:
     ) -> complex:
         """Return ``rho_RR(left,middle,right|1)`` from the Ward identities."""
 
-        # First remove creation modes from the bra R leg.  This ordering is
-        # the one used by the independently tested two-R-leg Ward matrix.
+        # If the ket word is A_1 ... A_k, the bra ends in A_1^dagger.
+        # Remove the first lowering mode so that its adjoint meets the vertex.
         if _has_r_creation(left):
-            creation_index = max(
+            creation_index = min(
                 index for index, item in enumerate(left) if item[1] < 0
             )
             mode = left[creation_index]
@@ -220,8 +220,10 @@ class RRNSDescendantThreeForm:
                 middle=middle,
                 right=right,
             )
-            # k=-1/2,...,n+1/2, or j=k+1/2=0,...,n+1.
-            for j in range(n + 2):
+            # Here n is an integer Ramond mode, so binomial(n+1/2,j)
+            # does not terminate at j=n+1. Only the level of the inserted
+            # NS descendant truncates G_{j-1/2}|middle>.
+            for j in range((state_twice_level(middle) + 1) // 2 + 1):
                 k_twice = 2 * j - 1
                 result += generalized_binomial(n + 0.5, j) * self._ns_action(
                     mode=("G", k_twice),

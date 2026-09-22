@@ -63,7 +63,11 @@ def sphere_bottom_global_coefficient(
     h3: Number,
     h4: Number,
 ) -> complex:
-    """Bottom-component four-point osp(1|2) coefficient at one level."""
+    """Literature bottom-component osp(1|2) coefficient at one level.
+
+    The odd coefficient is positive in this convention. Comparing it with
+    the saved Human-Note block requires the odd-sector minus sign.
+    """
 
     if twice_level < 0:
         raise ValueError("twice_level must be non-negative")
@@ -234,13 +238,13 @@ def enumerate_vacuum_fock_levels(
 
 
 def level_three_half_gram(c: Number, weight: Number) -> tuple[tuple[complex, complex], ...]:
-    r"""Gram matrix in {G_-3/2|h>, L_-1 G_-1/2|h>} at level 3/2."""
+    r"""Gram matrix in {G_-1/2 L_-1|h>, G_-3/2|h>} (literature order)."""
 
     c = complex(c)
     h = complex(weight)
     return (
-        (2.0 * h + 2.0 * c / 3.0, 4.0 * h),
-        (4.0 * h, 2.0 * h * (2.0 * h + 1.0)),
+        (2.0 * h * (2.0 * h + 1.0), 4.0 * h),
+        (4.0 * h, 2.0 * h + 2.0 * c / 3.0),
     )
 
 
@@ -310,12 +314,16 @@ def run_checks() -> CheckSummary:
             internal_weight=0.83,
             **weights,
         )
-        global_errors.append(abs(expected - block.seed_coefficient(twice_level)))
+        # The saved ordered odd vertex has rho(nu,nu,G_-1/2 nu)=-1.
+        # The literature coefficient above has the opposite odd-block phase;
+        # changing the order of PBW vectors does not change this dictionary.
+        human_expected = (-1) ** (twice_level % 2) * expected
+        global_errors.append(abs(human_expected - block.seed_coefficient(twice_level)))
 
     h = 0.83
-    left = (1.2, 0.7)
-    right = (-0.3, 1.1)
-    global_level_three_half = left[1] * right[1] / osp_edge_norm(h, 1, 1)
+    left = (0.7, 1.2)
+    right = (1.1, -0.3)
+    global_level_three_half = left[0] * right[0] / osp_edge_norm(h, 1, 1)
     finite_c_values = []
     for c_value in (1.0e3, 1.0e6):
         inverse = invert_two_by_two(level_three_half_gram(c_value, h))

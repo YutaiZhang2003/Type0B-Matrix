@@ -1,0 +1,38 @@
+{
+  "schema": "nsrr-resummed-frozen-grid-v1",
+  "source_config_sha256": "6cae594c88e9855abaf7c194bef919ce7561bb730d269dea711dd4e242db314e",
+  "binary_sha256": "cd9683ebfa263f75e7aa5379313418d588708732d005d08b1a564921d70158d6",
+  "implementation_sha256": {
+    "Code/genus_2/run_nsrr_resummed_frozen_grid.py": "95d2083859bea5227add682a0243528b2889968e3d7c43a17dcdbdbf83e3e107",
+    "Code/full_ramond_block_runtime/nsrr_resummed_backend.py": "7beee9215360190f1de2e932485118e49b6728f7b035e18657b0940b73671741",
+    "Code/genus_2/nsrr_resummed_sewing.py": "9ec74d8a58ba547ee1c0850047fee814de8f4907c73f2215c4eb17b418e2e377",
+    "Code/genus_2/nsrr_bilinear_sewing.py": "6ece2d3aa948a28458cfabb231a87d7143e400c78a9be30c90a5ce9e6c124977",
+    "Code/genus_2/nsrr_normalization.py": "ecbe78630939e65150178528610ff4e2e4b845ab45c289f855e38c49e238c3b6",
+    "Code/genus_2/nsrr_plumbing_adapter.py": "244556f8a520623d7e41e2f1d8e6e45b914230f9fc7ed49e84a4d9b229f7c569",
+    "Code/genus_2/physical_nsrr_sewing.py": "eccfc3a99a2f871d082ecd145e5f52dc426ba073bc7b71fc70c009d41d9533af"
+  },
+  "point_id": "generic_04",
+  "nodes": 1728,
+  "momentum_rule": "unchanged frozen inputs",
+  "target_policy": "unchanged saved all-NS target",
+  "branch_level": 0,
+  "branch_truncation": "total",
+  "recursion_order": 0,
+  "global_tolerance": 1e-11,
+  "global_max_shell": 64,
+  "dps": 40,
+  "sewing_convention": "human-bilinear",
+  "physical_lifts_slots": [
+    1,
+    -1,
+    1
+  ],
+  "normalization_policy": {
+    "normalization": "provisional-times-four",
+    "normalization_factor": 4,
+    "normalization_status": "assumption",
+    "normalization_scope": "multiply the entire genus-two NSRR M once",
+    "global_normalization_verified": false,
+    "normalization_reason": "Fixed factor four requested by the user on 2026-09-16; motivated by the converged ratios near one quarter; not derived or fitted"
+  }
+}

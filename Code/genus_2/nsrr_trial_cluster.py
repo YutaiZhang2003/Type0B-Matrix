@@ -2,9 +2,9 @@
 """Portable, three-hour-bounded L=5 NSRR trial; not a physical spin partition.
 
 The N=4 nodes, vertex coefficients, plumbing, and L=3 reference are frozen
-from the audited local trial. No protected kernel or old runner is changed.
-Equal signs use branching plus two Virasoro c-recursions; mixed signs use
-explicit PBW diagnostic completion through the SAME total chiral level five.
+from the audited local trial. Both equal and mixed vertex signs now use the
+native double-Virasoro implementation through total chiral level five.
+The execution host must have the C++ executable and its numerical libraries.
 """
 from __future__ import annotations
 
@@ -21,7 +21,6 @@ import resource
 import subprocess
 import sys
 import time
-from unittest.mock import patch
 
 import numpy as np
 
@@ -140,32 +139,12 @@ def preflight(config):
 
 
 def block_components(config, momenta):
-    started = time.monotonic()
-    timings = []
-    with patch.object(trial.dv, "HumanNSRRThetaOracle", wraps=trial.dv.HumanNSRRThetaOracle) as oracle:
-        runtime = trial.dv.NSRRDoubleVirasoroTheta(
-            b=config["b"], physical_momenta=momenta[::-1], cutoff=5,
-            completion="pbw_diagnostic", pbw_completion_max_level=5)
-        print(f"branching and Virasoro setup: {time.monotonic()-started:.3f}s", flush=True)
-        components = {}
-        for channel in trial.CHANNELS:
-            tick = time.monotonic()
-            components[channel] = runtime.physical_components(*channel)
-            timings.append({"channel": list(channel), "seconds": time.monotonic()-tick})
-            print(f"channel {channel}: {timings[-1]['seconds']:.3f}s", flush=True)
-        calls = oracle.call_count
-    error = 0.
-    for channel, vectors in components.items():
-        for lifts in product((1, -1), repeat=3):
-            k = trial.dv.spin_character_index(lifts)
-            expected = trial.low_level_coefficients(config["b"], momenta[::-1], *channel, lifts)
-            for exponent, target in zip(((0, 0, 0), (1, 0, 0)), expected):
-                error = max(error, abs(trial.fwht(vectors[exponent])[k]-target)/max(1., abs(target)))
-    if calls != 4 or error > 1e-10 or runtime.ward_residual_maximum > 1e-8:
-        raise ArithmeticError("completion count, low-level identity, or branching Ward check failed")
-    return components, {"explicit_PBW_completion_calls": calls, "analytic_max_error": error,
-                        "branching_ward_residual": runtime.ward_residual_maximum,
-                        "channel_timings": timings}
+    components, checks = trial.block_components(config["b"], momenta[::-1], 5)
+    checks["analytic_max_error"] = checks["analytic_ground_half_level_max_error"]
+    checks["channel_timings"] = [
+        {"channel": row["channel"], "seconds": row["timing_seconds"]["total"]}
+        for row in checks["native_channels"]]
+    return components, checks
 
 
 def evaluate_node(config, index):

@@ -1,44 +1,38 @@
 #!/usr/bin/env python3
-"""Physical fixed-spin NSRR sewing in the Human/HJS chiral basis.
+"""Legacy candidate NSRR sewing in the Human/HJS chiral basis.
 
-There are two convention changes which must be made before the saved NSRR
-chiral blocks can be used in a nonchiral partition function.
+This module is NOT a verified fixed-spin interacting sewing adapter. The
+free auxiliary-fermion identity below does not establish the Ramond
+vertex/BPZ conversion of an interacting nonchiral amplitude. Physical
+comparisons must use the certificate boundary in spin_structure.py.
 
-First, BRY's pair ``(C_even, C_odd)`` is not Suchanek's pair of chiral
-three-form coefficients.  Use the corrected conventions of
-arXiv:1012.2974, equations (28)--(31) and (36)--(37); the 2008 paper's
-R--NS block recursion used a conjugation assumption corrected there.  The
-three-form pair is
+BRY's pair ``(C_even, C_odd)`` gives the ordered HJS coefficient pair
 
     (c_+, c_-) = (C_even/2, C_odd/2).
 
-Second, the small Ramond representation does not give a diagonal norm in
-the chiral form-parity label.  Suchanek's physical ``R+`` vertex contains
-``e tensor e - i o tensor o`` while ``R-`` contains the two crossed terms,
-with a relative sign for the minus three-form.  Sewing the normalized
-physical Ramond subspace gives, for k = eta_left eta_right,
+The historical candidate implemented here ASSUMED the following reduction
+of the physical small Ramond representation, for k = eta_left eta_right:
 
                   1
         K(k) =     - [[1, -i k], [i k, 1]].
                   4
 
-Equivalently, the physical contribution of a fixed HJS-sign pair is
+Equivalently, its contribution of a fixed HJS-sign pair is
 
     (1/4) |F_0 + i eta_left eta_right F_1|^2.
 
-The matrix is positive and rank one.  The Human Note's block is quadratic,
-but that fact does not multiply the restricted nonchiral completeness tensor
-by four.  If the two Ramond edges use the full two-family restricted
-completeness tensor, the identity-NS degeneration contracts to ``2``; the
-unscaled modulus gives ``8`` whereas this kernel gives ``2``.  This is an
-internal consistency check of that explicitly chosen sewing tensor, not an
-a priori trace formula for a genus-two partition function and not an
-independent way to normalize the tensor.  A GSO projector, parity defect, or
-global spin-sum weight must be derived separately.  This is not the diagonal
-``|F_0|^2+|F_1|^2`` ansatz used by the earlier diagnostic run.
+This candidate cancels the NS half-level term that is nonzero in the
+independent radial-reflection state sum. Its identity limit does not detect
+that error. The Human Note's bilinear prescription instead requires an
+independently specified antiholomorphic block and physical Ramond dual;
+neither this matrix nor the reflection replacement establishes that map.
+The physical descendant BPZ dual and literal Human matrix are now derived
+in nsrr_bilinear_sewing.py; use that module for new bilinear contractions.
+See NSRR_BILINEAR_PAIRING_2026-09-15.md. Public names
+are retained only so historical datasets can be reproduced.
 
-The marked source spin [11|00] is selected from the auxiliary plumbing
-lifts by the independently bosonization-checked combination
+The auxiliary free-Majorana test for the marked source spin [11|00] uses
+the independently bosonization-checked combination
 
     (F_(+,+,+) + F_(+,-,+))/sqrt(2)
 
@@ -84,7 +78,7 @@ def bry_to_hjs_coefficients(
 
 
 def physical_form_matrix(eta_left: int, eta_right: int) -> np.ndarray:
-    """Return the normalized physical two-form-parity sewing kernel."""
+    """Return the historical candidate, not a verified physical kernel."""
 
     if eta_left not in (1, -1) or eta_right not in (1, -1):
         raise ValueError("HJS signs must be +/-1")
@@ -111,7 +105,7 @@ def physical_form_bilinear(
 def project_source_fixed_spin(
     amplitudes_by_lift: Mapping[Lift, Mapping[Channel, complex]],
 ) -> dict[Channel, complex]:
-    """Project full chiral amplitudes onto the marked source spin [11|00]."""
+    """Legacy two-lift projection; its interacting spin interpretation is unverified."""
 
     missing_lifts = set(SOURCE_FIXED_SPIN_LIFTS) - set(amplitudes_by_lift)
     if missing_lifts:
@@ -136,7 +130,7 @@ def contract_physical_blocks(
     *,
     reality_tolerance: float = 1.0e-10,
 ) -> dict:
-    """Contract one projected fixed-spin node with the physical parity form.
+    """Evaluate the legacy candidate parity form, without a spin certificate.
 
     ``blocks`` must already contain the full chiral propagation amplitude,
     including its primary plumbing power.  The returned terms do not include

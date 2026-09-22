@@ -1,0 +1,329 @@
+{
+  "config_digest": "eb117fac23bd71ec30a6f77f11ca9a3391fec274828d8fb023f54dfd4eaa0e3e",
+  "channel": "source",
+  "N": 7,
+  "index": 36,
+  "seconds": 4.403244292130694,
+  "momenta": [
+    0.1673029209501545,
+    2.013838907960444,
+    0.49627427062970614
+  ],
+  "measure": 0.0015939331264772756,
+  "constants": [
+    [
+      0.002431987409343348,
+      -9.771246204432739e-44
+    ],
+    [
+      0.001976803162046307,
+      7.942405589702873e-44
+    ]
+  ],
+  "primary": [
+    5.528317538253578e-06,
+    2.622034999143205e-06
+  ],
+  "log_q": [
+    [
+      -3.064056201942484,
+      -2.5745477239998715
+    ],
+    [
+      -2.9887616327360194,
+      2.508521754448886
+    ],
+    [
+      -3.138632151222414,
+      2.5170018980422926
+    ]
+  ],
+  "channels": [
+    [
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      -1,
+      -1
+    ],
+    [
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      -1,
+      -1
+    ]
+  ],
+  "rows": [
+    {
+      "L": 3,
+      "blocks": [
+        [
+          0.9510698377150307,
+          0.2929196099585494
+        ],
+        [
+          0.9632373658242813,
+          0.3868065248315395
+        ],
+        [
+          -0.2218424404264096,
+          -0.8146982609086557
+        ],
+        [
+          -0.3334750437169344,
+          -0.7734972616985517
+        ]
+      ],
+      "density": [
+        [
+          [
+            1.5019295233956345e-19,
+            -2.4359801106870832e-37
+          ],
+          [
+            9.854822467787624e-20,
+            7.584040207166981e-20
+          ]
+        ],
+        [
+          [
+            9.854822467787624e-20,
+            -7.584040207166982e-20
+          ],
+          [
+            1.0426803861337176e-19,
+            7.52414338732387e-37
+          ]
+        ]
+      ]
+    },
+    {
+      "L": 5,
+      "blocks": [
+        [
+          0.9524442124184016,
+          0.29049765495801944
+        ],
+        [
+          0.9644478865149372,
+          0.38362862483302423
+        ],
+        [
+          -0.21896367876649228,
+          -0.8198599026071236
+        ],
+        [
+          -0.3297064325633725,
+          -0.7793946315633677
+        ]
+      ],
+      "density": [
+        [
+          [
+            1.5029241380707977e-19,
+            2.4849514277543598e-36
+          ],
+          [
+            9.973421222097932e-20,
+            7.538381823611306e-20
+          ]
+        ],
+        [
+          [
+            9.973421222097932e-20,
+            -7.538381823611306e-20
+          ],
+          [
+            1.0528868426010887e-19,
+            -5.873232412878492e-37
+          ]
+        ]
+      ]
+    }
+  ],
+  "native_checks": {
+    "method": "C++ double-Virasoro CCY with ordinary/inserted fermion recovery",
+    "explicit_PBW_completion_calls": 0,
+    "physical_PBW_used": false,
+    "native_precision_digits": 40,
+    "native_pipeline_calls": 4,
+    "branching_ward_residual": 1.766795486627225e-41,
+    "native_channels": [
+      {
+        "channel": [
+          0,
+          1,
+          1
+        ],
+        "mode": "ordinary",
+        "dps": 40,
+        "precision_bits": 136,
+        "diagnostics": {
+          "maximum_action_residual": 1.0353839329298878e-27,
+          "maximum_ward_residual": 1.5530371899868571e-41,
+          "maximum_sector_residual": 5.2420352217455276e-30
+        },
+        "counts": {
+          "branches": 152,
+          "virasoro_blocks": 304,
+          "ccy_transitions": 1536,
+          "ccy_seed_terms": 7216,
+          "transposed_products_reused": 0,
+          "direct_boundary_values": 96,
+          "recursive_branching_values": 288,
+          "recursive_groups": 96,
+          "maximum_local_unknowns": 4,
+          "second_ward_rows": 0,
+          "vanishing_first_pivots": 0
+        },
+        "timing_seconds": {
+          "branching": 0.13605362479574978,
+          "actions": 0.09668600000441074,
+          "outer_ward": 0.03930533304810524,
+          "middle": 0,
+          "ccy": 0.13460946967825294,
+          "products": 0.009158705826848745,
+          "assembly": 0.014532336732372642,
+          "auxiliary": 0.002226708922535181,
+          "division": 0.005749334115535021,
+          "schottky": 0.0003097921144217253,
+          "restoration": 0.0004696659743785858,
+          "total": 0.3068474167957902
+        }
+      },
+      {
+        "channel": [
+          0,
+          -1,
+          -1
+        ],
+        "mode": "ordinary",
+        "dps": 40,
+        "precision_bits": 136,
+        "diagnostics": {
+          "maximum_action_residual": 1.0353839329298878e-27,
+          "maximum_ward_residual": 1.766795486627225e-41,
+          "maximum_sector_residual": 5.245891834536786e-30
+        },
+        "counts": {
+          "branches": 152,
+          "virasoro_blocks": 304,
+          "ccy_transitions": 1536,
+          "ccy_seed_terms": 7216,
+          "transposed_products_reused": 0,
+          "direct_boundary_values": 96,
+          "recursive_branching_values": 288,
+          "recursive_groups": 96,
+          "maximum_local_unknowns": 4,
+          "second_ward_rows": 0,
+          "vanishing_first_pivots": 0
+        },
+        "timing_seconds": {
+          "branching": 0.13592858309857547,
+          "actions": 0.08306775009259582,
+          "outer_ward": 0.05280895810574293,
+          "middle": 0,
+          "ccy": 0.13068829709663987,
+          "products": 0.0084485849365592,
+          "assembly": 0.015375889837741852,
+          "auxiliary": 0.002905790926888585,
+          "division": 0.006940375082194805,
+          "schottky": 0.0003926670178771019,
+          "restoration": 0.00044533307664096355,
+          "total": 0.30446520796976984
+        }
+      },
+      {
+        "channel": [
+          1,
+          1,
+          1
+        ],
+        "mode": "ordinary",
+        "dps": 40,
+        "precision_bits": 136,
+        "diagnostics": {
+          "maximum_action_residual": 1.0353839329298878e-27,
+          "maximum_ward_residual": 1.3922350373339883e-41,
+          "maximum_sector_residual": 5.245386757555687e-30
+        },
+        "counts": {
+          "branches": 152,
+          "virasoro_blocks": 304,
+          "ccy_transitions": 1536,
+          "ccy_seed_terms": 7216,
+          "transposed_products_reused": 0,
+          "direct_boundary_values": 96,
+          "recursive_branching_values": 288,
+          "recursive_groups": 96,
+          "maximum_local_unknowns": 4,
+          "second_ward_rows": 0,
+          "vanishing_first_pivots": 0
+        },
+        "timing_seconds": {
+          "branching": 0.13769762497395277,
+          "actions": 0.09050641604699194,
+          "outer_ward": 0.04714404186233878,
+          "middle": 0,
+          "ccy": 0.15170920570380986,
+          "products": 0.010456372052431107,
+          "assembly": 0.014495331328362226,
+          "auxiliary": 0.003707916010171175,
+          "division": 0.007278250064700842,
+          "schottky": 0.00036987499333918095,
+          "restoration": 0.0005141668953001499,
+          "total": 0.33017525007016957
+        }
+      },
+      {
+        "channel": [
+          1,
+          -1,
+          -1
+        ],
+        "mode": "ordinary",
+        "dps": 40,
+        "precision_bits": 136,
+        "diagnostics": {
+          "maximum_action_residual": 1.0353839329298878e-27,
+          "maximum_ward_residual": 1.359224113265387e-41,
+          "maximum_sector_residual": 5.258229810994256e-30
+        },
+        "counts": {
+          "branches": 152,
+          "virasoro_blocks": 304,
+          "ccy_transitions": 1536,
+          "ccy_seed_terms": 7216,
+          "transposed_products_reused": 0,
+          "direct_boundary_values": 96,
+          "recursive_branching_values": 288,
+          "recursive_groups": 96,
+          "maximum_local_unknowns": 4,
+          "second_ward_rows": 0,
+          "vanishing_first_pivots": 0
+        },
+        "timing_seconds": {
+          "branching": 0.16090670810081065,
+          "actions": 0.10120749985799193,
+          "outer_ward": 0.0596052089240402,
+          "middle": 0,
+          "ccy": 0.14378044591285288,
+          "products": 0.00875549204647541,
+          "assembly": 0.015536072663962841,
+          "auxiliary": 0.0020952499471604824,
+          "division": 0.006647291127592325,
+          "schottky": 0.0002592499367892742,
+          "restoration": 0.0003915000706911087,
+          "total": 0.34209183300845325
+        }
+      }
+    ]
+  }
+}

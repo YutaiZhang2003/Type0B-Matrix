@@ -1,0 +1,135 @@
+{
+  "status": "refinement_in_progress",
+  "completed_orders": [
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "checks": [
+    {
+      "N": 3,
+      "fresh_node_counts": {
+        "source": 0,
+        "target": 0
+      },
+      "maximum_native_ward_residual": null,
+      "maximum_target_global_occupation": null,
+      "saved_L3_checks": [
+        {
+          "dataset": "nsrr_factorized_sign_trial_L3_N5_20260830",
+          "maximum_L3_integral_relative_error": 1.1879386363489175e-14
+        },
+        {
+          "dataset": "nsrr_trial_L5_N3_local_20260830",
+          "maximum_L3_integral_relative_error": 0.0
+        }
+      ],
+      "maximum_L3_to_L5_change": 0.00036029884607624574
+    },
+    {
+      "N": 4,
+      "fresh_node_counts": {
+        "source": 64,
+        "target": 0
+      },
+      "maximum_native_ward_residual": 8.950522498681871e-41,
+      "maximum_target_global_occupation": null,
+      "saved_L3_checks": [
+        {
+          "dataset": "nsrr_factorized_sign_trial_L3_N5_20260830",
+          "maximum_L3_integral_relative_error": 4.440892098500626e-15
+        }
+      ],
+      "maximum_L3_to_L5_change": 0.0003587895537513486
+    },
+    {
+      "N": 5,
+      "fresh_node_counts": {
+        "source": 125,
+        "target": 125
+      },
+      "maximum_native_ward_residual": 1.109949016424743e-40,
+      "maximum_target_global_occupation": 20,
+      "saved_L3_checks": [
+        {
+          "dataset": "nsrr_factorized_sign_trial_L3_N5_20260830",
+          "maximum_L3_integral_relative_error": 7.549516567451064e-15
+        }
+      ],
+      "maximum_L3_to_L5_change": 0.0003588398859328823
+    },
+    {
+      "N": 6,
+      "fresh_node_counts": {
+        "source": 216,
+        "target": 216
+      },
+      "maximum_native_ward_residual": 2.218628351816379e-40,
+      "maximum_target_global_occupation": 20,
+      "saved_L3_checks": [],
+      "maximum_L3_to_L5_change": 0.0003589000476365012
+    },
+    {
+      "N": 7,
+      "fresh_node_counts": {
+        "source": 343,
+        "target": 343
+      },
+      "maximum_native_ward_residual": 2.230223680242092e-40,
+      "maximum_target_global_occupation": 21,
+      "saved_L3_checks": [],
+      "maximum_L3_to_L5_change": 0.0003589163350183888
+    }
+  ],
+  "last_step_maximum_relative_changes": {
+    "source_Z": 9.17809998701724e-06,
+    "target_Z": 0.0005993541402118385,
+    "ratio": 0.0006070580953906335
+  },
+  "stable_steps": [
+    {
+      "N": 6,
+      "maximum_relative_step": 0.00215223718637203,
+      "consecutive_stable_steps": 0
+    },
+    {
+      "N": 7,
+      "maximum_relative_step": 0.0006070580953906335,
+      "consecutive_stable_steps": 0
+    }
+  ],
+  "baseline_target_reuse_check": {
+    "N": 4,
+    "node": 0,
+    "maximum_relative_density_error": 0.0,
+    "maximum_global_occupation_used": 18,
+    "baseline_sha256": "d27b8567d78008e0adc8834298acbe8a18b463740b6b318434e4cb4bc9e016f0"
+  },
+  "extra_target_reuse_checks": [
+    {
+      "N": 3,
+      "index": 13,
+      "relative_error": 0.0,
+      "input_sha256": "b2762c4d43df0cfd8664d222a437cab47b1a9937d1012d6130156812f930b67f",
+      "global_max_occupation_used": 17
+    },
+    {
+      "N": 4,
+      "index": 21,
+      "relative_error": 0.0,
+      "input_sha256": "c3d2020ef5167cf2cd521202bf6c11ea80556257b145320e670e7ce5be1c0ab0",
+      "global_max_occupation_used": 18
+    },
+    {
+      "N": 4,
+      "index": 63,
+      "relative_error": 0.0,
+      "input_sha256": "1cf375d6dfa155fb803b14ad86fec62e5737a09d46a3c8797611569bb07bf2dc",
+      "global_max_occupation_used": 16
+    }
+  ],
+  "interpretation": "Empirical quadrature convergence at fixed block cutoffs; no rigorous remainder bound.",
+  "audit_script_sha256": "0b2067598972a0eeef41c7680ff96d5d8e1e97079bcb93ea7e37db1eda1fbd22"
+}

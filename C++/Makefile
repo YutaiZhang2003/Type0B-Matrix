@@ -12,10 +12,21 @@ endif
 HEADERS = $(wildcard include/ramond/*.hpp)
 SOURCES = $(wildcard src/*.cpp)
 OBJECTS = $(SOURCES:src/%.cpp=build/%.o)
-all: bin/ramond bin/pbw
+all: bin/ramond bin/pbw bin/ramond_resummed
 bin/pbw: drivers/pbw_main.cpp $(HEADERS)
 	@mkdir -p bin
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/ramond_resummed: tools/resummed_main.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/resummed_global: tests/resummed_global.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/resummed_recovery: tests/resummed_recovery.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+check-resummed: bin/ramond_resummed bin/resummed_global
+	bin/resummed_global
 bin/ramond: $(OBJECTS)
 	@mkdir -p bin
 	$(CXX) $(LDFLAGS) $^ $(LDLIBS) -o $@
@@ -26,6 +37,8 @@ clean:
 	rm -rf build bin
 check: bin/ramond
 	$(PYTHON) tests/verify_saved.py --run --level 3
+check-pbw: bin/ramond
+	$(PYTHON) tests/verify_fresh_pbw.py --below-order 5 --all-parities --results results/fresh_pbw_smoke
 bin/outer_ward_driver: tests/outer_ward_driver.cpp $(HEADERS)
 	@mkdir -p bin
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
@@ -40,4 +53,4 @@ check-branching: bin/outer_ward_driver bin/second_ward_actions
 	bin/outer_ward_driver 5 40 0
 	bin/outer_ward_driver 5 40 0 1
 	bin/outer_ward_driver 5 0 0 1
-.PHONY: all clean check check-branching
+.PHONY: all clean check check-pbw check-branching check-resummed

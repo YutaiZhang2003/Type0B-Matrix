@@ -2,9 +2,9 @@
 r"""Low-order test of a specified NSRR factorized sewing ANSATZ.
 
 This is not the physical Ramond projector or a certified partition.
-All eight literal Human-Note chiral components are retained. Equal-sign
-components use branching recursion and two Virasoro c-recursions; missing
-opposite-sign components use the explicit, capped PBW DIAGNOSTIC completion.
+All eight literal Human-Note chiral components are retained. All components use the native double-Virasoro pipelines: ordinary recovery
+for equal signs and inserted recovery for opposite signs. No physical PBW
+completion is used.
 
 Trial vertex: t_(f;eta,zeta)=i**f*c_eta*delta_eta,zeta,
               (c_+,c_-)=(C_even,C_odd)/2.
@@ -26,11 +26,11 @@ from pathlib import Path
 import subprocess
 import sys
 import time
-from unittest.mock import patch
 
 import numpy as np
 
 import nsrr_double_virasoro_block as dv
+from nsrr_cpp_backend import METHOD, implementation_hashes as native_hashes
 from theta_star_algebra import fwht
 from generic_super_liouville_structure_constants import GenericSuperLiouvilleConstants
 from fixed_spin_free_plumbing import fixed_spin_partition
@@ -77,7 +77,7 @@ def fingerprint():
              ROOT/"Code/genus_2/physical_free_plumbing_resummation.py",
              ROOT/"Code/genus_2/nsrr_plumbing_adapter.py",
              ROOT/"Code/c_Recursion/generic_super_liouville_structure_constants.py"]
-    return {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}
+    return {**native_hashes(), **{str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}}
 
 
 def low_level_coefficients(b, momenta_slots, f, eta, etap, lifts_slots):
@@ -93,30 +93,25 @@ def low_level_coefficients(b, momenta_slots, f, eta, etap, lifts_slots):
     return -1j*(l3-k*l2), -1j*l1*a*(1+k*l2*l3)/(2*h)
 
 
-def block_components(b, momenta_slots, cutoff):
-    if cutoff not in (1, 2):
-        raise ValueError("this diagnostic completion is bounded to level 1 or 2")
-    with patch.object(dv, "HumanNSRRThetaOracle", wraps=dv.HumanNSRRThetaOracle) as oracle:
-        runtime = dv.NSRRDoubleVirasoroTheta(
-            b=b, physical_momenta=momenta_slots, cutoff=cutoff,
-            completion="pbw_diagnostic", pbw_completion_max_level=2)
-        components = {channel: runtime.physical_components(*channel) for channel in CHANNELS}
-        calls = oracle.call_count
-    if calls != 4:
-        raise ArithmeticError("expected explicit PBW completion for exactly four opposite-sign channels")
+def block_components(b, momenta_slots, cutoff, *, native_dps=40):
+    """All eight physical HJS/form channels from the native double-Virasoro code."""
+    runtime = dv.NSRRDoubleVirasoroTheta(
+        b=b, physical_momenta=momenta_slots, cutoff=cutoff, native_dps=native_dps)
+    components = {channel: runtime.physical_components(*channel) for channel in CHANNELS}
     error = 0.
     for channel, vectors in components.items():
         for lifts in product((1, -1), repeat=3):
             k = dv.spin_character_index(lifts)
             expected = low_level_coefficients(b, momenta_slots, *channel, lifts)
             for exponent, target in zip(((0, 0, 0), (1, 0, 0)), expected):
+                if sum(exponent) > 2*cutoff:
+                    continue
                 actual = fwht(vectors[exponent])[k]
                 error = max(error, abs(actual-target)/max(1., abs(target)))
     if error > 1e-10 or runtime.ward_residual_maximum > 1e-8:
         raise ArithmeticError("a low-level normalization or branching check failed")
-    return components, {"explicit_PBW_completion_calls": calls,
-                        "analytic_ground_half_level_max_error": error,
-                        "branching_ward_residual": runtime.ward_residual_maximum}
+    return components, {**runtime.native.diagnostics(),
+                        "analytic_ground_half_level_max_error": error}
 
 
 def evaluate_blocks(components, q_slots, lifts_slots, level):
@@ -185,7 +180,7 @@ def make_config(geometry_path):
         "antiholomorphic_ansatz": "coefficientwise conjugate chiral block at real momenta; an explicit hypothesis, not a proved physical BPZ dictionary",
         "formula": "Z_trial=integral primary*conj(primary) sum_(f,eta,eta') (-1)^f (i^f c_eta)(i^f c_eta') F_f^(eta,eta') conj(F_f^(eta,eta')) dP^3/pi^3",
         "control": "also evaluate without the explicit sewing sign and with a formal same-chiral-convention antichiral block",
-        "method": "branching recursion and two Virasoro c-recursions, with explicit PBW diagnostic completion only for missing opposite-sign star channels",
+        "method": METHOD,
         "cosmological_factor": "common factor omitted consistently, as in previous toys",
         "reference_free_spin": [[1, 1], [0, 0]], "physical_lift_spin_dictionary": None,
         "normalization": "no fitted multiplicity; Q_trial_reference=Z_trial/Z_free_reference^kappa is a diagnostic only",
@@ -254,8 +249,8 @@ def validate_shard(config, index, shard):
     design = [(p["t"], l, list(lifts)) for p, lifts, l in product(config["points"], LIFTS, config["levels"])]
     if [(r["t"], r["level"], r["lifts_geometry"]) for r in shard["rows"]] != design:
         raise ValueError("missing or reordered evaluations")
-    if shard["checks"]["explicit_PBW_completion_calls"] != 4:
-        raise ValueError("missing explicit diagnostic completion")
+    if shard["checks"]["explicit_PBW_completion_calls"] != 0 or shard["checks"].get("method") != METHOD:
+        raise ValueError("NSRR production requires native double-Virasoro for every channel")
     for row in shard["rows"]:
         if len(row["blocks"]) != 8 or len(row["weighted_terms"]) != 8:
             raise ValueError("a chiral component was omitted")

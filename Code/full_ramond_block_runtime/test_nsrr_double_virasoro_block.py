@@ -58,8 +58,7 @@ class NSRRDoubleVirasoroBlockTests(unittest.TestCase):
         self.assertAlmostEqual(block.physical_series(0, 1, 1, 4)[(0, 0, 0)], 0)
         self.assertAlmostEqual(block.star_character_series(0, 1, 1, 4)[(0, 0, 0)], 2)
         block.pbw_completion_max_level = 0
-        with self.assertRaisesRegex(NotImplementedError, "annihilated"):
-            block.physical_components(1, 1, -1)
+        self.assertTrue(block.physical_components(1, 1, -1))
         with self.assertRaises(ZeroDivisionError):
             block.star_character_series(0, 1, 1, 0)
 
@@ -85,20 +84,13 @@ class NSRRDoubleVirasoroBlockTests(unittest.TestCase):
                     self.assertGreater(abs(result.auxiliary_ground), 0.5)
                     self.assertTrue(abs(result.value) < 100.0)
 
-    def test_only_the_certified_branching_interface_is_called(self):
-        original = BranchingGrid.solve
-        calls = []
-
-        def canonical_only(grid, a2, a3, **kwargs):
-            self.assertEqual(kwargs, {})
-            calls.append(grid.momenta)
-            return original(grid, a2, a3)
-
-        with patch.object(BranchingGrid, "solve", canonical_only):
+    def test_physical_blocks_use_native_recursion_without_legacy_grid(self):
+        with patch.object(BranchingGrid, "solve", side_effect=AssertionError("legacy grid forbidden")):
             block = NSRRDoubleVirasoroTheta(
                 b=1.4, physical_momenta=(.21, .37, .52), cutoff=1)
-        self.assertEqual(len(calls), 8)
-        self.assertEqual({p[1] for p in calls}, {.37j, -.37j})
+            block.physical_components(0, 1, 1)
+            block.physical_components(0, 1, -1)
+        self.assertEqual({row["mode"] for row in block.native.records.values()}, {"ordinary", "inserted"})
         self.assertLess(block.ward_residual_maximum, 1e-10)
 
     def test_production_never_calls_the_pbw_oracle(self):
@@ -109,8 +101,9 @@ class NSRRDoubleVirasoroBlockTests(unittest.TestCase):
             for f in (0, 1):
                 for eta in (1, -1):
                     block.physical_components(f, eta, eta)
-                with self.assertRaisesRegex(NotImplementedError, "silently use PBW"):
-                    block.physical_components(f, 1, -1)
+                block.physical_components(f, 1, -1)
+                block.physical_components(f, -1, 1)
+            self.assertEqual(block.native.diagnostics()["explicit_PBW_completion_calls"], 0)
 
 
 if __name__ == "__main__":

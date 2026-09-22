@@ -24,6 +24,7 @@ class PlumbingAdapterTests(unittest.TestCase):
             self.assertIs(actual, result)
             self.assertEqual(ctor.call_args.kwargs["physical_momenta"], (.21,.37,.52))
             self.assertEqual(ctor.call_args.kwargs["completion"], "none")
+            self.assertEqual(ctor.call_args.kwargs["global_method"], "resummed")
             self.assertEqual(ctor.return_value.block.call_args.kwargs["q_values"], self.plumbing.q_slots)
             self.assertEqual(ctor.return_value.block.call_args.kwargs["lifts"], self.plumbing.lifts_slots)
 
@@ -40,7 +41,7 @@ class PlumbingAdapterTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "three"):
             NSRRPlumbingInputs(self.plumbing.q_geometry, (1,-1), ("R","R","NS"))
 
-    def test_geometry_entry_point_matches_independent_pbw(self):
+    def test_polynomial_geometry_entry_point_matches_independent_pbw(self):
         import sympy as sp
         from nsrr_genus2_block import HumanNSRRThetaOracle, level_triples
         from theta_star_algebra import fwht
@@ -59,7 +60,7 @@ class PlumbingAdapterTests(unittest.TestCase):
             expected=evaluate_twice_level_series(reference,self.plumbing.q_slots)
             actual=chiral_block_in_geometry(plumbing=self.plumbing,b=1.4,
                 momenta_geometry=(.52,.37,.21),cutoff=1,
-                form_parity=f,eta_left=eta,eta_right=eta)
+                form_parity=f,eta_left=eta,eta_right=eta,global_method="polynomial")
             self.assertAlmostEqual(actual.value,expected,delta=1e-10)
 
 

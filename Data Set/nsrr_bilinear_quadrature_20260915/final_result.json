@@ -1,0 +1,110 @@
+{
+  "status": "quadrature_stabilized_at_fixed_block_cutoffs",
+  "t": 0.6,
+  "b": 1.4,
+  "source_N": 7,
+  "target_N": 10,
+  "source_L": 5,
+  "target_R": 12,
+  "values": {
+    "s=+1": {
+      "source_Z": 1.9280928985848454e-10,
+      "target_Z": 6.306838813561272e-10,
+      "ratio": 0.2500525946470593,
+      "four_times_ratio_minus_one": 0.00021037858823724775
+    },
+    "s=-1": {
+      "source_Z": 2.0907051255809692e-10,
+      "target_Z": 6.845299709620976e-10,
+      "ratio": 0.24981324351309295,
+      "four_times_ratio_minus_one": -0.0007470259476282104
+    },
+    "resolved_00": {
+      "source_Z": 2.0355921717663106e-10,
+      "target_Z": 6.666062612075919e-10,
+      "ratio": 0.24976784425742185,
+      "four_times_ratio_minus_one": -0.0009286229703125981
+    },
+    "resolved_11": {
+      "source_Z": 1.9832058523995045e-10,
+      "target_Z": 6.486075911106331e-10,
+      "ratio": 0.2500926394571815,
+      "four_times_ratio_minus_one": 0.00037055782872608134
+    },
+    "spin_sum": {
+      "source_Z": 4.018798024165815e-10,
+      "target_Z": 1.315213852318225e-09,
+      "ratio": 0.24992801945003335,
+      "four_times_ratio_minus_one": -0.00028792219986661927
+    }
+  },
+  "last_source_steps": [
+    9.1213883981478e-06,
+    9.17809998701724e-06
+  ],
+  "last_target_steps": [
+    {
+      "source_N": 7,
+      "target_N": 9,
+      "maximum_relative_changes": {
+        "source_Z": 0.0,
+        "target_Z": 4.963033052929333e-05,
+        "ratio": 4.962786748197168e-05
+      },
+      "consecutive_stable_target_steps": 1
+    },
+    {
+      "source_N": 7,
+      "target_N": 10,
+      "maximum_relative_changes": {
+        "source_Z": 0.0,
+        "target_Z": 1.6157499426405764e-05,
+        "ratio": 1.615723836556615e-05
+      },
+      "consecutive_stable_target_steps": 2
+    }
+  ],
+  "matrix_steps": {
+    "source": [
+      {
+        "channel": "source",
+        "N": 6,
+        "norm": 4.012852684264112e-10,
+        "off_diagonal_phase_rad": 0.040597830326349754,
+        "relative_matrix_step": 6.4869768434955844e-06,
+        "off_diagonal_phase_step_rad": -8.68003106732091e-06
+      },
+      {
+        "channel": "source",
+        "N": 7,
+        "norm": 4.0128177404830795e-10,
+        "off_diagonal_phase_rad": 0.04059839558274195,
+        "relative_matrix_step": 8.718592116908878e-06,
+        "off_diagonal_phase_step_rad": 5.652563921928837e-07
+      }
+    ],
+    "target": [
+      {
+        "channel": "target",
+        "N": 9,
+        "norm": 1.3132360917993222e-09,
+        "off_diagonal_phase_rad": 0.04107822241288609,
+        "relative_matrix_step": 4.8452437166057616e-05,
+        "off_diagonal_phase_step_rad": 1.2797917062723243e-06
+      },
+      {
+        "channel": "target",
+        "N": 10,
+        "norm": 1.3132567775060813e-09,
+        "off_diagonal_phase_rad": 0.041078657078046026,
+        "relative_matrix_step": 1.575498238276606e-05,
+        "off_diagonal_phase_step_rad": 4.3466515992815533e-07
+      }
+    ]
+  },
+  "off_diagonal_phase_difference_rad": -0.0004802614953040776,
+  "trace_normalized_matrix_difference_frobenius": 0.0005706858874308262,
+  "interpretation": "The low-N ratio was not stabilized. The refined central-surface ratio remains near one quarter with the original pairing and coefficients. No factor four is applied. This is quadrature convergence, not a full block-truncation or interacting-spin-transport validation.",
+  "scope": "One surface, t=0.60. Other saved surfaces have not received this quadrature refinement.",
+  "excluded": "The interrupted partial source N8 grid is not used."
+}

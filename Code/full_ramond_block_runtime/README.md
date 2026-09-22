@@ -1,5 +1,14 @@
 # Ramond block q-expansion runtime benchmark
 
+## Pointwise global resummation
+
+`NSRRDoubleVirasoroTheta.block()` now defaults to the native resummed evaluator.
+`ResummedNSRR` exposes separate branching, pole-recursion and global accuracy
+controls for both equal and opposite HJS signs. Coefficient-only APIs retain
+their finite-polynomial meaning. See [GLOBAL_RESUMMATION.md](GLOBAL_RESUMMATION.md)
+for the algorithm, punctured diagonal projection, independent tolerances and
+current validation scope.
+
 ## Physical-block recovery
 
 The equal-structure physical block can now be recovered from the enlarged
@@ -17,28 +26,28 @@ without further numerical validation. Fresh physical level-six coefficients
 are saved in [physical_level6_q_expansion.json](physical_level6_q_expansion.json)
 and agree with direct physical PBW sewing to `3.98e-10` in scaled error.
 
-## Physical-block boundary audit, 2026-08-30
+## Physical NSRR production boundary, 2026-09-11
 
-The certified enlarged series below must not be confused with a physical
-fixed-lift block or with a nonchiral partition function. The corrected
-`nsrr_double_virasoro_block.py` now:
+`NSRRDoubleVirasoroTheta` in `nsrr_double_virasoro_block.py` computes every
+physical HJS/form-parity component through the C++ double-Virasoro implementation.
+Equal vertex signs select ordinary recovery; opposite signs select the inserted
+Theta v_(1/2) pipeline. The former opposite-sign physical PBW completion has
+been removed. Legacy `completion="pbw_diagnostic"` arguments are accepted for
+compatibility but never select a PBW calculation.
 
-- divides the four supported auxiliary-star characters and reconstructs
-  parity components before taking the **ordinary** lift sum;
-- supplies the opposite-HJS-sign nullspace explicitly from the independent
-  PBW oracle (default cost cap: physical level 3);
-- obtains the odd form from the exact Ramond ground-partner Ward identity
-  `F_1 = -i e_(001) star F_0`, applied to the certified even-form series.
-  The old odd-form branching-grid extension is not used: its level-1/2
-  coefficient interchanges the HJS signs relative to the physical PBW block.
+Build the native executable with `make -C C++` from the repository root.
+`nsrr_cpp_backend.py` maps continuum momenta `p` to note momenta `P=i*p`, checks
+the complete coefficient table and metadata, and uses 40-digit arithmetic by
+default. It raises on a missing/stale executable or numerical failure, with no
+physical PBW fallback. The existing Python interface still returns complex128
+coefficients for plumbing evaluation and momentum integration. Set
+`TYPE0B_NSRR_BINARY` to use a separately built executable.
 
-Thus the supported data still use the branching recursion and the product
-of two ordinary Virasoro c-recursions. Missing star channels are not claimed
-to be a second double-Virasoro determination. The new level-3 certificate
-checks both primary parities, both form parities and all HJS sign pairs.
-See `Data Set/nsrr_nsnsns_human_note_repair_20260830/README.md` from the
-repository root. The nonchiral NSRR comparison is guarded until its Ramond
-ground projector and marked spin-lift dictionary are established.
+The old ordinary enlarged-series routines remain lazy, explicit algebraic
+audits; physical production does not initialize their Python branching grid.
+Independent PBW calculations remain in tests only. The genus-two modular
+rerun is `Code/genus_2/rerun_nsrr_double_virasoro.py`; it keeps the existing
+marked spin projection and nonchiral sewing formula.
 
 ## Authoritative calculation
 
