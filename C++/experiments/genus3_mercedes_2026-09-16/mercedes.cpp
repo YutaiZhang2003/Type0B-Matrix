@@ -23,10 +23,6 @@ int kernel(int a,int b){
     int local=0;for(auto &v:slots)local+=bit(a,v[1])*bit(b,v[2]);
     return graph_sign(a^b)*graph_sign(a)*graph_sign(b)*sign(local);
 }
-int transport(int mask,const std::array<int,3>&f){
-    int exponent=0;for(int i=0;i<3;i++)exponent+=f[i]*(bit(mask,i)+bit(mask,3+i));
-    return sign(exponent);
-}
 S virnorm(S h,int n){return n?S(2)*h:S(1);}
 // Exact L_-1 global vertex; all Virasoro descendant levels are <=1.
 S vrho(int i,int j,int k,std::array<S,3>h){
@@ -109,9 +105,9 @@ class Network{
             val=power((S(-1)+S(0,1))/root(S(2)),z.pbw%2+t.pbw%2)*form->value({a.pbw,z.pbw,t.pbw});
         }else if(kind==FERMION)val=ff.complex_value<S>({a.aux,z.aux,t.aux});
         else{
-            std::array<int,7>bk{v,a.n4,z.n4,t.n4,z.par,t.par,sign(f)*eta};
+            std::array<int,7>bk{v,a.n4,z.n4,t.n4,z.par,t.par,eta};
             auto it=branch_cache.find(bk);
-            if(it==branch_cache.end())it=branch_cache.emplace(bk,anchors[v-1]->raw({a.n4,z.n4,t.n4},z.par,t.par,sign(f)*eta)).first;
+            if(it==branch_cache.end())it=branch_cache.emplace(bk,anchors[v-1]->raw({a.n4,z.n4,t.n4},z.par,t.par,eta)).first;
             val=it->second;
         }
         if(kind==DV)for(int cp=0;cp<2;cp++)val*=vrho(cp?a.d1:a.d0,cp?z.d1:z.d0,cp?t.d1:t.d0,
@@ -174,7 +170,6 @@ public:
                 result+=central*tr(mul(mul(mul(mul(mul(v1,k3),v2),k4),v3),k5));
             }
             out[mask]=S(graph_sign(mask))*result;
-            if(kind!=PHYSICAL)out[mask]*=power(S(0,1),nspar[0]+nspar[1]+nspar[2]);
         }return out;
     }
 };
@@ -210,23 +205,22 @@ int main(int argc,char**argv){try{
         for(auto l:levels){ph[l]=physical.coefficient(l,f,eta,false);hat[l]=dv.coefficient(l,f,eta,ins);}
         for(auto l:levels){Row expected{},remainder=hat[l];
             for(auto r:levels){Levels s;bool ok=true,zero=true;for(int e=0;e<6;e++){s[e]=l[e]-r[e];if(s[e]<0)ok=false;if(s[e])zero=false;}if(!ok)continue;
-                auto it=aux[ins].find(s);if(it==aux[ins].end())continue;Row transported=ph[r];for(int k=0;k<64;k++)transported[k]*=S(transport(k,f));
-                addstar(expected,transported,it->second);
+                auto it=aux[ins].find(s);if(it==aux[ins].end())continue;addstar(expected,ph[r],it->second);
                 if(!zero){auto old=rec.find(r);if(old!=rec.end())addstar(remainder,old->second,it->second,S(-1));}
             }
             forward.check(hat[l],expected,l);for(auto &x:remainder)x/=constant;rec[l]=remainder;
-            Row recovered=remainder;for(int k=0;k<64;k++)recovered[k]*=S(transport(k,f));recovery.check(recovered,ph[l],l);
+            Row recovered=remainder;recovery.check(recovered,ph[l],l);
             Row spin_got{},spin_expected{};for(int lift=0;lift<64;lift++)for(int k=0;k<64;k++){
                 int sgn=sign(__builtin_popcount(unsigned(lift&k)));spin_got[lift]+=S(sgn)*recovered[k];spin_expected[lift]+=S(sgn)*ph[l][k];
             }spin.check(spin_got,spin_expected,l);
             coefficients<<"{\"case\":"<<cases<<",\"level2\":[";for(int e=0;e<6;e++){if(e)coefficients<<",";coefficients<<l[e];}
             coefficients<<"],\"physical_pbw\":";sparse_json(coefficients,ph[l]);coefficients<<",\"enlarged_dv\":";sparse_json(coefficients,hat[l]);coefficients<<",\"recovered\":";sparse_json(coefficients,recovered);coefficients<<"}\n";
-            Row jj{};S phase=power(S(0,1),-3)*S(graph_sign(56));for(int k=0;k<64;k++)jj[k^56]=phase*S(kernel(56,k))*ph[l][k]*S(eta[0]*eta[1]*eta[2]);sector.check(jj,ph[l],l);
+            Row jj{};S phase=power(S(0,1),-3)*S(graph_sign(56));for(int k=0;k<64;k++)jj[k^56]=phase*S(kernel(56,k))*ph[l][k]*S(sign(f[0]+f[1]+f[2])*eta[0]*eta[1]*eta[2]);sector.check(jj,ph[l],l);
             if(ins)vanishing.check(dv.coefficient(l,f,eta,false),Row{},l);
             if(ins)for(int right:{0,2})if(right!=l[3]){
                 Row expect{};
                 for(auto r:levels){Levels s;bool ok=true;for(int e=0;e<6;e++){s[e]=l[e]-r[e];if(s[e]<0)ok=false;}int sr=right-r[3];if(sr<0)ok=false;if(!ok)continue;
-                    auto ff=fermion.coefficient(s,{0,0,0},{1,1,1},true,sr);Row x=ph[r];for(int k=0;k<64;k++)x[k]*=S(transport(k,f));addstar(expect,x,ff);
+                    auto ff=fermion.coefficient(s,{0,0,0},{1,1,1},true,sr);addstar(expect,ph[r],ff);
                 }split.check(dv.coefficient(l,f,eta,true,right),expect,l,right);
             }
         }

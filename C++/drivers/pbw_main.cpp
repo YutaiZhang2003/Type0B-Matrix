@@ -24,7 +24,7 @@ template<class S> void run(int level,int dps,int p,int f,int eta,bool opposite,c
     std::filesystem::path path(output); if(path.has_parent_path()) std::filesystem::create_directories(path.parent_path());
     std::ofstream out(output); require(bool(out),"cannot open PBW output");
     out<<std::setprecision(17)<<"{\"status\":\"computed\",\"implementation\":\"C++17 direct SCA PBW\",\"mode\":\""
-       <<(opposite?"inserted":"ordinary")<<"\",\"truncation\":\"per-edge\",\"q_level_cutoffs\":["<<level<<','<<level<<','<<level
+       <<(opposite?"inserted":"ordinary")<<"\",\"conventions\":\"product_bpz_residue_2026-09-22\",\"truncation\":\"per-edge\",\"q_level_cutoffs\":["<<level<<','<<level<<','<<level
        <<"],\"dps\":"<<dps<<",\"precision_bits\":"<<(dps?MP::bits:53)<<",\"b\":\"7/5\",\"momenta\":[\"11/23\",\"13/29\",\"17/31\"],\"p\":"<<p<<",\"f\":"<<f
        <<",\"etas\":["<<eta<<','<<(opposite?-eta:eta)<<"],\"timing_seconds\":{\"setup\":"<<setup<<",\"metadata\":"<<t.metadata
        <<",\"gram_entries\":"<<t.gram_entries<<",\"gram_inverse\":"<<t.gram_inverse<<",\"vertices\":"<<t.vertices<<",\"contractions\":"<<t.contractions<<",\"total\":"<<total

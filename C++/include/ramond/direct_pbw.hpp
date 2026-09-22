@@ -151,12 +151,12 @@ template<class S> class ScaModule {
 template<class S> class ScaWard {
     ScaWords<S> &words_;
     std::array<ScaModule<S>*,3> modules_;
-    int p_,f_,eta_;
+    int f_,eta_;
     struct Entry { S value; bool active=true; };
     std::unordered_map<std::array<int,3>,Entry,Hash> cache_;
-    S epsilon(int first,int third) {
-        return S(Machine(0,-sign(p_+words_.words[first/2].parity+
-                                  words_.words[third/2].parity+third%2+1)));
+    S epsilon(int middle) {
+        // Minus the origin-contour coefficient +i (-1)^epsilon_2.
+        return S(Machine(0,-sign(words_.words[middle/2].parity+middle%2)));
     }
     int level(int state) const { return words_.words[state/2].level2; }
     int tail(int state) const { return 2*words_.words[state/2].tail+state%2; }
@@ -175,8 +175,8 @@ template<class S> class ScaWard {
     }
   public:
     size_t hits=0,misses=0,action_terms=0;
-    ScaWard(ScaWords<S> &words,std::array<ScaModule<S>*,3> modules,int p,int f,int eta)
-        :words_(words),modules_(modules),p_(p),f_(f),eta_(eta) {}
+    ScaWard(ScaWords<S> &words,std::array<ScaModule<S>*,3> modules,int /*primary_parity*/,int f,int eta)
+        :words_(words),modules_(modules),f_(f),eta_(eta) {}
     const S &value(const std::array<int,3> &s) {
         auto found=cache_.find(s);
         if(found!=cache_.end()) { require(!found->second.active,"cyclic direct SCA Ward recursion"); hits++; return found->second.value; }
@@ -188,7 +188,7 @@ template<class S> class ScaWard {
         const auto &w3=words_.words[s[2]/2].word;
         auto bin=[&](int a,int k)->const S& { return words_.binomial_half(a,k); };
         if(!w1.empty() && w1.front().kind) {
-            int r2=-w1.front().twice; rest[0]=tail(s[0]); S eps=epsilon(rest[0],s[2]);
+            int r2=-w1.front().twice; rest[0]=tail(s[0]); S eps=epsilon(s[1]);
             int maximum=std::max({0,r2+level(rest[0]),level(s[1]),level(s[2])})/2+4;
             for(int j=0;j<=maximum;j++) {
                 add_action(answer,rest,1,1,2*j,bin(r2,j));
@@ -209,7 +209,7 @@ template<class S> class ScaWard {
                     add_action(answer,rest,2,0,2*(j-1),S(sign(n))*b);
                 }
             } else {
-                S eps=epsilon(s[0],s[2]);
+                S eps=epsilon(rest[1]);
                 int maximum=std::max({0,2*n+level(rest[1]),level(s[0])-2*n+1,level(s[2])})/2+4;
                 for(int j=0;j<=maximum;j++) {
                     const S &b=bin(1-2*n,j);
@@ -229,7 +229,7 @@ template<class S> class ScaWard {
                 S exponent=modules_[2]->h+S(n)*modules_[1]->h-modules_[0]->h+rational<S>(level(rest[2]),2);
                 answer=exponent*value(rest);
             } else {
-                S eps=epsilon(s[0],rest[2]);
+                S eps=epsilon(s[1]);
                 int maximum=std::max(0,2*n+level(rest[2]))/2+4;
                 for(int j=0;j<=maximum;j++) {
                     add_action(answer,rest,1,1,2*j,bin(1-2*n,j)/eps);
@@ -241,7 +241,7 @@ template<class S> class ScaWard {
             int g2=s[1]%2,g3=s[2]%2;
             if((g2+g3)%2==f_) {
                 if(!g2) answer=S(1);
-                else answer=g3 ? S(eta_) : S(Machine(0,eta_));
+                else answer=g3 ? S(eta_) : S(Machine(0,-eta_));
             }
         }
         require(finite(answer),"nonfinite direct SCA Ward coefficient");

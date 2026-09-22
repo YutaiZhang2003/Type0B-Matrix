@@ -78,7 +78,7 @@ template <class S> class PBWModule {
 };
 template <class S> class PhysicalForm {
     std::array<PBWModule<S> *, 3> modules_;
-    int f_, eta_, p_;
+    int f_, eta_;
     using Triple = std::array<PBW, 3>;
     std::map<Triple, S> cache_;
     std::set<Triple> active_;
@@ -92,14 +92,9 @@ template <class S> class PhysicalForm {
         return v;
     }
     S gward(const Triple &states, int target, const Triple &rest) {
-        int p0 = modules_[0]->parity(rest[0]), p1 = modules_[1]->parity(rest[1]);
-        int koszul[3] = {1, sign(p0), sign(p0 + p1)};
-        if (target < 2)
-            koszul[2] *= sign(p_);
-        else {
-            koszul[0] *= sign(p_);
-            koszul[1] *= sign(p_);
-        }
+        // Residues of z^m(z-1)^n sqrt(z(z-1)) G(z). The root is
+        // z at infinity, sqrt(z-1) at 1, and +i sqrt(z) at 0.
+        const int middle_parity = modules_[1]->parity(rest[1]);
         std::map<Triple, S> equation;
         auto add_action = [&](int slot, int mode, const S &c) {
             if (c == S(0))
@@ -111,31 +106,17 @@ template <class S> class PhysicalForm {
             }
         };
         const S imag(Machine(0, 1));
-        int bound = 16; // Only the certified low anchors reach this evaluator.
-        if (target == 0) {
-            int mode = states[0].g.front(), m = (mode - 1) / 2;
-            for (int j = 0; j <= bound; j++) {
-                S a = from_rational<S>(sign(j) * half_binomial(1, j));
-                add_action(0, 2 * j - mode, S(koszul[0]) * (-imag) * a);
-                add_action(1, j, S(koszul[1]) * from_rational<S>(half_binomial(2 * m + 1, j)));
-                add_action(2, m + j, S(koszul[2]) * imag * a);
-            }
-        } else if (target == 1) {
-            int n = states[1].g.front();
-            for (int j = 0; j <= bound; j++) {
-                S c = from_rational<S>(sign(j) * half_binomial(1 - 2 * n, j));
-                add_action(0, 2 * (n + j) - 1, S(koszul[0]) * (-imag) * c);
-                add_action(1, -n + j, S(koszul[1]) * from_rational<S>(half_binomial(1, j)));
-                add_action(2, j, S(koszul[2] * sign(n)) * imag * c);
-            }
-        } else {
-            int n = states[2].g.front();
-            for (int j = 0; j <= bound; j++) {
-                S a = from_rational<S>(sign(j) * half_binomial(1, j));
-                add_action(0, 2 * (n + j) - 1, S(koszul[0]) * (-imag) * a);
-                add_action(1, j, S(koszul[1]) * from_rational<S>(half_binomial(1 - 2 * n, j)));
-                add_action(2, -n + j, S(koszul[2]) * imag * a);
-            }
+        const int m = target == 0 ? (states[0].g.front() - 1) / 2
+                                  : target == 2 ? -states[2].g.front() : 0;
+        const int n = target == 1 ? -states[1].g.front() : 0;
+        int bound = std::abs(m) + std::abs(n) + 4;
+        for (int slot = 0; slot < 3; slot++)
+            bound = std::max(bound, modules_[slot]->level(rest[slot]) + std::abs(m) + std::abs(n) + 4);
+        for (int j = 0; j <= bound; j++) {
+            const S a = from_rational<S>(sign(j) * half_binomial(2 * n + 1, j));
+            add_action(0, 2 * j - 2 * m - 2 * n - 1, -a);
+            add_action(1, n + j, from_rational<S>(half_binomial(2 * m + 1, j)));
+            add_action(2, m + j, imag * S(sign(middle_parity + n)) * a);
         }
         S target_coefficient = equation[states];
         equation.erase(states);
@@ -149,8 +130,8 @@ template <class S> class PhysicalForm {
     }
 
   public:
-    PhysicalForm(std::array<PBWModule<S> *, 3> modules, int f, int eta, int p)
-        : modules_(modules), f_(f), eta_(eta), p_(p) {}
+    PhysicalForm(std::array<PBWModule<S> *, 3> modules, int f, int eta, int /*primary_parity*/)
+        : modules_(modules), f_(f), eta_(eta) {}
     S value(const Triple &states) {
         auto found = cache_.find(states);
         if (found != cache_.end())
@@ -217,7 +198,7 @@ template <class S> class PhysicalForm {
                     if (!g2 && g3)
                         answer = phase;
                     else if (g2 && !g3)
-                        answer = phase * S(Machine(0, eta_));
+                        answer = phase * S(Machine(0, -eta_));
                 }
             }
         }
@@ -300,8 +281,7 @@ template <class S> class LowAnchors {
                     S aux = auxiliary_.complex_value<S>(states);
                     if (aux == S(0))
                         continue;
-                    int phase = pbw_[0]->parity(a.physical) * aux_parity(0, a.auxiliary) +
-                                (pbw_[1]->parity(b.physical) + p_) * aux_parity(2, c.auxiliary);
+                    int phase = pbw_[1]->parity(b.physical) * aux_parity(2, c.auxiliary);
                     answer += a.coefficient * b.coefficient * c.coefficient * S(sign(phase)) * aux *
                               form.value({a.physical, b.physical, c.physical});
                 }

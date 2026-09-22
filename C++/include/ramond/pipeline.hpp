@@ -187,7 +187,9 @@ template <class S> Result<S> pipeline(const Settings &settings) {
                         denominator *= r_norm(outgoing, alpha, b, p[1]);
                         factor *= middle_values.at({outgoing, incoming, alpha});
                     }
-                    factor *= S(sign(n1 / 2) * theta_sign(index));
+                    // Product BPZ sewing: the vertex already obeys both
+                    // Virasoro Ward identities, with no extra NS weight.
+                    factor *= S(theta_sign(index));
                     factor /= denominator;
                     factors[alpha] = {index, factor};
                 }
@@ -331,6 +333,7 @@ template <class S> void encode_result(std::ostream &out, const Settings &s, cons
         << (s.inserted ? -s.eta : s.eta) << "],\"sector_policy\":\""
         << (s.record_sector ? "record" : "error")
         << "\",\"branching_method\":\"stored_recursion\""
+        << ",\"conventions\":\"product_bpz_residue_2026-09-22\""
         << ",\"exponent_convention\":\"q1^(a/2) q2^l q3^(d/2), stored as "
            "(a,l,l,d)\",\"timing_seconds\":{\"branching\":"
         << t.branching << ",\"actions\":" << t.actions << ",\"outer_ward\":" << t.outer_ward

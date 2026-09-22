@@ -463,7 +463,7 @@ template <class S> class OuterBranching {
                                 for (int n2 : {-3, -1, 1, 3})
                                     for (int n3 : {-3, -1, 1, 3}) {
                                         tables_.at({a, g, e})[{n, n2, n3}] =
-                                            anchors_.raw({n, n2, n3}, a, g, sign(f_) * e);
+                                            anchors_.raw({n, n2, n3}, a, g, e);
                                         direct_boundary_values++;
                                     }
                     }

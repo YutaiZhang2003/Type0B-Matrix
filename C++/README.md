@@ -9,6 +9,14 @@ are implemented:
 | `ordinary` | `(eta, eta)` | Ordinary theta double-Virasoro sum and restricted fermion inverse |
 | `inserted` | `(eta, -eta)` | Theta v_(1/2) insertion, diagonal target sum, and fermion convolution |
 
+The production convention uses bilinear product BPZ pairings, the explicit
+Ramond contour branch, and a single middle-to-ket operator-moving sign in the
+enlarged vertex. Its definitions and fresh independent PBW checks are in
+[the convention notes](experiments/coherent_conventions_2026-09-22/README.md).
+Results contain `conventions: product_bpz_residue_2026-09-22`; archived output
+without this field predates the migration. Branching caches remain local to a
+fresh run. The manuscript has not been changed to adopt these conventions.
+
 Optional Python tools launch benchmarks and compare saved results. The Python
 numerical implementations remain available under `Code/`.
 

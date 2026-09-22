@@ -29,7 +29,6 @@ struct Setup {
             }
         }
     }
-    int transport(int mask,const Case&c)const{int ex=0;for(int v=0;v<int(graph.slots.size());v++){auto e=graph.slots[v];if(r[e[1]])ex+=c.f[v]*(((mask>>e[0])&1)+((mask>>e[1])&1));}return sign(ex);}
     int loop_count()const{return name=="mercedes"?1:int(r[1])+int(r[2]);}
 };
 S getrow(const Row&r,int k){auto it=r.find(k);return it==r.end()?S(0):it->second;}
@@ -139,7 +138,7 @@ public:
                     for(int i=0;i<int(left[e]->states.size());i++)for(int j=0;j<int(right[e]->states.size());j++)z+=(*props[e])(i,j)*vertex(v,a,left[e]->states[i],right[e]->states[j],c.f[v],c.eta[v]);t[v].push_back(z);
                 }for(int i=0;i<int(t[0].size());i++)for(int j=0;j<int(t[1].size());j++)ans+=t[0][i]*(*props[0])(i,j)*t[1][j];
             }
-            ans*=S(setup.graph.sign_of(mask));if(fermion)for(auto e:setup.graph.slots)if(setup.r[e[1]])ans*=power(S(Machine(0,1)),(mask>>e[0])&1);
+            ans*=S(setup.graph.sign_of(mask));
             if(ans!=S(0))out[mask]=ans;
         }return out;
     }
@@ -201,7 +200,7 @@ public:
                 for(int e=0;e<s.graph.edges;e++)if(!s.r[e]&&((mask>>e)&1)!=((labels[e]/2)%2+2)%2)ok=false;
                 for(int v=0;v<int(s.graph.slots.size());v++){int p=0;for(int e:s.graph.slots[v])p^=(mask>>e)&1;if(p!=c.f[v])ok=false;}if(!ok)continue;
                 S factor=S(s.graph.sign_of(mask));for(int v=0;v<int(s.graph.slots.size());v++){
-                    factor*=local(v,labels,mask,c,g);auto es=s.graph.slots[v];if(s.r[es[1]])factor*=power(S(Machine(0,1)),(mask>>es[0])&1);
+                    factor*=local(v,labels,mask,c,g);
                 }if(factor==S(0))continue;
                 for(int e=0;e<g.edges;e++){int original=e<s.graph.edges?e:marked[e-s.graph.edges];factor/=s.r[original]?r_norm(labels[e],(mask>>original)&1,b,s.p[original]):ns_norm(labels[e],b,s.p[original]);}
                 for(int j=0;j<int(marked.size());j++){
@@ -255,13 +254,13 @@ int main(int argc,char**argv){try{
         double pbw_seconds=seconds()-t;Error forward,recovery,vanishing,unequal,spin,sector;
         auto expanded=indices(setup,level,c.marked);auto &hat=numerators[c.marked][ci];S scalar=power(S(2),setup.loop_count())*power((parse<S>("7/5")+parse<S>("5/7"))/root(S(2)),c.marked.size());
         for(auto k:expanded){
-            Row expected;for(auto&[r,row]:ph){Key pull=r;for(int j=0;j<int(c.marked.size());j++)pull[bits+j]=r[c.marked[j]];if(!leq(pull,k))continue;auto it=aux[c.marked].find(minus(k,pull));if(it==aux[c.marked].end())continue;Row x=row;for(auto&[mask,v]:x)v*=S(setup.transport(mask,c));addstar(expected,x,it->second,setup.graph);}
+            Row expected;for(auto&[r,row]:ph){Key pull=r;for(int j=0;j<int(c.marked.size());j++)pull[bits+j]=r[c.marked[j]];if(!leq(pull,k))continue;auto it=aux[c.marked].find(minus(k,pull));if(it==aux[c.marked].end())continue;addstar(expected,row,it->second,setup.graph);}
             bool diagonal=true;for(int j=0;j<int(c.marked.size());j++)if(k[c.marked[j]]!=k[bits+j])diagonal=false;
             if(diagonal)forward.check(hat[k],expected,k,bits);else unequal.check(hat[k],expected,k,bits);
         }
         for(auto k:targets){Key pull=k;for(int j=0;j<int(c.marked.size());j++)pull[bits+j]=k[c.marked[j]];Row remainder=hat[pull];
             for(auto&[r,row]:rec)if(leq(r,k)&&r!=k){Key sk=minus(k,r);for(int j=0;j<int(c.marked.size());j++)sk[bits+j]=sk[c.marked[j]];auto it=aux[c.marked].find(sk);if(it!=aux[c.marked].end())addstar(remainder,row,it->second,setup.graph,S(-1));}
-            for(auto&[mask,x]:remainder)x/=scalar;rec[k]=remainder;Row recovered=remainder;for(auto&[mask,x]:recovered)x*=S(setup.transport(mask,c));recovery.check(recovered,ph[k],k,bits);
+            for(auto&[mask,x]:remainder)x/=scalar;rec[k]=remainder;Row recovered=remainder;recovery.check(recovered,ph[k],k,bits);
             Row sx,sy;for(int lift=0;lift<(1<<bits);lift++){for(auto[p,v]:recovered)sx[lift]+=S(sign(__builtin_popcount(unsigned(lift&p))))*v;for(auto[p,v]:ph[k])sy[lift]+=S(sign(__builtin_popcount(unsigned(lift&p))))*v;}spin.check(sx,sy,k,bits);
             if(!c.marked.empty())vanishing.check(numerators[{}][ci][k],{},k,bits);
             coeff<<"{\"case\":"<<ci<<",\"level2\":[";for(int e=0;e<bits;e++){if(e)coeff<<',';coeff<<k[e];}coeff<<"],\"physical\":";row_json(coeff,ph[k]);coeff<<",\"recovered\":";row_json(coeff,recovered);coeff<<",\"enlarged\":";row_json(coeff,hat[pull]);coeff<<"}\n";

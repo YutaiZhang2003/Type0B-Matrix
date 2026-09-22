@@ -79,11 +79,12 @@ class FermionForm {
         auto rest = states;
         int first = rest[target].modes.front();
         rest[target].modes.erase(rest[target].modes.begin());
-        int rp0 = aux_parity(0, rest[0]), rp1 = aux_parity(1, rest[1]);
-        int koszul[3] = {1, sign(rp0), sign(rp0 + rp1)}, largest[3];
+        // Residues of z^m(z-1)^n psi(z)/sqrt(z(z-1)), with
+        // psi_r^dagger=-psi_-r: slot coefficients are (1,1,-i (-1)^epsilon'_2).
+        int koszul[3] = {1, 1, sign(aux_parity(1, rest[1]))}, largest[3];
         for (int i = 0; i < 3; i++)
             largest[i] = rest[i].modes.empty() ? 0 : rest[i].modes.front();
-        int phase_target = target == 0 ? 1 : target == 1 ? 0 : 3;
+        int phase_target = target == 2 ? 3 : 0;
         Rational coefficient(0), remainder(0);
         auto add = [&](int slot, int mode, const Rational &c, int phase) {
             if (c == 0)
@@ -93,7 +94,8 @@ class FermionForm {
                 return;
             auto changed = rest;
             changed[slot] = std::move(final);
-            int exponent = (phase + aux_parity(1, changed[1]) - parity[1] - phase_target + 8) % 4;
+            int exponent = (phase + aux_parity(0, changed[0]) + aux_parity(1, changed[1])
+                            - parity[0] - parity[1] - phase_target + 8) % 4;
             require(exponent % 2 == 0, "inconsistent rational fermion Ward phase");
             Rational weight = c * action * sign(exponent / 2);
             if (changed == states)
@@ -106,7 +108,7 @@ class FermionForm {
                 cut = std::max({(first + largest[0]) / 2, largest[1], largest[2] - k, 0});
             for (int j = 0; j <= cut; j++) {
                 Rational a = sign(j) * half_binomial(-1, j);
-                add(0, 2 * j - first, koszul[0] * a, 1);
+                add(0, 2 * j - first, koszul[0] * a, 0);
                 add(1, j, koszul[1] * half_binomial(2 * k - 1, j), 0);
                 add(2, k + j, koszul[2] * a, 3);
             }
@@ -115,7 +117,7 @@ class FermionForm {
                 std::max({(largest[0] - 2 * first - 1) / 2, first + largest[1], largest[2], 0});
             for (int j = 0; j <= cut; j++) {
                 Rational d = half_binomial(-1, j), e = sign(j) * half_binomial(-2 * first - 1, j);
-                add(0, 2 * (first + j) + 1, koszul[0] * e, 1);
+                add(0, 2 * (first + j) + 1, koszul[0] * e, 0);
                 add(1, -first + j, koszul[1] * d, 0);
                 add(2, j, koszul[2] * sign(first) * e, 3);
             }
@@ -124,7 +126,7 @@ class FermionForm {
                 std::max({(largest[0] - 2 * first - 1) / 2, largest[1], first + largest[2], 0});
             for (int j = 0; j <= cut; j++) {
                 Rational a = sign(j) * half_binomial(-1, j);
-                add(0, 2 * (first + j) + 1, koszul[0] * a, 1);
+                add(0, 2 * (first + j) + 1, koszul[0] * a, 0);
                 add(1, j, koszul[1] * half_binomial(-2 * first - 1, j), 0);
                 add(2, -first + j, koszul[2] * a, 3);
             }
@@ -136,7 +138,9 @@ class FermionForm {
         return result;
     }
     template <class S> S complex_value(const AuxTriple &states) {
-        int phase = aux_parity(1, states[1]);
+        // In this ground basis each component is i^(epsilon'_1+epsilon'_2)
+        // times a rational number and the displayed zero-mode normalization.
+        int phase = aux_parity(0, states[0]) + aux_parity(1, states[1]);
         return power(S(Machine(0, 1)), phase) * from_rational<S>(value(states)) /
                power(root(S(2)), states[1].ground + states[2].ground);
     }
@@ -174,6 +178,8 @@ inline ParitySeries<Rational> fermion_series(int level, bool inserted, bool full
                             for (int g = 0; g < 2; g++) {
                                 int b = (B.size() + g) % 2, c = a ^ b,
                                     g3 = (c - int(C.size()) + int(C.size()) * 2) % 2;
+                                // rho_F carries i^(a+b); squaring it gives
+                                // this sign. It is not an extra sewing phase.
                                 int index = a | (b << 1) | (c << 2),
                                     common = sign(a + b) * theta_sign(index);
                                 AuxState third{C, g3}, left{B, g};
