@@ -10,9 +10,24 @@ else
 LDLIBS += -llapack -lblas
 endif
 HEADERS = $(wildcard include/ramond/*.hpp)
+GRAPH_HEADERS = $(wildcard include/scblocks/*.hpp include/scblocks/*.inc)
 SOURCES = $(wildcard src/*.cpp)
 OBJECTS = $(SOURCES:src/%.cpp=build/%.o)
 all: bin/ramond bin/pbw bin/ramond_resummed
+section6: all bin/graph_blocks
+bin/graph_blocks: drivers/graph_main.cpp drivers/graph_pbw_check.inc drivers/graph_dv.inc $(GRAPH_HEADERS) $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/graph_ns_forward: tests/graph_ns_forward.cpp $(GRAPH_HEADERS) $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+check-ns-forward: bin/graph_ns_forward
+	bin/graph_ns_forward
+bin/graph_schottky: tests/graph_schottky.cpp $(GRAPH_HEADERS) $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+check-graph-schottky: bin/graph_schottky
+	bin/graph_schottky
 bin/pbw: drivers/pbw_main.cpp $(HEADERS)
 	@mkdir -p bin
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
@@ -53,4 +68,4 @@ check-branching: bin/outer_ward_driver bin/second_ward_actions
 	bin/outer_ward_driver 5 40 0
 	bin/outer_ward_driver 5 40 0 1
 	bin/outer_ward_driver 5 0 0 1
-.PHONY: all clean check check-pbw check-branching check-resummed
+.PHONY: all section6 clean check check-pbw check-branching check-resummed check-ns-forward check-graph-schottky

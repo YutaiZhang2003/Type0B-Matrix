@@ -1,0 +1,1320 @@
+{
+  "status": "completed",
+  "suite": "theta-pbw",
+  "dps": 40,
+  "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+  "conventions": "product_bpz_residue_2026-09-22",
+  "source_sha256": {
+    "C++/Makefile": "f0f9cbe63d0f16b508fff2a35b281ad8d857f0b552f79fffe57cffec2f660a9a",
+    "C++/drivers/graph_main.cpp": "c3757a0b2744c9a9f8501f5b33ada2670772e7e13330c1cd4aa26a5c96c30eec",
+    "C++/drivers/graph_pbw_check.inc": "494929652f481ddf720baf9901efcf08c44402da52fa52156c020305cfca20ee",
+    "C++/drivers/pbw_main.cpp": "56abff4c844a68bb978e4f6678384dee22e78b610d4634d58bf98c22a1478aeb",
+    "C++/include/ramond/anchors.hpp": "119f679a5f84b7ca184c6667b6f2c23b12dad76cfd972ef752499d26d91168bc",
+    "C++/include/ramond/branching.hpp": "074771bb125132ef7e2d7fa7ec2a303ee6ded43015b35290f36671aa8d7cbc65",
+    "C++/include/ramond/ccy.hpp": "9826d3df0c4612eb1d67e9f6a432a1b8c83025d0381fd993c5f90803761f5c35",
+    "C++/include/ramond/direct_pbw.hpp": "461d587e8381620a6bf5e7b57227916caa93b650fefd212509953414e3b4570a",
+    "C++/include/ramond/fermion.hpp": "55ca9dd3d12cf5ccdf39f06b6d463f63d93f65105727d43613d51238f7855d5a",
+    "C++/include/ramond/free_field.hpp": "2372d473e8f39dcba2e256580f5fe3711179eaced568828ca122bdcf911229df",
+    "C++/include/ramond/linalg.hpp": "dd440804fdb0444b14c595c0950d431ee0c48c331e5a833cb74c2dad68942ec5",
+    "C++/include/ramond/number.hpp": "8f2dd10b1750145a21ef0749df933759ae873f9e3d2790eda29b7ebe534b1a2e",
+    "C++/include/ramond/pipeline.hpp": "b7bf177bb236608dab3425339743c4f52d0bad7e7ba6ac68af0ea83a60b98240",
+    "C++/include/ramond/resummed_global.hpp": "32a2c5822b0cc54d2672afe5b5a951929cbbb7ec35ddde01cab55df6ef7b48fb",
+    "C++/include/ramond/resummed_pipeline.hpp": "ed53099046d8441fa77d9d5532b166d248ca1697e059b7de2f61db067cf4d498",
+    "C++/include/ramond/schottky.hpp": "2c155f0e5614c9456ece1f63385a87248fa31d59021688aed45f8d27f22ecca2",
+    "C++/include/ramond/storage.hpp": "12a15d94aa0e446f75a5b4019249040d898655dfb6056cec198ee362f1026301",
+    "C++/include/scblocks/dv_engine.hpp": "38d4b66208a6fea13efe18625e3b9c001b36823c7f5eeab245140f9cefc468e1",
+    "C++/include/scblocks/graph_ccy.hpp": "831eccfa2931ec09a0bace9bbc83bc7bfaec5d94bb499ca2db326971390ab393",
+    "C++/include/scblocks/ns_local.hpp": "feb4e73db4f0baba03cc7663189efd8b47bd22b24843e7df185bed3ba5ae6e4d",
+    "C++/include/scblocks/ns_recursion.hpp": "423238cc8752cc040edd6e75f9c082c93c38de0430f23a3127144c8e40c7aa60",
+    "C++/include/scblocks/ns_schottky.hpp": "43445fe84672ef880836d5b2b6f58da3fd741a16284dd49a20641fc495c37150",
+    "C++/include/scblocks/pole_fragment.inc": "b3fa17c875f79cc7fb4a879347e34c0829c29805c9e79bf84f7f61a5b44de66a",
+    "C++/src/main.cpp": "0cf7d2f0757395060d3a048dea4da85f73e6907fda374bd5d9874a3b1aea143f",
+    "C++/tools/section6.py": "d317558d82b178ce9cf6e325b2cd85c019ca461d20b5c22b8b795865dc591ae5"
+  },
+  "stages": [
+    {
+      "name": "theta-nsrr_p0_f0_eta1_ordinary_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--p",
+        "0",
+        "--f",
+        "0",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f0_eta1_ordinary_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 3.373176167020574
+    },
+    {
+      "name": "theta-nsrr_p0_f0_eta1_ordinary_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--p",
+        "0",
+        "--f",
+        "0",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f0_eta1_ordinary_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.859968791017309
+    },
+    {
+      "name": "theta-nsrr_p0_f0_eta1_inserted_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--p",
+        "0",
+        "--f",
+        "0",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f0_eta1_inserted_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 6.93789400003152
+    },
+    {
+      "name": "theta-nsrr_p0_f0_eta1_inserted_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--p",
+        "0",
+        "--f",
+        "0",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f0_eta1_inserted_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.275400749989785
+    },
+    {
+      "name": "theta-nsrr_p0_f0_eta-1_ordinary_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--p",
+        "0",
+        "--f",
+        "0",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f0_eta-1_ordinary_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 2.898412292008288
+    },
+    {
+      "name": "theta-nsrr_p0_f0_eta-1_ordinary_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--p",
+        "0",
+        "--f",
+        "0",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f0_eta-1_ordinary_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.680676542047877
+    },
+    {
+      "name": "theta-nsrr_p0_f0_eta-1_inserted_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--p",
+        "0",
+        "--f",
+        "0",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f0_eta-1_inserted_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 7.206675083027221
+    },
+    {
+      "name": "theta-nsrr_p0_f0_eta-1_inserted_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--p",
+        "0",
+        "--f",
+        "0",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f0_eta-1_inserted_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.431609874998685
+    },
+    {
+      "name": "theta-nsrr_p0_f1_eta1_ordinary_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--p",
+        "0",
+        "--f",
+        "1",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f1_eta1_ordinary_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 2.9057599999941885
+    },
+    {
+      "name": "theta-nsrr_p0_f1_eta1_ordinary_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--p",
+        "0",
+        "--f",
+        "1",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f1_eta1_ordinary_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.877051000017673
+    },
+    {
+      "name": "theta-nsrr_p0_f1_eta1_inserted_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--p",
+        "0",
+        "--f",
+        "1",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f1_eta1_inserted_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 7.233685875020456
+    },
+    {
+      "name": "theta-nsrr_p0_f1_eta1_inserted_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--p",
+        "0",
+        "--f",
+        "1",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f1_eta1_inserted_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.60188150004251
+    },
+    {
+      "name": "theta-nsrr_p0_f1_eta-1_ordinary_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--p",
+        "0",
+        "--f",
+        "1",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f1_eta-1_ordinary_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 2.9342871669796295
+    },
+    {
+      "name": "theta-nsrr_p0_f1_eta-1_ordinary_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--p",
+        "0",
+        "--f",
+        "1",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f1_eta-1_ordinary_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.83412524999585
+    },
+    {
+      "name": "theta-nsrr_p0_f1_eta-1_inserted_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--p",
+        "0",
+        "--f",
+        "1",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f1_eta-1_inserted_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 7.246984167024493
+    },
+    {
+      "name": "theta-nsrr_p0_f1_eta-1_inserted_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--p",
+        "0",
+        "--f",
+        "1",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p0_f1_eta-1_inserted_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.561734166985843
+    },
+    {
+      "name": "theta-nsrr_p1_f0_eta1_ordinary_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--p",
+        "1",
+        "--f",
+        "0",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f0_eta1_ordinary_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 3.0773125829873607
+    },
+    {
+      "name": "theta-nsrr_p1_f0_eta1_ordinary_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--p",
+        "1",
+        "--f",
+        "0",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f0_eta1_ordinary_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.712508124997839
+    },
+    {
+      "name": "theta-nsrr_p1_f0_eta1_inserted_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--p",
+        "1",
+        "--f",
+        "0",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f0_eta1_inserted_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 7.249854082998354
+    },
+    {
+      "name": "theta-nsrr_p1_f0_eta1_inserted_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--p",
+        "1",
+        "--f",
+        "0",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f0_eta1_inserted_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.418652541993652
+    },
+    {
+      "name": "theta-nsrr_p1_f0_eta-1_ordinary_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--p",
+        "1",
+        "--f",
+        "0",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f0_eta-1_ordinary_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 2.8765899590216577
+    },
+    {
+      "name": "theta-nsrr_p1_f0_eta-1_ordinary_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--p",
+        "1",
+        "--f",
+        "0",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f0_eta-1_ordinary_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.674089833977632
+    },
+    {
+      "name": "theta-nsrr_p1_f0_eta-1_inserted_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--p",
+        "1",
+        "--f",
+        "0",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f0_eta-1_inserted_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 7.122190458001569
+    },
+    {
+      "name": "theta-nsrr_p1_f0_eta-1_inserted_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--p",
+        "1",
+        "--f",
+        "0",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f0_eta-1_inserted_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.729997750022449
+    },
+    {
+      "name": "theta-nsrr_p1_f1_eta1_ordinary_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--p",
+        "1",
+        "--f",
+        "1",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f1_eta1_ordinary_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 2.9218954169773497
+    },
+    {
+      "name": "theta-nsrr_p1_f1_eta1_ordinary_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--p",
+        "1",
+        "--f",
+        "1",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f1_eta1_ordinary_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.869845625013113
+    },
+    {
+      "name": "theta-nsrr_p1_f1_eta1_inserted_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--p",
+        "1",
+        "--f",
+        "1",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f1_eta1_inserted_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 7.135992915951647
+    },
+    {
+      "name": "theta-nsrr_p1_f1_eta1_inserted_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--p",
+        "1",
+        "--f",
+        "1",
+        "--eta",
+        "1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f1_eta1_inserted_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.66972074995283
+    },
+    {
+      "name": "theta-nsrr_p1_f1_eta-1_ordinary_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "ordinary",
+        "--p",
+        "1",
+        "--f",
+        "1",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f1_eta-1_ordinary_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 2.899867667001672
+    },
+    {
+      "name": "theta-nsrr_p1_f1_eta-1_ordinary_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "ordinary",
+        "--p",
+        "1",
+        "--f",
+        "1",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f1_eta-1_ordinary_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 4.870458458957728
+    },
+    {
+      "name": "theta-nsrr_p1_f1_eta-1_inserted_dv",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/ramond",
+        "--mode",
+        "inserted",
+        "--p",
+        "1",
+        "--f",
+        "1",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f1_eta-1_inserted_dv.json",
+        "--truncation",
+        "per-edge"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 7.175236249982845
+    },
+    {
+      "name": "theta-nsrr_p1_f1_eta-1_inserted_pbw",
+      "command": [
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/bin/pbw",
+        "--mode",
+        "inserted",
+        "--p",
+        "1",
+        "--f",
+        "1",
+        "--eta",
+        "-1",
+        "--level",
+        "5",
+        "--dps",
+        "40",
+        "--json",
+        "/Users/yuchenwang/Desktop/Type0B-Matrix/C++/results/section6_2026-09-23/theta_pbw5/theta-nsrr_p1_f1_eta-1_inserted_pbw.json"
+      ],
+      "status": "completed",
+      "exit_code": 0,
+      "wall_seconds": 8.416180917003658
+    }
+  ],
+  "comparisons": [
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "3.951216948153881632720000000000000549941055403368608148213167005303411776985024528280906516038854837E-16",
+      "max_scaled": "8.597536674260381195044356050788905983334573559616819238845143550611820656204026174393881695965032656E-21",
+      "worst": {
+        "index": [
+          9,
+          3,
+          3,
+          10,
+          5
+        ],
+        "left": [
+          "1854.36054821219774831708159299669727462069",
+          "1.18574522541666027752733590880891367013033E-34"
+        ],
+        "right": [
+          "1854.36054821219774833302452581725323051171",
+          "-0"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 0,
+      "f": 0,
+      "eta": 1,
+      "mode": "ordinary",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "1.723856047535620390683000000000010237885123897509063492412774524949598349377143895493887267313382889E-16",
+      "max_scaled": "1.394564716208846497544953667719208984949281798922168029296184032864646041448946066646339070895023446E-20",
+      "worst": {
+        "index": [
+          10,
+          4,
+          4,
+          10,
+          0
+        ],
+        "left": [
+          "115.353488663283191433647586401086654274427",
+          "1.15161568689618680447470772002942542782568E-33"
+        ],
+        "right": [
+          "115.353488663283191435256265452900773430211",
+          "0"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 0,
+      "f": 0,
+      "eta": 1,
+      "mode": "inserted",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "2.102588736304026740730000000000033429321649342369749189796744721433164909740949974009913599581568116E-16",
+      "max_scaled": "1.126391306603092742225709130622360071499739217736387287262310265777124379212128573918340307906818694E-20",
+      "worst": {
+        "index": [
+          10,
+          5,
+          5,
+          6,
+          0
+        ],
+        "left": [
+          "4000.97773038014298339522425307023116822273",
+          "-3.8265798652230268679464121095090714844595E-33"
+        ],
+        "right": [
+          "4000.97773038014298344029091840435882584856",
+          "0"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 0,
+      "f": 0,
+      "eta": -1,
+      "mode": "ordinary",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "1.723856047552300677816000000000010237885123798445766563555579059818119229176463343480422875065526086E-16",
+      "max_scaled": "1.394564716207871121422360396741944826325372452004998812160373095488875996777913127151459921071933312E-20",
+      "worst": {
+        "index": [
+          10,
+          4,
+          4,
+          10,
+          0
+        ],
+        "left": [
+          "115.353488663283191433647586401087779356132",
+          "1.15161568689618680447470772002942542782625E-33"
+        ],
+        "right": [
+          "115.353488663283191435256265452900773381531",
+          "0"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 0,
+      "f": 0,
+      "eta": -1,
+      "mode": "inserted",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "3.951216948136229438370000000000000549941055405825488273614390840126725185160766656261145440836967877E-16",
+      "max_scaled": "8.597536674253498890822394362170864449459043623702511919066482325107897708808407057759717205095449806E-21",
+      "worst": {
+        "index": [
+          9,
+          3,
+          3,
+          10,
+          1
+        ],
+        "left": [
+          "-1.18574522541666027752733590880891367012998E-34",
+          "1854.36054821219774831708159299671003689543"
+        ],
+        "right": [
+          "0",
+          "1854.36054821219774833302452581725323051302"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 0,
+      "f": 1,
+      "eta": 1,
+      "mode": "ordinary",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "1.723645063983838237760000000000010239138296845531857053173675948806757736580353598858227397946859253E-16",
+      "max_scaled": "1.394560790945288740104102064373925774481080341966911611683518037951717564679843943776152196411651786E-20",
+      "worst": {
+        "index": [
+          10,
+          4,
+          4,
+          10,
+          4
+        ],
+        "left": [
+          "1.15161568689618680447470772002942261951508E-33",
+          "-115.353488663283191433647590929015107294452"
+        ],
+        "right": [
+          "0",
+          "-115.35348866328319143525626545290077334852"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 0,
+      "f": 1,
+      "eta": 1,
+      "mode": "inserted",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "2.102588736306793721061000000000033429321649298377182367206207973494300942961466344292273282381900702E-16",
+      "max_scaled": "1.126391306603471260383533545450632135901024647892096787375956777006090421121789981228915548207232687E-20",
+      "worst": {
+        "index": [
+          10,
+          5,
+          5,
+          6,
+          4
+        ],
+        "left": [
+          "-3.82657986522302686794641210950907148445801E-33",
+          "-4000.97773038014298339522425307021602379459"
+        ],
+        "right": [
+          "0",
+          "-4000.97773038014298344029091840435882584762"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 0,
+      "f": 1,
+      "eta": -1,
+      "mode": "ordinary",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "1.723645064021806397308000000000010239138296619985864665642438172882619314105423396551513843782182203E-16",
+      "max_scaled": "1.394560790954014350036351790510670172814448244154306885166202234477438421999830259049403274806549834E-20",
+      "worst": {
+        "index": [
+          10,
+          4,
+          4,
+          10,
+          4
+        ],
+        "left": [
+          "1.15161568689618680447470772002942261950192E-33",
+          "-115.353488663283191433647590929005042095089"
+        ],
+        "right": [
+          "0",
+          "-115.353488663283191435256265452900773444621"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 0,
+      "f": 1,
+      "eta": -1,
+      "mode": "inserted",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "3.951216948153881632720000000000000549941055403368608148213167005303411776985024528280906516038854837E-16",
+      "max_scaled": "8.597536674260381195044356050788905983334573559616819238845143550611820656204026174393881695965032656E-21",
+      "worst": {
+        "index": [
+          9,
+          3,
+          3,
+          10,
+          4
+        ],
+        "left": [
+          "-1854.36054821219774831708159299669727462069",
+          "-1.18574522541666027752733590880891367013033E-34"
+        ],
+        "right": [
+          "-1854.36054821219774833302452581725323051171",
+          "0"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 1,
+      "f": 0,
+      "eta": 1,
+      "mode": "ordinary",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "1.723856047535620390683000000000010237885123897509063492412774524949598349377143895493887267313382889E-16",
+      "max_scaled": "1.394564716208846497544953667719208984949281798922168029296184032864646041448946066646339070895023446E-20",
+      "worst": {
+        "index": [
+          10,
+          4,
+          4,
+          10,
+          1
+        ],
+        "left": [
+          "115.353488663283191433647586401086654274427",
+          "1.15161568689618680447470772002942542782568E-33"
+        ],
+        "right": [
+          "115.353488663283191435256265452900773430211",
+          "0"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 1,
+      "f": 0,
+      "eta": 1,
+      "mode": "inserted",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "2.102588736304026740730000000000033429321649342369749189796744721433164909740949974009913599581568116E-16",
+      "max_scaled": "1.126391306603092742225709130622360071499739217736387287262310265777124379212128573918340307906818694E-20",
+      "worst": {
+        "index": [
+          10,
+          5,
+          5,
+          6,
+          1
+        ],
+        "left": [
+          "4000.97773038014298339522425307023116822273",
+          "-3.8265798652230268679464121095090714844595E-33"
+        ],
+        "right": [
+          "4000.97773038014298344029091840435882584856",
+          "0"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 1,
+      "f": 0,
+      "eta": -1,
+      "mode": "ordinary",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "1.723856047552300677816000000000010237885123798445766563555579059818119229176463343480422875065526086E-16",
+      "max_scaled": "1.394564716207871121422360396741944826325372452004998812160373095488875996777913127151459921071933312E-20",
+      "worst": {
+        "index": [
+          10,
+          4,
+          4,
+          10,
+          1
+        ],
+        "left": [
+          "115.353488663283191433647586401087779356132",
+          "1.15161568689618680447470772002942542782625E-33"
+        ],
+        "right": [
+          "115.353488663283191435256265452900773381531",
+          "0"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 1,
+      "f": 0,
+      "eta": -1,
+      "mode": "inserted",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "3.951216948136229438370000000000000549941055405825488273614390840126725185160766656261145440836967877E-16",
+      "max_scaled": "8.597536674253498890822394362170864449459043623702511919066482325107897708808407057759717205095449806E-21",
+      "worst": {
+        "index": [
+          9,
+          3,
+          3,
+          10,
+          0
+        ],
+        "left": [
+          "-1.18574522541666027752733590880891367012998E-34",
+          "1854.36054821219774831708159299671003689543"
+        ],
+        "right": [
+          "0",
+          "1854.36054821219774833302452581725323051302"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 1,
+      "f": 1,
+      "eta": 1,
+      "mode": "ordinary",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "1.723645063983838237760000000000010239138296845531857053173675948806757736580353598858227397946859253E-16",
+      "max_scaled": "1.394560790945288740104102064373925774481080341966911611683518037951717564679843943776152196411651786E-20",
+      "worst": {
+        "index": [
+          10,
+          4,
+          4,
+          10,
+          5
+        ],
+        "left": [
+          "-1.15161568689618680447470772002942261951508E-33",
+          "115.353488663283191433647590929015107294452"
+        ],
+        "right": [
+          "0",
+          "115.35348866328319143525626545290077334852"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 1,
+      "f": 1,
+      "eta": 1,
+      "mode": "inserted",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "2.102588736306793721061000000000033429321649298377182367206207973494300942961466344292273282381900702E-16",
+      "max_scaled": "1.126391306603471260383533545450632135901024647892096787375956777006090421121789981228915548207232687E-20",
+      "worst": {
+        "index": [
+          10,
+          5,
+          5,
+          6,
+          5
+        ],
+        "left": [
+          "3.82657986522302686794641210950907148445801E-33",
+          "4000.97773038014298339522425307021602379459"
+        ],
+        "right": [
+          "0",
+          "4000.97773038014298344029091840435882584762"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 1,
+      "f": 1,
+      "eta": -1,
+      "mode": "ordinary",
+      "level": 5,
+      "truncation": "per-edge"
+    },
+    {
+      "passed": true,
+      "components": 3168,
+      "tolerance": "1e-18",
+      "failed_components": 0,
+      "max_absolute": "1.723645064021806397308000000000010239138296619985864665642438172882619314105423396551513843782182203E-16",
+      "max_scaled": "1.394560790954014350036351790510670172814448244154306885166202234477438421999830259049403274806549834E-20",
+      "worst": {
+        "index": [
+          10,
+          4,
+          4,
+          10,
+          5
+        ],
+        "left": [
+          "-1.15161568689618680447470772002942261950192E-33",
+          "115.353488663283191433647590929005042095089"
+        ],
+        "right": [
+          "0",
+          "115.353488663283191435256265452900773444621"
+        ]
+      },
+      "channel": "theta-nsrr",
+      "p": 1,
+      "f": 1,
+      "eta": -1,
+      "mode": "inserted",
+      "level": 5,
+      "truncation": "per-edge"
+    }
+  ],
+  "protocol": "Sequential fresh C++ processes; no numerical cache loaded; build excluded.",
+  "wall_seconds": 188.2048012909945
+}

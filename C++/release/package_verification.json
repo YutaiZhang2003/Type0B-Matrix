@@ -1,0 +1,32 @@
+{
+  "archive": "section6-superconformal-blocks.tar.gz",
+  "archive_sha256": "d0726a1b7adfc4e90215f340d5b57e10a5bfe33b205860baaaab6f1957565027",
+  "clean_extraction_build": "passed",
+  "packaged_source_hashes_verified": 107,
+  "build_command": "make -C C++ -j2 section6",
+  "directed_check_command": "make -C C++ -j2 check-ns-forward check-graph-schottky",
+  "directed_checks": [
+    {
+      "passed": true,
+      "arithmetic": "exact rational",
+      "domains": 3,
+      "nonzero_coefficients": 176
+    },
+    {
+      "passed": true,
+      "channel": "theta-ns",
+      "truncation": "per-edge",
+      "level": 3,
+      "dps": 40,
+      "multidegrees": 343,
+      "max_scaled": 4.315066587773591e-37,
+      "max_absolute": 4.924586645976121e-36
+    }
+  ],
+  "python_entrypoint_help": "passed",
+  "packaged_saved_partition_audit": "passed; equality not established",
+  "packaged_validation_summary_regeneration": "passed",
+  "previous_build_archive_sha256": "25eca20d1d687b665c61f470224b5edc0c8bb9d0d4ff27f3523913b046426224",
+  "build_evidence": "All C++ translation units, headers and Makefile are byte-identical to the independently built archive; only audit code, reports and packaged saved results changed.",
+  "corrected_packaged_final_quadrature_audit": "passed, source N7 / target N10"
+}

@@ -1,0 +1,89 @@
+{
+  "channel": "glasses-r",
+  "original_case": 4,
+  "initial_dps": 40,
+  "refined_dps": 60,
+  "recovery_at_40_digits": {
+    "components": 3168,
+    "failed_components": 4,
+    "max_scaled": 5.718599998819421e-18,
+    "max_absolute": 3.877280939479285e-17,
+    "worst_level2": [
+      9,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "parity": 5
+  },
+  "recovery_at_60_digits": {
+    "components": 3168,
+    "failed_components": 0,
+    "max_scaled": 3.008542017850413e-38,
+    "max_absolute": 2.0398283887388755e-37,
+    "worst_level2": [
+      9,
+      10,
+      10,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "parity": 3
+  },
+  "dv_40_vs_60": {
+    "passed": false,
+    "components": 3168,
+    "tolerance": "1e-18",
+    "failed_components": 4,
+    "max_absolute": "3.877280939479285317675921570527423021272786481877284569627192732546403993796993375459524419219466323E-17",
+    "max_scaled": "5.718599998819421195497386138347425153246757935322478219765713830195372587201202417212596894468699426E-18",
+    "worst": {
+      "index": [
+        9,
+        10,
+        10,
+        5
+      ],
+      "left": [
+        "6.78012265288660197442712959144280620283918",
+        "-3.58699242329303732818379798515461519237383E-37"
+      ],
+      "right": [
+        "6.7801226528866020131999389862356593795983957052742302127262056",
+        "-1.1987788310793918977980476915132721987041489941394651933049582E-56"
+      ]
+    }
+  },
+  "pbw_40_vs_60": {
+    "passed": true,
+    "components": 3168,
+    "tolerance": "1e-18",
+    "failed_components": 0,
+    "max_absolute": "4.3458517356888419165130633E-36",
+    "max_scaled": "7.591451804468054016933397134550360552307292868737488271718419920715125596656587596427306793182364488E-37",
+    "worst": {
+      "index": [
+        7,
+        10,
+        10,
+        7
+      ],
+      "left": [
+        "0",
+        "5.5735094184327505324119507466511306123978"
+      ],
+      "right": [
+        "0",
+        "5.5735094184327505324119507466511306081666971868219001646325765"
+      ]
+    }
+  },
+  "interpretation": "The discrepancy falls from 5.72e-18 to 3.01e-38 when both methods use 60 digits, consistent with numerical cancellation. The initial 40-digit threshold failure is retained."
+}

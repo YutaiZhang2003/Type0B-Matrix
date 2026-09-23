@@ -1,5 +1,11 @@
 # Native C++ Ramond block pipelines
 
+The consolidated Section 6 interfaces, graph algorithms, explicit cutoff policy
+and reproducible comparisons are documented in [SECTION6.md](SECTION6.md).
+Build them with `make -C C++ section6`. The partition-function comparison's
+unresolved global normalization is documented separately from the coefficient
+tests there.
+
 `make -C C++` builds `ramond` for finite coefficients and `ramond_resummed`
 for pointwise evaluation with independently converged global descendants.
 The separate `pbw` target remains available for direct SCA benchmarks.
