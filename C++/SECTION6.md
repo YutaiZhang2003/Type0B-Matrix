@@ -3,7 +3,8 @@
 Build from the repository root with `make -C C++ section6`. Requirements are a
 C++17 compiler, GMP, MPFR, MPC and LAPACK/BLAS (Accelerate on macOS). The test
 launcher requires Python 3.10 or later and only its standard library. Optional
-partition-function tools additionally use NumPy, SciPy and mpmath.
+archival Python partition-function tools additionally use NumPy, SciPy and mpmath;
+the native `bin/partition` does not.
 
 The numerical block computations are C++. Python launches them and compares
 decimal output. Each process computes its own intermediate data and reuses them
@@ -162,47 +163,32 @@ these generic-weight commands.
 
 ## Partition-function experiment
 
-The nonchiral test has a different status from the coefficient tests. The
-newer saved bilinear-sewing calculation gives raw ratios near 1/4, while
-`provisional-times-four` multiplies the whole NS-R-R amplitude by an assumed
-factor four. This factor is explicitly not a derived global normalization.
-The older roughly 1% agreement used a superseded nonchiral contraction and
-must not be advertised as validation of the current assembly.
+The native entry point `bin/partition` retains the paper's literal `F`,
+`C_a`, and `C_f_eta` in edge order `(infinity,1,0)`. For the physical
+partition comparison, it multiplies each block coefficient by the local
+geometric BPZ phase and then evaluates it at one fixed tube-sign triple.
+This is done independently in the NS-R-R and all-NS channels. The two
+marked spin surfaces and their raw plumbing signs are recorded in
+[PARTITION.md](PARTITION.md). No two-sign block average or all-NS sewing
+matrix is used. The unconverted paper blocks remain in the node output
+for auditing. All cutoffs are total descendant levels, both Ramond `f`
+sectors are computed directly, and the identity-residue normalization is
+in [PARTITION_NORMALIZATION.md](PARTITION_NORMALIZATION.md).
 
-The completed quadrature study holds the source at N7 and refines the target
-to N10. Both integrals and their complex spin matrices meet the recorded
-two-step 0.01% stability criterion at fixed block cutoffs on the central
-surface. The two sign ratios are `0.250052595` and `0.249813244`, and their
-spin sum gives `0.249928019`. A subsequent source-level-8 study with the
-assumed factor four gives a spin-sum ratio `0.999709394`; the largest resolved
-spin discrepancy is about 0.0933%. Neither study derives the factor four.
-The initial release report mistakenly used the intermediate N7 summary;
-the audit now reads the completed `final_result.json`.
+The directed geometry check builds 228 Majorana Wick monomials through
+level 8 and compares the literal block's diagonal square with
+bosonization for all four marked NS spins under the assumed map. That
+map fails by 5.53% to 31.86%; the SCblock sign reduction does not.
+Literal NS and Ramond chiral blocks pass direct PBW comparisons through
+total level 3. The full Ramond nonchiral source contraction still needs
+an independent test in the paper's ground-state basis.
 
-Recompute the newer saved ratios without fitting or modifying them:
-
-```sh
-python3 C++/tools/section6_partition_audit.py --output /tmp/section6-partition-audit.json
-```
-
-For new frozen-grid evaluations, the production entry point is
-`C++/tools/section6_partition.py`. It delegates to the existing C++-backed
-resummed assembler and requires a prepared input bundle, explicit physical
-tube signs and a normalization policy. For example, the command structure is:
-
-```sh
-python3 C++/tools/section6_partition.py --help
-```
-
-Its `--index` evaluates one supplied momentum node; `--reduce` requires all
-nodes. The input bundle supplies geometry, measures, free factors and the
-all-NS target. `--physical-lifts-slots` is in `(NS,R1,R0)` order. The default
-`--normalization local` retains the derived local pairing;
-`--normalization provisional-times-four` records the assumption explicitly.
-The bilinear core is `Code/genus_2/nsrr_bilinear_sewing.py`, and normalization
-metadata is in `Code/genus_2/nsrr_normalization.py`. These tools do not establish
-the unresolved global normalization or interacting spin identification by
-comparing chiral coefficients.
+`tools/section6_partition.py` delegates to this native executable.
+`tools/prepare_partition_inputs.py` converts historical geometry-order
+inputs once, discards all saved block fields, and supplies paper-order
+inputs and coefficients. The production source archive excludes the
+obsolete Python sewing adapters. The older adjusted-block data remain
+as provenance, not as a fixed-spin check of the paper's literal block.
 
 ## Evidence and timing
 

@@ -3,6 +3,12 @@
 The formulas and normalization follow arXiv:2201.05621, section 3.1.  The
 Barnes-double-gamma combination is evaluated at b=1 through mpmath's Barnes
 G-function, using Upsilon_1(x) = G(x) G(2-x).
+
+The returned RRNS Upsilon terms require an explicit coefficient dictionary.
+The current equal-metric, identity-normalized native assembler uses them as
+c_+=C_even, c_-=C_odd, with family amplitudes C_even +/- C_odd. Applying a
+second half gives the historical genus-two factor-four error; see
+C++/PARTITION_NORMALIZATION.md. Numerical functions here are unchanged.
 """
 
 from __future__ import annotations
@@ -210,8 +216,10 @@ def rr_ns_chiral_structure_constant(
         HJS chiral +  <->  BRY C_even,
         HJS chiral -  <->  BRY C_odd.
 
-    These signs are not the BRY nonchiral Ramond-family labels, whose
-    physical coefficients are C_pm=(C_even +/- C_odd)/2.
+    These signs are not nonchiral Ramond-family labels. With the current
+    equal NS/R identity metrics, family amplitudes are C_even +/- C_odd.
+    The literal BRY half-sum dictionary cannot be applied to these raw
+    terms while retaining that identity normalization; see the module note.
     """
 
     sign = int(sign)

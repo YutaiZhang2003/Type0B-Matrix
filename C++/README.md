@@ -1,10 +1,19 @@
 # Native C++ Ramond block pipelines
 
+This checkout retains source, tests, and small input configurations. Historical
+`results/` trees and compiled executables have been removed; links below to
+those trees describe archived runs and require regenerated data.
+
 The consolidated Section 6 interfaces, graph algorithms, explicit cutoff policy
 and reproducible comparisons are documented in [SECTION6.md](SECTION6.md).
-Build them with `make -C C++ section6`. The partition-function comparison's
-unresolved global normalization is documented separately from the coefficient
-tests there.
+Build them with `make -C C++ section6`. The partition-function comparison and
+fresh native computations are in [PARTITION.md](PARTITION.md). The current
+driver uses the paper's literal blocks. Its diagonal all-NS sum is a
+correct formal factorization of the Human Note's state sum, while its
+geometric spin-lift identification remains to be verified. The former
+factor-four discrepancy was an extra half at each NSRR vertex; its resolution
+from the actual Liouville identity residue is derived in
+[PARTITION_NORMALIZATION.md](PARTITION_NORMALIZATION.md).
 
 `make -C C++` builds `ramond` for finite coefficients and `ramond_resummed`
 for pointwise evaluation with independently converged global descendants.

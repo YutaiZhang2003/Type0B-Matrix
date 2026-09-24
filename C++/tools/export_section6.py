@@ -21,20 +21,31 @@ def files():
     for directory in ("C++/include/ramond", "C++/include/scblocks", "C++/src"):
         paths.update(p for p in (ROOT/directory).iterdir() if p.suffix in (".hpp", ".cpp", ".inc"))
     relative = [
-        "C++/Makefile", "C++/README.md", "C++/SECTION6.md",
+        "C++/Makefile", "C++/README.md", "C++/SECTION6.md", "C++/PARTITION.md", "C++/PARTITION_NORMALIZATION.md",
+        "C++/drivers/partition_main.cpp", "C++/tests/partition_sewing.cpp", "C++/tests/partition_blocks.cpp",
+        "C++/tests/partition_spin_geometry.py",
         "C++/drivers/pbw_main.cpp", "C++/drivers/graph_main.cpp", "C++/drivers/graph_pbw_check.inc",
         "C++/drivers/graph_dv.inc",
         "C++/tools/resummed_main.cpp", "C++/tools/section6.py", "C++/tools/export_section6.py",
         "C++/tools/summarize_section6.py",
         "C++/tests/graph_ns_forward.cpp", "C++/tests/graph_schottky.cpp", "C++/tools/section6_verify_archive.py",
-        "C++/tools/section6_partition.py", "C++/tools/section6_partition_audit.py",
+        "C++/tools/section6_partition.py", "C++/tools/prepare_partition_inputs.py",
         "C++/tools/estimate_tetrahedron_box.py",
         "Code/full_ramond_block_runtime/nsrr_resummed_backend.py",
         "Code/full_ramond_block_runtime/GLOBAL_RESUMMATION.md",
-        "Code/genus_2/run_nsrr_resummed_frozen_grid.py",
-        "Code/genus_2/nsrr_resummed_sewing.py", "Code/genus_2/nsrr_plumbing_adapter.py",
-        "Code/genus_2/nsrr_bilinear_sewing.py", "Code/genus_2/nsrr_normalization.py",
-        "Code/genus_2/physical_nsrr_sewing.py",
+        
+         
+         
+        
+        "Code/c_Recursion/generic_super_liouville_structure_constants.py",
+        "Code/c_Recursion/super_liouville_structure_constants.py",
+        "Code/c_Recursion/test_nsrr_identity_normalization.py",
+        "Code/genus_2_cross_channel/liouville_torus.py",
+        "C++/results/partition_normalization_resolution_2026-09-24/comparison.json",
+        "C++/results/partition_normalization_resolution_2026-09-24/identity_residue_tests.json",
+        "C++/results/partition_normalization_resolution_2026-09-24/validation.json",
+        "C++/results/partition_normalization_resolution_2026-09-24/source/run.json",
+        "C++/results/partition_normalization_resolution_2026-09-24/target/run.json",
         "C++/experiments/coherent_conventions_2026-09-22/README.md",
         "C++/experiments/mercedes_all_ns_level10_2026-09-16/results_L10.json",
         "C++/experiments/mercedes_all_ns_level10_2026-09-16/timing_dv_L10.json",
@@ -47,6 +58,15 @@ def files():
         "Data Set/nsrr_provisional_factor4_20260916/README.md",
         "Data Set/nsrr_provisional_factor4_20260916/result.json",
     ]
+    relative += [f"C++/results/partition_paper_pairing_2026-09-24/{name}" for name in
+                 ("comparison.json", "validation.json", "spin_geometry_test.json", "source/run.json", "target/run.json")]
+    # Geometry test dependencies are diagnostics; production remains native C++.
+    relative += ["Code/genus_2/spin_structure.py", "Code/genus_2/fixed_spin_free_plumbing.py",
+                 "Code/genus_2_cross_channel/free_majorana_pair_of_pants.py",
+                 "Code/genus_2_cross_channel/free_boson_pair_of_pants.py",
+                 "Code/genus_2_cross_channel/free_boson_plumbing.py",
+                 "Code/genus_2/physical_free_plumbing_resummation.py",
+                 "Code/genus_2_cross_channel/genus2_vacuum_blocks.py", "Code/genus_2_cross_channel/plumbing_algorithms.py"]
     paths.update(ROOT/p for p in relative)
     # Validation reports, not cached inputs or large coefficient tables.
     results = ROOT/"C++/results/section6_2026-09-23"
@@ -80,9 +100,10 @@ def main():
                 "The tetrahedron tests use total levels 5 and 10; genus-two tests\n"
                 "use independent-edge levels 5 and 10. Full coefficients are generated\n"
                 "by the test commands. Packaged reports identify completed validations.\n\n"
-                "The nonchiral partition experiment retains an unresolved global\n"
-                "normalization; it is not a passed coefficient test. Its optional\n"
-                "frozen-grid frontend requires separately supplied input bundles.\n\n"
+                "The native nonchiral partition comparison uses identity-normalized\n"
+                "NSRR coefficients and the literal paper blocks, including their\n"
+                "Koszul sign; see C++/PARTITION.md for the current result. Its supplied\n"
+                "momentum/geometry bundles remain separate inputs.\n\n"
                 "Historical result paths in reports identify provenance in the full\n"
                 "working repository. This source bundle excludes large coefficient\n"
                 "archives and unrelated historical tests. Use the Section 6 commands\n"

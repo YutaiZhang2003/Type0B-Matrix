@@ -1,0 +1,995 @@
+\clearpage
+\begingroup
+\makeatletter
+\begingroup\lccode`+=32 \lowercase
+ {\endgroup\def\Url@ObeySp{\Url@Edit\Url@String{ }{+}}}
+\def\Url@space{\penalty\Url@sppen\ }
+\makeatother
+\section{The genus-two partition-function experiment}
+\label{app:partition-test}
+
+This appendix documents the saved September 15--16, 2026 comparison
+between an NS--R--R theta decomposition and an all-NS decomposition of
+the same marked surface. It supplements the nonchiral conventions in
+Appendix~\ref{app:nonchiral-conventions}; it is not an additional
+chiral-block identity. With the historical sewing matrix
+\begin{equation}
+ M_{fg,\mathrm{old}}^{(\eta,\eta')}=
+ \frac{B_{L,\eta}B_{R,\eta'}}8
+ \begin{pmatrix}1&\eta_1\eta_3\\\eta_1\eta_3&1\end{pmatrix}_{fg},
+ \qquad \eta\eta'=-\eta_2\eta_3,
+ \label{eq:partition-historical-matrix}
+\end{equation}
+the normalized cross-channel ratio converges near $1/4$.
+A subsequent experiment multiplies that entire
+matrix by four, as an explicit assumption. Its remaining discrepancies
+are below $0.1\%$ at the central tested surface. The calculation does
+not derive this multiplier or establish the proposed interacting spin
+transport. These historical normalization claims are superseded by
+Sec.~\ref{app:partition-normalization-resolution}: the actual Liouville
+identity residue fixes the missing factor two at each NS--R--R vertex.
+The current matrix is \eqref{eq:app-nonchiral-matrix}. All tables before
+that final subsection retain their original normalization.
+
+The main record is
+\path{Machine Notes/Genus 2/NSRR_BILINEAR_PAIRING_2026-09-15.md}.
+The completed numerical reports are
+\path{Data Set/nsrr_bilinear_cross_channel_20260915/README.md},
+\path{Data Set/nsrr_bilinear_quadrature_20260915/FINAL_REPORT.md}, and
+\path{Data Set/nsrr_provisional_factor4_20260916/README.md}.
+The latter two supersede the central low-order estimates in the first.
+The tables below transcribe those archived computations; adding this
+appendix does not rerun their momentum integrals with the subsequently
+revised release code.
+
+\subsection{Observable, spectrum, and primary propagation}
+
+The continuum input is delta-normalized $\mathcal N=1$ super-Liouville
+theory, with
+\begin{equation}
+ b=1.4,\qquad Q=b+b^{-1},\qquad
+ c=\frac32+3Q^2,\qquad
+ h_{\NS}(p)=\frac{Q^2}{8}+\frac{p^2}{2},\qquad
+ h_{\R}(p)=h_{\NS}(p)+\frac1{16}.
+ \label{eq:partition-spectrum}
+\end{equation}
+Thus $P=ip$ in the chiral momentum convention of these notes, and
+each internal continuum label is integrated over $p>0$ with measure
+$dp/\pi$. Both channels omit the same momentum-independent
+cosmological prefactor; the saved settings are
+\texttt{mu=1+0j} and \texttt{include\_cosmological\_prefactor=false}.
+
+The comparison removes the change of conformal frame using a physical
+free scalar plus one real Majorana fermion, of central charge $3/2$:
+\begin{equation}
+ \mathcal R=
+ \frac{Z_{\NS\R\R}}{Z_{\NS\NS\NS}}
+ \left(\frac{Z_{\mathrm{free,target}}}
+             {Z_{\mathrm{free,source}}}\right)^{\!\kappa},
+ \qquad \kappa=\frac{c}{3/2}=1+2Q^2
+              =9.940408163265307.
+ \label{eq:partition-ratio}
+\end{equation}
+Agreement in the tested prescription requires $\mathcal R=1$.
+The free theory here is the reference used to remove the conformal
+anomaly; it is distinct from the auxiliary fermion in the
+double-Virasoro convolution. Raw partition functions in the two
+plumbing frames need not be equal.
+
+The data files order the edges geometrically as $(0,1,\infty)$,
+namely $(\R_0,\R_1,\NS)$ for the source. Reverse this order when
+calling a block in the $(\NS_\infty,\R_1,\R_0)$ slots of these notes.
+For example, source primary propagation is
+\begin{equation}
+ \exp\!\left[h_{\R}(p_0)\operatorname{Log} q_0+
+ h_{\R}(p_1)\operatorname{Log} q_1+h_{\NS}(p_\infty)\operatorname{Log} q_\infty\right].
+ \label{eq:partition-primary}
+\end{equation}
+The target uses its own three plumbing parameters and three NS
+weights. These factors multiply the descendant blocks from outside;
+neither the blocks nor the nonchiral matrix contain an additional
+$q^h$ or cylinder factor $q^{-c/24}$. The archived integration uses
+the principal logarithms recorded at each node. More general
+continued logarithms and independent antichiral weights were checked
+separately. Complex conjugation is imposed only on the physical real
+slice used for the integrals.
+
+\paragraph{Three-point input.}
+The supplied constants are the real-continuum coefficients
+$(C,\widetilde C)$ for NS--NS--NS and $(E,O)$ for R--R--NS,
+in the common two-point normalization $\pi\delta(p-p')$.
+The implementation is
+\path{Code/c_Recursion/generic_super_liouville_structure_constants.py},
+with calls \texttt{ns\_constants(p0,p1,pinf)} and
+\texttt{rr\_ns\_constants(p1,p0,pinf)}. Its definitions use
+\begin{align}
+ \Upsilon_{\NS}(x)&=\Upsilon_b(x/2)\Upsilon_b((x+Q)/2),\nonumber\\
+ \Upsilon_{\R}(x)&=\Upsilon_b((x+b)/2)\Upsilon_b((x+b^{-1})/2).
+ \label{eq:partition-upsilon}
+\end{align}
+Here $\Upsilon_b(Q/2)=1$ and
+$\Upsilon'_{\NS}(0)=\Upsilon_b(b)/2$.
+For clarity, the leg factors in this implementation are
+\begin{align}
+ \mathcal N_{\NS}(p)&=
+ \sqrt{\Upsilon_{\NS}(2ip)\Upsilon_{\NS}(-2ip)}\,
+ |\gamma(1-ip/b)\gamma(-ipb)|^{1/2},\nonumber\\
+ \mathcal N_{\R}(p)&=
+ \sqrt{\Upsilon_{\R}(2ip)\Upsilon_{\R}(-2ip)}\,
+ |\gamma(\tfrac12+ipb)\gamma(\tfrac12+ip/b)|^{-1/2},
+ \label{eq:partition-legs}
+\end{align}
+where $\gamma(x)=\Gamma(x)/\Gamma(1-x)$ and each square root is
+positive for positive real momentum. To display the constants
+without four repeated long arguments, set
+$x_0=Q/2+i(p_1+p_2+p_3)$ and
+$x_j=Q/2+i(p_1+p_2+p_3-2p_j)$, $j=1,2,3$, in this paragraph only.
+Then the implemented input, with the cosmological factor omitted, is
+\begin{align}
+ C&=\frac{\Upsilon'_{\NS}(0)\prod_{j=1}^3\mathcal N_{\NS}(p_j)}
+                {\prod_{j=0}^3\Upsilon_{\NS}(x_j)},&
+ \widetilde C&=\frac{2\Upsilon'_{\NS}(0)\prod_{j=1}^3\mathcal N_{\NS}(p_j)}
+                {\prod_{j=0}^3\Upsilon_{\R}(x_j)},\nonumber\\
+ E&=\frac{b^{-2}\Upsilon'_{\NS}(0)
+          \mathcal N_{\R}(p_1)\mathcal N_{\R}(p_2)\mathcal N_{\NS}(p_3)}
+ {\Upsilon_{\R}(x_0)\Upsilon_{\R}(x_3)
+  \Upsilon_{\NS}(x_1)\Upsilon_{\NS}(x_2)},&
+ O&=\frac{b^{-2}\Upsilon'_{\NS}(0)
+          \mathcal N_{\R}(p_1)\mathcal N_{\R}(p_2)\mathcal N_{\NS}(p_3)}
+ {\Upsilon_{\NS}(x_0)\Upsilon_{\NS}(x_3)
+  \Upsilon_{\R}(x_1)\Upsilon_{\R}(x_2)}.
+ \label{eq:partition-constants}
+\end{align}
+The Ramond leg metrics and the relative $b^{-2}$ must be retained at
+$b=1.4$; their self-dual values do not fix the generic-$b$ convention.
+The odd NS vertex has the phase $i\widetilde C$ in the Human Note
+convention. That phase is handled by sewing, not inserted a second
+time into the real coefficient returned by the constants routine.
+
+\subsection{Local nonchiral sewing and its independent checks}
+
+Equation \eqref{eq:app-nonchiral-projection} defines the projected
+physical chiral blocks, and \eqref{eq:partition-historical-matrix} supplies
+their local matrix. The historical note denotes these projected
+blocks by $\widehat F$. That hat does \emph{not} mean the enlarged
+SCA--fermion block. We retain the explicit subscript ``projected''
+here to avoid confusing the two constructions.
+
+Write $s=\eta_1\eta_3$ and $r=\eta_2\eta_3$ for this experiment,
+where the $\eta_i$ are physical tube signs in slot order
+$(\NS_\infty,\R_1,\R_0)$. Simultaneously reversing all three
+leaves the full-state tube character unchanged. The local matrix
+is diagonal in the vertex-sign pair $(\eta,\eta')$ and supports
+$\eta\eta'=-r$. Consequently $r=-1$ selects $E_LE_R$ and
+$O_LO_R$, whereas $r=+1$ selects $E_LO_R$ and $O_LE_R$.
+These physical tube signs are separate from the formal-parity
+evaluations in the projected-block definition.
+
+\paragraph{The physical Ramond dual.}
+The finite Clifford calculation explains both the inverse Gram and
+the factor $1/8$. Put $u=e^{-i\pi/4}$ and define the odd map
+\begin{equation}
+ J=\begin{pmatrix}0&u\\\bar u&0\end{pmatrix},\qquad
+ J(Ww)=(-1)^{\#G_W}WJw.
+ \label{eq:partition-J}
+\end{equation}
+Here $W$ is a PBW word and $\#G_W$ counts its $G$ modes.
+It squares to one, commutes with $L$, anticommutes with $G$, and
+reverses the bilinear pairing: $B(Jx,Jy)=-B(x,y)$.
+At each level, an even basis $v_i$ and its partners $Jv_i$ separate
+the descendant multiplicities from a two-dimensional Clifford
+factor. Denote the Gram matrix on the even basis by $B_0$.
+The antichiral construction uses conjugate zero-mode phases and
+the ground metric $\operatorname{diag}(1,-i)$.
+
+In chiral/antichiral Clifford order $(00,01,10,11)$, the graded
+metric and the physical ket and dual embeddings are
+\begin{equation}
+ D_J=\operatorname{diag}(1,-1,-1,-1),\qquad
+ E_R^J=\frac1{\sqrt2}
+ \begin{pmatrix}1&0\\0&\bar u\\0&u\\-i&0\end{pmatrix},\qquad
+ E_L^J=\frac1{\sqrt2}
+ \begin{pmatrix}1&0\\0&-u\\0&-\bar u\\-i&0\end{pmatrix}.
+ \label{eq:partition-embeddings}
+\end{equation}
+Direct multiplication gives $(E_L^J)^TD_JE_R^J=I_2$.
+The physical multiplicity Gram is therefore
+$B_{0,h}\otimes B_{0,\tilde h}\otimes I_2$.
+If the columns of $U$ express these states in the canonical physical
+PBW basis, the inverse Gram in that basis is
+$U(B_{0,h}^{-1}\otimes B_{0,\tilde h}^{-1}\otimes I_2)U^T$.
+The transpose is bilinear, without complex conjugation.
+Both trinion tensors take physical \emph{ket} states; $E_L^J$
+enters the dual contraction, not a second ket at a vertex.
+
+An independent two-point Ward calculation uses the identity NS
+insertion and the coordinate map $z\mapsto z/(1-z)$. For left and
+right states $l,r$ it gives
+\begin{equation}
+ B(l,r)=(-1)^{N_l+\widetilde N_l}
+ T_{\mathbf1}\!\left(e^{L_1+\widetilde L_1}l,
+                     e^{-L_1-\widetilde L_1}r\right),
+ \label{eq:partition-identity-pairing}
+\end{equation}
+where $N_l,\widetilde N_l$ are the two descendant levels and
+$T_{\mathbf1}$ is the full three-point form with that identity
+insertion. The historical note reports 228 exact matrix comparisons at
+Ramond level pairs $(0,0),(1,0),(0,1),(1,1),(2,0),(0,2)$;
+all agree exactly in that record.
+
+\paragraph{Reduction of the two Ramond families.}
+For NS chiral and antichiral parities $a,b$, and Ramond
+chiral/antichiral parities $(\alpha,\beta)$ and
+$(\gamma,\delta)$, separating the two algebras at a vertex gives
+$(-1)^{b(a+\alpha+\gamma)+\beta\gamma}$. The $ab$ term comes
+from the outgoing NS bra. After removing the multiplicity
+amplitudes, the physical-family matrices are
+\begin{center}
+\begin{tabular}{ccccc}
+\toprule
+$(a,b)$ & $(0,0)$ & $(0,1)$ & $(1,0)$ & $(1,1)$\\
+\midrule
+matrix & $\begin{pmatrix}1&0\\0&\eta\end{pmatrix}$
+& $\begin{pmatrix}0&\bar u\\\eta u&0\end{pmatrix}$
+& $\begin{pmatrix}0&u\\\eta\bar u&0\end{pmatrix}$
+& $\begin{pmatrix}-i&0\\0&i\eta\end{pmatrix}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Writing the physical Ramond family parities as
+$\epsilon_2,\epsilon_3$, the theta sign is
+$K(a+b,\epsilon_2,\epsilon_3)
+=(a+b)(\epsilon_2+\epsilon_3)+\epsilon_2\epsilon_3$.
+The graded NS inverse Gram contributes $(-1)^{ab}$.
+Summing the families and their tube characters gives zero unless
+$\eta\eta'=-r$. In the supported sector its values, in the order
+$(a,b)=(0,0),(0,1),(1,0),(1,1)$, are
+\begin{equation}
+ (2,-2is,2is,2).
+ \label{eq:partition-family-sum}
+\end{equation}
+Coefficient by coefficient the projected chiral blocks satisfy
+$\mathbf F_1|_{\mathrm{projected}}
+=-i(-1)^a\mathbf F_0|_{\mathrm{projected}}$;
+the antichiral relation has $+i(-1)^b$.
+Each projected even block carries $\sqrt2$. Expressing
+\eqref{eq:partition-family-sum} in that basis gives
+$\tfrac12\bigl(\begin{smallmatrix}1&s\\s&1\end{smallmatrix}\bigr)$.
+The historical adapter took the chiral three-form coefficients to be
+$E/2,O/2$, supplying the remaining $1/4$ in
+\eqref{eq:partition-historical-matrix}. The Clifford reduction is exact;
+this last identification of its input coefficients was the error.
+
+For $r=-1$, before primary propagation, the ground coefficient is
+$(E_LE_R+O_LO_R)/2$. With only a holomorphic NS half-level excited,
+the coefficient is
+\begin{equation}
+ is\,\frac{E_LE_R(p_0-p_1)^2+O_LO_R(p_0+p_1)^2}
+                {8h_{\NS}},\qquad \beta_j=ip_j/\sqrt2.
+ \label{eq:partition-half-level}
+\end{equation}
+The antichiral half-level has the opposite phase. Their cancellation
+on a real slice does not make the separate coefficients zero.
+
+\paragraph{Identity and descendant tests.}
+The module test assigned $E=2,O=0$, giving ordinary Ramond trace two and
+supertrace zero. After converting the two-point local coordinates,
+the ordinary character is
+\begin{equation}
+ 2\prod_{n\geq1}\frac{1+q^n}{1-q^n}
+  \prod_{n\geq1}\frac{1+\widetilde q^n}{1-\widetilde q^n}.
+ \label{eq:partition-character}
+\end{equation}
+The checked multiplicities per family are $1,2,4,8$ through level
+three; the supertrace vanishes at each tested pair of levels.
+This check already counts both Ramond grounds. It does not supply
+an additional factor two per Ramond edge, nor identify a product
+of finite-neck plumbing parameters with the torus nome without
+the coordinate conversion.
+
+The independent full-state Ward/BPW oracle also checks 1,024
+descendant coefficients, including NS level $5/2$, Ramond level
+two, mixed descendants, all four tube-sign choices, all four
+products of pants coefficients, and independent complex antichiral
+parameters. Its maximum scaled discrepancy is $1.477\times10^{-15}$.
+Twelve finite-series tests with independent complex moduli,
+unequal primary weights, and continued logarithms have norm error
+at most $2.221\times10^{-16}$ and phase error at most
+$1.995\times10^{-16}$ radians. All 243 nodes in the complete
+saved L3/N5 and L5/N3 complex-block data were recombined for every
+tube-sign choice; their explicit primary factors agree exactly
+at saved precision. These are local checks, not global crossing
+tests.
+
+\subsection{Marked surfaces, spin transport, and the free reference}
+
+The five surfaces start from the original marking
+\begin{equation}
+ \Omega(t)=\begin{pmatrix}i&t+i/2\\t+i/2&i\end{pmatrix},
+ \qquad t=0.52,\ 0.56,\ 0.60,\ 0.64,\ 0.68.
+ \label{eq:partition-surfaces}
+\end{equation}
+The source and target use different re-marked theta charts. The
+saved composed symplectic matrix from source to target, in the
+usual $(A,B;C,D)$ block order, is
+\begin{equation}
+ \begin{pmatrix}
+ -1&0&0&0\\1&-1&0&-2\\0&0&-1&-1\\-1&1&0&1
+ \end{pmatrix}.
+ \label{eq:partition-symplectic}
+\end{equation}
+The charge periods obtained independently from charged-boson
+sewing obey $\Omega_{\mathrm{charge}}=\Omega_{\mathrm{marked}}+B$,
+with
+\begin{equation}
+ B_{\mathrm{source}}=\begin{pmatrix}0&0\\0&1\end{pmatrix},
+ \qquad B_{\mathrm{target}}=\begin{pmatrix}-1&-1\\-1&0\end{pmatrix}.
+ \label{eq:partition-period-branches}
+\end{equation}
+Here $B$ is an integer period shift, unrelated to any three-point
+coefficient. For binary characteristics $[\alpha|\beta]$, the
+charge characteristic is
+$\beta_{\mathrm{charge}}=\beta-B\alpha+\operatorname{diag}B$
+modulo two. Reducing its components to zero or one also fixes the
+theta translation phase
+$\exp\{i\pi[\alpha^TB\alpha/4+
+\alpha^T(\beta_{\mathrm{charge}}-\beta)/2]\}$.
+
+The two compared components have the following dictionary.
+The raw lifts in the last column are in geometry order, with the
+redundant infinity lift fixed to $+1$.
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+Source marked & Target marked & Target charge & Target raw lifts\\
+\midrule
+$[11|00]$ & $[00|00]$ & $[00|10]$ & $(-,+,+)$\\
+$[11|11]$ & $[00|10]$ & $[00|00]$ & $(+,+,+)$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The remaining source characteristics $[11|01]$ and $[11|10]$
+map to $[01|01]$ and $[01|11]$, respectively. Their target
+decomposition contains a Ramond edge, so this all-NS comparison
+does not test them. In particular, the integrated source uses
+$r=-1$, hence equal vertex signs $\eta=\eta'$. It is not a
+partition-function test of the inserted recovery for
+$\eta\eta'=-1$.
+
+At $t=0.60$ the actual plumbing inputs, rounded here to 12 digits,
+are
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+Edge & Source $q$ & Target $q$\\
+\midrule
+$0$ & $-0.039389297943-0.025083391996i$
+    & $ 0.034728649739-0.025129048103i$\\
+$1$ & $-0.040592698060+0.029788087392i$
+    & $-0.024917675595-0.001472871220i$\\
+$\infty$ & $-0.035159173395+0.025344924433i$
+    & $-0.080559050182-0.000078089260i$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Use \texttt{config.json} in the cross-channel data directory for
+the full stored precision and all five surfaces; do not regenerate
+rounded plumbing inputs from this table. The geometry provenance is
+also retained in
+\path{Data Set/fixed_spin_free_NSrr_20260830/summary.json}.
+
+\paragraph{Computing the free frame.}
+In the charge frame, the scalar chiral block has the form
+$P(q)\exp(i\pi a^T\Omega_{\mathrm{charge}}a)$, where $a$ is
+the two-component loop charge and $P(q)$ is its zero-charge
+oscillator factor. This paragraph's $P(q)$ is not the internal
+SCA momentum or the primary factor \eqref{eq:partition-primary}.
+Charge conservation fixes the infinity charge to $-a_0-a_1$.
+Two real fermions give the integer charge lattice, shifted by
+$\alpha/2$ in characteristic $[\alpha|\beta]$. Thus one
+Majorana chiral factor is the continued square root of
+$P(q)\theta[\alpha|\beta](\Omega_{\mathrm{charge}})$, and
+\begin{equation}
+ Z_{\mathrm{free}}=
+ \frac{|P(q)|^3\,|\theta[\alpha|\beta](\Omega_{\mathrm{charge}})|}
+      {\sqrt{\det(2\operatorname{Im}\Omega_{\mathrm{charge}})}}.
+ \label{eq:partition-free}
+\end{equation}
+The scalar has $h(a)=a^2/2$, measure $da_0\,da_1$, and connected
+target-space zero-mode volume one. These choices fix the two in
+the determinant. The nonchiral Majorana factor is the modulus
+of the Dirac chiral factor, not its modulus squared.
+
+The implementation
+\path{Code/genus_2/fixed_spin_free_plumbing.py} uses oscillator
+cutoff 32 for the recorded spin transport, charge-lattice cutoff
+five, and 32 radial continuation steps from $q_e\mapsto10^{-6}q_e$
+to $q_e$. It fixes the root at positive normalized degeneration
+coefficient (NS ground one; two-Ramond ground
+$\sqrt2\exp[(\operatorname{Log} q_0+\operatorname{Log} q_1)/16]$).
+At the central surface the same-frame free factors are
+\begin{equation}
+ Z_{\mathrm{free,source}}=0.5754095923717206,\qquad
+ Z_{\mathrm{free,target}}=0.5638924570404817.
+ \label{eq:partition-free-values}
+\end{equation}
+Their ratio is $1.020424347209\ldots$ and its $\kappa$th power
+is $1.222601313543\ldots$.
+The charge-period residuals at this point are
+$2.53\times10^{-13}$ and $6.33\times10^{-11}$;
+the independent free modular/frame residual is
+$1.72\times10^{-11}$. Across the five surfaces the period
+residual is at most $1.31\times10^{-9}$.
+
+The two independently continued source/target Majorana ratios
+have the same phase. At the central surface their quotient is
+$1.000000000004227-3.7558\times10^{-12}i$; the maximum discrepancy
+from one across all five surfaces is $1.020\times10^{-10}$.
+The interacting comparison therefore uses relative phase $+1$,
+fixed by this free control rather than fitted to an integral.
+Extending this free-spin dictionary to the interacting off-diagonal
+pairing is a proposal tested here, not a derivation of its fusion
+kernel.
+
+\paragraph{Why the full complex lift vector is retained.}
+At $c=3/2$, with charge conservation, independent mode sewing
+identifies the two free spin blocks with the projected physical
+blocks times their primaries, with relative factor $i$ on
+$\mathbf F_1|_{\mathrm{projected}}$.
+Thus the physical tube-sign combination corresponds to
+$(D_{00}-isD_{11})/\sqrt2$, where $D_{00},D_{11}$ denote the two
+raw spin components in the source charge frame. It is generally
+not one theta square root. At total descendant level three, two
+complex plumbing scales and both allowed charge choices give
+maximum norm-ratio error $3.646\times10^{-8}$ and phase error
+$5.320\times10^{-9}$ radians. Direct Majorana mode sewing
+agrees with the independently continued bosonized reference to
+$1.888\times10^{-14}$.
+
+For the all-NS target, the four literal lift blocks must first be
+converted to the reflected frame. For even NS primaries the
+conversion in three-form sector $a=0,1$ is
+\begin{equation}
+ \mathbf F^{\mathrm{reflected}}_a(\eta_0,\eta_1,1)
+ =\frac14\sum_{\lambda_0,\lambda_1=\pm1}
+ \sum_{\substack{p_0,p_1,p_\infty\in\{0,1\}\\
+                  p_0+p_1+p_\infty=a\ (\mathrm{mod}\ 2)}}
+ (-1)^{K(p_0,p_1,p_\infty)}
+ (\eta_0\lambda_0)^{p_0}(\eta_1\lambda_1)^{p_1}
+ \mathbf F_a(\lambda_0,\lambda_1,1).
+ \label{eq:partition-ns-transform}
+\end{equation}
+The $p_e$ in this finite sum are parity bits, not continuum
+momenta. The formula is the finite parity Fourier transform
+implemented in \path{Code/genus_2/all_ns_reflected_sewing.py}.
+One selects the two target raw lifts in the table only after this
+conversion, and then forms the same normalized two-component
+combination. Both NS three-form sectors and their supplied
+constants contribute. Taking absolute values of individual
+literal lift blocks before this step would lose the interference.
+
+The computation retains a $2\times2$ integrated spin matrix
+(called \texttt{density} in the files). Explicitly, on the real
+slice used for integration its source value is
+\begin{align}
+ (Z_{ij})_{\mathrm{source}}
+ ={}&\int\prod_e\frac{dp_e}{\pi}\,
+ \left|\exp\!\sum_e h_e\operatorname{Log}q_e\right|^2
+ \sum_{\eta=\pm1}\frac{B_{L,\eta}B_{R,\eta}}4\nonumber\\[-2pt]
+ &\quad\times
+ \left.\begin{pmatrix}\mathbf F_0^{(\eta,\eta)}\\
+                      i\mathbf F_1^{(\eta,\eta)}\end{pmatrix}
+       \right|_{\mathrm{projected}}
+ \left(\left.\begin{pmatrix}\mathbf F_0^{(\eta,\eta)}\\
+                      i\mathbf F_1^{(\eta,\eta)}\end{pmatrix}
+       \right|_{\mathrm{projected}}\right)^{\!\dagger}.
+ \label{eq:partition-source-density}
+\end{align}
+Here $i,j\in\{00,11\}$ label the two spin components, and
+$B_{L,+}=B_{R,+}=E$, $B_{L,-}=B_{R,-}=O$ in the numerical run.
+The dagger in this outer product is ordinary complex conjugate
+transpose on this real slice, not the bilinear BPZ operation.
+The target matrix uses its own momenta, primary factor and
+plumbing parameters:
+\begin{align}
+ (Z_{ij})_{\mathrm{target}}
+ ={}&\int\prod_e\frac{dp_e}{\pi}\,
+ \left|\exp\!\sum_e h_{\NS}(p_e)\operatorname{Log}q_e\right|^2
+ \sum_{a=0}^1 C_a^2\nonumber\\[-2pt]
+ &\quad\times
+ \begin{pmatrix}\mathbf F_a^{\mathrm{reflected}}(-,+,+)\\
+                 \mathbf F_a^{\mathrm{reflected}}(+,+,+)\end{pmatrix}
+ \begin{pmatrix}\mathbf F_a^{\mathrm{reflected}}(-,+,+)\\
+                 \mathbf F_a^{\mathrm{reflected}}(+,+,+)\end{pmatrix}^{\!\dagger},
+ \qquad C_0=C,\quad C_1=\widetilde C.
+ \label{eq:partition-target-density}
+\end{align}
+The local NS reflection conversion already combines the odd
+sewing sign with the two odd-vertex phases; no extra minus
+multiplies the $\widetilde C^2$ term here.
+The five reported scalar
+observables are its quadratic forms on
+$(1,-i)/\sqrt2$, $(1,i)/\sqrt2$, $(1,0)$, $(0,1)$, and its
+trace, denoted $s=+1$, $s=-1$, resolved 00, resolved 11, and
+spin sum. These are row vectors, contracted as
+$v(Z_{ij})\overline v^{\,T}$ in the code. The free-frame
+ratio is common to both transported components, so
+\eqref{eq:partition-ratio} applies to all five observables.
+In particular,
+\begin{equation}
+ Z_{s=+1}+Z_{s=-1}=Z_{00}+Z_{11}.
+ \label{eq:partition-spin-sum}
+\end{equation}
+The trace has no cross-spin interference. Its discrepancy cannot
+be repaired by changing only the relative Majorana phase.
+
+\subsection{Numerical design and the unscaled result}
+
+The source cutoff $L$ is total descendant level. The target
+parameter $R$ is the twice-level cutoff on NS $c$-recursion
+corrections; its large-$c$ global contribution is resummed.
+These are different truncations, so R12 is not a polynomial
+block truncated in every edge at level 12. The source uses the
+native double-Virasoro engine; the target uses
+\texttt{NSGenus2CRecursion.collision\_aware\_block\_mp} with
+\texttt{global\_method=resummed}. The target vacuum settings are
+Schottky word length seven and mode cutoff 50. The relative
+global-sum tolerance is $2\times10^{-9}$; its maximum total
+occupation was raised from 36 to 60 in the quadrature refinement.
+All accepted target nodes report converged global sums.
+
+The source native engine and structure constants use 40 decimal
+digits; target recursion uses 50. Stored projected amplitudes,
+spin matrices, and quadrature accumulation use complex binary64.
+Working precision is therefore not a claim of 40 accurate digits
+in the final partition function. The source coefficient banks
+retain the complex channels before nonchiral contraction and
+are reused at different plumbing parameters.
+
+For the unscaled refinement, each edge uses generalized
+Gauss--Laguerre nodes $x_j$ and weights $w_j$ for weight
+$x^{-1/2}e^{-x}$ on $[0,\infty)$. With the fixed envelope
+$|q_{e,\mathrm{env}}|$, the actual momentum rule is
+\begin{equation}
+ p_{e,j}=\sqrt{\frac{x_j}{-\log|q_{e,\mathrm{env}}|}},\qquad
+ W_{e,j}=\frac{w_j e^{x_j}}
+                  {2\pi\sqrt{-\log|q_{e,\mathrm{env}}|}},\qquad
+ \int_0^\infty\frac{dp_e}{\pi}\,f(p_e)
+       \simeq\sum_{j=1}^N W_{e,j}f(p_{e,j}).
+ \label{eq:partition-quadrature}
+\end{equation}
+The three-dimensional weights are products of these one-edge
+weights; the Gaussian primary propagation remains in the
+integrand. In geometry order the source envelopes are
+$(0.04779213238222936,0.0520035772489429,0.04349541543013214)$,
+and the target envelopes are
+$(0.04677899744906184,0.03806246230229872,0.1332848304670786)$.
+Only complete $N^3$ tensor grids enter any reported integral.
+
+\paragraph{Initial five-surface comparison.}
+With source L5, target R12, and N3 in both channels, the local
+matrix gives the following ratios. No factor four is applied.
+\begin{center}
+\begin{tabular}{rrrr}
+\toprule
+$t$ & $\mathcal R(s=+1)$ & $\mathcal R(s=-1)$ & $\mathcal R(\text{spin sum})$\\
+\midrule
+0.52 & 0.251461747 & 0.251166853 & 0.251308055\\
+0.56 & 0.252437897 & 0.252246849 & 0.252338372\\
+0.60 & 0.252925745 & 0.252836380 & 0.252879225\\
+0.64 & 0.252916112 & 0.252965657 & 0.252941875\\
+0.68 & 0.252456067 & 0.252714296 & 0.252590118\\
+\bottomrule
+\end{tabular}
+\end{center}
+At $t=0.60$, changing L3 to L5 at N3 changes the two sign ratios
+and the spin-sum ratio by $2.650\times10^{-4}$,
+$1.287\times10^{-4}$, and $1.941\times10^{-4}$ relatively.
+Changing target R8 to R12 at N3 changes those ratios by
+$-3.915\times10^{-7}$, $-1.910\times10^{-8}$, and
+$-1.976\times10^{-7}$. Changing both grids from N3 to N4 at
+L3/R12 gives $-2.447\times10^{-3}$, $-2.776\times10^{-3}$,
+and $-2.618\times10^{-3}$; the resulting spin-sum ratio is
+$0.252168291$. The grid effects warrant refinement but are much
+smaller than the discrepancy from one.
+
+This stage computes 91 fresh target momentum nodes: 27 shared
+nodes evaluated at all five surfaces and 64 at the central
+surface. Each retains both form sectors, all four complex
+lifts, and both target recursion cutoffs. Independent
+reconstruction of 334 source/target measures gives maximum
+relative error $6.661\times10^{-16}$.
+There are 120 source-block spot comparisons through L5 against
+the native engine. Their largest scaled difference,
+$8.117\times10^{-8}$, occurs in an extreme tail; the largest
+single checked-node correction divided by the integral is
+$3.727\times10^{-12}$. This is a three-node spot check, not
+a recomputation of the complete source grid. The saved spin
+matrices are Hermitian and positive within numerical precision.
+
+\paragraph{Completed central-surface quadrature.}
+The refinement fixes source L5 and target R12 at $t=0.60$.
+It requires two successive relative changes below $10^{-4}$
+for each source integral, target integral, and normalized ratio,
+for both signs, both resolved components, and the spin sum.
+The source stabilizes at N7; the target continues to N10.
+\begin{center}
+\begin{tabular}{rrrrr}
+\toprule
+Source $N$ & Target $N$ & $\mathcal R(s=+1)$ & $\mathcal R(s=-1)$ & $\mathcal R(\text{sum})$\\
+\midrule
+3 & 3 & 0.252925745 & 0.252836380 & 0.252879225\\
+4 & 4 & 0.252306619 & 0.252134476 & 0.252217026\\
+5 & 5 & 0.250782696 & 0.250562482 & 0.250668084\\
+6 & 6 & 0.250255801 & 0.250023212 & 0.250134747\\
+7 & 7 & 0.250108170 & 0.249871433 & 0.249984956\\
+7 & 8 & 0.250068188 & 0.249829678 & 0.249944051\\
+7 & 9 & 0.250056418 & 0.249817280 & 0.249931954\\
+7 & 10 & 0.250052595 & 0.249813244 & 0.249928019\\
+\bottomrule
+\end{tabular}
+\end{center}
+The two final maximum source changes are
+$9.1214\times10^{-6}$ and $9.1781\times10^{-6}$;
+the corresponding target changes are $4.9630\times10^{-5}$
+and $1.6157\times10^{-5}$. The full complex matrices also pass
+two successive relative Frobenius changes below $10^{-4}$:
+source $6.4870\times10^{-6}$, $8.7186\times10^{-6}$;
+target $4.8452\times10^{-5}$, $1.5755\times10^{-5}$.
+The interrupted partial source N8 grid is excluded.
+
+The final source and target spin sums are
+$4.018798024166\times10^{-10}$ and
+$1.315213852318\times10^{-9}$.
+The resolved-component ratios are $0.249767844257$ and
+$0.250092639457$. The difference between the arguments of the
+off-diagonal integrated matrix entries is
+$-4.802614953\times10^{-4}$ radians; the Frobenius distance
+between the trace-normalized matrices is
+$5.706858874\times10^{-4}$.
+Thus the local normalization still fails the proposed global
+comparison. Quadrature convergence alone does not establish the
+normalization, interacting spin transport, or block remainder.
+
+\subsection{The conditional factor-four experiment}
+
+The next saved study fixes the explicit assumption
+\begin{equation}
+ M_{\mathrm{provisional}}=4M_{\mathrm{local}}.
+ \label{eq:partition-factor-four}
+\end{equation}
+This replaces $B_{L,\eta}B_{R,\eta'}/8$ by
+$B_{L,\eta}B_{R,\eta'}/2$ on the same supported sectors and
+multiplies every matrix entry, including interference, once.
+The constants, chiral blocks, primary factors, spin phases,
+and spectral measure remain the same. Consequently the
+fixed-L5 quadrature ratios above are multiplied by exactly
+four; the central final values become
+$1.0002103786$, $0.9992529741$, and $0.9997120778$ for the
+two signs and their sum. The local identity/torus test does
+not derive this additional genus-two normalization.
+
+\paragraph{Source order and independent quadrature.}
+For a separate block-order study, complete complex coefficient
+banks through total level eight are retained on two source
+grids: the archived adapted N7 rule (343 nodes) and a panel
+N12 rule (1,728 nodes). Each node retains eight channel/parity
+tables with 285 exponent triples through total level eight.
+All 2,071 nodes are reused at the five saved plumbing points.
+The panel rule has 2, 8, and 2 nodes on the intervals
+$[0,0.1]$, $[0.1,2.5]$, and $[2.5,\infty)$, respectively.
+For exact reproduction, its frozen momentum nodes and weights
+are the \texttt{nodes} entries in
+\path{Data Set/nsrr_per_edge8_generic04_20260914/bundle/config.json};
+the adapted rule is stored in
+\path{Data Set/nsrr_moduli_extension_20260913/coefficient_bank/N7/manifest.json}.
+The bank originally built for another surface is independent
+of $q$; the comparison reevaluates its coefficients at
+\eqref{eq:partition-surfaces} and does not import that older
+surface's scalar contraction or primary factors.
+
+At the central surface, with panel N12 for the source and
+fixed N10/R12 for the target, the conditional results are
+\begin{center}
+\begin{tabular}{rrrrr}
+\toprule
+Source $L$ & $\mathcal R(s=+1)$ & $\mathcal R(s=-1)$ & $\mathcal R(\text{sum})$
+ & Nodal change\\
+\midrule
+3 & 0.9999375694 & 0.9991169498 & 0.9995104611 & ---\\
+4 & 1.0002406278 & 0.9992798038 & 0.9997405473 & $4.177\times10^{-4}$\\
+5 & 1.0002014989 & 0.9992453421 & 0.9997038475 & $5.896\times10^{-5}$\\
+6 & 1.0002080669 & 0.9992517683 & 0.9997103417 & $8.945\times10^{-6}$\\
+7 & 1.0002068305 & 0.9992506908 & 0.9997091880 & $1.503\times10^{-6}$\\
+8 & 1.0002070665 & 0.9992508688 & 0.9997093938 & $2.668\times10^{-7}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The last column is the largest, over the five scalar
+observables, of the sum of absolute changes of the weighted
+node contributions divided by the higher-order integral.
+Absolute values are taken before summing nodes, so cancellation
+between momenta cannot hide the measured order change. It is
+a finite-difference diagnostic, not a rigorous tail bound.
+Across all five surfaces, the largest such L7-to-L8 change
+is $9.247\times10^{-7}$.
+
+At L5, the largest scalar relative difference of panel N12
+from the completed Laguerre N7 source is $8.878\times10^{-6}$;
+from adapted N7 it is $5.705\times10^{-6}$.
+These are independent source-grid controls; they do not replace
+the target quadrature refinement.
+
+\paragraph{Target order and validation of saved banks.}
+The target controls, both on the N3 grid, are
+\begin{center}
+\begin{tabular}{rrr}
+\toprule
+Target recursion step & Largest scalar relative change & Matrix relative change\\
+\midrule
+R8 to R12 & $3.915\times10^{-7}$ & $2.388\times10^{-7}$\\
+R12 to R16 & $1.206\times10^{-9}$ & $7.852\times10^{-10}$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The fresh R16 control contains all 27 N3 nodes. There is no
+R16 recomputation of the N10 target integral in this record.
+
+Three panel nodes (head, bulk, and tail) were independently
+recomputed through L8 with the then-current native engine,
+using all four equal-$\eta$ channels and evaluating $f=1$
+directly rather than reconstructing it by parity. The maximum
+scaled coefficient discrepancy is $3.308\times10^{-34}$;
+the projected complex blocks agree at saved floating-point
+precision. Independent 40-digit evaluation of the supplied
+three-point constants agrees to $4.108\times10^{-14}$ relatively.
+This validates selected nodes, not a fresh recomputation of
+the entire bank.
+
+Nine unit tests check independent complex antichiral inputs,
+all tube signs, the single application of the factor four,
+diagonal and interference terms, phase preservation, unchanged
+descendant blocks and primary propagation at the resummed API
+boundary, rejection of the new normalization option for the
+legacy matrix, and the local BPZ/primary-bookkeeping regressions.
+Their saved commands, hashes, and outcomes are in
+\texttt{tests.json} and \texttt{bank\_validation.json}.
+
+\paragraph{Final conditional result.}
+At source L8/panel N12 and target R12/Laguerre N10:
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Observable & $\mathcal R$ & $100(\mathcal R-1)$\\
+\midrule
+$s=+1$ & 1.0002070665 & $+0.020707\%$\\
+$s=-1$ & 0.9992508688 & $-0.074913\%$\\
+Resolved 00 & 0.9990667801 & $-0.093322\%$\\
+Resolved 11 & 1.0003698399 & $+0.036984\%$\\
+Spin sum & 0.9997093938 & $-0.029061\%$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The conditional source spin sum is
+$1.607514893908\times10^{-9}$; the target is
+$1.315213852318\times10^{-9}$ before the free-frame correction.
+The off-diagonal phase difference is
+$-4.796613033\times10^{-4}$ radians, and the
+trace-normalized matrix distance is $5.715417354\times10^{-4}$.
+A positive scalar multiplier does not change phases; these
+matrix phases are also distinct from an overall chiral
+Pfaffian phase. The reported physical-slice scalar integrals
+are positive.
+
+The factor four removes the gross discrepancy but leaves
+nonzero residuals. Only the central surface has refined
+target quadrature; the other four retain coarse N3 targets.
+Finite changes in block order and quadrature are not certified
+error bounds. Neither this conditional agreement nor the
+independent local checks prove the extra normalization or the
+interacting spin transport.
+
+\subsection{Reproduction and the authoritative saved records}
+
+The local derivation and numerical tests are implemented in
+\path{Code/genus_2/nsrr_bilinear_sewing.py},
+\path{Code/genus_2/nsrr_bilinear_state_oracle.py}, and
+\path{Code/genus_2/audit_nsrr_bilinear_sewing.py}.
+The oracle contracts full physical Ward/BPW states without
+using the reduced block matrix. The audit driver writes Clifford identities, two-point comparisons,
+descendant checks, torus limits, free-theory phases, and input
+hashes to \path{Data Set/nsrr_bilinear_sewing_20260915/}.
+That original output directory is absent from the current checkout;
+its local-test counts and errors above are those reported in the
+historical note, not a fresh audit of missing raw records.
+The three cross-channel/convergence directories listed at the
+start of this appendix are present and retain their results.
+
+The following are the archived driver commands, run from the
+repository root with Python 3, NumPy, SciPy, mpmath, and the
+native Ramond executable available. Use a matching code/data
+snapshot: the drivers validate stored configuration and
+implementation hashes, so an old result must not be silently
+relabeled as a run of a newer executable.
+\begin{verbatim}
+export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
+export PYTHONDONTWRITEBYTECODE=1
+python3 Code/genus_2/audit_nsrr_bilinear_sewing.py
+
+python3 Code/genus_2/test_nsrr_bilinear_cross_channel.py --workers 3
+python3 Code/genus_2/check_cross_channel_source_blocks.py
+python3 Code/genus_2/report_nsrr_bilinear_cross_channel.py
+
+python3 Code/genus_2/reproduce_nsrr_bilinear_quadrature.py --workers 6
+python3 Code/genus_2/audit_nsrr_bilinear_quadrature.py
+python3 Code/genus_2/check_nsrr_quadrature_matrices.py
+python3 Code/genus_2/report_nsrr_quadrature_limit.py
+
+python3 Code/genus_2/check_nsrr_factor4_convergence.py \
+  --stage all --workers 4
+\end{verbatim}
+These drivers reuse completed matching records and may compute
+missing nodes; they are not all inexpensive report generators.
+The conditional driver consumes the complete coefficient banks
+listed above and saves its fresh target control under
+\texttt{target\_R16\_N3/}. A pointwise resummed worker selects
+the new local matrix and the conditional multiplier with
+\begin{verbatim}
+--sewing-convention human-bilinear
+--normalization provisional-times-four
+--physical-lifts-slots 1 -1 1
+\end{verbatim}
+The other tested sign uses \texttt{-1 -1 1}. The older option
+\texttt{legacy-times-four} refers to a different interference
+matrix and is not this experiment. Likewise, the frozen
+pointwise worker's older target scalar is not the full
+transported-spin comparison above.
+
+The cross-channel directory's \texttt{config.json} fixes
+geometry, spin transport, logarithms, cutoffs, and hashes;
+\texttt{source.json}, \texttt{target\_summary.json}, and the
+node records retain the complex data. Its
+\texttt{comparison.json}, \texttt{result.json}, and
+\texttt{fresh\_source\_checks.json} record the initial ratios
+and spot checks. The completed quadrature result is
+\texttt{final\_result.json}, supplemented by
+\texttt{target\_refinement.csv}, \texttt{matrix\_convergence.json},
+and \texttt{final\_provenance.json}. Its older
+\texttt{summary.json} stops at matched N7 grids and is not
+the final N7/N10 conclusion.
+
+In the conditional directory, \path{result.json},
+\path{quadrature.csv}, \path{block_orders.csv}, and
+\path{source_banks.json} retain the ratios and complex matrices.
+Input SHA-256 hashes are in \path{provenance.json} and
+\path{source_provenance.json}.
+\texttt{bank\_validation.json}, \texttt{verification.json},
+and \texttt{tests.json} distinguish saved-node validation
+from complete integration. Earlier scalar-only trial
+contractions and their marked-spin ratios cannot reconstruct
+the new matrix and are not additional crossing evidence.
+
+A lightweight audit of the final unscaled ratios requires no
+block evaluations or momentum integrations:
+\begin{verbatim}
+python3 C++/tools/section6_partition_audit.py \
+  --output /tmp/section6-partition-audit.json
+\end{verbatim}
+It reads the completed N7/N10 record, recomputes the ratios
+from the two integrals and free-frame factor, and records
+the assumed nature of the multiplier explicitly. It does
+not replace the conditional L8 study or establish crossing.
+
+\subsection{Resolution from the Liouville identity residue}
+\label{app:partition-normalization-resolution}
+
+The September 24, 2026 audit resolves the factor four without fitting
+the genus-two integral. The raw Upsilon coefficients in
+\eqref{eq:partition-constants} multiply the normalized ordered forms
+as $E,O$, not $E/2,O/2$. Their physical Ramond-family ground values
+are consequently $E+O,E-O$. The two-point normalization fixes this
+choice independently of any plumbing geometry.
+
+To see this, take the external NS Liouville charge to be
+$\alpha_3=\varepsilon\to0^+$, so
+$p_3=i(Q/2-\varepsilon)$, and set $p_1=p_2=p>0$.
+Divide the NS--R--R coefficients by the all-NS coefficient $C$ at
+these same momenta. The common external NS leg and cosmological
+factor cancel; only the two internal-leg normalizations differ.
+The positive-momentum gamma metrics in \eqref{eq:partition-legs}
+are exactly $1/b$ in NS and $1$ in R. Therefore
+\begin{align}
+ \frac{E}{C}&=
+ \frac{\mathcal N_{\R}(p)^2}{b^2\mathcal N_{\NS}(p)^2}
+ \frac{\Upsilon_{\NS}(\varepsilon+2ip)
+       \Upsilon_{\NS}(Q-\varepsilon+2ip)}
+      {\Upsilon_{\R}(\varepsilon+2ip)
+       \Upsilon_{\R}(Q-\varepsilon+2ip)}
+ \ \longrightarrow\ 1,\nonumber\\
+ \frac{O}{C}&=
+ \frac{\mathcal N_{\R}(p)^2}{b^2\mathcal N_{\NS}(p)^2}
+ \frac{\Upsilon_{\NS}(\varepsilon)^2}
+      {\Upsilon_{\R}(\varepsilon)^2}
+ \ \longrightarrow\ 0.
+ \label{eq:partition-identity-residue}
+\end{align}
+The first limit uses $\Upsilon_s(Q-x)=\Upsilon_s(x)$ and
+\eqref{eq:partition-legs}; the second uses the simple zero of
+$\Upsilon_{\NS}$ at zero. The same limits hold when $p_2-p_1$ is
+of order $\varepsilon$. The singular factors
+$\Upsilon_{\NS}(\varepsilon\pm i(p_2-p_1))$ are shared by $E$
+and $C$, so this compares the residues of the same delta-function
+peak. Both $E+O$ and $E-O$ reproduce the NS identity residue, as
+required by the equal NS/R metrics. Their former half-sums do not.
+
+This agrees with the equal-metric conventions in
+\href{https://arxiv.org/pdf/hep-th/9607120}{Poghossian,
+Eqs.~(14)--(15), (51), and (56)}. The historical adapter applied
+the half-sum dictionary of
+\href{https://arxiv.org/html/2201.05621\#S3.SS1}{Balthazar--Rodriguez--Yin,
+Eq.~(3.8)} directly to our raw Upsilon terms; that combination fails
+\eqref{eq:partition-identity-residue}. The present convention is
+specified by the identity residue, not by a change of Ramond phases.
+The earlier module test prescribed $E=2,O=0$ by hand and hence could
+not detect this incompatibility with the actual structure constants.
+
+The finite Clifford reduction remains unchanged. Its matrix is
+$\tfrac12\bigl(\begin{smallmatrix}1&s\\s&1\end{smallmatrix}\bigr)$
+times the product of the ordered-form coefficients. Thus the
+denominator eight in the old matrix becomes two, as in
+\eqref{eq:app-nonchiral-matrix}. No chiral coefficient, Ward identity,
+Gram matrix, or momentum measure changes. A denominator eight is
+valid only if its inputs are the family sums $2E,2O$.
+
+The actual special-function limits were checked at $b=0.8,1,1.4$,
+$p=0.23,0.67$, and $\varepsilon=10^{-2},10^{-4},10^{-6}$.
+At the smallest regulator, offsets
+$(p_2-p_1)/\varepsilon=-1,0,1$ were included. All corrected
+family ratios there differ from one by less than $10^{-5}$.
+At $b=1$ an independent Barnes-$G$ implementation agrees within
+$5.47\times10^{-17}$, limited by its binary64 return values.
+The native Clifford checks pass all 64 cases in machine and
+40-digit arithmetic, with maximal scaled errors
+$3.15\times10^{-15}$ and $3.25\times10^{-40}$, respectively.
+They include the identity trace two with $E=1,O=0$ after dividing
+out the common NS identity residue.
+
+A fresh native calculation at the central saved surface gives
+\begin{center}
+\begin{tabular}{lc}
+\toprule
+observable & corrected ratio $\mathcal R$\\
+\midrule
+$s=+1$ & $1.000006186773435$\\
+$s=-1$ & $1.000005527870852$\\
+resolved $00$ & $1.000007836181439$\\
+resolved $11$ & $1.000003799186142$\\
+spin sum & $1.000005843991480$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The source uses $N=7$ and total descendant level 5, the target
+$N=10$ and total level 8, both with 40-digit arithmetic and four
+workers. They took $34.56$ and $54.02$ seconds, excluding compilation
+and input preparation. The maximal residual is $7.84\times10^{-6}$;
+the source level-4-to-5 shift is at most $5.90\times10^{-5}$ and
+the target level-7-to-8 shift at most $8.62\times10^{-8}$.
+These shifts are convergence diagnostics, not rigorous error bounds.
+The momentum rule was retained without a new refinement study.
+
+The native target also corrects a separate Schottky spin-lift
+assignment in the historical pointwise evaluator: the half-multiplier
+signs are fixed coefficientwise before complex plumbing evaluation.
+Its independent low-level PBW check is recorded in
+\path{C++/results/partition_conventions_2026-09-24/}.
+The new identity tests, all fresh momentum nodes, and integrated
+results are in
+\path{C++/results/partition_normalization_resolution_2026-09-24/}.
+The derivation and reproduction commands are in
+\path{C++/PARTITION_NORMALIZATION.md} and \path{C++/PARTITION.md}.
+The native reducer rejects output with the old coefficient
+normalization. The comparison supports the specified interacting
+spin dictionary at this surface; it does not prove it for arbitrary
+geometry.
+
+\endgroup

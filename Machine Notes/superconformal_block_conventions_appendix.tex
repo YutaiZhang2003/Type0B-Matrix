@@ -897,71 +897,20 @@ as implementation choices. A failed comparison is retained, and the
 graph runner repeats only that case with 20 additional digits in both
 methods. It does not change the original failure into a passing result.
 
-\subsection{Nonchiral data and the normalization experiment}
+\subsection{Nonchiral data and identity normalization}
 \label{app:nonchiral-conventions}
 
-The chiral coefficient calculation above does not choose an SCFT
-spectrum, three-point structure constants, a spectral measure, or the
-conformal-anomaly factor of a metric. These data are required separately
-for a partition function. Holomorphic and antiholomorphic forms are
-independent bilinear inputs. A change of chiral basis $\mathbf F'=U\mathbf F$
-and antichiral basis $\widetilde{\mathbf F}'=V\widetilde{\mathbf F}$
-changes the sewing matrix as $M'=U^{-T}MV^{-1}$. Complex conjugation
-is a further specialization on an appropriate physical real slice,
-not part of the chiral BPZ definition.
-
-For completeness the saved genus-two NS--R--R experiment uses
-$P_e=ip_e$, $p_e>0$, measure $\prod_e dp_e/\pi$, the primary powers
-in \eqref{eq:correlator}, and independently supplied three-point
-constants $B_{v,+}=E_v$, $B_{v,-}=O_v$ on each sphere. These $B_{v,\eta}$
-are SCFT constants and are unrelated to the normalized branching
-coefficients $\mathbf B,\mathbb B$. The physical equal-family ground
-amplitudes are $(E_v+O_v)/2$ and $(E_v-O_v)/2$; the corresponding
-chiral form coefficients are $E_v/2$ and $O_v/2$.
-The antichiral ground frame uses the conjugate zero-mode phases and
-ground metric $\operatorname{diag}(1,-i)$.
-
-Its saved chiral basis consists of the eight components
-$(f,\eta,\eta')$ with the projection
-\begin{equation}
- \left.\mathbf F_f^{(\eta,\eta')}\right|_{\mathrm{projected}}
- =\frac{\mathbf F_f^{(\eta,\eta')}(+,+,+)
-            +\mathbf F_f^{(\eta,\eta')}(+,-,+)}{\sqrt2}.
- \label{eq:app-nonchiral-projection}
-\end{equation}
-Here the signs in parentheses are evaluation of the three formal edge
-parities in order $(\NS,\R_1,\R_0)$. This is a basis projection;
-the physical tube signs must still be supplied independently. In each
-supported $(\eta,\eta')$ sector the local matrix in $f=0,1$ is
-\begin{equation}
- M_{fg}^{(\eta,\eta')}=
- \frac{B_{L,\eta}B_{R,\eta'}}8
- \begin{pmatrix}1&\eta_1\eta_3\\\eta_1\eta_3&1\end{pmatrix}_{fg},
- \qquad \eta\eta'=-\eta_2\eta_3,
- \label{eq:app-nonchiral-matrix}
-\end{equation}
-and zero otherwise. The $\eta_e$ on the right are the physical tube
-signs, not the two evaluations in \eqref{eq:app-nonchiral-projection}.
-The contraction is $\mathbf F^T M\widetilde{\mathbf F}$ times the
-two primary factors; structure constants are not conjugated inside
-this bilinear expression. The identity limit $E=2,O=0$ gives the two
-Ramond ground states, with ordinary trace two and supertrace zero.
-
-The option \texttt{provisional-times-four} replaces this entire
-nonchiral matrix by $4M$, including its interference entries. It does
-not change any chiral block, Ward identity, Gram matrix, or branching
-coefficient. It is a normalization assumption motivated by the saved
-cross-channel ratio near $1/4$, not a consequence of the local
-conventions in this appendix. The local identity and torus checks
-already count both Ramond grounds and do not derive this multiplier.
-The completed quadrature study converges at fixed block cutoffs on
-the central saved surface; the subsequent conditional comparison with
-$4M$ leaves discrepancies below $0.1\%$. Neither observation fixes the
-global interacting spin transport or proves the extra normalization.
-Thus this appendix specifies that numerical experiment but does not
-promote it to an established crossing identity. Its frozen geometry,
-measures, three-point inputs, and normalization metadata are essential
-inputs for reproduction.
+A partition function also requires a spectrum, a spectral measure,
+and three-point coefficients. These are independent of the chiral
+coefficient algorithm. Appendix~\ref{app:partition-test} specifies
+these inputs for super-Liouville theory, using $C_a$ and $C_{f,\eta}$,
+and writes the partition functions directly in the paper's blocks.
+The displayed sewing matrices account for the physical
+Ramond families and the geometric spin characteristics while retaining
+the literal blocks and their Koszul signs. The identity limit
+in \eqref{eq:partition-identity-residue} fixes the relative NS/R
+normalization. The bilinear BPZ definition is retained; complex
+conjugation is imposed only on the physical diagonal spectrum.
 
 \subsection{Reproduction commands and the scope of the checks}
 \label{app:reproduce}
@@ -1054,19 +1003,15 @@ level-10 timing run. The independent level-10 all-NS theta calculation
 is fresh. These numerical checks are at generic momenta, and do not
 prove an arbitrary-genus statement by numerical enumeration.
 
-For the nonchiral experiment, the exact conventions are implemented in
-\path{Code/genus_2/nsrr_bilinear_sewing.py} and
-\path{Code/genus_2/nsrr_normalization.py}. The packaged frontend is
-\path{C++/tools/section6_partition.py}; it requires the frozen momentum
-and geometry bundle in addition to the source release. Saved-data
-reproduction without new integration is
-\begin{verbatim}
-python3 C++/tools/section6_partition_audit.py \
-  --output /tmp/section6-partition-audit.json
-\end{verbatim}
-The completed unscaled study and the conditional factor-four study are
-documented, respectively, in
-\path{Data Set/nsrr_bilinear_quadrature_20260915/FINAL_REPORT.md} and
-\path{Data Set/nsrr_provisional_factor4_20260916/README.md}.
-The latter is a separate conditional normalization experiment, not
-part of the chiral coefficient validation.
+The current nonchiral conventions are implemented in
+\path{C++/include/scblocks/partition_sewing.hpp}. Build
+\texttt{make -C C++ partition} and use \texttt{C++/bin/partition};
+\path{C++/PARTITION.md} gives the inputs and complete commands.
+The three-point formulas and the block expressions are given in
+Appendix~\ref{app:partition-test}. The corrected fresh results,
+including the geometric spin checks, are retained in
+\path{C++/results/partition_paper_pairing_2026-09-24/}.
+The independent identity-residue tests remain in
+\path{C++/results/partition_normalization_resolution_2026-09-24/}.
+Historical Python assemblers are retained to reproduce their
+original data, not as the current coefficient convention.

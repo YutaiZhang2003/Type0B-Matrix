@@ -26,8 +26,10 @@ independent radial-reflection state sum. Its identity limit does not detect
 that error. The Human Note's bilinear prescription instead requires an
 independently specified antiholomorphic block and physical Ramond dual;
 neither this matrix nor the reflection replacement establishes that map.
-The physical descendant BPZ dual and literal Human matrix are now derived
-in nsrr_bilinear_sewing.py; use that module for new bilinear contractions.
+The physical descendant BPZ dual and literal Human matrix were derived
+in nsrr_bilinear_sewing.py. Its coefficient conversion was subsequently
+corrected in C++/include/scblocks/partition_sewing.hpp; use C++/bin/partition
+for current calculations and see C++/PARTITION_NORMALIZATION.md.
 See NSRR_BILINEAR_PAIRING_2026-09-15.md. Public names
 are retained only so historical datasets can be reproduced.
 

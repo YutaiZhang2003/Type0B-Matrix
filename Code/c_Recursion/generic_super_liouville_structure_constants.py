@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 r"""Generic-real-``b`` delta-normalized N=1 super-Liouville constants.
 
-The public constants use the same BRY continuum normalization as
-``super_liouville_structure_constants.py``: every primary has two-point
+The public constants return the same numerical Upsilon expressions as
+``super_liouville_structure_constants.py`` at b=1. In the identity-normalized
+Poghossian convention used by the current native assembler, every primary has two-point
 function ``pi delta(P-P')`` and every internal edge is integrated with
 ``dP/pi``.  The formulas are written in terms of
 
@@ -28,6 +29,13 @@ used by the existing BRY implementation.  Consequently the functions below
 reduce to its real ``C``, ``tilde C``, ``C_even`` and ``C_odd`` without an
 additional phase conversion.  The Human-Note odd NS coefficient remains
 ``i*tilde C`` and must be applied only by the sewing assembler.
+
+The returned RRNS pair (E,O) is the coefficient pair of the unit-normalized
+ordered forms. Physical Ramond-family ground amplitudes are E+O and E-O.
+The former genus-two adapter divided both by two; its half-sum interpretation
+fails the actual identity-residue test with the stated equal NS/R metrics.
+See C++/PARTITION_NORMALIZATION.md and test_nsrr_identity_normalization.py.
+No numerical special-function expression is changed by this clarification.
 
 The optional cosmological factor is the common, momentum-independent factor
 left after delta normalization.  With
@@ -65,7 +73,7 @@ def _python_complex(value: mp.mpc | complex | float) -> complex:
 
 @dataclass
 class GenericSuperLiouvilleConstants:
-    """Numerical generic-``b`` structure constants in BRY normalization."""
+    """Numerical generic-``b`` Upsilon coefficients; see the input convention above."""
 
     b: float
     dps: int = 35
@@ -207,6 +215,19 @@ class GenericSuperLiouvilleConstants:
                 else self.upsilon_r(argument)
             )
         return mp.fprod(factors)
+
+    def C_a(self, a: int, p1: float, p2: float, p3: float) -> complex:
+        """Paper C_a(p1,p2,p3), including the i in C_1 (binary64 return)."""
+        if a not in (0, 1):
+            raise ValueError("a must be 0 or 1")
+        values = self.ns_constants(p1, p2, p3)
+        return values[a] * (1j if a else 1)
+
+    def C_f_eta(self, f: int, eta: int, p1: float, p2: float, p3: float) -> complex:
+        """Paper C_{f,eta}; NS on edge 1, R on 2 and 3 (binary64 return)."""
+        if f not in (0, 1) or eta not in (-1, 1):
+            raise ValueError("f must be 0 or 1 and eta must be +/-1")
+        return self.rr_ns_constants(p2, p3, p1)[eta == -1]
 
     def ns_constants(self, p1: float, p2: float, p3: float) -> tuple[complex, complex]:
         """Return ``(C, tilde_C)`` for three NS primaries."""

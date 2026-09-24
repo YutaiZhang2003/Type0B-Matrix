@@ -209,6 +209,10 @@ class NSRecursion {
     NSRecursion(Graph g, S c, std::vector<S> h, Cutoff level) : graph(g), weights(h), centers{c} {
         vacuum = ns_schottky(g, level);
     }
+    // The vacuum depends on the graph and cutoff, not on continuum momenta.
+    // A partition integral can construct it once and reuse it at every node.
+    NSRecursion(Graph g, S c, std::vector<S> h, const QPoly &seed)
+        : graph(g), weights(h), centers{c}, vacuum(seed) {}
     // shift+remaining level equals the requested multidegree at every node.
     // Therefore these full-block states cannot be reused by a different target.
     S coefficient(const Key &k) {

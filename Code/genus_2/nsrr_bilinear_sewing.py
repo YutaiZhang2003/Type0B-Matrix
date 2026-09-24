@@ -1,4 +1,9 @@
-"""Physical NSRR sewing with the Human Note's graded, bilinear BPZ dual.
+"""Historical NSRR sewing, retained to reproduce September 15--16 data.
+
+The raw-Upsilon coefficient conversion below was superseded on September 24:
+with equal NS/R identity metrics its E/2,O/2 interpretation is incorrect.
+Use C++/bin/partition and C++/include/scblocks/partition_sewing.hpp for current
+calculations. See C++/PARTITION_NORMALIZATION.md for the independent derivation.
 
 The eight inputs are descendant-only two-lift blocks, ordered by
 (form parity, eta_left, eta_right). The two-lift operation is a BASIS
