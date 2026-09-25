@@ -223,8 +223,8 @@ The NS $\mathsf{Vir}\oplus \mathsf{Vir}$ primary $v_n$ has Grassmann parity $2n\
 
 To reduce the superconformal block \eqref{scblock} to Virasoro conformal blocks, we first consider an enlarged $\mathsf{SCA}\oplus \mathsf{F}$ block $\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}$, defined as
 \ie 
-\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}} &= \sum_{\{A,\alpha,\mathsf{A},\mathsf{a}\}} (-1)^{K_{\hat{\Gamma}}(\epsilon+\epsilon')} \prod_{e\in E_\NS\cup E_\R} q_e^{|A_{e_1}|+|\mathsf{A}_{e_1}|}\eta_e^{\epsilon_e+\epsilon_e'}\\
-&\times \prod_{e\in E_\NS} \mathbf{G}_{h_e}^{\mathsf{A}_{e_1}A_{e_1}, \mathsf{A}_{e_2}A_{e_2}} \prod_{e\in E_\R} \mathbb{G}_{\beta_e}^{\mathsf{A}_{e_1}\mathsf{a}_{e_1}A_{e_1}\alpha_{e_1},\mathsf{A}_{e_2}\mathsf{a}_{e_2}A_{e_2}\alpha_{e_2}}\\
+\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}} &= \sum_{\{A,\alpha,\mathsf{A},\mathsf{a}\}} (-1)^{K_{\Gamma}(\epsilon+\epsilon')} \prod_{e\in E_\NS\cup E_\R} q_e^{|A_{e_1}|+|\mathsf{A}_{e_1}|}\eta_e^{\epsilon_e+\epsilon_e'}(-1)^{\epsilon_e\epsilon_e'}\\
+&\times \prod_{e\in E_\NS} \mathbf{G}_{\F}^{\mathsf{A}_{e_1}\mathsf{A}_{e_2}}  \mathbf{G}_{h_e}^{A_{e_1}A_{e_2}} \prod_{e\in E_\R} \mathbb{G}_{\F}^{\mathsf{A}_{e_1}\mathsf{a}_{e_1},\mathsf{A}_{e_2}\mathsf{a}_{e_2}} \mathbb{G}_{\beta_e}^{A_{e_1}\alpha_{e_1},A_{e_2}\alpha_{e_2}}\\
 &\times \prod_{v \in V_\NS} \hat{\rho}_{a_v}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1}\otimes \mathbf L_{-A_{v_1}}\phi_{v_1},\Psi_{-\mathsf{A}_{v_2}}\mathbf{1}\otimes \mathbf L_{-A_{v_2}}\phi_{v_2},\Psi_{-\mathsf{A}_{v_3}}\mathbf{1}\otimes \mathbf L_{-A_{v_3}}\phi_{v_3})\\
 &\times\prod_{v\in V_\R}\hat{\rho}_{f_v}^{(\eta_v)}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1}\otimes \mathbf L_{-A_{v_1}}\phi_{v_1},\Psi_{-\mathsf{A}_{v_2}} u^{\mathsf{a_{v_2}}}\otimes\mathbb L_{-A_{v_2}}w_{v_2}^{\alpha_{v_2}},\Psi_{-\mathsf{A}_{v_3}} u^{\mathsf{a_{v_3}}}\otimes\mathbb L_{-A_{v_3}}w_{v_3}^{\alpha_{v_3}})
 \fe
@@ -235,10 +235,10 @@ where $\Psi_{-\mathsf{A}}$ denotes a chain of fermion creation operators $\psi_{
 &(-1)^{\mathsf{A}_{v_1}+\mathsf{A}_{v_2}+\mathsf{A}_{v_3}} = 1,\quad v\in V_{\NS}\\
 &(-1)^{\mathsf{A}_{v_1}+\mathsf{A}_{v_2}+\mathsf{A}_{v_3}+\mathsf{a}_{v_2}+\mathsf{a}_{v_3}} = 1,\quad v\in V_{\R},
 \fe
-in addition to \eqref{selection}. $\epsilon$ and $\epsilon'$ denote the Grassmann parity of the $\mathsf{SCA}$ and the fermion part of the corresponding descendant, respectively. The enlarged Gram matrices are given by
+in addition to \eqref{selection}. $\epsilon$ and $\epsilon'$ denote the Grassmann parity of the $\mathsf{SCA}$ and the fermion part of the corresponding descendant, respectively. The fermion Gram matrices are given by
 \ie
-(\mathbf{G}_{h})_{\mathsf{A}A,\mathsf{B}B} &= \langle \langle \Psi_{-\mathsf{A}}\mathbf{1}\otimes \mathbf{L}_{-A}\phi_h|\Psi_{-\mathsf{B}}\mathbf{1}\otimes \mathbf{L}_{-B}\phi_h \rangle,\\
-(\mathbb{G}_{\beta})_{\mathsf{A}\mathsf{a}A\alpha,\mathsf{Bb}B\gamma} &= \langle \langle \Psi_{-\mathsf{A}}u^{\mathsf{a}}\otimes \mathbb{L}_{-A}w_\beta^\alpha|\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w_\beta^\gamma \rangle.
+(\mathbf{G}_{\F})_{\mathsf{A}\mathsf{B}} &= \langle \langle \Psi_{-\mathsf{A}}\mathbf{1}|\Psi_{-\mathsf{B}}\mathbf{1}\rangle,\\
+(\mathbb{G}_{\F})_{\mathsf{Aa},\mathsf{Bb}} &= \langle \langle \Psi_{-\mathsf{A}}u^{\mathsf{a}}|\Psi_{-\mathsf{B}}u^{\mathsf{b}}\rangle.
 \fe
 The enlarged 3-point functions $\hat{\rho}_a, \hat{\rho}_f^{(\eta)}$ are defined using the product of the fermion 3-point function and the normalized 3-point functions as
 \ie 
@@ -267,14 +267,13 @@ This enlarged block $\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}$ can be 
 where we view the blocks as formal series in $q_e, \eta_e$, and the convolution $\star_{\hat{\Gamma}}$ acts on monomials as
 \ie \label{conv}
 &\left(\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right)\star_{\hat{\Gamma}}\left(\prod_e q_e^{s_e}\eta_e^{\epsilon'_e}\right)\\
-&\qquad \qquad = (-1)^{K(\epsilon+\epsilon')-K(\epsilon)-K(\epsilon')+\sum_e\epsilon_e \epsilon_e'+\sum_v(\epsilon_{v,1}\epsilon'_{v,1}+\epsilon_{v,2}\epsilon'_{v,3})}
+&\qquad \qquad = (-1)^{K_\Gamma(\epsilon+\epsilon')-K_\Gamma(\epsilon)-K_\Gamma(\epsilon')+\sum_e\epsilon_e \epsilon_e'+\sum_v(\epsilon_{v,1}\epsilon'_{v,1}+\epsilon_{v,2}\epsilon'_{v,3})}
  \prod_e q_e^{r_e+s_e}\eta_e^{\epsilon_e+\epsilon'_e},
 \fe
 while the free fermion block $\mathbf{F}_{\mathsf{F}}$ is defined as
 \ie
-\mathbf{F}^{\mathsf{F}}_{\hat{\Gamma}} &= \sum_{\{\mathsf{A,a}\}} (-1)^{K_\Gamma(\epsilon')} \prod_{e\in E_\NS\cup E_\R} q_e^{|\mathsf{A}_{e_1}|}(-\eta_e)^{\epsilon_e'}\\
-&\times \prod_{v\in V_\NS} \rho_{\mathsf{F}}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1},\Psi_{-\mathsf{A}_{v_2}}\mathbf{1},\Psi_{-\mathsf{A}_{v_3}}\mathbf{1})\\
-&\times \prod_{v\in V_\R} \rho_{\mathsf{F}}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1},\Psi_{-\mathsf{A}_{v_2}}u^{\mathsf{a}_{v_2}},\Psi_{-\mathsf{A}_{v_3}}u^{\mathsf{a}_{v_3}}).
+\mathbf{F}^{\mathsf{F}}_{\hat{\Gamma}} &= \sum_{\{\mathsf{A,a}\}} (-1)^{K_\Gamma(\epsilon')} \prod_{e\in E_\NS\cup E_\R} q_e^{|\mathsf{A}_{e_1}|}\eta_e^{\epsilon_e'}\prod_{e\in E_{\NS}}\mathbf{G}_{\F}^{\mathsf{A}_{e_1}\mathsf{A}_{e_2}}\prod_{e\in E_{\R}}\mathbb{G}_{\beta_e}^{\mathsf{A}_{e_1}\mathsf{a}_{e_1},\mathsf{A}_{e_2}\mathsf{a}_{e_2}}\\
+&\times \prod_{v\in V_\NS} \rho_{\mathsf{F}}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1},\Psi_{-\mathsf{A}_{v_2}}\mathbf{1},\Psi_{-\mathsf{A}_{v_3}}\mathbf{1})\prod_{v\in V_\R} \rho_{\mathsf{F}}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1},\Psi_{-\mathsf{A}_{v_2}}u^{\mathsf{a}_{v_2}},\Psi_{-\mathsf{A}_{v_3}}u^{\mathsf{a}_{v_3}}).
 \fe
 
 As is, the enlarged block $\hat{\mathbf{F}}^{(\eta, \eta')}_f$ vanishes whenever the vertex signs $\eta_v$ around a closed Ramond loop $C\subset \hat{\Gamma}$ have product
@@ -285,7 +284,7 @@ We call such a loop an odd Ramond loop, and the algorithm for computing supercon
 
 The enlarged block can also be computed using the basis $L_{-A}^{(1)}L_{-B}^{(2)}v_n$ for $\mathcal{M}_{\NS}(h)$ and $L_{-A}^{(1)}L_{-B}^{(2)}v_n^\alpha$ for $\mathcal{M}_{\R}(\beta)$. This leads to the following decomposition of $\widehat{\mathbf{F}}_{\hat{\Gamma}}^{\{f, \eta, a\}}$:
 \ie
-\widehat{\mathbf{F}}_{\hat{\Gamma}}^{\{f, \eta, a\}} &= \sum_{\{n,\alpha\}} (-1)^{K(\epsilon)} \prod_{e\in E_\NS} q_e^{2n_e^2}\eta_e^{2n_e} \prod_{e\in E_\R} q_e^{2n_e^2-\frac{1}{8}}\eta_e^{\alpha_e}\\
+\widehat{\mathbf{F}}_{\hat{\Gamma}}^{\{f, \eta, a\}} &= \sum_{\{n,\alpha\}} (-1)^{K_{\Gamma}(\epsilon)} \prod_{e\in E_\NS} q_e^{2n_e^2}\eta_e^{2n_e} \prod_{e\in E_\R} q_e^{2n_e^2-\frac{1}{8}}\eta_e^{\alpha_e}\\
 &\times \prod_{i=1}^2 F_{\Gamma}(h_{e,n_e}^{(i)}, c^{(i)}) \prod_{v\in V_\NS} \mathbf{B}_{a_v}(n_{v_1},n_{v_2},n_{v_3})\\
 &\times \prod_{v\in V_\R} \mathbb{B}_{f_v}^{(\eta_v)}(n_{v_1},n_{v_2},n_{v_3},\alpha_{v_2},\alpha_{v_3}),\\
 \fe
@@ -338,11 +337,12 @@ On each new sphere $w$, we insert the operator $\Theta \psi$ at $w=1$, where the
 \fe
 and it anticommutes with $\psi_r, G_r$ while commuting with $L_n$. The new enlarged block $\hat{\mathbf{F}}^{(f,\eta,a)}_f[\Theta\psi]$ is defined to be
 \ie 
-\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi] &= \sum_{\{A,\alpha,\mathsf{A},\mathsf{a}\}} (-1)^{K_\Gamma(\epsilon+\epsilon')} \prod_{e\in E_\NS\cup (E_\R\backslash E_\mathrm{split})} q_e^{|A_{e_1}|+|\mathsf{A}_{e_1}|}\eta_e^{\epsilon_e+\epsilon_e'}(-1)^{\epsilon_e'} \\
-&\times \prod_{e\in E_\NS} \mathbf{G}_{h_e}^{A_{e_1}A_{e_2}} \prod_{e\in E_\R\backslash E_\mathrm{split}} \mathbb{G}_{\beta_e}^{A_{e_1}\alpha_{e_1},A_{e_2}\alpha_{e_2}}\\
+\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi] &= \sum_{\{A,\alpha,\mathsf{A},\mathsf{a}\}} (-1)^{K_{\Gamma_{\mathrm{split}}}(\epsilon+\epsilon')} \prod_{e\in E_\NS\cup (E_\R\backslash E_\mathrm{split})} q_e^{|A_{e_1}|+|\mathsf{A}_{e_1}|}\eta_e^{\epsilon_e+\epsilon_e'} (-1)^{\epsilon_e\epsilon_e'}\\
+&\times \prod_{e\in E_\NS} \mathbf{G}_{\F}^{\mathsf{A}_{e_1}\mathsf{A}_{e_2}}  \mathbf{G}_{h_e}^{A_{e_1}A_{e_2}} \prod_{e\in E_\R \backslash E_{\mathrm{split}}} \mathbb{G}_{\F}^{\mathsf{A}_{e_1}\mathsf{a}_{e_1},\mathsf{A}_{e_2}\mathsf{a}_{e_2}} \mathbb{G}_{\beta_e}^{A_{e_1}\alpha_{e_1},A_{e_2}\alpha_{e_2}}\\
 &\times \prod_{v \in V_\NS} \hat{\rho}_{a_v}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1}\otimes \mathbf L_{-A_{v_1}}\phi_{v_1},\Psi_{-\mathsf{A}_{v_2}}\mathbf{1}\otimes \mathbf L_{-A_{v_2}}\phi_{v_2},\Psi_{-\mathsf{A}_{v_3}}\mathbf{1}\otimes \mathbf L_{-A_{v_3}}\phi_{v_3})\\
 &\times\prod_{v\in V_\R}\hat{\rho}_{f_v}^{(\eta_v)}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1}\otimes \mathbf L_{-A_{v_1}}\phi_{v_1},\Psi_{-\mathsf{A}_{v_2}} u^{\mathsf{a_{v_2}}}\otimes\mathbb L_{-A_{v_2}}w_{v_2}^{\alpha_{v_2}},\Psi_{-\mathsf{A}_{v_3}} u^{\mathsf{a_{v_3}}}\otimes\mathbb L_{-A_{v_3}}w_{v_3}^{\alpha_{v_3}})\\
-&\times \prod_{e\in E_\mathrm{split}} q_{e_L}^{|A_{e_1}|+|\mathsf{A}_{e_1}|}q_{e_R}^{|A_{e_2}|+|\mathsf{A}_{e_2}|}\eta_e^{\epsilon_e+\epsilon_e'}\mathbb{G}^{A_{e_1}\alpha_{e_1}, A_{e_L}\alpha_{e_L}}_{\beta_e}\mathbb{G}^{A_{e_R}\alpha_{e_R}, A_{e_2}\alpha_{e_2}}_{\beta_e}\\
+&\times \prod_{e\in E_\mathrm{split}} q_{e_L}^{|A_{e_1}|+|\mathsf{A}_{e_1}|}q_{e_R}^{|A_{e_2}|+|\mathsf{A}_{e_2}|}(\eta_{e_L}\eta_{e_R})^{\epsilon_e+\epsilon_e'}\\
+&\qquad \qquad \times \mathbb{G}_{\F}^{\mathsf{A}_{e_1}\mathsf{a}_{e_1},\mathsf{A}_{e_L}\mathsf{a}_{e_L}} \mathbb{G}_{\beta_e}^{A_{e_1}\alpha_{e_1},A_{e_L}\alpha_{e_L}}\mathbb{G}_{\F}^{\mathsf{A}_{e_R}\mathsf{a}_{e_R},\mathsf{A}_{e_2}\mathsf{a}_{e_2}} \mathbb{G}_{\beta_e}^{A_{e_R}\alpha_{e_R},A_{e_2}\alpha_{e_2}}\\
 &\qquad \qquad \times \langle \langle \Psi_{-\mathsf{A}_{e_2}}u^{\mathsf{a}_{e_2}}\otimes \mathbb{L}_{-A_{e_R}}w^{\alpha_{e_R}}_{e_R}|\Theta \psi(1)|\Psi_{-\mathsf{A}_{e_1}}u^{\mathsf{a}_{e_1}}\otimes \mathbb{L}_{-A_{e_L}}w^{\alpha_{e_L}}_{e_L}\rangle,
 \fe
 where the sum is over all displayed labels, subject to \eqref{selection} and \eqref{Fselection}, except that the fermion labels $\mathsf{A}_{e_1}$, $\mathsf{A}_{e_2}$ and $\mathsf{a}_{e_1}$, $\mathsf{a}_{e_2}$ on a split edge may differ due to the $\psi(1)$ insertion. Their combined parities are constrained to be the same, namely
@@ -358,9 +358,9 @@ where the convolution is defined from the unsplitted channel $\hat{\Gamma}$, and
 
 On the other hand, since the operator $\psi$ is proportional to $v_{1/2}(P)$ with Liouville momentum $P=\frac{Q}{2}$, and the operator $\Theta$ commutes with the two copies of Virasoro algebras, one can decompose $\widehat{\mathbf{F}}_f^{(\eta, \eta')}[\Theta \psi]$ into Virasoro blocks as
  \ie
-\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi]&= \sum_{\{n,\alpha\}} (-1)^{K_{\hat{\Gamma}_{\mathrm{split}}}(\epsilon)} \prod_{e\in E_\NS} q_e^{2n_e^2}\eta_e^{2n_e} \prod_{e\in E_\R\backslash E_\mathrm{split}} q_e^{2n_e^2-\frac{1}{8}}\eta_e^{\alpha_e}\\
+\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi]&= \sum_{\{n,\alpha\}} (-1)^{K_{{\Gamma}_{\mathrm{split}}}(\epsilon)} \prod_{e\in E_\NS} q_e^{2n_e^2}\eta_e^{2n_e} \prod_{e\in E_\R\backslash E_\mathrm{split}} q_e^{2n_e^2-\frac{1}{8}}\eta_e^{\alpha_e}\\
 &\times \prod_{e\in E_\mathrm{split}} q_{e_L}^{2n_{e_L}^2-\frac{1}{8}}q_{e_R}^{2n_{e_R}^2-\frac{1}{8}} \eta_e^{\alpha_e}\ \mathbb{S}(n_{e_R}, n_{e_L}, \alpha_e)\\
-&\times \prod_{i=1}^2 F_{\Gamma'}(h_{e, n_e}^{(i)},h_\psi^{(1)}, c^{(i)}) \prod_{v\in V_\NS} \mathbf{B}_{a_v}(n_{v_1},n_{v_2},n_{v_3})\\
+&\times \prod_{i=1}^2 F_{\Gamma'}(h_{e, n_e}^{(i)},h_\psi^{(i)}, c^{(i)}) \prod_{v\in V_\NS} \mathbf{B}_{a_v}(n_{v_1},n_{v_2},n_{v_3})\\
 &\times \prod_{v\in V_\R} \mathbb{B}_{f_v}^{(\eta_v)}(n_{v_1},n_{v_2},n_{v_3},\alpha_{v_2},\alpha_{v_3}),
 \fe   
 where $F_{\Gamma'}(h_{e}^{(i)},h_\psi^{(i)}, c^{(i)})$ stands for Virasoro conformal blocks in the new channel $\Gamma'$ with external conformal weights
@@ -564,21 +564,21 @@ and $\ell(x,0)=1$. For $m<0$, we define their $\ell(x,m)$ using the reflection f
 \fe
 The BPZ norms of the $\mathsf{Vir}\oplus \mathsf{Vir}$ primaries with $n>0$ are given by
 \ie
-\|v_n(P)\|^2 &= (-1)^{2n} 2^{2n} \frac{\ell(2P,4n)}{\ell(Q+2P, 4n)},\\
-\|v_n^0\|^2&=2^{2\lfloor M/2\rfloor+1}
+\|v_n(P)\|^2 &= i^{2n\text{ mod }2}(-1)^{2n} 2^{2n} \frac{\ell(2P,4n)}{\ell(Q+2P, 4n)},\\
+\|v_n^0(P)\|^2&=2^{2\lfloor M/2\rfloor+1}
                \frac{\ell(2P,4n)}{\ell(Q+2P,4n)},\\
- \|v_n^1\|^2&=-2^{2\lceil M/2\rceil}
+ \|v_n^1(P)\|^2&=-i2^{2\lceil M/2\rceil}
                \frac{\ell(2P,4n)}{\ell(Q+2P,4n)},
 \fe
 where $M = 2n-\frac{1}{2}$. For the norms of the $\mathsf{Vir}\oplus \mathsf{Vir}$ primaries with $n<0$, one replace $P$ with $-P$, $n$ with $-n$ and use the formula above.
 
 The (NS, NS, NS) branching coeffieient is also fixed in \cite{Hadasz:2013dza} using the free field representation. In our convention, their result reads
 \ie
-\mathbf{B}_a&(n_1, n_2, n_3) = \frac{(-1)^{2n_3}(-i)^a}{\prod_{i=1}^3\sqrt{\ell(2P_i, 4n_i)\ell(Q+2P_i, 4n_i)}}\\
+\mathbf{B}_a&(n_1, n_2, n_3) = \frac{(-1)^{2n_3}(-i)^ae^{\frac{i\pi}{4}(\epsilon_1-\epsilon_2-\epsilon_3)}}{\prod_{i=1}^3\sqrt{\ell(2P_i, 4n_i)\ell(Q+2P_i, 4n_i)}}\\
 &\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2+P_3, 2(n_1+n_2+n_3)\right)\ell\left(\tfrac{Q}{2}-P_1+P_2+P_3, 2(-n_1+n_2+n_3)\right)\\
-&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2-P_3, 2(n_1+n_2-n_3)\right) \ell\left(\tfrac{Q}{2}-P_1+P_2-P_3, 2(-n_1+n_2-n_3)\right).
+&\quad \times \ell\left(\tfrac{Q}{2}+P_1+P_2-P_3, 2(n_1+n_2-n_3)\right) \ell\left(\tfrac{Q}{2}-P_1+P_2-P_3, 2(-n_1+n_2-n_3)\right),
 \fe
-In the code, we used this formula directly for the (NS, NS, NS) branching coeffieient, while the (NS, R, R) ones are obtained from the $L_1$ Ward identities.
+where $\epsilon_i = 2n_i$ mod 2. In the code, we used this formula directly for the (NS, NS, NS) branching coeffieient, while the (NS, R, R) ones are obtained from the $L_1$ Ward identities.
 
 \section{The cross-channel test}
 
