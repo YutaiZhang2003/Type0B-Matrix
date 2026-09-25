@@ -1,11 +1,12 @@
 #pragma once
 #include "branching.hpp"
 #include "schottky.hpp"
+#include "theta_bpz.hpp"
 #include <iostream>
 namespace ramond {
 struct Settings {
     int level = 3, dps = 0, p = 0, f = 0, eta = 1;
-    bool inserted = true, record_sector = false, box = false;
+    bool inserted = true, record_sector = false, box = false, native_bpz = false;
     std::string b = "7/5";
     std::array<std::string, 3> momenta{"11/23", "13/29", "17/31"};
 };
@@ -45,13 +46,20 @@ inline std::vector<Index> physical_indices(int cutoff, bool box = false) {
 }
 template <class S>
 ParitySeries<S> recover(ParitySeries<S> numerator, const ParitySeries<S> &auxiliary, int cutoff,
-                        bool inserted, bool record, double &maximum, bool box = false) {
+                        bool inserted, bool record, double &maximum, bool box = false,
+                        bool native_bpz = false) {
     // Triangular star division in the recoverable parity sector. This is a
     // restricted inverse, not an inverse of the auxiliary in the full algebra.
     auto constant = auxiliary.find(Index{});
     require(constant != auxiliary.end(), "auxiliary constant is missing");
     const auto &ground = constant->second;
     int sigma = inserted ? -1 : 1;
+    if (native_bpz) sigma = -sigma;
+    auto product_sign = [&](int a, int p) {
+        int result = star_sign(a, p);
+        if (native_bpz) result *= sign(__builtin_popcount(unsigned(a & p)));
+        return result;
+    };
     require(ground[0] != S(0), "auxiliary constant vanishes");
     for (int i = 0; i < 8; i++) {
         S expected = i == 0 ? ground[0] : i == 6 ? S(sigma) * ground[0] : S(0);
@@ -78,7 +86,7 @@ ParitySeries<S> recover(ParitySeries<S> numerator, const ParitySeries<S> &auxili
         std::array<S, 8> projected;
         double error = 0, scale = 1;
         for (int i = 0; i < 8; i++) {
-            projected[i] = (row[i] + S(sigma * star_sign(6, i ^ 6)) * row[i ^ 6]) / S(2);
+            projected[i] = (row[i] + S(sigma * product_sign(6, i ^ 6)) * row[i ^ 6]) / S(2);
             require(finite(row[i]), "nonfinite recovered coefficient");
             error = std::max(error, magnitude(row[i] - projected[i]));
             scale = std::max(scale, magnitude(row[i]));
@@ -100,7 +108,7 @@ ParitySeries<S> recover(ParitySeries<S> numerator, const ParitySeries<S> &auxili
                 if (a[i] != S(0))
                     for (int j = 0; j < 8; j++)
                         if (row[j] != S(0))
-                            future[i ^ j] -= S(star_sign(i, j)) * a[i] * row[j];
+                            future[i ^ j] -= S(product_sign(i, j)) * a[i] * row[j];
         }
     }
     return answer;
@@ -190,6 +198,8 @@ template <class S> Result<S> pipeline(const Settings &settings) {
                     // Product BPZ sewing: the vertex already obeys both
                     // Virasoro Ward identities, with no extra NS weight.
                     factor *= S(theta_sign(index));
+                    if (settings.native_bpz)
+                        factor *= theta_bpz_weight<S>(index);
                     factor /= denominator;
                     factors[alpha] = {index, factor};
                 }
@@ -266,10 +276,15 @@ template <class S> Result<S> pipeline(const Settings &settings) {
     std::cerr << "numerator complete: " << result.branch_cases << " branches, "
               << result.timing.ccy << " s CCY; computing auxiliary and recovery\n";
     result.auxiliary = numerical_fermion(level, settings.inserted, q, false, settings.box);
+    if (settings.native_bpz)
+        for (auto &[key, row] : result.auxiliary)
+            for (int epsilon = 0; epsilon < 8; epsilon++)
+                row[epsilon] *= theta_bpz_weight<S>(epsilon);
     result.timing.auxiliary = seconds() - tick;
     tick = seconds();
     auto quotient = recover(result.numerator, result.auxiliary, cutoff, settings.inserted,
-                            settings.record_sector, result.sector_residual, settings.box);
+                            settings.record_sector, result.sector_residual, settings.box,
+                            settings.native_bpz);
     result.timing.division = seconds() - tick;
     tick = seconds();
     SeriesDomain vacuum_domain = settings.box ? SeriesDomain(Index{level, level, level, 0})
@@ -290,6 +305,12 @@ template <class S> Result<S> pipeline(const Settings &settings) {
             }
     }
     result.timing.restoration = seconds() - tick;
+    // The convolution uses the oscillator pairing internally; the reported
+    // block uses the BPZ sewing convention of the theta state sum.
+    if (!settings.native_bpz)
+        for (auto &[key, row] : result.physical)
+            for (int epsilon = 0; epsilon < 8; epsilon++)
+                row[epsilon] *= theta_bpz_weight<S>(epsilon);
     result.timing.total = seconds() - start;
     return result;
 }
@@ -333,7 +354,7 @@ template <class S> void encode_result(std::ostream &out, const Settings &s, cons
         << (s.inserted ? -s.eta : s.eta) << "],\"sector_policy\":\""
         << (s.record_sector ? "record" : "error")
         << "\",\"branching_method\":\"stored_recursion\""
-        << ",\"conventions\":\"product_bpz_residue_2026-09-22\""
+        << ",\"conventions\":\"ordered_yutai_bpz_sewing_2026-09-25\""
         << ",\"exponent_convention\":\"q1^(a/2) q2^l q3^(d/2), stored as "
            "(a,l,l,d)\",\"timing_seconds\":{\"branching\":"
         << t.branching << ",\"actions\":" << t.actions << ",\"outer_ward\":" << t.outer_ward

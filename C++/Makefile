@@ -25,10 +25,23 @@ bin/partition_blocks: tests/partition_blocks.cpp $(GRAPH_HEADERS) $(HEADERS)
 bin/partition_bpz: tests/partition_bpz.cpp $(GRAPH_HEADERS) $(HEADERS)
 	@mkdir -p bin
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
-check-partition: bin/partition_sewing bin/partition_blocks bin/partition_bpz
+bin/bpz_one_over_z_ward: tests/bpz_one_over_z_ward.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/bpz_one_over_z_tensor: tests/bpz_one_over_z_tensor.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/torus_open_bpz_probe: tools/torus_open_bpz_probe.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+check-yutai-torus: bin/torus_open_bpz_probe
+	$(PYTHON) tools/check_yutai_torus_open_bpz.py
+check-partition: bin/partition_sewing bin/partition_blocks bin/partition_bpz bin/bpz_one_over_z_ward bin/bpz_one_over_z_tensor
 	bin/partition_sewing
 	bin/partition_blocks
 	bin/partition_bpz
+	bin/bpz_one_over_z_ward
+	bin/bpz_one_over_z_tensor
 bin/partition: drivers/partition_main.cpp $(GRAPH_HEADERS) $(HEADERS)
 	@mkdir -p bin
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
@@ -46,6 +59,18 @@ bin/graph_schottky: tests/graph_schottky.cpp $(GRAPH_HEADERS) $(HEADERS)
 check-graph-schottky: bin/graph_schottky
 	bin/graph_schottky
 bin/pbw: drivers/pbw_main.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/auxiliary_dump: tools/auxiliary_dump.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/sphere_mixed_ns_probe: tools/sphere_mixed_ns_probe.cpp $(GRAPH_HEADERS) $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/sphere_mixed_r_probe: tools/sphere_mixed_r_probe.cpp $(HEADERS)
+	@mkdir -p bin
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
+bin/sphere_rrrr_probe: tools/sphere_rrrr_probe.cpp $(HEADERS)
 	@mkdir -p bin
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@
 bin/ramond_resummed: tools/resummed_main.cpp $(HEADERS)
@@ -86,4 +111,4 @@ check-branching: bin/outer_ward_driver bin/second_ward_actions
 	bin/outer_ward_driver 5 40 0
 	bin/outer_ward_driver 5 40 0 1
 	bin/outer_ward_driver 5 0 0 1
-.PHONY: all section6 partition check-partition clean check check-saved check-pbw check-branching check-resummed check-ns-forward check-graph-schottky
+.PHONY: all section6 partition check-partition check-yutai-torus clean check check-saved check-pbw check-branching check-resummed check-ns-forward check-graph-schottky

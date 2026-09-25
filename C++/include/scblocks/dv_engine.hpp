@@ -35,7 +35,7 @@ struct Setup {
                     c.f = {__builtin_popcount(unsigned(fm)) % 2, fm & 1, (fm >> 1) & 1,
                            (fm >> 2) & 1};
                     c.eta = {1, sign(signs & 1), sign((signs >> 1) & 1), sign((signs >> 2) & 1)};
-                    if (sign(c.f[0]) * c.eta[1] * c.eta[2] * c.eta[3] < 0)
+                    if (c.eta[1] * c.eta[2] * c.eta[3] * sign(c.f[1]+c.f[2]+c.f[3]) < 0)
                         c.marked = {3};
                     cases.push_back(c);
                 }
@@ -51,7 +51,7 @@ struct Setup {
                     for (int b = 0; b < (r[2] ? 2 : 1); b++) {
                         Case c{{f, f}, {sign(a), sign(b)}, {}};
                         for (int i = 0; i < 2; i++)
-                            if (r[i + 1] && sign(f) * c.eta[i] < 0)
+                            if (r[i + 1] && c.eta[i] * sign(c.f[i]) < 0)
                                 c.marked.push_back(i + 1);
                         cases.push_back(c);
                     }
@@ -66,6 +66,24 @@ struct Setup {
                    : int(r[1]) + int(r[2]);
     }
 };
+// The oscillator branching frame and the ordered NS--R--R Ward frame differ
+// on slots 1 and 2 of an odd-form vertex. Collect those local parity changes
+// on each sewn edge; the resulting mask converts parity rows in either
+// direction because every factor is a sign.
+inline int ordered_frame_mask(const Setup &setup, const Case &c) {
+    int mask = 0;
+    for (int v = 0; v < int(setup.graph.slots.size()); v++) {
+        if (!setup.r[setup.graph.slots[v][1]] || !c.f[v])
+            continue;
+        for (int slot = 0; slot < 2; slot++)
+            mask ^= 1 << setup.graph.slots[v][slot];
+    }
+    return mask;
+}
+inline void transport_ordered_frame(Row &row, int frame_mask) {
+    for (auto &[parity, value] : row)
+        value *= S(sign(__builtin_popcount(unsigned(parity & frame_mask))));
+}
 inline S getrow(const Row &r, int k) {
     auto it = r.find(k);
     return it == r.end() ? S(0) : it->second;
@@ -163,6 +181,7 @@ struct EdgeData {
 class Sewing {
     const Setup &setup;
     bool fermion;
+    bool native_bpz;
     ScaWords<S> w;
     S b, q;
     std::vector<std::unique_ptr<ScaModule<S>>> gm, wm;
@@ -173,6 +192,26 @@ class Sewing {
     std::vector<std::unique_ptr<NSWard<S>>> nw;
     FermionForm ff;
     int nextid = 0;
+    S geometric_inner(int edge_number,int left,int right) {
+        const auto &word=w.words[left/2].word;
+        int odd=0;
+        std::map<int,S> current{{right,S(1)}};
+        for(auto mode:word) {
+            odd+=mode.kind;
+            std::map<int,S> next;
+            for(const auto &[state,outer]:current)
+                for(const auto &[target,value]:
+                    wm[edge_number]->act(mode.kind,-mode.twice,state))
+                    pbw_add(next,target,outer*value);
+            current=std::move(next);
+        }
+        auto found=current.find(left%2);
+        if(found==current.end())return S(0);
+        int ground_parity=setup.r[edge_number]?left%2:0;
+        return found->second*S(setup.r[edge_number]&&left%2?-1:1)
+            *S(sign(odd*ground_parity+odd*(odd-1)/2))
+            *power(S(Machine(0,1)),odd);
+    }
     const EdgeData &edge(int e, int l, int p) {
         auto key = std::array<int, 3>{e, l, p};
         auto old = edge_cache.find(key);
@@ -204,11 +243,14 @@ class Sewing {
         out.inverse = Matrix(n, n);
         if (fermion) {
             for (int j = 0; j < n; j++)
-                out.inverse(j, j) = S(sign(p));
+                out.inverse(j, j) = S(sign(p)) *
+                    (native_bpz && p ? S(Machine(0,-1)) : S(1));
         } else {
             for (int i = 0; i < n; i++)
                 for (int j = 0; j < n; j++)
-                    out.inverse(i, j) = gm[e]->inner(out.states[i].pbw, out.states[j].pbw);
+                    out.inverse(i, j) = native_bpz
+                        ? geometric_inner(e,out.states[i].pbw,out.states[j].pbw)
+                        : gm[e]->inner(out.states[i].pbw,out.states[j].pbw);
             if (n)
                 out.inverse.x = pbw_inverse(std::move(out.inverse.x), n);
         }
@@ -268,14 +310,22 @@ class Sewing {
                                                                      wm[e[2]].get()},
                                        0, f, eta))
                          .first;
-            ans = power((S(-1) + S(Machine(0, 1))) / root(S(2)), b.pbw % 2 + c.pbw % 2) *
+            ans = (native_bpz ? S(1)
+                   : power((S(-1) + S(Machine(0, 1))) / root(S(2)),
+                           b.pbw % 2 + c.pbw % 2)) *
                   it->second->value({a.pbw, b.pbw, c.pbw});
+        }
+        if (native_bpz) {
+            int parity = fermion ? aux_parity(setup.r[e[0]], a.aux)
+                                 : (w.words[a.pbw/2].parity+a.pbw%2)%2;
+            if (parity) ans *= S(Machine(0,1));
         }
         return vertex_cache.emplace(key, ans).first->second;
     }
 
   public:
-    Sewing(const Setup &s, bool ff) : setup(s), fermion(ff), b(s.b), q(b + S(1) / b) {
+    Sewing(const Setup &s, bool ff, bool bpz=false)
+        : setup(s), fermion(ff), native_bpz(bpz), b(s.b), q(b + S(1) / b) {
         S central = rational<S>(3, 2) + S(3) * q * q;
         for (int e = 0; e < s.graph.edges; e++) {
             S h = q * q / S(8) - s.p[e] * s.p[e] / S(2) + (s.r[e] ? rational<S>(1, 16) : S(0));

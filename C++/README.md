@@ -8,9 +8,8 @@ The consolidated Section 6 interfaces, graph algorithms, explicit cutoff policy
 and reproducible comparisons are documented in [SECTION6.md](SECTION6.md).
 Build them with `make -C C++ section6`. The partition-function comparison and
 fresh native computations are in [PARTITION.md](PARTITION.md). The current
-driver uses the paper's literal blocks. Its diagonal all-NS sum is a
-correct formal factorization of the Human Note's state sum, while its
-geometric spin-lift identification remains to be verified. The former
+driver uses the blocks returned by the theta algorithms with BPZ sewing
+included and compares each transported spin separately. The former
 factor-four discrepancy was an extra half at each NSRR vertex; its resolution
 from the actual Liouville identity residue is derived in
 [PARTITION_NORMALIZATION.md](PARTITION_NORMALIZATION.md).
@@ -31,13 +30,15 @@ are implemented:
 | `ordinary` | `(eta, eta)` | Ordinary theta double-Virasoro sum and restricted fermion inverse |
 | `inserted` | `(eta, -eta)` | Theta v_(1/2) insertion, diagonal target sum, and fermion convolution |
 
-The production convention uses bilinear product BPZ pairings, the explicit
-Ramond contour branch, and a single middle-to-ket operator-moving sign in the
-enlarged vertex. Its definitions and fresh independent PBW checks are in
-[the convention notes](experiments/coherent_conventions_2026-09-22/README.md).
-Results contain `conventions: product_bpz_residue_2026-09-22`; archived output
-without this field predates the migration. Branching caches remain local to a
-fresh run. The manuscript has not been changed to adopt these conventions.
+The production convention uses the computational bilinear pairing, the
+ordered Ramond Ward form and its explicit contour branch, the local
+branching-frame sign, and BPZ sewing in the returned theta block. Its definitions are in
+[the machine notes](../Machine%20Notes/arbitrary_plumbing_superconformal_blocks.tex);
+the directed PBW checks are run by `tools/section6.py`.
+Results contain `conventions: ordered_yutai_bpz_sewing_2026-09-25`; archived output
+with the prior label predates the migration. Branching caches remain local to a
+fresh run. The machine notes specify these conventions; the paper drafts
+were not edited in this work.
 
 The native numerical cores require no Python. Optional Python tools launch
 benchmarks and compare saved results. Python numerical implementations,

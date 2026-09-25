@@ -1,5 +1,12 @@
 # BRY Convention and Duality Ledger
 
+This ledger fixes physical Type 0B amplitude and matrix-model
+normalizations. For the **current chiral superconformal-block BPZ and
+sewing convention**, use AGENTS.md in the repository root and
+Machine Notes/bpz_one_over_z_sewing_2026-09-25.tex. The
+BRY-to-Human-Note sewing dictionary in Section 4.1 below predates
+that BPZ convention and must be rechecked in its frame before reuse.
+
 The master convention for this target is Balthazar--Rodriguez--Yin (BRY),
 [arXiv:2201.05621](https://arxiv.org/abs/2201.05621), especially sections
 2--4. Their paper fixes the on-shell worldsheet states, super-Liouville

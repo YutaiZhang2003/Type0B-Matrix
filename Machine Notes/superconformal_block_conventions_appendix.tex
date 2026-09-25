@@ -1,21 +1,18 @@
 % Included by arbitrary_plumbing_superconformal_blocks.tex.
-% Current production conventions; written as material for the PRL supplement.
+% Current BPZ and plumbing convention.
 \section{Conventions and reproduction of the calculation}
 \label{app:conventions}
 
-This appendix supplements the paper's definitions with the conventions
+This appendix supplements the block definitions above with the conventions
 and numerical details needed to reproduce the calculation. We use the
-PBW states and physical three-point normalizations of its Sec.~2,
-the double-Virasoro embedding of Sec.~3, and the enlarged vertices,
-sewing, and convolution of Secs.~4--5. The oscillator realization and
-reflection rules are those of its Appendix~A. We refer to these formulas
-below rather than repeat them; references to ``the paper'' mean
-\path{draft-long/scblock_long.tex}.
+PBW states and physical three-point normalizations of the long
+paper, but every pairing and descendant form uses the single BPZ
+convention fixed below. The algebraic double-Virasoro embedding,
+oscillator realization, and reflection rules are unchanged.
 
 The remaining choices specify the bilinear pairing, contour branches,
-primary scales used by the code, and numerical evaluation. They apply
-to both ordinary and inserted blocks, in the current
-\texttt{product\_bpz\_residue\_2026-09-22} convention.
+primary scales used by the code, and numerical evaluation. They
+apply to both ordinary and inserted blocks in the $1/z$ BPZ convention.
 ``Norm'' always means a bilinear BPZ pairing. Generic representation
 parameters are assumed unless a limit is specified.
 
@@ -58,37 +55,50 @@ $G_{-r}^2=L_{-2r}$ and $\psi_{-s}^2=0$.
 An operator product acts on the ground from right to left.
 For ground labels written as signs, $|+|=0$ and $|-|=1$.
 
-The adjoint is a \emph{linear}, order-reversing anti-involution:
+The BPZ transpose is \emph{linear and graded}:
 \begin{equation}
- L_n^\dagger=L_{-n},\qquad G_r^\dagger=G_{-r},\qquad
- \psi_r^\dagger=-\psi_{-r},\qquad
- (XY)^\dagger=Y^\dagger X^\dagger.
+ L_n^\dagger=L_{-n},\qquad G_r^\dagger=iG_{-r},\qquad
+ \psi_r^\dagger=-i\psi_{-r},\qquad
+ (XY)^\dagger=(-1)^{|X||Y|}Y^\dagger X^\dagger.
  \label{eq:app-adjoint}
 \end{equation}
-It does not conjugate $i$, $P$, or any other coefficient, and reversing
-the order adds no separate graded sign. Graded signs arise when the
-reversed modes are subsequently commuted. For example the bra of
-$L_{-1}G_{-1}w$ contains $G_1L_1$, not $L_1G_1$.
+It does not conjugate $i$, $P$, or any other coefficient. The
+bilinear pairing satisfies
+\begin{equation}
+ \langle\!\langle Ax|y\rangle
+ =(-1)^{|A||x|}\langle\!\langle x|A^\dagger y\rangle.
+ \label{eq:app-adjoint-pair}
+\end{equation}
+For the paper's PBW word containing $p$ supercurrents, this gives
+\begin{equation}
+ \langle\!\langle\mathbf L_{-A}g|y\rangle
+ =i^p(-1)^{p|g|+p(p-1)/2}
+ \langle\!\langle g|
+ G_{r_p}\cdots G_{r_1}L_{n_\ell}\cdots L_{n_1}y\rangle.
+ \label{eq:app-pbw-transpose}
+\end{equation}
 Adjointness of the zero modes fixes the ground metrics:
 \begin{equation}
- \mathbb G_\beta\big|_0=\operatorname{diag}(1,i),\qquad
- G_{\F,\R}\big|_0=\operatorname{diag}(1,-1).
+ \mathbb G_\beta\big|_0=\operatorname{diag}(1,-1),\qquad
+ G_{\F,\R}\big|_0=\operatorname{diag}(1,-i).
  \label{eq:app-ground-metrics}
 \end{equation}
-Indeed $e^{-i\pi/4}\langle\!\langle w^-|w^-\rangle
-=e^{i\pi/4}\langle\!\langle w^+|w^+\rangle$.
+Indeed the graded pairing gives
+$e^{-i\pi/4}\langle\!\langle w^-|w^-\rangle
+=i e^{i\pi/4}\langle\!\langle w^+|w^+\rangle$.
 All mixed ground pairings vanish. The auxiliary oscillator metric is
-diagonal with entry $(-1)^{\mathsf A+\mathsf a}$, and the same entry
-is its inverse. Set $\mathsf a=0$ in NS.
+diagonal; for a word with $m$ distinct modes and Ramond ground
+$u^{\mathsf a}$ its entry is
+$(-i)^{m+\mathsf a}(-1)^{m\mathsf a+m(m-1)/2}$.
+Its inverse is the reciprocal. Set $\mathsf a=0$ in NS.
 
-On the enlarged state space we choose the product pairing
+On the enlarged state space the pairing is graded:
 \begin{equation}
  \langle\!\langle a\otimes x|b\otimes y\rangle
- =\langle\!\langle a|b\rangle_{\F}
+ =(-1)^{|a||x|}\langle\!\langle a|b\rangle_{\F}
   \langle\!\langle x|y\rangle_{\mathsf{SCA}}.
  \label{eq:app-product-metric}
 \end{equation}
-There is no additional $(-1)^{|x||b|}$ in this definition.
 Compute a physical Gram matrix by commuting the positive modes of the
 bra through the ket using \eqref{eq:app-sca}, ending on
 \eqref{eq:app-ground-metrics}. Invert separately at each level and
@@ -96,28 +106,39 @@ parity. Upper Gram indices in the sewing formulas denote this inverse,
 including the Ramond ground metric. Multiplying its entries by another
 ground phase would count that phase twice.
 
-The oscillator and direct-PBW implementations also use a numerical
-Ramond basis whose second ground is $e^{3\pi i/4}w^-$. Its ground
-metric is $\operatorname{diag}(1,1)$ and both $G_0$ matrix elements
-are $-i\beta$. A physical three-point form on this numerical basis
-is multiplied by $e^{3\pi i/4}$ for each odd Ramond ground in its
-arguments. This is a basis conversion inside the computation, not an
-extra vertex in the physical definition. It explains how the
-unit-ground-metric PBW routines implement \eqref{eq:app-ground-metrics}.
+Some oscillator routines use a numerical Ramond basis rather than
+$w^\pm$. Any such basis change acts on both the Gram and local vertex;
+it must not be attached as an extra sewing or three-point phase.
+The BPZ-native direct-PBW path checks the returned coefficients
+without that intermediate basis conversion.
 
 \subsection{Local coordinates and spin frames}
 \label{app:local-data}
 
-The ordered punctures of the paper use local coordinates
-$(1/z,z-1,z)$. The fixed phases in their square-root coordinates are
-part of the spin frames; $\eta_e$ records the remaining sign.
+The ordered punctures use local coordinates $(1/z,z-1,z)$.
+At the first slot the BPZ inversion and its lift are
+\begin{equation}
+ I:z\mapsto1/z,\qquad \lambda_I(z)=-i/z.
+ \label{eq:app-bpz-map}
+\end{equation}
+At an edge they are
+\begin{equation}
+ I_q:z\mapsto q/z,\qquad
+ \lambda_{I_q}(z)=-i\sqrt q/z,
+ \qquad \sqrt{-1}=i.
+ \label{eq:app-edge-lift}
+\end{equation}
+The edge map is BPZ inversion followed by scaling by $q$; its
+state propagator is $q^{L_0}$ and contributes no extra phase.
+The fixed phases in the square-root coordinates are part of the
+spin frames; $\eta_e$ records the remaining sign.
 Moving punctures or permuting slots requires transporting these frames
 and the fields' conformal factors, as well as their parity signs.
 Exchanging weight labels alone is not a slot permutation.
 
 Use the physical and auxiliary ground values in the paper's Secs.~2
 and~4, respectively. Together with the Ward identities below, they fix
-all descendant forms. In particular the factors $-i\eta$ and $i$ in
+all descendant forms. In particular the factors $+i\eta$ and $i$ in
 those ground values must be kept with the stated contour branch.
 
 \subsection{Ward identities with all contour signs displayed}
@@ -160,51 +181,59 @@ $z^m(z-1)^n/\sqrt{z(z-1)}$ give, respectively,
 \begin{align}
  &\sum_{j\ge0}(-1)^j\binom{n+\frac12}{j}
  \rho_f^{(\eta)}(G_{j-m-n-\frac12}x_1,x_2,x_3)\nonumber\\
- &=\sum_{j\ge0}\binom{m+\frac12}{j}
+ &=i(-1)^{\epsilon_1}\sum_{j\ge0}\binom{m+\frac12}{j}
  \rho_f^{(\eta)}(x_1,G_{n+j}x_2,x_3)
- +i(-1)^{\epsilon_2+n}\sum_{j\ge0}(-1)^j\binom{n+\frac12}{j}
+ -(-1)^{\epsilon_1+f+\epsilon_2+n}
+       \sum_{j\ge0}(-1)^j\binom{n+\frac12}{j}
  \rho_f^{(\eta)}(x_1,x_2,G_{m+j}x_3),
  \label{eq:app-r-g-ward}\\
  &\sum_{j\ge0}(-1)^j\binom{n-\frac12}{j}
  \rho_{\F}(\psi_{j-m-n+\frac12}x_1,x_2,x_3)\nonumber\\
- &=-\sum_{j\ge0}\binom{m-\frac12}{j}
+ &=-i(-1)^{\epsilon'_1}\sum_{j\ge0}\binom{m-\frac12}{j}
  \rho_{\F}(x_1,\psi_{n+j}x_2,x_3)
- +i(-1)^{\epsilon'_2+n}\sum_{j\ge0}(-1)^j\binom{n-\frac12}{j}
+ -(-1)^{\epsilon'_1+\epsilon'_2+n}
+       \sum_{j\ge0}(-1)^j\binom{n-\frac12}{j}
  \rho_{\F}(x_1,x_2,\psi_{m+j}x_3).
  \label{eq:app-r-psi-ward}
 \end{align}
-The parities in these signs belong to the middle state passed by the
-current: $\epsilon_2$ for the physical form and $\epsilon'_2$ for
-the auxiliary form. Neither $f$ nor $\eta$ is a contour-crossing sign.
-The minus sign on the first term in \eqref{eq:app-r-psi-ward} comes
-from the auxiliary BPZ adjoint.
+The $\epsilon_1$ and $\epsilon'_1$ factors record transport past the
+first state, while $\epsilon_2$ and $\epsilon'_2$ record transport past
+the middle state. The additional $(-1)^f$ is the ordering sign of the
+odd NS--R--R form; it is not a square-root branch change.
+These formulas assume an intrinsically even NS primary at infinity.
+For an intrinsically odd one, reverse the physical origin sign,
+and multiply its ordered ground vertex and BPZ norm by $i$.
 
 For all-NS vertices the multipliers contain no Ramond square root:
 \begin{align}
  &\sum_{j\ge0}(-1)^j\binom nj
        \rho_a(G_{j-m-n+\frac12}x_1,x_2,x_3)\nonumber\\
- &=\sum_{j\ge0}\binom mj\rho_a(x_1,G_{n+j-\frac12}x_2,x_3)
-   +(-1)^{\epsilon_2+n}\sum_{j\ge0}(-1)^j\binom nj
+ &=i(-1)^{\epsilon_1}\sum_{j\ge0}\binom mj
+       \rho_a(x_1,G_{n+j-\frac12}x_2,x_3)
+   +i(-1)^{\epsilon_1+\epsilon_2+n}
+      \sum_{j\ge0}(-1)^j\binom nj
                       \rho_a(x_1,x_2,G_{m+j-\frac12}x_3),
  \label{eq:app-ns-g-ward}\\
  &\sum_{j\ge0}(-1)^j\binom nj
        \rho_{\F}(\psi_{j-m-n-\frac12}x_1,x_2,x_3)\nonumber\\
- &=-\sum_{j\ge0}\binom mj\rho_{\F}(x_1,\psi_{n+j+\frac12}x_2,x_3)
-   -(-1)^{\epsilon'_2+n}\sum_{j\ge0}(-1)^j\binom nj
+ &=-i(-1)^{\epsilon'_1}\sum_{j\ge0}\binom mj
+       \rho_{\F}(x_1,\psi_{n+j+\frac12}x_2,x_3)
+   -i(-1)^{\epsilon'_1+\epsilon'_2+n}
+      \sum_{j\ge0}(-1)^j\binom nj
                       \rho_{\F}(x_1,x_2,\psi_{m+j+\frac12}x_3).
  \label{eq:app-ns-psi-ward}
 \end{align}
 For example, on Ramond grounds the $m=n=0$ supercurrent identity gives
 \begin{align}
  \rho_f^{(\eta)}(G_{-1/2}\phi_1,w_2^\alpha,w_3^\gamma)
- &=\rho_f^{(\eta)}(\phi_1,G_0w_2^\alpha,w_3^\gamma)\nonumber\\
- &\quad+i(-1)^{|\alpha|}
+ &=i\rho_f^{(\eta)}(\phi_1,G_0w_2^\alpha,w_3^\gamma)\nonumber\\
+ &\quad-(-1)^{f+|\alpha|}
        \rho_f^{(\eta)}(\phi_1,w_2^\alpha,G_0w_3^\gamma).
  \label{eq:app-ground-g-ward}
 \end{align}
 The auxiliary identity on $(\mathbf1,u^0,u^1)$ gives
-$0=-\rho_{\F}(\mathbf1,u^1,u^1)/\sqrt2
-       +i\rho_{\F}(\mathbf1,u^0,u^0)/\sqrt2$.
+$0=-i\rho_{\F}(\mathbf1,u^1,u^1)/\sqrt2
+       -\rho_{\F}(\mathbf1,u^0,u^0)/\sqrt2$.
 This fixes the auxiliary $i$ directly. It is independent of a numerical
 comparison of blocks.
 
@@ -213,31 +242,29 @@ choose a residue identity containing that mode with a nonzero coefficient,
 apply all other modes by \eqref{eq:app-sca}, and solve for the requested
 form. Memoize triples of words, ground labels, representation parameters,
 and form labels. The ground tables terminate the reduction. The following
-all-NS values are useful checks; the form label is the parity of the row:
-\begin{equation}
-\begin{array}{c|c}
- \text{slots carrying }G_{-1/2}\phi&\rho\text{ value}\\\hline
- \varnothing&1\\
- 1&1\\2&1\\3&-1\\
- 1,2&h_1+h_2-h_3\\
- 1,3&h_1-h_2+h_3\\
- 2,3&h_1-h_2-h_3\\
- 1,2,3&-(h_1+h_2+h_3-\tfrac12)
-\end{array}
- \label{eq:app-ns-bottom}
-\end{equation}
-These values also fix the global superconformal seed without a separate
-choice of odd three-point normalization.
+all-NS and NS--R--R descendant values are generated from the
+displayed Ward identities. In particular, the global
+superconformal seed uses the same BPZ forms; it needs no separate
+odd three-point normalization.
 
 \subsection{Sewing signs and spin-frame changes}
 \label{app:sewing}
 
-In the enlarged vertex of the paper's Sec.~4, the sign moves the
-middle physical state past the ket auxiliary state. The bra pairing
-is already \eqref{eq:app-product-metric}, so it contributes no additional
-bra-parity factor. The separate $(-1)^{\epsilon'_e}$ on each sewn edge
-is the inverse auxiliary metric derived in Sec.~\ref{app:pbw}.
-It belongs to the edge, not to a vertex normalization.
+For states with the auxiliary factor first, the ordered enlarged
+three-point form is
+\begin{equation}
+ \hat\rho(a_1\otimes x_1,a_2\otimes x_2,a_3\otimes x_3)
+ =(-1)^{|a_1||x_1|+|x_2||a_3|}
+   \rho_{\F}(a_1,a_2,a_3)\rho(x_1,x_2,x_3).
+ \label{eq:app-enlarged-vertex}
+\end{equation}
+The first sign comes from the graded BPZ dual at infinity; the
+second moves the middle physical state past the third auxiliary
+state. An oscillator-frame change is performed on its arguments
+before evaluating this form, not appended as another local phase.
+Every edge uses the inverse of the full graded tensor Gram
+\eqref{eq:app-product-metric}; no standalone
+$(-1)^{\epsilon'_e}$ factor is attached.
 
 For external states, extend the paper's definition of $K$ by placing
 the ordered external states after the ordered internal edge-end pairs,
@@ -250,7 +277,17 @@ The enlarged Ramond ground additionally has auxiliary weight $1/16$.
 The omitted powers are restored only in a full correlator. These are
 plumbing-plane powers, with no implicit $q^{-c/24}$ cylinder factor.
 
-For the convolution in the paper's Sec.~4, retain the $\eta_e$ as
+The mixed sign in the convolution is
+\begin{equation}
+ (-1)^{K(\epsilon+\epsilon')-K(\epsilon)-K(\epsilon')
+        +\sum_e\epsilon_e\epsilon'_e
+        +\sum_v(\epsilon_{v,1}\epsilon'_{v,1}
+                +\epsilon_{v,2}\epsilon'_{v,3})}.
+ \label{eq:app-convolution-sign}
+\end{equation}
+The first terms compare total and separate operator orderings,
+the edge term comes from the tensor inverse Gram, and the last
+terms come from \eqref{eq:app-enlarged-vertex}. Retain the $\eta_e$ as
 formal variables with $\eta_e^2=1$ until recovery is complete.
 The convolution is associative because its sign exponent is bilinear,
 but its factors retain the displayed physical--auxiliary order.
@@ -273,21 +310,22 @@ it does not identify vertex-form signs or assign an Arf invariant.
 
 Normal ordering in the paper's embedding moves annihilators to the
 right, with a minus sign for each fermion exchange. Its embedded
-generators obey $(L_n^{(j)})^\dagger=L_{-n}^{(j)}$: in particular,
-$U_n^\dagger=U_{-n}$ follows from the minus in $\psi^\dagger$ and
-the anticommutation of $G$ with $\psi$. The code evaluates the displayed
+generators obey $(L_n^{(j)})^\dagger=L_{-n}^{(j)}$ under
+\eqref{eq:app-adjoint}: the phases of $G^\dagger$ and
+$\psi^\dagger$ cancel after graded reversal in $U_n$.
+The code evaluates the displayed
 $c^{(j)}$ and $h_n^{(j)}$ directly, without introducing square roots
 of auxiliary Virasoro momenta.
 
 Use the free-field realization in the paper's Appendix~A, with
-$\{\eta_r,\psi_s\}=0$. In the numerical Ramond basis of
-Sec.~\ref{app:pbw}, $\eta_0$ interchanges the two grounds with
-coefficient $1/\sqrt2$, giving $G_0=-iP\eta_0$.
+$\{\eta_r,\psi_s\}=0$. In its oscillator basis,
+$\eta_0$ interchanges the two grounds with coefficient $1/\sqrt2$,
+giving $G_0=-iP\eta_0$ after the stated basis identification.
 This oscillator realization constructs primaries and local actions;
 the physical Gram matrix still uses the BPZ pairing above.
 
-To specify the scale of these vectors, define the polynomial already
-used for branching norms in the SCblock notes:
+To specify the scale of these vectors, define the polynomial used
+in their oscillator normalization:
 \begin{equation}
  \ell(x,m)=2^{(1-(-1)^m)/16}
  \prod_{\substack{r,s\ge0,\ r+s<m\\r+s\equiv m\ (\mathrm{mod}\,2)}}
@@ -316,30 +354,33 @@ In particular,
 \begin{equation}
  v_{\pm1/2}=G_{-1/2}\phi_h+(Q/2\pm P)\psi_{-1/2}\phi_h,
  \qquad
- \|v_n(P)\|^2=(-1)^{2n}2^{-2n}\ell(2P,4n)\ell(Q+2P,4n)
- \quad(n\ge0).
+ \|v_n(P)\|_{\rm BPZ}^2
+ =\langle\!\langle v_n(P)|v_n(P)\rangle_{\eqref{eq:app-product-metric}}.
  \label{eq:app-ns-norm}
 \end{equation}
-The first expression suppresses the vacuum tensor factors. Use reflection
-for the norm at negative $n$. Rescaling a primary would leave a fully
+The first expression suppresses the vacuum tensor factors. Expand
+the vector in tensor PBW states, evaluate every term with
+\eqref{eq:app-adjoint-pair} and \eqref{eq:app-product-metric}, and
+cache the resulting bilinear norm. Use reflection for negative $n$.
+Rescaling a primary would leave a fully
 sewn block unchanged, but would change individual unnormalized
 branching coefficients; the factor \eqref{eq:app-ns-primary} fixes
 that scale.
 
-The R primaries retain the normalization and reflection rule of the
-paper's Appendix~A. In that construction,
-$\chi_0(-P)=\psi_0+i\eta_0(P)$ on the ground space.
-Writing $M=2n-1/2$ only in the next formula, the norms are
-\begin{align}
- \|v_n^0\|^2&=2^{2\lfloor M/2\rfloor+1}
-               \frac{\ell(2P,4n)}{\ell(Q+2P,4n)},\nonumber\\
- \|v_n^1\|^2&=-2^{2\lceil M/2\rceil}
-               \frac{\ell(2P,4n)}{\ell(Q+2P,4n)},\qquad n>0.
+The R primaries retain the oscillator construction and reflection
+rule of the paper's Appendix~A. In that construction
+$\chi_0(-P)=\psi_0+i\eta_0(P)$ on the ground space. Their current
+BPZ norms are obtained by the same finite contraction:
+\begin{equation}
+ \|v_n^\alpha(P)\|_{\rm BPZ}^2
+ =\langle\!\langle v_n^\alpha(P)|v_n^\alpha(P)
+   \rangle_{\eqref{eq:app-product-metric}},\qquad \alpha=0,1.
  \label{eq:app-r-norms}
-\end{align}
-Use $P\mapsto-P$, $n\mapsto-n$ for negative $n$.
-For example $\|v_{\pm1/4}^0\|^2=2$ and
-$\|v_{\pm1/4}^1\|^2=-1$.
+\end{equation}
+Use $P\mapsto-P$, $n\mapsto-n$ for negative $n$,
+including the reflected odd physical component. The closed
+oscillator-frame norm formulas from the earlier convention are
+not substituted for these BPZ norms.
 
 In the paper's normalized branching coefficients, use one norm root
 per module and branch at all its occurrences. Equivalently, use unnormalized vertices and
@@ -403,28 +444,23 @@ specified parameter limit, rather than an arbitrary replacement value.
 
 All-NS branching on a general graph can be obtained by the same finite
 oscillator/PBW construction and cached by its three labels and momenta.
-For two identical theta vertices the code instead uses the closed
-squared coefficient. To state it, first take $n_i\ge0$; for a negative
-$n_i$ replace $(n_i,P_i)$ by $(-n_i,-P_i)$. Then
-\begin{align}
- \mathbf B_a(n_1,n_2,n_3)^2
- ={}&(-1)^{2(n_1+n_2+n_3)}\nonumber\\[-1mm]
- &\times\frac{
- \displaystyle\prod_{(s_1,s_2,s_3)\in\{(+,+,+),(-,+,+),(+,-,+),(+,+,-)\}}
- \ell\!\left(\frac Q2+\sum_i s_iP_i,\,2\sum_i s_in_i\right)^2}
- {\displaystyle\prod_{i=1}^3\ell(2P_i,4n_i)\ell(Q+2P_i,4n_i)}.
- \label{eq:app-ns-closed}
-\end{align}
-It is used only when $a=2(n_1+n_2+n_3)\bmod2$; forbidden components
-vanish. A square here is a bilinear square, not an absolute square.
-Taking independent square roots of \eqref{eq:app-ns-closed} would not
-define consistent vertices on a graph with different adjacent triples.
+For two identical theta vertices, an internal oscillator-frame
+closed square is a useful shortcut, but it is not the definition
+of the BPZ-normalized $\mathbf B_a$ here. Its phases must be
+transported with the Gram and vertex basis change. The
+convention-independent prescription is to construct each primary,
+evaluate \eqref{eq:app-enlarged-vertex} with the displayed Ward
+identities, and divide by the roots of its BPZ norms from
+\eqref{eq:app-product-metric}. Cache the result under all three
+branch labels and momenta. This also fixes relative phases between
+different adjacent triples; independent square roots of a squared
+coefficient would not.
 
 \subsection{Insertion normalization and diagonal recovery}
 \label{app:insertion}
 
-Use the split channel and $\Theta$ action defined in the paper's
-Sec.~5. The production code inserts $Q\Theta\psi$ in place of
+Use the split channel and $\Theta$ action defined above. The
+production code inserts $Q\Theta\psi$ in place of
 $\Theta\psi$ at each new sphere, with the same scalar in its
 auxiliary factor. The physical part of the inserted matrix element
 is the unchanged physical Gram matrix;
@@ -432,7 +468,8 @@ contracting it between the two inverse physical Grams gives one inverse
 Gram. This is why recovery yields the original physical block.
 
 At $P=Q/2$ use the NS identity \emph{quotient}, with
-$G_{-1/2}\mathbf1=0$. Equation~\eqref{eq:app-ns-norm} then gives
+$G_{-1/2}\mathbf1=0$. The primary expression in
+\eqref{eq:app-ns-norm} then gives
 $v_{1/2}=Q\psi_{-1/2}\mathbf1$. One must not obtain this insertion by
 inverting the singular Gram matrix of an unreduced $h=0$ Verma module.
 Use the two external Virasoro weights given in the paper's Sec.~5.
@@ -441,20 +478,17 @@ The allowed R branches obey
  n_R=n_L\pm\tfrac12,\quad\alpha_R=\alpha_L.
  \label{eq:app-insertion-branches}
 \end{equation}
-With the unnormalized primaries above, both orientations of the
-ground matrix element entering $\mathbb S$ are
-\begin{equation}
- \langle\!\langle v_{1/4}^{\alpha}|Q\Theta\psi(1)|v_{-1/4}^{\alpha}\rangle
- =\langle\!\langle v_{-1/4}^{\alpha}|Q\Theta\psi(1)|v_{1/4}^{\alpha}\rangle
- =\frac{Q\sqrt2}{2^\alpha}.
- \label{eq:app-middle-ground}
-\end{equation}
-Apply the splitting Ward identity in the paper's Sec.~5, or its
+Evaluate the ground matrix elements in both orientations directly
+from the oscillator primaries, the action
+$\Theta u^{\mathsf a}=(-1)^{\mathsf a+1}u^{1-\mathsf a}$,
+and the graded BPZ pairing \eqref{eq:app-product-metric}. Do not
+identify the two orientations by an ungraded transpose. Apply
+the splitting Ward identity above, or its
 reversed version, using the same cached actions. A vanishing
 middle pivot is currently treated as a nongeneric parameter requiring
 a limit; the code does not silently regularize it.
 
-Each split segment carries its own inverse Gram and auxiliary metric
+Each split segment carries its own full graded tensor inverse Gram
 before the insertion is contracted. In the fully expanded PBW sewing
 \eqref{eq:split-enlarged-block}, multiply each inserted matrix element
 by $Q$ for the production normalization. The punctured Virasoro blocks
@@ -470,9 +504,9 @@ levels. The retained auxiliary operator acts as
  \label{eq:app-diagonal-insertion}
 \end{equation}
 The nonzero-mode signs cancel because both $\Theta$ and $\psi_0$
-are odd. In theta the auxiliary constant is $1+\eta_2\eta_3$ in
+are odd. In theta the auxiliary constant is $1-\eta_2\eta_3$ in
 the ordinary calculation and
-$Q(1-\eta_2\eta_3)/\sqrt2$ in the inserted one. On the required
+$Q(1+\eta_2\eta_3)/\sqrt2$ in the inserted one. On the required
 cycle sector these act by $2$ and $\sqrt2Q$, respectively.
 In general the corresponding scalar is
 \begin{equation}
@@ -484,7 +518,7 @@ Recover each physical coefficient by subtracting all positive-level
 fermion convolutions with lower physical coefficients and dividing by
 \eqref{eq:app-recovery-constant}. This is \eqref{eq:recovery} in the
 production normalization. It is a restricted inverse on the required
-cycle sector. No inverse of $1+\eta_2\eta_3$ on the full parity algebra
+cycle sector. No inverse of $1-\eta_2\eta_3$ on the full parity algebra
 is used. Using canonical $\Theta\psi$ in both numerator and auxiliary
 factor divides each insertion by $Q$ and leaves the recovered block
 unchanged; the numerical $Q\Theta\psi$ convention requires $Q\ne0$.
@@ -679,11 +713,12 @@ Opposite shifts are paired as before; the zero shift, when present in
 this subset, contributes $h_b-h_a$.
 
 An odd null changes the intrinsic parity of the shifted primary.
-Express the child again in the even-primary convention of
-\eqref{eq:app-ns-bottom}. Its additional incidence factors at slots
-$1,2,3$ are $1$, $(-1)^{\epsilon_3}$, and $-1$, respectively.
-Multiply over the two ends and by
-$(-1)^{K(\epsilon)-K(\epsilon_{\mathrm{child}})}$.
+Express the child again in the even-primary convention using the
+graded BPZ pairing and the all-NS Ward identities
+\eqref{eq:app-ns-g-ward}. Compute its slot incidence factors from
+those identities at both ends, together with
+$(-1)^{K(\epsilon)-K(\epsilon_{\mathrm{child}})}$;
+the old frame's fixed three-slot phase table does not apply.
 Here $\epsilon_e=2\,\mathrm{level}_e\bmod2$ before the null shift,
 and the child's edge parity changes if $rs$ is odd. The fusion label
 at each incident vertex is the sum of its three current edge parities.
@@ -691,9 +726,10 @@ This specifies the parity transport, rather than treating every
 residue as a scalar bosonic shift.
 
 The global NS basis is $L_{-1}^kG_{-1/2}^a\phi_h$, $a=0,1$,
-with Gram entry $k!(2h)_{k+a}$. Its vertex is
+with BPZ Gram entry $i^a k!(2h)_{k+a}$. Its vertex is
 \eqref{eq:app-global-vertex} with $h_i$ replaced by $h_i+a_i/2$,
-multiplied by the corresponding value in \eqref{eq:app-ns-bottom}.
+multiplied by the corresponding value generated by
+\eqref{eq:app-ns-g-ward}.
 Include the physical $(-1)^K$ when sewing. The vacuum factor is
 \begin{equation}
  V_{\NS}=V_{\mathrm{Vir}}
@@ -706,7 +742,7 @@ The first fermionic oscillator is at $3/2$, not $1/2$; the latter is
 already in the global basis. The sign of the half-multiplier $u_\gamma$
 is fixed by the spin lift, not by a principal numerical square root.
 Sew the global factor on the left of $V_{\NS}$ using
-the convolution in the paper's Sec.~4; its local middle-to-ket term generally survives
+\eqref{eq:app-convolution-sign}; its local middle-to-ket term generally survives
 on the tetrahedron.
 
 For clarity the following gives the exact half-multiplier prescription
@@ -725,14 +761,18 @@ modulo four by $\tau(0)=0$ and
 \begin{equation}
  i^{\tau(\epsilon)+\tau(\epsilon')-\tau(\epsilon+\epsilon')}
  =(-1)^{K(\epsilon+\epsilon')-K(\epsilon)-K(\epsilon')
-                  +\sum_v\epsilon_{v,2}\epsilon'_{v,3}}.
+            +\sum_e\epsilon_e\epsilon'_e
+            +\sum_v(\epsilon_{v,1}\epsilon'_{v,1}
+                         +\epsilon_{v,2}\epsilon'_{v,3})}.
  \label{eq:app-cycle-phase}
 \end{equation}
 On theta take $\tau=0$ on each of the basis cycles $\{1,2\}$ and
-$\{1,3\}$. On the tetrahedron take $\tau=0,1,0$ on the cycles
+$\{1,3\}$. On the tetrahedron take $\tau=0,2,0$ on the cycles
 $\{1,2,4\}$, $\{2,3,5\}$, and $\{1,3,6\}$, respectively.
 Equation~\eqref{eq:app-cycle-phase} extends these
-choices to every sum of basis cycles. If a primitive word has visits
+choices to every sum of basis cycles. These are Schottky
+half-multiplier branch choices in the current spin frame, not a
+conversion factor applied to a completed block. If a primitive word has visits
 $v_e$ and parity $\epsilon_e=v_e\bmod2$, then
 \begin{equation}
  u_\gamma=
@@ -905,9 +945,8 @@ and three-point coefficients. These are independent of the chiral
 coefficient algorithm. Appendix~\ref{app:partition-test} specifies
 these inputs for super-Liouville theory, using $C_a$ and $C_{f,\eta}$,
 and writes the partition functions directly in the paper's blocks.
-The displayed sewing matrices account for the physical
-Ramond families and the geometric spin characteristics while retaining
-the literal blocks and their Koszul signs. The identity limit
+The BPZ factors are included in the returned block, and the
+partition driver evaluates it at the chosen tube signs. The identity limit
 in \eqref{eq:partition-identity-residue} fixes the relative NS/R
 normalization. The bilinear BPZ definition is retained; complex
 conjugation is imposed only on the physical diagonal spectrum.

@@ -61,7 +61,7 @@ void metadata(const Setup &s, const std::string &channel, const std::string &met
               const fs::path &dir) {
     std::ofstream out(dir / "metadata.json.partial");
     require(bool(out), "cannot open metadata");
-    out << "{\"schema_version\":1,\"conventions\":\"product_bpz_residue_2026-09-22\",\"channel\":\""
+    out << "{\"schema_version\":1,\"conventions\":\"ordered_yutai_bpz_sewing_2026-09-25\",\"channel\":\""
         << channel << "\",\"method\":\"" << method << "\",\"level\":" << level
         << ",\"truncation\":\"" << (s.per_edge ? "per-edge" : "total")
         << "\",\"dps\":" << MP::digits << ",\"precision_bits\":" << MP::bits
@@ -173,7 +173,9 @@ int all_ns(const Setup &s, int level, const std::string &method, const fs::path 
         for (const auto &k : targets) {
             S value = remainder[k];
             int km = parity_mask(k);
-            scalar_json(out, s, k, value, "double_virasoro");
+            scalar_json(out, s, k,
+                        value * plumbing_bpz_weight<S>(s.graph, parity_mask(k)),
+                        "double_virasoro");
             if (value != S(0))
                 for (const auto &[a, f] : aux) {
                     if (total(k) + total(a) > int(domain))

@@ -9,7 +9,7 @@ the native `bin/partition` does not.
 The numerical block computations are C++. Python launches them and compares
 decimal output. Each process computes its own intermediate data and reuses them
 in memory; it loads no numerical coefficient cache. Numerical conventions are
-`product_bpz_residue_2026-09-22`, as in the current implementation. Neither
+`ordered_yutai_bpz_sewing_2026-09-25`, as in the current implementation. Neither
 manuscript is edited by these commands.
 
 ## Coefficient tests
@@ -163,32 +163,29 @@ these generic-weight commands.
 
 ## Partition-function experiment
 
-The native entry point `bin/partition` retains the paper's literal `F`,
-`C_a`, and `C_f_eta` in edge order `(infinity,1,0)`. For the physical
-partition comparison, it multiplies each block coefficient by the local
-geometric BPZ phase and then evaluates it at one fixed tube-sign triple.
-This is done independently in the NS-R-R and all-NS channels. The two
-marked spin surfaces and their raw plumbing signs are recorded in
-[PARTITION.md](PARTITION.md). No two-sign block average or all-NS sewing
-matrix is used. The unconverted paper blocks remain in the node output
-for auditing. All cutoffs are total descendant levels, both Ramond `f`
-sectors are computed directly, and the identity-residue normalization is
-in [PARTITION_NORMALIZATION.md](PARTITION_NORMALIZATION.md).
+The native entry point `bin/partition` uses the block returned by each
+algorithm, with the theta BPZ sewing convention included before return.
+It evaluates that block at one fixed tube-sign triple per marked spin;
+no coefficient conversion, two-sign average or all-NS sewing matrix is
+applied in the partition driver. The source and target signs and the
+fixed-spin decompositions are in [PARTITION.md](PARTITION.md). Both
+Ramond `f` sectors are computed directly, and all cutoffs are total
+descendant levels. The relative NS/R normalization is fixed by the
+identity residue in [PARTITION_NORMALIZATION.md](PARTITION_NORMALIZATION.md).
 
-The directed geometry check builds 228 Majorana Wick monomials through
-level 8 and compares the literal block's diagonal square with
-bosonization for all four marked NS spins under the assumed map. That
-map fails by 5.53% to 31.86%; the SCblock sign reduction does not.
-Literal NS and Ramond chiral blocks pass direct PBW comparisons through
-total level 3. The full Ramond nonchiral source contraction still needs
-an independent test in the paper's ground-state basis.
+At total level 3, the returned Ramond block agrees with independent
+physical PBW to maximum scaled error `2.47e-27`, and the all-NS
+recursion block agrees with PBW to `3.48e-38`. The independent
+free-Majorana state sum checks the BPZ spin lift against bosonization.
+The interacting Ramond nonchiral descendant pairing remains a scope
+limit of the numerical test.
 
 `tools/section6_partition.py` delegates to this native executable.
 `tools/prepare_partition_inputs.py` converts historical geometry-order
 inputs once, discards all saved block fields, and supplies paper-order
 inputs and coefficients. The production source archive excludes the
 obsolete Python sewing adapters. The older adjusted-block data remain
-as provenance, not as a fixed-spin check of the paper's literal block.
+as provenance; the fresh single-block run is in [PARTITION.md](PARTITION.md).
 
 ## Evidence and timing
 

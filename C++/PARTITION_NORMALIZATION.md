@@ -100,12 +100,13 @@ The production inputs use the paper's `C_a` and `C_f_eta` in edge order
 `(infinity,1,0)`. `C_1` includes its factor of `i`.
 `C_{f,+}=E`, `C_{f,-}=O`, with no extra half; both f values are equal
 reduced coefficients. The current partition driver stores the paper's
-literal `F` and applies the geometric BPZ phase coefficientwise before
-evaluating each fixed-spin partition contribution, as explained in
+returned `F` and evaluates each fixed spin without any additional
+coefficient-dependent phase. The block algorithms include the BPZ
+sewing factor before returning `F`, as explained in
 [PARTITION.md](PARTITION.md).
 
-Outputs carry `coefficient_convention: unit_identity_upsilon_coefficients_2026-09-24`
-and `sewing_convention: fixed_tube_sign_geometric_BPZ_both_channels_2026-09-24`.
+Outputs carry `coefficient_convention: unit_identity_upsilon_ordered_plus_i_eta_2026-09-25`
+and `sewing_convention: theta_BPZ_state_sum_in_block_2026-09-25`.
 The reducer rejects old or mixed conventions. `normalization_factor: 1`
 means no multiplier is applied after sewing.
 

@@ -23,7 +23,7 @@ template<class S> double check(double tolerance) {
         equal(S(sign(K(e^t)+__builtin_popcount(unsigned(e&t)))),S(sign(K(e)+K(t)+a)));
         graded_cases++;
     }
-    // At total level one, each pair of fermionic edges has K=1. The
+    // In the oscillator recursion, each pair of fermionic edges has K=1. The
     // product of the three relative signs is -1 for every paper eta_e.
     // This excludes the previously assumed linear map to the charge-lattice
     // theta signs at fixed q; it does not refute the SCblock factorization.
@@ -32,8 +32,8 @@ template<class S> double check(double tolerance) {
         for(int e:{3,5,6})loop_product*=sign(K(e))*nc::character(nc::eta_e[spin],e);
         require(loop_product==-1,"literal paper F changed its level-one signs");
     }
-    // At one fixed set of physical tube signs, coefficientwise geometric
-    // BPZ conversion gives the Ramond trace 2 in the NS identity limit.
+    // BPZ sewing is part of the block and gives the Ramond trace 2 in
+    // the NS identity limit at either fixed set of physical tube signs.
     std::array<S,2> constants{S(1),S(0)};
     std::array<S,8> even{},odd{};
     even[0]=S(1);even[6]=S(1);
@@ -41,7 +41,7 @@ template<class S> double check(double tolerance) {
     for(auto signs:{std::array<int,3>{1,-1,1},std::array<int,3>{-1,-1,1}}) {
         S f0=0,f1=0;
         for(int epsilon=0;epsilon<8;epsilon++) {
-            S phase=nc::geometric_phase<S>(epsilon)*S(nc::character(signs,epsilon));
+            S phase=theta_bpz_weight<S>(epsilon)*S(nc::character(signs,epsilon));
             f0+=phase*even[epsilon];f1+=phase*odd[epsilon];
         }
         equal(f0,S(2));equal(f1,-f0);
@@ -49,7 +49,7 @@ template<class S> double check(double tolerance) {
         equal(nc::fixed_R_partition(amplitude,anti,constants,constants,S(1)),S(2));
     }
     for(int epsilon=0;epsilon<8;epsilon++) {
-        S phase=nc::geometric_phase<S>(epsilon);
+        S phase=theta_bpz_weight<S>(epsilon);
         equal(phase*conjugate(phase),S(1));
     }
 

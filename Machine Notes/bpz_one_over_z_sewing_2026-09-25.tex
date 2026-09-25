@@ -1,0 +1,347 @@
+% Independent convention audit; the manuscripts are not modified by this file.
+\section*{BPZ and plumbing with the same inversion}
+
+At a first vertex slot use the local BPZ map and its spin-frame lift
+\begin{equation}
+ I:z\longmapsto1/z,\qquad \lambda_I(z)=-i/z.
+ \label{eq:new-bpz-map}
+\end{equation}
+At an edge use
+\begin{equation}
+ I_q:z\longmapsto q/z,\qquad \lambda_{I_q}(z)=-i\sqrt q/z,
+ \qquad \sqrt q\sim1\quad(q\sim1).
+ \label{eq:new-edge-map}
+\end{equation}
+The choice $\sqrt{-1}=i$ makes $-i/z$ a square root of
+$d(1/z)/dz=-1/z^2$.  The edge map is the BPZ map followed by the
+spin-frame scaling $(w,\vartheta)\mapsto(qw,\sqrt q\,\vartheta)$.
+At an NS puncture $\lambda$ is the multiplier of the odd coordinate;
+at a Ramond puncture it specifies the spin-frame transport on the
+annulus and does not assert the same formula for a Ramond-adapted odd
+coordinate at the divisor.
+Consequently the edge propagator is $q^{L_0}$, with the specified lift
+sign $\eta_e^{F}$ if requested.  Removing the primary factor $q^{h_e}$
+leaves $q^{|A|}$.  There is no additional half-turn at an edge.
+
+The geometric BPZ transpose is graded and linear:
+\begin{equation}
+ (AB)^\dagger=(-1)^{|A||B|}B^\dagger A^\dagger,
+ \qquad
+ L_n^\dagger=L_{-n},\quad
+ G_r^\dagger=iG_{-r},\quad
+ \psi_r^\dagger=-i\psi_{-r}.
+ \label{eq:new-bpz-modes}
+\end{equation}
+In particular $L_n^\dagger=L_n$ only for $n=0$.  The factors on
+the three currents follow from their weights $2,3/2,1/2$ and the
+chosen spin lift: contour reversal under $z\mapsto1/z$ cancels the
+Jacobian reversal, leaving $(-i)^{2h}A_{-r}$ for a field of weight
+$h$.  They preserve the SCA and Clifford relations under
+the graded transpose; applying the transpose twice gives $(-1)^F$.
+Our bilinear pairing obeys
+\begin{equation}
+ \langle Ax,y\rangle_{\rm BPZ}
+ =(-1)^{|A||x|}\langle x,A^\dagger y\rangle_{\rm BPZ}.
+ \label{eq:new-bpz-pairing}
+\end{equation}
+Set the even Ramond ground norm to one.  The paper's
+$G_0w^\pm=i\beta e^{\mp i\pi/4}w^\mp$ and the symmetric auxiliary
+$\psi_0u^a=u^{1-a}/\sqrt2$ then imply
+\begin{equation}
+ \langle w^\alpha,w^\gamma\rangle_{\rm BPZ}
+ =\operatorname{diag}(1,-1)_{\alpha\gamma},\qquad
+ \langle u^a,u^b\rangle_{\rm BPZ}
+ =\operatorname{diag}(1,-i)_{ab}.
+ \label{eq:new-ground-gram}
+\end{equation}
+All off-diagonal ground pairings vanish.  Equation
+\eqref{eq:new-bpz-pairing}, not an ungraded reversal of oscillator
+words, defines every descendant Gram matrix.  In particular the
+inverse Gram matrices in a sewn block are the inverses of these
+geometric matrices.  For the paper's PBW word
+$\mathbf L_{-A}=L_{-n_1}\cdots L_{-n_\ell}
+G_{-r_1}\cdots G_{-r_p}$ and a ground state $g$, the rule is
+\begin{equation}
+ \langle\mathbf L_{-A}g,y\rangle_{\rm BPZ}
+ =i^p(-1)^{p|g|+p(p-1)/2}
+  \langle g,G_{r_p}\cdots G_{r_1}
+                   L_{n_\ell}\cdots L_{n_1}y\rangle_{\rm BPZ}.
+ \label{eq:new-pbw-gram}
+\end{equation}
+The rightmost pairing uses the ground metric above.  Direct evaluation
+of \eqref{eq:new-pbw-gram} fixes the open R-edge tensor as well as
+closed blocks.  For the even NS primaries used in the paper,
+the ground values of the ordered three-point forms remain the
+paper's values.  Their descendants use the same BPZ map as the Gram
+matrix.  Explicitly, with insertions at $(\infty,1,0)$, we fix
+\begin{align}
+ &\rho_0(\phi_1,\phi_2,\phi_3)
+ =\rho_1(\phi_1,G_{-1/2}\phi_2,\phi_3)=1,\\
+ &\rho^{(\eta)}_0(\phi_1,w^+_2,w^+_3)=1,\qquad
+ \rho^{(\eta)}_0(\phi_1,w^-_2,w^-_3)=\eta,\\
+ &\rho^{(\eta)}_1(\phi_1,w^+_2,w^-_3)=1,\qquad
+ \rho^{(\eta)}_1(\phi_1,w^-_2,w^+_3)=i\eta,\\
+ &\rho_{\mathsf F}(\mathbf1,\mathbf1,\mathbf1)
+ =\rho_{\mathsf F}(\mathbf1,u^0,u^0)=1,\qquad
+ \rho_{\mathsf F}(\mathbf1,u^1,u^1)=i.
+ \label{eq:new-ground-vertices}
+\end{align}
+These choices fix the ordered forms; the spin lift and Ward
+identities below fix all their descendant values.  In particular,
+the local form at infinity uses $I$ itself, without a separate
+conversion at a sewn edge.
+If the NS primary in the first slot is assigned odd parity, the
+geometric BPZ norm of that ground state is $i$ and each displayed
+first-slot ground value acquires $i$.  This choice makes the
+graded transpose \eqref{eq:new-bpz-pairing} hold for all descendants;
+it also prevents an odd primary from being silently treated as even
+in a PBW comparison.
+
+For clarity, write $p_i$ for the parity of the state in slot $i$.
+The ordered NS--R--R supercurrent Ward identity in this convention is
+\begin{align}
+ &\sum_{j\ge0}(-1)^j\binom{n+\frac12}{j}
+ \rho_f^{(\eta)}(G_{j-m-n-\frac12}x_1,x_2,x_3)\nonumber\\
+ &=i(-1)^{p_1}\sum_{j\ge0}\binom{m+\frac12}{j}
+ \rho_f^{(\eta)}(x_1,G_{n+j}x_2,x_3)\nonumber\\
+ &\quad-(-1)^{p_1+f+p_2+n}\sum_{j\ge0}(-1)^j
+ \binom{n+\frac12}{j}
+ \rho_f^{(\eta)}(x_1,x_2,G_{m+j}x_3).
+ \label{eq:new-rr-g-ward}
+\end{align}
+Here the $f$ in the origin term is the parity of the ordered
+NS--R--R form; it is needed for its odd ground values.  The displayed
+identity assumes the even NS primary of the paper.  If the first-slot
+NS primary is odd, reverse the sign of the origin term, while keeping
+$p_i$ as the total state parities elsewhere.  This extra sign occurs
+because $f$ labels the Ramond ground pairing, not the intrinsic parity
+of the NS primary.  With the same
+branch $\sqrt{z(z-1)}$ as the paper, the auxiliary identity is
+\begin{align}
+ &\sum_{j\ge0}(-1)^j\binom{n-\frac12}{j}
+ \rho_{\mathsf F}(\psi_{j-m-n+\frac12}a_1,a_2,a_3)\nonumber\\
+ &=-i(-1)^{p_1}\sum_{j\ge0}\binom{m-\frac12}{j}
+ \rho_{\mathsf F}(a_1,\psi_{n+j}a_2,a_3)\nonumber\\
+ &\quad-(-1)^{p_1+p_2+n}\sum_{j\ge0}(-1)^j
+ \binom{n-\frac12}{j}
+ \rho_{\mathsf F}(a_1,a_2,\psi_{m+j}a_3).
+ \label{eq:new-rr-psi-ward}
+\end{align}
+The parity $p_i$ in \eqref{eq:new-rr-psi-ward} refers to $a_i$.
+For all-NS vertices, omit the Ramond square-root multiplier.  The
+corresponding two identities are
+\begin{align}
+ &\sum_{j\ge0}(-1)^j\binom nj
+ \rho_a(G_{j-m-n+\frac12}x_1,x_2,x_3)\nonumber\\
+ &=i(-1)^{p_1}\sum_{j\ge0}\binom mj
+ \rho_a(x_1,G_{n+j-\frac12}x_2,x_3)\nonumber\\
+ &\quad+i(-1)^{p_1+p_2+n}\sum_{j\ge0}(-1)^j\binom nj
+ \rho_a(x_1,x_2,G_{m+j-\frac12}x_3),
+ \label{eq:new-ns-g-ward}\\
+ &\sum_{j\ge0}(-1)^j\binom nj
+ \rho_{\mathsf F}(\psi_{j-m-n-\frac12}a_1,a_2,a_3)\nonumber\\
+ &=-i(-1)^{p_1}\sum_{j\ge0}\binom mj
+ \rho_{\mathsf F}(a_1,\psi_{n+j+\frac12}a_2,a_3)\nonumber\\
+ &\quad-i(-1)^{p_1+p_2+n}\sum_{j\ge0}(-1)^j\binom nj
+ \rho_{\mathsf F}(a_1,a_2,\psi_{m+j+\frac12}a_3).
+ \label{eq:new-ns-psi-ward}
+\end{align}
+The Virasoro Ward identity is unchanged, since
+$L_n^\dagger=L_{-n}$ and $L_n$ is even.
+
+With the auxiliary factor ordered first, the BPZ pairing on a tensor
+state is the graded product
+\begin{equation}
+ \langle a\otimes x,b\otimes y\rangle_{\rm BPZ}
+ =(-1)^{|a||x|}
+   \langle a,b\rangle_{\mathsf F}\langle x,y\rangle_{\mathsf{SCA}}
+ \label{eq:new-tensor-gram}
+\end{equation}
+on the nonzero parity-diagonal part.  This sign makes the tensor
+pairing obey \eqref{eq:new-bpz-pairing} for $G$ and $\psi$ acting with
+the usual Koszul rule.  The ordered enlarged local form is
+\begin{equation}
+ \widehat\rho(a_1\otimes x_1,a_2\otimes x_2,a_3\otimes x_3)
+ =(-1)^{|a_1||x_1|+|x_2||a_3|}
+   \rho_{\mathsf F}(a_1,a_2,a_3)\rho(x_1,x_2,x_3).
+ \label{eq:new-enlarged-vertex}
+\end{equation}
+The first sign is the graded BPZ dual at infinity; the second moves
+the middle physical operator past the third auxiliary operator.
+Ground values and all descendant values are fixed by the component
+Ward identities and these ordering rules.  In the oscillator
+implementation, the local change from its branching frame to the
+ordered $\rho_f^{(\eta)}$ frame is still made before applying
+\eqref{eq:new-enlarged-vertex}; it is a basis change, not a new
+physical three-point constant.
+
+For any plumbing graph use exactly the paper's PBW state sum, with
+each inverse Gram replaced by the inverse of
+\eqref{eq:new-bpz-pairing}, each local form by the BPZ form above,
+and the original Koszul permutation sign $(-1)^{K_\Gamma}$.
+Writing $\Phi_{v_i}$ for the selected SCA state on a half-edge,
+the ordinary block is
+\begin{align}
+ \mathbf F_{\hat\Gamma}^{\{f,\eta,a\}}
+ &=\sum_{\{A,\alpha\}}(-1)^{K_\Gamma(\epsilon)}
+ \prod_e q_e^{|A_{e_1}|}\eta_e^{\epsilon_e}
+ \prod_{e\in E_{\NS}}\mathbf G_{h_e}^{A_{e_1}A_{e_2}}
+ \prod_{e\in E_{\R}}\mathbb G_{\beta_e}^{A_{e_1}\alpha_{e_1},A_{e_2}\alpha_{e_2}}\nonumber\\
+ &\quad\times\prod_{v\in V_{\NS}}
+       \rho_{a_v}(\Phi_{v_1},\Phi_{v_2},\Phi_{v_3})
+ \prod_{v\in V_{\R}}\rho_{f_v}^{(\eta_v)}
+       (\Phi_{v_1},\Phi_{v_2},\Phi_{v_3}).
+ \label{eq:new-physical-block}
+\end{align}
+The inverse Gram matrices here use \eqref{eq:new-bpz-pairing};
+this incorporates the lift of $q_e/z$ into the state sum.
+The permitted states and parities obey the selection rules of the
+paper's block definition.
+For the enlarged block use the tensor inverse Gram from
+\eqref{eq:new-tensor-gram} and the vertices
+\eqref{eq:new-enlarged-vertex}.  Explicitly, the definition is the
+same sum as \eqref{eq:new-physical-block}, now over both $A$ and
+$\mathsf A$, with
+\begin{equation}
+ (-1)^{K_\Gamma(\epsilon+\epsilon')}
+ \prod_e q_e^{|A_{e_1}|+|\mathsf A_{e_1}|}
+            \eta_e^{\epsilon_e+\epsilon'_e}
+ \prod_e\widehat G_e^{(A,\mathsf A)_{e_1},(A,\mathsf A)_{e_2}}
+ \prod_v\widehat\rho_v
+ \label{eq:new-enlarged-block}
+\end{equation}
+in each summand.  Here $\widehat G_e$ is the inverse of the full
+graded tensor Gram matrix, and $\widehat\rho_v$ has the three states
+specified by the corresponding term of the sum.  This formula
+contains no independent $(-1)^{\epsilon'_e}$ sewing factor; the
+fermion signs are fixed by the BPZ inverse metric.
+On a split edge with a middle
+$\Theta\psi$ insertion, apply this rule to the split graph first;
+only then take the diagonal in the two middle plumbing powers.
+On that middle sphere use
+$\Theta u^{\mathsf b}=(-1)^{\mathsf b+1}u^{1-\mathsf b}$, with
+$\Theta$ anticommuting with $\psi_r$ and $G_r$ and commuting with
+$L_n$.  The normalization of $\psi$ is the state
+$v_{1/2}$ at $P=Q/2$.  The local matrix element in the
+double-Virasoro basis is
+\begin{equation}
+ \mathbb S(n_R,n_L,\alpha)
+ =\frac{\langle\!\langle v_{n_R}^{\alpha}|\Theta\psi(1)
+                |v_{n_L}^{\alpha}\rangle_{\rm BPZ}}
+        {\|v_{n_R}^{\alpha}\|_{\rm BPZ}
+         \|v_{n_L}^{\alpha}\|_{\rm BPZ}}.
+ \label{eq:new-splitting}
+\end{equation}
+Its descendant values and the recursion in $n_L,n_R$ follow from
+the same $L_{\pm1}$ Ward identity, with the new BPZ pairing in the
+matrix element.  The double-Virasoro expansion of the split block is
+\eqref{eq:new-double-virasoro} on the split graph, with
+$\mathbb S$ at every inserted sphere.  Diagonal extraction then
+replaces $q_{e_L}^m q_{e_R}^m$ by $q_e^m$ and keeps equal lift
+parities.  This is also the order of operations for its convolution
+with the inserted free-fermion block.
+
+Expanding the enlarged state sum gives a convolution of the physical
+and auxiliary blocks.  If their parities on edge $e$ are $\epsilon_e$
+and $\epsilon'_e$, the convolution sign, in addition to the two
+individual block signs, is
+\begin{equation}
+ (-1)^{K_\Gamma(\epsilon+\epsilon')+K_\Gamma(\epsilon)
+          +K_\Gamma(\epsilon')
+          +\sum_e\epsilon_e\epsilon'_e
+          +\sum_v(\epsilon_{v_1}\epsilon'_{v_1}
+                   +\epsilon_{v_2}\epsilon'_{v_3})}.
+ \label{eq:new-convolution-sign}
+\end{equation}
+All exponents are modulo two.  This follows term by term from
+the Koszul permutation, the tensor inverse Gram, and the enlarged
+local form, respectively.  The same formula on the split graph
+defines the inserted convolution; it does not require inventing a
+plumbing parameter on the unsplit edge.
+For the genus-two theta graph, the two first-slot vertex signs in
+\eqref{eq:new-convolution-sign} cancel.  In the parity arrays used by
+the code, the product of monomials is therefore
+\begin{align}
+ &\left(\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right)
+ \star\left(\prod_e q_e^{s_e}\eta_e^{\epsilon'_e}\right)\nonumber\\
+ &\quad=(-1)^{K_\Gamma(\epsilon+\epsilon')+K_\Gamma(\epsilon)
+                +K_\Gamma(\epsilon')+\sum_e\epsilon_e\epsilon'_e}
+ \prod_e q_e^{r_e+s_e}\eta_e^{\epsilon_e+\epsilon'_e}.
+ \label{eq:new-theta-convolution}
+\end{align}
+The direct fermion state sum supplies $\mathbf F^{\mathsf F}$,
+and the coefficientwise restricted convolution recovery uses this
+product.
+At zero plumbing order its only theta parity components are $000$
+and $110$: the latter is the negative of the former without the
+insertion, and equals it with the insertion.  Hence this constant
+has no inverse on the full parity algebra.  The code subtracts
+already determined positive-level products, divides by twice the
+$000$ coefficient on the recoverable sector, and checks the sector
+relation at each coefficient.  The odd-loop insertion changes which
+sector is recoverable; the physical block remains the same object.
+
+The algebraic $\mathsf{Vir}\oplus\mathsf{Vir}$ generators and their
+central charges are unchanged.  Their modes satisfy
+$(L_n^{(j)})^\dagger=L_{-n}^{(j)}$ under the graded pairing, since
+the $i$ and $-i$ in $G^\dagger$ and $\psi^\dagger$ cancel with graded
+reversal.  The complete double-Virasoro sum has the paper's form,
+\begin{align}
+ \widehat{\mathbf F}_{\hat\Gamma}^{\{f,\eta,a\}}
+ &=\sum_{\{n,\alpha\}}(-1)^{K_\Gamma(\epsilon)}
+   \prod_{e\in E_{\NS}}q_e^{2n_e^2}\eta_e^{2n_e}
+   \prod_{e\in E_{\R}}q_e^{2n_e^2-1/8}\eta_e^{\alpha_e}
+   \prod_{j=1}^2 F_\Gamma(h_{e,n_e}^{(j)},c^{(j)})\nonumber\\
+ &\quad\times\prod_{v\in V_{\NS}}\mathbf B_{a_v}(n_{v_1},n_{v_2},n_{v_3})
+   \prod_{v\in V_{\R}}\mathbb B_{f_v}^{(\eta_v)}
+   (n_{v_1},n_{v_2},n_{v_3},\alpha_{v_2},\alpha_{v_3}).
+ \label{eq:new-double-virasoro}
+\end{align}
+The branching coefficients are the enlarged three-point forms of
+$v_n$ and $v_n^\alpha$, divided by the corresponding BPZ norm
+roots.  The $L_{\pm1}$ branching recursion still follows from the
+Virasoro Ward identity because $L_n^\dagger=L_{-n}$.
+Thus the CCY Virasoro recursion and Schottky large-$c$
+seed are unchanged.  The branching norms are evaluated with
+\eqref{eq:new-tensor-gram}, and a branching vertex uses
+\eqref{eq:new-enlarged-vertex}.  Sew the resulting Virasoro blocks
+with the new inverse norms, divide by the auxiliary block using
+\eqref{eq:new-convolution-sign}, and retain the indicated restricted
+sector when an odd Ramond loop makes the ordinary auxiliary factor
+noninvertible.
+
+\paragraph{Directed evidence.}
+The independent local residue test
+\path{C++/tests/bpz_one_over_z_ward.cpp} verifies the new
+NS--R--R $G$ and $\psi$ identities at 40 digits.  The BPZ-native
+physical Gram and vertex path in \path{C++/include/ramond/direct_pbw.hpp}
+is compared with the double-Virasoro output by
+\path{C++/tests/partition_blocks.cpp} through total level three,
+including both parities of the NS primary and the inserted odd-loop
+sector.  The native convolution is checked coefficientwise there.
+The script \path{C++/tools/check_theta_pbw_oracle.py} compares against
+the separate theta implementation of the SCblock notes; that oracle
+is not Yutai's sphere or torus calculation.  The actual Type 0B
+sphere four-point block arrays are tested by
+\path{C++/tools/check_yutai_sphere_blocks.py}, after putting their
+ordered three-point forms in a common frame.  For Yutai's torus
+two-point calculation, \path{C++/tools/check_yutai_torus_open_bpz.py}
+compares the actual open-R-edge block coefficients, with two sewn
+edges, through NS twice-level two and R level one.  The external
+punctures include ground states and one $G_{-1}$ insertion on either
+side.  All 576 comparisons agree to $2.78\times10^{-16}$ after the
+BPZ phase $i^{\epsilon_{\NS}-\epsilon_{\R}}$ from the two sewn edges;
+here $\epsilon_{\R}$ is the parity of the complete propagating R
+state.  The raw
+arrays differ by as much as $\sqrt2$.  This is a block check, not a
+recalculation of a full torus amplitude.
+Fixed-spin genus-two partition comparisons are finite-cutoff numerical
+checks, not analytic proofs of exact cross-channel equality.  A fresh
+native-BPZ run at 40 digits on ten matched surfaces used total level
+five for the NS--R--R source, level eight for the all-NS target,
+$7^3$ and $10^3$ momentum nodes respectively, and two individually
+transported spins on each surface.  Its twenty source/target ratios
+lie between $0.9998405584$ and $1.0000233972$; the maximum deviation
+from one is $1.59442\times10^{-4}$, and the wall time was $732.6$ s.
+The inputs have finite quadrature, geometry, and structure-constant
+accuracy, so the residual is not solely a conformal-block error.

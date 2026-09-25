@@ -1,190 +1,73 @@
 \clearpage
 \begingroup
-\makeatletter
-\begingroup\lccode`+=32 \lowercase
- {\endgroup\def\Url@ObeySp{\Url@Edit\Url@String{ }{+}}}
-\def\Url@space{\penalty\Url@sppen\ }
-\makeatother
-\section{Super-Liouville partition functions in the theta channel}
+\section{Fixed-spin theta-channel super-Liouville sewing}
 \label{app:partition-test}
 
-We give the three-point coefficients and sewing formulas used in
-the cross-channel test, in the notation of the paper:
-$\mathbf F^{(a)}(h_{1,2,3};q_{1,2,3},\eta_{1,2,3})$ for all-NS
-and $\mathbf F^{(f,\eta,\eta')}(h_1,\beta_{2,3};q_{1,2,3},\eta_{1,2,3})$
-for NS--R--R. The slots are $(\infty,1,0)$, so edge 1 is NS in
-the latter channel. The signs $\eta,\eta'$ label the two
-three-point forms, while $\eta_e$ label the tubes.
+The block in this partition-function calculation is exactly
+$\mathbf F$ defined above and returned by the BPZ-native
+double-Virasoro or superconformal $c$-recursion path. The
+partition-function program does not append a sewing phase or a
+second block conversion. The slots are $(\infty,1,0)$ and the edge
+order is $(1,2,3)$. The form signs $\eta,\eta'$ and tube signs
+$\eta_e$ are different labels. Each chosen set of tube signs
+represents one fixed marked spin structure; no spin structures are
+averaged.
 
-The blocks of the main notes retain the algebraic pairings and ordered
-vertices specified in Appendix~\ref{app:conventions}. A diagonal physical
-partition decomposition uses the geometrically sewn blocks, obtained by
-converting the inverse Grams and infinity-slot vertices. We derive the
-conversion first. The literal blocks of the main notes do not give a
-fixed-spin partition contribution when squared diagonally. The algebraic
-block algorithms are unchanged; the geometric phase is applied to each
-coefficient in both channels before fixed-spin evaluation.
-
-The spectrum is parameterized by real $p_e>0$, with $P_e=ip_e$
-in the chiral block convention and measure $dp_e/\pi$ on each edge:
+Write $P_e=ip_e$ with $p_e>0$. The central charge, weights and
+Ramond ground parameter are
 \begin{equation}
  Q=b+b^{-1},\qquad c=\frac32+3Q^2,\qquad
- h_{\NS}(p)=\frac{Q^2}{8}+\frac{p^2}{2},\qquad
- h_{\R}(p)=h_{\NS}(p)+\frac1{16},\qquad
- \beta_e=\frac{ip_e}{\sqrt2}.
+ h_{\NS}(p)=\frac{Q^2}{8}+\frac{p^2}{2},\quad
+ h_{\R}(p)=h_{\NS}(p)+\frac1{16},\quad
+ \beta=\frac{ip}{\sqrt2}.
  \label{eq:partition-spectrum}
 \end{equation}
-The continuum two-point coefficient is $\pi\delta(p-p')$, both
-for an NS primary and for each physical Ramond family.
-The blocks omit primary powers, so every partition
-function below includes $\prod_{e=1}^3|q_e^{h_e}|^2$, with
-$q_e^{h_e}=\exp(h_e\operatorname{Log}q_e)$ in the chosen plumbing
-frame. There is no additional $q_e^{-c/24}$ in this
-plane-coordinate sewing prescription.
+The descendant blocks omit the primary factors $q_e^{h_e}$.
+The continuum measure is $dp_e/\pi$ and the NS and physical Ramond
+two-point coefficients are both $\pi\delta(p-p')$.
 
-\subsection{Algebraic pairings and geometric BPZ sewing}
-\label{app:partition-bpz}
+\subsection{Ordered forms and BPZ sewing}
 
-The adjoint in \eqref{eq:bpz} is a linear, ordinary order-reversing
-anti-involution: $(XY)^\dagger=Y^\dagger X^\dagger$, with
-$G_r^\dagger=G_{-r}$ and $\psi_r^\dagger=-\psi_{-r}$.
-It defines the stored contravariant Grams. Thus
-$\langle\!\langle G_{-1/2}\phi|G_{-1/2}\phi\rangle=2h$ and
-$\mathbb G_\beta|_0=\operatorname{diag}(1,i)$.
-The term ``BPZ'' used for these algebraic pairings earlier in the notes
-must be distinguished from the geometric pairing below.
+The first-slot BPZ inversion is $z\mapsto1/z$ with lift $-i/z$;
+each edge is sewn by $z\mapsto q_e/z$ with lift
+$-i\sqrt{q_e}/z$. The linear graded transpose and ground metrics
+are \eqref{eq:app-adjoint}--\eqref{eq:app-ground-metrics}.
+In particular, the physical Ramond ground metric is
+$\operatorname{diag}(1,-1)$ and the auxiliary one is
+$\operatorname{diag}(1,-i)$.
 
-The distinction comes from the spin lift of inversion. For $w=q/z$,
-\begin{equation}
- \sqrt{\frac{dw}{dz}}=\pm\frac{i\sqrt q}{z}.
- \label{eq:partition-spin-inversion}
-\end{equation}
-The sign specifies the lift; the factor $i$ is fixed by the derivative.
-Choose the branch in which geometric adjointness is
-\begin{gather}
- L_n^{\ddagger}=L_{-n},\qquad
- G_r^{\ddagger}=iG_{-r},\qquad
- \psi_r^{\ddagger}=-i\psi_{-r},\nonumber\\
- (XY)^{\ddagger}=(-1)^{\epsilon_X\epsilon_Y}
-                  Y^{\ddagger}X^{\ddagger},\nonumber\\
- \langle\!\langle G_r x|y\rangle_{\mathrm{geom}}
- =(-1)^{\epsilon_x}
-   \langle\!\langle x|iG_{-r}y\rangle_{\mathrm{geom}}.
- \label{eq:partition-geometric-adjoint}
-\end{gather}
-Here $\epsilon_X,\epsilon_Y$ are operator parities and $\epsilon_x$
-is the parity of the homogeneous state $x$. The adjoint is graded and
-its square acts as parity on odd modes. It is not the ordinary
-anti-involution used in the numerical Ward solver. These rules are
-the Li--Zamolodchikov pairing of
-\href{https://arxiv.org/pdf/1007.5203}{Tuite--Zuevsky,
-Eqs.~(10), (23), and (26)}, specialized to the supercurrent and free
-fermion. The opposite lift changes the reference tube signs consistently.
+Keep the ordered ground values, including
+$\rho_1^{(\eta)}(\phi,w^-,w^+)=i\eta$. The square-root branch at
+the origin is $i\sqrt z\sqrt{1-z}$, continued along the upper lip.
+For an even NS primary the $m=n=0$ supercurrent identity reads
+\begin{align}
+ \rho_f^{(\eta)}(G_{-1/2}\phi,w_2^\alpha,w_3^\gamma)
+ ={}&i\rho_f^{(\eta)}(\phi,G_0w_2^\alpha,w_3^\gamma)\nonumber\\
+ &-(-1)^{f+|\alpha|}
+       \rho_f^{(\eta)}(\phi,w_2^\alpha,G_0w_3^\gamma).
+ \label{eq:partition-ordered-ward}
+\end{align}
+All other descendants use the four identities in
+Appendix~\ref{app:wards}.
 
-With the even ground normalization fixed, the conversion is
+For an auxiliary-first tensor product the enlarged ordered
+three-point form contains exactly
 \begin{equation}
- \boxed{\displaystyle
- \langle\!\langle x|y\rangle_{\mathrm{geom}}
-     =i^{\epsilon_x}\langle\!\langle x|y\rangle,
- \qquad \epsilon_x=\epsilon_y.}
- \label{eq:partition-bpz-conversion}
+ (-1)^{\epsilon'_1\epsilon_1+\epsilon_2\epsilon'_3}
+ \rho_{\F}(x'_1,x'_2,x'_3)\rho_f^{(\eta)}(x_1,x_2,x_3).
+ \label{eq:partition-enlarged-vertex}
 \end{equation}
-The exponent is parity represented by 0 or 1, not descendant level.
-To verify the formula on an odd generator, use
-$i^{(\epsilon_x+1)\bmod2}=(-1)^{\epsilon_x}i\,i^{\epsilon_x}$
-and the ordinary contravariance of the stored Gram. Even generators
-preserve parity, so their adjointness is unchanged. This proves the
-conversion at every descendant level. In particular,
-\begin{equation}
- \langle\!\langle G_{-1/2}\phi|G_{-1/2}\phi\rangle_{\mathrm{geom}}
- =2ih,\qquad
- \mathbb G_{\beta,\mathrm{geom}}\big|_0=\operatorname{diag}(1,-1).
- \label{eq:partition-geometric-ground-metrics}
-\end{equation}
-The Ramond result also follows directly from the stated $G_0w^\pm$
-and \eqref{eq:partition-geometric-adjoint}. It does not require a
-change of the $G_0$ matrix elements. In the conjugate antiholomorphic
-branch the conversion is $(-i)^{\widetilde\epsilon_x}$.
-
-The vertex must be converted at the same time. The ordered matrix
-element uses its first state as the infinity-slot bra, and hence
-\begin{equation}
- \rho_{\mathrm{geom}}(x_1,x_2,x_3)
- =i^{\epsilon_1}\rho(x_1,x_2,x_3).
- \label{eq:partition-geometric-vertex}
-\end{equation}
-This applies to either physical three-point form; their prescribed
-ground values have an even first state and are unchanged. For a closed
-ordered plumbing graph, each summand of the stored physical block
-therefore acquires
-\begin{equation}
- \prod_e(-i)^{\epsilon_e}\prod_v i^{\epsilon_{v,1}}.
- \label{eq:partition-local-bpz-factors}
-\end{equation}
-The first product comes from inverse Grams and the second from vertices.
-The original $(-1)^{K_\Gamma}$ is retained during this conversion.
-Neither a replacement of the Gram alone nor a deletion of $K_\Gamma$
-alone specifies geometric sewing on an arbitrary graph. In the
-implementation the algebraic coefficients are recovered first, and
-the local conversion is applied to each target coefficient before
-the block is evaluated.
-
-For theta the cancellation is particularly simple. At an all-NS vertex
-$\sum_e\epsilon_e=a\pmod2$, and
-\begin{equation}
- K=\epsilon_1\epsilon_2+\epsilon_1\epsilon_3+\epsilon_2\epsilon_3,
- \qquad
- (-1)^K(-i)^{\epsilon_1+\epsilon_2+\epsilon_3}=(-i)^a.
- \label{eq:partition-theta-bpz-cancellation}
-\end{equation}
-The two infinity-slot vertices additionally give
-$(-1)^{\epsilon_1}$, which reverses the reference lift on edge 1.
-Thus the geometric contraction, written using the stored tensors and
-Grams, has only a constant $(-i)^a$ and this reference-lift change;
-there is no remaining quadratic $K$. The constant cancels against its
-antiholomorphic counterpart. The same chiral identity holds with $a$
-replaced by $f$ in NS--R--R.
-
-One can check the full all-NS state sum before holomorphic
-factorization. Its graded product metric contributes
-$(-1)^{\sum_e\epsilon_e\widetilde\epsilon_e}$, and
-\begin{equation}
- \begin{split}
- &(-1)^{K(\epsilon+\widetilde\epsilon)
-                      +\sum_e\epsilon_e\widetilde\epsilon_e}
-  (-i)^{\sum_e\epsilon_e}i^{\sum_e\widetilde\epsilon_e}
-  =(-1)^a,\\
- &\hspace{12mm}
- \sum_e\epsilon_e\equiv\sum_e\widetilde\epsilon_e\equiv a\pmod2.
- \end{split}
- \label{eq:partition-full-bpz-sign}
-\end{equation}
-The infinity factors have been absorbed into the reference lifts in
-this equation. The remaining $(-1)^a$ multiplying $C_a^2$ must still
-be kept. Equation~\eqref{eq:correlator-sign} is a valid algebraic
-parity identity, but the physical interpretation of
-\eqref{eq:correlator} requires these local BPZ factors. Factoring an
-unconverted starting state sum cannot supply them afterwards.
-
-The first discrepancy is already visible for a physical free Majorana,
-without Liouville structure constants. With unit Fock norms, the three
-two-fermion sphere matrix elements are one. The literal $K$-weighted
-sewing at $(\eta_1,\eta_2,\eta_3)=(1,1,1)$ begins
-\begin{equation}
- 1-\sqrt{q_1q_2}-\sqrt{q_1q_3}-\sqrt{q_2q_3}
-   +\text{terms of total level at least 2}.
- \label{eq:partition-first-mismatch}
-\end{equation}
-The geometric spin with positive charge-lattice character has all
-three plus signs. The BPZ conversion above gives them directly.
-Rescaling a structure constant cannot change these relative signs,
-and relabeling the lifts cannot do so either: it would require
-$\eta_1\eta_2=\eta_1\eta_3=\eta_2\eta_3=-1$, whose product is
-impossible. The discrepancy is consequently a local sewing-convention
-mismatch, not a failure of superconformal block decomposition or a
-truncation error.
+The first exponent is graded BPZ dualization at infinity; the
+second moves the middle physical state past the third auxiliary
+state. Every tube uses the inverse of the full graded tensor Gram.
+There is no separate $(-i)^{\epsilon_e}$ factor on a tube or
+$i^{\epsilon_{v,1}}$ factor at an infinity slot.
+The partition-function driver evaluates the returned coefficients
+at the fixed $\eta_e$ and the chosen $q_e$, then applies only the
+structure constants and primary factors displayed below.
 
 \subsection{The three-point coefficients}
+
 
 For an all-NS sphere, $C_a(p_1,p_2,p_3)$ is the coefficient of the
 normalized holomorphic and antiholomorphic forms $\rho_a$.
@@ -202,6 +85,14 @@ With the fixed Ramond ground-state factors kept in the sewing,
  C_{1,\eta}(p_1,p_2,p_3)=C_{0,\eta}(p_1,p_2,p_3).
  \label{eq:partition-Cf}
 \end{equation}
+The same sign-labeled coefficient multiplies the even and odd chiral
+vertices in \href{https://arxiv.org/pdf/0810.1203}{Hadasz--Jask\'olski--Suchanek,
+Eq.~(4.13)}; changing $f$ does not exchange $\eta$ with $-\eta$.
+The current long draft states $C_{1,\eta}=C_{0,-\eta}$, which is
+inconsistent with the coefficient assignment to its displayed
+$\rho_1^{(\eta)}$ ground values and the fixed-spin decomposition used
+here. That sentence needs correction
+when the draft is next edited; the draft has not been changed here.
 The two physical equal-family ground three-point values are
 $C_{0,+}+C_{0,-}$ and $C_{0,+}-C_{0,-}$.
 The label $f$ still distinguishes the normalized chiral forms;
@@ -250,10 +141,10 @@ fixed to one, as in the numerical test, the all-NS coefficients are
  \label{eq:partition-Ca}
 \end{align}
 All momentum sums in \eqref{eq:partition-Ca} run from 1 to 3.
-For NS--R--R, with $p_1$ on the NS edge, the coefficients for
-both $f=0,1$ are
+For NS--R--R, with $p_1$ on the NS edge, the two independent
+coefficients are
 \begin{align}
- C_{f,+}(p_1,p_2,p_3)
+ C_{0,+}(p_1,p_2,p_3)
  &=\frac{\Upsilon'_{\NS}(0)}{b^3}
  \frac{\displaystyle\sqrt{\prod_{\sigma=\pm1}
      \Upsilon_{\NS}(2i\sigma p_1)
@@ -261,7 +152,7 @@ both $f=0,1$ are
  {\displaystyle\prod_{\sigma=\pm1}
      \Upsilon_{\R}(Q/2+i(p_2+p_3+\sigma p_1))
      \Upsilon_{\NS}(Q/2+i(p_1+\sigma(p_2-p_3)))},\nonumber\\
- C_{f,-}(p_1,p_2,p_3)
+ C_{0,-}(p_1,p_2,p_3)
  &=\frac{\Upsilon'_{\NS}(0)}{b^3}
  \frac{\displaystyle\sqrt{\prod_{\sigma=\pm1}
      \Upsilon_{\NS}(2i\sigma p_1)
@@ -280,387 +171,114 @@ normalizations or three-point symbols are needed.
 These formulas use the equal NS/R two-point convention of
 \href{https://arxiv.org/pdf/hep-th/9607120}{Poghossian,
 Eqs.~(14)--(15), (51), and (56)}.
+The standalone Type 0B amplitude code uses half of each displayed
+NS--R--R coefficient and a Ramond continuum two-point metric half as
+large. Rescaling its Ramond field by $\sqrt2$ gives the equal-metric
+convention here: each NS--R--R vertex gains a factor two and each
+inverse Ramond continuum metric loses a factor two. On the theta
+channel's two Ramond internal edges these factors cancel. This field
+normalization changes no normalized chiral block.
 
-\subsection{The block decompositions}
+\subsection{Fixed-spin decompositions}
 
-The block functions in this appendix are exactly the paper's
-$\mathbf F$, including $(-1)^{K_\Gamma}$. A geometric spin
-characteristic and an argument $\eta_e$ of this block are different
-labels. In particular, the raw determinant signs in the archived
-geometry files cannot be inserted as the lift arguments of a single
-$\mathbf F$ with a diagonal absolute-square pairing.
-
-For either theta-channel block, the local factors in
-\eqref{eq:partition-local-bpz-factors} give a geometric block. At each
-fixed edge-parity triple, the run applies
+For either theta chart, set the tube signs to the chosen fixed spin
+before evaluating a block. The all-NS contribution is
 \begin{equation}
- \left.\mathbf F_{\mathrm{geom}}\right|_{\epsilon}
- =(-i)^{\epsilon_1+\epsilon_2+\epsilon_3}(-1)^{\epsilon_1}
-  \left.\mathbf F\right|_{\epsilon}.
- \label{eq:partition-geometric-coefficients}
-\end{equation}
-The restriction includes the original $q_e$ powers and the paper's
-$(-1)^{K_\Gamma}$. The signs $\eta_e$ are fixed independently for each
-marked spin; the factor $(-1)^{\epsilon_1}$ is kept in
-\eqref{eq:partition-geometric-coefficients} rather than hidden in a
-relabeling of $\eta_1$. Coefficients are converted before summing
-the block. The all-NS fixed-spin decomposition is diagonal:
-\begin{equation}
- \left.Z_{\text{super-Liouville}}\right|_{\NS\NS\NS}
+ \left.Z_{\mathrm{SL}}\right|_{\NS\NS\NS,\eta_e}
  =\int_{(0,\infty)^3}\prod_{e=1}^3\frac{dp_e}{\pi}|q_e^{h_e}|^2
  \sum_{a=0}^1(-1)^a C_a^2
- \mathbf F_{\mathrm{geom}}^{(a)}(q;\eta_e)
- \overline{\mathbf F_{\mathrm{geom}}^{(a)}(q;\eta_e)}.
+ \mathbf F^{(a)}(q;\eta_e)\overline{\mathbf F^{(a)}(q;\eta_e)}.
  \label{eq:partition-allns}
 \end{equation}
-The $a=1$ phase in the geometric block cancels against its
-antiholomorphic counterpart. The factor $(-1)^a$ and the $i$ in
-$C_1$ are retained. The direct Majorana state sum and independent
-bosonization check below fix the spin assignments. No sum of distinct
-spin structures occurs in \eqref{eq:partition-allns}.
-
-For Ramond edges it is also necessary to specify the physical
-two-family subspace. In the paper's ground basis its two kets are
+The $i$ in $C_1$ and the $(-1)^a$ are both retained.
+For the NS--R--R chart the physical Ramond ground pairing gives
+\begin{align}
+ \left.Z_{\mathrm{SL}}\right|_{\NS\R\R,\eta_e}
+ ={}&\frac14\int\prod_{e=1}^3\frac{dp_e}{\pi}|q_e^{h_e}|^2
+ \sum_{f=0}^1\sum_{\eta=\pm1}C_{f,\eta}^2
+ \mathbf F_f^{(\eta,\eta)}(q;\eta_e)
+ \overline{\mathbf F_f^{(\eta,\eta)}(q;\eta_e)}.
+ \label{eq:partition-nsrr-full}
+\end{align}
+This sums normalized three-point forms at one fixed spin, not
+surface spin structures. On the two even Ramond cycles tested,
+$\mathbf F_1^{(\eta,\eta)}=-\mathbf F_0^{(\eta,\eta)}$ at the
+\emph{same} $\eta$. With $C_{1,\eta}=C_{0,\eta}$,
+\eqref{eq:partition-nsrr-full} reduces to
 \begin{equation}
- \frac{w^+\otimes\widetilde w^+-i w^-\otimes\widetilde w^-}{\sqrt2},
- \qquad
- \frac{w^+\otimes\widetilde w^-+w^-\otimes\widetilde w^+}{\sqrt2}.
- \label{eq:partition-physical-ramond-kets}
-\end{equation}
-In the product order $(++,+-,-+,--)$, the stored graded product
-Gram and the geometric one are, respectively,
-\begin{equation}
- \operatorname{diag}(1,-i,i,-1),\qquad
- \operatorname{diag}(1,-1,-1,-1).
- \label{eq:partition-full-ramond-grams}
-\end{equation}
-Restriction to the same two kets on both sides gives
-$\operatorname{diag}(1,0)$ for the first pairing and
-$\operatorname{diag}(1,-1)$ for the second. Thus the first pairing
-cannot be inverted on that ket subspace. Choosing a separate dual
-embedding can produce an algebraic pairing, but does not by itself
-specify geometric sewing. The converted pairing is nondegenerate
-on the stated physical states without making such a choice.
-
-The implemented Ramond contraction pairs equal $\eta,\eta'$ and uses
-the two-family ground normalization above. After applying
-\eqref{eq:partition-geometric-coefficients} coefficientwise, its
-fixed-spin contribution is
-\begin{equation}
- \left.Z_{\text{super-Liouville}}\right|_{\NS\R\R,\eta_e}
+ \left.Z_{\mathrm{SL}}\right|_{\NS\R\R,\eta_e}
  =\frac12\int\prod_{e=1}^3\frac{dp_e}{\pi}|q_e^{h_e}|^2
  \sum_{\eta=\pm1}C_{0,\eta}^2
- \mathbf F_{\mathrm{geom}}^{(0,\eta,\eta)}(q;\eta_e)
- \overline{\mathbf F_{\mathrm{geom}}^{(0,\eta,\eta)}(q;\eta_e)}.
+ \mathbf F_0^{(\eta,\eta)}(q;\eta_e)
+ \overline{\mathbf F_0^{(\eta,\eta)}(q;\eta_e)}.
  \label{eq:partition-nsrr}
 \end{equation}
-Here the weights are $(h_1,\beta_2,\beta_3)$ and the constants have
-arguments $(p_1,p_2,p_3)$. The sum over $\eta$ is a three-point-form
-sum, not a spin-structure sum. Both $f$ blocks were computed in the
-run; at each fixed source spin they satisfy
-$\mathbf F_{\mathrm{geom}}^{(1,\eta,\eta)}
-=-\mathbf F_{\mathrm{geom}}^{(0,\eta,\eta)}$ within the numerical
-residual reported below. Equation~\eqref{eq:partition-nsrr} uses
-only $f=0$. The free-Majorana check tests this geometric sewing;
-an independent proof of the interacting Ramond descendant pairing
-in this basis remains outside the numerical check.
-
-These are fixed geometric spins, not coherent superpositions of
-distinct spin structures. Both formulas use the physical diagonal
-spectrum; the implementation accepts independent holomorphic and
-antiholomorphic arguments before that specialization.
-
-\subsection{Identity normalization}
-\label{app:partition-normalization-resolution}
-
-The relative NS/R normalization is fixed without a higher-genus
-calculation. Take the NS momentum to the identity,
-$p_1\to iQ/2$, with $p_2=p_3>0$.
-After cancelling the common external NS leg,
-\eqref{eq:partition-Ca}--\eqref{eq:partition-Cfeta} give
+The factor $1/2$ is the physical Ramond ground-pairing
+normalization. It is fixed, not fitted to the cross-channel ratio.
+In the NS identity limit $p_1\to iQ/2$ with $p_2=p_3$,
 \begin{equation}
- \frac{C_{f,+}(p_1,p_2,p_2)}{C_0(p_1,p_2,p_2)}\longrightarrow1,\qquad
- \frac{C_{f,-}(p_1,p_2,p_2)}{C_0(p_1,p_2,p_2)}\longrightarrow0.
+ \frac{C_{f,+}(p_1,p_2,p_2)}{C_0(p_1,p_2,p_2)}\to1,
+ \qquad
+ \frac{C_{f,-}(p_1,p_2,p_2)}{C_0(p_1,p_2,p_2)}\to0
+ \quad(f=0,1).
  \label{eq:partition-identity-residue}
 \end{equation}
-These compare residues of the common continuum delta function.
-Reflection of the Upsilon functions gives the first limit;
-$\Upsilon_{\NS}(0)=0$ gives the second. Both physical Ramond
-families therefore reproduce the NS identity residue.
-An extra half in either reduced coefficient would violate this
-condition and suppress a two-vertex partition contribution by four.
-This normalization issue is separate from the BPZ conversion above.
-The special-function tests at $b=0.8,1,1.4$, including
-an independent Barnes-$G$ calculation at $b=1$, are retained
-with the results.
+The identity residue and the direct special-function evaluation
+fix the relative NS/R normalization.
 
-\subsection{The cross-channel comparison}
-\label{app:partition-comparison}
+\subsection{Directed checks and scope}
 
-The saved fresh run uses $b=7/5$. The source marked characteristics
-$[11|00]$ and $[11|11]$ map to target marked characteristics
-$[00|00]$ and $[00|10]$. Their target charge-frame characteristics
-are $[00|10]$ and $[00|00]$, respectively. The charge-frame shift
-is $\left(\begin{smallmatrix}-1&-1\\-1&0\end{smallmatrix}\right)$;
-the source shift is $\left(\begin{smallmatrix}0&0\\0&1\end{smallmatrix}\right)$.
-The configuration records these shifts and the symplectic map
-\begin{equation}
- \begin{pmatrix}
- -1&0&0&0\\1&-1&0&-2\\0&0&-1&-1\\-1&1&0&1
- \end{pmatrix}.
-\end{equation}
-The fixed tube signs in the paper's edge order are
-\begin{center}
-\begin{tabular}{ccc}
-\toprule
-Source marked spin & NS--R--R $\eta_e$ & All-NS $\eta_e$\\
-\midrule
-$[11|00]$ & $(1,-1,1)$ & $(-1,1,-1)$\\
-$[11|11]$ & $(-1,-1,1)$ & $(-1,1,1)$\\
-\bottomrule
-\end{tabular}
-\end{center}
-Each row is evaluated separately at one sign triple in each channel.
-The comparison does not test $\eta\eta'=-1$.
+The BPZ-native theta test at 40 digits compares direct physical
+PBW sewing, the double-Virasoro recovery, and the coefficientwise
+enlarged convolution through total level three. It covers both
+intrinsic NS primary parities and the ordinary and inserted
+Ramond-loop sectors. The local NS--R--R $G$ and auxiliary $\psi$
+residue identities are separately tested in
+\path{C++/tests/bpz_one_over_z_ward.cpp}; the tensor pairing
+and enlarged vertex are tested in
+\path{C++/tests/bpz_one_over_z_tensor.cpp}.
+The separate theta PBW oracle is checked by
+\path{C++/tools/check_theta_pbw_oracle.py}. It is an independent
+theta implementation of the SCblock notes, not a block from
+Yutai's sphere or torus calculation.
 
-The central plumbing values, rounded and in the paper's edge order, are
-\begin{center}
-\begin{tabular}{ccc}
-\toprule
-Edge & NS--R--R channel & All-NS channel\\
-\midrule
-1 & $-0.035159173395+0.025344924433i$
-  & $-0.080559050182-0.000078089260i$\\
-2 & $-0.040592698060+0.029788087392i$
-  & $-0.024917675595-0.001472871220i$\\
-3 & $-0.039389297943-0.025083391996i$
-  & $ 0.034728649739-0.025129048103i$\\
-\bottomrule
-\end{tabular}
-\end{center}
-The computation reads the full stored geometry. The free scalar
-plus Majorana partition functions are $0.5754095923717206$ and
-$0.5638924570404817$ in the source and target frames.
-The compared quantities are
-\begin{equation}
- \left.\frac{Z_{\text{super-Liouville}}}
- {(Z_{\text{free boson+fermion}})^{1+2Q^2}}\right|_{\NS\R\R}
- \quad\hbox{and}\quad
- \left.\frac{Z_{\text{super-Liouville}}}
- {(Z_{\text{free boson+fermion}})^{1+2Q^2}}
- \right|_{\NS\NS\NS}.
- \label{eq:partition-ratio}
-\end{equation}
-This free theory removes the change of conformal frame; it is
-distinct from the auxiliary fermion in the block algorithm.
+The fixed-spin partition comparison was rerun with native BPZ
+blocks at 40 digits on ten matched genus-two surfaces. Each
+surface uses two individually transported spin assignments.
+The NS--R--R source has total descendant level five and
+$7^3$ momentum nodes; the all-NS target has level eight and
+$10^3$ nodes. The twenty separately evaluated source/target
+ratios lie between $0.9998405584$ and $1.0000233972$; their
+largest deviation from one is $1.59442\times10^{-4}$.
+The run took $732.6$ seconds. Finite quadrature, geometry and
+structure-constant accuracy contribute to this residual.
+No spin sum and no coefficient-dependent sewing conversion
+are used in the partition driver.
 
-The source uses a $7^3$ momentum grid and total descendant level
-5; the target uses a $10^3$ grid and total level 8. Both use
-40-digit block arithmetic and three workers. Each block is recomputed
-from scratch. Geometry, quadrature nodes, structure constants,
-and free-frame factors are supplied, rather than recomputed.
-The input conversion only changes edge order and coefficient names,
-including $C_1=i\widetilde C$ at the historical input boundary.
-The frozen input geometry and coefficients have approximately
-machine precision; 40-digit block arithmetic does not improve
-their input accuracy.
+Yutai's compared data are actual sphere four-point and torus
+two-point blocks. The sphere comparison uses common ordered
+three-point forms and checks 864 coefficients through internal
+level two, with maximum absolute discrepancy
+$3.89\times10^{-16}$; the frozen physical-bank comparison
+has maximum discrepancy $7.2\times10^{-9}$ on its stated
+supported nodes. The torus comparison checks 576 open-R-edge
+coefficients through NS twice-level two and R level one,
+including the supported external descendants. It agrees to
+$2.78\times10^{-16}$ after the BPZ sewn-edge frame phase
+$i^{\epsilon_{\NS}-\epsilon_{\R}}$. This phase compares the
+two implementations' local frames; it is not an extra factor
+in the block defined here. These are block comparisons, not
+recalculations of complete integrated Type 0B amplitudes.
 
-The fresh ratios, including the free-frame correction, are
-\begin{center}
-\begin{tabular}{lc}
-\toprule
-Source marked spin & Source/target ratio\\
-\midrule
-$[11|00]$ & $1.000007836181439$\\
-$[11|11]$ & $1.000003799186142$\\
-\bottomrule
-\end{tabular}
-\end{center}
-The respective source integrals are $8.14236868706525\times10^{-10}$
-and $7.93282340959802\times10^{-10}$; the target integrals are
-$6.65982016565363\times10^{-10}$ and
-$6.48845472646562\times10^{-10}$. The source and target took
-$93.66$ and $72.83$ seconds, respectively, excluding compilation,
-input preparation and reduction. Both channels apply
-\eqref{eq:partition-geometric-coefficients} before one fixed-sign
-evaluation. The maximum source form-identity residual is
-$1.66\times10^{-39}$. The numbers equal those of the earlier
-two-sign expression
-because that expression reduces algebraically to this fixed-sign
-coefficient sum in these sectors; their numerical equality is not an
-independent cross-check. No normalization is fitted. These are
-finite-cutoff comparisons at one surface, not rigorous truncation
-bounds or tests of every spin sector.
-
-\subsection{Ten matched fixed-spin surfaces}
-
-The archived ten-point geometry set supplies ten distinct Riemann
-surfaces, each with an NS--R--R and an all-NS plumbing description.
-The marked characteristic is $[11|00]$ in the source and its
-symplectic transport $[00|00]$ in the target at every point. We used
-the same $7^3$ and $10^3$ momentum nodes and three-point constants
-as above, but recomputed both chiral blocks from scratch at each
-plumbing geometry. The respective total descendant cutoffs are 5
-and 8, with 40-digit block arithmetic. The fixed-sign free scalar
-plus Majorana factors are supplied separately for each surface.
-The source blocks use double Virasoro; the target blocks use the
-superconformal $c$-recursion with a Schottky large-$c$ seed.
-The raw $\eta_e$ at each point follows from its recorded integer
-period branch; no sign or normalization is fitted to the Liouville
-ratio. The source signs are $(1,-1,1)$ throughout. The target signs
-and the resulting fixed-spin ratios are listed below.
-\begin{center}
-\begin{tabular}{ccc}
-\toprule
-Surface & All-NS $\eta_e$ & NS--R--R/all-NS ratio\\
-\midrule
-1  & $(-1,-1,-1)$ & $0.999984319108$\\
-2  & $(-1,-1, 1)$ & $1.000015770268$\\
-3  & $(-1,-1, 1)$ & $0.999974133929$\\
-4  & $(-1,-1, 1)$ & $1.000003985268$\\
-5  & $(-1,-1,-1)$ & $1.000040334078$\\
-6  & $(-1,-1, 1)$ & $1.000002080761$\\
-7  & $(-1,-1, 1)$ & $1.000013057152$\\
-8  & $(-1,-1, 1)$ & $1.000018867465$\\
-9  & $(-1,-1, 1)$ & $1.000007219093$\\
-10 & $(-1,-1, 1)$ & $1.000003923144$\\
-\bottomrule
-\end{tabular}
-\end{center}
-Each ratio uses one fixed spin on one surface, with no spin sum.
-The largest absolute deviation from one is $4.03\times10^{-5}$.
-Independent period and spin-transport checks on all ten pairs have
-maximum period residual $4.12\times10^{-10}$. The direct free-Majorana
-state sum agrees with charge-lattice bosonization through total level 8
-to maximum relative error $6.25\times10^{-7}$; this finite-cutoff
-check fixes the geometric signs. Across the interacting source nodes,
-the largest $|\mathbf F_{\mathrm{geom}}^{(0,\eta,\eta)}
-+\mathbf F_{\mathrm{geom}}^{(1,\eta,\eta)}|$ is
-$2.66\times10^{-38}$. Three point jobs ran concurrently, each with
-three block workers; the total wall time was $737.55$ seconds,
-excluding compilation and input preparation. The frozen structure
-constants, geometry and free factors have approximately machine
-precision, so 40-digit block arithmetic does not imply 40-digit
-accuracy for these ratios. No quadrature or descendant-cutoff
-extrapolation was performed.
-
-The ten configurations, complete node results, geometry checks and
-integrals were stored in
-\path{C++/results/partition_geometric_ten_points_2026-09-24/};
-the generated files have since been removed from the code-only checkout.
-The preparation and run scripts are
-\path{C++/tools/prepare_partition_ten_points.py} and
-\path{C++/tools/run_partition_ten_points.py}. The former reads the
-archived ten-point matched geometry; the latter uses the saved
-momentum nodes and constants but recomputes every chiral block.
-
-\subsection{Independent checks of the sewing convention}
-\label{app:partition-bpz-tests}
-
-The native test \path{C++/tests/partition_bpz.cpp} checks all 32
-allowed NS parity pairs in \eqref{eq:partition-full-bpz-sign}
-as integer exponents modulo four. It also checks the $G_0$ adjoint
-conversion and the four entries of the Ramond ground-state metric.
-Its maximum scaled errors are $2.22\times10^{-16}$ in machine
-arithmetic and $2.30\times10^{-41}$ at 40 digits. This test does
-not independently establish the interacting Ramond descendant pairing.
-
-A separate geometry test starts with sphere Wick or fermion Ward
-matrix elements, converts each local pairing and infinity vertex,
-and evaluates the resulting state sum. It uses neither a Liouville
-structure constant nor an interacting block. It compares the
-\emph{complex square} of the chiral Majorana amplitude with the
-Dirac charge-lattice result in the same plumbing frame, using the
-bosonization identity of
-\href{https://arxiv.org/pdf/1007.5203}{Tuite--Zuevsky, Eq.~(78)}.
-The NS vacuum coefficient is one; in NS--R--R the normalization is
-$\sqrt2\,q_2^{1/16}q_3^{1/16}$. The latter follows from the two
-minimal charge-lattice terms and fixes the normalization of the
-two-ground-state Ward sum before comparison.
-
-Through total level 8 the results are
-\begin{center}
-\begin{tabular}{lrc}
-\toprule
-Charge-frame spins & Nonzero level monomials & Maximum relative error\\
-\midrule
-Two compared $[00|\cdot\,\cdot]$ & 228 & $9.95\times10^{-9}$\\
-$[11|00]$ & 249 & $1.69\times10^{-8}$\\
-$[11|11]$ & 249 & $3.01\times10^{-8}$\\
-\bottomrule
-\end{tabular}
-\end{center}
-For the last spin the relative errors at levels 6, 7 and 8 are
-$8.97\times10^{-7}$, $1.66\times10^{-7}$ and $3.01\times10^{-8}$.
-The test uses machine-precision geometry and retains a finite
-descendant cutoff. It verifies the phases as well as absolute values;
-it does not claim 40-digit agreement. The complete directed geometry
-check took about $0.04$ seconds after compilation.
-
-The actual source and target Riemann surfaces were checked without
-using partition values. Reconstructing both period matrices from
-holomorphic-one-form collocation and applying the saved symplectic
-map leaves a maximum residual $6.36\times10^{-11}$. The collocation
-periods agree with the charge-sewing periods to $3.39\times10^{-15}$
-after the recorded integer branches. The two source characteristics
-$[11|00]$, $[11|11]$ transport exactly to target $[00|00]$,
-$[00|10]$, whose charge-frame characteristics are $[00|10]$,
-$[00|00]$.
-
-Separate block-engine checks through total level 3 verify the
-algebraic blocks. The geometric tests above address the additional
-sewing conversion used in this partition-function comparison.
-
-The native implementation is \path{C++/drivers/partition_main.cpp}
-with sewing in \path{C++/include/scblocks/partition_sewing.hpp}.
-The fresh inputs, blocks, geometric spin checks, times and integrals
-were stored in
-\path{C++/results/partition_geometric_fixed_2026-09-24/};
-these generated files have been removed.
-\path{C++/PARTITION.md} gives the reproduction commands.
-\path{C++/PARTITION_NO_M_AUDIT.md} gives the spin-sign obstruction
-and independent surface check.
-The BPZ derivation and directed-test evidence are in
-\path{C++/PARTITION_BPZ_DIAGNOSIS.md}; the associated generated output
-in \path{C++/results/partition_bpz_diagnosis_2026-09-24/} was removed.
-To reproduce the new local and geometry checks from the repository root,
-run \texttt{make -C C++ bin/partition\_bpz}, followed by
-\begin{quote}\small
+The current directed commands are
 \begin{verbatim}
-python3 C++/tests/partition_bpz_geometry.py \
-  --config \
-  /path/to/regenerated/config.json \
-  --output /tmp/partition-bpz-geometry.json
+make -C C++ check-partition
+python3 C++/tools/check_theta_pbw_oracle.py
+python3 C++/tools/check_yutai_sphere_blocks.py
+python3 C++/tools/check_yutai_torus_open_bpz.py
 \end{verbatim}
-\end{quote}
-This command runs the native Gram and parity audit before the geometry comparison.
-The unsuccessful diagonal-pairing run was stored in
-\path{C++/results/partition_paper_blocks_2026-09-24/}; its ratio
-$0.9590535743$ is not a truncation effect.
-
-\subsection{What must be stated in the paper}
-
-The paper can keep its algebraic Ward identities and recursion, but
-must distinguish its stored block from the geometric block used in a
-diagonal partition decomposition. For the two theta channels tested here,
-\eqref{eq:partition-geometric-coefficients} gives the conversion used.
-It follows from converting both inverse Grams and infinity-slot
-vertices as in \eqref{eq:partition-bpz-conversion}--
-\eqref{eq:partition-geometric-vertex}. A change of tube signs alone
-cannot produce it. The numerical evidence here does not establish an
-arbitrary-graph partition formula or certify every formula in the paper.
-
-Endpoint interchange requires spin-frame transport. Both the stored
-contravariant Gram and the Li--Zamolodchikov Gram are symmetric, not
-graded antisymmetric; a nonzero one-dimensional odd-state Gram already
-shows why the latter assertion cannot hold. Thus an endpoint-exchange
-sign cannot be attributed to a relative minus sign between
-$\mathbf G^{AB}$ and $\mathbf G^{BA}$.
-
-Two literal formula corrections should also be retained when transferring
-these conventions to the paper: \eqref{eq:graph-sign} defines the
-\emph{exponent} $K$ modulo two, and the sign is $(-1)^K$;
-the algebraic auxiliary adjoint is $\psi_r^\dagger=-\psi_{-r}$,
-with no second dagger on the right. These corrections are distinct from
-the BPZ conversion. Neither paper draft was edited for this appendix update.
+The implementation is in \path{C++/include/ramond/pipeline.hpp},
+\path{C++/include/ramond/direct_pbw.hpp},
+\path{C++/include/scblocks/ns_recursion.hpp}, and
+\path{C++/drivers/partition_main.cpp}.
 \endgroup

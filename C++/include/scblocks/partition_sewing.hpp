@@ -1,12 +1,13 @@
 #pragma once
 #include "ramond/number.hpp"
+#include "ramond/theta_bpz.hpp"
 #include <array>
 
 namespace scblocks::nonchiral {
 using ramond::Machine;
 using ramond::require;
-inline constexpr const char* coefficient_convention="unit_identity_upsilon_coefficients_2026-09-24";
-inline constexpr const char* sewing_convention="fixed_tube_sign_geometric_BPZ_both_channels_2026-09-24";
+inline constexpr const char* coefficient_convention="unit_identity_upsilon_ordered_plus_i_eta_2026-09-25";
+inline constexpr const char* sewing_convention="theta_BPZ_state_sum_in_block_2026-09-25";
 // Paper edge order: (1,2,3)=(infinity,1,0). Fix eta_1=+1.
 inline constexpr std::array<std::array<int,3>,4> eta_e{{{1,1,1},{1,-1,1},{1,1,-1},{1,-1,-1}}};
 template<class S> using F_NS = std::array<std::array<S,4>,2>; // [a][eta_e]
@@ -34,17 +35,7 @@ template<class S> S evaluate_parity(const std::array<S,8>& F,const std::array<in
 inline int K(int e) {
     return ((e&1)*((e>>1)&1)+(e&1)*((e>>2)&1)+((e>>1)&1)*((e>>2)&1))%2;
 }
-// Geometric BPZ conversion in the paper's PBW parity basis. Inversion of
-// each tube contributes -i for an odd state; the two infinity-slot vertices
-// contribute (-1)^epsilon_1. The original Koszul sign is already in F.
-template<class S> S geometric_phase(int epsilon) {
-    S minus_i(Machine(0,-1)),phase(1);
-    for(int edge=0;edge<3;edge++)if(epsilon&(1<<edge))phase*=minus_i;
-    if(epsilon&1)phase=-phase;
-    return phase;
-}
-// Physical two-family Ramond pairing for a fixed geometric spin, after
-// coefficientwise BPZ conversion. The second form is computed and retained
+// Physical two-family Ramond pairing for a fixed spin. The second form is computed and retained
 // for an independent sector-identity check; it is not summed as another spin.
 template<class S> S fixed_R_partition(const std::array<S,2>& F,
                                       const std::array<S,2>& Ftilde,

@@ -8,7 +8,7 @@ using namespace ramond;
 template<class S> void run(int level,int dps,int p,int f,int eta,bool opposite,const std::string &output) {
     double start=seconds();
     S b=parse<S>("7/5"); std::array<S,3> momenta{parse<S>("11/23"),parse<S>("13/29"),parse<S>("17/31")};
-    DirectPBW<S> engine(b,momenta,p,f,eta,opposite);
+    DirectPBW<S> engine(b,momenta,p,f,eta,opposite,true);
     double setup=seconds()-start;
     std::vector<std::array<int,3>> levels;
     for(int a=0;a<=2*level;a++) for(int l=0;l<=level;l++) for(int d=0;d<=level;d++) levels.push_back({a,2*l,2*d});
@@ -24,7 +24,7 @@ template<class S> void run(int level,int dps,int p,int f,int eta,bool opposite,c
     std::filesystem::path path(output); if(path.has_parent_path()) std::filesystem::create_directories(path.parent_path());
     std::ofstream out(output); require(bool(out),"cannot open PBW output");
     out<<std::setprecision(17)<<"{\"status\":\"computed\",\"implementation\":\"C++17 direct SCA PBW\",\"mode\":\""
-       <<(opposite?"inserted":"ordinary")<<"\",\"conventions\":\"product_bpz_residue_2026-09-22\",\"truncation\":\"per-edge\",\"q_level_cutoffs\":["<<level<<','<<level<<','<<level
+       <<(opposite?"inserted":"ordinary")<<"\",\"conventions\":\"ordered_yutai_bpz_sewing_2026-09-25\",\"truncation\":\"per-edge\",\"q_level_cutoffs\":["<<level<<','<<level<<','<<level
        <<"],\"dps\":"<<dps<<",\"precision_bits\":"<<(dps?MP::bits:53)<<",\"b\":\"7/5\",\"momenta\":[\"11/23\",\"13/29\",\"17/31\"],\"p\":"<<p<<",\"f\":"<<f
        <<",\"etas\":["<<eta<<','<<(opposite?-eta:eta)<<"],\"timing_seconds\":{\"setup\":"<<setup<<",\"metadata\":"<<t.metadata
        <<",\"gram_entries\":"<<t.gram_entries<<",\"gram_inverse\":"<<t.gram_inverse<<",\"vertices\":"<<t.vertices<<",\"contractions\":"<<t.contractions<<",\"total\":"<<total

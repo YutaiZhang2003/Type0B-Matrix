@@ -78,7 +78,7 @@ template <class S> class PBWModule {
 };
 template <class S> class PhysicalForm {
     std::array<PBWModule<S> *, 3> modules_;
-    int f_, eta_;
+    int f_, eta_, p_;
     using Triple = std::array<PBW, 3>;
     std::map<Triple, S> cache_;
     std::set<Triple> active_;
@@ -92,46 +92,49 @@ template <class S> class PhysicalForm {
         return v;
     }
     S gward(const Triple &states, int target, const Triple &rest) {
-        // Residues of z^m(z-1)^n sqrt(z(z-1)) G(z). The root is
-        // z at infinity, sqrt(z-1) at 1, and +i sqrt(z) at 0.
-        const int middle_parity = modules_[1]->parity(rest[1]);
-        std::map<Triple, S> equation;
-        auto add_action = [&](int slot, int mode, const S &c) {
-            if (c == S(0))
-                return;
-            for (const auto &[final, v] : modules_[slot]->act(1, mode, rest[slot])) {
-                auto changed = rest;
-                changed[slot] = final;
-                equation[changed] += c * v;
+        // Suchanek's two ordered NS-R-R contour identities at z=1.
+        const S eps=S(Machine(0,sign(p_+modules_[0]->parity(rest[0])+
+                                       modules_[2]->parity(rest[2]))));
+        std::map<Triple,S> equation;
+        auto add_action=[&](int slot,int mode,const S &c) {
+            if(c==S(0)) return;
+            for(const auto &[final,v]:modules_[slot]->act(1,mode,rest[slot])) {
+                auto changed=rest;
+                changed[slot]=final;
+                equation[changed]+=c*v;
             }
         };
-        const S imag(Machine(0, 1));
-        const int m = target == 0 ? (states[0].g.front() - 1) / 2
-                                  : target == 2 ? -states[2].g.front() : 0;
-        const int n = target == 1 ? -states[1].g.front() : 0;
-        int bound = std::abs(m) + std::abs(n) + 4;
-        for (int slot = 0; slot < 3; slot++)
-            bound = std::max(bound, modules_[slot]->level(rest[slot]) + std::abs(m) + std::abs(n) + 4);
-        for (int j = 0; j <= bound; j++) {
-            const S a = from_rational<S>(sign(j) * half_binomial(2 * n + 1, j));
-            add_action(0, 2 * j - 2 * m - 2 * n - 1, -a);
-            add_action(1, n + j, from_rational<S>(half_binomial(2 * m + 1, j)));
-            add_action(2, m + j, imag * S(sign(middle_parity + n)) * a);
+        int n=target==0 ? (states[0].g.front()-1)/2
+             : target==1 ? states[1].g.front() : -states[2].g.front();
+        int bound=std::abs(n)+4;
+        for(int slot=0;slot<3;slot++)
+            bound=std::max(bound,modules_[slot]->level(rest[slot])+std::abs(n)+4);
+        for(int j=0;j<=bound;j++) {
+            if(target==1) {
+                // Second identity isolates a negative middle Ramond mode.
+                S b=from_rational<S>(half_binomial(1-2*n,j));
+                add_action(1,j-n,from_rational<S>(half_binomial(1,j)));
+                add_action(0,2*j+2*n-1,-S(sign(j))*b);
+                add_action(2,j,-eps*S(sign(n+j))*b);
+            } else {
+                // First identity isolates the outer NS or origin Ramond mode.
+                S b=from_rational<S>(half_binomial(1,j));
+                add_action(1,j,from_rational<S>(half_binomial(2*n+1,j)));
+                add_action(0,2*j-2*n-1,-S(sign(j))*b);
+                add_action(2,n+j,-eps*S(sign(j))*b);
+            }
         }
-        S target_coefficient = equation[states];
+        S target_coefficient=equation[states];
         equation.erase(states);
-        require(magnitude(target_coefficient) > 1e-10,
-                "supercurrent Ward identity missed its target");
+        require(magnitude(target_coefficient)>1e-10,"generalized Ward identity missed its target");
         S answer(0);
-        for (const auto &[changed, c] : equation)
-            if (!arithmetic_zero(c))
-                answer -= c * value(changed);
-        return answer / target_coefficient;
+        for(const auto &[changed,c]:equation)
+            if(!arithmetic_zero(c)) answer-=c*value(changed);
+        return answer/target_coefficient;
     }
-
   public:
-    PhysicalForm(std::array<PBWModule<S> *, 3> modules, int f, int eta, int /*primary_parity*/)
-        : modules_(modules), f_(f), eta_(eta) {}
+    PhysicalForm(std::array<PBWModule<S> *, 3> modules, int f, int eta, int primary_parity)
+        : modules_(modules), f_(f), eta_(eta), p_(primary_parity) {}
     S value(const Triple &states) {
         auto found = cache_.find(states);
         if (found != cache_.end())
@@ -198,7 +201,7 @@ template <class S> class PhysicalForm {
                     if (!g2 && g3)
                         answer = phase;
                     else if (g2 && !g3)
-                        answer = phase * S(Machine(0, -eta_));
+                        answer = phase * S(Machine(0, eta_));
                 }
             }
         }
@@ -281,7 +284,11 @@ template <class S> class LowAnchors {
                     S aux = auxiliary_.complex_value<S>(states);
                     if (aux == S(0))
                         continue;
-                    int phase = pbw_[1]->parity(b.physical) * aux_parity(2, c.auxiliary);
+                    int A = int(a.physical.g.size()) % 2;
+                    int phys_middle = pbw_[1]->parity(b.physical);
+                    int aux_third = aux_parity(2, c.auxiliary);
+                    int phase = f * (A + phys_middle) +
+                                (phys_middle + p_) * aux_third;
                     answer += a.coefficient * b.coefficient * c.coefficient * S(sign(phase)) * aux *
                               form.value({a.physical, b.physical, c.physical});
                 }

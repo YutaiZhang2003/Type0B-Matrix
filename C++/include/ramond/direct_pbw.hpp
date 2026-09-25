@@ -2,6 +2,7 @@
 // Direct physical SCA PBW sewing, independent of branching and CCY.
 // All mode indices below are TWICE the physical mode index.
 #include "fermion.hpp"
+#include "theta_bpz.hpp"
 #include <deque>
 #include <memory>
 
@@ -151,12 +152,13 @@ template<class S> class ScaModule {
 template<class S> class ScaWard {
     ScaWords<S> &words_;
     std::array<ScaModule<S>*,3> modules_;
-    int f_,eta_;
+    int f_,eta_,p_;
     struct Entry { S value; bool active=true; };
     std::unordered_map<std::array<int,3>,Entry,Hash> cache_;
-    S epsilon(int middle) {
-        // Minus the origin-contour coefficient +i (-1)^epsilon_2.
-        return S(Machine(0,-sign(words_.words[middle/2].parity+middle%2)));
+    S epsilon(int outer,int origin) {
+        int parity=p_+words_.words[outer/2].parity+outer%2+
+            words_.words[origin/2].parity+origin%2;
+        return S(Machine(0,sign(parity)));
     }
     int level(int state) const { return words_.words[state/2].level2; }
     int tail(int state) const { return 2*words_.words[state/2].tail+state%2; }
@@ -175,8 +177,8 @@ template<class S> class ScaWard {
     }
   public:
     size_t hits=0,misses=0,action_terms=0;
-    ScaWard(ScaWords<S> &words,std::array<ScaModule<S>*,3> modules,int /*primary_parity*/,int f,int eta)
-        :words_(words),modules_(modules),f_(f),eta_(eta) {}
+    ScaWard(ScaWords<S> &words,std::array<ScaModule<S>*,3> modules,int primary_parity,int f,int eta)
+        :words_(words),modules_(modules),f_(f),eta_(eta),p_(primary_parity) {}
     const S &value(const std::array<int,3> &s) {
         auto found=cache_.find(s);
         if(found!=cache_.end()) { require(!found->second.active,"cyclic direct SCA Ward recursion"); hits++; return found->second.value; }
@@ -188,7 +190,7 @@ template<class S> class ScaWard {
         const auto &w3=words_.words[s[2]/2].word;
         auto bin=[&](int a,int k)->const S& { return words_.binomial_half(a,k); };
         if(!w1.empty() && w1.front().kind) {
-            int r2=-w1.front().twice; rest[0]=tail(s[0]); S eps=epsilon(s[1]);
+            int r2=-w1.front().twice; rest[0]=tail(s[0]); S eps=epsilon(rest[0],rest[2]);
             int maximum=std::max({0,r2+level(rest[0]),level(s[1]),level(s[2])})/2+4;
             for(int j=0;j<=maximum;j++) {
                 add_action(answer,rest,1,1,2*j,bin(r2,j));
@@ -209,7 +211,7 @@ template<class S> class ScaWard {
                     add_action(answer,rest,2,0,2*(j-1),S(sign(n))*b);
                 }
             } else {
-                S eps=epsilon(rest[1]);
+                S eps=epsilon(rest[0],rest[2]);
                 int maximum=std::max({0,2*n+level(rest[1]),level(s[0])-2*n+1,level(s[2])})/2+4;
                 for(int j=0;j<=maximum;j++) {
                     const S &b=bin(1-2*n,j);
@@ -229,7 +231,7 @@ template<class S> class ScaWard {
                 S exponent=modules_[2]->h+S(n)*modules_[1]->h-modules_[0]->h+rational<S>(level(rest[2]),2);
                 answer=exponent*value(rest);
             } else {
-                S eps=epsilon(s[1]);
+                S eps=epsilon(rest[0],rest[2]);
                 int maximum=std::max(0,2*n+level(rest[2]))/2+4;
                 for(int j=0;j<=maximum;j++) {
                     add_action(answer,rest,1,1,2*j,bin(1-2*n,j)/eps);
@@ -241,7 +243,7 @@ template<class S> class ScaWard {
             int g2=s[1]%2,g3=s[2]%2;
             if((g2+g3)%2==f_) {
                 if(!g2) answer=S(1);
-                else answer=g3 ? S(eta_) : S(Machine(0,-eta_));
+                else answer=g3 ? S(eta_) : S(Machine(0,eta_));
             }
         }
         require(finite(answer),"nonfinite direct SCA Ward coefficient");
@@ -288,6 +290,29 @@ template<class S> class DirectPBW {
     std::array<S,3> phases_;
     int p_,f_;
     bool opposite_;
+    bool native_bpz_;
+    S geometric_inner(int slot,int left,int right) {
+        const auto &word=words_.words[left/2].word;
+        int odd=0;
+        std::map<int,S> current{{right,S(1)}};
+        for(auto mode:word) {
+            odd+=mode.kind;
+            std::map<int,S> next;
+            for(const auto &[state,outer]:current)
+                for(const auto &[target,value]:
+                    ward_modules_[slot]->act(mode.kind,-mode.twice,state))
+                    pbw_add(next,target,outer*value);
+            current=std::move(next);
+        }
+        auto found=current.find(left%2);
+        if(found==current.end())return S(0);
+        int ground_parity=slot?left%2:p_;
+        S ground_metric=slot&&left%2?S(-1):S(1);
+        if(!slot&&p_)ground_metric*=S(Machine(0,1));
+        return found->second*ground_metric*
+               S(sign(odd*ground_parity+odd*(odd-1)/2))*
+               power(S(Machine(0,1)),odd);
+    }
     const Edge &edge(int slot,int level2,int parity) {
         std::array<int,3> key{slot,level2,parity};
         auto found=edges_.find(key); if(found!=edges_.end()) return found->second;
@@ -304,10 +329,16 @@ template<class S> class DirectPBW {
                 }
         times.metadata+=seconds()-start; start=seconds();
         int n=static_cast<int>(result.states.size()); std::vector<S> gram(size_t(n)*n);
-        for(int i=0;i<n;i++) for(int j=0;j<=i;j++) {
-            S v=gram_modules_[slot]->inner(result.states[i],result.states[j]);
-            gram[i*n+j]=v; gram[j*n+i]=v; counts.gram_entries++;
-        }
+        if(native_bpz_)
+            for(int i=0;i<n;i++)for(int j=0;j<n;j++) {
+                gram[size_t(i)*n+j]=geometric_inner(slot,result.states[i],result.states[j]);
+                counts.gram_entries++;
+            }
+        else
+            for(int i=0;i<n;i++) for(int j=0;j<=i;j++) {
+                S v=gram_modules_[slot]->inner(result.states[i],result.states[j]);
+                gram[i*n+j]=v; gram[j*n+i]=v; counts.gram_entries++;
+            }
         times.gram_entries+=seconds()-start; start=seconds();
         result.inverse=pbw_inverse(std::move(gram),n);
         times.gram_inverse+=seconds()-start; counts.gram_matrices++;
@@ -338,8 +369,9 @@ template<class S> class DirectPBW {
     struct Timings { double metadata=0,gram_entries=0,gram_inverse=0,vertices=0,contractions=0; } times;
     struct Counts { size_t gram_entries=0,gram_matrices=0,vertex_entries=0,reused_vertex_tensors=0,
                           contractions=0,contraction_products=0; } counts;
-    DirectPBW(S b,const std::array<S,3> &p,int primary_parity,int form_parity,int eta,bool opposite)
-        :p_(primary_parity),f_(form_parity),opposite_(opposite) {
+    DirectPBW(S b,const std::array<S,3> &p,int primary_parity,int form_parity,int eta,bool opposite,
+              bool native_bpz=false)
+        :p_(primary_parity),f_(form_parity),opposite_(opposite),native_bpz_(native_bpz) {
         S q=b+S(1)/b,c=rational<S>(3,2)+S(3)*q*q;
         for(int j=0;j<3;j++) {
             S h=q*q/S(8)-p[j]*p[j]/S(2)+(j?rational<S>(1,16):S(0));
@@ -362,7 +394,9 @@ template<class S> class DirectPBW {
             for(int v=0;v<(opposite_?2:1);v++) {
                 tensors[v].reserve(volume);
                 for(int a:edges[0]->states) for(int b:edges[1]->states) for(int c:edges[2]->states)
-                    tensors[v].push_back(phases_[b%2+c%2]*forms_[v]->value({a,b,c}));
+                    tensors[v].push_back((native_bpz_
+                        ? power(S(Machine(0,1)),(p_+words_.words[a/2].parity+a%2)%2)
+                        : phases_[b%2+c%2])*forms_[v]->value({a,b,c}));
                 counts.vertex_entries+=volume;
             }
             if(!opposite_) counts.reused_vertex_tensors++;
@@ -371,6 +405,9 @@ template<class S> class DirectPBW {
             result[index]=S(theta_sign(index))*contract(tensors[0],edges,tensors[opposite_?1:0]);
             times.contractions+=seconds()-tick;
         }
+        if(!native_bpz_)
+            for (int epsilon = 0; epsilon < 8; epsilon++)
+                result[epsilon] *= theta_bpz_weight<S>(epsilon);
         return result;
     }
     size_t ward_entries() const { return forms_[0]->cache_size()+(opposite_?forms_[1]->cache_size():0); }

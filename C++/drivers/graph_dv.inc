@@ -32,6 +32,7 @@ int graph_dv(const Setup &setup, int level, const fs::path &directory) {
                    power((setup.b + S(1) / setup.b) / root(S(2)), marked.size());
         for (int ci : cases) {
             Block recovered;
+            const int frame_mask = ordered_frame_mask(setup, setup.cases[ci]);
             for (auto k : targets) {
                 Key split = k;
                 for (int j = 0; j < int(marked.size()); j++)
@@ -53,7 +54,11 @@ int graph_dv(const Setup &setup, int level, const fs::path &directory) {
                     output << k[e];
                 }
                 output << "],\"double_virasoro\":";
-                row_json(output, remainder);
+                Row ordered = remainder;
+                transport_ordered_frame(ordered, frame_mask);
+                for (auto &[parity, value] : ordered)
+                    value *= plumbing_bpz_weight<S>(setup.graph, parity);
+                row_json(output, ordered);
                 output << "}\n";
             }
         }

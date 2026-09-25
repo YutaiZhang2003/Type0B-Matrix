@@ -21,6 +21,7 @@ static void help() {
 int main(int argc, char **argv) {
     try {
         Settings s;
+        s.native_bpz = true;
         std::string output;
         for (int i = 1; i < argc; i++) {
             std::string key = argv[i];

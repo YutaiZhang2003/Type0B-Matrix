@@ -48,6 +48,39 @@ void validate_config(const Json &config) {
     };
     check_spins("source_marked_spins",{{{1,1,0,0},{1,1,1,1}}});
     check_spins("target_marked_spins",{{{0,0,0,0},{0,0,1,0}}});
+    // Transport the actual marked characteristics through the supplied
+    // symplectic homology change, rather than merely accepting two labels.
+    const auto &transport=config.at("source_to_target");
+    require(transport.kind==Json::Array && transport.array.size()==4,"genus-two transport must be 4 by 4");
+    std::array<std::array<long long,4>,4> M{};
+    for(int i=0;i<4;i++) {
+        require(transport.at(i).kind==Json::Array && transport.at(i).array.size()==4,
+                "genus-two transport must be 4 by 4");
+        for(int j=0;j<4;j++)M[i][j]=transport.at(i).at(j).integer();
+    }
+    auto J=[](int i,int j) {return i<2 && j==i+2 ? 1 : i>=2 && j==i-2 ? -1 : 0;};
+    for(int i=0;i<4;i++)for(int j=0;j<4;j++) {
+        long long value=0;
+        for(int k=0;k<4;k++)for(int l=0;l<4;l++)value+=M[k][i]*J(k,l)*M[l][j];
+        require(value==J(i,j),"source-to-target homology map is not symplectic");
+    }
+    auto mod2=[](long long value) {return int((value%2+2)%2);};
+    for(int spin=0;spin<2;spin++) {
+        const auto &source=config.at("source_marked_spins").at(spin),
+                   &target=config.at("target_marked_spins").at(spin);
+        for(int i=0;i<2;i++) {
+            long long alpha=0,beta=0;
+            for(int j=0;j<2;j++) {
+                long long a=source.at(0).at(j).integer(),b=source.at(1).at(j).integer();
+                alpha+=M[i+2][j+2]*a-M[i+2][j]*b
+                      +M[i+2][j]*M[i+2][j+2];
+                beta+=-M[i][j+2]*a+M[i][j]*b+M[i][j]*M[i][j+2];
+            }
+            require(mod2(alpha)==target.at(0).at(i).integer()
+                 && mod2(beta)==target.at(1).at(i).integer(),
+                    "source and target marked spins are not related by the homology map");
+        }
+    }
     auto check_signs=[&](const char* key) {
         const auto& signs=config.at(key);
         require(signs.kind==Json::Array && signs.array.size()==2,"two fixed plumbing sign assignments required");
@@ -116,7 +149,7 @@ Scalar primary(Scalar b,const std::array<Scalar,3>& p,const std::array<Scalar,3>
     }
     return exp_value(ans);
 }
-struct SourceBlocks { nc::F_R<Scalar> literal{}; nc::Fixed_R<Scalar> geometric{}; };
+struct SourceBlocks { nc::F_R<Scalar> F{}; nc::Fixed_R<Scalar> fixed{}; };
 std::map<int,SourceBlocks> source_blocks(const Options& opts,Scalar b,const std::array<Scalar,3>& p,
                          const std::array<Scalar,3>& q,
                          const std::array<std::array<int,3>,2>& source_signs,
@@ -125,9 +158,10 @@ std::map<int,SourceBlocks> source_blocks(const Options& opts,Scalar b,const std:
     for(int l=opts.minimum;l<=opts.level;l++)out[l]={};
     std::array<Scalar,3> logs{log_value(q[0]),log_value(q[1]),log_value(q[2])};
     // Both f are computed directly. No projected-block identity is used.
-    // Both geometric source spins have the same R-family pairing, eta'=eta.
+    // Both fixed source spins have the same R-family pairing, eta'=eta.
     for(int eta:{1,-1})for(int f=0;f<2;f++) {
-        Settings s;s.inserted=false;s.box=false;s.record_sector=false;s.p=0;s.f=f;s.eta=eta;
+        Settings s;s.inserted=false;s.box=false;s.record_sector=false;s.native_bpz=true;
+        s.p=0;s.f=f;s.eta=eta;
         s.level=opts.level;s.dps=opts.dps;s.b=decimal(mpc_realref(b.data()));
         for(int e=0;e<3;e++)s.momenta[e]="0,"+decimal(mpc_realref(p[e].data()));
         auto result=pipeline<Scalar>(s);
@@ -137,20 +171,19 @@ std::map<int,SourceBlocks> source_blocks(const Options& opts,Scalar b,const std:
             Scalar monomial=exp_value(Scalar(k[0])*logs[0]/Scalar(2)+Scalar(k[1])*logs[1]+Scalar(k[3])*logs[2]/Scalar(2));
             for(int lift=0;lift<4;lift++) {
                 Scalar value=nc::evaluate_parity(row,nc::eta_e[lift])*monomial;
-                for(auto &[l,F]:out)if(degree(k)<=2*l)F.literal[nc::channel(f,eta,eta)][lift]+=value;
+                for(auto &[l,F]:out)if(degree(k)<=2*l)F.F[nc::channel(f,eta,eta)][lift]+=value;
             }
             for(auto &[l,F]:out)if(degree(k)<=2*l)
                 for(int spin=0;spin<2;spin++)for(int epsilon=0;epsilon<8;epsilon++)
-                    F.geometric[spin][f][eta==-1]
-                        +=nc::geometric_phase<Scalar>(epsilon)
-                          *Scalar(nc::character(source_signs[spin],epsilon))
+                    F.fixed[spin][f][eta==-1]
+                        +=Scalar(nc::character(source_signs[spin],epsilon))
                           *row[epsilon]*monomial;
         }
     }
     return out;
 }
 using LiftBlocks=nc::F_NS<Scalar>;
-struct TargetBlocks { LiftBlocks literal{}; std::array<std::array<Scalar,2>,2> literal_fixed{},geometric_fixed{}; };
+struct TargetBlocks { LiftBlocks F{}; std::array<std::array<Scalar,2>,2> fixed{}; };
 std::map<int,TargetBlocks> target_blocks(const Options& opts,Scalar b,const std::array<Scalar,3>& p,
                                      const std::array<Scalar,3>& q,
                                      const std::array<std::array<int,3>,2>& target_signs,
@@ -170,18 +203,16 @@ std::map<int,TargetBlocks> target_blocks(const Options& opts,Scalar b,const std:
         int form=scblocks::total(k)%2;
         int epsilon=(k[0]%2)+2*(k[1]%2)+4*(k[2]%2);
         Scalar x=co*exp_value((Scalar(k[0])*logs[0]+Scalar(k[1])*logs[1]+Scalar(k[2])*logs[2])/Scalar(2));
-        // The CCY coefficient contains exactly the Koszul sign in the
-        // paper's printed PBW definition. Do not change this block.
+        // The CCY output is the block in the theta BPZ sewing convention.
         for(auto &[l,F]:out)if(scblocks::total(k)<=2*l)
             for(int lift=0;lift<4;lift++) {
                 Scalar term=Scalar(nc::character(nc::eta_e[lift],epsilon))*x;
-                F.literal[form][lift]+=term;
+                F.F[form][lift]+=term;
             }
         for(auto &[l,F]:out)if(scblocks::total(k)<=2*l)
             for(int spin=0;spin<2;spin++) {
                 Scalar term=Scalar(nc::character(target_signs[spin],epsilon))*x;
-                F.literal_fixed[form][spin]+=term;
-                F.geometric_fixed[form][spin]+=nc::geometric_phase<Scalar>(epsilon)*term;
+                F.fixed[form][spin]+=term;
             }
     }
     return out;
@@ -196,7 +227,7 @@ void calculate_node(const Options& opts,const Json& config,const fs::path& input
     if(opts.channel=="target") C_a=numbers<2>(node.at("C_a"));
     else for(int f=0;f<2;f++) C_f_eta[f]=numbers<2>(node.at("C_f_eta").at(f));
     if(opts.channel=="source")for(int eta=0;eta<2;eta++)
-        require(C_f_eta[0][eta]==C_f_eta[1][eta],"this super-Liouville fixed-spin contraction requires C_0,eta=C_1,eta");
+        require(C_f_eta[0][eta]==C_f_eta[1][eta],"this ordered NS-R-R contraction requires C_1,eta=C_0,eta");
     require(node.at("N").integer()>0 && node.at("index").integer()>=0,"invalid quadrature node labels");
     if(node.has("channel"))require(node.at("channel").scalar()==opts.channel,"input node is from the other channel");
     Scalar measure=number(node.at("measure")),b=number(config.at("b"));
@@ -206,10 +237,10 @@ void calculate_node(const Options& opts,const Json& config,const fs::path& input
     Scalar prim=primary(b,p,q,opts.channel=="source");
     Scalar propagation=measure*prim*conjugate(prim);
     std::ostringstream out;out<<std::setprecision(17);
-    out<<"{\"schema\":\"paper-native-fixed-spin-node-v4\",\"conventions\":\"product_bpz_residue_2026-09-22\","
+    out<<"{\"schema\":\"ordered-fixed-spin-node-v5\",\"conventions\":\"ordered_yutai_bpz_sewing_2026-09-25\","
        <<"\"coefficient_convention\":"<<json_quote(nc::coefficient_convention)<<','
        <<"\"sewing_convention\":"<<json_quote(nc::sewing_convention)<<','
-       <<"\"spin_status\":\"geometric BPZ conversion is applied coefficientwise before one fixed-sign evaluation in each channel\","
+       <<"\"spin_status\":\"one fixed-sign evaluation of each algorithm block in each channel\","
        <<"\"implementation\":\"C++17\",\"normalization_factor\":1,\"chiral_blocks_fresh\":true,"
        <<"\"source_input\":"<<json_quote(input.string())<<",\"channel\":"<<json_quote(opts.channel)
        <<",\"index\":"<<node.at("index").integer()<<",\"N\":"<<node.at("N").integer()
@@ -235,13 +266,16 @@ void calculate_node(const Options& opts,const Json& config,const fs::path& input
             double maximum_form_identity_error=0;
             for(int spin=0;spin<2;spin++) {
                 require(signs[spin][1]*signs[spin][2]==-1,"this source run requires the even R-cycle contraction");
-                auto Ftilde=blocks.geometric[spin][0];
-                for(auto &x:Ftilde)x=conjugate(x);
-                Z[spin]=nc::fixed_R_partition(blocks.geometric[spin][0],Ftilde,
-                                               C_f_eta[0],C_f_eta[0],propagation);
+                // The two ordered parity forms enter with the same reduced
+                // coefficient. Each fixed spin is evaluated alone.
+                for(int f=0;f<2;f++)for(int eta=0;eta<2;eta++) {
+                    Scalar F=blocks.fixed[spin][f][eta];
+                    Z[spin]+=propagation*C_f_eta[f][eta]*C_f_eta[f][eta]
+                             *F*conjugate(F)/Scalar(4);
+                }
                 for(int eta=0;eta<2;eta++)
                     maximum_form_identity_error=std::max(maximum_form_identity_error,
-                        magnitude(blocks.geometric[spin][0][eta]+blocks.geometric[spin][1][eta]));
+                        magnitude(blocks.fixed[spin][0][eta]+blocks.fixed[spin][1][eta]));
             }
             if(count++)out<<',';
             out<<"{\"level\":"<<l<<",\"F\":[";
@@ -249,13 +283,13 @@ void calculate_node(const Options& opts,const Json& config,const fs::path& input
             for(int f=0;f<2;f++)for(int eta:{1,-1}) {
                 if(entry++)out<<',';
                 out<<"{\"f\":"<<f<<",\"eta\":"<<eta<<",\"eta_prime\":"<<eta<<",\"values\":";
-                vector_json(out,blocks.literal[nc::channel(f,eta,eta)]);out<<'}';
+                vector_json(out,blocks.F[nc::channel(f,eta,eta)]);out<<'}';
             }
-            out<<"],\"F_geometric_fixed\":[";
+            out<<"],\"F_fixed\":[";
             for(int spin=0;spin<2;spin++) {
                 if(spin)out<<',';out<<'[';
-                vector_json(out,blocks.geometric[spin][0]);out<<',';
-                vector_json(out,blocks.geometric[spin][1]);out<<']';
+                vector_json(out,blocks.fixed[spin][0]);out<<',';
+                vector_json(out,blocks.fixed[spin][1]);out<<']';
             }
             out<<"],\"Z_R_fixed\":";vector_json(out,Z);
             out<<",\"maximum_form_identity_error\":"<<maximum_form_identity_error<<'}';
@@ -264,23 +298,21 @@ void calculate_node(const Options& opts,const Json& config,const fs::path& input
         auto all=target_blocks(opts,b,p,q,signs,vacuum,transitions,seed_terms);
         int count=0;
         for(auto &[l,blocks]:all) {
-            std::array<Scalar,2> Z{},Z_literal{};
+            std::array<Scalar,2> Z{};
             for(int spin=0;spin<2;spin++) {
                 for(int a=0;a<2;a++) {
                     Scalar coupling=Scalar(a?-1:1)*C_a[a]*C_a[a]*propagation;
-                    Z[spin]+=coupling*blocks.geometric_fixed[a][spin]
-                             *conjugate(blocks.geometric_fixed[a][spin]);
-                    Z_literal[spin]+=coupling*blocks.literal_fixed[a][spin]
-                                     *conjugate(blocks.literal_fixed[a][spin]);
+                    Z[spin]+=coupling*blocks.fixed[a][spin]
+                             *conjugate(blocks.fixed[a][spin]);
                 }
             }
             if(count++)out<<',';out<<"{\"level\":"<<l<<",\"F\":[";
-            vector_json(out,blocks.literal[0]);out<<',';vector_json(out,blocks.literal[1]);
-            out<<"],\"F_geometric_fixed\":[";
-            vector_json(out,blocks.geometric_fixed[0]);out<<',';
-            vector_json(out,blocks.geometric_fixed[1]);
+            vector_json(out,blocks.F[0]);out<<',';vector_json(out,blocks.F[1]);
+            out<<"],\"F_fixed\":[";
+            vector_json(out,blocks.fixed[0]);out<<',';
+            vector_json(out,blocks.fixed[1]);
             out<<"],\"Z_NS_fixed\":";vector_json(out,Z);
-            out<<",\"Z_NS_literal_trial\":";vector_json(out,Z_literal);out<<'}';
+            out<<'}';
         }
     }
     out<<"],\"maximum_ward_residual\":"<<ward<<",\"maximum_sector_residual\":"<<sector
@@ -293,12 +325,12 @@ void integrate(const Options& opts,const Json& config) {
         auto run=Json::read((fs::path(dir)/"run.json").string());
         require(run.at("complete").kind==Json::Bool && run.at("complete").text=="true","run did not complete");
         require(run.at("config").scalar()==opts.config && run.at("channel").scalar()==expected,"run/configuration mismatch");
-        auto files=node_paths(dir);std::map<int,std::array<Scalar,4>> sums;int N=-1;
+        auto files=node_paths(dir);std::map<int,std::array<Scalar,2>> sums;int N=-1;
         std::set<int> seen;
         for(const auto &path:files) {
             auto d=Json::read(path.string());
             require(d.at("channel").scalar()==expected && d.at("normalization_factor").integer()==1,"wrong channel/normalization");
-            require(d.at("conventions").scalar()=="product_bpz_residue_2026-09-22","wrong conventions");
+            require(d.at("conventions").scalar()=="ordered_yutai_bpz_sewing_2026-09-25","wrong conventions");
             require(d.has("sewing_convention") && d.at("sewing_convention").scalar()==nc::sewing_convention,
                     "obsolete nonchiral sewing: recompute both fixed-spin channels");
             require(d.has("coefficient_convention") && d.at("coefficient_convention").scalar()==nc::coefficient_convention,
@@ -313,10 +345,6 @@ void integrate(const Options& opts,const Json& config) {
                 int l=row.at("level").integer();require(l==lower++,"missing or duplicate level row");
                 auto values=numbers<2>(row.at(expected=="target"?"Z_NS_fixed":"Z_R_fixed"));
                 for(int i=0;i<2;i++)sums[l][i]+=values[i];
-                if(expected=="target") {
-                    auto literal=numbers<2>(row.at("Z_NS_literal_trial"));
-                    for(int i=0;i<2;i++)sums[l][2+i]+=literal[i];
-                }
             }
         }
         require(int(files.size())==N*N*N,"incomplete tensor grid");
@@ -326,16 +354,14 @@ void integrate(const Options& opts,const Json& config) {
     auto src=collect(opts.source,"source"),tar=collect(opts.target,"target");
     Scalar b=number(config.at("b")),Q=b+Scalar(1)/b,kappa=Scalar(1)+Scalar(2)*Q*Q;
     Scalar frame=exp_value(kappa*log_value(number(config.at("point").at("source_free"))/number(config.at("point").at("target_free"))));
-    int reported_spins=config.at("provenance").has("physical_spin")?1:2;
-    std::ostringstream out;out<<std::setprecision(17)<<"{\"schema\":\"paper-native-fixed-spin-comparison-v4\","
+    constexpr int reported_spins=2;
+    std::ostringstream out;out<<std::setprecision(17)<<"{\"schema\":\"ordered-fixed-spin-comparison-v5\","
        <<"\"coefficient_convention\":"<<json_quote(nc::coefficient_convention)<<','
        <<"\"sewing_convention\":"<<json_quote(nc::sewing_convention)<<','
        <<"\"implementation\":\"C++17\",\"normalization_factor\":1,\"source_N\":"<<src.first<<",\"target_N\":"<<tar.first
        <<",\"free_frame_power\":"<<json_number(frame)<<",\"physical_inputs\":\"frozen momenta, measures, SCFT constants, geometry and free-frame factors; no saved chiral blocks used\","
-       <<"\"spin_transport_status\":"<<json_quote(reported_spins==1?
-          "One fixed marked spin transported to its target marked spin.":
-          "Two individually fixed marked spins, each transported to its target marked spin.")<<','
-       <<"\"comparison_status\":\"geometric BPZ conversion applied coefficientwise in both channels, then one fixed tube-sign assignment per spin\",\"comparisons\":[";
+       <<"\"spin_transport_status\":\"Two individually fixed marked spins, each transported to its target marked spin.\","
+       <<"\"comparison_status\":\"algorithm blocks evaluated at one fixed tube-sign assignment per spin; no block conversion in this comparison\",\"comparisons\":[";
     int count=0;
     for(auto &[sl,sz]:src.second)for(auto &[tl,tz]:tar.second) {
         for(int spin=0;spin<reported_spins;spin++) {
@@ -345,7 +371,7 @@ void integrate(const Options& opts,const Json& config) {
         }
         if(count++)out<<',';
         out<<"{\"source_level\":"<<sl<<",\"target_level\":"<<tl<<",\"source_R_fixed\":";vector_json(out,sz);
-        out<<",\"target_NS_fixed_and_literal\":";vector_json(out,tz);
+        out<<",\"target_NS_fixed\":";vector_json(out,tz);
         out<<",\"fixed_spin_ratios\":[";
         for(int spin=0;spin<reported_spins;spin++) {
             if(spin)out<<',';out<<json_number(sz[spin]/tz[spin]/frame);

@@ -68,7 +68,7 @@ def main():
             if channel=='target':
                 result['C_a']=[list(C[0]),[str(Decimal(C[1][1]).copy_negate()),C[1][0]]]
             else:
-                result['C_f_eta']=[[list(c) for c in C] for f in (0,1)]
+                result['C_f_eta']=[[list(c) for c in C], [list(c) for c in C]]
             write(args.output/channel/path.name,result)
             hashes[str(path)]=hashlib.sha256(path.read_bytes()).hexdigest()
     write(args.output/'provenance.json',hashes)

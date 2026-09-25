@@ -20,6 +20,16 @@
 \begin{document}
 \maketitle
 
+\noindent\textbf{Convention status (September 25, 2026).}
+The branching, CCY, truncation, caching, and restricted-recovery
+algorithms documented here remain implementation references. The
+BPZ metrics, Ward signs, enlarged-vertex signs, fermion state sum,
+and convolution written below belong to the preceding convention.
+For current blocks use the $1/z$ BPZ and $q/z$ sewing lifts, graded
+tensor Gram, and convolution derived in
+\texttt{bpz\_one\_over\_z\_sewing\_2026-09-25.tex}. The saved
+timings below were not rerun under that convention.
+
 These notes describe the two production algorithms in \path{C++/}:
 the ordinary NS--R--R theta block for $\eta\eta'=1$, and the
 $\Theta v_{1/2}$ construction for $\eta\eta'=-1$.
@@ -221,32 +231,27 @@ Negative labels again use reflection. Using squared norms avoids numerical
 choices of square roots for normalized branching coefficients.
 
 The code uses physical ground coordinates
-$(w^+,e^{3\pi i/4}w^-)$, whose metric is $(1,1)$, and the Ward sign
-$\eta_{\rm native}=(-1)^f\eta$.
+$(w^+,e^{3\pi i/4}w^-)$, whose metric is $(1,1)$, and the same
+$\eta$ label for both $f$ values.
 After transporting these coordinates, the implemented enlarged vertex is
-the following tensor-product form. Let $A,B$ be the physical descendant
-words in the first two slots and $\mathsf A,\mathsf B,\mathsf C$ the auxiliary
-words; $\alpha\in\{+,-\}$ is the physical second-slot ground label,
-with $|+|=0$ and $|-|=1$. As in the SCblock notes, in sign exponents
-$A,B$ denote the numbers of physical $G$ modes and
-$\mathsf A,\mathsf B,\mathsf C$ the numbers of auxiliary $\psi$ modes:
-\begin{align}
+the tensor-product form. Let $B$ be the physical descendant word in the
+second slot and $\mathsf C$ the auxiliary word in the third slot;
+$\alpha\in\{+,-\}$ is the physical second-slot ground label,
+with $|+|=0$ and $|-|=1$. In sign exponents $B$ counts physical $G$
+modes and $\mathsf C$ counts auxiliary $\psi$ modes:
+\begin{equation}
  \hat\rho_f^{(\eta)}=
- &(-i)^{A\bmod2}
- (-1)^{f(A+B+|\alpha|)+A\mathsf A}\nonumber\\
- &\times(-1)^{(B+|\alpha|+p_1)(\mathsf C+\mathsf c)}
+ (-1)^{(B+|\alpha|)(\mathsf C+\mathsf c)}
  \rho_{\mathsf F}\rho_f^{(\eta)}.
  \label{eq:vertex-frame}
-\end{align}
+\end{equation}
 The arguments are in the order $(\NS,\R,\R)$, with auxiliary third ground
 $u^{\mathsf c}$. The physical forms have the BPZ metric above and auxiliary
 ground values $\rho_{\mathsf F}(\mathbf1,u^0,u^0)=1$,
 $\rho_{\mathsf F}(\mathbf1,u^1,u^1)=i$.
-Here the unhatted physical form uses the human ground and contour conventions
-specified above; the powers of $-i$ and the $f$-dependent sign implement its
-transport, rather than redefine its ground data.
-These are parts of the definition, not adjustable phases in the final sum:
-the two $(-i)^{A\bmod2}$ factors cancel the physical NS contour sign.
+Here the unhatted physical form uses the ground and contour conventions
+specified above. The displayed sign moves the middle physical operator
+past the auxiliary operator in the third slot; no extra vertex phase is used.
 
 \subsection{Ordinary theta block}
 All Virasoro blocks $F$ below have leading coefficient one, with primary

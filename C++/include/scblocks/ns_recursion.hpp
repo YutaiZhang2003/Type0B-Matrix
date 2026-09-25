@@ -1,7 +1,9 @@
 #pragma once
 #include "ns_schottky.hpp"
+#include "ramond/theta_bpz.hpp"
 namespace scblocks {
-// All-NS fixed-weight c-recursion in the human-note trinion convention.
+// All-NS fixed-weight c-recursion. The returned block includes the
+// local BPZ sewing factors of the plumbing graph.
 class NSRecursion {
     bool compact_theta = false;
     struct Pole {
@@ -217,7 +219,8 @@ class NSRecursion {
     // Therefore these full-block states cannot be reused by a different target.
     S coefficient(const Key &k) {
         cache.clear();
-        return recurse(0, Key{}, k);
+        S value = recurse(0, Key{}, k);
+        return value * ramond::plumbing_bpz_weight<S>(graph, mask(k));
     }
     // Batch form of the same SCA c-recursion. At fixed output parity, a
     // residue depends on the accumulated null shift, not on the target's
@@ -331,6 +334,8 @@ class NSRecursion {
                             value * from_rational<S>(exact) * S(graph.kernel(mask(k), mask(v)));
                 }
         compact_theta = false;
+        for (auto &[k, value] : answer)
+            value *= ramond::plumbing_bpz_weight<S>(graph, mask(k));
         return answer;
     }
 };

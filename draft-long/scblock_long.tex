@@ -18,6 +18,7 @@
 \def\fe{\end{aligned}\end{equation}}
 \def\NS{\mathrm{NS}}
 \def\R{\mathrm{R}}
+\def\F{\mathsf{F}}
 
 \renewcommand{\title}[1]{\vbox{\center\LARGE{#1}}\vspace{5mm}}
 \renewcommand{\author}[1]{\vbox{\center#1}\vspace{5mm}}
@@ -113,10 +114,10 @@ After replacing each pair of plumbed punctures by a pair of local operators, we 
 \ie
 \rho_0(\phi_1, \phi_2, \phi_3)=1,\quad \rho_1(\phi_1, G_{-\frac{1}{2}}\phi_2, \phi_3)=1,
 \fe
-where the operators $\phi_1, \phi_2, \phi_3$ are inserted at $\infty, 1, 0$, respectively. The normalized three-point functions $\rho_a(\mathbf{L}_{-A}\phi_1, \mathbf{L}_{-B}\phi_2,\mathbf{L}_{-C}\phi_3)$ of descendants are defined by reducing them to $\rho_0(\phi_1, \phi_2, \phi_3)$, $\rho_1(\phi_1, G_{-\frac{1}{2}}\phi_2, \phi_3)$ using superconformal Ward identities. On an (NS, R, R) sphere, there are 4 independent 3-point functions, and we define 
+where the operators $\phi_1, \phi_2, \phi_3$ are inserted at $\infty, 1, 0$, respectively, and the operator at the first slot is inserted using the inversion map $w=1/z$. The normalized three-point functions $\rho_a(\mathbf{L}_{-A}\phi_1, \mathbf{L}_{-B}\phi_2,\mathbf{L}_{-C}\phi_3)$ of descendants are defined by reducing them to $\rho_0(\phi_1, \phi_2, \phi_3)$, $\rho_1(\phi_1, G_{-\frac{1}{2}}\phi_2, \phi_3)$ using superconformal Ward identities. On an (NS, R, R) sphere, there are 4 independent 3-point functions, and we define 
 \ie
 &\rho^{(\eta)}_0(\phi_1, w^+_2, w_3^+) = 1,\quad \rho^{(\eta)}_0(\phi_1, w^-_2, w_3^-) = \eta,\\
-&\rho^{(\eta)}_1(\phi_1, w^+_2, w_3^-) = 1,\quad \rho^{(\eta)}_1(\phi_1, w^-_2, w_3^+) = -i\eta,
+&\rho^{(\eta)}_1(\phi_1, w^+_2, w_3^-) = 1,\quad \rho^{(\eta)}_1(\phi_1, w^-_2, w_3^+) = i\eta,
 \fe
 for $\eta = \pm$. Again, the operators $\phi_1, w_2^\pm, w_3^\pm$ are inserted at $\infty, 1, 0$, respectively, and the normalized 3-point functions of descendants are defined through superconformal Ward identities. 
 
@@ -133,12 +134,16 @@ where $f_v, \eta_v$ label the 3-point functions on the (NS, R, R) spheres, and $
 &(-1)^{A_{v_1}+A_{v_2}+A_{v_3}}=(-1)^{a_v},\quad v\in V_\NS,\\
 &(-1)^{A_{v_1}+A_{v_2}+A_{v_3}+\alpha_{v_2}+\alpha_{v_3}}=(-1)^{f_v},\quad v\in V_\R.
 \fe
-We define $\epsilon_{v_i}$ to be the total Grassmann parity of the descendant $\Phi_{v_i}$, which stands for $\mathbf{L}_{-A_{v,i}}\phi_{v_i}$ in the NS sector or $\mathbb{L}_{-A_{v_i}}w_{v_i}^{\alpha_{v_i}}$ in the R sector. The sign $(-1)^{K_\Gamma(\epsilon)}$ is the Grassmann sign that arises from moving the operator order from the pairwise insertion order to the displayed order in the 3-point functions \footnote{More explicitly, this is the Grassmann sign that arises from moving the operators from order $\prod_{e\in E_\NS\cup E_\R}\Phi_{e_1}\Phi_{e_2}$ to order $\prod_{v\in V_\NS}\Phi_{v_1}\Phi_{v_2}\Phi_{v_3}\prod_{v\in V_\R}\Phi_{v_1}\Phi_{v_2}\Phi_{v_3}$. It can be defined as $(-1)^{K_\Gamma(\epsilon)}=\sum_{(v_i, w_j)}\epsilon_{v_i}\epsilon_{w_j}$, where the sum is over pairs $(v_i, w_j)$ such that $v_i$ precedes $w_j$ in the pairwise insertion but follows $w_j$ in the order of the 3-point functions.}. $\mathbf{G}, \mathbb{G}$ are inverse Gram matrices in the NS and R sectors, which are defined as the inverses of
+We define $\epsilon_{v_i}$ to be the total Grassmann parity of the descendant $\Phi_{v_i}$, which stands for $\mathbf{L}_{-A_{v,i}}\phi_{v_i}$ in the NS sector or $\mathbb{L}_{-A_{v_i}}w_{v_i}^{\alpha_{v_i}}$ in the R sector. The sign $(-1)^{K_\Gamma(\epsilon)}$ is the Grassmann sign that arises from moving the operator order from the pairwise insertion order to the displayed order in the 3-point functions \footnote{More explicitly, this is the Grassmann sign that arises from moving the operators from order $\prod_{e\in E_\NS\cup E_\R}\Phi_{e_1}\Phi_{e_2}$ to order $\prod_{v\in V_\NS}\Phi_{v_1}\Phi_{v_2}\Phi_{v_3}\prod_{v\in V_\R}\Phi_{v_1}\Phi_{v_2}\Phi_{v_3}$. It can be defined as 
+\ie
+K_\Gamma(\epsilon)=\sum_{(v_i, w_j)}\epsilon_{v_i}\epsilon_{w_j} \quad (\mathrm{mod}\ 2),
+\fe 
+where the sum is over pairs $(v_i, w_j)$ such that $v_i$ precedes $w_j$ in the pairwise insertion but follows $w_j$ in the order of the 3-point functions.}. $\mathbf{G}, \mathbb{G}$ are inverse Gram matrices in the NS and R sectors, which are defined as the inverses of
 \ie
 (\mathbf{G}_h)_{AB}&=\langle\langle \mathbf{L}_{-A}\phi_h|\mathbf{L}_{-B}\phi_h\rangle,\\
 (\mathbb{G}_\beta)_{A\alpha, B\alpha'}&=\langle\langle \mathbb{L}_{-A}w_\beta^\alpha|\mathbb{L}_{-B}w_\beta^{\alpha'}\rangle,
 \fe
-where the double left bracket stands for BPZ conjugation. $h, \beta$ label the conformal weight and $G_0$ eigenvalues of the primaries, which are normalized such that $\langle\langle \phi_h|\phi_h\rangle =1$, $\langle\langle w_\beta^+|w_\beta^{+} \rangle=1$. In the rest of this paper, we will omit the labels $(h_e, \beta_e;q_e, \eta_e)$ when writing the superconformal block. 
+where the double left bracket stands for BPZ conjugation, and the conventions we use for which are summarized in Appendix \ref{app:conventions}. $h, \beta$ label the conformal weight and $G_0$ eigenvalues of the primaries, which are normalized such that $\langle\langle \phi_h|\phi_h\rangle =1$, $\langle\langle w_\beta^+|w_\beta^{+} \rangle=1$. In the rest of this paper, we will omit the labels $(h_e, \beta_e;q_e, \eta_e)$ when writing the superconformal block. 
 
 % For simplicity, we will focus on the genus-2 theta channel in the rest of this Letter, where we sew together $z_1=z_2=0$, $z_1=z_2=1$ and $z_1=z_2=\infty$ on two Riemann spheres with complex coordinates $z_1, z_2$. The two edges that connect $z_1=z_2=0,1$ are R, while the edge that connects $z_1=z_2=\infty$ is NS. Nevertheless, the algorithm we present here can be easily generalized to arbitrary plumbing channels and arbitrary spin structures, and we leave the details to the appendix. \textbf{[Figure: Theta channel]}
 
@@ -218,7 +223,8 @@ The NS $\mathsf{Vir}\oplus \mathsf{Vir}$ primary $v_n$ has Grassmann parity $2n\
 
 To reduce the superconformal block \eqref{scblock} to Virasoro conformal blocks, we first consider an enlarged $\mathsf{SCA}\oplus \mathsf{F}$ block $\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}$, defined as
 \ie 
-\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}} &= \sum_{\{A,\alpha,\mathsf{A},\mathsf{a}\}} (-1)^{K_\Gamma(\epsilon+\epsilon')} \prod_{e\in E_\NS\cup E_\R} q_e^{|A_{e_1}|+|\mathsf{A}_{e_1}|}\eta_e^{\epsilon_e+\epsilon_e'}(-1)^{\epsilon_e'} \prod_{e\in E_\NS} \mathbf{G}_{h_e}^{A_{e_1}A_{e_2}} \prod_{e\in E_\R} \mathbb{G}_{\beta_e}^{A_{e_1}\alpha_{e_1},A_{e_2}\alpha_{e_2}}\\
+\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}} &= \sum_{\{A,\alpha,\mathsf{A},\mathsf{a}\}} (-1)^{K_{\hat{\Gamma}}(\epsilon+\epsilon')} \prod_{e\in E_\NS\cup E_\R} q_e^{|A_{e_1}|+|\mathsf{A}_{e_1}|}\eta_e^{\epsilon_e+\epsilon_e'}\\
+&\times \prod_{e\in E_\NS} \mathbf{G}_{h_e}^{\mathsf{A}_{e_1}A_{e_1}, \mathsf{A}_{e_2}A_{e_2}} \prod_{e\in E_\R} \mathbb{G}_{\beta_e}^{\mathsf{A}_{e_1}\mathsf{a}_{e_1}A_{e_1}\alpha_{e_1},\mathsf{A}_{e_2}\mathsf{a}_{e_2}A_{e_2}\alpha_{e_2}}\\
 &\times \prod_{v \in V_\NS} \hat{\rho}_{a_v}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1}\otimes \mathbf L_{-A_{v_1}}\phi_{v_1},\Psi_{-\mathsf{A}_{v_2}}\mathbf{1}\otimes \mathbf L_{-A_{v_2}}\phi_{v_2},\Psi_{-\mathsf{A}_{v_3}}\mathbf{1}\otimes \mathbf L_{-A_{v_3}}\phi_{v_3})\\
 &\times\prod_{v\in V_\R}\hat{\rho}_{f_v}^{(\eta_v)}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1}\otimes \mathbf L_{-A_{v_1}}\phi_{v_1},\Psi_{-\mathsf{A}_{v_2}} u^{\mathsf{a_{v_2}}}\otimes\mathbb L_{-A_{v_2}}w_{v_2}^{\alpha_{v_2}},\Psi_{-\mathsf{A}_{v_3}} u^{\mathsf{a_{v_3}}}\otimes\mathbb L_{-A_{v_3}}w_{v_3}^{\alpha_{v_3}})
 \fe
@@ -229,19 +235,24 @@ where $\Psi_{-\mathsf{A}}$ denotes a chain of fermion creation operators $\psi_{
 &(-1)^{\mathsf{A}_{v_1}+\mathsf{A}_{v_2}+\mathsf{A}_{v_3}} = 1,\quad v\in V_{\NS}\\
 &(-1)^{\mathsf{A}_{v_1}+\mathsf{A}_{v_2}+\mathsf{A}_{v_3}+\mathsf{a}_{v_2}+\mathsf{a}_{v_3}} = 1,\quad v\in V_{\R},
 \fe
-in addition to \eqref{selection}. $\epsilon$ and $\epsilon'$ denote the Grassmann parity of the $\mathsf{SCA}$ and the fermion part of the corresponding descendant, respectively. The enlarged 3-point functions $\hat{\rho}_a, \hat{\rho}_f^{(\eta)}$ are defined using the product of the fermion 3-point function and the normalized 3-point functions as
+in addition to \eqref{selection}. $\epsilon$ and $\epsilon'$ denote the Grassmann parity of the $\mathsf{SCA}$ and the fermion part of the corresponding descendant, respectively. The enlarged Gram matrices are given by
+\ie
+(\mathbf{G}_{h})_{\mathsf{A}A,\mathsf{B}B} &= \langle \langle \Psi_{-\mathsf{A}}\mathbf{1}\otimes \mathbf{L}_{-A}\phi_h|\Psi_{-\mathsf{B}}\mathbf{1}\otimes \mathbf{L}_{-B}\phi_h \rangle,\\
+(\mathbb{G}_{\beta})_{\mathsf{A}\mathsf{a}A\alpha,\mathsf{Bb}B\gamma} &= \langle \langle \Psi_{-\mathsf{A}}u^{\mathsf{a}}\otimes \mathbb{L}_{-A}w_\beta^\alpha|\Psi_{-\mathsf{B}}u^{\mathsf{b}}\otimes \mathbb{L}_{-B}w_\beta^\gamma \rangle.
+\fe
+The enlarged 3-point functions $\hat{\rho}_a, \hat{\rho}_f^{(\eta)}$ are defined using the product of the fermion 3-point function and the normalized 3-point functions as
 \ie 
  &\hat\rho_a(\Psi_{-\mathsf A}\mathbf1\otimes\mathbf L_{-A}\phi_1,
  \Psi_{-\mathsf B}\mathbf1\otimes\mathbf L_{-B}\phi_2,
  \Psi_{-\mathsf C}\mathbf1\otimes\mathbf L_{-C}\phi_3)\\
- &\qquad=(-1)^{\epsilon_2 \epsilon_3'}
+ &\qquad=(-1)^{\epsilon_1\epsilon_1'+\epsilon_2 \epsilon_3'}
  \rho_{\mathsf{F}}(\Psi_{-\mathsf A}\mathbf1,\Psi_{-\mathsf B}\mathbf1,
                                       \Psi_{-\mathsf C}\mathbf1)
  \rho_a(\mathbf L_{-A}\phi_1,\mathbf L_{-B}\phi_2,\mathbf L_{-C}\phi_3),\\
  &\hat\rho_f^{(\eta)}(\Psi_{-\mathsf A}\mathbf1\otimes\mathbf L_{-A}\phi_1,
  \Psi_{-\mathsf B}u^{\mathsf b}\otimes\mathbb L_{-B}w_2^\alpha,
  \Psi_{-\mathsf C}u^{\mathsf c}\otimes\mathbb L_{-C}w_3^\gamma)\\
- &\qquad=(-1)^{\epsilon_2 \epsilon_3'}
+ &\qquad=(-1)^{\epsilon_1\epsilon_1'+\epsilon_2 \epsilon_3'}
  \rho_{\mathsf{F}}(\Psi_{-\mathsf A}\mathbf1,\Psi_{-\mathsf B}u^{\mathsf b},
                                       \Psi_{-\mathsf C}u^{\mathsf c})
  \rho_f^{(\eta)}(\mathbf L_{-A}\phi_1,\mathbb L_{-B}w_2^\alpha,
@@ -255,7 +266,8 @@ This enlarged block $\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}$ can be 
 \fe
 where we view the blocks as formal series in $q_e, \eta_e$, and the convolution $\star_{\hat{\Gamma}}$ acts on monomials as
 \ie \label{conv}
-&\left(\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right)\star_{\hat{\Gamma}}\left(\prod_e q_e^{s_e}\eta_e^{\epsilon'_e}\right) = (-1)^{K(\epsilon+\epsilon')-K(\epsilon)-K(\epsilon')+\sum_v\epsilon_{v,2}\epsilon'_{v,3}}
+&\left(\prod_e q_e^{r_e}\eta_e^{\epsilon_e}\right)\star_{\hat{\Gamma}}\left(\prod_e q_e^{s_e}\eta_e^{\epsilon'_e}\right)\\
+&\qquad \qquad = (-1)^{K(\epsilon+\epsilon')-K(\epsilon)-K(\epsilon')+\sum_e\epsilon_e \epsilon_e'+\sum_v(\epsilon_{v,1}\epsilon'_{v,1}+\epsilon_{v,2}\epsilon'_{v,3})}
  \prod_e q_e^{r_e+s_e}\eta_e^{\epsilon_e+\epsilon'_e},
 \fe
 while the free fermion block $\mathbf{F}_{\mathsf{F}}$ is defined as
@@ -265,9 +277,9 @@ while the free fermion block $\mathbf{F}_{\mathsf{F}}$ is defined as
 &\times \prod_{v\in V_\R} \rho_{\mathsf{F}}(\Psi_{-\mathsf{A}_{v_1}}\mathbf{1},\Psi_{-\mathsf{A}_{v_2}}u^{\mathsf{a}_{v_2}},\Psi_{-\mathsf{A}_{v_3}}u^{\mathsf{a}_{v_3}}).
 \fe
 
-As is, the enlarged block $\hat{\mathbf{F}}^{(\eta, \eta')}_f$ vanishes whenever the labels $f_v,\eta_v$ in $\rho_f^{(\eta)}$ around a closed Ramond loop $C\subset \hat{\Gamma}$ have product
+As is, the enlarged block $\hat{\mathbf{F}}^{(\eta, \eta')}_f$ vanishes whenever the vertex signs $\eta_v$ around a closed Ramond loop $C\subset \hat{\Gamma}$ have product
 \ie
-(-1)^{\sum_{v\in C} f_v} \prod_{v\in C}\eta_v = -1.
+\prod_{v\in C}(-1)^{f_v}\eta_v = -1.
 \fe
 We call such a loop an odd Ramond loop, and the algorithm for computing superconformal blocks with odd Ramond loops will be presented in Section \ref{sec:oddloop}. In the rest of this section, we assume that there are no such odd Ramond loops.
 
@@ -342,11 +354,11 @@ This enlarged block is non-vanishing, and can be expressed as a convolution of t
 \ie \label{Insconv}
 \widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi] = {\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}} \star_{\hat{\Gamma}} \mathbf{F}^{\mathsf{F}}_{\hat{\Gamma}}[\Theta \psi],
 \fe
-where the convolution is defined from the unsplitted channel $\hat{\Gamma}_{\mathrm{split}}$, and one restrict to the terms in $\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi]$, $\mathbf{F}^{\mathsf{F}}_{\hat{\Gamma}}[\Theta \psi]$ that have same powers of $q_{e_L}, q_{e_R}$ and same powers of $\eta_{e_L}, \eta_{e_R}$ for each split edge $e$, and replace $q_{e_L}^m q_{e_R}^m$ by $q_e^m$, $\eta_{e_L}^\epsilon \eta_{e_R}^\epsilon$ by $\eta_{e}^\epsilon$ in these terms before performing the convolution.
+where the convolution is defined from the unsplitted channel $\hat{\Gamma}$, and one restrict to the terms in $\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi]$, $\mathbf{F}^{\mathsf{F}}_{\hat{\Gamma}}[\Theta \psi]$ that have same powers of $q_{e_L}, q_{e_R}$ and same powers of $\eta_{e_L}, \eta_{e_R}$ for each split edge $e$, and replace $q_{e_L}^m q_{e_R}^m$ by $q_e^m$, $\eta_{e_L}^\epsilon \eta_{e_R}^\epsilon$ by $\eta_{e}^\epsilon$ in these terms before performing the convolution.
 
-On the other hand, since the operator $\psi$ can be regarded as $v_{1/2}(P)$ with Liouville momentum $P=\frac{Q}{2}$, and the operator $\Theta$ commutes with the two copies of Virasoro algebras, one can decompose $\widehat{\mathbf{F}}_f^{(\eta, \eta')}[\Theta \psi]$ into Virasoro blocks as
+On the other hand, since the operator $\psi$ is proportional to $v_{1/2}(P)$ with Liouville momentum $P=\frac{Q}{2}$, and the operator $\Theta$ commutes with the two copies of Virasoro algebras, one can decompose $\widehat{\mathbf{F}}_f^{(\eta, \eta')}[\Theta \psi]$ into Virasoro blocks as
  \ie
-\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi]&= \sum_{\{n,\alpha\}} (-1)^{K(\epsilon)} \prod_{e\in E_\NS} q_e^{2n_e^2}\eta_e^{2n_e} \prod_{e\in E_\R\backslash E_\mathrm{split}} q_e^{2n_e^2-\frac{1}{8}}\eta_e^{\alpha_e}\\
+\widehat{\mathbf{F}}^{\{f,\eta,a\}}_{\hat{\Gamma}}[\Theta \psi]&= \sum_{\{n,\alpha\}} (-1)^{K_{\hat{\Gamma}_{\mathrm{split}}}(\epsilon)} \prod_{e\in E_\NS} q_e^{2n_e^2}\eta_e^{2n_e} \prod_{e\in E_\R\backslash E_\mathrm{split}} q_e^{2n_e^2-\frac{1}{8}}\eta_e^{\alpha_e}\\
 &\times \prod_{e\in E_\mathrm{split}} q_{e_L}^{2n_{e_L}^2-\frac{1}{8}}q_{e_R}^{2n_{e_R}^2-\frac{1}{8}} \eta_e^{\alpha_e}\ \mathbb{S}(n_{e_R}, n_{e_L}, \alpha_e)\\
 &\times \prod_{i=1}^2 F_{\Gamma'}(h_{e, n_e}^{(i)},h_\psi^{(1)}, c^{(i)}) \prod_{v\in V_\NS} \mathbf{B}_{a_v}(n_{v_1},n_{v_2},n_{v_3})\\
 &\times \prod_{v\in V_\R} \mathbb{B}_{f_v}^{(\eta_v)}(n_{v_1},n_{v_2},n_{v_3},\alpha_{v_2},\alpha_{v_3}),
@@ -407,9 +419,14 @@ We are grateful to Ben Mazel, Sounak Pal, Victor A. Rodriguez, and Jaroslav Sche
 
 \begin{appendix}
 
-\section{Superconformal Ward Identities}
+\section{Conventions}
 
-In this appendix, we summarize the choices of convention used in this paper for superconformal Ward identities. The $\mathcal{N}=1$ superconformal algebra is given by
+\label{app:conventions}
+
+In this appendix, we summarize the choices of convention used in this paper. 
+
+\paragraph{The superconformal algebra}
+The $\mathcal{N}=1$ superconformal algebra is given by
 \ie
 \left[L_m,L_n\right]
 &=(m-n)L_{m+n}
@@ -420,10 +437,31 @@ In this appendix, we summarize the choices of convention used in this paper for 
 &=2L_{r+s}
 +\frac{c}{3}\left(r^2-\frac14\right)\delta_{r+s,0}.
 \fe
-Under BPZ conjugation, the superconformal generators and the auxiliary fermion transforms as
+
+\paragraph{BPZ conjugation}
+
+The BPZ conjugation are defined using the inversion map $I: z\mapsto w=1/z$, and we choose the spin lift such that
 \ie
-L_n^\dagger = L_{-n},\quad G_r^\dagger = G_{-r},\quad \psi_r^\dagger = -\psi_{-r}^\dagger.
+\left(\frac{dw}{dz}\right)^{\frac12} = -\frac{i}{z},
 \fe
+which is consistent with \cite{Sen}. On each plumbed edge with plumbing map $zw=q$, we choose the spin lift such that 
+\ie
+\left(\frac{dw}{dz}\right)^{\frac12} = -\frac{i\sqrt{q}}{z},
+\fe
+with the branch of $\sqrt{q}$ chosen such that $\sqrt{q}$ for positive real $q$ gives the positive square root. Under BPZ conjugation, the superconformal generators and the auxiliary fermion transforms as
+\ie
+L_n^\dagger = L_{-n},\quad G_r^\dagger = iG_{-r},\quad \psi_r^\dagger = -i\psi_{-r}.
+\fe
+We also adopt the convention that the BPZ conjugation acts on product as 
+\ie 
+(XY)^\dagger = (-1)^{\epsilon_X\epsilon_Y}Y^\dagger X^\dagger,
+\fe
+where $\epsilon_X, \epsilon_Y$ are the Grassmann parities of $X, Y$. For tensor product operators, the BPZ inner product is given by
+\ie
+\langle \langle A\otimes X| B\otimes Y\rangle =(-1)^{\epsilon_A\epsilon_X}\langle \langle A|B\rangle\langle \langle X|Y\rangle.
+\fe
+
+\paragraph{Ward identities}
 
 The $L_n$ Ward identity is given by
 \ie
@@ -444,29 +482,35 @@ With this choise of branch, the $G_r$ and $\psi_r$ Ward identities are given by
 \ie
 &\sum_{j\ge0}(-1)^j\binom nj
        \rho_a(G_{j-m-n+\frac12}x_1,x_2,x_3)\\
- &=\sum_{j\ge0}\binom mj\rho_a(x_1,G_{n+j-\frac12}x_2,x_3)
-   +(-1)^{\epsilon_2+n}\sum_{j\ge0}(-1)^j\binom nj
+ &=i(-1)^{\epsilon_1}\sum_{j\ge0}\binom mj
+       \rho_a(x_1,G_{n+j-\frac12}x_2,x_3)
+   +i(-1)^{\epsilon_1+\epsilon_2+n}
+      \sum_{j\ge0}(-1)^j\binom nj
                       \rho_a(x_1,x_2,G_{m+j-\frac12}x_3),
 \fe \ie
  &\sum_{j\ge0}(-1)^j\binom nj
-       \rho_{\mathsf{F}}(\psi_{j-m-n-\frac12}x_1,x_2,x_3)\\
- &=-\sum_{j\ge0}\binom mj\rho_{\mathsf{F}}(x_1,\psi_{n+j+\frac12}x_2,x_3)
-   -(-1)^{\epsilon'_2+n}\sum_{j\ge0}(-1)^j\binom nj
-                      \rho_{\mathsf{F}}(x_1,x_2,\psi_{m+j+\frac12}x_3),
+       \rho_{\F}(\psi_{j-m-n-\frac12}x_1,x_2,x_3)\\
+ &=-i(-1)^{\epsilon'_1}\sum_{j\ge0}\binom mj
+       \rho_{\F}(x_1,\psi_{n+j+\frac12}x_2,x_3)
+   -i(-1)^{\epsilon'_1+\epsilon'_2+n}
+      \sum_{j\ge0}(-1)^j\binom nj
+                      \rho_{\F}(x_1,x_2,\psi_{m+j+\frac12}x_3).
 \fe \ie
 &\sum_{j\ge0}(-1)^j\binom{n+\frac12}{j}
  \rho_f^{(\eta)}(G_{j-m-n-\frac12}x_1,x_2,x_3)\\
- &=\sum_{j\ge0}\binom{m+\frac12}{j}
+ &=i(-1)^{\epsilon_1}\sum_{j\ge0}\binom{m+\frac12}{j}
  \rho_f^{(\eta)}(x_1,G_{n+j}x_2,x_3)
- +i(-1)^{\epsilon_2+n}\sum_{j\ge0}(-1)^j\binom{n+\frac12}{j}
+ -(-1)^{\epsilon_1+f+\epsilon_2+n}
+       \sum_{j\ge0}(-1)^j\binom{n+\frac12}{j}
  \rho_f^{(\eta)}(x_1,x_2,G_{m+j}x_3),
 \fe \ie
  &\sum_{j\ge0}(-1)^j\binom{n-\frac12}{j}
- \rho_{\mathsf{F}}(\psi_{j-m-n+\frac12}x_1,x_2,x_3)\\
- &=-\sum_{j\ge0}\binom{m-\frac12}{j}
- \rho_{\mathsf{F}}(x_1,\psi_{n+j}x_2,x_3)
- +i(-1)^{\epsilon'_2+n}\sum_{j\ge0}(-1)^j\binom{n-\frac12}{j}
- \rho_{\mathsf{F}}(x_1,x_2,\psi_{m+j}x_3).
+ \rho_{\F}(\psi_{j-m-n+\frac12}x_1,x_2,x_3)\\
+ &=-i(-1)^{\epsilon'_1}\sum_{j\ge0}\binom{m-\frac12}{j}
+ \rho_{\F}(x_1,\psi_{n+j}x_2,x_3)
+ -(-1)^{\epsilon'_1+\epsilon'_2+n}
+       \sum_{j\ge0}(-1)^j\binom{n-\frac12}{j}
+ \rho_{\F}(x_1,x_2,\psi_{m+j}x_3).
 \fe
 
 \section{Free field representation of $\mathsf{Vir}\oplus \mathsf{Vir}$ primaries}
@@ -564,9 +608,9 @@ where $\Upsilon$ is the Barnes double gamma function, and
 \Upsilon_{\NS}(x)=\Upsilon_b(x/2)\Upsilon_b((x+Q)/2),\quad
  \Upsilon_{\R}(x)=\Upsilon_b((x+b)/2)\Upsilon_b((x+b^{-1})/2).
 \fe
-The (NS, R, R) structure constants $C_{f,\eta}$ are given by
+The (NS, R, R) structure constants $C_{0,\eta}$ are given by
 \ie
-C_{f,+}(p_1,p_2,p_3)
+C_{0,+}(p_1,p_2,p_3)
  &=\frac{\Upsilon'_{\NS}(0)}{b^3}
  \frac{\sqrt{\prod_{\sigma=\pm1}
      \Upsilon_{\NS}(2i\sigma p_1)
@@ -574,7 +618,7 @@ C_{f,+}(p_1,p_2,p_3)
  {\prod_{\sigma=\pm1}
      \Upsilon_{\R}(Q/2+i(p_2+p_3+\sigma p_1))
      \Upsilon_{\NS}(Q/2+i(p_1+\sigma(p_2-p_3)))},\nonumber\\
- C_{f,-}(p_1,p_2,p_3)
+ C_{0,-}(p_1,p_2,p_3)
 &=\frac{\Upsilon'_{\NS}(0)}{b^3}
  \frac{\sqrt{\prod_{\sigma=\pm1}
      \Upsilon_{\NS}(2i\sigma p_1)
@@ -583,7 +627,7 @@ C_{f,+}(p_1,p_2,p_3)
      \Upsilon_{\NS}(Q/2+i(p_2+p_3+\sigma p_1))
      \Upsilon_{\R}(Q/2+i(p_1+\sigma(p_2-p_3)))}.
 \fe
-Notably, the structure constants with $f=0$ is identical to those with $f=1$.
+The other two coefficients obey $C_{1,\eta}=C_{0,\eta}$.
 
 We will focus on the genus-2 partition function of this theory in the genus-2 theta channel. In the theta channel with NS-NS-NS edges, the $a$ label in both 3-point functions $\rho_a$ are forced to be the same by the Gram matrices. We can then denote the all-NS theta channel superconformal block as $\mathbf{F}^{(a)}(h_{1,2,3};q_{1,2,3},\eta_{1,2,3})$. For the theta channel with NS-R-R edges, the two $f$ labels of $\rho^{(\eta)}_f$ are forced to be the same, but the two $\eta$ labels can be different. We will denote the NS-R-R theta channel block as $\mathbf{F}^{(f,\eta,\eta')}(h_1, \beta_{2,3};q_{1,2,3},\eta_{1,2,3})$, where $\eta, \eta'$ are the $\eta$-label of the 3-point functions on the $z_1$ and the $z_2$ sphere. There is an odd Ramond loop in this channel if $\eta \eta'=-1$. Using these blocks, the super-Liouville partition function can be written as
 

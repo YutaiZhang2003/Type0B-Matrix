@@ -37,8 +37,11 @@ int validate_pbw(const Setup &setup, int level, const std::filesystem::path &dir
         auto c = setup.cases[ci];
         double t = seconds();
         Block ph, rec;
-        for (auto k : targets)
+        const int frame_mask = ordered_frame_mask(setup, c);
+        for (auto k : targets) {
             ph[k] = physical.coefficient(k, c);
+            transport_ordered_frame(ph[k], frame_mask);
+        }
         double pbw_seconds = seconds() - t;
         Error forward, recovery, vanishing, unequal, spin, sector;
         auto expanded = indices(setup, level, c.marked);
@@ -103,9 +106,16 @@ int validate_pbw(const Setup &setup, int level, const std::filesystem::path &dir
                 coeff << k[e];
             }
             coeff << "],\"physical\":";
-            row_json(coeff, ph[k]);
+            Row physical_ordered = ph[k], recovered_ordered = recovered;
+            transport_ordered_frame(physical_ordered, frame_mask);
+            transport_ordered_frame(recovered_ordered, frame_mask);
+            for (auto &[parity, value] : physical_ordered)
+                value *= plumbing_bpz_weight<S>(setup.graph, parity);
+            for (auto &[parity, value] : recovered_ordered)
+                value *= plumbing_bpz_weight<S>(setup.graph, parity);
+            row_json(coeff, physical_ordered);
             coeff << ",\"recovered\":";
-            row_json(coeff, recovered);
+            row_json(coeff, recovered_ordered);
             coeff << ",\"enlarged\":";
             row_json(coeff, hat[pull]);
             coeff << "}\n";

@@ -21,7 +21,7 @@ import time
 
 CPP = Path(__file__).resolve().parents[1]
 REPO = CPP.parent
-CONVENTIONS = "product_bpz_residue_2026-09-22"
+CONVENTIONS = "ordered_yutai_bpz_sewing_2026-09-25"
 ZERO = (Decimal(0), Decimal(0))
 
 
