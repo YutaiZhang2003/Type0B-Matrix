@@ -1,0 +1,234 @@
+{
+  "schema": "local-conformal-block-example-v1",
+  "kind": "sphere_r",
+  "convention": "local_amplitude_production_2026-09-24",
+  "configuration": {
+    "kind": "sphere_r",
+    "family": "mixed_ns",
+    "momenta": [
+      [
+        0.0,
+        0.08333333333333333
+      ],
+      [
+        0.0,
+        0.25
+      ],
+      [
+        0.0,
+        0.08333333333333333
+      ],
+      [
+        0.0,
+        0.08333333333333333
+      ]
+    ],
+    "P": 0.46,
+    "z": [
+      0.37,
+      0.11
+    ],
+    "external": [
+      0,
+      0,
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "maximum_twice_level": 2,
+    "epsilon": 0.01
+  },
+  "result": {
+    "sectors": [
+      "R",
+      "R",
+      "NS",
+      "NS"
+    ],
+    "maximum_twice_level": 2,
+    "chiral_external": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "block_labels": [
+      {
+        "parity": 0,
+        "left": 1,
+        "right": 1
+      },
+      {
+        "parity": 0,
+        "left": 1,
+        "right": -1
+      },
+      {
+        "parity": 1,
+        "left": 1,
+        "right": 1
+      },
+      {
+        "parity": 1,
+        "left": 1,
+        "right": -1
+      }
+    ],
+    "holomorphic": [
+      [
+        1.800440436053767,
+        -0.15993617128639387
+      ],
+      [
+        1.800440436053767,
+        -0.15993617128639387
+      ],
+      [
+        -0.09384007451166536,
+        0.07743480196946195
+      ],
+      [
+        0.18768014902333072,
+        -0.1548696039389239
+      ]
+    ],
+    "antiholomorphic": [
+      [
+        1.800440436053767,
+        0.15993617128639387
+      ],
+      [
+        1.800440436053767,
+        0.15993617128639387
+      ],
+      [
+        0.09384007451166536,
+        0.07743480196946195
+      ],
+      [
+        -0.18768014902333072,
+        -0.1548696039389239
+      ]
+    ],
+    "stripped_sewn_density": [
+      152.81763418229497,
+      -2.5153392606678948e-14
+    ],
+    "external_leg_factor": [
+      -9.155927008061946e-05,
+      0.0
+    ],
+    "dP_integrand": [
+      -0.004453750878615661,
+      7.330760289648575e-19
+    ],
+    "measure": "1/pi included exactly once in dP_integrand",
+    "physical_external": [
+      0,
+      0,
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        0
+      ]
+    ],
+    "metadata": {
+      "holomorphic": {
+        "method": "Type0B b-dual two-sample extrapolation of assembled coefficients",
+        "formula": "[4*(1+epsilon)*F(1+epsilon)-(1+2*epsilon)*F(1+2*epsilon)]/(3+2*epsilon)",
+        "options": {
+          "epsilon": 0.01
+        },
+        "sample_b": [
+          1.01,
+          1.02
+        ],
+        "variable": "x=Q-2=(b-1)^2/b",
+        "formal_error": "O(epsilon^4), conditional on analyticity and b-duality",
+        "regulator_error_estimate": null,
+        "primary_prefactors": "exact b=1",
+        "component_tables_checked": 4,
+        "ordinary_virasoro_backend": "CCY sphere c-recursion",
+        "c": 13.5,
+        "maximum_twice_level": 2
+      },
+      "analytic_dual": {
+        "method": "Type0B b-dual two-sample extrapolation of assembled coefficients",
+        "formula": "[4*(1+epsilon)*F(1+epsilon)-(1+2*epsilon)*F(1+2*epsilon)]/(3+2*epsilon)",
+        "options": {
+          "epsilon": 0.01
+        },
+        "sample_b": [
+          1.01,
+          1.02
+        ],
+        "variable": "x=Q-2=(b-1)^2/b",
+        "formal_error": "O(epsilon^4), conditional on analyticity and b-duality",
+        "regulator_error_estimate": null,
+        "primary_prefactors": "exact b=1",
+        "component_tables_checked": 4,
+        "ordinary_virasoro_backend": "CCY sphere c-recursion",
+        "c": 13.5,
+        "maximum_twice_level": 2
+      },
+      "physical_momenta_conjugated": false,
+      "absolute_amplitude_normalization": false
+    },
+    "normalization": "unchanged sphere scattering half-sum fields; effective D_R/D_NS=1/2"
+  },
+  "loaded_package_sources": [
+    "run.py",
+    "runtime/__init__.py",
+    "runtime/engine.py",
+    "source/project/Code/c_Recursion/super_liouville_structure_constants.py",
+    "source/project/Code/type0b_rr_sphere/frozen.py",
+    "source/project/Code/type0b_rr_sphere/normalization.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/heterotic_so23_1to3_vvvv_fit_bundle/heterotic_so23_1to3.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/heterotic_so23_1to3_vvvv_fit_bundle/heterotic_so23_1to3_fast.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/heterotic_so23_1to3_vvvv_fit_bundle/liouville_momentum_quadrature.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/heterotic_so23_1to3_vvvv_fit_bundle/ns_elliptic_conversion.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/literature_component_blocks.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/literature_double_virasoro.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/literature_precision_blocks.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/literature_self_dual_blocks.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/literature_self_dual_correlator.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/literature_super_liouville.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ns_algebra/__init__.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ns_algebra/ns_fusion.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ns_algebra/ns_middle_fusion.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ns_algebra/ns_sca.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ns_algebra/ns_three_point_tensor.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ramond_algebra/__init__.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ramond_algebra/nrr_middle_fusion.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ramond_algebra/nrr_three_point_tensor.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ramond_algebra/ns_rr_three_point_tensor.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ramond_algebra/ramond_plumbing.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/ramond_algebra/ramond_sca.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_direct_domain.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_four_ramond_assembly.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_four_ramond_elliptic_recursion.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_four_ramond_nonchiral.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_literature_amplitude.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_literature_atlas.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_literature_campaign.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_ramond_cocycles.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/so7e8_spin7_kz_continuation.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/sphere_block_uniformization.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/spin23_genus1_recursion.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/spin23_ramond_blocks.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/spin23_super_liouville_data.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/spin23_two_virasoro_ramond.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/spin23_virasoro_torus_recursion.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/Codes/virasoro_sphere_c_recursion.py",
+    "source/project/Data Set/type0b_rr_sphere_20260921/het_inputs/reference/moduli/source/integrate_so7e8_literature_banks.py"
+  ],
+  "moduli_integral_computed": false
+}

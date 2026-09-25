@@ -1,0 +1,1006 @@
+{
+  "schema": "type0b-rr-internal-normalization-checks-v2",
+  "normalization": {
+    "id": "rr-correlator-prefactor-v1",
+    "layer": "overall partition/correlation function, after descendant summation",
+    "convention": "OPE NS-handle correlator sets the relative reference",
+    "radial_factor": 2.0,
+    "ope_theta_factors": [
+      2.0,
+      2.0,
+      1.0,
+      1.0
+    ],
+    "determined_by": "channel overlap and modular covariance",
+    "geometry_or_energy_dependent": false,
+    "descendant_dependent": false,
+    "primary_norms_changed": false,
+    "inverse_Grams_changed": false,
+    "trinion_couplings_changed": false,
+    "descendant_coefficients_changed": false,
+    "factor_per_internal_edge": false,
+    "GSO_weights_changed": false,
+    "external_vertices_rescaled": false,
+    "common_amplitude_constant": null,
+    "common_constant_prescription": "factorization onto independently normalized lower-genus string amplitudes",
+    "matrix_amplitude_used": false
+  },
+  "local_checks": {
+    "counts": {
+      "ope": 80,
+      "collision_polynomials": 144,
+      "radial": 80,
+      "unchanged_grams": 12,
+      "unchanged_radial_coefficients": 120,
+      "unchanged_chiral_arrays": 48,
+      "unchanged_handle_weights": 32
+    },
+    "maximum_contraction_residual": 0.0,
+    "maximum_radial_G0_residual": 4.654751537338637e-17,
+    "maximum_primary_descendant_or_coupling_change": 0.0,
+    "energies": [
+      [
+        0.0,
+        0.25
+      ],
+      [
+        0.2,
+        0.25
+      ]
+    ],
+    "scope": "prefactor applied only to completed correlators and their collision expansion; primary metrics, couplings and descendant sums checked unchanged; absolute amplitude constant excluded"
+  },
+  "modular": [
+    {
+      "input_bank": "Data Set/type0b_rr_genus1_20260921/RR_MOMENTUM_MODULAR_GK.npz",
+      "input_sha256": "075a4435cdd4dc2c411aba2e125802c9600d2cbee6952140843f46d04ddeac10",
+      "output_bank": "Data Set/type0b_rr_genus1_20260921/RR_INTERNAL_MODULAR_GK.npz",
+      "output_sha256": "eb3460b93d04995b47eeff62c462d5df805aec36d0e06ae436b4ecbc1dd0889b",
+      "value": [
+        [
+          [
+            [
+              0.09547619085184893,
+              1.1137721492337737e-19
+            ],
+            [
+              -0.002620616257359351,
+              1.4547686327108558e-20
+            ]
+          ],
+          [
+            [
+              0.11238280362139612,
+              4.6833168478470337e-20
+            ],
+            [
+              -0.004316039955800479,
+              -1.6361395113629513e-19
+            ]
+          ],
+          [
+            [
+              0.12000053224427919,
+              5.597998070170927e-19
+            ],
+            [
+              -0.004809331819797957,
+              -6.586852944312686e-20
+            ]
+          ],
+          [
+            [
+              0.11202473784246285,
+              -7.601143319652606e-20
+            ],
+            [
+              -0.004257669487495194,
+              3.081870673656381e-19
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              0.09547619122354854,
+              2.0209468999047838e-19
+            ],
+            [
+              -0.0026206162377838188,
+              -2.9222242979732895e-20
+            ]
+          ],
+          [
+            [
+              0.11202464478621724,
+              -4.35882017446397e-21
+            ],
+            [
+              -0.0042576648810867404,
+              2.0208898775792604e-19
+            ]
+          ],
+          [
+            [
+              0.12000055259924153,
+              -1.7832597915025772e-20
+            ],
+            [
+              -0.004809333597237084,
+              -1.7654184357685061e-19
+            ]
+          ],
+          [
+            [
+              0.11238288315404973,
+              -3.137502714880633e-19
+            ],
+            [
+              -0.004316043214148443,
+              3.673122057038668e-19
+            ]
+          ]
+        ]
+      ],
+      "ratios": [
+        [
+          [
+            1.0000000038931132,
+            9.501580846921706e-19
+          ],
+          [
+            0.9999999925301798,
+            1.6702151287986503e-17
+          ]
+        ],
+        [
+          [
+            1.0000007076941582,
+            -3.2085288984679085e-18
+          ],
+          [
+            1.0000007549392493,
+            -1.2301236452763248e-16
+          ]
+        ],
+        [
+          [
+            1.0000001696239338,
+            -4.813582815713732e-18
+          ],
+          [
+            1.0000003695813044,
+            2.3012196691097968e-17
+          ]
+        ],
+        [
+          [
+            0.9999991693241386,
+            6.396136358914069e-19
+          ],
+          [
+            0.9999989180915835,
+            2.4919206737192694e-17
+          ]
+        ]
+      ],
+      "relative_modular_residual": [
+        [
+          3.893113164809367e-09,
+          7.469820166343557e-09
+        ],
+        [
+          7.076941582953041e-07,
+          7.549392492204176e-07
+        ],
+        [
+          1.6962393382736186e-07,
+          3.695813044108176e-07
+        ],
+        [
+          8.306758614585448e-07,
+          1.0819084165625887e-06
+        ]
+      ],
+      "max_relative_modular_residual": 1.0819084165625887e-06
+    },
+    {
+      "input_bank": "Data Set/type0b_rr_genus1_20260921/RR_MOMENTUM_MODULAR_JACOBI.npz",
+      "input_sha256": "ec1724a069ac17a720140a56baaaae20f5af2ec0c7e95bb3189d1f90dc103935",
+      "output_bank": "Data Set/type0b_rr_genus1_20260921/RR_INTERNAL_MODULAR_JACOBI.npz",
+      "output_sha256": "e9bf4fce302ad4dab051f6185c1644606c1d88e0eae6bd3dc5fcab6b6e362f4f",
+      "value": [
+        [
+          [
+            [
+              0.09547618537953297,
+              2.481620329332959e-19
+            ],
+            [
+              -0.0026206162229169085,
+              -1.004535495494885e-19
+            ]
+          ],
+          [
+            [
+              0.1123828017914195,
+              -2.690649039107058e-19
+            ],
+            [
+              -0.004316039794592316,
+              3.377657825525906e-20
+            ]
+          ],
+          [
+            [
+              0.12000052240350016,
+              4.295645879629381e-19
+            ],
+            [
+              -0.0048093316317946045,
+              -8.519659395827787e-20
+            ]
+          ],
+          [
+            [
+              0.11202472808910989,
+              -1.1548501426242135e-19
+            ],
+            [
+              -0.004257669378158427,
+              9.52059881157779e-20
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              0.09547618568099814,
+              4.731644540714591e-20
+            ],
+            [
+              -0.0026206162084712356,
+              -3.097972657254238e-20
+            ]
+          ],
+          [
+            [
+              0.11202464288240138,
+              -1.030585034804807e-19
+            ],
+            [
+              -0.004257664714961752,
+              -1.4601950654674423e-19
+            ]
+          ],
+          [
+            [
+              0.12000054246669144,
+              -4.5758638695373e-19
+            ],
+            [
+              -0.004809333419551489,
+              4.0484022956080307e-19
+            ]
+          ],
+          [
+            [
+              0.11238287310568905,
+              5.543453575024947e-19
+            ],
+            [
+              -0.004316043110569168,
+              -1.1723143297481514e-19
+            ]
+          ]
+        ]
+      ],
+      "ratios": [
+        [
+          [
+            1.0000000031574907,
+            -2.1036197404758713e-18
+          ],
+          [
+            0.9999999944876808,
+            -2.6510490859239744e-17
+          ]
+        ],
+        [
+          [
+            1.0000006345656847,
+            7.326836660299594e-18
+          ],
+          [
+            1.000000768291538,
+            3.498763782705051e-17
+          ]
+        ],
+        [
+          [
+            1.0000001671925327,
+            -7.392893205528106e-18
+          ],
+          [
+            1.0000003717266808,
+            -1.018929224903691e-16
+          ]
+        ],
+        [
+          [
+            0.9999992393937486,
+            1.1092571394980102e-19
+          ],
+          [
+            0.99999890475369,
+            5.66566750405717e-17
+          ]
+        ]
+      ],
+      "relative_modular_residual": [
+        [
+          3.1574907509296636e-09,
+          5.5123191370476445e-09
+        ],
+        [
+          6.345656845036352e-07,
+          7.682915379429444e-07
+        ],
+        [
+          1.671925327753843e-07,
+          3.7172668080360057e-07
+        ],
+        [
+          7.606062515102413e-07,
+          1.0952463098894437e-06
+        ]
+      ],
+      "max_relative_modular_residual": 1.0952463098894437e-06
+    }
+  ],
+  "pilot": {
+    "path": "Data Set/type0b_rr_genus1_20260921/RR_LOCAL_DENSITY_INTERNAL_PILOT.npz",
+    "sha256": "46c56da37a25f3ec8f06382fec1d2eaa5f67c731d0362443535d847d0a68b590",
+    "input_sha256": "bb148e0f733a07a919c046bcd7f04948b15133b2c57fd2d6f73e9b626f82fd82",
+    "scope": "overall correlator prefactors on assembled local PCO and collision data; retains original 16-node pilot limits"
+  },
+  "coarse_overlap": [
+    {
+      "input": "Data Set/type0b_rr_genus1_20260921/RR_RADIAL_OVERLAP_N8.json",
+      "input_sha256": "289f402da278a19aa5b153d495098b26acc85775b27e7d82c452f804edfff43e",
+      "internally_normalized_radial": [
+        [
+          [
+            0.06120119470234689,
+            -2.8741452485490676e-19
+          ],
+          [
+            -0.0011134785381094606,
+            -3.356912167706079e-20
+          ]
+        ],
+        [
+          [
+            0.06814923126748099,
+            -9.829533629625802e-21
+          ],
+          [
+            -0.002079109676913226,
+            -6.601440558040853e-21
+          ]
+        ],
+        [
+          [
+            0.07488517514709897,
+            1.1776234060217512e-19
+          ],
+          [
+            -0.0025052277659932585,
+            4.623547945752478e-21
+          ]
+        ],
+        [
+          [
+            0.07253337980120872,
+            1.1625687524824257e-19
+          ],
+          [
+            -0.002304582340437056,
+            1.0230846440701066e-21
+          ]
+        ]
+      ],
+      "internally_normalized_ope": [
+        [
+          [
+            0.06120992668904681,
+            -2.4747080665995282e-19
+          ],
+          [
+            -0.0011133362075867767,
+            1.1257463136587003e-19
+          ]
+        ],
+        [
+          [
+            0.0681614564638384,
+            4.107104178311713e-19
+          ],
+          [
+            -0.002077523568775757,
+            5.209168133223775e-21
+          ]
+        ],
+        [
+          [
+            0.07502136553492186,
+            3.724093099352761e-19
+          ],
+          [
+            -0.002506377237271078,
+            1.4515344415126318e-19
+          ]
+        ],
+        [
+          [
+            0.07265993850428178,
+            1.2808137173443959e-19
+          ],
+          [
+            -0.0023060201400500312,
+            -4.171722752176781e-19
+          ]
+        ]
+      ],
+      "relative_discrepancy": [
+        [
+          0.0001426563822610105,
+          0.00012784145679807946
+        ],
+        [
+          0.0001793564426530846,
+          0.0007634609596288375
+        ],
+        [
+          0.0018153546906513932,
+          0.00045861862321691974
+        ],
+        [
+          0.0017417948002474426,
+          0.0006234982895439921
+        ]
+      ],
+      "maximum_relative_discrepancy": 0.0018153546906513932,
+      "status": "historical coarse grid after overall correlator prefactors; still requires independent spectral/block refinement"
+    },
+    {
+      "input": "Data Set/type0b_rr_genus1_20260921/RR_RADIAL_RAISED_OVERLAP_N8.json",
+      "input_sha256": "2d859924acc0a919f4668bd9e258b559692a392cf128e27a5166f24380b70798",
+      "internally_normalized_radial": [
+        [
+          [
+            [
+              [
+                6.816892125253673e-21,
+                0.0019125373344483399
+              ],
+              [
+                -0.004944161041793976,
+                0.0010044924606749136
+              ]
+            ],
+            [
+              [
+                0.004944161041793978,
+                0.0010044924606749136
+              ],
+              [
+                -5.905197544725023e-18,
+                0.021058145776146106
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -9.774644978196482e-22,
+                3.4796204315920645e-05
+              ],
+              [
+                0.009908880751786944,
+                -0.0021062401757812694
+              ]
+            ],
+            [
+              [
+                -0.009908880751786944,
+                -0.00210624017578127
+              ],
+              [
+                1.6077964372439587e-19,
+                -0.05350683117261715
+              ]
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1.548291684165496e-21,
+                0.0021296634771087804
+              ],
+              [
+                -0.00421420894725438,
+                0.0006834348595961333
+              ]
+            ],
+            [
+              [
+                0.00421420894725438,
+                0.0006834348595961332
+              ],
+              [
+                -2.471818093880988e-18,
+                -0.40641626369401584
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -2.0863422975990381e-22,
+                6.49721774035383e-05
+              ],
+              [
+                0.008685845335411597,
+                -0.002104671597150511
+              ]
+            ],
+            [
+              [
+                -0.008685845335411599,
+                -0.002104671597150511
+              ],
+              [
+                -1.6696661123480717e-18,
+                -0.03226620695066858
+              ]
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1.6297143242429322e-21,
+                0.0023401617233468424
+              ],
+              [
+                -0.0034301450234654413,
+                0.0007534080234362175
+              ]
+            ],
+            [
+              [
+                0.0034301450234654413,
+                0.0007534080234362174
+              ],
+              [
+                3.476896116088451e-18,
+                -0.5723862481837945
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -1.6380314401622631e-22,
+                7.82883676872893e-05
+              ],
+              [
+                0.010039676911156524,
+                -0.0017999353697929156
+              ]
+            ],
+            [
+              [
+                -0.010039676911156524,
+                -0.0017999353697929156
+              ],
+              [
+                1.8280887840852447e-19,
+                -0.02600541520417843
+              ]
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1.472781855088791e-21,
+                0.002266668118787772
+              ],
+              [
+                -0.0032138226483775373,
+                0.0007174888050174609
+              ]
+            ],
+            [
+              [
+                0.0032138226483775373,
+                0.0007174888050174607
+              ],
+              [
+                5.139307411005371e-18,
+                -0.488203679748969
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -2.78800868877005e-22,
+                7.201819813865799e-05
+              ],
+              [
+                0.010420580654747092,
+                -0.0018700907262154385
+              ]
+            ],
+            [
+              [
+                -0.010420580654747092,
+                -0.0018700907262154387
+              ],
+              [
+                1.8681495379548905e-19,
+                -0.026963465399098448
+              ]
+            ]
+          ]
+        ]
+      ],
+      "internally_normalized_ope": [
+        [
+          [
+            [
+              [
+                3.472661021734038e-21,
+                0.0019128102090327128
+              ],
+              [
+                -0.004958280028769703,
+                0.0010487432208247654
+              ]
+            ],
+            [
+              [
+                0.004958280028769703,
+                0.0010487432208247656
+              ],
+              [
+                -3.6195923189500844e-19,
+                0.022214959773354786
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                -5.118369879389918e-21,
+                3.47917564870869e-05
+              ],
+              [
+                0.009964178283602451,
+                -0.0022597632555001255
+              ]
+            ],
+            [
+              [
+                -0.009964178283602451,
+                -0.002259763255500125
+              ],
+              [
+                6.973054025053424e-20,
+                -0.05422276551908481
+              ]
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1.3341383939832834e-20,
+                0.0021300455144949494
+              ],
+              [
+                -0.004236722195959767,
+                0.0007260078754104419
+              ]
+            ],
+            [
+              [
+                0.004236722195959767,
+                0.0007260078754104421
+              ],
+              [
+                1.2482561275806856e-18,
+                -0.4071517343193802
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                8.053448748931103e-21,
+                6.492261152424239e-05
+              ],
+              [
+                0.008763256474727307,
+                -0.0022710417814348965
+              ]
+            ],
+            [
+              [
+                -0.008763256474727307,
+                -0.0022710417814348965
+              ],
+              [
+                1.8764076597304467e-18,
+                -0.03292570796747368
+              ]
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                1.5100968218920594e-20,
+                0.002344417672966308
+              ],
+              [
+                -0.003518581506159991,
+                0.000874583258933345
+              ]
+            ],
+            [
+              [
+                0.0035185815061599918,
+                0.0008745832589333451
+              ],
+              [
+                1.4708400104490492e-18,
+                -0.5755532603760446
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                2.9944477233400504e-21,
+                7.832428866472102e-05
+              ],
+              [
+                0.010224546186901181,
+                -0.002085104484910583
+              ]
+            ],
+            [
+              [
+                -0.010224546186901181,
+                -0.0020851044849105834
+              ],
+              [
+                -7.0135683920176e-18,
+                -0.027586338474009587
+              ]
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              [
+                -1.6534574841723957e-20,
+                0.002270623078258806
+              ],
+              [
+                -0.0032985860495329234,
+                0.0008359886210506346
+              ]
+            ],
+            [
+              [
+                0.003298586049532924,
+                0.0008359886210506347
+              ],
+              [
+                -5.607866896204499e-19,
+                -0.4905514813950518
+              ]
+            ]
+          ],
+          [
+            [
+              [
+                4.922588016910795e-22,
+                7.206312937656334e-05
+              ],
+              [
+                0.010597629855205824,
+                -0.0021437898774679517
+              ]
+            ],
+            [
+              [
+                -0.010597629855205824,
+                -0.0021437898774679517
+              ],
+              [
+                3.125856544113398e-18,
+                -0.028528047531092227
+              ]
+            ]
+          ]
+        ]
+      ],
+      "relative_discrepancy": [
+        [
+          [
+            [
+              0.00014265638226123721,
+              0.00916512101485424
+            ],
+            [
+              0.009165121014854175,
+              0.05207364807368201
+            ]
+          ],
+          [
+            [
+              0.00012784145679437843,
+              0.01597092426214913
+            ],
+            [
+              0.015970924262149053,
+              0.013203574912011335
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              0.00017935644265308463,
+              0.011203781607019873
+            ],
+            [
+              0.011203781607019937,
+              0.0018063796942773425
+            ]
+          ],
+          [
+            [
+              0.0007634609596288377,
+              0.020269863251812584
+            ],
+            [
+              0.020269863251812497,
+              0.02002997224711484
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              0.0018153546906513934,
+              0.04137602347187527
+            ],
+            [
+              0.041376023471875446,
+              0.005502552778835662
+            ]
+          ],
+          [
+            [
+              0.0004586186232151904,
+              0.03256831982885049
+            ],
+            [
+              0.032568319828850514,
+              0.05730819518946376
+            ]
+          ]
+        ],
+        [
+          [
+            [
+              0.0017417948002478242,
+              0.04281529512800415
+            ],
+            [
+              0.04281529512800427,
+              0.004786045369603207
+            ]
+          ],
+          [
+            [
+              0.0006234982895423006,
+              0.030148273540642655
+            ],
+            [
+              0.030148273540642635,
+              0.054843645724039394
+            ]
+          ]
+        ]
+      ],
+      "maximum_relative_discrepancy": 0.05730819518946376,
+      "status": "historical coarse grid after overall correlator prefactors; still requires independent spectral/block refinement"
+    }
+  ],
+  "factorization_prescription": "RR_FACTORIZATION_NORMALIZATION.json",
+  "source_sha256": {
+    "Code/c_Recursion/ns_genus2_symbolic_low_order.py": "b0d963707477cb030d01af19a5b01f95c583a3ca40bb608ace4610af7f338b20",
+    "Code/c_Recursion/super_liouville_structure_constants.py": "63a26947aef1c25bc549e7dda60bc04bdfde6660719cae28fb91dd7885d4b6a3",
+    "Code/double_virasoro/nsrr/ramond_pbw_generalized_ward.py": "b4c6ea6df48e619f59517353207f5840817dcecd1f1dd52e4390e84e393564a4",
+    "Code/genus_2/nsrr_bilinear_sewing.py": "ba429df71191c9f5298a8223f383f0e89885adab0754eb5057c3562918e863c6",
+    "Code/genus_2/nsrr_bilinear_state_oracle.py": "8385dbe481a0aafe3c9b0c93674d122d73af83dbdc8de1a28d170b29b6173943",
+    "Code/type0b_genus1/bulk_order8/numeric_ramond.py": "d4ddae9d30fdf663b4a44ae1907b156e27e5bb4c717ea75fb71806ff4c361236",
+    "Code/type0b_genus1/disk_order8/numeric_ns_onepoint.py": "3d61ddcb2eaf137bbfca2b0d2a4e58235fb8af1b576a4f3c0f850abbd842a00a",
+    "Code/type0b_genus1/even.py": "e1e81fde8d215d091df7aeec6ea6e561fb4211a7389dc0ee8964084e456f08ee",
+    "Code/type0b_genus1/ope_channel/bridge_descendants.py": "042331aa8e6c465c7e851f0d1fcdf91bb21590507f6ca3f70d9671bca4f4eb30",
+    "Code/type0b_genus1/ramond_descendants.py": "f232deed908d9220d2673859d0ef1f04f4e7aefaa949b5f8f3fb5f7854b6e2ce",
+    "Code/type0b_rr_genus1/audit_rr_normalization.py": "b4fb1ad67a724f61f6423a8bc66739143b82c501806b3945d4d309476383c680",
+    "Code/type0b_rr_genus1/check_collision_kernel.py": "fe73880bfc645945acad0ba48769de0f71a80e65498e06fa2b68cef17f3a85e4",
+    "Code/type0b_rr_genus1/check_cusp_layers.py": "ae2d8231ccb8969b31f10a1cbb05a0b735b9811f928be4f52c50a563b6324717",
+    "Code/type0b_rr_genus1/check_elliptic_cusp.py": "5f712b510aa4479b61ef6ff9b17ab519b8da5464b8ce3ae58f986198cef2c99e",
+    "Code/type0b_rr_genus1/check_free_field.py": "26bfbc6e996a1f0b7f51b17af61e29295088e666b577bc512bb3c7ba6531fe23",
+    "Code/type0b_rr_genus1/check_geometry.py": "26fc025ebe735b9132be90f0d87bf3483029d8f9fbeaf6593d0c9f1d67f10e7d",
+    "Code/type0b_rr_genus1/check_gso_projection.py": "8516a2483c9d645954972ce6d1069c51143d2720b34738196beb588b4e745c3b",
+    "Code/type0b_rr_genus1/check_internal_normalization.py": "94443bd63b401a92e8ece1e16d71d19076486398dedfa8ded02276a2ed718ee3",
+    "Code/type0b_rr_genus1/check_local_density.py": "1fec0d3a84f35576c90f826e7cccaa3211b5a3074e5bda39c49b85aebfec42d0",
+    "Code/type0b_rr_genus1/check_local_modular.py": "ccd38cf59b30715e4f92c9208a4f021a3b783f2e854619f4ea434f0ebd66f63b",
+    "Code/type0b_rr_genus1/check_matched_integration.py": "f46b37b7f00093ab34c4ea6e94dcfe071c27039b45d947632ed6ed10e7a839d2",
+    "Code/type0b_rr_genus1/check_mixed_blocks.py": "18f8e52b56aee09d6f4d1b18f82d1a1fe1c5e987bbfe65a8ca06068d7a12edb8",
+    "Code/type0b_rr_genus1/check_momentum_design.py": "e739570332099d791e3ce8c1e52dbd67ea6f6526b41b1bc94f2a3acf4a1872af",
+    "Code/type0b_rr_genus1/check_momentum_quadrature.py": "754e3ffb51ed97a9ba77973e3ea1963b13828c3f652876bd022e0fa3ff617809",
+    "Code/type0b_rr_genus1/check_ope_channel.py": "ec96c755eae6d05263fa7d679d7a73d641062a84f7a996969df5d4e80320eec8",
+    "Code/type0b_rr_genus1/check_physical_components.py": "4e4fbe3c915a41e0a807529dd91e6090cf332c31c3d0374c85d281271f3decfa",
+    "Code/type0b_rr_genus1/check_picture_changed.py": "3e9fd94597d3ba237e9f347ede482186fdce7f9acd5e5e379b0bdeb80b97e6a9",
+    "Code/type0b_rr_genus1/check_radial_overlap.py": "98d0cc021bd0d2a60fa7db549ed3d2b664f6afb0ca9ee5a4065f2aa3b6b10f80",
+    "Code/type0b_rr_genus1/check_radial_trace.py": "59576d7d3d0b0e33e1d2d5e8a79040f67aeb89bf02919031c0cae212a88d6ee1",
+    "Code/type0b_rr_genus1/collision_kernel.py": "759ec36156924402eaf1148cbb1d09b38daf08440c938adcc6b878cc282b8743",
+    "Code/type0b_rr_genus1/cusp_kernel.py": "aa5b1e3d31731a97baaf4d4b652c81ea08c10545252dd479265228b458a4edd0",
+    "Code/type0b_rr_genus1/elliptic_series.py": "893d545257c83caf5496db74b9152d6fa80664dbfb4e6b84fdd32da94529b5ec",
+    "Code/type0b_rr_genus1/factorization_normalization.py": "f9997184a42accbc2c4f2a57bcc268c0a1085ddde7ed3b42eba10a6fb8cac506",
+    "Code/type0b_rr_genus1/geometry.py": "84deb920c6467b4aa5a576b28fd060a06a72e88096aedf466dd15316558f78a6",
+    "Code/type0b_rr_genus1/gso_projection.py": "62c037c437d4ef1d29be23cd157ec709a5880e97eb98cac6b1611a2c2a75480c",
+    "Code/type0b_rr_genus1/gso_sewing.py": "7e0b84b3c86704057f93bda05d85dbcfb2f24cc77531b2f087f547fc687f3c8e",
+    "Code/type0b_rr_genus1/internal_normalization.py": "5d812541e0b7cd0a2cd2536e214687ac69c95eb50793db5498399f59d2031c0a",
+    "Code/type0b_rr_genus1/kinematics.py": "17a80be4e716829b461ddb65a19a4bcd13c612d8ad962a236a5369099e8f52b3",
+    "Code/type0b_rr_genus1/local_density.py": "a6ac005ad5d820e882fd293bf96f3b83e0912454a8ea082b75f8e1307566e439",
+    "Code/type0b_rr_genus1/matched_integration.py": "4ffd41d061a9ff683115f586a805b9b70a4ab2b0501177708f90e82d901a4b48",
+    "Code/type0b_rr_genus1/mixed_blocks.py": "e80ceb5b6ea7c7ea57804a2873ab5d5365f9f53c0e5cafd4f24ce311ccda4f4c",
+    "Code/type0b_rr_genus1/momentum_quadrature.py": "c1294692ea5b2d8bfb25083ab55138d281ceddb5b734ecf74fdceb59c5eb224a",
+    "Code/type0b_rr_genus1/numeric_nrr.py": "8bd31d355fa88486bac6b1c6fece2542a27e1498a63aa7d1f003c88d4f03cb9a",
+    "Code/type0b_rr_genus1/ope_channel.py": "c3d16e11e94ebc2a79043c6f3434de4cbfa39c3a9d17c6e7f161637255d445cd",
+    "Code/type0b_rr_genus1/physical_components.py": "3c77d87522da7cfb47c6813ccce895340acc954da9b0aca777a2ea5a3fa56814",
+    "Code/type0b_rr_genus1/picture_changed.py": "823dbb731420e30d004801d3d5d72dc7382ed7fd4c7b491e8f58e615934ab36a",
+    "Code/type0b_rr_genus1/prepare_local_bank.py": "fd002d946e24dc89d9e0478178b0e5cdd980a21e19923a6eb7605469d497d876",
+    "Code/type0b_rr_genus1/prepare_ope_bank.py": "3d26fa2e7e2a025b0ae2eb3c65918c7ba9462a52bac4e3ce47246f816351a81d",
+    "Code/type0b_rr_genus1/radial_trace.py": "e251755da707294b5d6bccdc6daad0915d927bc13a293d99da967e01137e0607",
+    "Code/type0b_rr_genus1/torus_blocks.py": "d3b4b77865ddbaf1459c6912cf0d3f0605d8fcee889f0aff79a2f69c811f0a55",
+    "handoffs/reference/HetSO23_1to1_20260920/Codes/ns_algebra/ns_middle_fusion.py": "9aec8f43ed9188be727160a0891ba92cb6a0ba55484a4a57d67f901d050954aa",
+    "handoffs/reference/HetSO23_1to1_20260920/Codes/ns_algebra/ns_sca.py": "dcf657d2dafcda953dd4c3c5db03912ddbe1cd1a8f0ede9cd1fd45395235f7de",
+    "handoffs/reference/HetSO23_1to1_20260920/Codes/ns_algebra/ns_three_point_tensor.py": "39e5b63da19423f52e3b21b103db43ae3376c3c58b8d76c0992b5981ed0e59a3",
+    "handoffs/reference/HetSO23_1to1_20260920/Codes/ramond_algebra/ramond_sca.py": "0c8e647cfd73331e7092825335d5eb5ecedd7525d34dce103f96de9f2ed9773a"
+  },
+  "seconds": 12.26242999988608,
+  "common_amplitude_constant": null,
+  "worldsheet_amplitude": null,
+  "status": "relative partition/correlation-function prefactors implemented; primary norms and descendant sums unchanged; modular test passed at declared finite cutoffs; common constant reserved for factorization"
+}

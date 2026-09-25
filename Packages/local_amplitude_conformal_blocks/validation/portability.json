@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "method": "Independent physical copy outside repository; directory name contains a space; each command ran with Python -I -B, PYTHONPATH empty and unrelated working directory.",
+  "python": "3.11.15",
+  "symlinked": false,
+  "examples_passed": 7,
+  "scientific_checks": [
+    "sphere_banks",
+    "ns_crossing",
+    "torus_ns",
+    "torus_r"
+  ],
+  "crossing_passed": true,
+  "working_directory": "/private/tmp",
+  "tested_files_sha256": {
+    "runtime/__init__.py": "7a6ffae33a3ad88fd721c304c01a997698db51ff27b461e5dc00c15e39f0bc39",
+    "runtime/engine.py": "33b3d41cd7e7bd11f23e6a42b1c94da10e4580f2782f1771e25bae22f9efaeca",
+    "runtime/validate.py": "243ae0a5788c95557193501dbdcec84e3a76bfc85829049cb1901433532ad59c",
+    "tests/check_science.py": "b6d15dfeba6531b1f78f92ec0fa24314d55336606535314f47fa798b48a15b1a",
+    "examples/sphere_mixed_ns.json": "45cc1af5047f946b64efb2d5513ebac285cf08c3c816dd0b00dacb4f95030f71",
+    "examples/sphere_mixed_r.json": "65b51ef38fd7ee41fbf9d0b4bb3b330ec6bafb441224e5b1b90fb78fe95b8f3b",
+    "examples/sphere_ns.json": "b43db853a6db0a55b0e445cdfffab28e2f436977a9641c1aad8acd6e921adce5",
+    "examples/sphere_rrrr.json": "d91aea191fd7384f0a3442df1efab19ff5a407dd2a6c62ebc42a39acb9812584",
+    "examples/torus_ns.json": "281fd948e855d24429d96673cc01526bf179ac255daded16d003a33186e6083e",
+    "examples/torus_r_ope.json": "9f3bcc2da361a5536917dd30f1287ac52aaa354c57078ae15fcfc567854c6df9",
+    "examples/torus_r_radial.json": "8bdd2c1a053c9b086d498fd394fedd611d910c1b8fee8770f8a7ce7bbd98b8ef",
+    "run.py": "06d0e6cd5298cf63fac9cd4e147f1c8fd0134c8e43852417895e70a2a2aa2cc4",
+    "provenance/source_origins.json": "d9bc50c063d85a4687e22150a3694741cc0d38282679001c24fcacc3b37644ed"
+  },
+  "source_paths": "All reported package imports resolve to real files in the copied folder, matching the release.",
+  "commands": [
+    "python -I -B <copy>/run.py examples --output-dir <outputs>/examples",
+    "python -I -B <copy>/run.py test --output <outputs>/science.json",
+    "python -I -B <copy>/run.py cross-check --output <outputs>/cross_channel.json"
+  ]
+}
