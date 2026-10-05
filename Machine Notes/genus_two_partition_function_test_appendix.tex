@@ -179,6 +179,165 @@ inverse Ramond continuum metric loses a factor two. On the theta
 channel's two Ramond internal edges these factors cancel. This field
 normalization changes no normalized chiral block.
 
+
+\subsection{Free scalar--Majorana reference}
+
+The reference theory is one noncompact free scalar $X$ and one
+physical Majorana fermion $\psi$, with central charge $3/2$. It is
+independent of the auxiliary fermion in the block algorithm. We set
+the scalar's connected zero-mode volume to one and use $q^{L_0}$ on
+each edge, with no separate $q^{-c/24}$ cylinder factor.
+
+Let $z$ and $w$ be the coordinates on the two three-punctured
+spheres. In the paper's edge order, the sewing equations are
+$zw=q_3$, $(z-1)(w-1)=q_2$, and
+$z^{-1}w^{-1}=q_1$. Taking the infinity tube as a spanning-tree
+edge gives two Schottky generators in the $z$ coordinate:
+\begin{equation}
+ g_0(z)=q_1q_3z,\qquad
+ g_1(z)=\frac{q_1(q_2-1)z+1}{1-q_1z}.
+ \label{eq:partition-free-schottky-generators}
+\end{equation}
+These maps generate the Schottky group of the sewn surface, a free
+group of M\"obius transformations. A word is a product of
+$g_0^{\pm1},g_1^{\pm1}$ with adjacent inverse pairs canceled; it is
+primitive if it is not a nontrivial power of another word. Words
+related by conjugation or inversion describe the same unoriented
+closed cycle and are counted once below.
+Represent $g_0$ and $g_1$ by
+$\left(\begin{smallmatrix}q_1q_3&0\\0&1\end{smallmatrix}\right)$
+and
+$\left(\begin{smallmatrix}q_1(q_2-1)&1\\-q_1&1\end{smallmatrix}\right)$,
+respectively. For each primitive word $\gamma$,
+let $M_\gamma$ be the corresponding product of these matrices and
+their inverses. Its multiplier is explicitly
+\begin{equation}
+ k_\gamma(q)=
+ \frac{\operatorname{tr}M_\gamma-
+  \sqrt{(\operatorname{tr}M_\gamma)^2-4\det M_\gamma}}
+ {\operatorname{tr}M_\gamma+
+  \sqrt{(\operatorname{tr}M_\gamma)^2-4\det M_\gamma}},
+ \qquad |k_\gamma|<1,
+ \label{eq:partition-free-multiplier}
+\end{equation}
+where the inequality fixes the square-root branch by continuation
+from the plumbing cusp; for example, $k_{g_0}=q_1q_3$. Equivalently,
+$k_\gamma$ is the derivative of $\gamma$ at its attracting fixed
+point. The chiral scalar oscillator factor is
+\begin{equation}
+ P_X(q)=\prod_{[\gamma]}\prod_{m=1}^{\infty}
+                   (1-k_\gamma(q)^m)^{-1}.
+ \label{eq:partition-free-boson-product}
+\end{equation}
+The product begins at $m=1$ because the free scalar has a current
+oscillator at level one. Numerically, we evaluate it by the equivalent
+Gaussian determinant from free Heisenberg sewing.
+
+The scalar has two real loop momenta $a=(a_0,a_1)^T$ with measure
+$da_0\,da_1$; each edge charge has weight equal to its square
+divided by two. In the edge order $(1,2,3)=(\infty,1,0)$,
+charge conservation assigns charges $-a_0-a_1,a_1,a_0$,
+respectively. The charged
+chiral factor is $P_X(q)\exp(i\pi a^T\Omega(q)a)$, where
+$\Omega(q)$ is the period matrix in the sewing charge basis.
+Its primary plumbing term is
+$q_1^{(a_0+a_1)^2/2}q_2^{a_1^2/2}q_3^{a_0^2/2}$.
+Consequently the nonchiral scalar is
+\begin{equation}
+ Z_X(q)=|P_X(q)|^2\int_{\mathbb R^2}da_0\,da_1\,
+           e^{-2\pi a^T\operatorname{Im}\Omega(q)a}
+ =\frac{|P_X(q)|^2}
+        {\sqrt{\det(2\operatorname{Im}\Omega(q))}}.
+ \label{eq:partition-free-scalar}
+\end{equation}
+The $2$ in the determinant follows from this charge measure and the
+edge weight $a^2/2$.
+
+For the fixed spin structure with characteristic
+$[\alpha\mid\beta]$, $\alpha,\beta\in\{0,1\}^2$, bosonizing two
+real fermions gives the chiral Dirac factor
+$P_X(q)\vartheta[\alpha\mid\beta](0\mid\Omega(q))$, where
+\begin{equation}
+ \vartheta[\alpha\mid\beta](0\mid\Omega)
+ =\sum_{n\in\mathbb Z^2}
+ \exp\!\left\{i\pi\left[
+ (n+\alpha/2)^T\Omega(n+\alpha/2)
+ +(n+\alpha/2)^T\beta\right]\right\}.
+ \label{eq:partition-free-theta}
+\end{equation}
+One \emph{nonchiral} Majorana contributes
+$|P_X\vartheta[\alpha\mid\beta]|$, not its modulus squared.
+The free partition function actually used as the frame reference is
+therefore
+\begin{equation}
+ Z_{X+\psi}(q;[\alpha\mid\beta])
+ =\frac{|P_X(q)|^3
+        |\vartheta[\alpha\mid\beta](0\mid\Omega(q))|}
+        {\sqrt{\det(2\operatorname{Im}\Omega(q))}}.
+ \label{eq:partition-free-reference}
+\end{equation}
+For odd spin the theta constant vanishes; all four characteristics
+used here are even. In the geometric marking, they are
+$[(1,1)\mid(0,0)]$, $[(1,1)\mid(1,1)]$ in the NS--R--R chart
+and $[(0,0)\mid(0,0)]$, $[(0,0)\mid(1,0)]$ in the all-NS chart.
+These are the first and second $\eta_e$ assignments, respectively,
+in Table~\ref{tab:partition-ten-point-q-eta}.
+
+To evaluate \eqref{eq:partition-free-reference}, we obtain $\Omega(q)$
+from the exponents of the charged scalar factors, including the primary
+plumbing powers above. After removing $P_X$, the exponents at
+$a=(1,0),(0,1),(1,1)$ are $i\pi\Omega_{11}$,
+$i\pi\Omega_{22}$, and
+$i\pi(\Omega_{11}+2\Omega_{12}+\Omega_{22})$, respectively.
+We use the principal branches of $\log q_e$. If the resulting period
+matrix is the geometrically marked period plus a symmetric integral
+matrix $B$, we use
+$[\alpha\mid\beta-B\alpha+\operatorname{diag}B]$ modulo two with
+$\Omega(q)$; the corresponding theta constants differ only by a
+phase. In the edge order $(\infty,1,0)$, the bits
+$(\alpha_0+\alpha_1,\alpha_1,\alpha_0)$, taken modulo two, specify
+the NS ($0$) or R ($1$) sector on each edge. Write the two entries
+of the transformed $\beta$ above as $(b_0,b_1)$. The tube-lift
+representatives used in the comparison are
+\begin{equation}
+ (\eta_1,\eta_2,\eta_3)=
+ \begin{cases}
+ (-1,(-1)^{b_1},(-1)^{b_0}),&\NS\NS\NS,\\
+ ((-1)^{b_0},-1,+1),&\NS\R\R,
+ \end{cases}
+ \label{eq:partition-characteristic-lifts}
+\end{equation}
+where the even NS--R--R characteristics used here have
+$\alpha=(1,1)$ and $b_0=b_1$. Thus $\alpha,\beta$ label the
+marked spin structure, while the individual $\eta_e$ also depend
+on the plumbing branch and our choice of lift representative.
+We retain Heisenberg modes $1\leq m\leq32$ on each edge and
+terms with $-5\leq n_i\leq5-\alpha_i$ in the theta sum.
+The free reference was evaluated in double precision, while the
+interacting blocks used 40-digit working precision. Increasing the
+Heisenberg cutoff from 31 to 32 changes the ten-point free values by
+an absolute amount of at most $1.8\times10^{-15}$; increasing the
+theta cutoff from four to five changes the theta sum by at most
+$4.2\times10^{-16}$.
+
+At each matched point and fixed spin structure, we compare the two
+channel decompositions through
+\begin{equation}
+ \frac{Z_{\mathrm{SL}}^{\NS\R\R}}
+      {Z_{\mathrm{SL}}^{\NS\NS\NS}}
+ \left(\frac{Z_{X+\psi}^{\NS\NS\NS}}
+            {Z_{X+\psi}^{\NS\R\R}}\right)^{1+2Q^2}.
+ \label{eq:partition-free-frame-comparison}
+\end{equation}
+The free factors were evaluated for the first spin in each channel;
+their ratio was reused for the second spin. Although the individual
+factors depend on spin, the ratio between charts is spin independent
+for the same transported spin structure: the absolute value of the theta
+transformation factor is independent of the characteristic. Direct
+evaluation for both spins at all ten numerically matched points
+changes this ratio by at most $1.91\times10^{-10}$, within the period
+matching error. No spin structures are averaged.
+
 \subsection{Fixed-spin decompositions}
 
 For either theta chart, set the tube signs to the chosen fixed spin
@@ -191,17 +350,40 @@ before evaluating a block. The all-NS contribution is
  \label{eq:partition-allns}
 \end{equation}
 The $i$ in $C_1$ and the $(-1)^a$ are both retained.
-For the NS--R--R chart the physical Ramond ground pairing gives
+The antiholomorphic forms below use the complex-conjugate ordered
+convention. In particular,
+$\widetilde\rho_1^{(\eta)}(\widetilde\phi,\widetilde w^-,
+\widetilde w^+)=-i\eta$, whereas the holomorphic value is $+i\eta$;
+the even ground value $\rho_0^{(\eta)}(\phi,w^-,w^-)=\eta$ is real.
+Thus the same superscript labels conjugate forms, not identical
+$+i\eta$ odd-form conventions in the two chiralities. This is the
+diagonal chiral--antichiral pairing of
+\href{https://arxiv.org/pdf/0810.1203}{Hadasz--Jask\'olski--Suchanek,
+Eq.~(4.13)}. If the antiholomorphic odd form is instead labeled by
+its $+i\widetilde\eta$ ground value, its label is
+$\widetilde\eta=-\eta$.
+For the NS--R--R chart, the two vertices have independent form labels
+$\eta,\eta'=\pm1$. At each vertex the chiral form is paired with its
+antiholomorphic form carrying the same label. The physical Ramond
+ground pairing gives
 \begin{align}
  \left.Z_{\mathrm{SL}}\right|_{\NS\R\R,\eta_e}
  ={}&\frac14\int\prod_{e=1}^3\frac{dp_e}{\pi}|q_e^{h_e}|^2
- \sum_{f=0}^1\sum_{\eta=\pm1}C_{f,\eta}^2
- \mathbf F_f^{(\eta,\eta)}(q;\eta_e)
- \overline{\mathbf F_f^{(\eta,\eta)}(q;\eta_e)}.
+ \sum_{f=0}^1\sum_{\eta,\eta'=\pm1}C_{f,\eta}C_{f,\eta'}
+ \mathbf F_f^{(\eta,\eta')}(q;\eta_e)
+ \overline{\mathbf F_f^{(\eta,\eta')}(q;\eta_e)}.
  \label{eq:partition-nsrr-full}
 \end{align}
 This sums normalized three-point forms at one fixed spin, not
-surface spin structures. On the two even Ramond cycles tested,
+surface spin structures. For the theta cycle monomial $\eta_2\eta_3$,
+the convolution sign in \eqref{eq:theta-specialization} is one, so
+$(\eta_2\eta_3)\star\mathbf F=(\eta_2\eta_3)\mathbf F$.
+Thus \eqref{eq:theta-ground} implies that a block evaluated at fixed
+tube signs can be nonzero only if $\eta\eta'=-\eta_2\eta_3$.
+The two fixed NS--R--R spin assignments used in the test have
+$\eta_2\eta_3=-1$, so only $\eta'=\eta$ survives. If
+$\eta_2\eta_3=+1$, the surviving blocks instead have
+$\eta'=-\eta$. On the two even Ramond cycles tested,
 $\mathbf F_1^{(\eta,\eta)}=-\mathbf F_0^{(\eta,\eta)}$ at the
 \emph{same} $\eta$. With $C_{1,\eta}=C_{0,\eta}$,
 \eqref{eq:partition-nsrr-full} reduces to
@@ -254,6 +436,68 @@ The run took $732.6$ seconds. Finite quadrature, geometry and
 structure-constant accuracy contribute to this residual.
 No spin sum and no coefficient-dependent sewing conversion
 are used in the partition driver.
+
+\paragraph{Matched plumbing data.}
+Table~\ref{tab:partition-ten-point-q-eta} lists the ten pairs of
+plumbing coordinates used in this comparison. Each pair describes
+the same marked genus-two surface in the two theta charts.
+The table uses the paper's edge order $(\infty,1,0)$ for
+$(q_1,q_2,q_3)$, reversing the $(0,1,\infty)$ order stored in the
+source data.
+The first and second $\eta_e$ columns are the two separately
+transported fixed-spin assignments for that surface; $+$ and $-$
+mean $+1$ and $-1$. The signs are listed in the same edge order
+as the plumbing coordinates. Values in the table are rounded to six
+decimal places; the full-precision inputs are in
+\path{Data Set/nsrr_nsnsns_generic_10point_N4_20260904/config.json},
+with the conversion to paper order in
+\path{C++/tools/prepare_partition_ten_points.py}.
+
+{\scriptsize
+\setlength{\tabcolsep}{5pt}
+\begin{longtable}{@{}c c r r r c c@{}}
+\caption{Matched theta-channel plumbing parameters and fixed-spin signs.}
+\label{tab:partition-ten-point-q-eta}\\
+\toprule
+Point & Channel & $q_1$ & $q_2$ & $q_3$ & first $\eta_e$ & second $\eta_e$\\
+\midrule
+\endfirsthead
+\toprule
+Point & Channel & $q_1$ & $q_2$ & $q_3$ & first $\eta_e$ & second $\eta_e$\\
+\midrule
+\endhead
+01 & $\NS\NS\NS$ & $-0.071250-0.042549i$ & $-0.019696+0.005144i$ & $+0.017998-0.080979i$ & $(-,-,-)$ & $(-,-,+)$\\
+ & $\NS\R\R$ & $-0.027941+0.071218i$ & $-0.057774+0.066640i$ & $-0.026376-0.017260i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+02 & $\NS\NS\NS$ & $-0.082935+0.006449i$ & $-0.033283-0.013330i$ & $+0.049890-0.014666i$ & $(-,-,+)$ & $(-,-,-)$\\
+ & $\NS\R\R$ & $-0.060523+0.011892i$ & $-0.027736+0.021163i$ & $-0.043145-0.012892i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+03 & $\NS\NS\NS$ & $-0.062544+0.013403i$ & $-0.015537-0.007620i$ & $+0.020629-0.007765i$ & $(-,-,+)$ & $(-,-,-)$\\
+ & $\NS\R\R$ & $-0.016109+0.005454i$ & $-0.039397+0.032408i$ & $-0.072252-0.037339i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+04 & $\NS\NS\NS$ & $-0.080397+0.073055i$ & $-0.032588-0.026727i$ & $+0.023875-0.010459i$ & $(-,-,+)$ & $(-,-,-)$\\
+ & $\NS\R\R$ & $-0.029248+0.019339i$ & $-0.011178+0.008110i$ & $-0.056249-0.036215i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+05 & $\NS\NS\NS$ & $-0.057225-0.017265i$ & $-0.017256+0.000446i$ & $+0.073492-0.059010i$ & $(-,-,-)$ & $(-,-,+)$\\
+ & $\NS\R\R$ & $-0.061589+0.039921i$ & $-0.069915+0.051999i$ & $-0.046420-0.019395i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+06 & $\NS\NS\NS$ & $-0.069370+0.024053i$ & $-0.020448-0.018347i$ & $+0.013474-0.017942i$ & $(-,-,+)$ & $(-,-,-)$\\
+ & $\NS\R\R$ & $-0.013911+0.016093i$ & $-0.023198+0.022171i$ & $-0.071563-0.025133i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+07 & $\NS\NS\NS$ & $-0.074203+0.022952i$ & $-0.037505-0.020450i$ & $+0.040852-0.011942i$ & $(-,-,+)$ & $(-,-,-)$\\
+ & $\NS\R\R$ & $-0.049364+0.012976i$ & $-0.022885+0.012734i$ & $-0.050842-0.011843i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+08 & $\NS\NS\NS$ & $-0.067061+0.003058i$ & $-0.033476-0.018628i$ & $+0.040470-0.032913i$ & $(-,-,+)$ & $(-,-,-)$\\
+ & $\NS\R\R$ & $-0.048123+0.028738i$ & $-0.030295+0.020925i$ & $-0.050247-0.004106i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+09 & $\NS\NS\NS$ & $-0.078821+0.015521i$ & $-0.025878-0.005284i$ & $+0.041879-0.035882i$ & $(-,-,+)$ & $(-,-,-)$\\
+ & $\NS\R\R$ & $-0.040796+0.039739i$ & $-0.034555+0.023510i$ & $-0.044637-0.028816i$ & $(+,-,+)$ & $(-,-,+)$\\
+\addlinespace[2pt]
+10 & $\NS\NS\NS$ & $-0.089186+0.052432i$ & $-0.033207-0.014493i$ & $+0.016411-0.010169i$ & $(-,-,+)$ & $(-,-,-)$\\
+ & $\NS\R\R$ & $-0.018493+0.016088i$ & $-0.017174+0.011483i$ & $-0.045417-0.035425i$ & $(+,-,+)$ & $(-,-,+)$\\
+\bottomrule
+\end{longtable}
+}
 
 Yutai's compared data are actual sphere four-point and torus
 two-point blocks. The sphere comparison uses common ordered
